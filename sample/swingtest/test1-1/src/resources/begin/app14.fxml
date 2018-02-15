@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+ 
+<?language javascript?>
+<?import java.lang.*?>
+<?import java.net.URL ?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import swing.begin.*?>
+ 
+<BorderPane xmlns="http://javafx.com/javafx"
+        xmlns:fx="http://javafx.com/fxml"
+        fx:controller="swing.begin.AppController14">
+    <top>
+        <Label fx:id="label1" text="This is FXML!" />
+    </top>
+    <center>
+        <TextField fx:id="field1" />
+    </center>
+    <bottom>
+        <Button fx:id="btn1" text="Click" />
+    </bottom>
+</BorderPane>

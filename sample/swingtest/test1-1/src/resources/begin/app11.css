@@ -1,0 +1,6 @@
+//@CHARSET "utf-8";
+ 
+Label#label1 {
+    -fx-font-family:Serif;
+    -fx-font-size:24pt;
+}

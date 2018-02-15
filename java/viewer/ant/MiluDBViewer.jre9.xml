@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- https://github.com/oracle/oracle-db-examples/blob/master/java/jdbc/ConnectionManagementSamples/build.xml -->
+<!-- https://ant.apache.org/manual/tutorial-HelloWorldWithAnt.html -->
+<project name="MiluDBViewer0.0.6.jre9" default="compile">
+    <property name="build.dir"     value="../build" />
+	<property name="src.dir"       location="../src" />
+	<property name="lib.dir"       location="../lib" />
+	<property name="doc.dir"       location="../doc" />
+	<property name="resources.dir" location="../resources" />
+	<property name="shell.dir"     location="../shell" />
+	
+	<!-- classpath -->
+	<path id="java.classpath">
+		<pathelement path="../lib/cassandra-jdbc-driver-0.6.4-shaded.jar" />
+		<pathelement path="../lib/mysql-connector-java-5.1.45-bin.jar" />
+		<pathelement path="../lib/ojdbc6.jar" />
+		<pathelement path="../lib/postgresql-42.1.4.jar" />
+		<pathelement path="../lib/excel/commons-collections4-4.1.jar" />
+		<pathelement path="../lib/excel/poi-3.17.jar" />
+		<pathelement path="../lib/excel/poi-ooxml-3.17.jar" />
+		<pathelement path="../lib/excel/poi-ooxml-schemas-3.17.jar" />
+		<pathelement path="../lib/excel/xmlbeans-2.6.0.jar" />
+	</path>
+	
+	<target name="compile">
+        <mkdir dir="${build.dir}"/>
+		<javac includeantruntime="false"
+			srcdir="${src.dir}"
+			destdir="${build.dir}"
+			encoding="UTF-8"
+		>
+			<classpath refid="java.classpath" />
+		</javac>
+	</target>
+	
+	<target name="clean">
+		<delete dir="${build.dir}" />
+	</target>
+	
+	<target name="jar" depends="compile">
+		<!--
+		<copy todir="${build.dir}/milu/conf">
+			<fileset dir="${src.dir}/conf" />
+		</copy>
+		-->
+		<copy todir="${build.dir}/conf">
+			<fileset dir="${src.dir}/conf" />
+		</copy>
+		<!-- by this jar, css works, but language doesn't work.  -->
+		<jar destfile="${build.dir}/${ant.project.name}.jar" basedir="${build.dir}">
+            <manifest>
+                <attribute name="Main-Class" value="milu.main.MiluDBViewer"/>
+                <attribute name="Class-Path" 
+						value=". 
+							lib/cassandra-jdbc-driver-0.6.4-shaded.jar
+							lib/mysql-connector-java-5.1.45-bin.jar 
+							lib/ojdbc6.jar 
+							lib/postgresql-42.1.4.jar
+							lib/excel/commons-collections4-4.1.jar
+							lib/excel/poi-3.17.jar
+							lib/excel/poi-ooxml-3.17.jar
+							lib/excel/poi-ooxml-schemas-3.17.jar
+							lib/excel/xmlbeans-2.6.0.jar
+				"/>
+            </manifest>
+		</jar>
+		<!-- -->
+		<copy todir="${build.dir}/lib">
+			<fileset dir="${lib.dir}" />
+		</copy>
+		<copy todir="${build.dir}/resources">
+			<fileset dir="${resources.dir}" />
+		</copy>
+		<copy todir="${build.dir}">
+			<fileset dir="${shell.dir}" />
+		</copy>
+		<mkdir dir="${build.dir}/doc"/>
+		<copy todir="${build.dir}/doc">
+			<fileset dir="${doc.dir}" />
+		</copy>
+		<chmod file="${build.dir}/*.sh" perm="755" />
+		<!-- chmod file="${build.dir}/*.bat" perm="755" / -->
+		
+	</target>
+</project>

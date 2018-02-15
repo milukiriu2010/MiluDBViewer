@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-9">
+		<attributes>
+			<attribute name="module" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="lib/ojdbc6.jar"/>
+	<classpathentry kind="lib" path="lib/postgresql-42.1.4.jar"/>
+	<classpathentry kind="lib" path="lib/mysql-connector-java-5.1.45-bin.jar"/>
+	<classpathentry kind="lib" path="lib/java-getopt-1.0.14.jar"/>
+	<classpathentry kind="lib" path="lib/xdb6.jar"/>
+	<classpathentry kind="lib" path="lib/xmlparserv2.jar"/>
+	<classpathentry kind="lib" path="lib/apache-cassandra-3.9.0.jar"/>
+	<classpathentry kind="lib" path="lib/apache-cassandra-thrift-3.9.0.jar"/>
+	<classpathentry kind="lib" path="lib/libthrift-0.9.2.jar"/>
+	<classpathentry kind="lib" path="lib/slf4j-api-1.7.7.jar"/>
+	<classpathentry kind="lib" path="lib/slf4j-simple-1.7.25.jar"/>
+	<classpathentry kind="lib" path="lib/jsqlparser-1.2-SNAPSHOT.jar"/>
+	<classpathentry kind="lib" path="lib/richtextfx-0.8.1.jar"/>
+	<classpathentry kind="lib" path="lib/flowless-0.6-SNAPSHOT.jar"/>
+	<classpathentry kind="lib" path="lib/reactfx-1.4.1.jar"/>
+	<classpathentry kind="lib" path="lib/cassandra-jdbc-driver-0.6.2-shaded.jar"/>
+	<classpathentry kind="lib" path="lib/excel/commons-collections4-4.1.jar"/>
+	<classpathentry kind="lib" path="lib/excel/poi-3.17.jar"/>
+	<classpathentry kind="lib" path="lib/excel/poi-ooxml-3.17.jar"/>
+	<classpathentry kind="lib" path="lib/excel/poi-ooxml-schemas-3.17.jar"/>
+	<classpathentry kind="lib" path="lib/excel/xmlbeans-2.6.0.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
