@@ -116,6 +116,11 @@ public class SchemaEntity
 	
 	protected List<SchemaEntity>  entityLst = new ArrayList<>();
 	
+	public SchemaEntity( SCHEMA_TYPE type )
+	{
+		this.type = type;
+	}
+	
 	public SchemaEntity( String name, SCHEMA_TYPE type )
 	{
 		this.name = name;

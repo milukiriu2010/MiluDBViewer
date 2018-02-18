@@ -12,13 +12,21 @@ public class SchemaEntityFactory
 		{
 			return new SchemaEntityEachSchema( name );
 		}
-		else if ( schemaType == SchemaEntity.SCHEMA_TYPE.ROOT_TABLE )
-		{
-			return new SchemaEntityRootTable( name );
-		}
 		else
 		{
 			return new SchemaEntity( name, schemaType );
+		}
+	}
+	
+	public static SchemaEntity createInstance( SchemaEntity.SCHEMA_TYPE schemaType )
+	{
+		if ( schemaType == SchemaEntity.SCHEMA_TYPE.ROOT_TABLE )
+		{
+			return new SchemaEntityRootTable();
+		}
+		else
+		{
+			return new SchemaEntity( schemaType );
 		}
 	}
 }

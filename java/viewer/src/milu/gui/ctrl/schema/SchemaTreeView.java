@@ -172,21 +172,21 @@ public class SchemaTreeView extends TreeView<SchemaEntity>
 	
 	private TreeItem<SchemaEntity> addItem
 		( TreeItem<SchemaEntity>   itemParent, 
-		  String                   fileResourceName, 
 		  String                   itemName,
 		  NAME_TYPE                skipBundle,
-		  SchemaEntity.SCHEMA_TYPE itemType )
+		  SchemaEntity.SCHEMA_TYPE itemType,
+		  String                   fileResourceName ) 
 	{
-		return this.addItem(itemParent, fileResourceName, itemName, skipBundle, itemType, STATUS.VALID );
+		return this.addItem(itemParent, itemName, skipBundle, itemType, STATUS.VALID, fileResourceName );
 	}
 	
 	private TreeItem<SchemaEntity> addItem
 		( TreeItem<SchemaEntity>   itemParent, 
-		  String                   fileResourceName, 
 		  String                   itemName,
 		  NAME_TYPE                skipBundle,
 		  SchemaEntity.SCHEMA_TYPE itemType,
-		  STATUS                   status)
+		  STATUS                   status, 
+		  String                   fileResourceName )
 	{
 		SchemaEntity seEnt = null;
 		if ( skipBundle == NAME_TYPE.NAME_OBJECT )
@@ -260,10 +260,10 @@ public class SchemaTreeView extends TreeView<SchemaEntity>
 		this.item0Root = 
 			this.addItem( 
 				null, 
-				"file:resources/images/url.png", 
 				strRoot, 
 				NAME_TYPE.NAME_OBJECT, 
-				SchemaEntity.SCHEMA_TYPE.ROOT 
+				SchemaEntity.SCHEMA_TYPE.ROOT, 
+				"file:resources/images/url.png" 
 			);
 		this.item0Root.setExpanded( true );
 		this.setRoot( this.item0Root );
@@ -275,19 +275,19 @@ public class SchemaTreeView extends TreeView<SchemaEntity>
 			TreeItem<SchemaEntity> item1Schema = 
 				this.addItem( 
 					this.item0Root, 
-					"file:resources/images/schema.png", 
 					schemaNameItem.get("schemaName"), 
 					NAME_TYPE.NAME_OBJECT, 
-					SchemaEntity.SCHEMA_TYPE.SCHEMA 
+					SchemaEntity.SCHEMA_TYPE.SCHEMA,
+					"file:resources/images/schema.png" 
 				); 
 				
 			// create Table Root
 			this.addItem( 
 				item1Schema, 
-				"file:resources/images/table_root.png", 
 				"ITEM_TABLE", 
 				NAME_TYPE.NAME_BUNDLE, 
-				SchemaEntity.SCHEMA_TYPE.ROOT_TABLE 
+				SchemaEntity.SCHEMA_TYPE.ROOT_TABLE, 
+				"file:resources/images/table_root.png" 
 			);
 				
 			// create View Root
@@ -295,10 +295,10 @@ public class SchemaTreeView extends TreeView<SchemaEntity>
 			{
 				this.addItem( 
 					item1Schema, 
-					"file:resources/images/view_root.png", 
 					"ITEM_VIEW", 
 					NAME_TYPE.NAME_BUNDLE, 
-					SchemaEntity.SCHEMA_TYPE.ROOT_VIEW 
+					SchemaEntity.SCHEMA_TYPE.ROOT_VIEW, 
+					"file:resources/images/view_root.png" 
 				);
 			}
 			
@@ -307,10 +307,10 @@ public class SchemaTreeView extends TreeView<SchemaEntity>
 			{
 				this.addItem( 
 					item1Schema, 
-					"file:resources/images/systemview_root.png", 
 					"ITEM_SYSTEM_VIEW", 
 					NAME_TYPE.NAME_BUNDLE, 
-					SchemaEntity.SCHEMA_TYPE.ROOT_SYSTEM_VIEW 
+					SchemaEntity.SCHEMA_TYPE.ROOT_SYSTEM_VIEW, 
+					"file:resources/images/systemview_root.png" 
 				);
 			}
 			
@@ -319,10 +319,10 @@ public class SchemaTreeView extends TreeView<SchemaEntity>
 			{
 				this.addItem( 
 					item1Schema, 
-					"file:resources/images/materialized_view_root.png", 
-					"ITEM_MATE_VIEW", 
+					"ITEM_MATERIALIZED_VIEW", 
 					NAME_TYPE.NAME_BUNDLE, 
-					SchemaEntity.SCHEMA_TYPE.ROOT_MATERIALIZED_VIEW 
+					SchemaEntity.SCHEMA_TYPE.ROOT_MATERIALIZED_VIEW, 
+					"file:resources/images/materialized_view_root.png" 
 				);
 			}
 			
@@ -331,10 +331,10 @@ public class SchemaTreeView extends TreeView<SchemaEntity>
 			{
 				this.addItem( 
 					item1Schema, 
-					"file:resources/images/func_root.png", 
 					"ITEM_FUNC", 
 					NAME_TYPE.NAME_BUNDLE, 
-					SchemaEntity.SCHEMA_TYPE.ROOT_FUNC 
+					SchemaEntity.SCHEMA_TYPE.ROOT_FUNC, 
+					"file:resources/images/func_root.png" 
 				);
 			}
 			
@@ -343,10 +343,10 @@ public class SchemaTreeView extends TreeView<SchemaEntity>
 			{
 				this.addItem( 
 					item1Schema, 
-					"file:resources/images/aggregate_root.png", 
 					"ITEM_AGGREGATE", 
 					NAME_TYPE.NAME_BUNDLE, 
-					SchemaEntity.SCHEMA_TYPE.ROOT_AGGREGATE 
+					SchemaEntity.SCHEMA_TYPE.ROOT_AGGREGATE, 
+					"file:resources/images/aggregate_root.png" 
 				);
 			}
 			
@@ -355,10 +355,10 @@ public class SchemaTreeView extends TreeView<SchemaEntity>
 			{
 				this.addItem( 
 					item1Schema, 
-					"file:resources/images/proc_root.png", 
 					"ITEM_PROC", 
 					NAME_TYPE.NAME_BUNDLE, 
-					SchemaEntity.SCHEMA_TYPE.ROOT_PROC 
+					SchemaEntity.SCHEMA_TYPE.ROOT_PROC, 
+					"file:resources/images/proc_root.png" 
 				);
 			}
 			
@@ -367,10 +367,10 @@ public class SchemaTreeView extends TreeView<SchemaEntity>
 			{
 				this.addItem( 
 					item1Schema, 
-					"file:resources/images/package_def_root.png", 
 					"ITEM_PACKAGE_DEF", 
 					NAME_TYPE.NAME_BUNDLE, 
-					SchemaEntity.SCHEMA_TYPE.ROOT_PACKAGE_DEF 
+					SchemaEntity.SCHEMA_TYPE.ROOT_PACKAGE_DEF, 
+					"file:resources/images/package_def_root.png" 
 				);
 			}
 			
@@ -379,10 +379,10 @@ public class SchemaTreeView extends TreeView<SchemaEntity>
 			{
 				this.addItem( 
 					item1Schema, 
-					"file:resources/images/package_body_root.png", 
 					"ITEM_PACKAGE_BODY", 
 					NAME_TYPE.NAME_BUNDLE, 
-					SchemaEntity.SCHEMA_TYPE.ROOT_PACKAGE_BODY 
+					SchemaEntity.SCHEMA_TYPE.ROOT_PACKAGE_BODY, 
+					"file:resources/images/package_body_root.png" 
 				);
 			}
 			
@@ -391,10 +391,10 @@ public class SchemaTreeView extends TreeView<SchemaEntity>
 			{
 				this.addItem( 
 					item1Schema, 
-					"file:resources/images/trigger_root.png", 
 					"ITEM_TRIGGER", 
 					NAME_TYPE.NAME_BUNDLE, 
-					SchemaEntity.SCHEMA_TYPE.ROOT_TRIGGER 
+					SchemaEntity.SCHEMA_TYPE.ROOT_TRIGGER, 
+					"file:resources/images/trigger_root.png" 
 				);
 			}
 			
@@ -403,10 +403,10 @@ public class SchemaTreeView extends TreeView<SchemaEntity>
 			{
 				this.addItem( 
 					item1Schema, 
-					"file:resources/images/type_root.png", 
 					"ITEM_TYPE", 
 					NAME_TYPE.NAME_BUNDLE, 
-					SchemaEntity.SCHEMA_TYPE.ROOT_TYPE 
+					SchemaEntity.SCHEMA_TYPE.ROOT_TYPE, 
+					"file:resources/images/type_root.png" 
 				);
 			}
 			
@@ -415,10 +415,10 @@ public class SchemaTreeView extends TreeView<SchemaEntity>
 			{
 				this.addItem( 
 					item1Schema, 
-					"file:resources/images/seq_root.png", 
 					"ITEM_SEQ", 
 					NAME_TYPE.NAME_BUNDLE, 
-					SchemaEntity.SCHEMA_TYPE.ROOT_SEQUENCE
+					SchemaEntity.SCHEMA_TYPE.ROOT_SEQUENCE,
+					"file:resources/images/seq_root.png"
 				);
 			}
 		}
@@ -444,20 +444,20 @@ public class SchemaTreeView extends TreeView<SchemaEntity>
 			TreeItem<SchemaEntity> item3TableName = 
 				this.addItem( 
 					itemTarget, 
-					"file:resources/images/table.png", 
 					dataRow.get(1), 
 					NAME_TYPE.NAME_OBJECT, 
 					SchemaEntity.SCHEMA_TYPE.TABLE,
-					status
+					status,
+					"file:resources/images/table.png" 
 				);
 			
 			// create Index Root
 			this.addItem( 
 				item3TableName, 
-				"file:resources/images/index_root.png", 
 				"ITEM_INDEX", 
 				NAME_TYPE.NAME_BUNDLE, 
-				SchemaEntity.SCHEMA_TYPE.ROOT_INDEX 
+				SchemaEntity.SCHEMA_TYPE.ROOT_INDEX, 
+				"file:resources/images/index_root.png" 
 			);
 			
 		}
@@ -503,11 +503,11 @@ public class SchemaTreeView extends TreeView<SchemaEntity>
 			TreeItem<SchemaEntity> item5Index = 
 					this.addItem( 
 						itemTarget, 
-						iconFileName, 
 						dataRow.get("index_name"), 
 						NAME_TYPE.NAME_OBJECT, 
 						SchemaEntity.SCHEMA_TYPE.INDEX,
-						status
+						status,
+						iconFileName 
 					);
 			
 			/*
@@ -564,10 +564,10 @@ public class SchemaTreeView extends TreeView<SchemaEntity>
 			
 			this.addItem( 
 				itemTarget, 
-				iconFileName, 
 				columnName, 
 				NAME_TYPE.NAME_OBJECT, 
-				SchemaEntity.SCHEMA_TYPE.INDEX_COLUMN
+				SchemaEntity.SCHEMA_TYPE.INDEX_COLUMN,
+				iconFileName
 			);
 		}
 		itemTarget.setExpanded(true);
@@ -588,11 +588,11 @@ public class SchemaTreeView extends TreeView<SchemaEntity>
 	        // create View Item
 			this.addItem( 
 				itemTarget, 
-				"file:resources/images/view.png", 
 				dataRow.get("name"), 
 				NAME_TYPE.NAME_OBJECT, 
 				SchemaEntity.SCHEMA_TYPE.VIEW,
-				status
+				status,
+				"file:resources/images/view.png" 
 			);
 		}
 		
@@ -608,10 +608,10 @@ public class SchemaTreeView extends TreeView<SchemaEntity>
 	        // create System View Item
 			this.addItem( 
 				itemTarget, 
-				"file:resources/images/systemview.png", 
 				dataRow.get(1), 
 				NAME_TYPE.NAME_OBJECT, 
-				SchemaEntity.SCHEMA_TYPE.SYSTEM_VIEW 
+				SchemaEntity.SCHEMA_TYPE.SYSTEM_VIEW, 
+				"file:resources/images/systemview.png" 
 			);
 			
 		}
@@ -638,11 +638,11 @@ public class SchemaTreeView extends TreeView<SchemaEntity>
 			// create Materialized View Item
 			this.addItem( 
 				itemTarget, 
-				"file:resources/images/materialized_view.png", 
 				dataRow.get(1), 
 				NAME_TYPE.NAME_OBJECT, 
 				SchemaEntity.SCHEMA_TYPE.MATERIALIZED_VIEW,
-				status
+				status,
+				"file:resources/images/materialized_view.png" 
 			);
 		}
 		
@@ -668,11 +668,11 @@ public class SchemaTreeView extends TreeView<SchemaEntity>
 			// create Function Item
 			this.addItem( 
 				itemTarget, 
-				"file:resources/images/func.png", 
 				dataRow.get(1), 
 				NAME_TYPE.NAME_OBJECT, 
 				SchemaEntity.SCHEMA_TYPE.FUNC,
-				status
+				status,
+				"file:resources/images/func.png" 
 			);
 		}
 		
@@ -698,11 +698,11 @@ public class SchemaTreeView extends TreeView<SchemaEntity>
 			// create Aggregate Item
 			this.addItem( 
 				itemTarget, 
-				"file:resources/images/aggregate.png", 
 				dataRow.get(1), 
 				NAME_TYPE.NAME_OBJECT, 
 				SchemaEntity.SCHEMA_TYPE.AGGREGATE,
-				status
+				status,
+				"file:resources/images/aggregate.png" 
 			);
 		}
 		
@@ -728,11 +728,11 @@ public class SchemaTreeView extends TreeView<SchemaEntity>
 			// create Procedure Item
 			this.addItem( 
 				itemTarget, 
-				"file:resources/images/proc.png", 
 				dataRow.get(1), 
 				NAME_TYPE.NAME_OBJECT, 
 				SchemaEntity.SCHEMA_TYPE.PROC,
-				status
+				status,
+				"file:resources/images/proc.png" 
 			);
 		}
 		
@@ -757,11 +757,11 @@ public class SchemaTreeView extends TreeView<SchemaEntity>
 	        // create Package Definition Item
 			this.addItem( 
 				itemTarget, 
-				"file:resources/images/package_def.png", 
 				dataRow.get(1), 
 				NAME_TYPE.NAME_OBJECT, 
 				SchemaEntity.SCHEMA_TYPE.PACKAGE_DEF,
-				status
+				status,
+				"file:resources/images/package_def.png" 
 			);
 		}
 		
@@ -786,11 +786,11 @@ public class SchemaTreeView extends TreeView<SchemaEntity>
 	        // create Package Body Item
 			this.addItem( 
 				itemTarget, 
-				"file:resources/images/package_body.png", 
 				dataRow.get(1), 
 				NAME_TYPE.NAME_OBJECT, 
 				SchemaEntity.SCHEMA_TYPE.PACKAGE_BODY,
-				status
+				status,
+				"file:resources/images/package_body.png" 
 			);
 			
 		}
@@ -816,11 +816,11 @@ public class SchemaTreeView extends TreeView<SchemaEntity>
 	        // create Type Item
 			this.addItem( 
 				itemTarget, 
-				"file:resources/images/type.png", 
 				dataRow.get(1), 
 				NAME_TYPE.NAME_OBJECT, 
 				SchemaEntity.SCHEMA_TYPE.TYPE,
-				status
+				status,
+				"file:resources/images/type.png" 
 			);
 			
 		}
@@ -846,11 +846,11 @@ public class SchemaTreeView extends TreeView<SchemaEntity>
 	        // create Trigger Item
 			this.addItem( 
 				itemTarget, 
-				"file:resources/images/trigger.png", 
 				dataRow.get(1), 
 				NAME_TYPE.NAME_OBJECT, 
 				SchemaEntity.SCHEMA_TYPE.TRIGGER,
-				status
+				status,
+				"file:resources/images/trigger.png" 
 			);
 			
 		}
@@ -876,11 +876,11 @@ public class SchemaTreeView extends TreeView<SchemaEntity>
 	        // create Sequence Item
 			this.addItem( 
 				itemTarget, 
-				"file:resources/images/seq.png", 
 				dataRow.get(1), 
 				NAME_TYPE.NAME_OBJECT, 
 				SchemaEntity.SCHEMA_TYPE.SEQUENCE,
-				status
+				status,
+				"file:resources/images/seq.png" 
 			);
 			
 		}

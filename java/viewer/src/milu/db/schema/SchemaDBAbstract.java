@@ -37,7 +37,7 @@ public abstract class SchemaDBAbstract
 		for ( Map<String,String> schemaName : this.schemaNameLst )
 		{
 			SchemaEntity eachSchemaEntity = SchemaEntityFactory.createInstance( schemaName.get("schemaName"), SchemaEntity.SCHEMA_TYPE.SCHEMA );
-			SchemaEntity rootTableEntity  = SchemaEntityFactory.createInstance( "TABLE", SchemaEntity.SCHEMA_TYPE.ROOT_TABLE );
+			SchemaEntity rootTableEntity  = SchemaEntityFactory.createInstance( SchemaEntity.SCHEMA_TYPE.ROOT_TABLE );
 			eachSchemaEntity.addEntity( rootTableEntity );
 			schemaEntityLst.add( eachSchemaEntity );
 		}
