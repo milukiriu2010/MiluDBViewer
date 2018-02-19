@@ -10,6 +10,8 @@ import javafx.collections.ObservableList;
 import javafx.collections.FXCollections;
 
 import milu.db.MyDBAbstract;
+import milu.db.table.TableDBAbstract;
+import milu.db.table.TableDBFactory;
 import milu.entity.schema.SchemaEntity;
 
 /**
@@ -67,8 +69,16 @@ public class SelectedItemHandlerRootTable extends SelectedItemHandlerAbstract
 		if ( itemChildren.size() == 0 )
 		{
 			String schema = itemParent.getValue().toString();
+			TableDBAbstract tableDBAbs = TableDBFactory.getInstance(this.myDBAbs);
+			if ( tableDBAbs != null )
+			{
+				tableDBAbs.selectTableLst( schema );
+				this.schemaTreeView.setTableData( itemSelected, tableDBAbs.getTableNameLst() );
+			}
+			/*
 			List<List<String>> dataLst = myDBAbs.getSchemaTable( schema );
 			this.schemaTreeView.setTableData( itemSelected, dataLst );
+			*/
 		}
 		
 		// Delete DBSchemaTableViewTab, if already exists. 

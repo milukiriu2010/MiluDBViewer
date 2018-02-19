@@ -426,25 +426,22 @@ public class SchemaTreeView extends TreeView<SchemaEntity>
 		this.setAction();
 	}
 	
-	public void setTableData( TreeItem<SchemaEntity> itemTarget, List<List<String>> dataLst )
+	public void setTableData( TreeItem<SchemaEntity> itemTarget, List<Map<String,String>> dataLst )
 	{
-		for ( List<String> dataRow : dataLst )
+		for ( Map<String,String> dataRow : dataLst )
 		{
-			int cnt = dataRow.size();
 			STATUS status = STATUS.VALID; 
-			if ( cnt >= 3 )
+			String strStatus = dataRow.get("status");
+			if ( "INVALID".equals(strStatus) )
 			{
-				String strStatus = dataRow.get(2);
-				if ( "INVALID".equals(strStatus) )
-				{
-					status = STATUS.INVALID;
-				}
+				status = STATUS.INVALID;
 			}
+			
 	        // create Table Item
 			TreeItem<SchemaEntity> item3TableName = 
 				this.addItem( 
 					itemTarget, 
-					dataRow.get(1), 
+					dataRow.get("tableName"), 
 					NAME_TYPE.NAME_OBJECT, 
 					SchemaEntity.SCHEMA_TYPE.TABLE,
 					status,
@@ -964,15 +961,15 @@ public class SchemaTreeView extends TreeView<SchemaEntity>
 			}
 			else if ( schemaType == SchemaEntity.SCHEMA_TYPE.ROOT_TYPE )
 			{
-				scEnt.setName( langRB.getString("ITEM_PACKAGE_TYPE"));
+				scEnt.setName( langRB.getString("ITEM_TYPE"));
 			}
 			else if ( schemaType == SchemaEntity.SCHEMA_TYPE.ROOT_TRIGGER )
 			{
-				scEnt.setName( langRB.getString("ITEM_PACKAGE_TRIGGER"));
+				scEnt.setName( langRB.getString("ITEM_TRIGGER"));
 			}
 			else if ( schemaType == SchemaEntity.SCHEMA_TYPE.ROOT_SEQUENCE )
 			{
-				scEnt.setName( langRB.getString("ITEM_PACKAGE_SEQUENCE"));
+				scEnt.setName( langRB.getString("ITEM_SEQ"));
 			}
 			itemChild.setValue( scEnt );
 

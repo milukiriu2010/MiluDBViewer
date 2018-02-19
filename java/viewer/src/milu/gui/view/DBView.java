@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.Future;
 
 import javafx.concurrent.Task;
 
@@ -40,6 +41,7 @@ import milu.db.MyDBAbstract;
 import milu.db.schema.SchemaDBAbstract;
 import milu.db.schema.SchemaDBFactory;
 import milu.entity.schema.SchemaEntity;
+import milu.task.CollectTask;
 
 public class DBView extends Stage
 	implements 
@@ -62,6 +64,8 @@ public class DBView extends Stage
 	
 	// Thread Pool
 	private ExecutorService service = Executors.newSingleThreadExecutor();	
+	
+	private Future<?> future  = null;
 	
 	// ---------------------------
 	// Constractor
@@ -194,9 +198,17 @@ public class DBView extends Stage
 			(event)->
 			{
 				System.out.println( "dbView Shown." );
-				final CollectTask collectTask = new CollectTask();
+				final CollectTask collectTask = new CollectTask( this.myDBAbs );
 				// execute task
-				this.service.submit( collectTask );
+				this.future = this.service.submit( collectTask );
+				
+				collectTask.progressProperty().addListener
+				(
+					(obs,oldVal,newVal)->
+					{
+						System.out.println( "CollectTask:Progress[" + obs.getClass() + "]oldVal[" + oldVal + "]newVal[" + newVal + "]" );
+					}
+				);
 			}
 		);
 		
@@ -447,12 +459,13 @@ public class DBView extends Stage
 		}
 	}
 	
-	class CollectTask extends Task<Boolean>
+	/*
+	class CollectTask extends Task<Integer>
 	{
 		@Override
-		protected Boolean call() 
+		protected Integer call() 
 		{
-			boolean isOK = true;
+			int progress = 0;
 			try
 			{
 				System.out.println( "Task start." );
@@ -482,14 +495,15 @@ public class DBView extends Stage
 				
 				System.out.println( "Task finish." );
 				
-				return isOK;
+				progress = 100;
+				return progress;
 			}
 			catch ( SQLException sqlEx )
 			{
 				System.out.println( "CollectTask:SQLException." );
-				isOK = false;
+				progress = -2;
 				
-				return isOK;
+				return progress;
 			}
 		}
 		
@@ -499,4 +513,5 @@ public class DBView extends Stage
 			System.out.println( "Task Success." );
 		}
 	}
+	*/
 }
