@@ -244,6 +244,58 @@ public class SchemaTreeView extends TreeView<SchemaEntity>
 		return itemNew;
 	}
 	
+	private TreeItem<SchemaEntity> addItem
+		( TreeItem<SchemaEntity>   itemParent, 
+		  SchemaEntity             schemaEntity )
+	{
+		String imageResourceName = schemaEntity.getImageResourceName();
+		ImageView iv = new ImageView( new Image( imageResourceName ) );
+		iv.setFitHeight( 16 );
+		iv.setFitWidth( 16 );
+		
+		SchemaEntity.STATE state = schemaEntity.getState();
+		
+		Group imageGroup = new Group();
+		if ( state == SchemaEntity.STATE.VALID )
+		{
+			imageGroup.getChildren().add( iv );
+		}
+		else if ( state == SchemaEntity.STATE.INVALID )
+		{
+			Line lineLTRB = new Line( 0, 0, iv.getFitWidth(), iv.getFitHeight() );
+			lineLTRB.setStyle( "-fx-stroke: red; -fx-stroke-width: 2;" );
+			Line lineRTLB = new Line( iv.getFitWidth(), 0, 0, iv.getFitHeight() );
+			lineRTLB.setStyle( "-fx-stroke: red; -fx-stroke-width: 2;" );
+			imageGroup.getChildren().addAll( iv, lineLTRB, lineRTLB );
+			imageGroup.setEffect( new Blend(BlendMode.OVERLAY) );
+		}
+		
+		TreeItem<SchemaEntity> itemNew = new TreeItem<SchemaEntity>( schemaEntity, imageGroup );
+		if ( itemParent != null )
+		{
+			itemParent.getChildren().add( itemNew );
+		}
+		
+		// https://stackoverflow.com/questions/14236666/how-to-get-current-treeitem-reference-which-is-expanding-by-user-click-in-javafx
+		itemNew.expandedProperty().addListener
+		(
+			(obs,oldVal,newVal)->
+			{
+		        System.out.println("newVal = " + newVal);
+		        BooleanProperty bb = (BooleanProperty) obs;
+		        Object obj = bb.getBean();
+		        System.out.println("bb.getBean() = " + obj);
+		        if ( obj instanceof TreeItem )
+		        {
+		        	TreeItem<SchemaEntity> itemTarget = (TreeItem<SchemaEntity>)obj;
+		        	scrollBack( itemTarget );
+		        }
+		    }
+		);
+		
+		return itemNew;
+	}
+	
 	// When expanding adn unexpanding with too many treeitems, weird scroll occurs.
 	private void scrollBack( TreeItem<SchemaEntity> itemTarget )
 	{
@@ -254,6 +306,44 @@ public class SchemaTreeView extends TreeView<SchemaEntity>
 		}
 	}
 	
+	public void setInitialData( SchemaEntity rootEntity )
+	{
+		// create Root Item
+		this.item0Root = this.addItem( null, rootEntity );
+		this.item0Root.setExpanded( true );
+		this.setRoot( this.item0Root );
+		
+		if ( rootEntity == null )
+		{
+			return;
+		}
+		
+		// ----------------------------------------
+		// -[ROOT]
+		//   -[SCHEMA] => set
+		// ----------------------------------------
+		for ( SchemaEntity schemaEntity: rootEntity.getEntityLst() )
+		{
+			TreeItem<SchemaEntity> item1Schema =
+				this.addItem( this.item0Root, schemaEntity );
+			
+			//System.out.println( "schemaEntity.getName():" + schemaEntity.getName() );
+			//System.out.println( "schemaEntity.getEntityLst().size():" + schemaEntity.getEntityLst().size() );
+			
+			// ----------------------------------------
+			// -[ROOT]
+			//   -[SCHEMA]
+			//     -[ROOT_TABLE] => set
+			//     -[ROOT_VIEW]  => set
+			// ----------------------------------------
+			for ( SchemaEntity rootObjEntity: schemaEntity.getEntityLst() )
+			{
+				this.addItem( item1Schema, rootObjEntity );
+			}
+		}
+	}
+
+	/*
 	public void setInitialData( String strRoot, List<Map<String,String>> schemaNameLst, List<SchemaEntity.SCHEMA_TYPE>  suppoertedTypeLst )
 	{
 		// create Root Item
@@ -425,7 +515,9 @@ public class SchemaTreeView extends TreeView<SchemaEntity>
 		
 		this.setAction();
 	}
-	
+	*/
+
+	/*
 	public void setTableData( TreeItem<SchemaEntity> itemTarget, List<Map<String,String>> dataLst )
 	{
 		for ( Map<String,String> dataRow : dataLst )
@@ -457,6 +549,52 @@ public class SchemaTreeView extends TreeView<SchemaEntity>
 				"file:resources/images/index_root.png" 
 			);
 			
+		}
+		
+		this.setAction();
+		itemTarget.setExpanded(true);
+		this.scrollBack(itemTarget);
+	}
+	*/
+	
+	public void setTableData( TreeItem<SchemaEntity> itemTarget, List<SchemaEntity> tableEntityLst )
+	{
+		for ( SchemaEntity tableEntity : tableEntityLst )
+		{
+			// ---------------------------------------
+			// -[ROOT]
+			//   -[SCHEMA]
+			//     -[ROOT_TABLE]
+			//       -[TABLE]    => add
+			// ---------------------------------------
+			TreeItem<SchemaEntity> item3TableName = 
+				this.addItem( 
+					itemTarget,
+					tableEntity
+				);
+			
+			// ---------------------------------------
+			// -[ROOT]
+			//   -[SCHEMA]
+			//     -[ROOT_TABLE]
+			//       -[TABLE]
+			//         -[INDEX_ROOT] => add
+			// ---------------------------------------
+			for ( SchemaEntity rootObjEntity : tableEntity.getEntityLst() )
+			{
+				this.addItem( item3TableName, rootObjEntity );
+			}
+			
+			/*
+			// create Index Root
+			this.addItem( 
+				item3TableName, 
+				"ITEM_INDEX", 
+				NAME_TYPE.NAME_BUNDLE, 
+				SchemaEntity.SCHEMA_TYPE.ROOT_INDEX, 
+				"file:resources/images/index_root.png" 
+			);
+			*/
 		}
 		
 		this.setAction();
@@ -570,7 +708,8 @@ public class SchemaTreeView extends TreeView<SchemaEntity>
 		itemTarget.setExpanded(true);
 		this.scrollBack(itemTarget);
 	}
-	
+
+	/*
 	public void setViewData( TreeItem<SchemaEntity> itemTarget, List<Map<String,String>> dataLst )
 	{
 		
@@ -591,6 +730,26 @@ public class SchemaTreeView extends TreeView<SchemaEntity>
 				status,
 				"file:resources/images/view.png" 
 			);
+		}
+		
+		itemTarget.setExpanded(true);
+		this.scrollBack(itemTarget);
+	}
+	*/
+	
+	public void addEntityLst( TreeItem<SchemaEntity> itemTarget, List<SchemaEntity> schemaEntityLst )
+	{
+		for ( SchemaEntity schemaEntity : schemaEntityLst )
+		{
+			// ---------------------------------------
+			// -[ROOT]
+			//   -[SCHEMA]
+			//     -[ROOT_VIEW]
+			//       -[VIEW]    => add
+			//     -[ROOT_PACKAGE_DEF]
+			//       -[PACKAGE_DEF]    => add
+			// ---------------------------------------
+			this.addItem( itemTarget, schemaEntity ); 
 		}
 		
 		itemTarget.setExpanded(true);
@@ -736,35 +895,24 @@ public class SchemaTreeView extends TreeView<SchemaEntity>
 		itemTarget.setExpanded(true);
 		this.scrollBack(itemTarget);
 	}
-	
-	public void setPackageDefData( TreeItem<SchemaEntity> itemTarget, List<List<String>> dataLst )
+	/*
+	public void setPackageDefData( TreeItem<SchemaEntity> itemTarget, List<SchemaEntity> schemaEntityLst )
 	{
-		for ( List<String> dataRow : dataLst )
+		for ( SchemaEntity schemaEntity : schemaEntityLst )
 		{
-			int cnt = dataRow.size();
-			STATUS status = STATUS.VALID; 
-			if ( cnt >= 3 )
-			{
-				String strStatus = dataRow.get(2);
-				if ( "INVALID".equals(strStatus) )
-				{
-					status = STATUS.INVALID;
-				}
-			}
-	        // create Package Definition Item
-			this.addItem( 
-				itemTarget, 
-				dataRow.get(1), 
-				NAME_TYPE.NAME_OBJECT, 
-				SchemaEntity.SCHEMA_TYPE.PACKAGE_DEF,
-				status,
-				"file:resources/images/package_def.png" 
-			);
+			// ---------------------------------------
+			// -[ROOT]
+			//   -[SCHEMA]
+			//     -[ROOT_PACKAGE_DEF]
+			//       -[PACKAGE_DEF]    => add
+			// ---------------------------------------
+			this.addItem( itemTarget, schemaEntity ); 
 		}
 		
 		itemTarget.setExpanded(true);
 		this.scrollBack(itemTarget);
 	}
+	*/
 	
 	public void setPackageBodyData( TreeItem<SchemaEntity> itemTarget, List<List<String>> dataLst )
 	{
@@ -904,7 +1052,7 @@ public class SchemaTreeView extends TreeView<SchemaEntity>
 		this.loadLangResource();
 		
 		this.setContextMenu();
-		this.skimThrough( this.item0Root );
+		//this.skimThrough( this.item0Root );
 	}
 	
 	private void skimThrough( TreeItem<SchemaEntity> itemParent )

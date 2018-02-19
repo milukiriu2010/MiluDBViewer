@@ -13,6 +13,7 @@ import milu.db.MyDBAbstract;
 import milu.db.table.TableDBAbstract;
 import milu.db.table.TableDBFactory;
 import milu.entity.schema.SchemaEntity;
+import milu.entity.schema.SearchSchemaEntity;
 
 /**
  * This class is invoked, when "root table" item is clicked on SchemaTreeView.
@@ -68,17 +69,32 @@ public class SelectedItemHandlerRootTable extends SelectedItemHandlerAbstract
 		// get View List & add list as children
 		if ( itemChildren.size() == 0 )
 		{
-			String schema = itemParent.getValue().toString();
+			/*
+			String schemaName = itemParent.getValue().toString();
 			TableDBAbstract tableDBAbs = TableDBFactory.getInstance(this.myDBAbs);
 			if ( tableDBAbs != null )
 			{
-				tableDBAbs.selectTableLst( schema );
+				tableDBAbs.selectTableLst( schemaName );
 				this.schemaTreeView.setTableData( itemSelected, tableDBAbs.getTableNameLst() );
 			}
-			/*
-			List<List<String>> dataLst = myDBAbs.getSchemaTable( schema );
-			this.schemaTreeView.setTableData( itemSelected, dataLst );
 			*/
+			
+			String schemaName = itemParent.getValue().toString();
+			SchemaEntity schemaEntity = 
+				SearchSchemaEntity.search( 
+					this.myDBAbs.getSchemaRoot(), 
+					SchemaEntity.SCHEMA_TYPE.SCHEMA, 
+					schemaName
+				);
+			SchemaEntity rootTableEntity = 
+				SearchSchemaEntity.search( 
+					schemaEntity, 
+					SchemaEntity.SCHEMA_TYPE.ROOT_TABLE
+				);
+			if ( rootTableEntity != null )
+			{
+				this.schemaTreeView.setTableData( itemSelected, rootTableEntity.getEntityLst() );
+			}
 		}
 		
 		// Delete DBSchemaTableViewTab, if already exists. 

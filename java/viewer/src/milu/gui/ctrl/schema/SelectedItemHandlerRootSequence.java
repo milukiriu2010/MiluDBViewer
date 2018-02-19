@@ -8,7 +8,10 @@ import javafx.scene.control.TreeItem;
 import javafx.collections.ObservableList;
 
 import milu.db.MyDBAbstract;
+import milu.db.sequence.SequenceDBAbstract;
+import milu.db.sequence.SequenceDBFactory;
 import milu.entity.schema.SchemaEntity;
+
 
 /**
  * This class is invoked, when "root sequence" item is clicked on SchemaTreeView.
@@ -72,9 +75,18 @@ public class SelectedItemHandlerRootSequence extends SelectedItemHandlerAbstract
 		// get View List & add list as children
 		if ( itemChildren.size() == 0 )
 		{
+			/*
 			String schema = itemParent.getValue().toString();
 			List<List<String>> dataLst = myDBAbs.getSchemaSequence( schema );
 			this.schemaTreeView.setSequenceData( itemSelected, dataLst );
+			*/
+			SequenceDBAbstract sequenceDBAbs = SequenceDBFactory.getInstance(myDBAbs);
+			if ( sequenceDBAbs != null )
+			{
+				String schemaName = itemParent.getValue().toString();
+				sequenceDBAbs.selectEntityLst(schemaName);
+				this.schemaTreeView.addEntityLst( itemSelected, sequenceDBAbs.getEntityLst() );
+			}
 		}
 	}
 

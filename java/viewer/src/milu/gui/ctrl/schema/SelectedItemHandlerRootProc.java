@@ -10,6 +10,8 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 import milu.db.MyDBAbstract;
+import milu.db.proc.ProcDBAbstract;
+import milu.db.proc.ProcDBFactory;
 import milu.entity.schema.SchemaEntity;
 
 /**
@@ -70,9 +72,18 @@ public class SelectedItemHandlerRootProc extends SelectedItemHandlerAbstract
 		// get View List & add list as children
 		if ( itemChildren.size() == 0 )
 		{
+			/*
 			String schema = itemParent.getValue().toString();
 			List<List<String>> dataLst = myDBAbs.getSchemaProc( schema );
 			this.schemaTreeView.setProcData( itemSelected, dataLst );
+			*/
+			ProcDBAbstract procDBAbs = ProcDBFactory.getInstance(myDBAbs);
+			if ( procDBAbs != null )
+			{
+				String schemaName = itemParent.getValue().toString();
+				procDBAbs.selectEntityLst(schemaName);
+				this.schemaTreeView.addEntityLst( itemSelected, procDBAbs.getEntityLst() );
+			}
 		}
 		
 		// Delete DBSchemaTableViewTab, if already exists. 

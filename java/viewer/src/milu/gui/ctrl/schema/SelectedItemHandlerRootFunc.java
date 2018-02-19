@@ -10,6 +10,8 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 import milu.db.MyDBAbstract;
+import milu.db.func.FuncDBAbstract;
+import milu.db.func.FuncDBFactory;
 import milu.entity.schema.SchemaEntity;
 
 /**
@@ -68,9 +70,18 @@ public class SelectedItemHandlerRootFunc extends SelectedItemHandlerAbstract
 		// get View List & add list as children
 		if ( itemChildren.size() == 0 )
 		{
+			/*
 			String schema = itemParent.getValue().toString();
 			List<List<String>> dataLst = myDBAbs.getSchemaFunc( schema );
 			this.schemaTreeView.setFuncData( itemSelected, dataLst );
+			*/
+			FuncDBAbstract funcDBAbs = FuncDBFactory.getInstance(myDBAbs);
+			if ( funcDBAbs != null )
+			{
+				String schemaName = itemParent.getValue().toString();
+				funcDBAbs.selectEntityLst(schemaName);
+				this.schemaTreeView.addEntityLst( itemSelected, funcDBAbs.getEntityLst() );
+			}
 		}
 		
 		// Delete DBSchemaTableViewTab, if already exists. 

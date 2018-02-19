@@ -70,16 +70,16 @@ public class SelectedItemHandlerRootView extends SelectedItemHandlerAbstract
 		if ( itemChildren.size() == 0 )
 		{
 			String schema = itemParent.getValue().toString();
-			/*
-			List<List<String>> dataLst = myDBAbs.getSchemaView( schema );
-			this.schemaTreeView.setViewData( itemSelected, dataLst );
-			*/
 			ViewDBAbstract viewDBAbs = ViewDBFactory.getInstance(myDBAbs);
 			if ( viewDBAbs != null )
 			{
+				/*
 				viewDBAbs.selectViewLst( schema );
 				List<Map<String,String>> dataLst = viewDBAbs.getDataLst();
 				this.schemaTreeView.setViewData( itemSelected, dataLst );
+				*/
+				viewDBAbs.selectViewLst( schema );
+				this.schemaTreeView.addEntityLst( itemSelected, viewDBAbs.getViewEntityLst() );
 			}
 		}
 		

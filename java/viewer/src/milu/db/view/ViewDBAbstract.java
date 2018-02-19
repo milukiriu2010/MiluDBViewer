@@ -7,6 +7,8 @@ import java.util.Map;
 import java.sql.SQLException;
 
 import milu.db.MyDBAbstract;
+import milu.entity.schema.SchemaEntity;
+import milu.entity.schema.SchemaEntityFactory;
 
 public abstract class ViewDBAbstract
 {
@@ -14,31 +16,33 @@ public abstract class ViewDBAbstract
 	protected MyDBAbstract  myDBAbs = null;
 	
 	// View Name List
-	protected List<String>  viewNameLst      = new ArrayList<String>();
-	
-	// Data List
-	protected List<Map<String,String>> dataLst    = new ArrayList<>();
+	protected List<Map<String,String>> viewLst = new ArrayList<>();
 	
 	public ViewDBAbstract( MyDBAbstract myDBAbs )
 	{
 		this.myDBAbs = myDBAbs;
 	}
 	
-	public List<String> getViewNameLst()
-	{
-		return this.viewNameLst;
-	}
-	
-	public List<Map<String,String>> getDataLst()
-	{
-		return this.dataLst;
-	}
-	
 	protected void clear()
 	{
-		this.viewNameLst.clear();
-		this.dataLst.clear();
+		this.viewLst.clear();
 	}
+	
+	public List<SchemaEntity> getViewEntityLst()
+	{
+		List<SchemaEntity>  viewEntityLst = new ArrayList<>();
+		for ( Map<String,String> view : this.viewLst )
+		{
+			SchemaEntity eachViewEntity = SchemaEntityFactory.createInstance( view.get("viewName"), SchemaEntity.SCHEMA_TYPE.VIEW );
+			String strStatus = view.get("status");
+			if ( strStatus != null && "INVALID".equals(strStatus) )
+			{
+				eachViewEntity.setState( SchemaEntity.STATE.INVALID );
+			}
+			viewEntityLst.add( eachViewEntity );
+		}
+		return viewEntityLst;
+	}	
 	
 	abstract public void selectViewLst( String schemaName ) throws SQLException;
 	

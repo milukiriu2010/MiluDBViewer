@@ -9,6 +9,7 @@ import javafx.scene.control.TabPane;
 import milu.db.MyDBAbstract;
 import milu.db.schema.SchemaDBFactory;
 import milu.db.schema.SchemaDBAbstract;
+import milu.entity.schema.SchemaEntity;
 
 /**
  * This class is invoked, when there is no root item on SchemaTreeView
@@ -48,10 +49,6 @@ public class SelectedItemHandlerRoot extends SelectedItemHandlerAbstract
 			SQLException
 	{
 		/*
-		List<List<String>> dataLst = this.myDBAbs.getSchemaLst();
-		this.schemaTreeView.setInitialData( this.myDBAbs.getUrl(), dataLst, this.myDBAbs.getSupportedTypeLst() );
-		*/
-		
 		SchemaDBAbstract schemaDBAbs = SchemaDBFactory.getInstance( this.myDBAbs );
 		if ( schemaDBAbs != null )
 		{
@@ -59,6 +56,14 @@ public class SelectedItemHandlerRoot extends SelectedItemHandlerAbstract
 			List<Map<String,String>> schemaNameLst = schemaDBAbs.getSchemaNameLst();
 			this.schemaTreeView.setInitialData( this.myDBAbs.getUrl(), schemaNameLst, this.myDBAbs.getSupportedTypeLst() );
 		}
+		*/
+		
+		SchemaEntity rootEntity = this.myDBAbs.getSchemaRoot();
+		if ( rootEntity != null )
+		{
+			this.schemaTreeView.setInitialData( rootEntity );
+		}
+		
 	}
 	
 }

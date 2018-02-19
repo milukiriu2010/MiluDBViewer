@@ -24,11 +24,12 @@ public abstract class TableDBAbstract
 	{
 		this.myDBAbs = myDBAbs;
 	}
-	
+	/*
 	public List<Map<String,String>> getTableNameLst()
 	{
 		return this.tableNameLst;
-	}	
+	}
+	*/	
 	
 	public List<SchemaEntity> getTableEntityLst()
 	{

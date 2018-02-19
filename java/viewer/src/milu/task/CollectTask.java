@@ -48,9 +48,8 @@ public class CollectTask extends Task<Double>
 					{
 						SchemaEntity schemaEntity = schemaEntityLst.get(i);
 						// select Table list 
-						SchemaEntity rootTableEntity = SchemaEntityFactory.createInstance( SchemaEntity.SCHEMA_TYPE.ROOT_TABLE );
-						this.selectTableLst( schemaEntity, rootTableEntity );
-						schemaEntity.addEntity( rootTableEntity );
+						this.selectTableLst( schemaEntity );
+						
 						this.updateProgress( i*100/schemaEntityLstSize, MAX );
 					}
 					
@@ -87,16 +86,68 @@ public class CollectTask extends Task<Double>
 		}
 	}
 	
-	private void selectTableLst( SchemaEntity schemaEntity, SchemaEntity rootTableEntity )
+	// select Table List
+	private void selectTableLst( SchemaEntity schemaEntity )
 		throws SQLException
 	{
 		TableDBAbstract tableDBAbs = TableDBFactory.getInstance(this.myDBAbs);
 		if ( tableDBAbs != null )
 		{
+			// ---------------------------------------
+			// -[ROOT]
+			//   -[SCHEMA]
+			//     -[ROOT_TABLE]             => add
+			//     -[ROOT_VIEW]              => add
+			//     -[ROOT_MATERIALIZED_VIEW] => add
+			//     -[ROOT_FUNC]              => add
+			//     -[ROOT_PROC]              => add
+			//     -[ROOT_PACKAGE_DEF]       => add
+			//     -[ROOT_PACKAGE_BODY]      => add
+			//     -[ROOT_TYPE]              => add
+			//     -[ROOT_SEQUENCE]          => add
+			// ---------------------------------------
+			SchemaEntity rootTableEntity        = SchemaEntityFactory.createInstance( SchemaEntity.SCHEMA_TYPE.ROOT_TABLE );
+			schemaEntity.addEntity( rootTableEntity );
+			SchemaEntity rootViewEntity         = SchemaEntityFactory.createInstance( SchemaEntity.SCHEMA_TYPE.ROOT_VIEW );
+			schemaEntity.addEntity( rootViewEntity );
+			SchemaEntity rootMaterializedViewEntity = SchemaEntityFactory.createInstance( SchemaEntity.SCHEMA_TYPE.ROOT_MATERIALIZED_VIEW );
+			schemaEntity.addEntity( rootMaterializedViewEntity );
+			SchemaEntity rootFuncEntity             = SchemaEntityFactory.createInstance( SchemaEntity.SCHEMA_TYPE.ROOT_FUNC );
+			schemaEntity.addEntity( rootFuncEntity );
+			SchemaEntity rootProcEntity             = SchemaEntityFactory.createInstance( SchemaEntity.SCHEMA_TYPE.ROOT_PROC );
+			schemaEntity.addEntity( rootProcEntity );
+			SchemaEntity rootPackageDefEntity   = SchemaEntityFactory.createInstance( SchemaEntity.SCHEMA_TYPE.ROOT_PACKAGE_DEF );
+			schemaEntity.addEntity( rootPackageDefEntity );
+			SchemaEntity rootPackageBodyEntity  = SchemaEntityFactory.createInstance( SchemaEntity.SCHEMA_TYPE.ROOT_PACKAGE_BODY );
+			schemaEntity.addEntity( rootPackageBodyEntity );
+			SchemaEntity rootTypeEntity             = SchemaEntityFactory.createInstance( SchemaEntity.SCHEMA_TYPE.ROOT_TYPE );
+			schemaEntity.addEntity( rootTypeEntity );
+			SchemaEntity rootSequenceEntity     = SchemaEntityFactory.createInstance( SchemaEntity.SCHEMA_TYPE.ROOT_SEQUENCE );
+			schemaEntity.addEntity( rootSequenceEntity );
+			
+			// ---------------------------------------
+			// -[ROOT]
+			//   -[SCHEMA]
+			//     -[ROOT_TABLE]
+			//       -[TABLE]    => add
+			// ---------------------------------------
 			String schemaName = schemaEntity.getName();
 			tableDBAbs.selectTableLst( schemaName );
 			List<SchemaEntity> tableEntityLst = tableDBAbs.getTableEntityLst();
 			rootTableEntity.addEntityAll( tableEntityLst );
+			
+			// ---------------------------------------
+			// -[ROOT]
+			//   -[SCHEMA]
+			//     -[ROOT_TABLE]
+			//       -[TABLE]
+			//         -[INDEX_ROOT] => add
+			// ---------------------------------------
+			for ( SchemaEntity tableEntity : tableEntityLst )
+			{
+				SchemaEntity rootIndexEntity = SchemaEntityFactory.createInstance( SchemaEntity.SCHEMA_TYPE.ROOT_INDEX );
+				tableEntity.addEntity( rootIndexEntity );
+			}
 		}
 	}
 	

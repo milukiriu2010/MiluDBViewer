@@ -108,11 +108,19 @@ public class SchemaEntity
 					SEQUENCE
 	}
 	
+	public enum STATE
+	{
+		VALID,
+		INVALID
+	}
+	
 	protected String       name = null;
 	
 	protected SCHEMA_TYPE  type = null;
 	
 	protected String       imageResourceName = null;
+	
+	protected STATE        state = STATE.VALID;
 	
 	protected List<SchemaEntity>  entityLst = new ArrayList<>();
 	
@@ -145,6 +153,16 @@ public class SchemaEntity
 	public SCHEMA_TYPE getType()
 	{
 		return this.type;
+	}
+	
+	public STATE getState()
+	{
+		return this.state;
+	}
+	
+	public void setState( SchemaEntity.STATE state )
+	{
+		this.state = state;
 	}
 	
 	public String getImageResourceName()

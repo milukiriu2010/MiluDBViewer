@@ -85,6 +85,7 @@ public class MyDBCassandra extends MyDBAbstract
 	 *************************************
 	 * @return String
 	 */
+	/*
 	@Override
 	protected String schemaTableSQL( String schema )
 	{
@@ -99,6 +100,7 @@ public class MyDBCassandra extends MyDBAbstract
 			" order by table_name";
 		return sql;
 	}
+	*/
 	
 	
 	/**
@@ -281,6 +283,7 @@ public class MyDBCassandra extends MyDBAbstract
 	 *************************************************
 	 * @return schema
 	 */
+	/*
 	protected String schemaMaterializedViewSQL( String schema )
 	{
 		String sql =
@@ -294,6 +297,7 @@ public class MyDBCassandra extends MyDBAbstract
 			" order by view_name";
 		return sql;
 	}
+	*/
 	
 	/**
 	 * SQL to get function lists of schema.
@@ -301,6 +305,7 @@ public class MyDBCassandra extends MyDBAbstract
 	 *************************************
 	 * @return schema
 	 */
+	/*
 	@Override
 	protected String schemaFuncSQL( String schema )
 	{
@@ -315,6 +320,7 @@ public class MyDBCassandra extends MyDBAbstract
 			" order by function_name";
 		return sql;
 	}
+	*/
 	
 	/**
 	 * Get SchemaInfo(Function Source)
@@ -515,6 +521,7 @@ public class MyDBCassandra extends MyDBAbstract
 	 *************************************
 	 * @return schema
 	 */
+	/*
 	@Override
 	protected String schemaTypeSQL( String schema )
 	{
@@ -529,6 +536,7 @@ public class MyDBCassandra extends MyDBAbstract
 			" order by type_name";
 		return sql;
 	}
+	*/
 	
 	/**
 	 * Get SchemaInfo(Type Source)

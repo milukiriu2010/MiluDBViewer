@@ -106,6 +106,7 @@ public class MyDBOracle extends MyDBAbstract
 	 *************************************
 	 * @return String
 	 */
+	/*
 	@Override
 	protected String schemaTableSQL( String schema )
 	{
@@ -118,7 +119,7 @@ public class MyDBOracle extends MyDBAbstract
 			" order by owner, object_name";
 		return sql;
 	}
-
+	*/
 	
 	/**
 	 * SQL to get view lists of schema.
@@ -126,6 +127,7 @@ public class MyDBOracle extends MyDBAbstract
 	 *************************************
 	 * @return String
 	 */
+	/*
 	@Override
 	protected String schemaViewSQL( String schema )
 	{
@@ -138,6 +140,7 @@ public class MyDBOracle extends MyDBAbstract
 			" order by owner, object_name";
 		return sql;
 	}
+	*/
 	
 	/**
 	 * SQL to get materialized view lists of schema.
@@ -145,6 +148,7 @@ public class MyDBOracle extends MyDBAbstract
 	 *************************************************
 	 * @return schema
 	 */
+	/*
 	@Override
 	protected String schemaMaterializedViewSQL( String schema )
 	{
@@ -157,6 +161,7 @@ public class MyDBOracle extends MyDBAbstract
 			" order by owner, object_name";
 		return sql;
 	}
+	*/
 	
 	/**
 	 * SQL to get index lists of schema.
@@ -297,6 +302,7 @@ order by ai.index_name
 	 *************************************
 	 * @return schema
 	 */
+	/*
 	@Override
 	protected String schemaFuncSQL( String schema )
 	{
@@ -318,6 +324,7 @@ order by ai.index_name
 			" order by object_name";
 		return sql;
 	}
+	*/
 	
 	/**
 	 * Get SchemaInfo(Function Source)
@@ -365,6 +372,7 @@ order by ai.index_name
 	 * @return schema
 	 * @throws UnsupportedOperationException
 	 */
+	/*
 	protected String schemaProcSQL( String schema )
 		throws UnsupportedOperationException
 	{
@@ -382,7 +390,7 @@ order by ai.index_name
 			" order by object_name";
 			return sql;
 	}
-	
+	*/
 	
 	/**
 	 * Get SchemaInfo(Procedure Source)
@@ -429,6 +437,7 @@ order by ai.index_name
 	 *************************************
 	 * @return schema
 	 */
+	/*
 	@Override
 	protected String schemaPackageDefSQL( String schema )
 	{
@@ -446,6 +455,7 @@ order by ai.index_name
 			" order by object_name";
 		return sql;
 	}
+	*/
 	
 	
 	/**
@@ -495,6 +505,7 @@ order by ai.index_name
 	 * @return schema
 	 * @throws UnsupportedOperationException
 	 */
+	/*
 	@Override
 	protected String schemaPackageBodySQL( String schema )
 		throws UnsupportedOperationException
@@ -513,6 +524,7 @@ order by ai.index_name
 			" order by object_name";
 		return sql;
 	}
+	*/
 	
 	/**
 	 * Get SchemaInfo(Package Body Source)
@@ -560,6 +572,7 @@ order by ai.index_name
 	 * @return schema
 	 * @throws UnsupportedOperationException
 	 */
+	/*
 	@Override
 	protected String schemaTypeSQL( String schema )
 		throws UnsupportedOperationException
@@ -578,7 +591,7 @@ order by ai.index_name
 			" order by object_name";
 		return sql;
 	}
-	
+	*/
 	/**
 	 * Get SchemaInfo(Type Source)
 	 ***************************************
@@ -694,6 +707,7 @@ order by ai.index_name
 	 * @return schema
 	 * @throws UnsupportedOperationException
 	 */
+	/*
 	@Override
 	protected String schemaSequenceSQL( String schema )
 	{
@@ -711,5 +725,5 @@ order by ai.index_name
 			" order by object_name";
 		return sql;
 	}
-	
+	*/
 }

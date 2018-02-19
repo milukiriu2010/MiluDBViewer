@@ -330,6 +330,7 @@ abstract public class MyDBAbstract
 	 * @throws SQLException
 	 *************************************
 	 */
+	/*
 	public List<List<String>> getSchemaTable( String schema )
 		throws SQLException
 	{
@@ -363,6 +364,7 @@ abstract public class MyDBAbstract
 		
 		return dataLst;
 	}
+	*/
 	
 	/**
 	 * SQL to get table lists of schema.
@@ -371,11 +373,13 @@ abstract public class MyDBAbstract
 	 * @return String
 	 * @throws UnsupportedOperationException
 	 */
+	/*
 	protected String schemaTableSQL( String schema )
 		throws UnsupportedOperationException
 	{
 		throw new UnsupportedOperationException();
 	}
+	*/
 	
 	/**
 	 * Get SchemaInfo(View)
@@ -388,6 +392,7 @@ abstract public class MyDBAbstract
 	 * @throws SQLException
 	 *************************************
 	 */
+	/*
 	public List<List<String>> getSchemaView( String schema )
 		throws SQLException
 	{
@@ -423,6 +428,7 @@ abstract public class MyDBAbstract
 		
 		return dataLst;
 	}
+	*/
 	
 	/**
 	 * SQL to get view lists of schema.
@@ -431,11 +437,13 @@ abstract public class MyDBAbstract
 	 * @return sql
 	 * @throws UnsupportedOperationException
 	 */
+	/*
 	protected String schemaViewSQL( String schema )
 		throws UnsupportedOperationException
 	{
 		throw new UnsupportedOperationException();
 	}
+	*/
 	
 	/**
 	 * Get SchemaInfo(System View)
@@ -1224,6 +1232,7 @@ abstract public class MyDBAbstract
 	 * @throws SQLException
 	 *********************************
 	 */
+	/*
 	public List<List<String>> getSchemaSequence( String schema )
 		throws SQLException
 	{
@@ -1259,6 +1268,7 @@ abstract public class MyDBAbstract
 		
 		return dataLst;
 	}
+	*/
 	
 	/**
 	 * SQL to get sequence lists of schema.
@@ -1267,10 +1277,12 @@ abstract public class MyDBAbstract
 	 * @return schema
 	 * @throws UnsupportedOperationException
 	 */
+	/*
 	protected String schemaSequenceSQL( String schema )
 		throws UnsupportedOperationException
 	{
 		throw new UnsupportedOperationException();
 	}
+	*/
 	
 }

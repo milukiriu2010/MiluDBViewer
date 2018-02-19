@@ -248,6 +248,8 @@ public class MainToolBar extends ToolBar
 		
 		// "Open Schema View" button clicked
 		this.btnSchema.setOnAction( (event)->{ this.dbView.openSchemaView(); } );
+		// disable until finishing to get schema list.
+		this.btnSchema.setDisable(true);
 	}
 	
 	public void setMnemonic()
@@ -354,6 +356,12 @@ public class MainToolBar extends ToolBar
 				}
 			}
 		);
+	}
+	
+	public void taskDone()
+	{
+		// disable until finishing to get schema list.
+		this.btnSchema.setDisable(false);
 	}
 
 	/**

@@ -10,6 +10,8 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 import milu.db.MyDBAbstract;
+import milu.db.mateview.MaterializedViewDBAbstract;
+import milu.db.mateview.MaterializedViewDBFactory;
 import milu.entity.schema.SchemaEntity;
 
 /**
@@ -70,9 +72,18 @@ public class SelectedItemHandlerRootMaterializedView extends SelectedItemHandler
 		// get View List & add list as children
 		if ( itemChildren.size() == 0 )
 		{
+			/*
 			String schema = itemParent.getValue().toString();
 			List<List<String>> dataLst = myDBAbs.getSchemaMaterializedView( schema );
 			this.schemaTreeView.setMaterializedViewData( itemSelected, dataLst );
+			*/
+			MaterializedViewDBAbstract materializedViewDBAbs = MaterializedViewDBFactory.getInstance(myDBAbs);
+			if ( materializedViewDBAbs != null )
+			{
+				String schemaName = itemParent.getValue().toString();
+				materializedViewDBAbs.selectEntityLst(schemaName);
+				this.schemaTreeView.addEntityLst( itemSelected, materializedViewDBAbs.getEntityLst() );
+			}
 		}
 		
 		// Delete DBSchemaTableViewTab, if already exists. 

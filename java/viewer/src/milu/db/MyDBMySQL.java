@@ -98,6 +98,7 @@ public class MyDBMySQL extends MyDBAbstract
 	 *************************************
 	 * @return String
 	 */
+	/*
 	@Override
 	protected String schemaTableSQL( String schema )
 	{
@@ -118,6 +119,7 @@ public class MyDBMySQL extends MyDBAbstract
 			" order by table_schema, table_name";
 		return sql;
 	}
+	*/
 	
 	/**
 	 * SQL to get view lists of schema.
@@ -125,6 +127,7 @@ public class MyDBMySQL extends MyDBAbstract
 	 *************************************
 	 * @return String
 	 */
+	/*
 	@Override
 	protected String schemaViewSQL( String schema )
 	{
@@ -145,6 +148,7 @@ public class MyDBMySQL extends MyDBAbstract
 			" order by table_schema, table_name";
 		return sql;
 	}
+	*/
 	
 	/**
 	 * SQL to get system view lists of schema.
@@ -277,6 +281,7 @@ ORDER BY COUNT(1) DESC;
 	 * @return schema
 	 * @throws UnsupportedOperationException
 	 */
+	/*
 	@Override
 	protected String schemaFuncSQL( String schema )
 	{
@@ -293,6 +298,7 @@ ORDER BY COUNT(1) DESC;
 			" order by name";
 		return sql;
 	}
+	*/
 	
 	/**
 	 * Get SchemaInfo(Function Source)
@@ -357,6 +363,7 @@ ORDER BY COUNT(1) DESC;
 	 * @return schema
 	 * @throws UnsupportedOperationException
 	 */
+	/*
 	@Override
 	protected String schemaProcSQL( String schema )
 	{
@@ -373,6 +380,7 @@ ORDER BY COUNT(1) DESC;
 			" order by name";
 		return sql;
 	}
+	*/
 	
 	/**
 	 * Get SchemaInfo(Procedure Source)

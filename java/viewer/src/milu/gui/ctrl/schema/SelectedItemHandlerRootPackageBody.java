@@ -10,6 +10,8 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 import milu.db.MyDBAbstract;
+import milu.db.packagebody.PackageBodyDBAbstract;
+import milu.db.packagebody.PackageBodyDBFactory;
 import milu.entity.schema.SchemaEntity;
 
 /**
@@ -74,9 +76,18 @@ public class SelectedItemHandlerRootPackageBody extends SelectedItemHandlerAbstr
 		// get View List & add list as children
 		if ( itemChildren.size() == 0 )
 		{
+			/*
 			String schema = itemParent.getValue().toString();
 			List<List<String>> dataLst = myDBAbs.getSchemaPackageBody( schema );
 			this.schemaTreeView.setPackageBodyData( itemSelected, dataLst );
+			*/
+			PackageBodyDBAbstract packageBodyDBAbs = PackageBodyDBFactory.getInstance(myDBAbs);
+			if ( packageBodyDBAbs != null )
+			{
+				String schemaName = itemParent.getValue().toString();
+				packageBodyDBAbs.selectEntityLst(schemaName);
+				this.schemaTreeView.addEntityLst( itemSelected, packageBodyDBAbs.getEntityLst() );
+			}
 		}
 		
 		// Delete DBSchemaTableViewTab, if already exists. 

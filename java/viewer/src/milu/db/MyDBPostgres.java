@@ -93,20 +93,10 @@ public class MyDBPostgres extends MyDBAbstract
 	 *************************************
 	 * @return String
 	 */
+	/*
 	@Override
 	protected String schemaTableSQL( String schema )
 	{
-		/*
-		String sql = 
-			"select table_schema, table_name \n" +
-			"from \n" +
-			"  information_schema.tables \n" + 
-			"where \n " +
-			"  table_type='BASE TABLE' \n " +
-			"  and \n" +
-			"  table_schema = '" + schema + "' \n" +
-			"order by table_schema, table_name";
-		*/
 		String sql = 
 			"select \n" +
 			"  n.nspname, \n" +
@@ -121,25 +111,17 @@ public class MyDBPostgres extends MyDBAbstract
 			"order by c.relname";
 		return sql;
 	}
-	
+	*/
 	/**
 	 * SQL to get view lists of schema.
 	 * call by getSchemaView
 	 *************************************
 	 * @return String
 	 */
+	/*
 	@Override
 	protected String schemaViewSQL( String schema )
 	{
-		/*
-		String sql = 
-			" select table_schema, table_name from information_schema.tables " +
-			" where " +
-			" table_type='VIEW' " + 
-			" and " + 
-			" table_schema = '" + schema + "'" +
-			" order by table_schema, table_name";
-		*/
 		String sql = 
 			"select \n" +
 			"  n.nspname, \n" +
@@ -154,6 +136,7 @@ public class MyDBPostgres extends MyDBAbstract
 			"order by c.relname";
 		return sql;
 	}
+	*/
 	
 	/**
 	 * SQL to get materialized view lists of schema.
@@ -162,6 +145,7 @@ public class MyDBPostgres extends MyDBAbstract
 	 * @return schema
 	 * @throws UnsupportedOperationException
 	 */
+	/*
 	@Override
 	protected String schemaMaterializedViewSQL( String schema )
 	{
@@ -179,6 +163,7 @@ public class MyDBPostgres extends MyDBAbstract
 			" order by c.relname";
 		return sql;
 	}
+	*/
 	
 	/**
 	 * SQL to get index lists of schema.
@@ -368,16 +353,10 @@ ORDER BY c.relname,f.attname;
 	 * @return schema
 	 * @throws UnsupportedOperationException
 	 */
+	/*
 	@Override
 	protected String schemaFuncSQL( String schema )
 	{
-		/*
-		 * SELECT routines.routine_name, parameters.data_type, parameters.ordinal_position
-FROM information_schema.routines
-    LEFT JOIN information_schema.parameters ON routines.specific_name=parameters.specific_name
-WHERE routines.specific_schema='my_specified_schema_name'
-ORDER BY routines.routine_name, parameters.ordinal_position;
-		 */
 		String sql = 
 			" select distinct \n" +
 			"   routines.routine_schema, \n" +
@@ -389,7 +368,7 @@ ORDER BY routines.routine_name, parameters.ordinal_position;
 			" order by routines.routine_schema, routines.routine_name";
 		return sql;
 	}
-	
+	*/
 	
 	/**
 	 * Get SchemaInfo(Function Source)
@@ -533,6 +512,7 @@ ORDER BY 1, 2, 4;
 	 * @return schema
 	 * @throws UnsupportedOperationException
 	 */
+	/*
 	protected String schemaTypeSQL( String schema )
 	{
 		String sql = 
@@ -546,7 +526,7 @@ ORDER BY 1, 2, 4;
 			" order by user_defined_type_schema, user_defined_type_name";
 		return sql;
 	}
-	
+	*/
 	
 	/**
 	 * Get SchemaInfo(Type Source)
@@ -675,19 +655,9 @@ ORDER BY 1, 2, 4;
 	 *************************************
 	 * @return String
 	 */
+	/*
 	protected String schemaSequenceSQL( String schema )
 	{
-		/*
-		String sql = 
-			" select \n" +
-			"   sequence_schema, \n" +
-			"   sequence_name    \n" +
-			" from  \n"  +
-			"   information_schema.sequences \n" + 
-			" where \n"  + 
-			"   sequence_schema = '" + schema + "' \n" +
-			" order by sequence_name";
-		*/
 		String sql =
 			"select \n" +
 			"  n.nspname, \n" +
@@ -702,5 +672,6 @@ ORDER BY 1, 2, 4;
 			"order by c.relname";
 		return sql;
 	}
+	*/
 	
 }

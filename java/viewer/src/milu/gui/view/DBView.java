@@ -207,6 +207,10 @@ public class DBView extends Stage
 					(obs,oldVal,newVal)->
 					{
 						System.out.println( "CollectTask:Progress[" + obs.getClass() + "]oldVal[" + oldVal + "]newVal[" + newVal + "]" );
+						if ( newVal.doubleValue() == 1.0 )
+						{
+							this.mainToolBar.taskDone();
+						}
 					}
 				);
 			}
