@@ -20,6 +20,10 @@ public class SchemaEntityFactory
 		{
 			return new SchemaEntityEachView( name );
 		}
+		else if ( schemaType == SchemaEntity.SCHEMA_TYPE.SYSTEM_VIEW )
+		{
+			return new SchemaEntityEachSystemView( name );
+		}
 		else if ( schemaType == SchemaEntity.SCHEMA_TYPE.MATERIALIZED_VIEW )
 		{
 			return new SchemaEntityEachMaterializedView( name );
@@ -67,6 +71,10 @@ public class SchemaEntityFactory
 		else if ( schemaType == SchemaEntity.SCHEMA_TYPE.ROOT_VIEW )
 		{
 			return new SchemaEntityRootView();
+		}
+		else if ( schemaType == SchemaEntity.SCHEMA_TYPE.ROOT_SYSTEM_VIEW )
+		{
+			return new SchemaEntityRootSystemView();
 		}
 		else if ( schemaType == SchemaEntity.SCHEMA_TYPE.ROOT_MATERIALIZED_VIEW )
 		{

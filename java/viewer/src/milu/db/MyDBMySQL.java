@@ -156,6 +156,7 @@ public class MyDBMySQL extends MyDBAbstract
 	 *************************************
 	 * @return String
 	 */
+	/*
 	@Override
 	protected String schemaSystemViewSQL( String schema )
 	{
@@ -168,6 +169,7 @@ public class MyDBMySQL extends MyDBAbstract
 			" order by table_schema, table_name";
 		return sql;
 	}
+	*/
 	
 	/**
 	 * SQL to get index lists of schema.

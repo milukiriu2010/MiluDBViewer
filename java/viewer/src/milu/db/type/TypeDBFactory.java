@@ -23,6 +23,10 @@ public class TypeDBFactory
 		{
 			typeDBAbs = new TypeDBCassandra();
 		}
+		else
+		{
+			return null;
+		}
 		
 		typeDBAbs.setMyDBAbstract(myDBAbs);
 		return typeDBAbs;

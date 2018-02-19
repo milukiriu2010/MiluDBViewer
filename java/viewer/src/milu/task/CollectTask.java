@@ -6,10 +6,19 @@ import java.util.List;
 import javafx.concurrent.Task;
 
 import milu.db.MyDBAbstract;
+import milu.db.func.FuncDBFactory;
+import milu.db.mateview.MaterializedViewDBFactory;
+import milu.db.packagebody.PackageBodyDBFactory;
+import milu.db.packagedef.PackageDefDBFactory;
+import milu.db.proc.ProcDBFactory;
 import milu.db.schema.SchemaDBAbstract;
 import milu.db.schema.SchemaDBFactory;
+import milu.db.sequence.SequenceDBFactory;
 import milu.db.table.TableDBAbstract;
 import milu.db.table.TableDBFactory;
+import milu.db.type.TypeDBFactory;
+import milu.db.view.ViewDBFactory;
+import milu.db.sysview.SystemViewDBFactory;
 import milu.entity.schema.SchemaEntity;
 import milu.entity.schema.SchemaEntityFactory;
 import milu.gui.view.DBView;
@@ -84,6 +93,16 @@ public class CollectTask extends Task<Double>
 			
 			return progress;
 		}
+		catch ( Exception ex )
+		{
+			System.out.println( "CollectTask:Exception." );
+			ex.printStackTrace();
+			progress = -3.0;
+			
+			this.updateProgress( progress, MAX );
+			
+			return progress;
+		}
 	}
 	
 	// select Table List
@@ -99,6 +118,7 @@ public class CollectTask extends Task<Double>
 			//     -[ROOT_TABLE]             => add
 			//     -[ROOT_VIEW]              => add
 			//     -[ROOT_MATERIALIZED_VIEW] => add
+			//	   -[ROOT_SYSTEM_VIEW]       => add
 			//     -[ROOT_FUNC]              => add
 			//     -[ROOT_PROC]              => add
 			//     -[ROOT_PACKAGE_DEF]       => add
@@ -108,22 +128,51 @@ public class CollectTask extends Task<Double>
 			// ---------------------------------------
 			SchemaEntity rootTableEntity        = SchemaEntityFactory.createInstance( SchemaEntity.SCHEMA_TYPE.ROOT_TABLE );
 			schemaEntity.addEntity( rootTableEntity );
-			SchemaEntity rootViewEntity         = SchemaEntityFactory.createInstance( SchemaEntity.SCHEMA_TYPE.ROOT_VIEW );
-			schemaEntity.addEntity( rootViewEntity );
-			SchemaEntity rootMaterializedViewEntity = SchemaEntityFactory.createInstance( SchemaEntity.SCHEMA_TYPE.ROOT_MATERIALIZED_VIEW );
-			schemaEntity.addEntity( rootMaterializedViewEntity );
-			SchemaEntity rootFuncEntity             = SchemaEntityFactory.createInstance( SchemaEntity.SCHEMA_TYPE.ROOT_FUNC );
-			schemaEntity.addEntity( rootFuncEntity );
-			SchemaEntity rootProcEntity             = SchemaEntityFactory.createInstance( SchemaEntity.SCHEMA_TYPE.ROOT_PROC );
-			schemaEntity.addEntity( rootProcEntity );
-			SchemaEntity rootPackageDefEntity   = SchemaEntityFactory.createInstance( SchemaEntity.SCHEMA_TYPE.ROOT_PACKAGE_DEF );
-			schemaEntity.addEntity( rootPackageDefEntity );
-			SchemaEntity rootPackageBodyEntity  = SchemaEntityFactory.createInstance( SchemaEntity.SCHEMA_TYPE.ROOT_PACKAGE_BODY );
-			schemaEntity.addEntity( rootPackageBodyEntity );
-			SchemaEntity rootTypeEntity             = SchemaEntityFactory.createInstance( SchemaEntity.SCHEMA_TYPE.ROOT_TYPE );
-			schemaEntity.addEntity( rootTypeEntity );
-			SchemaEntity rootSequenceEntity     = SchemaEntityFactory.createInstance( SchemaEntity.SCHEMA_TYPE.ROOT_SEQUENCE );
-			schemaEntity.addEntity( rootSequenceEntity );
+			if ( ViewDBFactory.getInstance(myDBAbs) != null )
+			{
+				SchemaEntity rootViewEntity         = SchemaEntityFactory.createInstance( SchemaEntity.SCHEMA_TYPE.ROOT_VIEW );
+				schemaEntity.addEntity( rootViewEntity );
+			}
+			if ( SystemViewDBFactory.getInstance(myDBAbs) != null )
+			{
+				SchemaEntity rootSystemViewEntity         = SchemaEntityFactory.createInstance( SchemaEntity.SCHEMA_TYPE.ROOT_SYSTEM_VIEW );
+				schemaEntity.addEntity( rootSystemViewEntity );
+			}
+			if ( MaterializedViewDBFactory.getInstance(myDBAbs) != null )
+			{
+				SchemaEntity rootMaterializedViewEntity = SchemaEntityFactory.createInstance( SchemaEntity.SCHEMA_TYPE.ROOT_MATERIALIZED_VIEW );
+				schemaEntity.addEntity( rootMaterializedViewEntity );
+			}
+			if ( FuncDBFactory.getInstance(myDBAbs) != null )
+			{
+				SchemaEntity rootFuncEntity             = SchemaEntityFactory.createInstance( SchemaEntity.SCHEMA_TYPE.ROOT_FUNC );
+				schemaEntity.addEntity( rootFuncEntity );
+			}
+			if ( ProcDBFactory.getInstance(myDBAbs) != null )
+			{
+				SchemaEntity rootProcEntity             = SchemaEntityFactory.createInstance( SchemaEntity.SCHEMA_TYPE.ROOT_PROC );
+				schemaEntity.addEntity( rootProcEntity );
+			}
+			if ( PackageDefDBFactory.getInstance(myDBAbs) != null )
+			{
+				SchemaEntity rootPackageDefEntity   = SchemaEntityFactory.createInstance( SchemaEntity.SCHEMA_TYPE.ROOT_PACKAGE_DEF );
+				schemaEntity.addEntity( rootPackageDefEntity );
+			}
+			if ( PackageBodyDBFactory.getInstance(myDBAbs) != null )
+			{
+				SchemaEntity rootPackageBodyEntity  = SchemaEntityFactory.createInstance( SchemaEntity.SCHEMA_TYPE.ROOT_PACKAGE_BODY );
+				schemaEntity.addEntity( rootPackageBodyEntity );
+			}
+			if ( TypeDBFactory.getInstance(myDBAbs) != null )
+			{
+				SchemaEntity rootTypeEntity             = SchemaEntityFactory.createInstance( SchemaEntity.SCHEMA_TYPE.ROOT_TYPE );
+				schemaEntity.addEntity( rootTypeEntity );
+			}
+			if ( SequenceDBFactory.getInstance(myDBAbs) != null )
+			{
+				SchemaEntity rootSequenceEntity     = SchemaEntityFactory.createInstance( SchemaEntity.SCHEMA_TYPE.ROOT_SEQUENCE );
+				schemaEntity.addEntity( rootSequenceEntity );
+			}
 			
 			// ---------------------------------------
 			// -[ROOT]

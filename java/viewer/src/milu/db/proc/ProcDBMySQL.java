@@ -29,7 +29,6 @@ public class ProcDBMySQL extends ProcDBAbstract
 			{
 				Map<String, String> mapView = new HashMap<String,String>();
 				mapView.put( "procName", rs.getString("name") );
-				mapView.put( "status"  , rs.getString("status") );
 				this.procLst.add( mapView );
 			}
 		}
