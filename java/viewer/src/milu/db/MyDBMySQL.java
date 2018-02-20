@@ -446,6 +446,7 @@ ORDER BY COUNT(1) DESC;
 	 *************************************
 	 * @return schema
 	 */
+	/*
 	@Override
 	protected String schemaTriggerSQL( String schema )
 	{
@@ -460,6 +461,7 @@ ORDER BY COUNT(1) DESC;
 			" order by trigger_name";
 		return sql;
 	}
+	*/
 	
 	/**
 	 * Get SchemaInfo(Trigger Source)

@@ -170,6 +170,11 @@ public class SchemaEntity
 		return this.imageResourceName;
 	}
 	
+	public void setImageResourceName( String imageResourceName )
+	{
+		this.imageResourceName = imageResourceName;
+	}
+	
 	public List<SchemaEntity> getEntityLst()
 	{
 		return this.entityLst;

@@ -16,6 +16,14 @@ public class SchemaEntityFactory
 		{
 			return new SchemaEntityEachTable( name );
 		}
+		else if ( schemaType == SchemaEntity.SCHEMA_TYPE.INDEX )
+		{
+			return new SchemaEntityEachIndex( name );
+		}
+		else if ( schemaType == SchemaEntity.SCHEMA_TYPE.INDEX_COLUMN )
+		{
+			return new SchemaEntityEachIndexColumn( name );
+		}
 		else if ( schemaType == SchemaEntity.SCHEMA_TYPE.VIEW )
 		{
 			return new SchemaEntityEachView( name );
@@ -47,6 +55,10 @@ public class SchemaEntityFactory
 		else if ( schemaType == SchemaEntity.SCHEMA_TYPE.TYPE )
 		{
 			return new SchemaEntityEachType( name );
+		}
+		else if ( schemaType == SchemaEntity.SCHEMA_TYPE.TRIGGER )
+		{
+			return new SchemaEntityEachTrigger( name );
 		}
 		else if ( schemaType == SchemaEntity.SCHEMA_TYPE.SEQUENCE )
 		{
@@ -99,6 +111,10 @@ public class SchemaEntityFactory
 		else if ( schemaType == SchemaEntity.SCHEMA_TYPE.ROOT_TYPE )
 		{
 			return new SchemaEntityRootType();
+		}
+		else if ( schemaType == SchemaEntity.SCHEMA_TYPE.ROOT_TRIGGER )
+		{
+			return new SchemaEntityRootTrigger();
 		}
 		else if ( schemaType == SchemaEntity.SCHEMA_TYPE.ROOT_SEQUENCE )
 		{

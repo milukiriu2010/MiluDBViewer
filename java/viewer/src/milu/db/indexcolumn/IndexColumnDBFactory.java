@@ -1,4 +1,4 @@
-package milu.db.index;
+package milu.db.indexcolumn;
 
 import milu.db.MyDBAbstract;
 import milu.db.MyDBPostgres;
@@ -6,25 +6,25 @@ import milu.db.MyDBMySQL;
 import milu.db.MyDBOracle;
 import milu.db.MyDBCassandra;
 
-public class IndexDBFactory
+public class IndexColumnDBFactory
 {
-	public static IndexDBAbstract getInstance( MyDBAbstract myDBAbs )
+	public static IndexColumnDBAbstract getInstance( MyDBAbstract myDBAbs )
 	{
 		if ( myDBAbs instanceof MyDBPostgres )
 		{
-			return new IndexDBPostgres( myDBAbs );
+			return new IndexColumnDBPostgres( myDBAbs );
 		}
 		else if ( myDBAbs instanceof MyDBMySQL )
 		{
-			return new IndexDBMySQL( myDBAbs );
+			return new IndexColumnDBMySQL( myDBAbs );
 		}
 		else if ( myDBAbs instanceof MyDBOracle )
 		{
-			return new IndexDBOracle( myDBAbs );
+			return new IndexColumnDBOracle( myDBAbs );
 		}
 		else if ( myDBAbs instanceof MyDBCassandra )
 		{
-			return new IndexDBCassandra( myDBAbs );
+			return new IndexColumnDBCassandra( myDBAbs );
 		}
 		else
 		{

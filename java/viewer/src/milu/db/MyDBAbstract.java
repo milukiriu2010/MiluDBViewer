@@ -89,7 +89,7 @@ abstract public class MyDBAbstract
 		return this.url;
 	}
 	
-	public SchemaEntity getSchemaRoot()
+	public synchronized SchemaEntity getSchemaRoot()
 	{
 		return this.schemaRoot;
 	}
@@ -127,7 +127,7 @@ abstract public class MyDBAbstract
 	 * @throws ClassNotFoundException
 	 * @throws SQLException 
 	 */
-	public void connect( Map<String,String> dbOptMap ) 
+	public synchronized void connect( Map<String,String> dbOptMap ) 
 		 throws ClassNotFoundException, SQLException
 	{
 		// close connection, if already connected.
@@ -169,9 +169,10 @@ abstract public class MyDBAbstract
 	 ******************************
 	 * @throws SQLException
 	 */
-	public void reconnect() 
+	public synchronized void reconnect() 
 		 throws SQLException
 	{
+		/*
 		// close connection, if already connected.
 		try
 		{
@@ -181,6 +182,7 @@ abstract public class MyDBAbstract
 		{
 			// suppress error
 		}
+		*/
 		
 		// Connection
 		this.conn = 
@@ -197,7 +199,7 @@ abstract public class MyDBAbstract
 	 * @throws SQLException
 	 *********************************************** 
 	 */
-	public void close()
+	public synchronized void close()
 		throws SQLException
 	{
 		this.schemaRoot = null;
@@ -215,7 +217,7 @@ abstract public class MyDBAbstract
 	 *   true  => connected
 	 *   false => not connected
 	 */
-	public boolean isConnected()
+	public synchronized boolean isConnected()
 	{
 		return ( this.conn != null );
 	}
@@ -225,7 +227,7 @@ abstract public class MyDBAbstract
 	 ************************************* 
 	 * @throws SQLException
 	 */
-	public void commit()
+	public synchronized void commit()
 		throws SQLException
 	{
 		if ( this.conn != null )
@@ -239,7 +241,7 @@ abstract public class MyDBAbstract
 	 *************************************
 	 * @throws SQLException
 	 */
-	public void rollback()
+	public synchronized void rollback()
 		throws SQLException
 	{
 		if ( this.conn != null )
@@ -248,7 +250,7 @@ abstract public class MyDBAbstract
 		}
 	}
 	
-	public Statement createStatement()
+	public synchronized Statement createStatement()
 		throws SQLException
 	{
 		return this.conn.createStatement();
@@ -456,6 +458,7 @@ abstract public class MyDBAbstract
 	 * @throws SQLException
 	 *********************************
 	 */
+	/*
 	public List<List<String>> getSchemaSystemView( String schema )
 		throws SQLException
 	{
@@ -491,6 +494,7 @@ abstract public class MyDBAbstract
 		
 		return dataLst;
 	}
+	*/
 	
 	/**
 	 * SQL to get system view lists of schema.
@@ -499,11 +503,13 @@ abstract public class MyDBAbstract
 	 * @return String
 	 * @throws UnsupportedOperationException
 	 */
+	/*
 	protected String schemaSystemViewSQL( String schema )
 		throws UnsupportedOperationException
 	{
 		throw new UnsupportedOperationException();
 	}
+	*/
 	
 	/**
 	 * Get SchemaInfo(Materialized View)
@@ -516,6 +522,7 @@ abstract public class MyDBAbstract
 	 * @throws SQLException
 	 *********************************
 	 */
+	/*
 	public List<List<String>> getSchemaMaterializedView( String schema )
 		throws SQLException
 	{
@@ -551,6 +558,7 @@ abstract public class MyDBAbstract
 		
 		return dataLst;
 	}
+	*/
 	
 	/**
 	 * SQL to get materialized view lists of schema.
@@ -559,11 +567,13 @@ abstract public class MyDBAbstract
 	 * @return schema
 	 * @throws UnsupportedOperationException
 	 */
+	/*
 	protected String schemaMaterializedViewSQL( String schema )
 		throws UnsupportedOperationException
 	{
 		throw new UnsupportedOperationException();
 	}
+	*/
 	
 	/**
 	 * Get SchemaInfo(Index)
@@ -700,6 +710,7 @@ abstract public class MyDBAbstract
 	 * @throws SQLException
 	 *********************************
 	 */
+	/*
 	public List<List<String>> getSchemaFunc( String schema )
 		throws SQLException
 	{
@@ -735,6 +746,7 @@ abstract public class MyDBAbstract
 		
 		return dataLst;
 	}
+	*/
 	
 	/**
 	 * SQL to get function lists of schema.
@@ -743,11 +755,13 @@ abstract public class MyDBAbstract
 	 * @return schema
 	 * @throws UnsupportedOperationException
 	 */
+	/*
 	protected String schemaFuncSQL( String schema )
 		throws UnsupportedOperationException
 	{
 		throw new UnsupportedOperationException();
 	}
+	*/
 	
 	/**
 	 * Get SchemaInfo(Function Source)
@@ -852,6 +866,7 @@ abstract public class MyDBAbstract
 	 * @throws SQLException
 	 *********************************
 	 */
+	/*
 	public List<List<String>> getSchemaProc( String schema )
 		throws SQLException
 	{
@@ -887,7 +902,7 @@ abstract public class MyDBAbstract
 		
 		return dataLst;
 	}
-	
+	*/
 	/**
 	 * SQL to get procedure lists of schema.
 	 * call by getSchemaProc
@@ -895,11 +910,13 @@ abstract public class MyDBAbstract
 	 * @return schema
 	 * @throws UnsupportedOperationException
 	 */
+	/*
 	protected String schemaProcSQL( String schema )
 		throws UnsupportedOperationException
 	{
 		throw new UnsupportedOperationException();
 	}
+	*/
 	
 	/**
 	 * Get SchemaInfo(Procedure Source)
@@ -928,6 +945,7 @@ abstract public class MyDBAbstract
 	 * @throws SQLException
 	 *********************************
 	 */
+	/*
 	public List<List<String>> getSchemaPackageDef( String schema )
 		throws SQLException
 	{
@@ -963,7 +981,7 @@ abstract public class MyDBAbstract
 		
 		return dataLst;
 	}
-	
+	*/
 	/**
 	 * SQL to get package def lists of schema.
 	 * call by getSchemaPackageDef
@@ -971,12 +989,13 @@ abstract public class MyDBAbstract
 	 * @return schema
 	 * @throws UnsupportedOperationException
 	 */
+	/*
 	protected String schemaPackageDefSQL( String schema )
 		throws UnsupportedOperationException
 	{
 		throw new UnsupportedOperationException();
 	}
-	
+	*/
 	/**
 	 * Get SchemaInfo(Package Source)
 	 ***************************************
@@ -1004,6 +1023,7 @@ abstract public class MyDBAbstract
 	 * @throws SQLException
 	 *********************************
 	 */
+	/*
 	public List<List<String>> getSchemaPackageBody( String schema )
 		throws SQLException
 	{
@@ -1039,7 +1059,7 @@ abstract public class MyDBAbstract
 		
 		return dataLst;
 	}
-	
+	*/
 	/**
 	 * SQL to get package body lists of schema.
 	 * call by getSchemaPackageBody
@@ -1047,12 +1067,13 @@ abstract public class MyDBAbstract
 	 * @return schema
 	 * @throws UnsupportedOperationException
 	 */
+	/*
 	protected String schemaPackageBodySQL( String schema )
 		throws UnsupportedOperationException
 	{
 		throw new UnsupportedOperationException();
 	}
-	
+	*/
 	/**
 	 * Get SchemaInfo(Package Body Source)
 	 ***************************************
@@ -1080,6 +1101,7 @@ abstract public class MyDBAbstract
 	 * @throws SQLException
 	 *********************************
 	 */
+	/*
 	public List<List<String>> getSchemaType( String schema )
 		throws SQLException
 	{
@@ -1115,6 +1137,7 @@ abstract public class MyDBAbstract
 		
 		return dataLst;
 	}
+	*/
 	
 	/**
 	 * SQL to get type lists of schema.
@@ -1123,12 +1146,13 @@ abstract public class MyDBAbstract
 	 * @return schema
 	 * @throws UnsupportedOperationException
 	 */
+	/*
 	protected String schemaTypeSQL( String schema )
 		throws UnsupportedOperationException
 	{
 		throw new UnsupportedOperationException();
 	}
-	
+	*/
 	/**
 	 * Get SchemaInfo(Type Source)
 	 ***************************************
@@ -1156,6 +1180,7 @@ abstract public class MyDBAbstract
 	 * @throws SQLException
 	 *********************************
 	 */
+	/*
 	public List<List<String>> getSchemaTrigger( String schema )
 		throws SQLException
 	{
@@ -1191,7 +1216,7 @@ abstract public class MyDBAbstract
 		
 		return dataLst;
 	}
-	
+	*/
 	/**
 	 * SQL to get trigger lists of schema.
 	 * call by getSchemaTrigger
@@ -1199,11 +1224,13 @@ abstract public class MyDBAbstract
 	 * @return schema
 	 * @throws UnsupportedOperationException
 	 */
+	/*
 	protected String schemaTriggerSQL( String schema )
 		throws UnsupportedOperationException
 	{
 		throw new UnsupportedOperationException();
 	}
+	*/
 	
 	/**
 	 * Get SchemaInfo(Trigger Source)

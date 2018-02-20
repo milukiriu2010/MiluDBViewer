@@ -676,6 +676,7 @@ public class SchemaTreeView extends TreeView<SchemaEntity>
 		this.scrollBack(itemTarget);
 	}
 	
+	/*
 	public void setIndexColumnData( TreeItem<SchemaEntity> itemTarget, List<Map<String,String>> dataLst )
 	{
 		for ( Map<String,String> dataRow : dataLst )
@@ -708,6 +709,7 @@ public class SchemaTreeView extends TreeView<SchemaEntity>
 		itemTarget.setExpanded(true);
 		this.scrollBack(itemTarget);
 	}
+	*/
 
 	/*
 	public void setViewData( TreeItem<SchemaEntity> itemTarget, List<Map<String,String>> dataLst )
@@ -755,7 +757,7 @@ public class SchemaTreeView extends TreeView<SchemaEntity>
 		itemTarget.setExpanded(true);
 		this.scrollBack(itemTarget);
 	}
-	
+	/*
 	public void setSystemViewData( TreeItem<SchemaEntity> itemTarget, List<List<String>> dataLst )
 	{
 		
@@ -775,7 +777,8 @@ public class SchemaTreeView extends TreeView<SchemaEntity>
 		itemTarget.setExpanded(true);
 		this.scrollBack(itemTarget);
 	}
-	
+	*/
+	/*
 	public void setMaterializedViewData( TreeItem<SchemaEntity> itemTarget, List<List<String>> dataLst )
 	{
 		
@@ -805,7 +808,8 @@ public class SchemaTreeView extends TreeView<SchemaEntity>
 		itemTarget.setExpanded(true);
 		this.scrollBack(itemTarget);
 	}
-	
+	*/
+	/*
 	public void setFuncData( TreeItem<SchemaEntity> itemTarget, List<List<String>> dataLst )
 	{
 		
@@ -835,7 +839,7 @@ public class SchemaTreeView extends TreeView<SchemaEntity>
 		itemTarget.setExpanded(true);
 		this.scrollBack(itemTarget);
 	}
-	
+	*/
 	public void setAggregateData( TreeItem<SchemaEntity> itemTarget, List<List<String>> dataLst )
 	{
 		
@@ -865,7 +869,7 @@ public class SchemaTreeView extends TreeView<SchemaEntity>
 		itemTarget.setExpanded(true);
 		this.scrollBack(itemTarget);
 	}
-	
+	/*
 	public void setProcData( TreeItem<SchemaEntity> itemTarget, List<List<String>> dataLst )
 	{
 		
@@ -895,6 +899,7 @@ public class SchemaTreeView extends TreeView<SchemaEntity>
 		itemTarget.setExpanded(true);
 		this.scrollBack(itemTarget);
 	}
+	*/
 	/*
 	public void setPackageDefData( TreeItem<SchemaEntity> itemTarget, List<SchemaEntity> schemaEntityLst )
 	{
@@ -913,7 +918,7 @@ public class SchemaTreeView extends TreeView<SchemaEntity>
 		this.scrollBack(itemTarget);
 	}
 	*/
-	
+	/*
 	public void setPackageBodyData( TreeItem<SchemaEntity> itemTarget, List<List<String>> dataLst )
 	{
 		for ( List<String> dataRow : dataLst )
@@ -943,7 +948,8 @@ public class SchemaTreeView extends TreeView<SchemaEntity>
 		
 		this.scrollBack(itemTarget);
 	}
-	
+	*/
+	/*
 	public void setTypeData( TreeItem<SchemaEntity> itemTarget, List<List<String>> dataLst )
 	{
 		for ( List<String> dataRow : dataLst )
@@ -973,7 +979,8 @@ public class SchemaTreeView extends TreeView<SchemaEntity>
 		
 		this.scrollBack(itemTarget);
 	}
-	
+	*/
+	/*
 	public void setTriggerData( TreeItem<SchemaEntity> itemTarget, List<List<String>> dataLst )
 	{
 		for ( List<String> dataRow : dataLst )
@@ -1003,7 +1010,8 @@ public class SchemaTreeView extends TreeView<SchemaEntity>
 		
 		this.scrollBack(itemTarget);
 	}
-	
+	*/
+	/*
 	public void setSequenceData( TreeItem<SchemaEntity> itemTarget, List<List<String>> dataLst )
 	{
 		for ( List<String> dataRow : dataLst )
@@ -1033,7 +1041,7 @@ public class SchemaTreeView extends TreeView<SchemaEntity>
 		
 		this.scrollBack(itemTarget);
 	}
-	
+	*/
 	/**
 	 * Load Language Resource
 	 */

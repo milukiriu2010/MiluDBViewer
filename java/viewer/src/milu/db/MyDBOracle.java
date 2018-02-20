@@ -640,6 +640,7 @@ order by ai.index_name
 	 * @return schema
 	 * @throws UnsupportedOperationException
 	 */
+	/*
 	@Override
 	protected String schemaTriggerSQL( String schema )
 	{
@@ -657,7 +658,7 @@ order by ai.index_name
 			" order by object_name";
 		return sql;
 	}
-	
+	*/
 	/**
 	 * Get SchemaInfo(Trigger Source)
 	 ***************************************

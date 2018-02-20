@@ -599,6 +599,7 @@ ORDER BY 1, 2, 4;
 	 ************************************
 	 * @return String
 	 */
+	/*
 	@Override
 	protected String schemaTriggerSQL( String schema )
 	{
@@ -617,7 +618,7 @@ ORDER BY 1, 2, 4;
 			" order by t.tgname";
 		return sql;
 	}
-	
+	*/
 	/**
 	 * Get SchemaInfo(Trigger Source)
 	 ***************************************

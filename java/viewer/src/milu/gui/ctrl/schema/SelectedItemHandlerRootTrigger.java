@@ -10,6 +10,8 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 import milu.db.MyDBAbstract;
+import milu.db.trigger.TriggerDBAbstract;
+import milu.db.trigger.TriggerDBFactory;
 import milu.entity.schema.SchemaEntity;
 
 /**
@@ -72,9 +74,18 @@ public class SelectedItemHandlerRootTrigger extends SelectedItemHandlerAbstract
 		// get View List & add list as children
 		if ( itemChildren.size() == 0 )
 		{
+			/*
 			String schema = itemParent.getValue().toString();
 			List<List<String>> dataLst = myDBAbs.getSchemaTrigger( schema );
 			this.schemaTreeView.setTriggerData( itemSelected, dataLst );
+			*/
+			TriggerDBAbstract triggerDBAbs = TriggerDBFactory.getInstance(myDBAbs);
+			if ( triggerDBAbs != null )
+			{
+				String schemaName = itemParent.getValue().toString();
+				triggerDBAbs.selectEntityLst(schemaName);
+				this.schemaTreeView.addEntityLst( itemSelected, triggerDBAbs.getEntityLst() );
+			}
 		}
 		
 		// Delete DBSchemaTableViewTab, if already exists. 

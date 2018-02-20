@@ -12,9 +12,9 @@ import javafx.scene.control.TreeItem;
 //import javafx.scene.image.ImageView;
 
 import milu.db.MyDBAbstract;
-import milu.db.index.IndexDBFactory;
+import milu.db.indexcolumn.IndexColumnDBAbstract;
+import milu.db.indexcolumn.IndexColumnDBFactory;
 import milu.entity.schema.SchemaEntity;
-import milu.db.index.IndexDBAbstract;
 
 import java.sql.SQLException;
 
@@ -81,11 +81,12 @@ public class SelectedItemHandlerEachIndex extends SelectedItemHandlerAbstract
 		System.out.println( "indexName: " + indexName );
 		*/
 		
-		IndexDBAbstract indexDBAbs = IndexDBFactory.getInstance( this.myDBAbs );
-		if ( indexDBAbs != null )
+		IndexColumnDBAbstract indexColumnDBAbs = IndexColumnDBFactory.getInstance( this.myDBAbs );
+		if ( indexColumnDBAbs != null )
 		{
-			indexDBAbs.selectColumnLst( schemaName, tableName, indexName );
-			this.schemaTreeView.setIndexColumnData( this.itemSelected, indexDBAbs.getDataLst() );
+			indexColumnDBAbs.selectEntityLst( schemaName, tableName, indexName );
+			this.schemaTreeView.addEntityLst( itemSelected, indexColumnDBAbs.getEntityLst() );
+			//this.schemaTreeView.setIndexColumnData( this.itemSelected, indexColumnDBAbs.getDataLst() );
 		}
 		
 		/*
