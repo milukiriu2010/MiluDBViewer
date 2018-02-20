@@ -7,6 +7,8 @@ import javafx.scene.control.TreeItem;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import milu.db.MyDBAbstract;
+import milu.db.aggregate.AggregateDBAbstract;
+import milu.db.aggregate.AggregateDBFactory;
 import milu.entity.schema.SchemaEntity;
 
 import java.sql.SQLException;
@@ -62,9 +64,9 @@ public class SelectedItemHandlerEachAggregate extends SelectedItemHandlerAbstrac
 			SQLException
 	{
 		TreeItem<SchemaEntity> itemParent = itemSelected.getParent();
-		String schema         = itemParent.getParent().getValue().toString();
+		String schemaName     = itemParent.getParent().getValue().toString();
 		String aggregateName  = itemSelected.getValue().getName();
-		String id             = schema + "@aggregate@" + aggregateName;
+		String id             = schemaName + "@aggregate@" + aggregateName;
 		System.out.println( "setAggregateDef:" + aggregateName );
 		
 		final ObservableList<Tab> tabLst =  this.tabPane.getTabs();
@@ -105,8 +107,14 @@ public class SelectedItemHandlerEachAggregate extends SelectedItemHandlerAbstrac
 		newTab.setGraphic( iv );
 		
 		// get table definition
-		String strSrc = 
-			myDBAbs.getAggregateSourceBySchemaAggregate( schema, aggregateName );
+		//String strSrc = 
+		//	myDBAbs.getAggregateSourceBySchemaAggregate( schema, aggregateName );
+		AggregateDBAbstract aggregateDBAbs = AggregateDBFactory.getInstance(myDBAbs);
+		if ( aggregateDBAbs == null )
+		{
+			return;
+		}
+		String strSrc = aggregateDBAbs.getSRC(schemaName, aggregateName);
 		
 		// set function source in SqlTextArea
 		newTab.setSrcText( strSrc );

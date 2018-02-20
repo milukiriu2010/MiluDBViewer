@@ -70,7 +70,8 @@ public class SchemaEntityFactory
 		}
 		else
 		{
-			return new SchemaEntity( name, schemaType );
+			//return new SchemaEntity( name, schemaType );
+			return null;
 		}
 	}
 	
@@ -130,7 +131,8 @@ public class SchemaEntityFactory
 		}
 		else
 		{
-			return new SchemaEntity( schemaType );
+			//return new SchemaEntity( schemaType );
+			return null;
 		}
 	}
 }

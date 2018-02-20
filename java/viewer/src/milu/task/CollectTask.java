@@ -7,6 +7,7 @@ import javafx.concurrent.Task;
 
 import milu.db.MyDBAbstract;
 import milu.db.func.FuncDBFactory;
+import milu.db.aggregate.AggregateDBFactory;
 import milu.db.mateview.MaterializedViewDBFactory;
 import milu.db.packagebody.PackageBodyDBFactory;
 import milu.db.packagedef.PackageDefDBFactory;
@@ -121,6 +122,7 @@ public class CollectTask extends Task<Double>
 			//     -[ROOT_MATERIALIZED_VIEW] => add
 			//	   -[ROOT_SYSTEM_VIEW]       => add
 			//     -[ROOT_FUNC]              => add
+			//     -[ROOT_AGGREGATE]         => add
 			//     -[ROOT_PROC]              => add
 			//     -[ROOT_PACKAGE_DEF]       => add
 			//     -[ROOT_PACKAGE_BODY]      => add
@@ -149,6 +151,11 @@ public class CollectTask extends Task<Double>
 			{
 				SchemaEntity rootFuncEntity             = SchemaEntityFactory.createInstance( SchemaEntity.SCHEMA_TYPE.ROOT_FUNC );
 				schemaEntity.addEntity( rootFuncEntity );
+			}
+			if ( AggregateDBFactory.getInstance(myDBAbs) != null )
+			{
+				SchemaEntity rootAggregateEntity        = SchemaEntityFactory.createInstance( SchemaEntity.SCHEMA_TYPE.ROOT_AGGREGATE );
+				schemaEntity.addEntity( rootAggregateEntity );
 			}
 			if ( ProcDBFactory.getInstance(myDBAbs) != null )
 			{

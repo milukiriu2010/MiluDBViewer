@@ -40,9 +40,8 @@ public class IndexDBMySQL extends IndexDBAbstract {
 	protected String listSQL(String schemaName, String tableName) 
 	{
 		String sql = 
-			" select \n"        + 
-			"   table_name, \n" +
-			"   index_name, \n" +
+			" select distinct \n"             + 
+			"   index_name, \n"               +
 			"   case index_name \n "          +
 			"     when 'PRIMARY' then 't' \n" +
 			"     else                'f' \n" +
@@ -61,7 +60,7 @@ public class IndexDBMySQL extends IndexDBAbstract {
 			"   table_schema = '" + schemaName + "' \n" +
 			"   and \n" +
 			"   table_name = '" + tableName + "' \n" +
-			" order by table_name,index_name,seq_in_index";
+			" order by index_name,seq_in_index";
 			
 		return sql;
 	}

@@ -1,0 +1,8 @@
+C:\Program Files\MongoDB\Server\3.6\bin
+
+https://docs.mongodb.com/getting-started/shell/tutorial/install-mongodb-on-windows/
+
+"C:\Program Files\MongoDB\Server\3.6\bin\mongod.exe" --dbpath c:\my\mongodb\data
+
+https://docs.mongodb.com/manual/tutorial/enable-authentication/
+

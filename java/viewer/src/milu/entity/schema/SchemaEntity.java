@@ -4,8 +4,10 @@ import java.util.Collection;
 import java.util.List;
 import java.util.ArrayList;
 
+import milu.ctrl.visitor.VisitorInterface;
+
 // This class will be abstract
-public class SchemaEntity
+abstract public class SchemaEntity
 {
 	// ---------------------------------------
 	// [0:ROOT]
@@ -188,5 +190,10 @@ public class SchemaEntity
 	public void addEntityAll( Collection<? extends SchemaEntity> schemaEntityLst )
 	{
 		this.entityLst.addAll( schemaEntityLst );
+	}
+	
+	public void accept( VisitorInterface visitor )
+	{
+		visitor.visit(this);
 	}
 }

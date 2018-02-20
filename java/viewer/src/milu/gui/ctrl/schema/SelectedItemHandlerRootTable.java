@@ -14,6 +14,8 @@ import milu.db.table.TableDBAbstract;
 import milu.db.table.TableDBFactory;
 import milu.entity.schema.SchemaEntity;
 import milu.entity.schema.SearchSchemaEntity;
+import milu.ctrl.visitor.SearchSchemaEntityVisitorTypeName;
+import milu.ctrl.visitor.SearchSchemaEntityVisitorType;
 
 /**
  * This class is invoked, when "root table" item is clicked on SchemaTreeView.
@@ -66,7 +68,7 @@ public class SelectedItemHandlerRootTable extends SelectedItemHandlerAbstract
 		TreeItem<SchemaEntity> itemParent   = this.itemSelected.getParent();
 		ObservableList<TreeItem<SchemaEntity>> itemChildren = this.itemSelected.getChildren();
 		
-		// get View List & add list as children
+		// get Table List & add list as children
 		if ( itemChildren.size() == 0 )
 		{
 			/*
@@ -80,6 +82,7 @@ public class SelectedItemHandlerRootTable extends SelectedItemHandlerAbstract
 			*/
 			
 			String schemaName = itemParent.getValue().toString();
+			/*
 			SchemaEntity schemaEntity = 
 				SearchSchemaEntity.search( 
 					this.myDBAbs.getSchemaRoot(), 
@@ -91,6 +94,15 @@ public class SelectedItemHandlerRootTable extends SelectedItemHandlerAbstract
 					schemaEntity, 
 					SchemaEntity.SCHEMA_TYPE.ROOT_TABLE
 				);
+				*/
+			SearchSchemaEntityVisitorTypeName sseVisitorTN = new SearchSchemaEntityVisitorTypeName(SchemaEntity.SCHEMA_TYPE.SCHEMA,schemaName);
+			this.myDBAbs.getSchemaRoot().accept(sseVisitorTN);
+			SchemaEntity schemaEntity = sseVisitorTN.getHitSchemaEntity();
+			
+			SearchSchemaEntityVisitorType     sseVisitorT  = new SearchSchemaEntityVisitorType(SchemaEntity.SCHEMA_TYPE.ROOT_TABLE);
+			schemaEntity.accept( sseVisitorT );
+			SchemaEntity rootTableEntity = sseVisitorT.getHitSchemaEntity();
+			
 			if ( rootTableEntity != null )
 			{
 				this.schemaTreeView.setTableData( itemSelected, rootTableEntity.getEntityLst() );

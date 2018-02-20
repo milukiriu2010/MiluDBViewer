@@ -46,8 +46,8 @@ public class TableDBCassandra extends TableDBAbstract
 			{
 				Map<String,String> dataRow = new LinkedHashMap<String,String>();
 				dataRow.put( "column_name"   , rs.getString("column_name") );
-				dataRow.put( "data_type"     , rs.getString("data_type") );
-				dataRow.put( "data_size"     , rs.getString("data_size") );
+				dataRow.put( "data_type"     , rs.getString("type") );
+				dataRow.put( "data_size"     , null );
 				String nullable = "NULL OK";
 				// partition_key => PRIMARY KEY
 				// clustering    => part of PRIMARY KEY
