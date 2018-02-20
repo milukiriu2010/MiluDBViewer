@@ -7,6 +7,8 @@ import javafx.scene.control.TreeItem;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import milu.db.MyDBAbstract;
+import milu.db.proc.ProcDBAbstract;
+import milu.db.proc.ProcDBFactory;
 import milu.entity.schema.SchemaEntity;
 
 import java.sql.SQLException;
@@ -62,9 +64,9 @@ public class SelectedItemHandlerEachProc extends SelectedItemHandlerAbstract
 			SQLException
 	{
 		TreeItem<SchemaEntity> itemParent = itemSelected.getParent();
-		String schema    = itemParent.getParent().getValue().toString();
-		String procName  = itemSelected.getValue().getName();
-		String id        = schema + "@proc@" + procName;
+		String schemaName = itemParent.getParent().getValue().toString();
+		String procName   = itemSelected.getValue().getName();
+		String id         = schemaName + "@proc@" + procName;
 		System.out.println( "setProcDef:" + procName );
 		
 		// Activate DBSchemaProcViewTab, if already exists.
@@ -106,8 +108,14 @@ public class SelectedItemHandlerEachProc extends SelectedItemHandlerAbstract
 		newTab.setGraphic( iv );
 		
 		// get table definition
-		String strSrc = 
-				myDBAbs.getProcedureSourceBySchemaProc( schema, procName );
+		//String strSrc = 
+		//		myDBAbs.getProcedureSourceBySchemaProc( schema, procName );
+		ProcDBAbstract procDBAbs = ProcDBFactory.getInstance(myDBAbs);
+		if ( procDBAbs == null )
+		{
+			return;
+		}
+		String strSrc = procDBAbs.getSRC(schemaName, procName);
 		
 		// set procedure source in SqlTextArea
 		newTab.setSrcText( strSrc );

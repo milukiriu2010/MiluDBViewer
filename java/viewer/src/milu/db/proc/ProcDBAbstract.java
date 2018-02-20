@@ -14,19 +14,11 @@ abstract public class ProcDBAbstract
 	// DB Access Object
 	protected MyDBAbstract  myDBAbs = null;
 	
-	// Procedure List
-	protected List<Map<String,String>> procLst = new ArrayList<>();
-	
 	public void setMyDBAbstract( MyDBAbstract myDBAbs )
 	{
 		this.myDBAbs = myDBAbs;
 	}
-	
-	protected void clear()
-	{
-		this.procLst.clear();
-	}
-	
+	/*	
 	public List<SchemaEntity> getEntityLst()
 	{
 		List<SchemaEntity>  procEntityLst = new ArrayList<>();
@@ -42,9 +34,12 @@ abstract public class ProcDBAbstract
 		}
 		return procEntityLst;
 	}	
-	
-	abstract public void selectEntityLst( String schemaName ) throws SQLException;
+	*/
+	abstract public List<SchemaEntity> selectEntityLst( String schemaName ) throws SQLException;
 	
 	abstract protected String listSQL( String schemaName );
+
+	// Source of Procedure
+	abstract public String getSRC( String schemaName, String procName ) throws SQLException;
 
 }

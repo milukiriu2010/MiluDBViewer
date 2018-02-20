@@ -261,6 +261,7 @@ ORDER BY c.relname,f.attname;
 	 * @return SQL
 	 *****************************************
 	 */
+	/*
 	protected String schemaIndexSQL( String schema, String table )
 	{
 		// The following SQL doesn't work well for "information_schema"
@@ -306,7 +307,7 @@ ORDER BY c.relname,f.attname;
 		
 		return sql;
 	}
-	
+	*/
 	/**
 	 * SQL to get table definition
 	 * call by getTableDefBySchemaTable
@@ -315,6 +316,7 @@ ORDER BY c.relname,f.attname;
 	 * @param table
 	 * @return
 	 */
+	/*
 	@Override
 	protected String schemaTableDefSQL( String schema, String table )
 	{
@@ -343,7 +345,7 @@ ORDER BY c.relname,f.attname;
 			" order by ordinal_position";
 		return sql;
 	}	
-	 
+	 */
 	/**
 	 * SQL to get function lists of schema.
 	 * call by getSchemaView
@@ -425,6 +427,7 @@ ORDER BY 1, 2, 4;
 	 * @return
 	 * @throws SQLException
 	 */
+	/*
 	public String getFunctionSourceBySchemaFunc( String schema, String function )
 		throws 
 			SQLException
@@ -452,23 +455,6 @@ ORDER BY 1, 2, 4;
 			"   n.nspname = '" + schema   + "' \n" +
 			"   and \n" +
 			"   p.proname  = '" + function + "'	\n";
-		/*
-		String sql2 = 
-			" select \n" +
-			"   data_type, \n" +
-			"   external_language,  \n" +
-			"   is_deterministic,   \n" +
-			"   is_null_call,       \n" +
-			"   routine_definition  \n" +
-			" from   \n" +
-			"   information_schema.routines \n" +
-			" where  \n" +
-			"   routine_schema = '" + schema   + "' \n" +
-			"   and  \n" +
-			"   routine_name  = '" + function + "' \n" +
-			"   and  \n" +
-			"   routine_type  = 'FUNCTION'";
-		*/
 		System.out.println( " -- getFunctionSourceBySchemaFunc -----------" );
 		System.out.println( sql1 );
 		//System.out.println( " --------------------------------------------" );
@@ -503,7 +489,7 @@ ORDER BY 1, 2, 4;
 		
 		return src.toString();
 	}	
-	
+	*/
 	
 	/**
 	 * SQL to get type lists of schema.
@@ -629,6 +615,7 @@ ORDER BY 1, 2, 4;
 	 * @return
 	 * @throws SQLException
 	 */
+	/*
 	@Override
 	public String getTriggerSourceBySchemaTrigger( String schema, String trigger )
 		throws 
@@ -649,6 +636,7 @@ ORDER BY 1, 2, 4;
 		}
 		return src;
 	}
+	*/
 	
 	/**
 	 * SQL to get sequence lists of schema.

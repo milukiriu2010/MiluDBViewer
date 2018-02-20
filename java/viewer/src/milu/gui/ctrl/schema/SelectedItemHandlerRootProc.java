@@ -81,8 +81,8 @@ public class SelectedItemHandlerRootProc extends SelectedItemHandlerAbstract
 			if ( procDBAbs != null )
 			{
 				String schemaName = itemParent.getValue().toString();
-				procDBAbs.selectEntityLst(schemaName);
-				this.schemaTreeView.addEntityLst( itemSelected, procDBAbs.getEntityLst() );
+				List<SchemaEntity> procEntityLst = procDBAbs.selectEntityLst(schemaName);
+				this.schemaTreeView.addEntityLst( itemSelected, procEntityLst );
 			}
 		}
 		

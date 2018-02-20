@@ -10,6 +10,8 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 import milu.db.MyDBAbstract;
+import milu.db.aggregate.AggregateDBAbstract;
+import milu.db.aggregate.AggregateDBFactory;
 import milu.entity.schema.SchemaEntity;
 
 /**
@@ -68,9 +70,16 @@ public class SelectedItemHandlerRootAggregate extends SelectedItemHandlerAbstrac
 		// get View List & add list as children
 		if ( itemChildren.size() == 0 )
 		{
+			/*
 			String schema = itemParent.getValue().toString();
 			List<List<String>> dataLst = myDBAbs.getSchemaAggregate( schema );
 			this.schemaTreeView.setAggregateData( itemSelected, dataLst );
+			*/
+			String schemaName = itemParent.getValue().toString();
+			AggregateDBAbstract aggregateDBAbs = AggregateDBFactory.getInstance(myDBAbs);
+			List<SchemaEntity> aggregateEntityLst = aggregateDBAbs.selectEntityLst(schemaName);
+			this.schemaTreeView.addEntityLst( itemSelected, aggregateEntityLst );
+			
 		}
 		
 		// Delete DBSchemaTableViewTab, if already exists. 

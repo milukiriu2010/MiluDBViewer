@@ -18,18 +18,13 @@ public abstract class SequenceDBAbstract
 	protected MyDBAbstract  myDBAbs = null;
 	
 	// Sequence List
-	protected List<Map<String,String>>  seqLst = new ArrayList<>();
+	//protected List<Map<String,String>>  seqLst = new ArrayList<>();
 	
 	public void setMyDBAbstract( MyDBAbstract myDBAbs )
 	{
 		this.myDBAbs = myDBAbs;
 	}
-	
-	protected void clear()
-	{
-		this.seqLst.clear();
-	}
-	
+	/*
 	public List<SchemaEntity> getEntityLst()
 	{
 		List<SchemaEntity>  sequenceEntityLst = new ArrayList<>();
@@ -45,29 +40,8 @@ public abstract class SequenceDBAbstract
 		}
 		return sequenceEntityLst;
 	}	
-	
-	public void selectEntityLst( String schemaName ) throws SQLException
-	{
-		String sql = this.listSQL( schemaName );
-		
-		System.out.println( " -- selectSequenceLst ----------------" );
-		System.out.println( sql );
-		System.out.println( " -------------------------------------" );
-		try
-		(
-			Statement stmt = this.myDBAbs.createStatement();
-			ResultSet rs   = stmt.executeQuery( sql )
-		)
-		{
-			while ( rs.next() )
-			{
-				Map<String,String> dataRow = new HashMap<>();
-				dataRow.put( "sequenceName", rs.getString("object_name") );
-				dataRow.put( "status"      , rs.getString("status") );
-				this.seqLst.add( dataRow );
-			}
-		}
-	}
+	*/
+	abstract public List<SchemaEntity> selectEntityLst( String schemaName ) throws SQLException;
 	
 	abstract protected String listSQL( String schemaName );		
 	

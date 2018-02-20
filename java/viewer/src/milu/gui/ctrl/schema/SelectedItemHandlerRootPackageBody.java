@@ -85,8 +85,8 @@ public class SelectedItemHandlerRootPackageBody extends SelectedItemHandlerAbstr
 			if ( packageBodyDBAbs != null )
 			{
 				String schemaName = itemParent.getValue().toString();
-				packageBodyDBAbs.selectEntityLst(schemaName);
-				this.schemaTreeView.addEntityLst( itemSelected, packageBodyDBAbs.getEntityLst() );
+				List<SchemaEntity> packageBodyEntityLst = packageBodyDBAbs.selectEntityLst(schemaName);
+				this.schemaTreeView.addEntityLst( itemSelected, packageBodyEntityLst );
 			}
 		}
 		

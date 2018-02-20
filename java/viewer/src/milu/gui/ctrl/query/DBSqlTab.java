@@ -222,12 +222,21 @@ public class DBSqlTab extends Tab
 			String    strMsg     = ex.getMessage();
 			TextArea  txtMsg     = new TextArea( strMsg );
 			txtMsg.setPrefColumnCount( MyTool.getCharCount( strMsg, "\n" )+1 );
+			txtMsg.setEditable( false );
 			
 			String    strExp     = MyTool.getExceptionString( ex );
 			TextArea  txtExp     = new TextArea( strExp );
 			txtExp.setPrefRowCount( MyTool.getCharCount( strExp, "\n" )+1 );
+			txtExp.setEditable( false );
 			
-			this.lowerPane.getChildren().addAll( labelTitle, txtMsg, txtExp, this.tableViewSQL );
+			VBox vBoxExp = new VBox(2);
+			vBoxExp.getChildren().addAll( labelTitle, txtMsg, txtExp );
+			
+			SplitPane splitPane = new SplitPane();
+			splitPane.setOrientation(Orientation.VERTICAL);
+			splitPane.getItems().addAll( vBoxExp , this.tableViewSQL );
+			splitPane.setDividerPositions( 0.3f, 0.7f );
+			this.lowerPane.getChildren().add( splitPane );
 		}
 		finally
 		{
@@ -308,10 +317,12 @@ public class DBSqlTab extends Tab
 		String    strMsg     = sqlEx.getMessage();
 		TextArea  txtMsg     = new TextArea( strMsg );
 		txtMsg.setPrefColumnCount( MyTool.getCharCount( strMsg, "\n" )+1 );
+		txtMsg.setEditable( false );
 		
 		String    strExp     = MyTool.getExceptionString( sqlEx );
 		TextArea  txtExp     = new TextArea( strExp );
 		txtExp.setPrefRowCount( MyTool.getCharCount( strExp, "\n" )+1 );
+		txtExp.setEditable( false );
 		
 		Button    btnReConnect = new Button (langRB.getString("BTN_RECONNECT"));
 		btnReConnect.setOnAction
@@ -336,7 +347,17 @@ public class DBSqlTab extends Tab
 			} 
 		);
 		
-		this.lowerPane.getChildren().addAll( labelTitle, txtMsg, txtExp, btnReConnect, this.tableViewSQL );
+		HBox hBoxExp = new HBox(2);
+		hBoxExp.getChildren().addAll( labelTitle, btnReConnect );
+		
+		VBox vBoxExp = new VBox(2);
+		vBoxExp.getChildren().addAll( hBoxExp, txtMsg, txtExp );
+		
+		SplitPane splitPane = new SplitPane();
+		splitPane.setOrientation(Orientation.VERTICAL);
+		splitPane.getItems().addAll( vBoxExp , this.tableViewSQL );
+		splitPane.setDividerPositions( 0.3f, 0.7f );
+		this.lowerPane.getChildren().add( splitPane );
 	}
 	
 	/**************************************************

@@ -13,6 +13,8 @@ import javafx.scene.image.ImageView;
 import javafx.collections.ObservableList;
 
 import milu.db.MyDBAbstract;
+import milu.db.mateview.MaterializedViewDBAbstract;
+import milu.db.mateview.MaterializedViewDBFactory;
 import milu.entity.schema.SchemaEntity;
 
 /**
@@ -66,9 +68,9 @@ public class SelectedItemHandlerEachMaterializedView extends SelectedItemHandler
 			SQLException
 	{
 		TreeItem<SchemaEntity> itemParent   = this.itemSelected.getParent();
-		String schema    = itemParent.getParent().getValue().toString();
+		String schemaName           = itemParent.getParent().getValue().toString();
 		String materializedViewName = itemSelected.getValue().getName();
-		String id                   = schema + "@materialized_view@" + materializedViewName;
+		String id                   = schemaName + "@materialized_view@" + materializedViewName;
 		System.out.println( "setMaterializedViewDef:" + materializedViewName );
 		
 		final ObservableList<Tab> tabLst =  this.tabPane.getTabs();
@@ -108,8 +110,14 @@ public class SelectedItemHandlerEachMaterializedView extends SelectedItemHandler
 		newTab.setGraphic( iv );
 		
 		// get view definition
-		List<Map<String,String>> dataLst = 
-				myDBAbs.getTableDefBySchemaTable( schema, materializedViewName );
+		//List<Map<String,String>> dataLst = 
+		//		myDBAbs.getTableDefBySchemaTable( schema, materializedViewName );
+		MaterializedViewDBAbstract  mateViewDBAbs = MaterializedViewDBFactory.getInstance(myDBAbs);
+		if ( mateViewDBAbs == null )
+		{
+			return;
+		}
+		List<Map<String,String>> dataLst = mateViewDBAbs.selectDefinition( schemaName, materializedViewName );
 		
 		// table header
 		List<String> headLst = new ArrayList<String>();

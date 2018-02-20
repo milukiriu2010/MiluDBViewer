@@ -81,8 +81,8 @@ public class SelectedItemHandlerRootType extends SelectedItemHandlerAbstract
 			if ( typeDBAbs != null )
 			{
 				String schemaName = itemParent.getValue().toString();
-				typeDBAbs.selectEntityLst(schemaName);
-				this.schemaTreeView.addEntityLst( itemSelected, typeDBAbs.getEntityLst() );
+				List<SchemaEntity> typeEntityLst = typeDBAbs.selectEntityLst(schemaName);
+				this.schemaTreeView.addEntityLst( itemSelected, typeEntityLst );
 			}
 		}
 		

@@ -1,26 +1,23 @@
-package milu.db.func;
+package milu.db.aggregate;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import milu.entity.schema.SchemaEntity;
 import milu.entity.schema.SchemaEntityFactory;
 
-public class FuncDBCassandra extends FuncDBAbstract 
-{
+public class AggregateDBCassandra extends AggregateDBAbstract {
 
 	@Override
 	public List<SchemaEntity> selectEntityLst(String schemaName) throws SQLException 
 	{
-		List<SchemaEntity>  funcEntityLst = new ArrayList<>();
+		List<SchemaEntity>  aggregateEntityLst = new ArrayList<>();
 
 		String sql = this.listSQL( schemaName );
-		System.out.println( " -- selectEntityLst(Func) ---------" );
+		System.out.println( " -- selectEntityLst(Aggregate) ----" );
 		System.out.println( sql );
 		System.out.println( " ----------------------------------" );
 		
@@ -32,70 +29,66 @@ public class FuncDBCassandra extends FuncDBAbstract
 		{
 			while ( rs.next() )
 			{
-				/*
-				Map<String, String> mapView = new HashMap<String,String>();
-				mapView.put( "funcName", rs.getString("function_name") );
-				this.funcLst.add( mapView );
-				*/
-				SchemaEntity funcEntity = SchemaEntityFactory.createInstance( rs.getString("function_name"), SchemaEntity.SCHEMA_TYPE.FUNC );
-				funcEntityLst.add( funcEntity );
+				SchemaEntity funcEntity = SchemaEntityFactory.createInstance( rs.getString("aggregate_name"), SchemaEntity.SCHEMA_TYPE.AGGREGATE );
+				aggregateEntityLst.add( funcEntity );
 			}
 		}
 		
-		return funcEntityLst;
+		return aggregateEntityLst;
 	}
 
 	@Override
-	protected String listSQL(String schemaName) 
+	protected String listSQL(String schemaName)
 	{
 		String sql =
 			" select \n"           +
-		    "   function_name  \n" +
+		    "   aggregate_name \n" +
 			" from  \n" +
-			"   system_schema.functions \n" +
+			"   system_schema.aggregates \n" +
 			" where \n" +
 			"   keyspace_name = '" + schemaName + "' \n" +
-			" order by function_name";
+			" order by aggregate_name";
 		return sql;
 	}
 
-	// Source of Function
 	@Override
-	public String getSRC( String schemaName, String funcName ) throws SQLException
-	{
+	public String getSRC(String schemaName, String aggregateName) throws SQLException {
 		StringBuffer src = 
 			new StringBuffer
 			( 
-				"CREATE OR REPLACE FUNCTION \n" + funcName 
+				"CREATE OR REPLACE AGGREGATE \n" + aggregateName 
 			);
 		
 		String sql = 
 			" select \n" +
-			"   argument_types,       \n" +
-			"   argument_names,       \n" +
-			"   body,                 \n" +
-			"   called_on_null_input, \n" +
-			"   language,             \n" +
-			"   return_type           \n" +
+			"   argument_types, \n" +
+			"   aggregate_name, \n" +
+			"   final_func,     \n" +
+			"   initcond,       \n" +
+			"   return_type,    \n" +
+			"   state_func,     \n" +
+			"   state_type      \n" +
 			" from   \n" +
-			"   system_schema.functions \n" +
+			"   system_schema.aggregates \n" +
 			" where  \n" +
-			"   keyspace_name  = '" + schemaName   + "' \n" +
+			"   keyspace_name  = '" + schemaName    + "' \n" +
 			"   and  \n" +
-			"   function_name  = '" + funcName + "'";
+			"   aggregate_name = '" + aggregateName + "'";
 		
-		System.out.println( " -- getSRC(Func) -----------" );
+		System.out.println( " -- getSRC(Aggregate) ------" );
 		System.out.println( sql );
 		System.out.println( " ---------------------------" );
 		Statement stmt = this.myDBAbs.createStatement();
 		ResultSet rs = stmt.executeQuery( sql );
 		while ( rs.next() )
 		{
+			/*
 			// [column, num]
 			// [state, type, amount]
-			String argument_names = rs.getString( "argument_names" );
+			String argument_names = rs.getString( "aggregate_name" );
 			argument_names = argument_names.replaceAll( "(\\[|\\])", "" );
 			String[] argNameLst = argument_names.split( "," );
+			*/
 			
 			// [text, int]
 			// [map<text, int>, text, int]
@@ -108,29 +101,30 @@ public class FuncDBCassandra extends FuncDBAbstract
 			String[] argTypeLst = argument_types.split( "\n" );
 			
 			src.append( " ( " );
-			for ( int i = 0; i < argNameLst.length; i++ )
+			for ( int i = 0; i < argTypeLst.length; i++ )
 			{
 				if ( i != 0 )
 				{
 					src.append( "," );
 				}
-				src.append( argNameLst[i] + " " + argTypeLst[i] );
+				src.append( argTypeLst[i] );
 			}
 			src.append( " ) \n" );
 			
-			
-			if ( "true".equals( rs.getString( "called_on_null_input") ) )
+			src.append( "SFUNC "     + rs.getString("state_func") + " \n" );
+			String state_type = rs.getString("state_type");
+			System.out.println( "state_type[" + state_type + "]" );
+			state_type = state_type.replaceAll( "frozen<(.+)>", "$1" );
+			src.append( "STYPE "     + state_type + " \n" );
+			String final_func = rs.getString("final_func");
+			if ( final_func != null && "null".equals(final_func) == false )
 			{
-				src.append( "CALLED ON NULL INPUT \n" );
+				src.append( "FINALFUNC " + final_func + " \n" );
 			}
-			else
-			{
-				src.append( "RETURNS NULL ON NULL INPUT \n" );
-			}
-			src.append( "RETURNS "  + rs.getString("return_type") + " \n" );
-			src.append( "LANGUAGE " + rs.getString("language") + " AS \n" );
-			src.append( "$$ " + rs.getString("body") + " $$; \n" );
+			src.append( "INITCOND "  + rs.getString("initcond")   + " \n" );
+			src.append( ";" );
 		}
 		return src.toString();
 	}
+
 }

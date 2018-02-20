@@ -7,6 +7,8 @@ import javafx.scene.control.TreeItem;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import milu.db.MyDBAbstract;
+import milu.db.packagebody.PackageBodyDBAbstract;
+import milu.db.packagebody.PackageBodyDBFactory;
 import milu.entity.schema.SchemaEntity;
 
 import java.sql.SQLException;
@@ -66,9 +68,9 @@ public class SelectedItemHandlerEachPackageBody extends SelectedItemHandlerAbstr
 			SQLException
 	{
 		TreeItem<SchemaEntity> itemParent = itemSelected.getParent();
-		String schema    = itemParent.getParent().getValue().toString();
-		String packageBodyName  = itemSelected.getValue().getName();
-		String id        = schema + "@package_body@" + packageBodyName;
+		String schemaName      = itemParent.getParent().getValue().toString();
+		String packageBodyName = itemSelected.getValue().getName();
+		String id              = schemaName + "@package_body@" + packageBodyName;
 		System.out.println( "setPackageBody:" + packageBodyName );
 		
 		final ObservableList<Tab> tabLst =  this.tabPane.getTabs();
@@ -109,8 +111,14 @@ public class SelectedItemHandlerEachPackageBody extends SelectedItemHandlerAbstr
 		newTab.setGraphic( iv );
 		
 		// get table definition
-		String strSrc = 
-				myDBAbs.getPackageBodySourceBySchemaPackageBody( schema, packageBodyName );
+		//String strSrc = 
+		//		myDBAbs.getPackageBodySourceBySchemaPackageBody( schema, packageBodyName );
+		PackageBodyDBAbstract packageBodyDBAbs = PackageBodyDBFactory.getInstance(myDBAbs);
+		if ( packageBodyDBAbs == null )
+		{
+			return;
+		}
+		String strSrc = packageBodyDBAbs.getSRC(schemaName, packageBodyName);
 		
 		// set package source in SqlTextArea
 		newTab.setSrcText( strSrc );

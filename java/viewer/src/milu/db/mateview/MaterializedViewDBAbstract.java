@@ -14,19 +14,11 @@ abstract public class MaterializedViewDBAbstract
 	// DB Access Object
 	protected MyDBAbstract  myDBAbs = null;
 	
-	// Materialized View List
-	protected List<Map<String,String>> viewLst = new ArrayList<>();
-	
 	public void setMyDBAbstract( MyDBAbstract myDBAbs )
 	{
 		this.myDBAbs = myDBAbs;
 	}
-	
-	protected void clear()
-	{
-		this.viewLst.clear();
-	}
-	
+	/*
 	public List<SchemaEntity> getEntityLst()
 	{
 		List<SchemaEntity>  viewEntityLst = new ArrayList<>();
@@ -42,9 +34,15 @@ abstract public class MaterializedViewDBAbstract
 		}
 		return viewEntityLst;
 	}	
-	
-	abstract public void selectEntityLst( String schemaName ) throws SQLException;
+	*/
+	abstract public List<SchemaEntity> selectEntityLst( String schemaName ) throws SQLException;
 	
 	abstract protected String listSQL( String schemaName );
+	
+	// select Table Definition
+	abstract public List<Map<String,String>> selectDefinition( String schameName, String viewName ) throws SQLException;
+	
+	// SQL for Table Definition
+	abstract protected String definitionSQL( String schemaName, String viewName );
 
 }

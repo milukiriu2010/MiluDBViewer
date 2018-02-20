@@ -79,8 +79,8 @@ public class SelectedItemHandlerRootFunc extends SelectedItemHandlerAbstract
 			if ( funcDBAbs != null )
 			{
 				String schemaName = itemParent.getValue().toString();
-				funcDBAbs.selectEntityLst(schemaName);
-				this.schemaTreeView.addEntityLst( itemSelected, funcDBAbs.getEntityLst() );
+				List<SchemaEntity> funcEntityLst = funcDBAbs.selectEntityLst(schemaName);
+				this.schemaTreeView.addEntityLst( itemSelected, funcEntityLst );
 			}
 		}
 		

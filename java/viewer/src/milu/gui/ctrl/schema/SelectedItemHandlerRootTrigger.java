@@ -83,8 +83,8 @@ public class SelectedItemHandlerRootTrigger extends SelectedItemHandlerAbstract
 			if ( triggerDBAbs != null )
 			{
 				String schemaName = itemParent.getValue().toString();
-				triggerDBAbs.selectEntityLst(schemaName);
-				this.schemaTreeView.addEntityLst( itemSelected, triggerDBAbs.getEntityLst() );
+				List<SchemaEntity> triggerEntityLst =  triggerDBAbs.selectEntityLst(schemaName);
+				this.schemaTreeView.addEntityLst( itemSelected, triggerEntityLst );
 			}
 		}
 		

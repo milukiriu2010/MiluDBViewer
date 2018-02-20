@@ -188,8 +188,7 @@ public class CollectTask extends Task<Double>
 			//       -[TABLE]    => add
 			// ---------------------------------------
 			String schemaName = schemaEntity.getName();
-			tableDBAbs.selectTableLst( schemaName );
-			List<SchemaEntity> tableEntityLst = tableDBAbs.getTableEntityLst();
+			List<SchemaEntity> tableEntityLst = tableDBAbs.selectEntityLst( schemaName );
 			rootTableEntity.addEntityAll( tableEntityLst );
 			
 			// ---------------------------------------

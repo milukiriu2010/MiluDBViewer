@@ -118,6 +118,7 @@ public class MyDBCassandra extends MyDBAbstract
 	 * @throws SQLException
 	 *********************************
 	 */
+	/*
 	public List<Map<String,String>> getIndexBySchemaTable( String schema, String table )
 		throws SQLException
 	{
@@ -177,7 +178,7 @@ public class MyDBCassandra extends MyDBAbstract
 		
 		return dataLst;
 	}
-	
+	*/
 	/**
 	 * SQL to get index lists of schema.
 	 * call by getIndexBySchemaTable
@@ -187,6 +188,7 @@ public class MyDBCassandra extends MyDBAbstract
 	 * @return
 	 *****************************************
 	 */
+	/*
 	protected String schemaIndexSQL( String schema, String table )
 	{
 		String sql =
@@ -203,7 +205,7 @@ public class MyDBCassandra extends MyDBAbstract
 			"   table_name = '" + table + "'";
 		return sql;
 	}
-	
+	*/
 	/**
 	 * Get SchemaInfo(Table Definition)
 	 ***************************************
@@ -212,6 +214,7 @@ public class MyDBCassandra extends MyDBAbstract
 	 * @return
 	 * @throws SQLException
 	 */
+	/*
 	public List<Map<String,String>> getTableDefBySchemaTable( String schema, String table )
 			throws SQLException
 	{
@@ -249,7 +252,8 @@ public class MyDBCassandra extends MyDBAbstract
 			dataLst.add( dataRow );
 		}
 		return dataLst;
-	}	
+	}
+	*/	
 	
 	/**
 	 * SQL to get table definition
@@ -259,6 +263,7 @@ public class MyDBCassandra extends MyDBAbstract
 	 * @param table
 	 * @return
 	 */
+	/*
 	protected String schemaTableDefSQL( String schema, String table )
 	{
 		String sql =
@@ -274,6 +279,7 @@ public class MyDBCassandra extends MyDBAbstract
 			"   table_name = '" + table + "'";
 		return sql;
 	}
+	*/
 	
 	/**
 	 * SQL to get materialized view lists of schema.
@@ -330,6 +336,7 @@ public class MyDBCassandra extends MyDBAbstract
 	 * @return
 	 * @throws SQLException
 	 */
+	/*
 	@Override
 	public String getFunctionSourceBySchemaFunc( String schema, String function )
 			throws SQLException
@@ -404,7 +411,7 @@ public class MyDBCassandra extends MyDBAbstract
 		}
 		return src.toString();
 	}
-	
+	*/
 	/**
 	 * SQL to get aggregate lists of schema.
 	 * call by getSchemaFunc
@@ -412,6 +419,7 @@ public class MyDBCassandra extends MyDBAbstract
 	 * @return schema
 	 * @throws UnsupportedOperationException
 	 */
+	/*
 	@Override
 	protected String schemaAggregateSQL( String schema )
 		throws UnsupportedOperationException
@@ -427,7 +435,7 @@ public class MyDBCassandra extends MyDBAbstract
 			" order by aggregate_name";
 		return sql;
 	}
-	
+	*/
 	
 	/**
 	 * Get SchemaInfo(Aggregate Source)
@@ -437,6 +445,7 @@ public class MyDBCassandra extends MyDBAbstract
 	 * @return
 	 * @throws SQLException
 	 */
+	/*
 	public String getAggregateSourceBySchemaAggregate( String schema, String aggregate )
 		throws 
 			SQLException
@@ -470,14 +479,6 @@ public class MyDBCassandra extends MyDBAbstract
 		ResultSet rs = stmt.executeQuery( sql );
 		while ( rs.next() )
 		{
-			/*
-			// [column, num]
-			// [state, type, amount]
-			String argument_names = rs.getString( "aggregate_name" );
-			argument_names = argument_names.replaceAll( "(\\[|\\])", "" );
-			String[] argNameLst = argument_names.split( "," );
-			*/
-			
 			// [text, int]
 			// [map<text, int>, text, int]
 			String argument_types = rs.getString( "argument_types" );
@@ -514,7 +515,7 @@ public class MyDBCassandra extends MyDBAbstract
 		}
 		return src.toString();
 	}	
-	
+	*/
 	/**
 	 * SQL to get type lists of schema.
 	 * call by getSchemaType
@@ -546,6 +547,7 @@ public class MyDBCassandra extends MyDBAbstract
 	 * @return
 	 * @throws SQLException
 	 */
+	/*
 	public String getTypeSourceBySchemaType( String schema, String type )
 		throws 
 			SQLException
@@ -606,5 +608,5 @@ public class MyDBCassandra extends MyDBAbstract
 		}
 		return src.toString();
 	}
-	
+	*/
 }

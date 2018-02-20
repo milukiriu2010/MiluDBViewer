@@ -14,11 +14,6 @@ import milu.db.MyDBAbstract;
 public class IndexColumnDBPostgres 
 	extends IndexColumnDBAbstract
 {
-	public IndexColumnDBPostgres( MyDBAbstract myDBAbs )
-	{
-		super( myDBAbs );
-	}
-	
 	@Override
 	public void selectEntityLst( String schemaName, String tableName, String indexName ) throws SQLException
 	{

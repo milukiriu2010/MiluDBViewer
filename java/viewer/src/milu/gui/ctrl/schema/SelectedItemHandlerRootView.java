@@ -78,8 +78,8 @@ public class SelectedItemHandlerRootView extends SelectedItemHandlerAbstract
 				List<Map<String,String>> dataLst = viewDBAbs.getDataLst();
 				this.schemaTreeView.setViewData( itemSelected, dataLst );
 				*/
-				viewDBAbs.selectViewLst( schema );
-				this.schemaTreeView.addEntityLst( itemSelected, viewDBAbs.getViewEntityLst() );
+				List<SchemaEntity> viewEntityLst = viewDBAbs.selectEntityLst( schema );
+				this.schemaTreeView.addEntityLst( itemSelected, viewEntityLst );
 			}
 		}
 		

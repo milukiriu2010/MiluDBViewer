@@ -13,6 +13,8 @@ import javafx.scene.image.ImageView;
 import javafx.collections.ObservableList;
 
 import milu.db.MyDBAbstract;
+import milu.db.sysview.SystemViewDBAbstract;
+import milu.db.sysview.SystemViewDBFactory;
 import milu.entity.schema.SchemaEntity;
 
 /**
@@ -66,9 +68,9 @@ public class SelectedItemHandlerEachSystemView extends SelectedItemHandlerAbstra
 			SQLException
 	{
 		TreeItem<SchemaEntity> itemParent   = this.itemSelected.getParent();
-		String schema    = itemParent.getParent().getValue().toString();
+		String schameName     = itemParent.getParent().getValue().toString();
 		String systemViewName = itemSelected.getValue().getName();
-		String id             = schema + "@system_view@" + systemViewName;
+		String id             = schameName + "@system_view@" + systemViewName;
 		System.out.println( "setSystemViewDef:" + systemViewName );
 		
 		final ObservableList<Tab> tabLst =  this.tabPane.getTabs();
@@ -108,8 +110,14 @@ public class SelectedItemHandlerEachSystemView extends SelectedItemHandlerAbstra
 		newTab.setGraphic( iv );
 		
 		// get view definition
-		List<Map<String,String>> dataLst = 
-				myDBAbs.getTableDefBySchemaTable( schema, systemViewName );
+		//List<Map<String,String>> dataLst = 
+		//		myDBAbs.getTableDefBySchemaTable( schema, systemViewName );
+		SystemViewDBAbstract sysViewDBAbs = SystemViewDBFactory.getInstance(myDBAbs);
+		if ( sysViewDBAbs == null )
+		{
+			return;
+		}
+		List<Map<String,String>>  dataLst = sysViewDBAbs.selectDefinition(schameName, systemViewName);
 		
 		// table header
 		List<String> headLst = new ArrayList<String>();

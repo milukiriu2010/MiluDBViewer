@@ -9,21 +9,26 @@ public class ViewDBFactory
 {
 	public static ViewDBAbstract getInstance( MyDBAbstract myDBAbs )
 	{
+		ViewDBAbstract viewDBAbs = null;
+		
 		if ( myDBAbs instanceof MyDBPostgres )
 		{
-			return new ViewDBPostgres( myDBAbs );
+			viewDBAbs = new ViewDBPostgres();
 		}
 		else if ( myDBAbs instanceof MyDBMySQL )
 		{
-			return new ViewDBMySQL( myDBAbs );
+			viewDBAbs = new ViewDBMySQL();
 		}
 		else if ( myDBAbs instanceof MyDBOracle )
 		{
-			return new ViewDBOracle( myDBAbs );
+			viewDBAbs = new ViewDBOracle();
 		}
 		else
 		{
 			return null;
 		}
+		
+		viewDBAbs.setMyDBAbstract(myDBAbs);
+		return viewDBAbs;
 	}
 }

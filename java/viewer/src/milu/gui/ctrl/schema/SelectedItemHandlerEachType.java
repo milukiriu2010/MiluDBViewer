@@ -6,7 +6,10 @@ import javafx.scene.control.TabPane;
 import javafx.scene.control.TreeItem;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+
 import milu.db.MyDBAbstract;
+import milu.db.type.TypeDBAbstract;
+import milu.db.type.TypeDBFactory;
 import milu.entity.schema.SchemaEntity;
 
 import java.sql.SQLException;
@@ -68,9 +71,9 @@ public class SelectedItemHandlerEachType extends SelectedItemHandlerAbstract
 			SQLException
 	{
 		TreeItem<SchemaEntity> itemParent = itemSelected.getParent();
-		String schema    = itemParent.getParent().getValue().toString();
-		String typeName  = itemSelected.getValue().getName();
-		String id        = schema + "@type@" + typeName;
+		String schemaName = itemParent.getParent().getValue().toString();
+		String typeName   = itemSelected.getValue().getName();
+		String id         = schemaName + "@type@" + typeName;
 		System.out.println( "setType:" + typeName );
 		
 		final ObservableList<Tab> tabLst =  this.tabPane.getTabs();
@@ -111,8 +114,14 @@ public class SelectedItemHandlerEachType extends SelectedItemHandlerAbstract
 		newTab.setGraphic( iv );
 		
 		// get table definition
-		String strSrc = 
-				myDBAbs.getTypeSourceBySchemaType( schema, typeName );
+		//String strSrc = 
+		//		myDBAbs.getTypeSourceBySchemaType( schema, typeName );
+		TypeDBAbstract typeDBAbs = TypeDBFactory.getInstance(myDBAbs);
+		if ( typeDBAbs == null )
+		{
+			return;
+		}
+		String strSrc = typeDBAbs.getSRC(schemaName, typeName);
 		
 		// set type source in SqlTextArea
 		newTab.setSrcText( strSrc );

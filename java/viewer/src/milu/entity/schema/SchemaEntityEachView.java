@@ -4,8 +4,8 @@ public class SchemaEntityEachView extends SchemaEntity
 {
 	public SchemaEntityEachView( String name )
 	{
-		super( name, SchemaEntity.SCHEMA_TYPE.FUNC );
+		super( name, SchemaEntity.SCHEMA_TYPE.VIEW );
 		
-		this.imageResourceName = "file:resources/images/func.png";
+		this.imageResourceName = "file:resources/images/view.png";
 	}
 }

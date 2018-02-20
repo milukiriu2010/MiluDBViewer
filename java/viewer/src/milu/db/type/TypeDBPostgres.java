@@ -3,19 +3,24 @@ package milu.db.type;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+
+import milu.entity.schema.SchemaEntity;
+import milu.entity.schema.SchemaEntityFactory;
 
 public class TypeDBPostgres extends TypeDBAbstract 
 {
 
 	@Override
-	public void selectEntityLst(String schemaName) throws SQLException 
+	public List<SchemaEntity> selectEntityLst(String schemaName) throws SQLException 
 	{
-		this.clear();
+		List<SchemaEntity>  typeEntityLst = new ArrayList<>();
 
 		String sql = this.listSQL( schemaName );
-		System.out.println( " -- selectTypeLst -----------------" );
+		System.out.println( " -- selectEntityLst(Type) ---------" );
 		System.out.println( sql );
 		System.out.println( " ----------------------------------" );
 		
@@ -27,12 +32,23 @@ public class TypeDBPostgres extends TypeDBAbstract
 		{
 			while ( rs.next() )
 			{
+				/*
 				Map<String, String> mapView = new HashMap<String,String>();
 				mapView.put( "typeName", rs.getString("user_defined_type_name") );
 				mapView.put( "status"  , rs.getString("status") );
 				this.typeLst.add( mapView );
+				*/
+				SchemaEntity typeEntity = SchemaEntityFactory.createInstance( rs.getString("user_defined_type_name"), SchemaEntity.SCHEMA_TYPE.TYPE );
+				String strStatus = rs.getString("status");
+				if ( strStatus != null && "INVALID".equals(strStatus) )
+				{
+					typeEntity.setState( SchemaEntity.STATE.INVALID );
+				}
+				typeEntityLst.add( typeEntity );
 			}
 		}
+		
+		return typeEntityLst;
 	}
 
 	@Override
@@ -49,4 +65,45 @@ public class TypeDBPostgres extends TypeDBAbstract
 		return sql;
 	}
 
+	// Source of Type
+	@Override
+	public String getSRC( String schemaName, String typeName ) throws SQLException
+	{
+		StringBuffer src = 
+			new StringBuffer
+			( 
+				"DROP TYPE IF EXISTS " + typeName + ";\n " + 
+				"CREATE TYPE " + typeName + " AS " 
+			);
+		
+		String sql = 
+			" select \n" + 
+			"   a.attname  attname, \n" +
+			"   t.typname  typname  \n" +
+			" from \n" +  
+			"   pg_class c join \n" + 
+			"   pg_attribute a on c.oid = a.attrelid join \n" +
+			"   pg_type t ON a.atttypid = t.oid \n" +
+			" where \n" +
+			"   c.relname = '" + typeName + "'";
+		
+		System.out.println( " -- getSRC(Type) --------------" );
+		System.out.println( sql );
+		System.out.println( " ------------------------------" );
+		Statement stmt = this.myDBAbs.createStatement();
+		ResultSet rs = stmt.executeQuery( sql );
+		int i = 0;
+		src.append( "(" );
+		while ( rs.next() )
+		{
+			if ( i != 0 )
+			{
+				src.append( "," );
+			}
+			src.append( rs.getString("attname") + " " + rs.getString("typname") );
+			i++;
+		}
+		src.append( ");" );
+		return src.toString();
+	}
 }

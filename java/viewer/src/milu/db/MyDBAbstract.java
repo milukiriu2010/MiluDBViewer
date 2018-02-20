@@ -184,6 +184,8 @@ abstract public class MyDBAbstract
 		}
 		*/
 		
+		
+		this.conn = null;
 		// Connection
 		this.conn = 
 	    	DriverManager.getConnection( this.url, this.username, this.password );
@@ -590,6 +592,7 @@ abstract public class MyDBAbstract
 	 * @throws SQLException
 	 *********************************
 	 */
+	/*
 	public List<Map<String,String>> getIndexBySchemaTable( String schema, String table )
 		throws SQLException
 	{
@@ -629,7 +632,7 @@ abstract public class MyDBAbstract
 		}
 		return dataLst;
 	}
-	
+	*/
 	/**
 	 * SQL to get index lists of schema.
 	 * call by getIndexBySchemaTable
@@ -640,11 +643,13 @@ abstract public class MyDBAbstract
 	 * @throws UnsupportedOperationException
 	 *****************************************
 	 */
+	/*
 	protected String schemaIndexSQL( String schema, String table )
 		throws UnsupportedOperationException
 	{
 		throw new UnsupportedOperationException();
 	}
+	*/
 
 	/**
 	 * Get SchemaInfo(Table Definition)
@@ -654,6 +659,7 @@ abstract public class MyDBAbstract
 	 * @return
 	 * @throws SQLException
 	 */
+	/*
 	public List<Map<String,String>> getTableDefBySchemaTable( String schema, String table )
 			throws SQLException
 	{
@@ -683,7 +689,7 @@ abstract public class MyDBAbstract
 		}
 		return dataLst;
 	}	
-	
+	*/
 	/**
 	 * SQL to get table definition
 	 * call by getTableDefBySchemaTable
@@ -693,11 +699,13 @@ abstract public class MyDBAbstract
 	 * @return
 	 * @throws UnsupportedOperationException
 	 */
+	/*
 	protected String schemaTableDefSQL( String schema, String table )
 		throws UnsupportedOperationException
 	{
 		throw new UnsupportedOperationException();
 	}
+	*/
 	
 	/**
 	 * Get SchemaInfo(Function)
@@ -771,6 +779,7 @@ abstract public class MyDBAbstract
 	 * @return
 	 * @throws SQLException
 	 */
+	/*
 	public String getFunctionSourceBySchemaFunc( String schema, String function )
 		throws 
 			UnsupportedOperationException,
@@ -778,6 +787,7 @@ abstract public class MyDBAbstract
 	{
 		throw new UnsupportedOperationException();
 	}	
+	*/
 		
 	/**
 	 * Get SchemaInfo(Aggregate)
@@ -790,6 +800,7 @@ abstract public class MyDBAbstract
 	 * @throws SQLException
 	 *********************************
 	 */
+	/*
 	public List<List<String>> getSchemaAggregate( String schema )
 		throws SQLException
 	{
@@ -825,7 +836,7 @@ abstract public class MyDBAbstract
 		
 		return dataLst;
 	}
-	
+	*/
 	/**
 	 * SQL to get aggregate lists of schema.
 	 * call by getSchemaFunc
@@ -833,11 +844,13 @@ abstract public class MyDBAbstract
 	 * @return schema
 	 * @throws UnsupportedOperationException
 	 */
+	/*
 	protected String schemaAggregateSQL( String schema )
 		throws UnsupportedOperationException
 	{
 		throw new UnsupportedOperationException();
 	}
+	*/
 	
 	/**
 	 * Get SchemaInfo(Aggregate Source)

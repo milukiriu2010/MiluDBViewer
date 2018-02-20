@@ -14,19 +14,11 @@ abstract public class FuncDBAbstract
 	// DB Access Object
 	protected MyDBAbstract  myDBAbs = null;
 	
-	// Function List
-	protected List<Map<String,String>> funcLst = new ArrayList<>();
-	
 	public void setMyDBAbstract( MyDBAbstract myDBAbs )
 	{
 		this.myDBAbs = myDBAbs;
 	}
-	
-	protected void clear()
-	{
-		this.funcLst.clear();
-	}
-	
+	/*
 	public List<SchemaEntity> getEntityLst()
 	{
 		List<SchemaEntity>  funcEntityLst = new ArrayList<>();
@@ -42,9 +34,15 @@ abstract public class FuncDBAbstract
 		}
 		return funcEntityLst;
 	}	
+	*/
 	
-	abstract public void selectEntityLst( String schemaName ) throws SQLException;
+	// select Function List
+	abstract public List<SchemaEntity> selectEntityLst( String schemaName ) throws SQLException;
 	
+	// SQL for Function List
 	abstract protected String listSQL( String schemaName );
+	
+	// Source of Function
+	abstract public String getSRC( String schemaName, String funcName ) throws SQLException;
 
 }

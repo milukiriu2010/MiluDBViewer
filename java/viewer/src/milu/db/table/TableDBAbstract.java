@@ -17,39 +17,33 @@ public abstract class TableDBAbstract
 	// DB Access Object
 	protected MyDBAbstract  myDBAbs = null;
 	
-	// Table Name List
-	protected List<Map<String,String>>  tableNameLst = new ArrayList<>();
+	// Table List
+	protected List<Map<String,String>>  tableLst = new ArrayList<>();
 	
 	public void setMyDBAbstract( MyDBAbstract myDBAbs )
 	{
 		this.myDBAbs = myDBAbs;
 	}
-	/*
-	public List<Map<String,String>> getTableNameLst()
-	{
-		return this.tableNameLst;
-	}
-	*/	
 	
-	public List<SchemaEntity> getTableEntityLst()
+	/*
+	public List<SchemaEntity> getEntityLst()
 	{
 		List<SchemaEntity>  tableEntityLst = new ArrayList<>();
-		for ( Map<String,String> tableName : this.tableNameLst )
+		for ( Map<String,String> table : this.tableLst )
 		{
-			SchemaEntity eachTableEntity = SchemaEntityFactory.createInstance( tableName.get("tableName"), SchemaEntity.SCHEMA_TYPE.TABLE );
+			SchemaEntity eachTableEntity = SchemaEntityFactory.createInstance( table.get("tableName"), SchemaEntity.SCHEMA_TYPE.TABLE );
 			tableEntityLst.add( eachTableEntity );
 		}
 		return tableEntityLst;
 	}
+	*/
 	
-	protected void clear()
+	// select Table List
+	public List<SchemaEntity> selectEntityLst( String schemaName ) throws SQLException
 	{
-		this.tableNameLst.clear();
-	}	
-	
-	public void selectTableLst( String schemaName ) throws SQLException
-	{
-		String sql = this.tableLstSQL( schemaName );
+		List<SchemaEntity>  tableEntityLst = new ArrayList<>();
+		
+		String sql = this.listSQL( schemaName );
 		
 		System.out.println( " -- selectTableLst ------------------" );
 		System.out.println( sql );
@@ -62,13 +56,20 @@ public abstract class TableDBAbstract
 		{
 			while ( rs.next() )
 			{
-				Map<String,String> dataRow = new HashMap<>();
-				dataRow.put( "tableName", rs.getString(1) );
-				this.tableNameLst.add( dataRow );
+				SchemaEntity tableEntity = SchemaEntityFactory.createInstance( rs.getString(1), SchemaEntity.SCHEMA_TYPE.TABLE );
+				tableEntityLst.add( tableEntity );
 			}
 		}
+		
+		return tableEntityLst;
 	}
 	
-	abstract protected String tableLstSQL( String schemaName );	
+	// SQL for Table List
+	abstract protected String listSQL( String schemaName );
 	
+	// select Table Definition
+	abstract public List<Map<String,String>> selectDefinition( String schameName, String tableName ) throws SQLException;
+	
+	// SQL for Table Definition
+	abstract protected String definitionSQL( String schemaName, String tableName );
 }

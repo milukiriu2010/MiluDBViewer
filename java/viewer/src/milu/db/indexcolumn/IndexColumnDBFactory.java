@@ -10,26 +10,31 @@ public class IndexColumnDBFactory
 {
 	public static IndexColumnDBAbstract getInstance( MyDBAbstract myDBAbs )
 	{
+		IndexColumnDBAbstract indexColumnDBAbs = null;
+		
 		if ( myDBAbs instanceof MyDBPostgres )
 		{
-			return new IndexColumnDBPostgres( myDBAbs );
+			indexColumnDBAbs = new IndexColumnDBPostgres();
 		}
 		else if ( myDBAbs instanceof MyDBMySQL )
 		{
-			return new IndexColumnDBMySQL( myDBAbs );
+			indexColumnDBAbs = new IndexColumnDBMySQL();
 		}
 		else if ( myDBAbs instanceof MyDBOracle )
 		{
-			return new IndexColumnDBOracle( myDBAbs );
+			indexColumnDBAbs = new IndexColumnDBOracle();
 		}
 		else if ( myDBAbs instanceof MyDBCassandra )
 		{
-			return new IndexColumnDBCassandra( myDBAbs );
+			indexColumnDBAbs = new IndexColumnDBCassandra();
 		}
 		else
 		{
 			return null;
 		}
+		
+		indexColumnDBAbs.setMyDBAbstract(myDBAbs);
+		return indexColumnDBAbs;
 	}
 }
 

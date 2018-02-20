@@ -13,6 +13,8 @@ import javafx.scene.image.ImageView;
 import javafx.collections.ObservableList;
 
 import milu.db.MyDBAbstract;
+import milu.db.view.ViewDBAbstract;
+import milu.db.view.ViewDBFactory;
 import milu.entity.schema.SchemaEntity;
 
 /**
@@ -64,10 +66,10 @@ public class SelectedItemHandlerEachView extends SelectedItemHandlerAbstract
 			SQLException
 	{
 		TreeItem<SchemaEntity> itemParent   = this.itemSelected.getParent();
-		String schema    = itemParent.getParent().getValue().toString();
-		String tableName = itemSelected.getValue().getName();
-		String id        = schema + "@view@" + tableName;
-		System.out.println( "setViewDef:" + tableName );
+		String schemaName = itemParent.getParent().getValue().toString();
+		String viewName   = itemSelected.getValue().getName();
+		String id         = schemaName + "@view@" + viewName;
+		System.out.println( "setViewDef:" + viewName );
 		
 		final ObservableList<Tab> tabLst =  this.tabPane.getTabs();
 		for ( Tab tab : tabLst )
@@ -95,7 +97,7 @@ public class SelectedItemHandlerEachView extends SelectedItemHandlerAbstract
 		// Create DBSchemaTableViewTab, if it doesn't exist.
 		DBSchemaTableViewTab newTab = new DBSchemaTableViewTab();
 		newTab.setId( id );
-		newTab.setText( tableName );
+		newTab.setText( viewName );
 		this.tabPane.getTabs().add( newTab );
 		this.tabPane.getSelectionModel().select( newTab );
 		
@@ -106,8 +108,14 @@ public class SelectedItemHandlerEachView extends SelectedItemHandlerAbstract
 		newTab.setGraphic( iv );
 		
 		// get view definition
-		List<Map<String,String>> dataLst = 
-				myDBAbs.getTableDefBySchemaTable( schema, tableName );
+		//List<Map<String,String>> dataLst = 
+		//		myDBAbs.getTableDefBySchemaTable( schemaName, viewName );
+		ViewDBAbstract viewDBAbs = ViewDBFactory.getInstance(myDBAbs);
+		if ( viewDBAbs == null )
+		{
+			return;
+		}
+		List<Map<String,String>> dataLst = viewDBAbs.selectDefinition(schemaName, viewName );
 		
 		// table header
 		List<String> headLst = new ArrayList<String>();

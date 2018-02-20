@@ -14,19 +14,11 @@ abstract public class TypeDBAbstract
 	// DB Access Object
 	protected MyDBAbstract  myDBAbs = null;
 	
-	// Type List
-	protected List<Map<String,String>> typeLst = new ArrayList<>();
-	
 	public void setMyDBAbstract( MyDBAbstract myDBAbs )
 	{
 		this.myDBAbs = myDBAbs;
 	}
-	
-	protected void clear()
-	{
-		this.typeLst.clear();
-	}
-	
+	/*
 	public List<SchemaEntity> getEntityLst()
 	{
 		List<SchemaEntity>  typeEntityLst = new ArrayList<>();
@@ -42,9 +34,12 @@ abstract public class TypeDBAbstract
 		}
 		return typeEntityLst;
 	}	
-	
-	abstract public void selectEntityLst( String schemaName ) throws SQLException;
+	*/
+	abstract public List<SchemaEntity> selectEntityLst( String schemaName ) throws SQLException;
 	
 	abstract protected String listSQL( String schemaName );
+
+	// Source of Type
+	abstract public String getSRC( String schemaName, String typeName ) throws SQLException;
 
 }

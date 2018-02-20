@@ -9,6 +9,8 @@ import javafx.scene.control.TreeItem;
 import javafx.collections.ObservableList;
 
 import milu.db.MyDBAbstract;
+import milu.db.index.IndexDBAbstract;
+import milu.db.index.IndexDBFactory;
 import milu.entity.schema.SchemaEntity;
 
 /**
@@ -64,11 +66,21 @@ public class SelectedItemHandlerRootIndex extends SelectedItemHandlerAbstract
 		
 		if ( itemChildren.size() == 0 )
 		{
+			/*
 			String schema = itemParent.getParent().getParent().getValue().toString();
 			String table  = itemParent.getValue().toString();
 			List<Map<String,String>> dataLst = 
 					myDBAbs.getIndexBySchemaTable( schema, table );
 			this.schemaTreeView.setIndexData( itemSelected, dataLst );
+			*/
+			String schemaName = itemParent.getParent().getParent().getValue().toString();
+			String tableName  = itemParent.getValue().toString();
+			IndexDBAbstract indexDBAbs = IndexDBFactory.getInstance( this.myDBAbs );
+			if ( indexDBAbs != null )
+			{
+				indexDBAbs.selectEntityLst(schemaName, tableName);
+				this.schemaTreeView.addEntityLst( this.itemSelected, indexDBAbs.getEntityLst() );
+			}
 		}
 	}
 

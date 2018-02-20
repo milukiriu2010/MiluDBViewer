@@ -7,6 +7,8 @@ import javafx.scene.control.TreeItem;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import milu.db.MyDBAbstract;
+import milu.db.trigger.TriggerDBAbstract;
+import milu.db.trigger.TriggerDBFactory;
 import milu.entity.schema.SchemaEntity;
 
 import java.sql.SQLException;
@@ -70,9 +72,9 @@ public class SelectedItemHandlerEachTrigger extends SelectedItemHandlerAbstract
 			SQLException
 	{
 		TreeItem<SchemaEntity> itemParent = itemSelected.getParent();
-		String schema       = itemParent.getParent().getValue().toString();
+		String schemaName   = itemParent.getParent().getValue().toString();
 		String triggerName  = itemSelected.getValue().getName();
-		String id           = schema + "@trigger@" + triggerName;
+		String id           = schemaName + "@trigger@" + triggerName;
 		System.out.println( "setTrigger:" + triggerName );
 		
 		final ObservableList<Tab> tabLst =  this.tabPane.getTabs();
@@ -113,8 +115,14 @@ public class SelectedItemHandlerEachTrigger extends SelectedItemHandlerAbstract
 		newTab.setGraphic( iv );
 		
 		// get table definition
-		String strSrc = 
-			myDBAbs.getTriggerSourceBySchemaTrigger( schema, triggerName );
+		//String strSrc = 
+		//	myDBAbs.getTriggerSourceBySchemaTrigger( schema, triggerName );
+		TriggerDBAbstract triggerDBAbs = TriggerDBFactory.getInstance(myDBAbs);
+		if ( triggerDBAbs == null )
+		{
+			return;
+		}
+		String strSrc = triggerDBAbs.getSRC(schemaName, triggerName);
 		
 		// set type source in SqlTextArea
 		newTab.setSrcText( strSrc );

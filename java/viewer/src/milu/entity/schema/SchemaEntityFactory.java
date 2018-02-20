@@ -40,6 +40,10 @@ public class SchemaEntityFactory
 		{
 			return new SchemaEntityEachFunc( name );
 		}
+		else if ( schemaType == SchemaEntity.SCHEMA_TYPE.AGGREGATE )
+		{
+			return new SchemaEntityEachAggregate( name );
+		}
 		else if ( schemaType == SchemaEntity.SCHEMA_TYPE.PROC )
 		{
 			return new SchemaEntityEachProc( name );
@@ -95,6 +99,10 @@ public class SchemaEntityFactory
 		else if ( schemaType == SchemaEntity.SCHEMA_TYPE.ROOT_FUNC )
 		{
 			return new SchemaEntityRootFunc();
+		}
+		else if ( schemaType == SchemaEntity.SCHEMA_TYPE.ROOT_AGGREGATE )
+		{
+			return new SchemaEntityRootAggregate();
 		}
 		else if ( schemaType == SchemaEntity.SCHEMA_TYPE.ROOT_PROC )
 		{

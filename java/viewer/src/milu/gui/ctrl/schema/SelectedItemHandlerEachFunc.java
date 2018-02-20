@@ -7,6 +7,8 @@ import javafx.scene.control.TreeItem;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import milu.db.MyDBAbstract;
+import milu.db.func.FuncDBAbstract;
+import milu.db.func.FuncDBFactory;
 import milu.entity.schema.SchemaEntity;
 
 import java.sql.SQLException;
@@ -60,9 +62,9 @@ public class SelectedItemHandlerEachFunc extends SelectedItemHandlerAbstract
 			SQLException
 	{
 		TreeItem<SchemaEntity> itemParent = itemSelected.getParent();
-		String schema    = itemParent.getParent().getValue().toString();
-		String funcName  = itemSelected.getValue().getName();
-		String id        = schema + "@func@" + funcName;
+		String schemaName = itemParent.getParent().getValue().toString();
+		String funcName   = itemSelected.getValue().getName();
+		String id         = schemaName + "@func@" + funcName;
 		System.out.println( "setFuncDef:" + funcName );
 		
 		final ObservableList<Tab> tabLst =  this.tabPane.getTabs();
@@ -103,8 +105,14 @@ public class SelectedItemHandlerEachFunc extends SelectedItemHandlerAbstract
 		newTab.setGraphic( iv );
 		
 		// get table definition
-		String strSrc = 
-				myDBAbs.getFunctionSourceBySchemaFunc( schema, funcName );
+		//String strSrc = 
+		//		myDBAbs.getFunctionSourceBySchemaFunc( schema, funcName );
+		FuncDBAbstract funcDBAbs = FuncDBFactory.getInstance(myDBAbs);
+		if ( funcDBAbs == null )
+		{
+			return;
+		}
+		String strSrc = funcDBAbs.getSRC( schemaName, funcName );
 		
 		// set function source in SqlTextArea
 		newTab.setSrcText( strSrc );

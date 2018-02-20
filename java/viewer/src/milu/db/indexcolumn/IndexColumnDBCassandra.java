@@ -13,11 +13,6 @@ import milu.db.MyDBAbstract;
 
 public class IndexColumnDBCassandra extends IndexColumnDBAbstract
 {
-	public IndexColumnDBCassandra( MyDBAbstract myDBAbs )
-	{
-		super( myDBAbs );
-	}
-
 	@Override
 	public void selectEntityLst(String schemaName, String tableName, String indexName) throws SQLException 
 	{

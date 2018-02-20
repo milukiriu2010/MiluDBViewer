@@ -11,6 +11,8 @@ import javafx.scene.control.TreeItem;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import milu.db.MyDBAbstract;
+import milu.db.table.TableDBAbstract;
+import milu.db.table.TableDBFactory;
 import milu.entity.schema.SchemaEntity;
 
 import java.sql.SQLException;
@@ -62,9 +64,9 @@ public class SelectedItemHandlerEachTable extends SelectedItemHandlerAbstract
 			SQLException
 	{
 		TreeItem<SchemaEntity> itemParent = itemSelected.getParent();
-		String schema    = itemParent.getParent().getValue().toString();
-		String tableName = itemSelected.getValue().getName();
-		String id        = schema + "@table@" + tableName;
+		String schemaName = itemParent.getParent().getValue().toString();
+		String tableName  = itemSelected.getValue().getName();
+		String id         = schemaName + "@table@" + tableName;
 		System.out.println( "setTableDef:" + tableName );
 		
 		final ObservableList<Tab> tabLst =  this.tabPane.getTabs();
@@ -104,8 +106,16 @@ public class SelectedItemHandlerEachTable extends SelectedItemHandlerAbstract
 		newTab.setGraphic( iv );
 		
 		// get table definition
-		List<Map<String,String>> dataLst = 
-				myDBAbs.getTableDefBySchemaTable( schema, tableName );
+		//List<Map<String,String>> dataLst = 
+		//		myDBAbs.getTableDefBySchemaTable( schemaName, tableName );
+		
+		// get table definition
+		TableDBAbstract tableDBAbs = TableDBFactory.getInstance(this.myDBAbs);
+		if ( tableDBAbs == null )
+		{
+			return;
+		}
+		List<Map<String,String>> dataLst = tableDBAbs.selectDefinition(schemaName, tableName);
 		
 		// table header
 		List<String> headLst = new ArrayList<String>();

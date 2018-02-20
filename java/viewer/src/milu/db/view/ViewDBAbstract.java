@@ -14,20 +14,12 @@ public abstract class ViewDBAbstract
 {
 	// DB Access Object
 	protected MyDBAbstract  myDBAbs = null;
-	
-	// View Name List
-	protected List<Map<String,String>> viewLst = new ArrayList<>();
-	
-	public ViewDBAbstract( MyDBAbstract myDBAbs )
+
+	public void setMyDBAbstract( MyDBAbstract myDBAbs )
 	{
 		this.myDBAbs = myDBAbs;
 	}
-	
-	protected void clear()
-	{
-		this.viewLst.clear();
-	}
-	
+	/*
 	public List<SchemaEntity> getViewEntityLst()
 	{
 		List<SchemaEntity>  viewEntityLst = new ArrayList<>();
@@ -43,8 +35,15 @@ public abstract class ViewDBAbstract
 		}
 		return viewEntityLst;
 	}	
+	*/
+	abstract public List<SchemaEntity> selectEntityLst( String schemaName ) throws SQLException;
 	
-	abstract public void selectViewLst( String schemaName ) throws SQLException;
+	abstract protected String listSQL( String schemaName );
 	
-	abstract protected String viewLstSQL( String schemaName );
+	// select View Definition
+	abstract public List<Map<String,String>> selectDefinition( String schameName, String viewName ) throws SQLException;
+	
+	// SQL for View Definition
+	abstract protected String definitionSQL( String schemaName, String viewName );
+	
 }

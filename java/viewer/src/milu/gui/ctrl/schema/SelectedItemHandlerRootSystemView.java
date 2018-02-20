@@ -81,8 +81,8 @@ public class SelectedItemHandlerRootSystemView extends SelectedItemHandlerAbstra
 			if ( systemViewDBAbs != null )
 			{
 				String schemaName = itemParent.getValue().toString();
-				systemViewDBAbs.selectEntityLst(schemaName);
-				this.schemaTreeView.addEntityLst( itemSelected, systemViewDBAbs.getEntityLst() );
+				List<SchemaEntity> viewEntityLst = systemViewDBAbs.selectEntityLst(schemaName);
+				this.schemaTreeView.addEntityLst( itemSelected, viewEntityLst );
 			}
 		}
 		

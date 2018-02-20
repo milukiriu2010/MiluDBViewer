@@ -84,8 +84,8 @@ public class SelectedItemHandlerRootSequence extends SelectedItemHandlerAbstract
 			if ( sequenceDBAbs != null )
 			{
 				String schemaName = itemParent.getValue().toString();
-				sequenceDBAbs.selectEntityLst(schemaName);
-				this.schemaTreeView.addEntityLst( itemSelected, sequenceDBAbs.getEntityLst() );
+				List<SchemaEntity> sequenceEntityLst = sequenceDBAbs.selectEntityLst(schemaName);
+				this.schemaTreeView.addEntityLst( itemSelected, sequenceEntityLst );
 			}
 		}
 	}

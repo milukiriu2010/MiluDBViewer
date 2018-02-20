@@ -211,6 +211,7 @@ ORDER BY COUNT(1) DESC;
 	 * @return SQL
 	 *****************************************
 	 */
+	/*
 	protected String schemaIndexSQL( String schema, String table )
 	{
 		String sql = 
@@ -242,7 +243,7 @@ ORDER BY COUNT(1) DESC;
 			
 		return sql;
 	}
-	
+	*/
 	/**
 	 * SQL to get table definition
 	 * call by getTableDefBySchemaTable
@@ -251,6 +252,7 @@ ORDER BY COUNT(1) DESC;
 	 * @param table
 	 * @return
 	 */
+	/*
 	@Override
 	protected String schemaTableDefSQL( String schema, String table )
 	{
@@ -272,8 +274,8 @@ ORDER BY COUNT(1) DESC;
 			"   table_name = '" + table + "' \n"     + 
 			" order by ordinal_position";
 		return sql;
-	}	
-	 
+	}
+	 */
 	/**
 	 * SQL to get function lists of schema.
 	 * call by getSchemaView
@@ -310,6 +312,7 @@ ORDER BY COUNT(1) DESC;
 	 * @return
 	 * @throws SQLException
 	 */
+	/*
 	@Override
 	public String getFunctionSourceBySchemaFunc( String schema, String function )
 			throws SQLException
@@ -357,7 +360,7 @@ ORDER BY COUNT(1) DESC;
 		}
 		return src.toString();
 	}
-	
+	*/
 	/**
 	 * SQL to get procedure lists of schema.
 	 * call by getSchemaProc
@@ -392,6 +395,7 @@ ORDER BY COUNT(1) DESC;
 	 * @return
 	 * @throws SQLException
 	 */
+	/*
 	@Override
 	public String getProcedureSourceBySchemaProc( String schema, String procedure )
 			throws SQLException
@@ -438,7 +442,7 @@ ORDER BY COUNT(1) DESC;
 		}
 		return src.toString();
 	}
-	
+	*/
 	
 	/**
 	 * SQL to get trigger lists of schema.
@@ -471,6 +475,7 @@ ORDER BY COUNT(1) DESC;
 	 * @return
 	 * @throws SQLException
 	 */
+	/*
 	@Override
 	public String getTriggerSourceBySchemaTrigger( String schema, String trigger )
 		throws 
@@ -517,5 +522,5 @@ ORDER BY COUNT(1) DESC;
 		}
 		return src.toString();
 	}
-	
+	*/
 }

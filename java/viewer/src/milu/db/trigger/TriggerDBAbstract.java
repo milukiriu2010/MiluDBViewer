@@ -14,19 +14,11 @@ public abstract class TriggerDBAbstract
 	// DB Access Object
 	protected MyDBAbstract  myDBAbs = null;
 	
-	// Function List
-	protected List<Map<String,String>> triggerLst = new ArrayList<>();
-	
 	public void setMyDBAbstract( MyDBAbstract myDBAbs )
 	{
 		this.myDBAbs = myDBAbs;
 	}
-	
-	protected void clear()
-	{
-		this.triggerLst.clear();
-	}
-	
+	/*
 	public List<SchemaEntity> getEntityLst()
 	{
 		List<SchemaEntity>  triggerEntityLst = new ArrayList<>();
@@ -41,10 +33,14 @@ public abstract class TriggerDBAbstract
 			triggerEntityLst.add( eachTriggerEntity );
 		}
 		return triggerEntityLst;
-	}	
+	}
+	*/	
 	
-	abstract public void selectEntityLst( String schemaName ) throws SQLException;
+	abstract public List<SchemaEntity> selectEntityLst( String schemaName ) throws SQLException;
 	
 	abstract protected String listSQL( String schemaName );
+
+	// Source of Trigger
+	abstract public String getSRC( String schemaName, String triggerName ) throws SQLException;
 	
 }

@@ -209,6 +209,7 @@ order by ai.index_name
 	 * @return SQL
 	 *****************************************
 	 */
+	/*
 	protected String schemaIndexSQL( String schema, String table )
 	{
 		String sql = 
@@ -255,7 +256,7 @@ order by ai.index_name
 				
 		return sql;
 	}
-	
+	*/
 	/**
 	 * SQL to get table definition
 	 * call by getTableDefBySchemaTable
@@ -264,6 +265,7 @@ order by ai.index_name
 	 * @param table
 	 * @return
 	 */
+	/*
 	protected String schemaTableDefSQL( String schema, String table )
 	{
 		String sql = 
@@ -295,7 +297,7 @@ order by ai.index_name
 			" order by column_id";
 		return sql;
 	}
-	
+	*/
 	/**
 	 * SQL to get function lists of schema.
 	 * call by getSchemaView
@@ -334,6 +336,7 @@ order by ai.index_name
 	 * @return
 	 * @throws SQLException
 	 */
+	/*
 	@Override
 	public String getFunctionSourceBySchemaFunc( String schema, String function )
 			throws SQLException
@@ -364,7 +367,7 @@ order by ai.index_name
 		}
 		return src.toString();
 	}
-	
+	*/
 	/**
 	 * SQL to get procedure lists of schema.
 	 * call by getSchemaProc
@@ -400,6 +403,7 @@ order by ai.index_name
 	 * @return
 	 * @throws SQLException
 	 */
+	/*
 	public String getProcedureSourceBySchemaProc( String schema, String procedure )
 		throws 
 			SQLException
@@ -430,7 +434,7 @@ order by ai.index_name
 		}
 		return src.toString();
 	}
-	
+	*/
 	/**
 	 * SQL to get package lists of schema.
 	 * call by getSchemaPackageDef
@@ -466,6 +470,7 @@ order by ai.index_name
 	 * @return
 	 * @throws SQLException
 	 */
+	/*
 	public String getPackageDefSourceBySchemaPackageDef( String schema, String packageDef )
 		throws 
 			UnsupportedOperationException,
@@ -497,6 +502,7 @@ order by ai.index_name
 		}
 		return src.toString();
 	}
+	*/
 	
 	/**
 	 * SQL to get package body lists of schema.
@@ -534,6 +540,7 @@ order by ai.index_name
 	 * @return
 	 * @throws SQLException
 	 */
+	/*
 	public String getPackageBodySourceBySchemaPackageBody( String schema, String packageBody )
 		throws 
 			SQLException
@@ -564,7 +571,7 @@ order by ai.index_name
 		}
 		return src.toString();
 	}
-	
+	*/
 	/**
 	 * SQL to get type lists of schema.
 	 * call by getSchemaType
@@ -600,6 +607,7 @@ order by ai.index_name
 	 * @return
 	 * @throws SQLException
 	 */
+	/*
 	public String getTypeSourceBySchemaType( String schema, String type )
 		throws 
 			SQLException
@@ -632,7 +640,7 @@ order by ai.index_name
 		rs.close();
 		return src.toString();
 	}
-	
+	*/
 	/**
 	 * SQL to get trigger lists of schema.
 	 * call by getSchemaTrigger
@@ -667,6 +675,7 @@ order by ai.index_name
 	 * @return
 	 * @throws SQLException
 	 */
+	/*
 	public String getTriggerSourceBySchemaTrigger( String schema, String trigger )
 		throws 
 			UnsupportedOperationException,
@@ -700,7 +709,7 @@ order by ai.index_name
 		rs.close();
 		return src.toString();
 	}
-	
+	*/
 	/**
 	 * SQL to get sequence lists of schema.
 	 * call by getSchemaSequence

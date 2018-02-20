@@ -17,19 +17,12 @@ public abstract class PackageDefDBAbstract
 	// DB Access Object
 	protected MyDBAbstract  myDBAbs = null;
 	
-	// Package Definition List
-	protected List<Map<String,String>>  packageDefLst = new ArrayList<>();
-	
 	public void setMyDBAbstract( MyDBAbstract myDBAbs )
 	{
 		this.myDBAbs = myDBAbs;
 	}
-	
-	protected void clear()
-	{
-		this.packageDefLst.clear();
-	}	
-	
+
+	/*
 	public List<SchemaEntity> getEntityLst()
 	{
 		List<SchemaEntity>  packageDefEntityLst = new ArrayList<>();
@@ -44,15 +37,18 @@ public abstract class PackageDefDBAbstract
 			packageDefEntityLst.add( eachPackageDefEntity );
 		}
 		return packageDefEntityLst;
-	}	
+	}
+	*/	
 	
-	public void selectPackageDefLst( String schemaName ) throws SQLException
+	public List<SchemaEntity> selectEntityLst( String schemaName ) throws SQLException
 	{
+		List<SchemaEntity>  packageDefEntityLst = new ArrayList<>();
+		
 		String sql = this.listSQL( schemaName );
 		
-		System.out.println( " -- selectPackageDefLst --------------" );
+		System.out.println( " -- selectEntityLst(Package Definition) -----" );
 		System.out.println( sql );
-		System.out.println( " -------------------------------------" );
+		System.out.println( " --------------------------------------------" );
 		try
 		(
 			Statement stmt = this.myDBAbs.createStatement();
@@ -61,13 +57,27 @@ public abstract class PackageDefDBAbstract
 		{
 			while ( rs.next() )
 			{
+				/*
 				Map<String,String> dataRow = new HashMap<>();
 				dataRow.put( "packageDefName", rs.getString("object_name") );
 				dataRow.put( "status"        , rs.getString("status") );
 				this.packageDefLst.add( dataRow );
+				*/
+				SchemaEntity packageDefEntity = SchemaEntityFactory.createInstance( rs.getString("object_name"), SchemaEntity.SCHEMA_TYPE.PACKAGE_DEF );
+				String strStatus = rs.getString("status");
+				if ( strStatus != null && "INVALID".equals(strStatus) )
+				{
+					packageDefEntity.setState( SchemaEntity.STATE.INVALID );
+				}
+				packageDefEntityLst.add( packageDefEntity );
 			}
 		}
+		
+		return packageDefEntityLst;
 	}
 	
-	abstract protected String listSQL( String schemaName );		
+	abstract protected String listSQL( String schemaName );
+
+	// Source of Package Definition
+	abstract public String getSRC( String schemaName, String packageDefName ) throws SQLException;
 }

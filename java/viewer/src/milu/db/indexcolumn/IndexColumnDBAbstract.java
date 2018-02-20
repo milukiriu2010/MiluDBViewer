@@ -18,7 +18,7 @@ public abstract class IndexColumnDBAbstract
 	// Column Name List
 	protected List<Map<String,String>>  indexColumnLst = new ArrayList<>();
 	
-	public IndexColumnDBAbstract( MyDBAbstract myDBAbs )
+	public void setMyDBAbstract( MyDBAbstract myDBAbs )
 	{
 		this.myDBAbs = myDBAbs;
 	}
