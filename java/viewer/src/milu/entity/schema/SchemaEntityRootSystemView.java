@@ -6,7 +6,8 @@ public class SchemaEntityRootSystemView extends SchemaEntity
 	{
 		super( SchemaEntity.SCHEMA_TYPE.ROOT_SYSTEM_VIEW );
 		
-		this.name = "SYSTEM VIEW";
+		this.nameId = "ITEM_SYSTEM_VIEW";
+		this.setName();
 		
 		this.imageResourceName = "file:resources/images/systemview_root.png";
 	}

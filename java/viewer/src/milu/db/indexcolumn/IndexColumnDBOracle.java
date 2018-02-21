@@ -6,8 +6,6 @@ import java.sql.Statement;
 import java.util.HashMap;
 import java.util.Map;
 
-import milu.db.MyDBAbstract;
-
 public class IndexColumnDBOracle extends IndexColumnDBAbstract 
 {
 	@Override

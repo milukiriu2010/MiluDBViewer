@@ -1,13 +1,10 @@
 package milu.db.trigger;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import milu.db.MyDBAbstract;
 import milu.entity.schema.SchemaEntity;
-import milu.entity.schema.SchemaEntityFactory;
 
 public abstract class TriggerDBAbstract 
 {

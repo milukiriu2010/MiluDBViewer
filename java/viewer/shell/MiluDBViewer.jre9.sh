@@ -7,7 +7,7 @@ cd $prgdir
 export MYCLASSPATH=$CLASSPATH:.
 export MYCLASSPATH=$MYCLASSPATH:$prgdir
 export MYCLASSPATH=$MYCLASSPATH:$prgdir/lib/mysql-connector-java-5.1.45-bin.jar
-export MYCLASSPATH=$MYCLASSPATH:$prgdir/lib/ojdbc6.jar
+export MYCLASSPATH=$MYCLASSPATH:$prgdir/lib/ojdbc8.jar
 export MYCLASSPATH=$MYCLASSPATH:$prgdir/lib/postgresql-42.1.4.jar
 export MYCLASSPATH=$MYCLASSPATH:$prgdir/lib/cassandra-jdbc-driver-0.6.4-shaded.jar
 export MYCLASSPATH=$MYCLASSPATH:$prgdir/lib/excel/commons-collections4-4.1.jar

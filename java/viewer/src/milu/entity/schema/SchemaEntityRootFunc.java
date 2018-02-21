@@ -6,7 +6,8 @@ public class SchemaEntityRootFunc extends SchemaEntity
 	{
 		super( SchemaEntity.SCHEMA_TYPE.ROOT_FUNC );
 		
-		this.name = "FUNCTION";
+		this.nameId = "ITEM_FUNC";
+		this.setName();
 		
 		this.imageResourceName = "file:resources/images/func_root.png";
 	}

@@ -6,7 +6,8 @@ public class SchemaEntityRootIndex extends SchemaEntity
 	{
 		super( SchemaEntity.SCHEMA_TYPE.ROOT_INDEX );
 		
-		this.name = "INDEX";
+		this.nameId = "ITEM_INDEX";
+		this.setName();
 		
 		this.imageResourceName = "file:resources/images/index_root.png";
 	}

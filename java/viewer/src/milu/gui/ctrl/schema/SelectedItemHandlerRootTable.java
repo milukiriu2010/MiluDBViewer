@@ -1,7 +1,6 @@
 package milu.gui.ctrl.schema;
 
 import java.sql.SQLException;
-import java.util.List;
 
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
@@ -10,12 +9,10 @@ import javafx.collections.ObservableList;
 import javafx.collections.FXCollections;
 
 import milu.db.MyDBAbstract;
-import milu.db.table.TableDBAbstract;
-import milu.db.table.TableDBFactory;
 import milu.entity.schema.SchemaEntity;
-import milu.entity.schema.SearchSchemaEntity;
-import milu.ctrl.visitor.SearchSchemaEntityVisitorTypeName;
-import milu.ctrl.visitor.SearchSchemaEntityVisitorType;
+import milu.ctrl.visitor.VisitorInterface;
+import milu.ctrl.visitor.SearchSchemaEntityInterface;
+import milu.ctrl.visitor.VisitorFactory;
 
 /**
  * This class is invoked, when "root table" item is clicked on SchemaTreeView.
@@ -95,13 +92,13 @@ public class SelectedItemHandlerRootTable extends SelectedItemHandlerAbstract
 					SchemaEntity.SCHEMA_TYPE.ROOT_TABLE
 				);
 				*/
-			SearchSchemaEntityVisitorTypeName sseVisitorTN = new SearchSchemaEntityVisitorTypeName(SchemaEntity.SCHEMA_TYPE.SCHEMA,schemaName);
+			VisitorInterface sseVisitorTN = new VisitorFactory().createInstance(SchemaEntity.SCHEMA_TYPE.SCHEMA, schemaName);
 			this.myDBAbs.getSchemaRoot().accept(sseVisitorTN);
-			SchemaEntity schemaEntity = sseVisitorTN.getHitSchemaEntity();
+			SchemaEntity schemaEntity = ((SearchSchemaEntityInterface)sseVisitorTN).getHitSchemaEntity();
 			
-			SearchSchemaEntityVisitorType     sseVisitorT  = new SearchSchemaEntityVisitorType(SchemaEntity.SCHEMA_TYPE.ROOT_TABLE);
+			VisitorInterface sseVisitorT = new VisitorFactory().createInstance(SchemaEntity.SCHEMA_TYPE.ROOT_TABLE );
 			schemaEntity.accept( sseVisitorT );
-			SchemaEntity rootTableEntity = sseVisitorT.getHitSchemaEntity();
+			SchemaEntity rootTableEntity = ((SearchSchemaEntityInterface)sseVisitorT).getHitSchemaEntity();
 			
 			if ( rootTableEntity != null )
 			{

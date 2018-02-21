@@ -13,7 +13,7 @@
 	<path id="java.classpath">
 		<pathelement path="../lib/cassandra-jdbc-driver-0.6.4-shaded.jar" />
 		<pathelement path="../lib/mysql-connector-java-5.1.45-bin.jar" />
-		<pathelement path="../lib/ojdbc6.jar" />
+		<pathelement path="../lib/ojdbc8.jar" />
 		<pathelement path="../lib/postgresql-42.1.4.jar" />
 		<pathelement path="../lib/excel/commons-collections4-4.1.jar" />
 		<pathelement path="../lib/excel/poi-3.17.jar" />
@@ -54,7 +54,7 @@
 						value=". 
 							lib/cassandra-jdbc-driver-0.6.4-shaded.jar
 							lib/mysql-connector-java-5.1.45-bin.jar 
-							lib/ojdbc6.jar 
+							lib/ojdbc8.jar 
 							lib/postgresql-42.1.4.jar
 							lib/excel/commons-collections4-4.1.jar
 							lib/excel/poi-3.17.jar

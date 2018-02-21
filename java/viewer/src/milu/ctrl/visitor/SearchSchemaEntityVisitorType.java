@@ -2,7 +2,9 @@ package milu.ctrl.visitor;
 
 import milu.entity.schema.SchemaEntity;
 
-public class SearchSchemaEntityVisitorType implements VisitorInterface 
+public class SearchSchemaEntityVisitorType 
+	implements VisitorInterface,
+		SearchSchemaEntityInterface 
 {
 	private SchemaEntity.SCHEMA_TYPE searchSchemaType = null;
 	
@@ -13,6 +15,7 @@ public class SearchSchemaEntityVisitorType implements VisitorInterface
 		this.searchSchemaType = searchSchemaType;
 	}
 	
+	@Override
 	public SchemaEntity getHitSchemaEntity()
 	{
 		return this.hitSchemaEntity;
@@ -27,7 +30,6 @@ public class SearchSchemaEntityVisitorType implements VisitorInterface
 		}
 		
 		SchemaEntity.SCHEMA_TYPE schemaType = schemaEntity.getType();
-		String name = schemaEntity.getName();
 		if ( schemaType == this.searchSchemaType )
 		{
 			this.hitSchemaEntity = schemaEntity;

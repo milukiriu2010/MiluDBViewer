@@ -14,16 +14,10 @@ import javafx.scene.image.Image;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-import java.sql.SQLException;
-
-import java.util.List;
-//import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.Future;
-
-import javafx.concurrent.Task;
 
 import milu.ctrl.ExecQueryDBInterface;
 import milu.ctrl.ExecExplainDBInterface;
@@ -38,9 +32,6 @@ import milu.gui.ctrl.menu.MainToolBar;
 import milu.gui.ctrl.query.DBSqlTab;
 import milu.gui.ctrl.schema.DBSchemaTab;
 import milu.db.MyDBAbstract;
-import milu.db.schema.SchemaDBAbstract;
-import milu.db.schema.SchemaDBFactory;
-import milu.entity.schema.SchemaEntity;
 import milu.task.CollectTask;
 
 public class DBView extends Stage

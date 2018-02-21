@@ -1,16 +1,8 @@
 package milu.db;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.List;
-import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.Map;
 
 import milu.entity.schema.SchemaEntity.SCHEMA_TYPE;
-
-import java.util.HashMap;
 
 public class MyDBCassandra extends MyDBAbstract
 {

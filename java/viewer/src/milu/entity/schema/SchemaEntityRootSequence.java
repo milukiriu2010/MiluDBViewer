@@ -6,7 +6,8 @@ public class SchemaEntityRootSequence extends SchemaEntity
 	{
 		super( SchemaEntity.SCHEMA_TYPE.ROOT_SEQUENCE );
 		
-		this.name = "SEQUENCE";
+		this.nameId = "ITEM_SEQ";
+		this.setName();
 		
 		this.imageResourceName = "file:resources/images/seq_root.png";
 	}

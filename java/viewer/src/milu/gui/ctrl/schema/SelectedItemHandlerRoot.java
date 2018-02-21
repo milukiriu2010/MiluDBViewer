@@ -1,14 +1,10 @@
 package milu.gui.ctrl.schema;
 
-import java.util.List;
-import java.util.Map;
 import java.sql.SQLException;
 
 import javafx.scene.control.TabPane;
 
 import milu.db.MyDBAbstract;
-import milu.db.schema.SchemaDBFactory;
-import milu.db.schema.SchemaDBAbstract;
 import milu.entity.schema.SchemaEntity;
 
 /**

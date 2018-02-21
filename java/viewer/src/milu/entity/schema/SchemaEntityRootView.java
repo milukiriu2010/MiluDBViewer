@@ -6,7 +6,8 @@ public class SchemaEntityRootView extends SchemaEntity
 	{
 		super( SchemaEntity.SCHEMA_TYPE.ROOT_VIEW );
 		
-		this.name = "VIEW";
+		this.nameId = "ITEM_VIEW";
+		this.setName();
 		
 		this.imageResourceName = "file:resources/images/view_root.png";
 	}

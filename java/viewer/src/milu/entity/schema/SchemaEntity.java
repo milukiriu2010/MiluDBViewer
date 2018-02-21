@@ -2,12 +2,15 @@ package milu.entity.schema;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.ResourceBundle;
 import java.util.ArrayList;
 
+import milu.ctrl.ChangeLangInterface;
 import milu.ctrl.visitor.VisitorInterface;
 
 // This class will be abstract
 abstract public class SchemaEntity
+	implements ChangeLangInterface
 {
 	// ---------------------------------------
 	// [0:ROOT]
@@ -118,6 +121,8 @@ abstract public class SchemaEntity
 	
 	protected String       name = null;
 	
+	protected String       nameId = null;
+	
 	protected SCHEMA_TYPE  type = null;
 	
 	protected String       imageResourceName = null;
@@ -125,6 +130,12 @@ abstract public class SchemaEntity
 	protected STATE        state = STATE.VALID;
 	
 	protected List<SchemaEntity>  entityLst = new ArrayList<>();
+	
+	// Property File for this class 
+	protected static final String PROPERTY_FILENAME = 
+		 	"conf.lang.entity.schema.SchemaEntity";
+
+	protected static ResourceBundle langRB = ResourceBundle.getBundle( PROPERTY_FILENAME );	
 	
 	public SchemaEntity( SCHEMA_TYPE type )
 	{
@@ -150,6 +161,14 @@ abstract public class SchemaEntity
 	public void setName( String name )
 	{
 		this.name = name;
+	}
+	
+	public void setName()
+	{
+		if ( this.nameId != null )
+		{
+			this.name = langRB.getString( this.nameId );
+		}
 	}
 	
 	public SCHEMA_TYPE getType()
@@ -195,5 +214,16 @@ abstract public class SchemaEntity
 	public void accept( VisitorInterface visitor )
 	{
 		visitor.visit(this);
+	}
+	
+	public static void loadResourceBundle()
+	{
+		langRB = ResourceBundle.getBundle( PROPERTY_FILENAME );
+	}
+	
+	@Override
+	public void changeLang()
+	{
+		this.setName();
 	}
 }

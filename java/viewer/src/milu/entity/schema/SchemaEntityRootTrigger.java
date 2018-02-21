@@ -6,7 +6,8 @@ public class SchemaEntityRootTrigger extends SchemaEntity
 	{
 		super( SchemaEntity.SCHEMA_TYPE.ROOT_TRIGGER );
 		
-		this.name = "TRIGGER";
+		this.nameId = "ITEM_TRIGGER";
+		this.setName();
 		
 		this.imageResourceName = "file:resources/images/trigger_root.png";
 	}

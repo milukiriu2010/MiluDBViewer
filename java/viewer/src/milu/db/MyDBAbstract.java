@@ -4,7 +4,6 @@ import java.util.Map;
 
 import milu.entity.schema.SchemaEntity;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.ArrayList;
 
@@ -12,11 +11,8 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.Statement;
 
-import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 
-import milu.entity.schema.SchemaEntity;
 import milu.entity.schema.SchemaEntityFactory;
 
 abstract public class MyDBAbstract

@@ -2,10 +2,6 @@ package milu.db.table;
 
 import milu.db.MyDBAbstract;
 import milu.db.MyDBPostgres;
-import milu.db.schema.SchemaDBCassandra;
-import milu.db.schema.SchemaDBMySQL;
-import milu.db.schema.SchemaDBOracle;
-import milu.db.schema.SchemaDBPostgres;
 import milu.db.MyDBMySQL;
 import milu.db.MyDBOracle;
 import milu.db.MyDBCassandra;

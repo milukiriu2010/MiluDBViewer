@@ -6,7 +6,8 @@ public class SchemaEntityRootType extends SchemaEntity
 	{
 		super( SchemaEntity.SCHEMA_TYPE.ROOT_TYPE );
 		
-		this.name = "TYPE";
+		this.nameId = "ITEM_TYPE";
+		this.setName();
 		
 		this.imageResourceName = "file:resources/images/type_root.png";
 	}

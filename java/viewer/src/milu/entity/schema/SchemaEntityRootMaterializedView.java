@@ -6,7 +6,8 @@ public class SchemaEntityRootMaterializedView extends SchemaEntity
 	{
 		super( SchemaEntity.SCHEMA_TYPE.ROOT_MATERIALIZED_VIEW );
 		
-		this.name = "MATERIALIZED VIEW";
+		this.nameId = "ITEM_MATERIALIZED_VIEW";
+		this.setName();
 		
 		this.imageResourceName = "file:resources/images/materialized_view_root.png";
 	}

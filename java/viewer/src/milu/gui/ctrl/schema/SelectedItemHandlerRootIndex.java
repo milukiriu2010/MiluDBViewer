@@ -1,8 +1,6 @@
 package milu.gui.ctrl.schema;
 
 import java.sql.SQLException;
-import java.util.List;
-import java.util.Map;
 
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TreeItem;

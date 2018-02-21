@@ -6,7 +6,8 @@ public class SchemaEntityRootProc extends SchemaEntity
 	{
 		super( SchemaEntity.SCHEMA_TYPE.ROOT_PROC );
 		
-		this.name = "PROCEDURE";
+		this.nameId = "ITEM_PROC";
+		this.setName();
 		
 		this.imageResourceName = "file:resources/images/proc_root.png";
 	}

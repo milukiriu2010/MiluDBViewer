@@ -6,7 +6,8 @@ public class SchemaEntityRootTable extends SchemaEntity
 	{
 		super( SchemaEntity.SCHEMA_TYPE.ROOT_TABLE );
 		
-		this.name = "TABLE";
+		this.nameId = "ITEM_TABLE";
+		this.setName();
 		
 		this.imageResourceName = "file:resources/images/table_root.png";
 	}

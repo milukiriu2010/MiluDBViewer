@@ -345,6 +345,7 @@ public class JSQLParseExample2 extends Application
     	sb.append( tab + "Table:FullyQualifiedName:" + tbl.getFullyQualifiedName() + "\n" );
     	sb.append( tab + "Table:SchemaName:" + tbl.getSchemaName() + "\n" );
     	processAlias( tbl.getAlias(), level, sb );
+    	processDatabase( tbl.getDatabase(), level, sb );
     }
     
     private void processAlias( Alias alias, int level, StringBuffer sb )

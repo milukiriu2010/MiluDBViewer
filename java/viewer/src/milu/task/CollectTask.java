@@ -23,7 +23,6 @@ import milu.db.sysview.SystemViewDBFactory;
 import milu.db.trigger.TriggerDBFactory;
 import milu.entity.schema.SchemaEntity;
 import milu.entity.schema.SchemaEntityFactory;
-import milu.gui.view.DBView;
 
 public class CollectTask extends Task<Double>
 {

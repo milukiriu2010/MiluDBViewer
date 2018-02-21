@@ -23,6 +23,8 @@ import milu.gui.dlg.DBSettingDialog;
 import milu.gui.view.DBView;
 
 import milu.db.MyDBAbstract;
+import milu.entity.schema.SchemaEntity;
+import milu.ctrl.visitor.ChangeLangSchemaEntityVisitor;
 
 public class MainController
 {
@@ -208,14 +210,23 @@ public class MainController
 	 */
 	public void changeLang( String langCode )
 	{
-		System.out.println( "changeLang:" + langCode );
+		System.out.println( "changeLang start:" + langCode );
 		Locale nextLocale = new Locale( langCode );
 		Locale.setDefault( nextLocale );
+		
+		SchemaEntity.loadResourceBundle();
+		for ( MyDBAbstract myDBAbs : this.myDBAbsLst )
+		{
+			SchemaEntity schemaRoot = myDBAbs.getSchemaRoot();
+			schemaRoot.accept(new ChangeLangSchemaEntityVisitor());
+		}
 		
 		for ( DBView dbView : this.dbViewLst )
 		{
 			dbView.changeLang();
 		}
+		
+		System.out.println( "changeLang done." );
 	}
 	
 }

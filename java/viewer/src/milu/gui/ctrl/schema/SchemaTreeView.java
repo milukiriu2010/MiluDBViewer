@@ -1,30 +1,24 @@
 package milu.gui.ctrl.schema;
 
-import java.util.Map;
 import java.util.List;
-//import java.util.Set;
 import java.util.ResourceBundle;
 
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
-//import javafx.scene.control.ScrollBar;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.shape.Line;
 import javafx.scene.Group;
-//import javafx.scene.Node;
 import javafx.scene.effect.Blend;
 import javafx.scene.effect.BlendMode;
 import javafx.collections.ObservableList;
-//import javafx.geometry.Orientation;
 import javafx.beans.property.BooleanProperty;
 import milu.gui.view.DBView;
 
 import milu.ctrl.ChangeLangInterface;
 import milu.entity.schema.SchemaEntity;
-import milu.entity.schema.SchemaEntityFactory;
 
 public class SchemaTreeView extends TreeView<SchemaEntity>
 	implements
@@ -42,7 +36,7 @@ public class SchemaTreeView extends TreeView<SchemaEntity>
 	
 	// Root Item of this Tree
 	private TreeItem<SchemaEntity> item0Root = null;
-	
+	/*
 	private enum NAME_TYPE
 	{
 		NAME_OBJECT,
@@ -54,6 +48,7 @@ public class SchemaTreeView extends TreeView<SchemaEntity>
 		VALID,
 		INVALID
 	}
+	*/
 	
 	public SchemaTreeView( DBView dbView )
 	{
@@ -169,17 +164,7 @@ public class SchemaTreeView extends TreeView<SchemaEntity>
 		}
 		*/
 	}
-	
-	private TreeItem<SchemaEntity> addItem
-		( TreeItem<SchemaEntity>   itemParent, 
-		  String                   itemName,
-		  NAME_TYPE                skipBundle,
-		  SchemaEntity.SCHEMA_TYPE itemType,
-		  String                   fileResourceName ) 
-	{
-		return this.addItem(itemParent, itemName, skipBundle, itemType, STATUS.VALID, fileResourceName );
-	}
-	
+	/*
 	private TreeItem<SchemaEntity> addItem
 		( TreeItem<SchemaEntity>   itemParent, 
 		  String                   itemName,
@@ -243,7 +228,9 @@ public class SchemaTreeView extends TreeView<SchemaEntity>
 		
 		return itemNew;
 	}
+	*/
 	
+	@SuppressWarnings("unchecked")
 	private TreeItem<SchemaEntity> addItem
 		( TreeItem<SchemaEntity>   itemParent, 
 		  SchemaEntity             schemaEntity )
@@ -342,220 +329,6 @@ public class SchemaTreeView extends TreeView<SchemaEntity>
 			}
 		}
 	}
-
-	/*
-	public void setInitialData( String strRoot, List<Map<String,String>> schemaNameLst, List<SchemaEntity.SCHEMA_TYPE>  suppoertedTypeLst )
-	{
-		// create Root Item
-		this.item0Root = 
-			this.addItem( 
-				null, 
-				strRoot, 
-				NAME_TYPE.NAME_OBJECT, 
-				SchemaEntity.SCHEMA_TYPE.ROOT, 
-				"file:resources/images/url.png" 
-			);
-		this.item0Root.setExpanded( true );
-		this.setRoot( this.item0Root );
-		
-		// create Schema Item
-		for ( Map<String,String> schemaNameItem : schemaNameLst )
-		{
-			// create Schema Root
-			TreeItem<SchemaEntity> item1Schema = 
-				this.addItem( 
-					this.item0Root, 
-					schemaNameItem.get("schemaName"), 
-					NAME_TYPE.NAME_OBJECT, 
-					SchemaEntity.SCHEMA_TYPE.SCHEMA,
-					"file:resources/images/schema.png" 
-				); 
-				
-			// create Table Root
-			this.addItem( 
-				item1Schema, 
-				"ITEM_TABLE", 
-				NAME_TYPE.NAME_BUNDLE, 
-				SchemaEntity.SCHEMA_TYPE.ROOT_TABLE, 
-				"file:resources/images/table_root.png" 
-			);
-				
-			// create View Root
-			if ( suppoertedTypeLst.contains( SchemaEntity.SCHEMA_TYPE.ROOT_VIEW ) )
-			{
-				this.addItem( 
-					item1Schema, 
-					"ITEM_VIEW", 
-					NAME_TYPE.NAME_BUNDLE, 
-					SchemaEntity.SCHEMA_TYPE.ROOT_VIEW, 
-					"file:resources/images/view_root.png" 
-				);
-			}
-			
-			// create System View Root
-			if ( suppoertedTypeLst.contains( SchemaEntity.SCHEMA_TYPE.ROOT_SYSTEM_VIEW ) )
-			{
-				this.addItem( 
-					item1Schema, 
-					"ITEM_SYSTEM_VIEW", 
-					NAME_TYPE.NAME_BUNDLE, 
-					SchemaEntity.SCHEMA_TYPE.ROOT_SYSTEM_VIEW, 
-					"file:resources/images/systemview_root.png" 
-				);
-			}
-			
-			// create Materialized View Root
-			if ( suppoertedTypeLst.contains( SchemaEntity.SCHEMA_TYPE.ROOT_MATERIALIZED_VIEW ) )
-			{
-				this.addItem( 
-					item1Schema, 
-					"ITEM_MATERIALIZED_VIEW", 
-					NAME_TYPE.NAME_BUNDLE, 
-					SchemaEntity.SCHEMA_TYPE.ROOT_MATERIALIZED_VIEW, 
-					"file:resources/images/materialized_view_root.png" 
-				);
-			}
-			
-			// create Function Root
-			if ( suppoertedTypeLst.contains( SchemaEntity.SCHEMA_TYPE.ROOT_FUNC ) )
-			{
-				this.addItem( 
-					item1Schema, 
-					"ITEM_FUNC", 
-					NAME_TYPE.NAME_BUNDLE, 
-					SchemaEntity.SCHEMA_TYPE.ROOT_FUNC, 
-					"file:resources/images/func_root.png" 
-				);
-			}
-			
-			// create Aggregate Root
-			if ( suppoertedTypeLst.contains( SchemaEntity.SCHEMA_TYPE.ROOT_AGGREGATE ) )
-			{
-				this.addItem( 
-					item1Schema, 
-					"ITEM_AGGREGATE", 
-					NAME_TYPE.NAME_BUNDLE, 
-					SchemaEntity.SCHEMA_TYPE.ROOT_AGGREGATE, 
-					"file:resources/images/aggregate_root.png" 
-				);
-			}
-			
-			// create Procedure Root
-			if ( suppoertedTypeLst.contains( SchemaEntity.SCHEMA_TYPE.ROOT_PROC ) )
-			{
-				this.addItem( 
-					item1Schema, 
-					"ITEM_PROC", 
-					NAME_TYPE.NAME_BUNDLE, 
-					SchemaEntity.SCHEMA_TYPE.ROOT_PROC, 
-					"file:resources/images/proc_root.png" 
-				);
-			}
-			
-			// create Package Root
-			if ( suppoertedTypeLst.contains( SchemaEntity.SCHEMA_TYPE.ROOT_PACKAGE_DEF ) )
-			{
-				this.addItem( 
-					item1Schema, 
-					"ITEM_PACKAGE_DEF", 
-					NAME_TYPE.NAME_BUNDLE, 
-					SchemaEntity.SCHEMA_TYPE.ROOT_PACKAGE_DEF, 
-					"file:resources/images/package_def_root.png" 
-				);
-			}
-			
-			// create Package Body Root
-			if ( suppoertedTypeLst.contains( SchemaEntity.SCHEMA_TYPE.ROOT_PACKAGE_BODY ) )
-			{
-				this.addItem( 
-					item1Schema, 
-					"ITEM_PACKAGE_BODY", 
-					NAME_TYPE.NAME_BUNDLE, 
-					SchemaEntity.SCHEMA_TYPE.ROOT_PACKAGE_BODY, 
-					"file:resources/images/package_body_root.png" 
-				);
-			}
-			
-			// create Trigger Root
-			if ( suppoertedTypeLst.contains( SchemaEntity.SCHEMA_TYPE.ROOT_TRIGGER ) )
-			{
-				this.addItem( 
-					item1Schema, 
-					"ITEM_TRIGGER", 
-					NAME_TYPE.NAME_BUNDLE, 
-					SchemaEntity.SCHEMA_TYPE.ROOT_TRIGGER, 
-					"file:resources/images/trigger_root.png" 
-				);
-			}
-			
-			// create Type Root
-			if ( suppoertedTypeLst.contains( SchemaEntity.SCHEMA_TYPE.ROOT_TYPE ) )
-			{
-				this.addItem( 
-					item1Schema, 
-					"ITEM_TYPE", 
-					NAME_TYPE.NAME_BUNDLE, 
-					SchemaEntity.SCHEMA_TYPE.ROOT_TYPE, 
-					"file:resources/images/type_root.png" 
-				);
-			}
-			
-			// create Sequence Root
-			if ( suppoertedTypeLst.contains( SchemaEntity.SCHEMA_TYPE.ROOT_SEQUENCE ) )
-			{
-				this.addItem( 
-					item1Schema, 
-					"ITEM_SEQ", 
-					NAME_TYPE.NAME_BUNDLE, 
-					SchemaEntity.SCHEMA_TYPE.ROOT_SEQUENCE,
-					"file:resources/images/seq_root.png"
-				);
-			}
-		}
-		
-		this.setAction();
-	}
-	*/
-
-	/*
-	public void setTableData( TreeItem<SchemaEntity> itemTarget, List<Map<String,String>> dataLst )
-	{
-		for ( Map<String,String> dataRow : dataLst )
-		{
-			STATUS status = STATUS.VALID; 
-			String strStatus = dataRow.get("status");
-			if ( "INVALID".equals(strStatus) )
-			{
-				status = STATUS.INVALID;
-			}
-			
-	        // create Table Item
-			TreeItem<SchemaEntity> item3TableName = 
-				this.addItem( 
-					itemTarget, 
-					dataRow.get("tableName"), 
-					NAME_TYPE.NAME_OBJECT, 
-					SchemaEntity.SCHEMA_TYPE.TABLE,
-					status,
-					"file:resources/images/table.png" 
-				);
-			
-			// create Index Root
-			this.addItem( 
-				item3TableName, 
-				"ITEM_INDEX", 
-				NAME_TYPE.NAME_BUNDLE, 
-				SchemaEntity.SCHEMA_TYPE.ROOT_INDEX, 
-				"file:resources/images/index_root.png" 
-			);
-			
-		}
-		
-		this.setAction();
-		itemTarget.setExpanded(true);
-		this.scrollBack(itemTarget);
-	}
-	*/
 	
 	public void setTableData( TreeItem<SchemaEntity> itemTarget, List<SchemaEntity> tableEntityLst )
 	{
@@ -584,24 +357,13 @@ public class SchemaTreeView extends TreeView<SchemaEntity>
 			{
 				this.addItem( item3TableName, rootObjEntity );
 			}
-			
-			/*
-			// create Index Root
-			this.addItem( 
-				item3TableName, 
-				"ITEM_INDEX", 
-				NAME_TYPE.NAME_BUNDLE, 
-				SchemaEntity.SCHEMA_TYPE.ROOT_INDEX, 
-				"file:resources/images/index_root.png" 
-			);
-			*/
 		}
 		
 		this.setAction();
 		itemTarget.setExpanded(true);
 		this.scrollBack(itemTarget);
 	}
-	
+	/*
 	public void setIndexData( TreeItem<SchemaEntity> itemTarget, List<Map<String,String>> dataLst )
 	{
 		for ( Map<String,String> dataRow : dataLst )
@@ -644,101 +406,12 @@ public class SchemaTreeView extends TreeView<SchemaEntity>
 						status,
 						iconFileName 
 					);
-			
-			/*
-			// split column list into each column
-			// ex1. {column1}
-			//        => column1
-			// ex2. {column1,column2}
-			//        => column1 column2
-			String index_keys = dataRow.get("index_keys");
-			if ( index_keys != null )
-			{
-				index_keys = index_keys.replace( "{",  "" );
-				index_keys = index_keys.replace( "}",  "" );
-				String[] indexLst = index_keys.split(",");
-				// create Column Item
-				for ( String ind : indexLst )
-				{
-					this.addItem( 
-						item5Index, 
-						"file:resources/images/column.png", 
-						ind, 
-						NAME_TYPE.NAME_OBJECT, 
-						SchemaEntity.SCHEMA_TYPE.INDEX_COLUMN 
-					);
-				}
-			}
-			*/
-		}
-		
-		itemTarget.setExpanded(true);
-		this.scrollBack(itemTarget);
-	}
-	
-	/*
-	public void setIndexColumnData( TreeItem<SchemaEntity> itemTarget, List<Map<String,String>> dataLst )
-	{
-		for ( Map<String,String> dataRow : dataLst )
-		{
-			// create IndexColumn Item
-			String columnName      = dataRow.get("columnName");
-			String clusteringOrder = dataRow.get("clusteringOrder");
-			String iconFileName  = null;
-			if ( "asc".equals( clusteringOrder ) )
-			{
-				iconFileName = "file:resources/images/order_a.png";
-			}
-			else if ( "desc".equals( clusteringOrder ) )
-			{
-				iconFileName = "file:resources/images/order_d.png";
-			}
-			else
-			{
-				iconFileName = "file:resources/images/column.png";
-			}
-			
-			this.addItem( 
-				itemTarget, 
-				columnName, 
-				NAME_TYPE.NAME_OBJECT, 
-				SchemaEntity.SCHEMA_TYPE.INDEX_COLUMN,
-				iconFileName
-			);
-		}
-		itemTarget.setExpanded(true);
-		this.scrollBack(itemTarget);
-	}
-	*/
-
-	/*
-	public void setViewData( TreeItem<SchemaEntity> itemTarget, List<Map<String,String>> dataLst )
-	{
-		
-		for ( Map<String,String> dataRow : dataLst )
-		{
-			STATUS status = STATUS.VALID; 
-			String strStatus = dataRow.get("status");
-			if ( "INVALID".equals(strStatus) )
-			{
-				status = STATUS.INVALID;
-			}
-	        // create View Item
-			this.addItem( 
-				itemTarget, 
-				dataRow.get("name"), 
-				NAME_TYPE.NAME_OBJECT, 
-				SchemaEntity.SCHEMA_TYPE.VIEW,
-				status,
-				"file:resources/images/view.png" 
-			);
 		}
 		
 		itemTarget.setExpanded(true);
 		this.scrollBack(itemTarget);
 	}
 	*/
-	
 	public void addEntityLst( TreeItem<SchemaEntity> itemTarget, List<SchemaEntity> schemaEntityLst )
 	{
 		for ( SchemaEntity schemaEntity : schemaEntityLst )
@@ -758,88 +431,6 @@ public class SchemaTreeView extends TreeView<SchemaEntity>
 		this.scrollBack(itemTarget);
 	}
 	/*
-	public void setSystemViewData( TreeItem<SchemaEntity> itemTarget, List<List<String>> dataLst )
-	{
-		
-		for ( List<String> dataRow : dataLst )
-		{
-	        // create System View Item
-			this.addItem( 
-				itemTarget, 
-				dataRow.get(1), 
-				NAME_TYPE.NAME_OBJECT, 
-				SchemaEntity.SCHEMA_TYPE.SYSTEM_VIEW, 
-				"file:resources/images/systemview.png" 
-			);
-			
-		}
-		
-		itemTarget.setExpanded(true);
-		this.scrollBack(itemTarget);
-	}
-	*/
-	/*
-	public void setMaterializedViewData( TreeItem<SchemaEntity> itemTarget, List<List<String>> dataLst )
-	{
-		
-		for ( List<String> dataRow : dataLst )
-		{
-			int cnt = dataRow.size();
-			STATUS status = STATUS.VALID; 
-			if ( cnt >= 3 )
-			{
-				String strStatus = dataRow.get(2);
-				if ( "INVALID".equals(strStatus) )
-				{
-					status = STATUS.INVALID;
-				}
-			}
-			// create Materialized View Item
-			this.addItem( 
-				itemTarget, 
-				dataRow.get(1), 
-				NAME_TYPE.NAME_OBJECT, 
-				SchemaEntity.SCHEMA_TYPE.MATERIALIZED_VIEW,
-				status,
-				"file:resources/images/materialized_view.png" 
-			);
-		}
-		
-		itemTarget.setExpanded(true);
-		this.scrollBack(itemTarget);
-	}
-	*/
-	/*
-	public void setFuncData( TreeItem<SchemaEntity> itemTarget, List<List<String>> dataLst )
-	{
-		
-		for ( List<String> dataRow : dataLst )
-		{
-			int cnt = dataRow.size();
-			STATUS status = STATUS.VALID; 
-			if ( cnt >= 3 )
-			{
-				String strStatus = dataRow.get(2);
-				if ( "INVALID".equals(strStatus) )
-				{
-					status = STATUS.INVALID;
-				}
-			}
-			// create Function Item
-			this.addItem( 
-				itemTarget, 
-				dataRow.get(1), 
-				NAME_TYPE.NAME_OBJECT, 
-				SchemaEntity.SCHEMA_TYPE.FUNC,
-				status,
-				"file:resources/images/func.png" 
-			);
-		}
-		
-		itemTarget.setExpanded(true);
-		this.scrollBack(itemTarget);
-	}
-	*/
 	public void setAggregateData( TreeItem<SchemaEntity> itemTarget, List<List<String>> dataLst )
 	{
 		
@@ -869,178 +460,6 @@ public class SchemaTreeView extends TreeView<SchemaEntity>
 		itemTarget.setExpanded(true);
 		this.scrollBack(itemTarget);
 	}
-	/*
-	public void setProcData( TreeItem<SchemaEntity> itemTarget, List<List<String>> dataLst )
-	{
-		
-		for ( List<String> dataRow : dataLst )
-		{
-			int cnt = dataRow.size();
-			STATUS status = STATUS.VALID; 
-			if ( cnt >= 3 )
-			{
-				String strStatus = dataRow.get(2);
-				if ( "INVALID".equals(strStatus) )
-				{
-					status = STATUS.INVALID;
-				}
-			}
-			// create Procedure Item
-			this.addItem( 
-				itemTarget, 
-				dataRow.get(1), 
-				NAME_TYPE.NAME_OBJECT, 
-				SchemaEntity.SCHEMA_TYPE.PROC,
-				status,
-				"file:resources/images/proc.png" 
-			);
-		}
-		
-		itemTarget.setExpanded(true);
-		this.scrollBack(itemTarget);
-	}
-	*/
-	/*
-	public void setPackageDefData( TreeItem<SchemaEntity> itemTarget, List<SchemaEntity> schemaEntityLst )
-	{
-		for ( SchemaEntity schemaEntity : schemaEntityLst )
-		{
-			// ---------------------------------------
-			// -[ROOT]
-			//   -[SCHEMA]
-			//     -[ROOT_PACKAGE_DEF]
-			//       -[PACKAGE_DEF]    => add
-			// ---------------------------------------
-			this.addItem( itemTarget, schemaEntity ); 
-		}
-		
-		itemTarget.setExpanded(true);
-		this.scrollBack(itemTarget);
-	}
-	*/
-	/*
-	public void setPackageBodyData( TreeItem<SchemaEntity> itemTarget, List<List<String>> dataLst )
-	{
-		for ( List<String> dataRow : dataLst )
-		{
-			int cnt = dataRow.size();
-			STATUS status = STATUS.VALID; 
-			if ( cnt >= 3 )
-			{
-				String strStatus = dataRow.get(2);
-				if ( "INVALID".equals(strStatus) )
-				{
-					status = STATUS.INVALID;
-				}
-			}
-	        // create Package Body Item
-			this.addItem( 
-				itemTarget, 
-				dataRow.get(1), 
-				NAME_TYPE.NAME_OBJECT, 
-				SchemaEntity.SCHEMA_TYPE.PACKAGE_BODY,
-				status,
-				"file:resources/images/package_body.png" 
-			);
-			
-		}
-		itemTarget.setExpanded(true);
-		
-		this.scrollBack(itemTarget);
-	}
-	*/
-	/*
-	public void setTypeData( TreeItem<SchemaEntity> itemTarget, List<List<String>> dataLst )
-	{
-		for ( List<String> dataRow : dataLst )
-		{
-			int cnt = dataRow.size();
-			STATUS status = STATUS.VALID; 
-			if ( cnt >= 3 )
-			{
-				String strStatus = dataRow.get(2);
-				if ( "INVALID".equals(strStatus) )
-				{
-					status = STATUS.INVALID;
-				}
-			}
-	        // create Type Item
-			this.addItem( 
-				itemTarget, 
-				dataRow.get(1), 
-				NAME_TYPE.NAME_OBJECT, 
-				SchemaEntity.SCHEMA_TYPE.TYPE,
-				status,
-				"file:resources/images/type.png" 
-			);
-			
-		}
-		itemTarget.setExpanded(true);
-		
-		this.scrollBack(itemTarget);
-	}
-	*/
-	/*
-	public void setTriggerData( TreeItem<SchemaEntity> itemTarget, List<List<String>> dataLst )
-	{
-		for ( List<String> dataRow : dataLst )
-		{
-			int cnt = dataRow.size();
-			STATUS status = STATUS.VALID; 
-			if ( cnt >= 3 )
-			{
-				String strStatus = dataRow.get(2);
-				if ( "INVALID".equals(strStatus) )
-				{
-					status = STATUS.INVALID;
-				}
-			}
-	        // create Trigger Item
-			this.addItem( 
-				itemTarget, 
-				dataRow.get(1), 
-				NAME_TYPE.NAME_OBJECT, 
-				SchemaEntity.SCHEMA_TYPE.TRIGGER,
-				status,
-				"file:resources/images/trigger.png" 
-			);
-			
-		}
-		itemTarget.setExpanded(true);
-		
-		this.scrollBack(itemTarget);
-	}
-	*/
-	/*
-	public void setSequenceData( TreeItem<SchemaEntity> itemTarget, List<List<String>> dataLst )
-	{
-		for ( List<String> dataRow : dataLst )
-		{
-			int cnt = dataRow.size();
-			STATUS status = STATUS.VALID; 
-			if ( cnt >= 3 )
-			{
-				String strStatus = dataRow.get(2);
-				if ( "INVALID".equals(strStatus) )
-				{
-					status = STATUS.INVALID;
-				}
-			}
-	        // create Sequence Item
-			this.addItem( 
-				itemTarget, 
-				dataRow.get(1), 
-				NAME_TYPE.NAME_OBJECT, 
-				SchemaEntity.SCHEMA_TYPE.SEQUENCE,
-				status,
-				"file:resources/images/seq.png" 
-			);
-			
-		}
-		itemTarget.setExpanded(true);
-		
-		this.scrollBack(itemTarget);
-	}
 	*/
 	/**
 	 * Load Language Resource
@@ -1060,77 +479,6 @@ public class SchemaTreeView extends TreeView<SchemaEntity>
 		this.loadLangResource();
 		
 		this.setContextMenu();
-		//this.skimThrough( this.item0Root );
 	}
 	
-	private void skimThrough( TreeItem<SchemaEntity> itemParent )
-	{
-		if ( itemParent == null )
-		{
-			return;
-		}
-		
-		for ( TreeItem<SchemaEntity> itemChild : itemParent.getChildren() )
-		{
-			SchemaEntity scEnt = itemChild.getValue();
-			//System.out.println( "skimThrough:"+ scEnt.getName() );
-			SchemaEntity.SCHEMA_TYPE schemaType = scEnt.getType();
-			if ( schemaType == SchemaEntity.SCHEMA_TYPE.ROOT_TABLE )
-			{
-				//System.out.println( "skimThrough:ROOT_TABLE" );
-				scEnt.setName( langRB.getString("ITEM_TABLE"));
-			}
-			else if ( schemaType == SchemaEntity.SCHEMA_TYPE.ROOT_VIEW )
-			{
-				//System.out.println( "skimThrough:ROOT_VIEW" );
-				scEnt.setName( langRB.getString("ITEM_VIEW"));
-			}
-			else if ( schemaType == SchemaEntity.SCHEMA_TYPE.ROOT_MATERIALIZED_VIEW )
-			{
-				//System.out.println( "skimThrough:ROOT_MATERIALIZED_VIEW" );
-				scEnt.setName( langRB.getString("ITEM_MATERIALIZED_VIEW"));
-			}
-			else if ( schemaType == SchemaEntity.SCHEMA_TYPE.ROOT_INDEX )
-			{
-				//System.out.println( "skimThrough:ROOT_INDEX" );
-				scEnt.setName( langRB.getString("ITEM_INDEX"));
-			}
-			else if ( schemaType == SchemaEntity.SCHEMA_TYPE.ROOT_FUNC )
-			{
-				scEnt.setName( langRB.getString("ITEM_FUNC"));
-			}
-			else if ( schemaType == SchemaEntity.SCHEMA_TYPE.ROOT_AGGREGATE )
-			{
-				scEnt.setName( langRB.getString("ITEM_AGGREGATE"));
-			}
-			else if ( schemaType == SchemaEntity.SCHEMA_TYPE.ROOT_PROC )
-			{
-				scEnt.setName( langRB.getString("ITEM_PROC"));
-			}
-			else if ( schemaType == SchemaEntity.SCHEMA_TYPE.ROOT_PACKAGE_DEF )
-			{
-				scEnt.setName( langRB.getString("ITEM_PACKAGE_DEF"));
-			}
-			else if ( schemaType == SchemaEntity.SCHEMA_TYPE.ROOT_PACKAGE_BODY )
-			{
-				scEnt.setName( langRB.getString("ITEM_PACKAGE_BODY"));
-			}
-			else if ( schemaType == SchemaEntity.SCHEMA_TYPE.ROOT_TYPE )
-			{
-				scEnt.setName( langRB.getString("ITEM_TYPE"));
-			}
-			else if ( schemaType == SchemaEntity.SCHEMA_TYPE.ROOT_TRIGGER )
-			{
-				scEnt.setName( langRB.getString("ITEM_TRIGGER"));
-			}
-			else if ( schemaType == SchemaEntity.SCHEMA_TYPE.ROOT_SEQUENCE )
-			{
-				scEnt.setName( langRB.getString("ITEM_SEQ"));
-			}
-			itemChild.setValue( scEnt );
-
-			
-			this.skimThrough( itemChild );
-		}
-	}
 }
