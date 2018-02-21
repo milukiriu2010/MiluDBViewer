@@ -20,58 +20,32 @@ public class SelectedItemHandlerChooser
 			SQLException
 	{
 		
-		SelectedItemHandlerAbstract handleRoot = 
-			new SelectedItemHandlerRoot( schemaTreeView, tabPane, myDBAbs, refreshType );
-		SelectedItemHandlerAbstract handleRootTable = 
-				new SelectedItemHandlerRootTable( schemaTreeView, tabPane, myDBAbs, refreshType );
-		SelectedItemHandlerAbstract handleEachTable = 
-			new SelectedItemHandlerEachTable( schemaTreeView, tabPane, myDBAbs, refreshType );
-		SelectedItemHandlerAbstract handleRootIndex = 
-			new SelectedItemHandlerRootIndex( schemaTreeView, tabPane, myDBAbs, refreshType );
-		SelectedItemHandlerAbstract handleEachIndex = 
-			new SelectedItemHandlerEachIndex( schemaTreeView, tabPane, myDBAbs, refreshType );
-		SelectedItemHandlerAbstract handleRootView = 
-			new SelectedItemHandlerRootView( schemaTreeView, tabPane, myDBAbs, refreshType );
-		SelectedItemHandlerAbstract handleEachView = 
-			new SelectedItemHandlerEachView( schemaTreeView, tabPane, myDBAbs, refreshType );
-		SelectedItemHandlerAbstract handleRootSystemView = 
-			new SelectedItemHandlerRootSystemView( schemaTreeView, tabPane, myDBAbs, refreshType );
-		SelectedItemHandlerAbstract handleEachSystemView = 
-			new SelectedItemHandlerEachSystemView( schemaTreeView, tabPane, myDBAbs, refreshType );
-		SelectedItemHandlerAbstract handleRootMaterializedView = 
-			new SelectedItemHandlerRootMaterializedView( schemaTreeView, tabPane, myDBAbs, refreshType );
-		SelectedItemHandlerAbstract handleEachMaterializedView = 
-			new SelectedItemHandlerEachMaterializedView( schemaTreeView, tabPane, myDBAbs, refreshType );
-		SelectedItemHandlerAbstract handleRootFunc = 
-			new SelectedItemHandlerRootFunc( schemaTreeView, tabPane, myDBAbs, refreshType );
-		SelectedItemHandlerAbstract handleEachFunc = 
-			new SelectedItemHandlerEachFunc( schemaTreeView, tabPane, myDBAbs, refreshType );
-		SelectedItemHandlerAbstract handleRootAggregate = 
-			new SelectedItemHandlerRootAggregate( schemaTreeView, tabPane, myDBAbs, refreshType );
-		SelectedItemHandlerAbstract handleEachAggregate = 
-			new SelectedItemHandlerEachAggregate( schemaTreeView, tabPane, myDBAbs, refreshType );
-		SelectedItemHandlerAbstract handleRootProc = 
-			new SelectedItemHandlerRootProc( schemaTreeView, tabPane, myDBAbs, refreshType );
-		SelectedItemHandlerAbstract handleEachProc = 
-			new SelectedItemHandlerEachProc( schemaTreeView, tabPane, myDBAbs, refreshType );
-		SelectedItemHandlerAbstract handleRootPackageDef = 
-			new SelectedItemHandlerRootPackageDef( schemaTreeView, tabPane, myDBAbs, refreshType );
-		SelectedItemHandlerAbstract handleEachPackageDef = 
-			new SelectedItemHandlerEachPackageDef( schemaTreeView, tabPane, myDBAbs, refreshType );
-		SelectedItemHandlerAbstract handleRootPackageBody = 
-			new SelectedItemHandlerRootPackageBody( schemaTreeView, tabPane, myDBAbs, refreshType );
-		SelectedItemHandlerAbstract handleEachPackageBody = 
-			new SelectedItemHandlerEachPackageBody( schemaTreeView, tabPane, myDBAbs, refreshType );
-		SelectedItemHandlerAbstract handleRootType = 
-			new SelectedItemHandlerRootType( schemaTreeView, tabPane, myDBAbs, refreshType );
-		SelectedItemHandlerAbstract handleEachType = 
-			new SelectedItemHandlerEachType( schemaTreeView, tabPane, myDBAbs, refreshType );
-		SelectedItemHandlerAbstract handleRootTrigger = 
-			new SelectedItemHandlerRootTrigger( schemaTreeView, tabPane, myDBAbs, refreshType );
-		SelectedItemHandlerAbstract handleEachTrigger = 
-			new SelectedItemHandlerEachTrigger( schemaTreeView, tabPane, myDBAbs, refreshType );
-		SelectedItemHandlerAbstract handleRootSequence = 
-			new SelectedItemHandlerRootSequence( schemaTreeView, tabPane, myDBAbs, refreshType );
+		SelectedItemHandlerAbstract handleRoot                 = new SelectedItemHandlerRoot();
+		SelectedItemHandlerAbstract handleRootTable            = new SelectedItemHandlerRootTable();
+		SelectedItemHandlerAbstract handleEachTable            = new SelectedItemHandlerEachTable();
+		SelectedItemHandlerAbstract handleRootIndex            = new SelectedItemHandlerRootIndex();
+		SelectedItemHandlerAbstract handleEachIndex            = new SelectedItemHandlerEachIndex();
+		SelectedItemHandlerAbstract handleRootView             = new SelectedItemHandlerRootView();
+		SelectedItemHandlerAbstract handleEachView             = new SelectedItemHandlerEachView();
+		SelectedItemHandlerAbstract handleRootSystemView       = new SelectedItemHandlerRootSystemView();
+		SelectedItemHandlerAbstract handleEachSystemView       = new SelectedItemHandlerEachSystemView();
+		SelectedItemHandlerAbstract handleRootMaterializedView = new SelectedItemHandlerRootMaterializedView();
+		SelectedItemHandlerAbstract handleEachMaterializedView = new SelectedItemHandlerEachMaterializedView();
+		SelectedItemHandlerAbstract handleRootFunc             = new SelectedItemHandlerRootFunc();
+		SelectedItemHandlerAbstract handleEachFunc             = new SelectedItemHandlerEachFunc();
+		SelectedItemHandlerAbstract handleRootAggregate        = new SelectedItemHandlerRootAggregate();
+		SelectedItemHandlerAbstract handleEachAggregate        = new SelectedItemHandlerEachAggregate();
+		SelectedItemHandlerAbstract handleRootProc             = new SelectedItemHandlerRootProc();
+		SelectedItemHandlerAbstract handleEachProc             = new SelectedItemHandlerEachProc();
+		SelectedItemHandlerAbstract handleRootPackageDef       = new SelectedItemHandlerRootPackageDef();
+		SelectedItemHandlerAbstract handleEachPackageDef       = new SelectedItemHandlerEachPackageDef();
+		SelectedItemHandlerAbstract handleRootPackageBody      = new SelectedItemHandlerRootPackageBody();
+		SelectedItemHandlerAbstract handleEachPackageBody      = new SelectedItemHandlerEachPackageBody();
+		SelectedItemHandlerAbstract handleRootType             = new SelectedItemHandlerRootType();
+		SelectedItemHandlerAbstract handleEachType             = new SelectedItemHandlerEachType();
+		SelectedItemHandlerAbstract handleRootTrigger          = new SelectedItemHandlerRootTrigger();
+		SelectedItemHandlerAbstract handleEachTrigger          = new SelectedItemHandlerEachTrigger();
+		SelectedItemHandlerAbstract handleRootSequence         = new SelectedItemHandlerRootSequence();
 		
 		handleRoot.addNextHandler( handleEachTable );
 		handleRoot.addNextHandler( handleRootTable );
@@ -98,6 +72,18 @@ public class SelectedItemHandlerChooser
 		handleRoot.addNextHandler( handleRootTrigger );
 		handleRoot.addNextHandler( handleEachTrigger );
 		handleRoot.addNextHandler( handleRootSequence );
+		
+		SelectedItemHandlerAbstract handleNext = handleRoot;
+		
+		while ( handleNext != null )
+		{
+			handleNext.setSchemaTreeView(schemaTreeView);
+			handleNext.setTabPane(tabPane);
+			handleNext.setMyDBAbs(myDBAbs);
+			handleNext.setRefreshType(refreshType);
+			
+			handleNext = handleNext.getNextHandler();
+		}
 		
 		handleRoot.execChain();
 	}

@@ -12,12 +12,12 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.Button;
 
-//import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.AnchorPane;
 
 import java.sql.SQLException;
 
@@ -59,11 +59,14 @@ public class DBSqlTab extends Tab
 	// Counter for how many times this class is opened.
 	private static int counterOpend = 0;
 	
+	// TextArea on this pane
+	private AnchorPane   upperPane = new AnchorPane();
+	
 	// TextArea for input SQL 
 	private SqlTextArea  textAreaSQL = null;
 	
 	// "SqlTableView & Warning Message" on this Pane.
-	private VBox lowerPane = new VBox(2);
+	private VBox         lowerPane = new VBox(2);
 	
 	// TableView for SQL result
 	private SqlTableView tableViewSQL = null;
@@ -86,6 +89,13 @@ public class DBSqlTab extends Tab
 		
         // http://tutorials.jenkov.com/javafx/textarea.html
         this.textAreaSQL  = new SqlTextArea();
+        // AnchorPane
+        this.upperPane.getChildren().add( this.textAreaSQL );
+        AnchorPane.setTopAnchor( this.textAreaSQL, 0.0 );
+        AnchorPane.setBottomAnchor( this.textAreaSQL, 0.0 );
+        AnchorPane.setLeftAnchor( this.textAreaSQL, 0.0 );
+        AnchorPane.setRightAnchor( this.textAreaSQL, 0.0 );
+        
         // https://docs.oracle.com/javafx/2/ui_controls/table-view.htm
         this.tableViewSQL = new SqlTableView();
         this.lowerPane.getChildren().add( this.tableViewSQL );
@@ -101,8 +111,8 @@ public class DBSqlTab extends Tab
         // http://fxexperience.com/2011/06/splitpane-in-javafx-2-0/
 		SplitPane splitPane = new SplitPane();
 		splitPane.setOrientation(Orientation.VERTICAL);
-		//splitPane.getItems().addAll( this.textAreaSQL, this.tableViewSQL );
-		splitPane.getItems().addAll( this.textAreaSQL, this.lowerPane );
+		//splitPane.getItems().addAll( this.textAreaSQL, this.lowerPane );
+		splitPane.getItems().addAll( this.upperPane, this.lowerPane );
 		splitPane.setDividerPositions( 0.3f, 0.7f );
 		
 		BorderPane brdPane = new BorderPane();
@@ -119,6 +129,20 @@ public class DBSqlTab extends Tab
 		
 		// Tab Title
 		this.setText( "SQL" + Integer.valueOf( counterOpend ) );
+		
+		this.setAction();
+	}
+	
+	private void setAction()
+	{
+		this.textAreaSQL.setOnKeyPressed
+		(
+			(event)->
+			{
+				System.out.println( "--- TextArea KeyPressed -------------" );
+				System.out.println( "CaretPosition:" + this.textAreaSQL.getCaretPosition() );
+			}
+		);
 	}
 
 	/**

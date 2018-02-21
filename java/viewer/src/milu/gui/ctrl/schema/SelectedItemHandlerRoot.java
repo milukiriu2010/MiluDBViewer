@@ -2,9 +2,6 @@ package milu.gui.ctrl.schema;
 
 import java.sql.SQLException;
 
-import javafx.scene.control.TabPane;
-
-import milu.db.MyDBAbstract;
 import milu.entity.schema.SchemaEntity;
 
 /**
@@ -14,6 +11,7 @@ import milu.entity.schema.SchemaEntity;
  */
 public class SelectedItemHandlerRoot extends SelectedItemHandlerAbstract
 {
+	/*
 	public SelectedItemHandlerRoot
 	( 
 		SchemaTreeView schemaTreeView, 
@@ -24,7 +22,7 @@ public class SelectedItemHandlerRoot extends SelectedItemHandlerAbstract
 	{
 		super( schemaTreeView, tabPane, myDBAbs, refreshType );
 	}
-	
+	*/
 	@Override
 	protected boolean isMyResponsible()
 	{

@@ -1,7 +1,5 @@
 package sqlparse;
 
-import java.util.Collections;
-import java.util.List;
 import java.util.Map;
 
 import java.io.StringWriter;
@@ -18,37 +16,9 @@ import javafx.scene.layout.VBox;
 
 import net.sf.jsqlparser.parser.CCJSqlParserUtil;
 
-import net.sf.jsqlparser.statement.select.FromItem;
-import net.sf.jsqlparser.statement.select.Join;
-import net.sf.jsqlparser.statement.select.Select;
-import net.sf.jsqlparser.statement.select.SelectBody;
-import net.sf.jsqlparser.statement.select.PlainSelect;
-import net.sf.jsqlparser.statement.select.SelectItem;
-import net.sf.jsqlparser.statement.select.SelectExpressionItem;
-import net.sf.jsqlparser.statement.select.SubJoin;
-import net.sf.jsqlparser.statement.select.SubSelect;
-import net.sf.jsqlparser.statement.select.LateralSubSelect;
-import net.sf.jsqlparser.statement.select.OrderByElement;
-import net.sf.jsqlparser.statement.select.AllColumns;
-import net.sf.jsqlparser.statement.select.AllTableColumns;
-import net.sf.jsqlparser.statement.select.ValuesList;
 import net.sf.jsqlparser.statement.Statement; 
 import net.sf.jsqlparser.JSQLParserException;
 
-import net.sf.jsqlparser.statement.alter.Alter;
-import net.sf.jsqlparser.statement.Commit;
-
-import net.sf.jsqlparser.expression.Expression;
-import net.sf.jsqlparser.expression.Alias;
-import net.sf.jsqlparser.expression.operators.conditional.AndExpression;
-import net.sf.jsqlparser.expression.operators.relational.GreaterThanEquals;
-import net.sf.jsqlparser.expression.operators.relational.MinorThan;
-
-import net.sf.jsqlparser.schema.Table;
-import net.sf.jsqlparser.schema.Column;
-import net.sf.jsqlparser.schema.Database;
-
-import net.sf.jsqlparser.statement.StatementVisitor;
 
 // https://www.programcreek.com/java-api-examples/?api=net.sf.jsqlparser.parser.CCJSqlParserUtil
 // https://www.programcreek.com/java-api-examples/index.php?source_dir=Mybatis-PageHelper-master/src/main/java/com/github/pagehelper/parser/SqlServer.java

@@ -30,7 +30,7 @@ abstract class SelectedItemHandlerAbstract
 	}
 	
 	protected REFRESH_TYPE  refreshType = REFRESH_TYPE.NO_REFRESH;
-	
+	/*
 	public SelectedItemHandlerAbstract
 	( 
 		SchemaTreeView schemaTreeView, 
@@ -49,6 +49,31 @@ abstract class SelectedItemHandlerAbstract
 		this.myDBAbs     = myDBAbs;
 		this.refreshType = refreshType;
 	}
+	*/
+	public void setSchemaTreeView( SchemaTreeView schemaTreeView )
+	{
+		this.schemaTreeView = schemaTreeView;
+		this.itemRoot = this.schemaTreeView.getRoot();
+		if ( this.itemRoot != null )
+		{
+			this.itemSelected = this.schemaTreeView.getSelectionModel().getSelectedItem();
+		}
+	}
+	
+	public void setTabPane( TabPane tabPane )
+	{
+		this.tabPane = tabPane;
+	}
+	
+	public void setMyDBAbs( MyDBAbstract myDBAbs )
+	{
+		this.myDBAbs     = myDBAbs;
+	}
+	
+	public void setRefreshType( SelectedItemHandlerAbstract.REFRESH_TYPE refreshType )
+	{
+		this.refreshType = refreshType;
+	}
 	
 	public void addNextHandler( SelectedItemHandlerAbstract nextHandler )
 	{
@@ -60,6 +85,11 @@ abstract class SelectedItemHandlerAbstract
 		{
 			this.nextHandler = nextHandler;
 		}
+	}
+	
+	public SelectedItemHandlerAbstract getNextHandler()
+	{
+		return this.nextHandler;
 	}
 	
 	public boolean execChain()

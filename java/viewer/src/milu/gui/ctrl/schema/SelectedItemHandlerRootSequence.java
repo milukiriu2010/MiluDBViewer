@@ -3,11 +3,9 @@ package milu.gui.ctrl.schema;
 import java.sql.SQLException;
 import java.util.List;
 
-import javafx.scene.control.TabPane;
 import javafx.scene.control.TreeItem;
 import javafx.collections.ObservableList;
 
-import milu.db.MyDBAbstract;
 import milu.db.sequence.SequenceDBAbstract;
 import milu.db.sequence.SequenceDBFactory;
 import milu.entity.schema.SchemaEntity;
@@ -39,6 +37,7 @@ import milu.entity.schema.SchemaEntity;
  */
 public class SelectedItemHandlerRootSequence extends SelectedItemHandlerAbstract
 {
+	/*
 	public SelectedItemHandlerRootSequence
 	( 
 		SchemaTreeView schemaTreeView, 
@@ -49,7 +48,7 @@ public class SelectedItemHandlerRootSequence extends SelectedItemHandlerAbstract
 	{
 		super( schemaTreeView, tabPane, myDBAbs, refreshType );
 	}
-	
+	*/
 	@Override
 	protected boolean isMyResponsible()
 	{

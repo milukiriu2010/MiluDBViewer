@@ -2,11 +2,9 @@ package milu.gui.ctrl.schema;
 
 import javafx.collections.ObservableList;
 import javafx.scene.control.Tab;
-import javafx.scene.control.TabPane;
 import javafx.scene.control.TreeItem;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import milu.db.MyDBAbstract;
 import milu.db.aggregate.AggregateDBAbstract;
 import milu.db.aggregate.AggregateDBFactory;
 import milu.entity.schema.SchemaEntity;
@@ -33,6 +31,7 @@ import java.sql.SQLException;
  */
 public class SelectedItemHandlerEachAggregate extends SelectedItemHandlerAbstract
 {
+	/*
 	public SelectedItemHandlerEachAggregate
 	( 
 		SchemaTreeView schemaTreeView, 
@@ -43,7 +42,7 @@ public class SelectedItemHandlerEachAggregate extends SelectedItemHandlerAbstrac
 	{
 		super( schemaTreeView, tabPane, myDBAbs, refreshType );
 	}
-	
+	*/
 	@Override
 	protected boolean isMyResponsible()
 	{

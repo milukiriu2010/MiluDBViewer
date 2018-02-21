@@ -1,17 +1,7 @@
 package milu.gui.ctrl.schema;
 
-//import java.util.ArrayList;
-//import java.util.List;
-//import java.util.Map;
-
-//import javafx.collections.ObservableList;
-//import javafx.scene.control.Tab;
-import javafx.scene.control.TabPane;
 import javafx.scene.control.TreeItem;
-//import javafx.scene.image.Image;
-//import javafx.scene.image.ImageView;
 
-import milu.db.MyDBAbstract;
 import milu.db.indexcolumn.IndexColumnDBAbstract;
 import milu.db.indexcolumn.IndexColumnDBFactory;
 import milu.entity.schema.SchemaEntity;
@@ -35,6 +25,7 @@ import java.sql.SQLException;
  */
 public class SelectedItemHandlerEachIndex extends SelectedItemHandlerAbstract
 {
+	/*
 	public SelectedItemHandlerEachIndex
 	( 
 		SchemaTreeView schemaTreeView, 
@@ -45,7 +36,7 @@ public class SelectedItemHandlerEachIndex extends SelectedItemHandlerAbstract
 	{
 		super( schemaTreeView, tabPane, myDBAbs, refreshType );
 	}
-	
+	*/
 	@Override
 	protected boolean isMyResponsible()
 	{

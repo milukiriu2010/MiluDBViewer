@@ -2,11 +2,10 @@ package milu.gui.ctrl.schema;
 
 import javafx.collections.ObservableList;
 import javafx.scene.control.Tab;
-import javafx.scene.control.TabPane;
 import javafx.scene.control.TreeItem;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import milu.db.MyDBAbstract;
+
 import milu.db.packagedef.PackageDefDBAbstract;
 import milu.db.packagedef.PackageDefDBFactory;
 import milu.entity.schema.SchemaEntity;
@@ -35,6 +34,7 @@ import java.sql.SQLException;
  */
 public class SelectedItemHandlerEachPackageDef extends SelectedItemHandlerAbstract
 {
+	/*
 	public SelectedItemHandlerEachPackageDef
 	( 
 		SchemaTreeView schemaTreeView, 
@@ -45,7 +45,7 @@ public class SelectedItemHandlerEachPackageDef extends SelectedItemHandlerAbstra
 	{
 		super( schemaTreeView, tabPane, myDBAbs, refreshType );
 	}
-	
+	*/
 	@Override
 	protected boolean isMyResponsible()
 	{

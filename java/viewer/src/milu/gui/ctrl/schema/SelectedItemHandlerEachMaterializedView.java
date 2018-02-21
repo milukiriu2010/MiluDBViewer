@@ -6,13 +6,11 @@ import java.util.List;
 import java.util.Map;
 
 import javafx.scene.control.Tab;
-import javafx.scene.control.TabPane;
 import javafx.scene.control.TreeItem;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.collections.ObservableList;
 
-import milu.db.MyDBAbstract;
 import milu.db.mateview.MaterializedViewDBAbstract;
 import milu.db.mateview.MaterializedViewDBFactory;
 import milu.entity.schema.SchemaEntity;
@@ -37,6 +35,7 @@ import milu.entity.schema.SchemaEntity;
  */
 public class SelectedItemHandlerEachMaterializedView extends SelectedItemHandlerAbstract
 {
+	/*
 	public SelectedItemHandlerEachMaterializedView
 	( 
 		SchemaTreeView schemaTreeView, 
@@ -47,7 +46,7 @@ public class SelectedItemHandlerEachMaterializedView extends SelectedItemHandler
 	{
 		super( schemaTreeView, tabPane, myDBAbs, refreshType );
 	}
-	
+	*/
 	@Override
 	protected boolean isMyResponsible()
 	{
