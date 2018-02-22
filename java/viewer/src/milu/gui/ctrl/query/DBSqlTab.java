@@ -88,9 +88,11 @@ public class DBSqlTab extends Tab
 		DBSqlTab.counterOpend++;
 		
         // http://tutorials.jenkov.com/javafx/textarea.html
-        this.textAreaSQL  = new SqlTextArea( this.upperPane );
+		this.textAreaSQL  = new SqlTextArea();
+        //this.textAreaSQL  = new SqlTextArea( this.upperPane );
         // AnchorPane
         this.upperPane.getChildren().add( this.textAreaSQL );
+        this.textAreaSQL.init();
         AnchorPane.setTopAnchor( this.textAreaSQL, 0.0 );
         AnchorPane.setBottomAnchor( this.textAreaSQL, 0.0 );
         AnchorPane.setLeftAnchor( this.textAreaSQL, 0.0 );

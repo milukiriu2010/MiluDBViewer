@@ -10,6 +10,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.shape.Path;
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.Window;
 
 public class MyTool
@@ -68,11 +69,11 @@ public class MyTool
 		return null;
 	}
 	
-	public static Point2D findScreenLocation( Node node, Node base) 
+	public static Point2D findScreenLocation( Node node, Node base ) 
 	{
 		double x = 0;
 		double y = 0;
-		for (Node n = node; n != null ; n=n.getParent()) 
+		for ( Node n = node; n != null ; n=n.getParent() ) 
 		{
 			if ( n == base )
 			{
@@ -83,10 +84,12 @@ public class MyTool
 			x += parentBounds.getMinX();
 			y += parentBounds.getMinY();
 		}
-		/*
+		/**/
 		Scene scene = node.getScene();
 		x += scene.getX();
 		y += scene.getY();
+		/**/
+		/*
 		Window window = scene.getWindow();
 		x += window.getX();
 		y += window.getY();
@@ -94,5 +97,33 @@ public class MyTool
 		Point2D screenLoc = new Point2D(x, y);
 		return screenLoc;
 	}
+	
+	public static AnchorPane findAnchorPane( Node node )
+	{
+		for ( Node n = node; n != null ; n=n.getParent() ) 
+		{
+			System.out.println( "findAnchorPane :" + n.getClass() );
+			if ( n instanceof AnchorPane )
+			{
+				return ((AnchorPane)n);
+			}
+		}
+		return null;
+	}
+	
+	public static String bytesToHex(byte[] bytes) 
+	{
+		final char[] hexArray = "0123456789ABCDEF".toCharArray();
+	    char[] hexChars = new char[bytes.length * 2];
+	    
+	    for ( int j = 0; j < bytes.length; j++ ) 
+	    {
+	        int v = bytes[j] & 0xFF;
+	        hexChars[j * 2] = hexArray[v >>> 4];
+	        hexChars[j * 2 + 1] = hexArray[v & 0x0F];
+	    }
+	    return new String(hexChars);
+	}
+
 	
 }
