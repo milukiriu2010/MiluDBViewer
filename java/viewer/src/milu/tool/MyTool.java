@@ -10,6 +10,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.shape.Path;
+import javafx.stage.Window;
 
 public class MyTool
 {
@@ -46,9 +47,10 @@ public class MyTool
 		{
 			System.out.println( "findCaret:parent is null." );
 		}
+		System.out.println( "findCaret:parent:" + parent.getClass() );
 		for (Node n : parent.getChildrenUnmodifiable()) 
 		{
-			System.out.println( "findCaret:" + n.getClass() );
+			System.out.println( "findCaret:child :" + n.getClass() );
 			if (n instanceof Path) 
 			{
 			    return (Path) n;
@@ -62,23 +64,29 @@ public class MyTool
 			    }
 			}
 		}
+		System.out.println( "findCaret:not found." );
 		return null;
 	}
 	
-	public static Point2D findScreenLocation(Node node) 
+	public static Point2D findScreenLocation( Node node, Node base) 
 	{
 		double x = 0;
 		double y = 0;
-		for (Node n = node; n != null; n=n.getParent()) 
+		for (Node n = node; n != null ; n=n.getParent()) 
 		{
+			if ( n == base )
+			{
+				break;
+			}
+			System.out.println( "location :" + n.getClass() );
 			Bounds parentBounds = n.getBoundsInParent();
 			x += parentBounds.getMinX();
 			y += parentBounds.getMinY();
 		}
+		/*
 		Scene scene = node.getScene();
 		x += scene.getX();
 		y += scene.getY();
-		/*
 		Window window = scene.getWindow();
 		x += window.getX();
 		y += window.getY();

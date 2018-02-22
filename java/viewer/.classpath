@@ -15,5 +15,6 @@
 	<classpathentry kind="lib" path="lib/excel/poi-ooxml-schemas-3.17.jar"/>
 	<classpathentry kind="lib" path="lib/excel/xmlbeans-2.6.0.jar"/>
 	<classpathentry kind="lib" path="lib/ojdbc8.jar"/>
+	<classpathentry kind="lib" path="lib/jsqlparser/jsqlparser-1.2-SNAPSHOT.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

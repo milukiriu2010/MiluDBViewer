@@ -88,7 +88,7 @@ public class DBSqlTab extends Tab
 		DBSqlTab.counterOpend++;
 		
         // http://tutorials.jenkov.com/javafx/textarea.html
-        this.textAreaSQL  = new SqlTextArea();
+        this.textAreaSQL  = new SqlTextArea( this.upperPane );
         // AnchorPane
         this.upperPane.getChildren().add( this.textAreaSQL );
         AnchorPane.setTopAnchor( this.textAreaSQL, 0.0 );
@@ -135,6 +135,7 @@ public class DBSqlTab extends Tab
 	
 	private void setAction()
 	{
+		/*
 		this.textAreaSQL.setOnKeyPressed
 		(
 			(event)->
@@ -143,6 +144,7 @@ public class DBSqlTab extends Tab
 				System.out.println( "CaretPosition:" + this.textAreaSQL.getCaretPosition() );
 			}
 		);
+		*/
 	}
 
 	/**
