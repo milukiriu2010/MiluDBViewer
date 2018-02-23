@@ -12,8 +12,10 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.shape.Path;
-
+import milu.ctrl.sqlparse.SQLParse;
 import milu.tool.MyTool;
+
+import net.sf.jsqlparser.JSQLParserException;
 
 public class SqlTextArea extends TextArea
 {
@@ -42,23 +44,6 @@ public class SqlTextArea extends TextArea
 	{
 		super();
 	}
-
-	/*
-	public SqlTextArea( AnchorPane parentPane )
-	{
-		super();
-		
-		this.parentPane = parentPane;
-		this.parentPane.getChildren().add( this.comboHint );
-		this.comboHint.setVisible( false );
-		
-		// https://stackoverflow.com/questions/19010619/javafx-filtered-combobox
-		this.filteredItems = new FilteredList<String>( hints, p -> true);
-		this.comboHint.setItems( this.filteredItems );		
-		
-		this.setAction();
-	}
-	*/
 	
 	public void init()
 	{
@@ -129,6 +114,7 @@ public class SqlTextArea extends TextArea
 				System.out.println( "KeyCode:" + keyCode );
 				
 				Boolean isVisibleComboHint = this.comboHint.visibleProperty().getValue();
+				// ComboBox is visible
 				if ( isVisibleComboHint == true )
 				{
 					if ( KeyCode.ENTER.equals( keyCode ) )
@@ -152,6 +138,7 @@ public class SqlTextArea extends TextArea
 						this.sbOnTheWay = null;
 					}
 				}
+				// ComboBox is invisible
 				else
 				{
 				}
@@ -169,8 +156,23 @@ public class SqlTextArea extends TextArea
 				System.out.println( "Character:" + chr );
 				System.out.println( "CharacterHex[" + MyTool.bytesToHex( chr.getBytes() ) + "]" );
 				
+				
+				try
+				{
+					SQLParse  sqlParse = new SQLParse();
+					sqlParse.setStrSQL( this.getSQL() );
+					sqlParse.parse();
+				}
+				catch ( JSQLParserException parseExp )
+				{
+					//parseExp.printStackTrace();
+				}
+				
+				this.extractLastWord();
+				
 				Boolean isVisibleComboHint = this.comboHint.visibleProperty().getValue();
 				
+				// ComboBox is invisible
 				if ( isVisibleComboHint == false )
 				{
 					if ( ".".equals( chr ) )
@@ -192,6 +194,7 @@ public class SqlTextArea extends TextArea
 						this.sbOnTheWay = new StringBuffer();
 					}
 				}
+				// ComboBox is visible
 				else
 				{
 					if ( "\r".equals(chr) || "\n".equals(chr) )
@@ -274,4 +277,14 @@ public class SqlTextArea extends TextArea
 		return strSQL;
 	}
 
+	private void extractLastWord()
+	{
+		String strBeforeCaret = this.getText().substring(0, this.getCaretPosition() );
+		// "select * from dual" => dual  
+		String strAfterSpace = strBeforeCaret.replaceAll( ".*\\s+(\\S+)", "$1" );
+		// "user_data.a" => "user_data"
+		// "user_data "  => "user_data" 
+		String strWord = strAfterSpace.replaceAll("(\\s|\\..+$)", "" );
+		System.out.println( "extractLastWord[" + strWord + "]" );
+	}
 }

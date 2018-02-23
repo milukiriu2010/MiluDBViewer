@@ -1,8 +1,7 @@
-package sqlparse;
+package milu.ctrl.sqlparse;
 
 import net.sf.jsqlparser.statement.Commit;
 import net.sf.jsqlparser.statement.SetStatement;
-import net.sf.jsqlparser.statement.StatementVisitor;
 import net.sf.jsqlparser.statement.Statements;
 import net.sf.jsqlparser.statement.UseStatement;
 import net.sf.jsqlparser.statement.alter.Alter;
@@ -17,22 +16,14 @@ import net.sf.jsqlparser.statement.insert.Insert;
 import net.sf.jsqlparser.statement.merge.Merge;
 import net.sf.jsqlparser.statement.replace.Replace;
 import net.sf.jsqlparser.statement.select.Select;
+import net.sf.jsqlparser.statement.select.SelectBody;
 import net.sf.jsqlparser.statement.truncate.Truncate;
 import net.sf.jsqlparser.statement.update.Update;
 import net.sf.jsqlparser.statement.upsert.Upsert;
 
-import net.sf.jsqlparser.statement.select.SelectBody;
-import net.sf.jsqlparser.statement.select.SelectVisitor;
-
-public class ExampleStatementVisitor implements StatementVisitor 
+public class TableStatementVisitor implements AnalyzeStatementVisitor 
 {
-	private SelectVisitor selectVisitor = null;
-	
-	public ExampleStatementVisitor( SelectVisitor selectVisitor )
-	{
-		this.selectVisitor = selectVisitor;
-	}
-	
+	private AnalyzeSelectVisitor  analyzeSelectVisitor = null;
 
 	@Override
 	public void visit(Commit arg0) {
@@ -131,14 +122,12 @@ public class ExampleStatementVisitor implements StatementVisitor
 	}
 
 	@Override
-	public void visit(Select select) {
-		// TODO Auto-generated method stub
-		System.out.println( "ExampleStatementVisitor.visit:" + select );
-		
+	public void visit(Select select) 
+	{
 		SelectBody selectBody = select.getSelectBody();
 		if ( selectBody != null )
 		{
-			selectBody.accept(this.selectVisitor);
+			selectBody.accept(this.analyzeSelectVisitor);
 		}
 	}
 
@@ -152,6 +141,12 @@ public class ExampleStatementVisitor implements StatementVisitor
 	public void visit(UseStatement arg0) {
 		// TODO Auto-generated method stub
 
+	}
+
+	@Override
+	public void setAnalyzeSelectVistor(AnalyzeSelectVisitor analyzeSelectVisitor) 
+	{
+		this.analyzeSelectVisitor = analyzeSelectVisitor;
 	}
 
 }

@@ -1,45 +1,36 @@
-package sqlparse;
+package milu.ctrl.sqlparse;
 
 import java.util.List;
 
+import net.sf.jsqlparser.statement.select.FromItem;
+import net.sf.jsqlparser.statement.select.Join;
 import net.sf.jsqlparser.statement.select.PlainSelect;
-import net.sf.jsqlparser.statement.select.SelectVisitor;
 import net.sf.jsqlparser.statement.select.SetOperationList;
 import net.sf.jsqlparser.statement.select.WithItem;
 
-import net.sf.jsqlparser.statement.select.Join;
-import net.sf.jsqlparser.statement.select.FromItem;
-import net.sf.jsqlparser.statement.select.FromItemVisitor;
-
-public class ExampleSelectVisitor implements SelectVisitor 
+public class TableSelectVisitor implements AnalyzeSelectVisitor 
 {
-	private FromItemVisitor fromItemVisitor = null;
-	
-	public ExampleSelectVisitor( FromItemVisitor fromItemVisitor )
-	{
-		this.fromItemVisitor = fromItemVisitor;
-	}
+	private AnalyzeFromItemVisitor  analyzeFromItemVisitor = null;
 
 	@Override
-	public void visit(PlainSelect plainSelect) 
+	public void visit(PlainSelect plainSelect)
 	{
-		System.out.println( "ExampleSelectVisitor.visit:" + plainSelect );
-		
 		List<Join>   joinLst = plainSelect.getJoins();
 		if ( joinLst != null )
 		{
 			for ( Join join : joinLst )
 			{
 				FromItem  fromItemInJoin = join.getRightItem();
-				fromItemInJoin.accept( this.fromItemVisitor );
+				fromItemInJoin.accept( this.analyzeFromItemVisitor );
 			}
 		}
 		
 		FromItem fromItem = plainSelect.getFromItem();
 		if ( fromItem != null )
 		{
-			fromItem.accept( this.fromItemVisitor );
+			fromItem.accept( this.analyzeFromItemVisitor );
 		}
+
 	}
 
 	@Override
@@ -52,6 +43,12 @@ public class ExampleSelectVisitor implements SelectVisitor
 	public void visit(WithItem arg0) {
 		// TODO Auto-generated method stub
 
+	}
+
+	@Override
+	public void setAnalyzeFromItemVisitor(AnalyzeFromItemVisitor analyzeFromItemVisitor) 
+	{
+		this.analyzeFromItemVisitor = analyzeFromItemVisitor;
 	}
 
 }
