@@ -7,7 +7,7 @@ create or replace procedure kunimei_cnt
 is
 begin
 	out_err := 0;
-	select count(*) into out_cnt from m_国名 where id = in_id;
+	select count(*) into out_cnt from m_country where id = in_id;
 exception
 	when others then
 	     out_err := sqlcode;

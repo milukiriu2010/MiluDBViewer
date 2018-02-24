@@ -11,10 +11,12 @@
 	
 	<!-- classpath -->
 	<path id="java.classpath">
-		<pathelement path="../lib/cassandra-jdbc-driver-0.6.4-shaded.jar" />
-		<pathelement path="../lib/mysql-connector-java-5.1.45-bin.jar" />
-		<pathelement path="../lib/ojdbc8.jar" />
-		<pathelement path="../lib/postgresql-42.1.4.jar" />
+		<pathelement path="../lib/cassandra/cassandra-jdbc-driver-0.6.4-shaded.jar" />
+		<pathelement path="../lib/mysql/mysql-connector-java-5.1.45-bin.jar" />
+		<pathelement path="../lib/oracle/ojdbc8.jar" />
+		<pathelement path="../lib/oracle/xdb6.jar" />
+		<pathelement path="../lib/oracle/xmlparserv2.jar" />
+		<pathelement path="../lib/postgresql/postgresql-42.1.4.jar" />
 		<pathelement path="../lib/jsqlparser/jsqlparser-1.2-SNAPSHOT.jar" />
 		<pathelement path="../lib/excel/commons-collections4-4.1.jar" />
 		<pathelement path="../lib/excel/poi-3.17.jar" />
@@ -53,10 +55,12 @@
                 <attribute name="Main-Class" value="milu.main.MiluDBViewer"/>
                 <attribute name="Class-Path" 
 						value=". 
-							lib/cassandra-jdbc-driver-0.6.4-shaded.jar
-							lib/mysql-connector-java-5.1.45-bin.jar 
-							lib/ojdbc8.jar 
-							lib/postgresql-42.1.4.jar
+							lib/cassandra/cassandra-jdbc-driver-0.6.4-shaded.jar
+							lib/mysql/mysql-connector-java-5.1.45-bin.jar
+							lib/oracle/ojdbc8.jar
+							lib/oracle/xdb6.jar
+							lib/oracle/xmlparserv2.jar
+							lib/postgresql/postgresql-42.1.4.jar
 							lib/jsqlparser/jsqlparser-1.2-SNAPSHOT.jar
 							lib/excel/commons-collections4-4.1.jar
 							lib/excel/poi-3.17.jar

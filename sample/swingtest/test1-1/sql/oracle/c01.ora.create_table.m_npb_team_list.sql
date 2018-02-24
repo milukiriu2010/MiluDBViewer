@@ -13,9 +13,9 @@ create table m_npb_team_list
 )
 /
 
-comment on table m_npb_team_list is 'プロ野球チームリスト';
-comment on column m_npb_team_list.head_name is 'チームオーナー英名';
-comment on column m_npb_team_list.tail_name is 'チームキャラクター英名';
+-- comment on table m_npb_team_list is 'プロ野球チームリスト';
+-- comment on column m_npb_team_list.head_name is 'チームオーナー英名';
+-- comment on column m_npb_team_list.tail_name is 'チームキャラクター英名';
 
 create bitmap index bp_m_npb_team_list_league on m_npb_team_list( league );
 --create unique index ui_m_npb_team_list_name on m_npb_team_list( head_name, tail_name );
