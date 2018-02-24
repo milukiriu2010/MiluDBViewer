@@ -30,18 +30,7 @@ public class TypeDBPostgres extends TypeDBAbstract
 		{
 			while ( rs.next() )
 			{
-				/*
-				Map<String, String> mapView = new HashMap<String,String>();
-				mapView.put( "typeName", rs.getString("user_defined_type_name") );
-				mapView.put( "status"  , rs.getString("status") );
-				this.typeLst.add( mapView );
-				*/
 				SchemaEntity typeEntity = SchemaEntityFactory.createInstance( rs.getString("user_defined_type_name"), SchemaEntity.SCHEMA_TYPE.TYPE );
-				String strStatus = rs.getString("status");
-				if ( strStatus != null && "INVALID".equals(strStatus) )
-				{
-					typeEntity.setState( SchemaEntity.STATE.INVALID );
-				}
 				typeEntityLst.add( typeEntity );
 			}
 		}

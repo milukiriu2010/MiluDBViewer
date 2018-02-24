@@ -31,7 +31,7 @@ public class ViewDBPostgres extends ViewDBAbstract
 		{
 			while ( rs.next() )
 			{
-				SchemaEntity viewEntity = SchemaEntityFactory.createInstance( rs.getString("object_name"), SchemaEntity.SCHEMA_TYPE.VIEW );
+				SchemaEntity viewEntity = SchemaEntityFactory.createInstance( rs.getString("relname"), SchemaEntity.SCHEMA_TYPE.VIEW );
 				viewEntityLst.add( viewEntity );			}
 		}
 		

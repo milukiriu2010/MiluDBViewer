@@ -15,6 +15,7 @@
 		<pathelement path="../lib/mysql-connector-java-5.1.45-bin.jar" />
 		<pathelement path="../lib/ojdbc8.jar" />
 		<pathelement path="../lib/postgresql-42.1.4.jar" />
+		<pathelement path="../lib/jsqlparser/jsqlparser-1.2-SNAPSHOT.jar" />
 		<pathelement path="../lib/excel/commons-collections4-4.1.jar" />
 		<pathelement path="../lib/excel/poi-3.17.jar" />
 		<pathelement path="../lib/excel/poi-ooxml-3.17.jar" />
@@ -56,6 +57,7 @@
 							lib/mysql-connector-java-5.1.45-bin.jar 
 							lib/ojdbc8.jar 
 							lib/postgresql-42.1.4.jar
+							lib/jsqlparser/jsqlparser-1.2-SNAPSHOT.jar
 							lib/excel/commons-collections4-4.1.jar
 							lib/excel/poi-3.17.jar
 							lib/excel/poi-ooxml-3.17.jar
