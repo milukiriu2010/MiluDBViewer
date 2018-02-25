@@ -11,6 +11,13 @@ create table m_npb_team_list
     end_date         datetime        not null  default '9999-12-31'
 );
 
+create unique index m_npb_team_list_name 
+on m_npb_team_list( head_name, tail_name );
+
+create unique index m_npb_team_list_waname 
+on m_npb_team_list( head_waname, tail_waname );
+
+
 create index name_first_five on m_npb_team_list( head_name(5) );
 
 insert into m_npb_team_list 

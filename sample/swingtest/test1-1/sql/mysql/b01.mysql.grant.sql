@@ -13,6 +13,7 @@ grant trigger on *.* to 'milu'@'localhost';
 grant drop on *.* to 'milu'@'localhost';
 grant alter on *.* to 'milu'@'localhost';
 grant references on *.* to 'milu'@'localhost';
+grant index on miludb.* to 'milu'@'localhost';
 
 grant execute on *.* to 'milu'@'%';
 
