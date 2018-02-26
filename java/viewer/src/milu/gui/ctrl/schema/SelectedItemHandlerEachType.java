@@ -3,12 +3,12 @@ package milu.gui.ctrl.schema;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TreeItem;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
 import milu.db.type.TypeDBAbstract;
 import milu.db.type.TypeDBFactory;
 import milu.entity.schema.SchemaEntity;
+import milu.ctrl.MainController;
 
 import java.sql.SQLException;
 
@@ -38,18 +38,6 @@ import java.sql.SQLException;
  */
 public class SelectedItemHandlerEachType extends SelectedItemHandlerAbstract
 {
-	/*
-	public SelectedItemHandlerEachType
-	( 
-		SchemaTreeView schemaTreeView, 
-		TabPane        tabPane,
-		MyDBAbstract   myDBAbs,
-		SelectedItemHandlerAbstract.REFRESH_TYPE  refreshType
-	)
-	{
-		super( schemaTreeView, tabPane, myDBAbs, refreshType );
-	}
-	*/
 	@Override
 	protected boolean isMyResponsible()
 	{
@@ -100,21 +88,20 @@ public class SelectedItemHandlerEachType extends SelectedItemHandlerAbstract
 		
 		
 		// Create DBSchemaProcViewTab, if it doesn't exist.
-		DBSchemaProcViewTab newTab = new DBSchemaProcViewTab();
+		DBSchemaProcViewTab newTab = new DBSchemaProcViewTab( this.dbView );
 		newTab.setId( id );
 		newTab.setText( typeName );
 		this.tabPane.getTabs().add( newTab );
 		this.tabPane.getSelectionModel().select( newTab );
 		
 		// set icon on Tab
-		ImageView iv = new ImageView( new Image("file:resources/images/type.png") );
+		MainController mainController = this.dbView.getMainController();
+		ImageView iv = new ImageView( mainController.getImage("file:resources/images/type.png") );
 		iv.setFitHeight( 16 );
 		iv.setFitWidth( 16 );
 		newTab.setGraphic( iv );
 		
 		// get table definition
-		//String strSrc = 
-		//		myDBAbs.getTypeSourceBySchemaType( schema, typeName );
 		TypeDBAbstract typeDBAbs = TypeDBFactory.getInstance(myDBAbs);
 		if ( typeDBAbs == null )
 		{

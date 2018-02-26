@@ -1,6 +1,7 @@
 set MYCLASSPATH=%CLASSPATH%;.;
 set MYCLASSPATH=%MYCLASSPATH%;lib/mysql/mysql-connector-java-5.1.45-bin.jar
 set MYCLASSPATH=%MYCLASSPATH%;lib/oracle/ojdbc8.jar
+set MYCLASSPATH=%MYCLASSPATH%;lib/oracle/orai18n.jar
 set MYCLASSPATH=%MYCLASSPATH%;lib/oracle/xdb6.jar
 set MYCLASSPATH=%MYCLASSPATH%;lib/oracle/xmlparserv2.jar
 set MYCLASSPATH=%MYCLASSPATH%;lib/postgresql/postgresql-42.1.4.jar

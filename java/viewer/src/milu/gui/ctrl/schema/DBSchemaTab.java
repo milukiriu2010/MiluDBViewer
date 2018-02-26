@@ -7,7 +7,6 @@ import javafx.scene.control.SplitPane;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.Alert.AlertType;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.geometry.Orientation;
@@ -15,11 +14,11 @@ import javafx.geometry.Orientation;
 import milu.db.MyDBAbstract;
 
 import milu.gui.view.DBView;
-import milu.gui.ctrl.common.DraggingTabPaneSupport;
 import milu.gui.ctrl.schema.SchemaTreeView;
 import milu.gui.ctrl.schema.SelectedItemHandlerChooser;
 import milu.gui.dlg.MyAlertDialog;
 import milu.ctrl.ExecQueryDBInterface;
+import milu.ctrl.MainController;
 import milu.ctrl.RefreshInterface;
 import milu.ctrl.ToggleHorizontalVerticalInterface;
 import milu.ctrl.ChangeLangInterface;
@@ -67,8 +66,10 @@ public class DBSchemaTab extends Tab
 		
 		this.setContent( brdPane );
 		
+		MainController mainController = this.dbView.getMainController();
+		
 		// set icon on Tab
-		ImageView iv = new ImageView( new Image("file:resources/images/schema.png") );
+		ImageView iv = new ImageView(  mainController.getImage("file:resources/images/schema.png") );
 		iv.setFitHeight( 16 );
 		iv.setFitWidth( 16 );
 		this.setGraphic( iv );
@@ -85,7 +86,14 @@ public class DBSchemaTab extends Tab
 	{
 		try
 		{
-			SelectedItemHandlerChooser.exec( this.schemaTreeView, this.tabPane, myDBAbs, SelectedItemHandlerAbstract.REFRESH_TYPE.NO_REFRESH );
+			SelectedItemHandlerChooser.exec
+			( 
+				this.schemaTreeView, 
+				this.tabPane, 
+				this.dbView,
+				myDBAbs, 
+				SelectedItemHandlerAbstract.REFRESH_TYPE.NO_REFRESH 
+			);
 		}
 		catch ( UnsupportedOperationException uoEx )
 		{
@@ -113,7 +121,14 @@ public class DBSchemaTab extends Tab
 	{
 		try
 		{
-			SelectedItemHandlerChooser.exec( this.schemaTreeView, this.tabPane, myDBAbs, SelectedItemHandlerAbstract.REFRESH_TYPE.WITH_REFRESH );
+			SelectedItemHandlerChooser.exec
+			( 
+				this.schemaTreeView, 
+				this.tabPane,
+				this.dbView,
+				myDBAbs, 
+				SelectedItemHandlerAbstract.REFRESH_TYPE.WITH_REFRESH 
+			);
 		}
 		catch ( UnsupportedOperationException uoEx )
 		{

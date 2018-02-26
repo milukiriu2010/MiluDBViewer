@@ -8,6 +8,7 @@ export MYCLASSPATH=$CLASSPATH:.
 export MYCLASSPATH=$MYCLASSPATH:$prgdir
 export MYCLASSPATH=$MYCLASSPATH:$prgdir/lib/mysql/mysql-connector-java-5.1.45-bin.jar
 export MYCLASSPATH=$MYCLASSPATH:$prgdir/lib/oracle/ojdbc8.jar
+export MYCLASSPATH=$MYCLASSPATH:$prgdir/lib/oracle/orai18n.jar
 export MYCLASSPATH=$MYCLASSPATH:$prgdir/lib/oracle/xdb6.jar
 export MYCLASSPATH=$MYCLASSPATH:$prgdir/lib/oracle/xmlparserv2.jar
 export MYCLASSPATH=$MYCLASSPATH:$prgdir/lib/postgresql/postgresql-42.1.4.jar

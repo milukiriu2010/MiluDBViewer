@@ -12,7 +12,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.Button;
 
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -29,8 +28,8 @@ import milu.ctrl.CopyInterface;
 import milu.ctrl.ChangeLangInterface;
 
 import milu.gui.ctrl.query.SqlTableView;
-//import milu.gui.dlg.MyAlertDialog;
 import milu.gui.view.DBView;
+import milu.ctrl.MainController;
 import milu.tool.MyTool;
 import milu.db.MyDBAbstract;
 import milu.db.MyDBOverFetchSizeException;
@@ -88,7 +87,7 @@ public class DBSqlTab extends Tab
 		DBSqlTab.counterOpend++;
 		
         // http://tutorials.jenkov.com/javafx/textarea.html
-		this.textAreaSQL  = new SqlTextArea();
+		this.textAreaSQL  = new SqlTextArea( dbView );
         //this.textAreaSQL  = new SqlTextArea( this.upperPane );
         // AnchorPane
         this.upperPane.getChildren().add( this.textAreaSQL );
@@ -113,7 +112,6 @@ public class DBSqlTab extends Tab
         // http://fxexperience.com/2011/06/splitpane-in-javafx-2-0/
 		SplitPane splitPane = new SplitPane();
 		splitPane.setOrientation(Orientation.VERTICAL);
-		//splitPane.getItems().addAll( this.textAreaSQL, this.lowerPane );
 		splitPane.getItems().addAll( this.upperPane, this.lowerPane );
 		splitPane.setDividerPositions( 0.3f, 0.7f );
 		
@@ -123,30 +121,16 @@ public class DBSqlTab extends Tab
 		
 		this.setContent( brdPane );
 		
+		MainController mainController = this.dbView.getMainController();
+		
 		// set icon on Tab
-		ImageView iv = new ImageView( new Image("file:resources/images/sql.png") );
+		ImageView iv = new ImageView( mainController.getImage("file:resources/images/sql.png") );
 		iv.setFitHeight( 16 );
 		iv.setFitWidth( 16 );
 		this.setGraphic( iv );
 		
 		// Tab Title
 		this.setText( "SQL" + Integer.valueOf( counterOpend ) );
-		
-		this.setAction();
-	}
-	
-	private void setAction()
-	{
-		/*
-		this.textAreaSQL.setOnKeyPressed
-		(
-			(event)->
-			{
-				System.out.println( "--- TextArea KeyPressed -------------" );
-				System.out.println( "CaretPosition:" + this.textAreaSQL.getCaretPosition() );
-			}
-		);
-		*/
 	}
 
 	/**
@@ -208,14 +192,6 @@ public class DBSqlTab extends Tab
 		}
 		catch ( MyDBOverFetchSizeException myDBEx )
 		{
-			/*
-			MyAlertDialog alertDlg = new MyAlertDialog(AlertType.WARNING);
-			alertDlg.setHeaderText( langRB.getString("TITLE_OVER_FETCH_SIZE") );
-			alertDlg.setTxtMsg( langRB.getString("WARN_OVER_FETCH_SIZE") );
-    		alertDlg.showAndWait();
-    		alertDlg = null;
-    		*/
-			
 			Label     labelTitle = new Label( langRB.getString("TITLE_OVER_FETCH_SIZE") );
 			String    msg        = langRB.getString("WARN_OVER_FETCH_SIZE");
 			TextArea  txtMsg     = new TextArea( msg );
@@ -226,25 +202,10 @@ public class DBSqlTab extends Tab
 		}
 		catch ( SQLException sqlEx )
 		{
-    		/*
-			MyAlertDialog alertDlg = new MyAlertDialog(AlertType.WARNING);
-			alertDlg.setHeaderText( langRB.getString("TITLE_EXEC_QUERY_ERROR") );
-    		alertDlg.setTxtExp( sqlEx, myDBAbs );
-    		alertDlg.showAndWait();
-    		alertDlg = null;
-    		*/
     		this.showSQLException( sqlEx, myDBAbs );
 		}
 		catch ( Exception ex )
 		{
-			/*
-			MyAlertDialog alertDlg = new MyAlertDialog(AlertType.WARNING);
-			alertDlg.setHeaderText( langRB.getString("TITLE_EXEC_QUERY_ERROR") );
-    		alertDlg.setTxtExp( ex );
-    		alertDlg.showAndWait();
-    		alertDlg = null;
-    		*/
-			
 			Label     labelTitle = new Label( langRB.getString("TITLE_EXEC_QUERY_ERROR") );
 			
 			String    strMsg     = ex.getMessage();
@@ -310,16 +271,6 @@ public class DBSqlTab extends Tab
 		}
 		catch ( SQLException sqlEx )
 		{
-			/*
-    		System.out.println( "SQLState:" + sqlEx.getSQLState() );
-    		System.out.println( "ErrorCode:" + sqlEx.getErrorCode() );
-    		
-			MyAlertDialog alertDlg = new MyAlertDialog(AlertType.WARNING);
-			alertDlg.setHeaderText( langRB.getString("TITLE_EXEC_QUERY_ERROR") );
-    		alertDlg.setTxtExp( sqlEx, myDBAbs );
-    		alertDlg.showAndWait();
-    		alertDlg = null;
-    		*/
 			this.showSQLException( sqlEx, myDBAbs );
 		}
 		finally

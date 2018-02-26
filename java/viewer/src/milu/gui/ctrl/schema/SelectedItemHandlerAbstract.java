@@ -8,6 +8,7 @@ import java.sql.SQLException;
 import milu.gui.ctrl.schema.SchemaTreeView;
 import milu.db.MyDBAbstract;
 import milu.entity.schema.SchemaEntity;
+import milu.gui.view.DBView;
 
 abstract class SelectedItemHandlerAbstract 
 {
@@ -21,6 +22,8 @@ abstract class SelectedItemHandlerAbstract
 	
 	protected TabPane       tabPane = null;
 	
+	protected DBView                  dbView = null;
+	
 	protected MyDBAbstract  myDBAbs = null;
 	
 	public enum REFRESH_TYPE
@@ -30,26 +33,7 @@ abstract class SelectedItemHandlerAbstract
 	}
 	
 	protected REFRESH_TYPE  refreshType = REFRESH_TYPE.NO_REFRESH;
-	/*
-	public SelectedItemHandlerAbstract
-	( 
-		SchemaTreeView schemaTreeView, 
-		TabPane        tabPane,
-		MyDBAbstract   myDBAbs,
-		SelectedItemHandlerAbstract.REFRESH_TYPE  refreshType
-	)
-	{
-		this.schemaTreeView = schemaTreeView;
-		this.itemRoot = this.schemaTreeView.getRoot();
-		if ( this.itemRoot != null )
-		{
-			this.itemSelected = this.schemaTreeView.getSelectionModel().getSelectedItem();
-		}
-		this.tabPane     = tabPane;
-		this.myDBAbs     = myDBAbs;
-		this.refreshType = refreshType;
-	}
-	*/
+	
 	public void setSchemaTreeView( SchemaTreeView schemaTreeView )
 	{
 		this.schemaTreeView = schemaTreeView;
@@ -63,6 +47,11 @@ abstract class SelectedItemHandlerAbstract
 	public void setTabPane( TabPane tabPane )
 	{
 		this.tabPane = tabPane;
+	}
+	
+	public void setDBView( DBView dbView )
+	{
+		this.dbView = dbView;
 	}
 	
 	public void setMyDBAbs( MyDBAbstract myDBAbs )

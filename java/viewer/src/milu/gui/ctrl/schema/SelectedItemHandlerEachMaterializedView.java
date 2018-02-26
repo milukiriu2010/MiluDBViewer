@@ -7,13 +7,13 @@ import java.util.Map;
 
 import javafx.scene.control.Tab;
 import javafx.scene.control.TreeItem;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.collections.ObservableList;
 
 import milu.db.mateview.MaterializedViewDBAbstract;
 import milu.db.mateview.MaterializedViewDBFactory;
 import milu.entity.schema.SchemaEntity;
+import milu.ctrl.MainController;
 
 /**
  * This class is invoked, when "view" item is clicked on SchemaTreeView.
@@ -35,18 +35,6 @@ import milu.entity.schema.SchemaEntity;
  */
 public class SelectedItemHandlerEachMaterializedView extends SelectedItemHandlerAbstract
 {
-	/*
-	public SelectedItemHandlerEachMaterializedView
-	( 
-		SchemaTreeView schemaTreeView, 
-		TabPane        tabPane,
-		MyDBAbstract   myDBAbs,
-		SelectedItemHandlerAbstract.REFRESH_TYPE  refreshType
-	)
-	{
-		super( schemaTreeView, tabPane, myDBAbs, refreshType );
-	}
-	*/
 	@Override
 	protected boolean isMyResponsible()
 	{
@@ -103,14 +91,13 @@ public class SelectedItemHandlerEachMaterializedView extends SelectedItemHandler
 		this.tabPane.getSelectionModel().select( newTab );
 		
 		// set icon on Tab
-		ImageView iv = new ImageView( new Image("file:resources/images/materialized_view.png") );
+		MainController mainController = this.dbView.getMainController();
+		ImageView iv = new ImageView( mainController.getImage("file:resources/images/materialized_view.png") );
 		iv.setFitHeight( 16 );
 		iv.setFitWidth( 16 );
 		newTab.setGraphic( iv );
 		
 		// get view definition
-		//List<Map<String,String>> dataLst = 
-		//		myDBAbs.getTableDefBySchemaTable( schema, materializedViewName );
 		MaterializedViewDBAbstract  mateViewDBAbs = MaterializedViewDBFactory.getInstance(myDBAbs);
 		if ( mateViewDBAbs == null )
 		{

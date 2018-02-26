@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.HashMap;
 
-import net.sf.jsqlparser.statement.select.FromItemVisitor;
 import net.sf.jsqlparser.schema.Table;
 import net.sf.jsqlparser.statement.select.LateralSubSelect;
 import net.sf.jsqlparser.statement.select.SubJoin;

@@ -7,7 +7,6 @@ import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.shape.Line;
 import javafx.scene.Group;
@@ -16,6 +15,7 @@ import javafx.scene.effect.BlendMode;
 import javafx.collections.ObservableList;
 import javafx.beans.property.BooleanProperty;
 import milu.gui.view.DBView;
+import milu.ctrl.MainController;
 
 import milu.ctrl.ChangeLangInterface;
 import milu.entity.schema.SchemaEntity;
@@ -36,19 +36,6 @@ public class SchemaTreeView extends TreeView<SchemaEntity>
 	
 	// Root Item of this Tree
 	private TreeItem<SchemaEntity> item0Root = null;
-	/*
-	private enum NAME_TYPE
-	{
-		NAME_OBJECT,
-		NAME_BUNDLE
-	}
-	
-	private enum STATUS
-	{
-		VALID,
-		INVALID
-	}
-	*/
 	
 	public SchemaTreeView( DBView dbView )
 	{
@@ -164,79 +151,17 @@ public class SchemaTreeView extends TreeView<SchemaEntity>
 		}
 		*/
 	}
-	/*
-	private TreeItem<SchemaEntity> addItem
-		( TreeItem<SchemaEntity>   itemParent, 
-		  String                   itemName,
-		  NAME_TYPE                skipBundle,
-		  SchemaEntity.SCHEMA_TYPE itemType,
-		  STATUS                   status, 
-		  String                   fileResourceName )
-	{
-		SchemaEntity seEnt = null;
-		if ( skipBundle == NAME_TYPE.NAME_OBJECT )
-		{
-			seEnt = SchemaEntityFactory.createInstance( itemName, itemType );
-		}
-		else if ( skipBundle == NAME_TYPE.NAME_BUNDLE )
-		{
-			seEnt = SchemaEntityFactory.createInstance( langRB.getString(itemName), itemType );
-		}
-
-		String imageResourceName = seEnt.getImageResourceName();
-		if ( imageResourceName == null )
-		{
-			imageResourceName = fileResourceName;
-		}
-		ImageView iv = new ImageView( new Image( imageResourceName ) );
-		iv.setFitHeight( 16 );
-		iv.setFitWidth( 16 );
-		
-		Group imageGroup = new Group();
-		if ( status == STATUS.VALID )
-		{
-			imageGroup.getChildren().add( iv );
-		}
-		else if ( status == STATUS.INVALID )
-		{
-			Line lineLTRB = new Line( 0, 0, iv.getFitWidth(), iv.getFitHeight() );
-			lineLTRB.setStyle( "-fx-stroke: red; -fx-stroke-width: 2;" );
-			Line lineRTLB = new Line( iv.getFitWidth(), 0, 0, iv.getFitHeight() );
-			lineRTLB.setStyle( "-fx-stroke: red; -fx-stroke-width: 2;" );
-			imageGroup.getChildren().addAll( iv, lineLTRB, lineRTLB );
-			imageGroup.setEffect( new Blend(BlendMode.OVERLAY) );
-		}
-		
-		TreeItem<SchemaEntity> itemNew = new TreeItem<SchemaEntity>( seEnt, imageGroup );
-		if ( itemParent != null )
-		{
-			itemParent.getChildren().add( itemNew );
-		}
-		
-		// https://stackoverflow.com/questions/14236666/how-to-get-current-treeitem-reference-which-is-expanding-by-user-click-in-javafx
-		itemNew.expandedProperty().addListener
-		(
-			(obs,oldVal,newVal)->
-			{
-		        System.out.println("newVal = " + newVal);
-		        BooleanProperty bb = (BooleanProperty) obs;
-		        System.out.println("bb.getBean() = " + bb.getBean());
-		        TreeItem<SchemaEntity> itemTarget = (TreeItem<SchemaEntity>) bb.getBean();
-		        scrollBack( itemTarget );
-		    }
-		);
-		
-		return itemNew;
-	}
-	*/
 	
 	@SuppressWarnings("unchecked")
 	private TreeItem<SchemaEntity> addItem
 		( TreeItem<SchemaEntity>   itemParent, 
 		  SchemaEntity             schemaEntity )
 	{
+		MainController mainController = dbView.getMainController();
+		
 		String imageResourceName = schemaEntity.getImageResourceName();
-		ImageView iv = new ImageView( new Image( imageResourceName ) );
+		//ImageView iv = new ImageView( new Image( imageResourceName ) );
+		ImageView iv = new ImageView( mainController.getImage(imageResourceName) );
 		iv.setFitHeight( 16 );
 		iv.setFitWidth( 16 );
 		
@@ -363,55 +288,7 @@ public class SchemaTreeView extends TreeView<SchemaEntity>
 		itemTarget.setExpanded(true);
 		this.scrollBack(itemTarget);
 	}
-	/*
-	public void setIndexData( TreeItem<SchemaEntity> itemTarget, List<Map<String,String>> dataLst )
-	{
-		for ( Map<String,String> dataRow : dataLst )
-		{
-			// create Index Item
-			String is_primary    = dataRow.get("is_primary");
-			String is_unique     = dataRow.get("is_unique");
-			String is_functional = dataRow.get("is_functional");
-			String iconFileName  = null;
-			if ( "t".equals(is_primary) )
-			{
-				iconFileName = "file:resources/images/index_p.png";
-			}
-			else if ( "t".equals(is_unique) )
-			{
-				iconFileName = "file:resources/images/index_u.png";
-			}
-			else if ( "t".equals(is_functional) )
-			{
-				iconFileName = "file:resources/images/index_f.png";
-			}
-			else
-			{
-				iconFileName = "file:resources/images/index_i.png";
-			}
-			
-			STATUS status = STATUS.VALID; 
-			String strStatus = dataRow.get("status");
-			if ( "INVALID".equals(strStatus) )
-			{
-				status = STATUS.INVALID;
-			}
-
-			TreeItem<SchemaEntity> item5Index = 
-					this.addItem( 
-						itemTarget, 
-						dataRow.get("index_name"), 
-						NAME_TYPE.NAME_OBJECT, 
-						SchemaEntity.SCHEMA_TYPE.INDEX,
-						status,
-						iconFileName 
-					);
-		}
-		
-		itemTarget.setExpanded(true);
-		this.scrollBack(itemTarget);
-	}
-	*/
+	
 	public void addEntityLst( TreeItem<SchemaEntity> itemTarget, List<SchemaEntity> schemaEntityLst )
 	{
 		for ( SchemaEntity schemaEntity : schemaEntityLst )
@@ -430,37 +307,7 @@ public class SchemaTreeView extends TreeView<SchemaEntity>
 		itemTarget.setExpanded(true);
 		this.scrollBack(itemTarget);
 	}
-	/*
-	public void setAggregateData( TreeItem<SchemaEntity> itemTarget, List<List<String>> dataLst )
-	{
-		
-		for ( List<String> dataRow : dataLst )
-		{
-			int cnt = dataRow.size();
-			STATUS status = STATUS.VALID; 
-			if ( cnt >= 3 )
-			{
-				String strStatus = dataRow.get(2);
-				if ( "INVALID".equals(strStatus) )
-				{
-					status = STATUS.INVALID;
-				}
-			}
-			// create Aggregate Item
-			this.addItem( 
-				itemTarget, 
-				dataRow.get(1), 
-				NAME_TYPE.NAME_OBJECT, 
-				SchemaEntity.SCHEMA_TYPE.AGGREGATE,
-				status,
-				"file:resources/images/aggregate.png" 
-			);
-		}
-		
-		itemTarget.setExpanded(true);
-		this.scrollBack(itemTarget);
-	}
-	*/
+	
 	/**
 	 * Load Language Resource
 	 */

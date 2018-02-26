@@ -5,15 +5,21 @@ import javafx.scene.control.TextArea;
 import javafx.scene.layout.BorderPane;
 
 import milu.gui.ctrl.query.SqlTextArea;
+import milu.gui.view.DBView;
 
 public class DBSchemaProcViewTab extends Tab
 {
-	private TextArea   srcTextArea = new SqlTextArea();
+	private DBView     dbView      = null;
 	
-	public DBSchemaProcViewTab()
+	private TextArea   srcTextArea = null;
+	
+	public DBSchemaProcViewTab( DBView dbView )
 	{
 		super();
 		
+		this.dbView = dbView;
+		
+		this.srcTextArea = new SqlTextArea( this.dbView );
 		this.srcTextArea.setEditable( false );
 		
 		BorderPane brdPane = new BorderPane();

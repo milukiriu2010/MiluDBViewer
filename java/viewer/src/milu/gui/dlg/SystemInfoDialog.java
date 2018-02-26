@@ -82,9 +82,8 @@ public class SystemInfoDialog extends Dialog<Boolean>
 		this.getDialogPane().getButtonTypes().add( ButtonType.CLOSE );
 		
 		// Window Icon
-		Image     imgIcon = new Image( "file:resources/images/winicon.gif" );
 		Stage     stage   = (Stage)this.getDialogPane().getScene().getWindow();
-		stage.getIcons().add( imgIcon );
+		stage.getIcons().add( new Image( "file:resources/images/winicon.gif" ) );
 		
 		// set css for this dialog
 		Scene scene = this.getDialogPane().getScene();

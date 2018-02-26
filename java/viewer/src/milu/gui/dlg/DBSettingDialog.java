@@ -7,14 +7,6 @@ import java.util.HashMap;
 import java.util.ResourceBundle;
 import java.util.Collections;
 
-//import java.util.concurrent.ExecutorService;
-//import java.util.concurrent.Executors;
-
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.InputStream;
-
 import java.sql.SQLException;
 
 import javafx.scene.control.Button;
@@ -25,7 +17,6 @@ import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.control.PasswordField;
-//import javafx.scene.Cursor;
 import javafx.scene.control.Alert.AlertType;
 
 import javafx.scene.image.Image;
@@ -160,17 +151,8 @@ public class DBSettingDialog extends Dialog<MyDBAbstract>
 		this.urlTextField.setEditable( false );
 		
 		// Window Icon
-		try
-		{
-			InputStream inputStreamWinIcon = new FileInputStream( "resources" + File.separator + "images" + File.separator + "winicon.gif" );
-			Image imgWinIcon = new Image( inputStreamWinIcon );
-			Stage stage = (Stage)this.getDialogPane().getScene().getWindow();
-			stage.getIcons().add( imgWinIcon );
-		}
-		catch ( FileNotFoundException fnfEx )
-		{
-			fnfEx.printStackTrace();
-		}
+		Stage stage = (Stage)this.getDialogPane().getScene().getWindow();
+		stage.getIcons().add( new Image( "file:resources/images/winicon.gif" ) );
 		
 		// set Action
 		this.setAction();

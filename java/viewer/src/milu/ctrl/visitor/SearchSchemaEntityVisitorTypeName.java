@@ -40,6 +40,17 @@ public class SearchSchemaEntityVisitorTypeName
 			this.hitSchemaEntity = schemaEntity;
 			return;
 		}
+		else if ( ( schemaType == this.searchSchemaType ) && name.equals(this.searchName.toUpperCase()) )
+		{
+			this.hitSchemaEntity = schemaEntity;
+			return;
+		}
+		else if ( ( schemaType == this.searchSchemaType ) && name.equals(this.searchName.toLowerCase()) )
+		{
+			this.hitSchemaEntity = schemaEntity;
+			return;
+		}
+		
 		
 		for ( SchemaEntity child : schemaEntity.getEntityLst() )
 		{

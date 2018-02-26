@@ -1,10 +1,6 @@
 package milu.gui.dlg;
 
 import java.io.StringWriter;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.InputStream;
 import java.io.PrintWriter;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
@@ -49,6 +45,9 @@ public class MyAlertDialog extends Alert
 		this.setTitle( "MiluDBViewer Alert");
 		
         // Window Icon
+		Stage stage = (Stage)this.getDialogPane().getScene().getWindow();
+		stage.getIcons().add( new Image( "file:resources/images/winicon.gif" ) );
+		/*
 		try
 		{
 			InputStream inputStreamWinIcon = new FileInputStream( "resources" + File.separator + "images" + File.separator + "winicon.gif" );
@@ -60,6 +59,7 @@ public class MyAlertDialog extends Alert
 		{
 			fnfEx.printStackTrace();
 		}
+		*/
 	}
 	
 	public void setTxtMsg( String msg )

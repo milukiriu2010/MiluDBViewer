@@ -3,21 +3,15 @@ package milu.ctrl;
 import java.util.Optional;
 import java.util.List;
 import java.util.ArrayList;
-
+import java.util.Map;
+import java.util.HashMap;
 import java.util.Locale;
 
 import java.sql.SQLException;
 
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
-//import javafx.application.Platform;
-//import javafx.scene.control.Button;
-//import javafx.scene.control.ButtonBar.ButtonData;
-//import javafx.scene.control.ButtonType;
 import javafx.stage.Window;
-
-//import javafx.stage.Stage;
-
-//import java.sql.SQLException;
 
 import milu.gui.dlg.DBSettingDialog;
 import milu.gui.view.DBView;
@@ -35,8 +29,81 @@ public class MainController
 	// DBView list
 	private List<DBView> dbViewLst = new ArrayList<DBView>();
 	
+	// Image Map
+	private Map<String,Image> imageMap = new HashMap<>();
+	
 	public MainController()
 	{
+	}
+	
+	public void loadImages()
+	{
+		String[] images =
+			{
+				// SchemaEntity
+				"file:resources/images/index_p.png",
+				"file:resources/images/index_u.png",
+				"file:resources/images/index_f.png",
+				"file:resources/images/index_i.png",
+				"file:resources/images/order_a.png",
+				"file:resources/images/order_d.png",
+				"file:resources/images/column.png",
+				"file:resources/images/aggregate.png",
+				"file:resources/images/func.png",
+				"file:resources/images/materialized_view.png",
+				"file:resources/images/package_body.png",
+				"file:resources/images/package_def.png",
+				"file:resources/images/proc.png",
+				"file:resources/images/schema.png",			// MainToolBar,DBSchemaTab
+				"file:resources/images/seq.png",
+				"file:resources/images/systemview.png",
+				"file:resources/images/table.png",
+				"file:resources/images/trigger.png",
+				"file:resources/images/type.png",
+				"file:resources/images/view.png",
+				"file:resources/images/url.png",
+				"file:resources/images/aggregate_root.png",
+				"file:resources/images/func_root.png",
+				"file:resources/images/index_root.png",
+				"file:resources/images/materialized_view_root.png",
+				"file:resources/images/package_body_root.png",
+				"file:resources/images/package_def_root.png",
+				"file:resources/images/proc_root.png",
+				"file:resources/images/seq_root.png",
+				"file:resources/images/systemview_root.png",
+				"file:resources/images/table_root.png",
+				"file:resources/images/trigger_root.png",
+				"file:resources/images/type_root.png",
+				"file:resources/images/view_root.png",
+				// MainMenuBar
+				"file:resources/images/config.png",
+				"file:resources/images/quit.png",
+				"file:resources/images/sysinfo.png",
+				// MainToolBar
+				"file:resources/images/execsql.png",
+				"file:resources/images/explain.png",
+				"file:resources/images/direction.png",
+				"file:resources/images/newtab.png",
+				"file:resources/images/newwin.png",
+				"file:resources/images/connect.png",
+				"file:resources/images/copy.png",
+				"file:resources/images/copy2.png",
+				// Dialog
+				"file:resources/images/winicon.gif",
+				// DBSqlTab
+				"file:resources/images/sql.png",
+			};
+		
+		for ( String image : images )
+		{
+			System.out.println( "image loading..." + image );
+			this.imageMap.put( image, new Image( image ) );
+		}
+	}
+	
+	public Image getImage( String resourceName ) 
+	{
+		return this.imageMap.get( resourceName );
 	}
 	
 	private void closeAllDB()

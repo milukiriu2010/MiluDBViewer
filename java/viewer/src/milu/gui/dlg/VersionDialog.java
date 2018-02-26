@@ -54,9 +54,8 @@ public class VersionDialog extends Dialog<Boolean>
 		this.getDialogPane().getButtonTypes().add( ButtonType.CLOSE );
 		
 		// Window Icon
-		Image     imgIcon = new Image( "file:resources/images/winicon.gif" );
 		Stage     stage   = (Stage)this.getDialogPane().getScene().getWindow();
-		stage.getIcons().add( imgIcon );
+		stage.getIcons().add( new Image( "file:resources/images/winicon.gif" ) );
 		
 		// set size
 		this.setResizable( true );

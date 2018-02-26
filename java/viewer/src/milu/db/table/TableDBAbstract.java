@@ -24,19 +24,6 @@ public abstract class TableDBAbstract
 		this.myDBAbs = myDBAbs;
 	}
 	
-	/*
-	public List<SchemaEntity> getEntityLst()
-	{
-		List<SchemaEntity>  tableEntityLst = new ArrayList<>();
-		for ( Map<String,String> table : this.tableLst )
-		{
-			SchemaEntity eachTableEntity = SchemaEntityFactory.createInstance( table.get("tableName"), SchemaEntity.SCHEMA_TYPE.TABLE );
-			tableEntityLst.add( eachTableEntity );
-		}
-		return tableEntityLst;
-	}
-	*/
-	
 	// select Table List
 	public List<SchemaEntity> selectEntityLst( String schemaName ) throws SQLException
 	{
@@ -67,7 +54,7 @@ public abstract class TableDBAbstract
 	abstract protected String listSQL( String schemaName );
 	
 	// select Table Definition
-	abstract public List<Map<String,String>> selectDefinition( String schameName, String tableName ) throws SQLException;
+	abstract public List<Map<String,String>> selectDefinition( String schemaName, String tableName ) throws SQLException;
 	
 	// SQL for Table Definition
 	abstract protected String definitionSQL( String schemaName, String tableName );

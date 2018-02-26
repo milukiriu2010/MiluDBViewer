@@ -7,11 +7,11 @@ import java.util.Map;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TreeItem;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import milu.db.table.TableDBAbstract;
 import milu.db.table.TableDBFactory;
 import milu.entity.schema.SchemaEntity;
+import milu.ctrl.MainController;
 
 import java.sql.SQLException;
 
@@ -31,18 +31,6 @@ import java.sql.SQLException;
  */
 public class SelectedItemHandlerEachTable extends SelectedItemHandlerAbstract
 {
-	/*
-	public SelectedItemHandlerEachTable
-	( 
-		SchemaTreeView schemaTreeView, 
-		TabPane        tabPane,
-		MyDBAbstract   myDBAbs,
-		SelectedItemHandlerAbstract.REFRESH_TYPE  refreshType
-	)
-	{
-		super( schemaTreeView, tabPane, myDBAbs, refreshType );
-	}
-	*/
 	@Override
 	protected boolean isMyResponsible()
 	{
@@ -64,6 +52,7 @@ public class SelectedItemHandlerEachTable extends SelectedItemHandlerAbstract
 	{
 		TreeItem<SchemaEntity> itemParent = itemSelected.getParent();
 		String schemaName = itemParent.getParent().getValue().toString();
+		SchemaEntity selectedEntity = itemSelected.getValue();
 		String tableName  = itemSelected.getValue().getName();
 		String id         = schemaName + "@table@" + tableName;
 		System.out.println( "setTableDef:" + tableName );
@@ -99,22 +88,32 @@ public class SelectedItemHandlerEachTable extends SelectedItemHandlerAbstract
 		this.tabPane.getSelectionModel().select( newTab );
 		
 		// set icon on Tab
-		ImageView iv = new ImageView( new Image("file:resources/images/table.png") );
+		MainController mainController = this.dbView.getMainController();
+		ImageView iv = new ImageView( mainController.getImage("file:resources/images/table.png") );
 		iv.setFitHeight( 16 );
 		iv.setFitWidth( 16 );
 		newTab.setGraphic( iv );
 		
 		// get table definition
-		//List<Map<String,String>> dataLst = 
-		//		myDBAbs.getTableDefBySchemaTable( schemaName, tableName );
-		
-		// get table definition
+		/*
 		TableDBAbstract tableDBAbs = TableDBFactory.getInstance(this.myDBAbs);
 		if ( tableDBAbs == null )
 		{
 			return;
 		}
 		List<Map<String,String>> dataLst = tableDBAbs.selectDefinition(schemaName, tableName);
+		*/
+		// get table definition
+		List<Map<String,String>>  dataLst = selectedEntity.getDefinitionLst();
+		if ( dataLst.size() == 0 )
+		{
+			TableDBAbstract tableDBAbs = TableDBFactory.getInstance(this.myDBAbs);
+			if ( tableDBAbs == null )
+			{
+				return;
+			}
+			dataLst = tableDBAbs.selectDefinition(schemaName, tableName);
+		}
 		
 		// table header
 		List<String> headLst = new ArrayList<String>();

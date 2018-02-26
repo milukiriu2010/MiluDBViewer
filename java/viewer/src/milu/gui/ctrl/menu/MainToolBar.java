@@ -1,22 +1,18 @@
 package milu.gui.ctrl.menu;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.InputStream;
 import java.util.ResourceBundle;
 
 import javafx.scene.control.Button;
 import javafx.scene.control.Separator;
 import javafx.scene.control.ToolBar;
 import javafx.scene.control.Tooltip;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
 import milu.ctrl.ChangeLangInterface;
 import milu.gui.view.DBView;
+import milu.ctrl.MainController;
 
 import milu.db.explain.ExplainDBFactory;
 
@@ -68,129 +64,61 @@ public class MainToolBar extends ToolBar
 	
 	private void setMenu()
 	{
+		MainController mainController = this.dbView.getMainController();
+		
 		// Button to get data
-		try
-		{
-			InputStream inputStreamGo = new FileInputStream( "resources" + File.separator + "images" + File.separator + "execsql.png" );
-			Image imgGo = new Image( inputStreamGo );
-			ImageView ivGo = new ImageView( imgGo );
-			ivGo.setFitWidth( 32 );
-			ivGo.setFitHeight( 32 );
-			this.btnGo = new Button( "", ivGo );
-		}
-		catch ( FileNotFoundException fnfEx )
-		{
-			fnfEx.printStackTrace();
-			this.btnGo = new Button( "Go!" );
-		}
+		ImageView ivGo = new ImageView( mainController.getImage("file:resources/images/execsql.png") );
+		ivGo.setFitWidth( 32 );
+		ivGo.setFitHeight( 32 );
+		this.btnGo = new Button( "", ivGo );
 		
 		// Button to get explain
-		ImageView   ivExplain = new ImageView( new Image("file:resources/images/explain.png") );
+		ImageView   ivExplain = new ImageView( mainController.getImage("file:resources/images/explain.png") );
 		ivExplain.setFitWidth( 32 );
 		ivExplain.setFitHeight( 32 );
 		this.btnExplain = new Button( "", ivExplain );
 		
 		// Button to toggle Horizontal/Vertical mode
-		try
-		{
-			InputStream inputStreamToggleHV = new FileInputStream( "resources" + File.separator + "images" + File.separator + "direction.png" );
-			Image imgToggleHV = new Image( inputStreamToggleHV );
-			ImageView ivToggleHV = new ImageView( imgToggleHV );
-			ivToggleHV.setFitWidth( 32 );
-			ivToggleHV.setFitHeight( 32 );
-			this.btnToggleHV = new Button( "", ivToggleHV );
-		}
-		catch ( FileNotFoundException fnfEx )
-		{
-			fnfEx.printStackTrace();
-			this.btnToggleHV = new Button( "Toggle H/V" );
-		}
+		ImageView ivToggleHV = new ImageView( mainController.getImage("file:resources/images/direction.png") );
+		ivToggleHV.setFitWidth( 32 );
+		ivToggleHV.setFitHeight( 32 );
+		this.btnToggleHV = new Button( "", ivToggleHV );
 		
 		// Button to add a new tab
-		try
-		{
-			InputStream inputStreamNewTab = new FileInputStream( "resources" + File.separator + "images" + File.separator + "newtab.png" );
-			Image imgNewTab = new Image( inputStreamNewTab );
-			ImageView ivNewTab = new ImageView( imgNewTab );
-			ivNewTab.setFitWidth( 32 );
-			ivNewTab.setFitHeight( 32 );
-			this.btnNewTab = new Button( "", ivNewTab );
-		}
-		catch ( FileNotFoundException fnfEx )
-		{
-			fnfEx.printStackTrace();
-			this.btnNewTab = new Button( "New Tab" );
-		}
+		ImageView ivNewTab = new ImageView( mainController.getImage("file:resources/images/newtab.png") );
+		ivNewTab.setFitWidth( 32 );
+		ivNewTab.setFitHeight( 32 );
+		this.btnNewTab = new Button( "", ivNewTab );
 		
 		// Button to add a new window
-		try
-		{
-			InputStream inputStreamNewWin = new FileInputStream( "resources" + File.separator + "images" + File.separator + "newwin.png" );
-			Image imgNewWin = new Image( inputStreamNewWin );
-			ImageView ivNewWin = new ImageView( imgNewWin );
-			ivNewWin.setFitWidth( 32 );
-			ivNewWin.setFitHeight( 32 );
-			this.btnNewWin = new Button( "", ivNewWin );
-		}
-		catch ( FileNotFoundException fnfEx )
-		{
-			fnfEx.printStackTrace();
-			this.btnNewWin = new Button( "New Window" );
-		}
+		ImageView ivNewWin = new ImageView( mainController.getImage("file:resources/images/newwin.png") );
+		ivNewWin.setFitWidth( 32 );
+		ivNewWin.setFitHeight( 32 );
+		this.btnNewWin = new Button( "", ivNewWin );
 		
 		// Button for new db connection
-		ImageView   ivNewCon = new ImageView( new Image("file:resources/images/connect.png") );
+		ImageView   ivNewCon = new ImageView( mainController.getImage("file:resources/images/connect.png") );
 		ivNewCon.setFitWidth( 32 );
 		ivNewCon.setFitHeight( 32 );
 		this.btnNewCon = new Button( "", ivNewCon );
 		
 		// Button to copy table data(no column)
-		try
-		{
-			InputStream inputStreamCopyTblNoHead = new FileInputStream( "resources" + File.separator + "images" + File.separator + "copy.png" );
-			Image imgCopyTblNoHead = new Image( inputStreamCopyTblNoHead );
-			ImageView ivCopyTblNoHead = new ImageView( imgCopyTblNoHead );
-			ivCopyTblNoHead.setFitWidth( 32 );
-			ivCopyTblNoHead.setFitHeight( 32 );
-			this.btnCopyTblNoHead = new Button( "", ivCopyTblNoHead );
-		}
-		catch ( FileNotFoundException fnfEx )
-		{
-			fnfEx.printStackTrace();
-			this.btnCopyTblNoHead = new Button( "Copy Table without Column" );
-		}
+		ImageView ivCopyTblNoHead = new ImageView( mainController.getImage("file:resources/images/copy.png") );
+		ivCopyTblNoHead.setFitWidth( 32 );
+		ivCopyTblNoHead.setFitHeight( 32 );
+		this.btnCopyTblNoHead = new Button( "", ivCopyTblNoHead );
 		
 		// Button to copy table data(with column)
-		try
-		{
-			InputStream inputStreamCopyTblWithHead = new FileInputStream( "resources" + File.separator + "images" + File.separator + "copy2.png" );
-			Image imgCopyTblWithHead = new Image( inputStreamCopyTblWithHead );
-			ImageView ivCopyTblWithHead = new ImageView( imgCopyTblWithHead );
-			ivCopyTblWithHead.setFitWidth( 32 );
-			ivCopyTblWithHead.setFitHeight( 32 );
-			this.btnCopyTblWithHead = new Button( "", ivCopyTblWithHead );
-		}
-		catch ( FileNotFoundException fnfEx )
-		{
-			fnfEx.printStackTrace();
-			this.btnCopyTblWithHead = new Button( "Copy Table with Column" );
-		}
+		ImageView ivCopyTblWithHead = new ImageView( mainController.getImage("file:resources/images/copy2.png") );
+		ivCopyTblWithHead.setFitWidth( 32 );
+		ivCopyTblWithHead.setFitHeight( 32 );
+		this.btnCopyTblWithHead = new Button( "", ivCopyTblWithHead );
 		
 		// Button to Open Schema View
-		try
-		{
-			InputStream inputStreamSchema = new FileInputStream( "resources" + File.separator + "images" + File.separator + "schema.png" );
-			Image imgSchema = new Image( inputStreamSchema );
-			ImageView ivSchema = new ImageView( imgSchema );
-			ivSchema.setFitWidth( 32 );
-			ivSchema.setFitHeight( 32 );
-			this.btnSchema = new Button( "", ivSchema );
-		}
-		catch ( FileNotFoundException fnfEx )
-		{
-			fnfEx.printStackTrace();
-			this.btnSchema = new Button( "Open Schema View" );
-		}
+		ImageView ivSchema = new ImageView( mainController.getImage("file:resources/images/schema.png") );
+		ivSchema.setFitWidth( 32 );
+		ivSchema.setFitHeight( 32 );
+		this.btnSchema = new Button( "", ivSchema );
 		
 		// put buttons on this ToolBar
 		this.getItems().addAll

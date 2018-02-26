@@ -8,14 +8,12 @@ import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.Set;
 import java.util.TreeMap;
-//import java.util.Enumeration;
 
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.CheckMenuItem;
 import javafx.scene.control.SeparatorMenuItem;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
@@ -30,6 +28,7 @@ import milu.gui.dlg.SystemInfoDialog;
 import milu.gui.dlg.VersionDialog;
 
 import milu.gui.view.DBView;
+import milu.ctrl.MainController;
 
 public class MainMenuBar extends MenuBar
 	implements ChangeLangInterface
@@ -130,13 +129,16 @@ public class MainMenuBar extends MenuBar
 			new SeparatorMenuItem(),
 			this.menuItemQuit 
 		);
+		
+		MainController mainController = this.dbView.getMainController();
+		
 		// set icon on menuItemPref
-		ImageView ivPref = new ImageView( new Image("file:resources/images/config.png") );
+		ImageView ivPref = new ImageView( mainController.getImage("file:resources/images/config.png") );
 		ivPref.setFitHeight( 16 );
 		ivPref.setFitWidth( 16 );
 		this.menuItemPref.setGraphic( ivPref );
 		// set icon on menuItemQuit
-		ImageView ivQuit = new ImageView( new Image("file:resources/images/quit.png") );
+		ImageView ivQuit = new ImageView( mainController.getImage("file:resources/images/quit.png") );
 		ivQuit.setFitHeight( 16 );
 		ivQuit.setFitWidth( 16 );
 		this.menuItemQuit.setGraphic( ivQuit );
@@ -189,12 +191,12 @@ public class MainMenuBar extends MenuBar
 			this.menuItemAbout
 		);
 		// set icon on menuItemSysInfo
-		ImageView ivSysInfo = new ImageView( new Image("file:resources/images/sysinfo.png") );
+		ImageView ivSysInfo = new ImageView( mainController.getImage("file:resources/images/sysinfo.png") );
 		ivSysInfo.setFitHeight( 16 );
 		ivSysInfo.setFitWidth( 16 );
 		this.menuItemSysInfo.setGraphic( ivSysInfo );
 		// set icon on menuItemAbout
-		ImageView ivAbout = new ImageView( new Image("file:resources/images/winicon.gif") );
+		ImageView ivAbout = new ImageView( mainController.getImage("file:resources/images/winicon.gif") );
 		ivAbout.setFitHeight( 16 );
 		ivAbout.setFitWidth( 16 );
 		this.menuItemAbout.setGraphic( ivAbout );

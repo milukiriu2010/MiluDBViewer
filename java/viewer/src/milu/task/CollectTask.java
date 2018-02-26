@@ -2,6 +2,7 @@ package milu.task;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Map;
 
 import javafx.concurrent.Task;
 
@@ -41,6 +42,7 @@ public class CollectTask extends Task<Double>
 		try
 		{
 			System.out.println( "Task start." );
+			long startTime = System.nanoTime();
 			this.updateProgress( progress, MAX );
 			
 			SchemaEntity schemaRoot = myDBAbs.getSchemaRoot();
@@ -58,7 +60,7 @@ public class CollectTask extends Task<Double>
 					{
 						SchemaEntity schemaEntity = schemaEntityLst.get(i);
 						// select Table list 
-						this.selectTableLst( schemaEntity );
+						this.selectTableLst( schemaEntity, i, schemaEntityLstSize );
 						
 						this.updateProgress( i*100/schemaEntityLstSize, MAX );
 					}
@@ -79,7 +81,9 @@ public class CollectTask extends Task<Double>
 				System.out.println( "schemaEntityLst:size:" + schemaRoot2.getEntityLst().size() );
 			}
 			
-			System.out.println( "Task finish." );
+			long endTime = System.nanoTime();
+			System.out.println( "Task finish:" + String.format( "%,d nsec",(endTime-startTime) ) );
+			
 			
 			progress = MAX;
 			this.updateProgress( progress, MAX );
@@ -107,7 +111,7 @@ public class CollectTask extends Task<Double>
 	}
 	
 	// select Table List
-	private void selectTableLst( SchemaEntity schemaEntity )
+	private void selectTableLst( SchemaEntity schemaEntity, int schemaEntityLstPos, int schemaEntityLstSize )
 		throws SQLException
 	{
 		TableDBAbstract tableDBAbs = TableDBFactory.getInstance(this.myDBAbs);
@@ -195,6 +199,21 @@ public class CollectTask extends Task<Double>
 			// ---------------------------------------
 			String schemaName = schemaEntity.getName();
 			List<SchemaEntity> tableEntityLst = tableDBAbs.selectEntityLst( schemaName );
+			int tableEntityLstSize = tableEntityLst.size();
+			double tableEntityLstProgressInit = schemaEntityLstPos*100/schemaEntityLstSize; 
+			double tableEntityLstProgressDiv  = 100/schemaEntityLstSize;
+			for ( int i = 0; i < tableEntityLstSize; i++  )
+			{
+				double tableEntityLstProgressNow = tableEntityLstProgressDiv*i/tableEntityLstSize+tableEntityLstProgressInit;
+				
+				SchemaEntity tableEntity = tableEntityLst.get(i);
+				String tableName = tableEntity.getName();
+				//String msg = "Loading " + schemaName + "." + tableName + "...";
+				String msg = String.format( "Loading(%.3f%%) %s.%s", tableEntityLstProgressNow, schemaName, tableName );
+				this.updateMessage(msg);
+				List<Map<String,String>>  definitionLst = tableDBAbs.selectDefinition( schemaName, tableName ); 
+				tableEntity.setDefinitionlst(definitionLst);
+			}
 			rootTableEntity.addEntityAll( tableEntityLst );
 			
 			// ---------------------------------------

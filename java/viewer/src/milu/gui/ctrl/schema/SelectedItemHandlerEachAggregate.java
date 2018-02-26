@@ -3,11 +3,11 @@ package milu.gui.ctrl.schema;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TreeItem;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import milu.db.aggregate.AggregateDBAbstract;
 import milu.db.aggregate.AggregateDBFactory;
 import milu.entity.schema.SchemaEntity;
+import milu.ctrl.MainController;
 
 import java.sql.SQLException;
 
@@ -31,18 +31,6 @@ import java.sql.SQLException;
  */
 public class SelectedItemHandlerEachAggregate extends SelectedItemHandlerAbstract
 {
-	/*
-	public SelectedItemHandlerEachAggregate
-	( 
-		SchemaTreeView schemaTreeView, 
-		TabPane        tabPane,
-		MyDBAbstract   myDBAbs,
-		SelectedItemHandlerAbstract.REFRESH_TYPE  refreshType
-	)
-	{
-		super( schemaTreeView, tabPane, myDBAbs, refreshType );
-	}
-	*/
 	@Override
 	protected boolean isMyResponsible()
 	{
@@ -93,14 +81,15 @@ public class SelectedItemHandlerEachAggregate extends SelectedItemHandlerAbstrac
 		
 		
 		// Create DBSchemaProcViewTab, if it doesn't exist.
-		DBSchemaProcViewTab newTab = new DBSchemaProcViewTab();
+		DBSchemaProcViewTab newTab = new DBSchemaProcViewTab( this.dbView );
 		newTab.setId( id );
 		newTab.setText( aggregateName );
 		this.tabPane.getTabs().add( newTab );
 		this.tabPane.getSelectionModel().select( newTab );
 		
 		// set icon on Tab
-		ImageView iv = new ImageView( new Image("file:resources/images/aggregate.png") );
+		MainController mainController = this.dbView.getMainController();
+		ImageView iv = new ImageView( mainController.getImage("file:resources/images/aggregate.png") );
 		iv.setFitHeight( 16 );
 		iv.setFitWidth( 16 );
 		newTab.setGraphic( iv );

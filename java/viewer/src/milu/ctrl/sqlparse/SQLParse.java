@@ -1,6 +1,9 @@
 package milu.ctrl.sqlparse;
 
 import java.util.List;
+import java.util.ArrayList;
+import java.util.Map;
+import java.util.HashMap;
 
 import net.sf.jsqlparser.parser.CCJSqlParserUtil;
 
@@ -12,14 +15,28 @@ public class SQLParse
 {
 	private String strSQL = null;
 	
+	private List<String> tableLst = new ArrayList<>();
+	
+	// Alias <=> Table
+	private Map<String,String>  aliasMap = new HashMap<>();
+	
 	public SQLParse()
 	{
-		
 	}
 	
 	public void setStrSQL( String strSQL )
 	{
 		this.strSQL = strSQL;
+	}
+	
+	public List<String> getTableLst()
+	{
+		return this.tableLst;
+	}
+	
+	public Map<String,String> getAliasMap()
+	{
+		return this.aliasMap;
 	}
 	
 	public void parse() throws JSQLParserException
@@ -38,8 +55,10 @@ public class SQLParse
 		
 		stmt.accept( analyzeStatementVisitor );
 		
-		List<String> tableLst = analyzeFromItemVisitor.getTableLst();
+		this.tableLst = analyzeFromItemVisitor.getTableLst();
+		this.tableLst.forEach( (item)->System.out.println( "parse table:" + item ) );
 		
-		tableLst.forEach( (item)->System.out.println( "parse:" + item ) );
+		this.aliasMap = analyzeFromItemVisitor.getAliasMap();
+		this.aliasMap.forEach( (k,v)->System.out.println( "parse alias:k[" + k + "]v[" + v + "]" ) );
 	}
 }

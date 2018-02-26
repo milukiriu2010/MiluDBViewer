@@ -2,8 +2,10 @@ package milu.entity.schema;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.ArrayList;
+import java.util.stream.Collectors;
 
 import milu.ctrl.ChangeLangInterface;
 import milu.ctrl.visitor.VisitorInterface;
@@ -129,6 +131,8 @@ abstract public class SchemaEntity
 	
 	protected STATE        state = STATE.VALID;
 	
+	protected List<Map<String,String>>  definitionLst = new ArrayList<>();
+	
 	protected List<SchemaEntity>  entityLst = new ArrayList<>();
 	
 	// Property File for this class 
@@ -184,6 +188,45 @@ abstract public class SchemaEntity
 	public void setState( SchemaEntity.STATE state )
 	{
 		this.state = state;
+	}
+	
+	public void setDefinitionlst( List<Map<String,String>>  definitionLst )
+	{
+		this.definitionLst = definitionLst;
+	}
+	
+	public List<Map<String,String>> getDefinitionLst()
+	{
+		return this.definitionLst;
+	}
+	
+	public List<String> getDefinitionLst( String strFilter )
+	{
+		List<String>  filteredLst = new ArrayList<>();
+		for ( Map<String,String> map : this.definitionLst )
+		{
+			String filteredVal = map.get(strFilter);
+			if ( filteredVal != null )
+			{
+				filteredLst.add(filteredVal);
+				continue;
+			}
+			
+			filteredVal = map.get( strFilter.toUpperCase() );
+			if ( filteredVal != null )
+			{
+				filteredLst.add(filteredVal);
+				continue;
+			}
+			
+			filteredVal = map.get(strFilter.toLowerCase() );
+			if ( filteredVal != null )
+			{
+				filteredLst.add(filteredVal);
+				continue;
+			}
+		}
+		return filteredLst;
 	}
 	
 	public String getImageResourceName()

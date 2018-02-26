@@ -5,6 +5,7 @@ import java.sql.SQLException;
 import javafx.scene.control.TabPane;
 import milu.gui.ctrl.schema.SchemaTreeView;
 import milu.db.MyDBAbstract;
+import milu.gui.view.DBView;
 
 public class SelectedItemHandlerChooser
 {
@@ -12,11 +13,11 @@ public class SelectedItemHandlerChooser
 	( 
 		SchemaTreeView schemaTreeView, 
 		TabPane        tabPane,
+		DBView         dbView,
 		MyDBAbstract   myDBAbs,
 		SelectedItemHandlerAbstract.REFRESH_TYPE  refreshType
 	)
 		throws
-			UnsupportedOperationException,
 			SQLException
 	{
 		
@@ -79,6 +80,7 @@ public class SelectedItemHandlerChooser
 		{
 			handleNext.setSchemaTreeView(schemaTreeView);
 			handleNext.setTabPane(tabPane);
+			handleNext.setDBView(dbView);
 			handleNext.setMyDBAbs(myDBAbs);
 			handleNext.setRefreshType(refreshType);
 			

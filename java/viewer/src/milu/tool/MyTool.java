@@ -11,7 +11,6 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.shape.Path;
 import javafx.scene.layout.AnchorPane;
-import javafx.stage.Window;
 
 public class MyTool
 {
@@ -27,6 +26,23 @@ public class MyTool
 		}
 	}
 	
+	public static int lastIndexOf(char ch, String str) 
+	{
+		if ( str.length() < 1 )
+		{
+			return -1;
+		}
+	    if (str.charAt(str.length() - 1) == ch)
+	    { 
+	    	return str.length()-1; 
+	    }
+	    if (str.length() <= 1)
+	    { 
+	    	return -1; 
+	    }
+	    return lastIndexOf( ch, str.substring(0,str.length()-1) );
+	}
+	
 	public static String getFileExtension( File file )
 	{
 		String name = file.getName();
@@ -40,18 +56,18 @@ public class MyTool
 		exp.printStackTrace( pw );
 		return sw.toString();
 	}
-	
 
 	public static Path findCaret(Parent parent) 
 	{
 		if ( parent == null )
 		{
-			System.out.println( "findCaret:parent is null." );
+			//System.out.println( "findCaret:parent is null." );
+			return null;
 		}
-		System.out.println( "findCaret:parent:" + parent.getClass() );
+		//System.out.println( "findCaret:parent:" + parent.getClass() );
 		for (Node n : parent.getChildrenUnmodifiable()) 
 		{
-			System.out.println( "findCaret:child :" + n.getClass() );
+			//System.out.println( "findCaret:child :" + n.getClass() );
 			if (n instanceof Path) 
 			{
 			    return (Path) n;
@@ -65,7 +81,7 @@ public class MyTool
 			    }
 			}
 		}
-		System.out.println( "findCaret:not found." );
+		//System.out.println( "findCaret:not found." );
 		return null;
 	}
 	
@@ -109,6 +125,19 @@ public class MyTool
 			}
 		}
 		return null;
+	}
+	
+	public static void skimThroughParent( Node node )
+	{
+		if ( node == null )
+		{
+			return;
+		}
+		
+		for ( Node n = node; n != null; n = n.getParent() )
+		{
+			System.out.println( "skimThroughParent:" + n.getClass().getName() );
+		}
 	}
 	
 	public static String bytesToHex(byte[] bytes) 

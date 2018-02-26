@@ -14,6 +14,7 @@
 		<pathelement path="../lib/cassandra/cassandra-jdbc-driver-0.6.4-shaded.jar" />
 		<pathelement path="../lib/mysql/mysql-connector-java-5.1.45-bin.jar" />
 		<pathelement path="../lib/oracle/ojdbc8.jar" />
+		<pathelement path="../lib/oracle/orai18n.jar" />
 		<pathelement path="../lib/oracle/xdb6.jar" />
 		<pathelement path="../lib/oracle/xmlparserv2.jar" />
 		<pathelement path="../lib/postgresql/postgresql-42.1.4.jar" />
@@ -58,6 +59,7 @@
 							lib/cassandra/cassandra-jdbc-driver-0.6.4-shaded.jar
 							lib/mysql/mysql-connector-java-5.1.45-bin.jar
 							lib/oracle/ojdbc8.jar
+							lib/oracle/orai18n.jar
 							lib/oracle/xdb6.jar
 							lib/oracle/xmlparserv2.jar
 							lib/postgresql/postgresql-42.1.4.jar

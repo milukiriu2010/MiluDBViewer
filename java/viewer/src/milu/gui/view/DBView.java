@@ -1,16 +1,11 @@
 package milu.gui.view;
 
-import java.io.File;
-import java.io.InputStream;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
+import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 import javafx.scene.layout.BorderPane;
 import javafx.collections.ObservableList;
-import javafx.scene.image.Image;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
@@ -53,10 +48,16 @@ public class DBView extends Stage
 	// TabPane for multi view
 	private TabPane tabPane = null;
 	
+	// BorderPane 
+	private BorderPane brdPane = new BorderPane();
+	
 	// Thread Pool
 	private ExecutorService service = Executors.newSingleThreadExecutor();	
 	
 	private Future<?> future  = null;
+	
+	// Message from Task
+	private Label  lblMsg = new Label();
 	
 	// ---------------------------
 	// Constractor
@@ -70,6 +71,11 @@ public class DBView extends Stage
 		
 		// DB Connection Object
 		this.myDBAbs = myDBAbs;
+	}
+	
+	public MainController getMainController()
+	{
+		return this.mainCtrl;
 	}
 	
 	public MyDBAbstract getMyDBAbstract()
@@ -106,13 +112,12 @@ public class DBView extends Stage
 		dragSupport.addSupport( this.tabPane );
 		
 		// put items on Pane
-        BorderPane pane = new BorderPane();
-        pane.setTop( vboxMenu );
-        pane.setCenter( this.tabPane );
+        this.brdPane.setTop( vboxMenu );
+        this.brdPane.setCenter( this.tabPane );
         
         // Stage for New Window
         // http://o7planning.org/en/11533/opening-a-new-window-in-javafx
-        Scene scene = new Scene(pane, 800, 600 );
+        Scene scene = new Scene(this.brdPane, 800, 600 );
         // load css on DBView elements
 		scene.getStylesheets().add
 		(
@@ -130,16 +135,7 @@ public class DBView extends Stage
 		// Window Title
         this.setTitle( "MiluDBViewer[URL=" + this.myDBAbs.getUrl() + "][USER=" + this.myDBAbs.getUsername() + "]" );
         // Window Icon
-		try
-		{
-			InputStream inputStreamWinIcon = new FileInputStream( "resources" + File.separator + "images" + File.separator + "winicon.gif" );
-			Image imgWinIcon = new Image( inputStreamWinIcon );
-			this.getIcons().add( imgWinIcon );
-		}
-		catch ( FileNotFoundException fnfEx )
-		{
-			fnfEx.printStackTrace();
-		}
+        this.getIcons().add( this.mainCtrl.getImage("file:resources/images/winicon.gif") );
 		
 		// Action when pushing 'x' on this view
 		this.setOnCloseRequest( event->this.mainCtrl.close(this) );
@@ -201,9 +197,21 @@ public class DBView extends Stage
 						if ( newVal.doubleValue() == 1.0 )
 						{
 							this.mainToolBar.taskDone();
+							this.brdPane.setBottom(null);
 						}
 					}
 				);
+				
+				collectTask.messageProperty().addListener
+				(
+					(obs,oldVal,newVal)->
+					{
+						System.out.println( "CollectTask:Message[" + newVal + "]" );
+						this.lblMsg.setText(newVal);
+						this.brdPane.setBottom(lblMsg);
+					}
+				);
+				
 			}
 		);
 		

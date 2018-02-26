@@ -1,14 +1,5 @@
 package milu.main;
 
-//import java.util.Enumeration;
-import java.util.Properties;
-import java.util.List;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Set;
-import java.util.Map;
-
-
 import javafx.application.Application;
 import javafx.stage.Stage;
 
@@ -21,31 +12,6 @@ public class MiluDBViewer extends Application
 {
     public static void main(String[] args)
     {
-    	System.out.println( "********** System Property **********" );
-    	Properties  properties = System.getProperties();
-    	Set<String> propSet    = properties.stringPropertyNames();
-        List<String> propLst   = new ArrayList<String>( propSet );
-        Collections.sort(propLst);
-        
-        for ( String propName : propLst )
-        {
-        	System.out.println( propName + "=" + System.getProperty(propName) );
-        }
-        System.out.println();
-        System.out.println( "********** System Property **********" );
-        
-        Map<String, String>  envMap = System.getenv();
-        List<String> envLst         = new ArrayList<String>( envMap.keySet() );
-        Collections.sort(envLst);
-        
-        for ( String envName : envLst )
-        {
-        	System.out.println( envName + "=" + System.getenv(envName) );
-        }
-        System.out.println( "*************************************" );
-        
-        System.out.println();
-        
     	launch(args);
     }
     
@@ -55,6 +21,7 @@ public class MiluDBViewer extends Application
 		MainController mainCtrl = new MainController();
     	try
     	{
+    		mainCtrl.loadImages();
     		mainCtrl.createNewDBConnectionAndOpenNewWindow();
     	}
     	catch ( Exception ex )
@@ -64,12 +31,5 @@ public class MiluDBViewer extends Application
     		alertDlg.setTxtExp( ex );
     		alertDlg.showAndWait();
     	}
-    	/*
-    	finally
-    	{
-    		System.out.println( "DB connection is closing..." );
-    		mainCtrl.close();
-    	}
-    	*/
     }
 }

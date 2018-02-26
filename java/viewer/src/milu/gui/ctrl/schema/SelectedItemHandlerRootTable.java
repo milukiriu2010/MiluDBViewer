@@ -8,9 +8,8 @@ import javafx.collections.ObservableList;
 import javafx.collections.FXCollections;
 
 import milu.entity.schema.SchemaEntity;
-import milu.ctrl.visitor.VisitorInterface;
 import milu.ctrl.visitor.SearchSchemaEntityInterface;
-import milu.ctrl.visitor.VisitorFactory;
+import milu.ctrl.visitor.SearchSchemaEntityVisitorFactory;
 
 /**
  * This class is invoked, when "root table" item is clicked on SchemaTreeView.
@@ -30,19 +29,6 @@ import milu.ctrl.visitor.VisitorFactory;
  */
 public class SelectedItemHandlerRootTable extends SelectedItemHandlerAbstract
 {
-	/*
-	public SelectedItemHandlerRootTable
-	( 
-		SchemaTreeView schemaTreeView, 
-		TabPane        tabPane,
-		MyDBAbstract   myDBAbs,
-		SelectedItemHandlerAbstract.REFRESH_TYPE  refreshType
-	)
-	{
-		super( schemaTreeView, tabPane, myDBAbs, refreshType );
-	}
-	*/
-	
 	@Override
 	protected boolean isMyResponsible()
 	{
@@ -68,37 +54,15 @@ public class SelectedItemHandlerRootTable extends SelectedItemHandlerAbstract
 		// get Table List & add list as children
 		if ( itemChildren.size() == 0 )
 		{
-			/*
 			String schemaName = itemParent.getValue().toString();
-			TableDBAbstract tableDBAbs = TableDBFactory.getInstance(this.myDBAbs);
-			if ( tableDBAbs != null )
-			{
-				tableDBAbs.selectTableLst( schemaName );
-				this.schemaTreeView.setTableData( itemSelected, tableDBAbs.getTableNameLst() );
-			}
-			*/
 			
-			String schemaName = itemParent.getValue().toString();
-			/*
-			SchemaEntity schemaEntity = 
-				SearchSchemaEntity.search( 
-					this.myDBAbs.getSchemaRoot(), 
-					SchemaEntity.SCHEMA_TYPE.SCHEMA, 
-					schemaName
-				);
-			SchemaEntity rootTableEntity = 
-				SearchSchemaEntity.search( 
-					schemaEntity, 
-					SchemaEntity.SCHEMA_TYPE.ROOT_TABLE
-				);
-				*/
-			VisitorInterface sseVisitorTN = new VisitorFactory().createInstance(SchemaEntity.SCHEMA_TYPE.SCHEMA, schemaName);
+			SearchSchemaEntityInterface sseVisitorTN = new SearchSchemaEntityVisitorFactory().createInstance(SchemaEntity.SCHEMA_TYPE.SCHEMA, schemaName);
 			this.myDBAbs.getSchemaRoot().accept(sseVisitorTN);
-			SchemaEntity schemaEntity = ((SearchSchemaEntityInterface)sseVisitorTN).getHitSchemaEntity();
+			SchemaEntity schemaEntity = sseVisitorTN.getHitSchemaEntity();
 			
-			VisitorInterface sseVisitorT = new VisitorFactory().createInstance(SchemaEntity.SCHEMA_TYPE.ROOT_TABLE );
+			SearchSchemaEntityInterface sseVisitorT = new SearchSchemaEntityVisitorFactory().createInstance(SchemaEntity.SCHEMA_TYPE.ROOT_TABLE );
 			schemaEntity.accept( sseVisitorT );
-			SchemaEntity rootTableEntity = ((SearchSchemaEntityInterface)sseVisitorT).getHitSchemaEntity();
+			SchemaEntity rootTableEntity = sseVisitorT.getHitSchemaEntity();
 			
 			if ( rootTableEntity != null )
 			{
