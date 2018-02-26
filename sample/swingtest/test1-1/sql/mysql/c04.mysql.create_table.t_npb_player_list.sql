@@ -30,3 +30,35 @@ insert into t_npb_player_list
 values
 ( 1004, 'HT', '鳥谷', '敬', 'SS' );
 
+insert into t_npb_player_list
+values
+( 1005, 'HT', 'マートン', 'マット', 'CF' );
+
+insert into t_npb_player_list
+values
+( 2001, 'YG', '東野', '峻', 'P' );
+
+insert into t_npb_player_list
+values
+( 2002, 'YG', '小笠原', '道大', 'F' );
+
+insert into t_npb_player_list
+values
+( 3001, 'CD', '吉見', '一起', 'P' );
+
+insert into t_npb_player_list
+values
+( 3002, 'CD', '森野', '将彦', 'T' );
+
+insert into t_npb_player_list
+values
+( 4001, 'YS', '館山', '昌平', 'P' );
+
+insert into t_npb_player_list
+values
+( 5001, 'YB', '内川', '聖一', 'RF' );
+
+insert into t_npb_player_list
+values
+( 6001, 'HC', '前田', '健太', 'P' );
+
