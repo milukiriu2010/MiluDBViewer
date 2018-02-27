@@ -286,8 +286,18 @@ public class MainToolBar extends ToolBar
 		);
 	}
 	
+	public void taskProcessing()
+	{
+		this.btnGo.setDisable(true);
+		this.btnExplain.setDisable(true);
+		this.btnToggleHV.setDisable(true);
+	}
+	
 	public void taskDone()
 	{
+		this.btnGo.setDisable(false);
+		this.btnExplain.setDisable(false);
+		this.btnToggleHV.setDisable(false);
 		// disable until finishing to get schema list.
 		this.btnSchema.setDisable(false);
 	}

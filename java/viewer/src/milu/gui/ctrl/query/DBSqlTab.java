@@ -2,6 +2,9 @@ package milu.gui.ctrl.query;
 
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 import javafx.application.Platform;
 import javafx.geometry.Insets;
@@ -26,16 +29,19 @@ import milu.ctrl.ToggleHorizontalVerticalInterface;
 import milu.ctrl.CounterInterface;
 import milu.ctrl.CopyInterface;
 import milu.ctrl.ChangeLangInterface;
+import milu.ctrl.MainController;
 
 import milu.gui.ctrl.query.SqlTableView;
 import milu.gui.view.DBView;
-import milu.ctrl.MainController;
 import milu.tool.MyTool;
 import milu.db.MyDBAbstract;
 import milu.db.MyDBOverFetchSizeException;
 import milu.db.AccessDB;
 import milu.db.explain.ExplainDBFactory;
 import milu.db.explain.ExplainDBAbstract;
+import milu.task.ToggleHVTask;
+
+import milu.conf.AppConf;
 
 public class DBSqlTab extends Tab
 	implements 
@@ -75,6 +81,9 @@ public class DBSqlTab extends Tab
 	
 	// Label for SQL execution time
 	private Label labelExecTimeSQL = new Label();
+	
+	// Thread Pool
+	private ExecutorService service = Executors.newSingleThreadExecutor();	
 	
 	public DBSqlTab( DBView dbView )
 	{
@@ -131,6 +140,39 @@ public class DBSqlTab extends Tab
 		
 		// Tab Title
 		this.setText( "SQL" + Integer.valueOf( counterOpend ) );
+		
+		this.setAction();
+	}
+	
+	private void setAction()
+	{
+		// shutdown the thread pool on closing this window. 
+		// http://winterbe.com/posts/2015/04/07/java8-concurrency-tutorial-thread-executor-examples/
+		this.setOnCloseRequest
+		(	
+			(event)->
+			{
+				try
+				{
+					System.out.println( "shutdown executor start." );
+					service.shutdown();
+					service.awaitTermination( 3, TimeUnit.SECONDS );
+				}
+				catch ( InterruptedException intEx )
+				{
+					System.out.println( "tasks interrupted" );
+				}
+				finally
+				{
+					if ( !service.isTerminated() )
+					{
+						System.out.println( "executor still working..." );
+					}
+					service.shutdownNow();
+					System.out.println( "executor finished." );
+				}
+			}
+		);
 	}
 
 	/**
@@ -166,7 +208,43 @@ public class DBSqlTab extends Tab
 	@Override
 	public void switchDirection()
 	{
-		this.tableViewSQL.switchDirection();
+		//this.tableViewSQL.switchDirection();
+		
+		long startTime = System.nanoTime();
+		int cnt = this.tableViewSQL.getItems().size();
+		if ( cnt > 0 )
+		{
+			final ToggleHVTask toggleHVTask = new ToggleHVTask( this.tableViewSQL, cnt );
+			// execute task
+			this.service.submit( toggleHVTask );
+			
+			toggleHVTask.progressProperty().addListener
+			(
+				(obs,oldVal,newVal)->
+				{
+					System.out.println( "CollectTask:Progress[" + obs.getClass() + "]oldVal[" + oldVal + "]newVal[" + newVal + "]" );
+					// task start.
+					if ( newVal.doubleValue() == 0.0 )
+					{
+						this.dbView.taskProcessing();
+						Label label = new Label( langRB.getString("LABEL_PROCESSING") );
+						this.lowerPane.getChildren().clear();
+						this.lowerPane.getChildren().add( label );
+						System.out.println( "CollectTask:clear" );
+					}
+					// task done.
+					else if ( newVal.doubleValue() == 1.0 )
+					{
+						this.lowerPane.getChildren().clear();
+						this.lowerPane.getChildren().add( this.tableViewSQL );
+						this.dbView.taskDone();
+						long endTime = System.nanoTime();
+						this.setExecTime( endTime - startTime );
+						System.out.println( "CollectTask:set" );
+					}
+				}
+			);
+		}
 	}
 	
 	/**************************************************
@@ -176,6 +254,10 @@ public class DBSqlTab extends Tab
 	@Override
 	public void Go( MyDBAbstract myDBAbs )
 	{
+		//AppConf appConf = AppConf.getInstance();
+		MainController mainController = this.dbView.getMainController();
+		AppConf appConf = mainController.getAppConf();
+		
 		AccessDB   acsDB = new AccessDB( myDBAbs );
 		long startTime = System.nanoTime();
 		
@@ -186,7 +268,7 @@ public class DBSqlTab extends Tab
 			// exec sql
 			String sql = this.textAreaSQL.getSQL();
 			System.out.println( "Go!!:" + sql );
-			acsDB.select( sql );
+			acsDB.select( sql, appConf.getFetchMax() );
 
 			this.lowerPane.getChildren().addAll( this.tableViewSQL );
 		}

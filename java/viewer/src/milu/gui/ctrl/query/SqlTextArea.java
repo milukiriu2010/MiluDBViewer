@@ -115,7 +115,7 @@ public class SqlTextArea extends TextArea
 						fontSize = 1.0;
 					}
 					this.setStyle( "-fx-font-size: " + fontSize + ";" );
-					event.consume();
+					//event.consume();
 				}
 			}
 		);
@@ -229,21 +229,24 @@ public class SqlTextArea extends TextArea
 					{
 						this.resetComboBox();
 						
-						Path caret = MyTool.findCaret(this);
-						Point2D screenLoc = MyTool.findScreenLocation(caret,this);
-						//System.out.println( "X:" + screenLoc.getX() + "/Y:" + screenLoc.getY() );
-						AnchorPane.setLeftAnchor( this.comboHint, screenLoc.getX() );
-						AnchorPane.setTopAnchor( this.comboHint, screenLoc.getY() );
-						
-						// list back to full.
-						this.filteredItems.setPredicate( (item)->{ return true;	} );
-						
-						this.comboHint.getSelectionModel().selectFirst();
-						this.comboHint.setVisible(true);
-						this.comboHint.show();
-						
-						this.sbOnTheWay = null;
-						this.sbOnTheWay = new StringBuffer();
+						if ( this.hints.size() > 0 )
+						{
+							Path caret = MyTool.findCaret(this);
+							Point2D screenLoc = MyTool.findScreenLocation(caret,this);
+							//System.out.println( "X:" + screenLoc.getX() + "/Y:" + screenLoc.getY() );
+							AnchorPane.setLeftAnchor( this.comboHint, screenLoc.getX() );
+							AnchorPane.setTopAnchor( this.comboHint, screenLoc.getY() );
+							
+							// list back to full.
+							this.filteredItems.setPredicate( (item)->{ return true;	} );
+							
+							this.comboHint.getSelectionModel().selectFirst();
+							this.comboHint.setVisible(true);
+							this.comboHint.show();
+							
+							this.sbOnTheWay = null;
+							this.sbOnTheWay = new StringBuffer();
+						}
 					}
 				}
 				// ComboBox is visible
@@ -331,7 +334,7 @@ public class SqlTextArea extends TextArea
 				this.insertText( pos, selectedItem );				
 				this.comboHint.setVisible(false);
 				this.comboHint.hide();
-				event.consume();
+				//event.consume();
 			}
 		);
 	}
@@ -371,7 +374,7 @@ public class SqlTextArea extends TextArea
 		System.out.println( "extractLastWord[" + this.strLastWord + "]" );
 	}
 	
-	private void resetComboBox()
+	private boolean resetComboBox()
 	{
 		//this.comboHint.getItems().removeAll( this.hints );
 		
@@ -389,7 +392,8 @@ public class SqlTextArea extends TextArea
 		else
 		{
 			System.out.println( "no table/alias" );
-			return;
+			this.hints.removeAll( this.hints );
+			return false;
 		}
 		System.out.println( "Search Table=>" + tableName );
 		
@@ -400,7 +404,8 @@ public class SqlTextArea extends TextArea
 		if ( hitEntity == null )
 		{
 			System.out.println( "No hit." );
-			return;
+			this.hints.removeAll( this.hints );
+			return false;
 		}
 		
 		List<String> columnLst = hitEntity.getDefinitionLst("column_name");
@@ -408,5 +413,6 @@ public class SqlTextArea extends TextArea
 		this.hints.removeAll( this.hints );
 		this.hints.addAll( columnLst );
 		
+		return true;
 	}
 }

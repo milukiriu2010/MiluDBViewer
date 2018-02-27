@@ -218,7 +218,8 @@ public class MainMenuBar extends MenuBar
 			// ----------------------------------------
 			(actionEvent)->
 			{
-				AppSettingDialog dlg = new AppSettingDialog();
+				MainController mainController = this.dbView.getMainController();
+				AppSettingDialog dlg = new AppSettingDialog( mainController );
 				dlg.showAndWait();
 			}
 		);

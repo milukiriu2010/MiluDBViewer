@@ -60,7 +60,7 @@ public class AccessDB
 		this.dataLst.clear();
 	}
 	
-	public void select( String sql )
+	public void select( String sql, final int fetchMax )
 		throws 
 			SQLException,
 			MyDBOverFetchSizeException,
@@ -103,9 +103,11 @@ public class AccessDB
 			}
 			System.out.println( "----------------------------" );
 			
+			/*
 			// Get "Fetch Max"
 			AppConf appConf = AppConf.getInstance();
 			int fetchMax = appConf.getFetchMax();
+			*/
 			
 			// Fetch Count
 			int fetchCnt = 0;

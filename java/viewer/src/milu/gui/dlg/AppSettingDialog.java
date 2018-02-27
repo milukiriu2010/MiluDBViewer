@@ -30,6 +30,7 @@ import javafx.beans.property.StringProperty;
 import milu.conf.AppConf;
 import milu.ctrl.ApplyInterface;
 import milu.entity.AppSettingEntity;
+import milu.ctrl.MainController;
 
 public class AppSettingDialog extends Dialog<Boolean>
 {
@@ -46,9 +47,14 @@ public class AppSettingDialog extends Dialog<Boolean>
 	// Apply&Close Button
 	private ButtonType okButtonType = null;
 	
-	public AppSettingDialog()
+	// Main Controller
+	private MainController mainController = null;
+	
+	public AppSettingDialog( MainController mainController )
 	{
 		super();
+		
+		this.mainController = mainController;
 		
 		// Set dialog title.
 		this.setTitle( langRB.getString( "TITLE_APP_SETTING" ) );
@@ -205,7 +211,8 @@ public class AppSettingDialog extends Dialog<Boolean>
 			
 			HBox     hbxRowMax = new HBox( 2 );
 			Label    lblRowMax = new Label( langRB.getString( "LABEL_ROW_MAX" ) );
-			AppConf  appConf   = AppConf.getInstance();
+			//AppConf  appConf   = AppConf.getInstance();
+			AppConf  appConf   = mainController.getAppConf();
 			this.txtRowMax.setText( String.valueOf( appConf.getFetchMax() ) );
 			hbxRowMax.getChildren().addAll( lblRowMax, this.txtRowMax );
 			
@@ -244,7 +251,8 @@ public class AppSettingDialog extends Dialog<Boolean>
 			String strRowMax = this.txtRowMax.getText();
 			if ( strRowMax.length() > 0 )
 			{
-				AppConf appConf = AppConf.getInstance();
+				//AppConf appConf = AppConf.getInstance();
+				AppConf  appConf   = mainController.getAppConf();
 				appConf.setFetchMax( Integer.valueOf( strRowMax ) );
 			}
 			return true;

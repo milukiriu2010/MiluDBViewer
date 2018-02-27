@@ -6,7 +6,7 @@ package milu.conf;
  * @author milu
  **********************************
  */
-public class AppConf
+final public class AppConf
 {
 	// Singleton Instance
 	private static AppConf instance = null;
@@ -14,6 +14,7 @@ public class AppConf
 	// Max fetch rows when selecting.
 	protected int fetchMax = 100;
 	
+	/*
 	public static AppConf getInstance()
 	{
 		if ( instance == null )
@@ -22,8 +23,9 @@ public class AppConf
 		}
 		return instance;
 	}
+	*/
 	
-	protected AppConf()
+	public AppConf()
 	{
 		
 	}

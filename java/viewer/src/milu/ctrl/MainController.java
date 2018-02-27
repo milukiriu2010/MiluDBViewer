@@ -19,9 +19,13 @@ import milu.gui.view.DBView;
 import milu.db.MyDBAbstract;
 import milu.entity.schema.SchemaEntity;
 import milu.ctrl.visitor.ChangeLangSchemaEntityVisitor;
+import milu.conf.AppConf;
 
 public class MainController
 {
+	// Application Configuration
+	private AppConf  appConf = new AppConf();
+	
 	// DB connection list
 	// put MyDBAbstract Object after connected to DB.
 	private List<MyDBAbstract> myDBAbsLst = new ArrayList<MyDBAbstract>();
@@ -34,6 +38,11 @@ public class MainController
 	
 	public MainController()
 	{
+	}
+	
+	public AppConf getAppConf()
+	{
+		return this.appConf;
 	}
 	
 	public void loadImages()

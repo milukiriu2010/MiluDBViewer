@@ -54,8 +54,6 @@ public class DBView extends Stage
 	// Thread Pool
 	private ExecutorService service = Executors.newSingleThreadExecutor();	
 	
-	private Future<?> future  = null;
-	
 	// Message from Task
 	private Label  lblMsg = new Label();
 	
@@ -187,16 +185,18 @@ public class DBView extends Stage
 				System.out.println( "dbView Shown." );
 				final CollectTask collectTask = new CollectTask( this.myDBAbs );
 				// execute task
-				this.future = this.service.submit( collectTask );
+				this.service.submit( collectTask );
 				
 				collectTask.progressProperty().addListener
 				(
 					(obs,oldVal,newVal)->
 					{
 						System.out.println( "CollectTask:Progress[" + obs.getClass() + "]oldVal[" + oldVal + "]newVal[" + newVal + "]" );
+						// Task Done.
 						if ( newVal.doubleValue() == 1.0 )
 						{
-							this.mainToolBar.taskDone();
+							//this.mainToolBar.taskDone();
+							this.taskDone();
 							this.brdPane.setBottom(null);
 						}
 					}
@@ -242,6 +242,16 @@ public class DBView extends Stage
 				}
 			}
 		);
+	}
+	
+	public void taskProcessing()
+	{
+		this.mainToolBar.taskProcessing();
+	}
+	
+	public void taskDone()
+	{
+		this.mainToolBar.taskDone();
 	}
 	
 	/**
