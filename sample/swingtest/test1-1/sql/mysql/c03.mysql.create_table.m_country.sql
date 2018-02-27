@@ -1,6 +1,6 @@
 create table m_country
 (
-	ID          int(4)  primary key,
+	ID          int(5)  primary key,
 	English     varchar(40),
 	Japanese    varchar(40),
 	Chinese     varchar(40),
@@ -8,4 +8,6 @@ create table m_country
 	Spanish     varchar(40)
 );
 
-insert into m_country values( 1, 'Japan', '“ú–{', '“ú–{', 'Japon', 'Japon' );
+insert into m_country values( 1, 'America', 'ã‚¢ãƒ¡ãƒªã‚«', 'ç¾Žå›½', 'AmÃ©rique', 'America' );
+
+insert into m_country values( 81, 'Japan', 'æ—¥æœ¬', 'æ—¥æœ¬', 'Japon', 'Japon' );

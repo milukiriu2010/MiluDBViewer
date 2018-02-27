@@ -21,7 +21,7 @@ create table t_npb_hit_stats
     sf      int(4),    -- # 犠飛(Sacrifice Flies)
     ibb     int(4),    -- # 敬遠四球(Intentional Base On Balls)
     primary key( id, tyear ),
-    foreign key( id ) references t_npb_player_list( id )
+    foreign key( id ) references t_npb_player_list( id ) on update cascade on delete no action
 );
 
 insert into t_npb_hit_stats
