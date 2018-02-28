@@ -20,7 +20,7 @@ public class ExecQueryTask extends Task<Exception>
 	private AppConf      appConf = null;
 	private String       sql     = null;
 	private SqlTableView tableViewSQL = null;
-	private Exception  taskEx = null;
+	private Exception    taskEx = null;
 	
 	public ExecQueryTask( MyDBAbstract myDBAbs, AppConf appConf, String sql, SqlTableView tableViewSQL )
 	{

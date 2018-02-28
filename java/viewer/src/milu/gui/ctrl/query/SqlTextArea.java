@@ -173,9 +173,30 @@ public class SqlTextArea extends TextArea
 					if ( KeyCode.ENTER.equals( keyCode ) )
 					{
 						String selectedItem = this.comboHint.selectionModelProperty().getValue().getSelectedItem();
-						System.out.println( "selectedItem:" + selectedItem );
+						System.out.println( "selectedItem[" + selectedItem + "]sbOnTheWay[" + this.sbOnTheWay + "]" );
 						int pos = this.caretPositionProperty().getValue().intValue();
+						// -----------------------------------------------------------------
+						// On Ubuntu, "Return Code" is added after ComboBox is closed.
+						// I know this is not a good solution. How should I ?
+						// -----------------------------------------------------------------
+						if ( pos > 0 )
+						{
+							String strCur = this.getText( pos-1, pos );
+							if ( "\r".equals(strCur) || "\n".equals(strCur) )
+							{
+								pos--;
+							}
+						}
+						// -----------------------------------------------------------------
 						if ( selectedItem.contains( this.sbOnTheWay ) )
+						{
+							this.insertText( pos, selectedItem.substring( this.sbOnTheWay.length() ) );
+						}
+						else if ( selectedItem.contains( this.sbOnTheWay.toString().toUpperCase() ) )
+						{
+							this.insertText( pos, selectedItem.substring( this.sbOnTheWay.length() ) );
+						}
+						else if ( selectedItem.contains( this.sbOnTheWay.toString().toLowerCase() ) )
 						{
 							this.insertText( pos, selectedItem.substring( this.sbOnTheWay.length() ) );
 						}
@@ -255,8 +276,7 @@ public class SqlTextArea extends TextArea
 					if ( "\r".equals(chr) || "\n".equals(chr) )
 					{
 						String selectedItem = this.comboHint.selectionModelProperty().getValue().getSelectedItem();
-						System.out.println( "selectedItem:" + selectedItem );
-						int pos = this.caretPositionProperty().getValue().intValue();
+						System.out.println( "selectedItem[" + selectedItem + "]sbOnTheWay[" + this.sbOnTheWay + "]" );						int pos = this.caretPositionProperty().getValue().intValue();
 						if ( selectedItem.contains( this.sbOnTheWay ) )
 						{
 							this.insertText( pos, selectedItem.substring( this.sbOnTheWay.length() ) );
@@ -322,12 +342,43 @@ public class SqlTextArea extends TextArea
 	
 	private void setAction()
 	{
+		// On Linux, these don't work
 		this.comboHint.addEventFilter
 		(
 			KeyEvent.KEY_TYPED,
 			(event)->
 			{
 				System.out.println( "--- ComboBox KeyTyped -----------" );
+				String selectedItem = this.comboHint.selectionModelProperty().getValue().getSelectedItem();
+				System.out.println( "selectedItem:" + selectedItem );
+				int pos = this.caretPositionProperty().getValue().intValue();
+				this.insertText( pos, selectedItem );				
+				this.comboHint.setVisible(false);
+				this.comboHint.hide();
+				//event.consume();
+			}
+		);
+		this.comboHint.addEventFilter
+		(
+			KeyEvent.KEY_PRESSED,
+			(event)->
+			{
+				System.out.println( "--- ComboBox KeyPressed(EventFilter) -----------" );
+				String selectedItem = this.comboHint.selectionModelProperty().getValue().getSelectedItem();
+				System.out.println( "selectedItem:" + selectedItem );
+				int pos = this.caretPositionProperty().getValue().intValue();
+				this.insertText( pos, selectedItem );				
+				this.comboHint.setVisible(false);
+				this.comboHint.hide();
+				//event.consume();
+			}
+		);
+		this.comboHint.addEventHandler
+		(
+			KeyEvent.KEY_PRESSED,
+			(event)->
+			{
+				System.out.println( "--- ComboBox KeyPressed(EventHandler) -----------" );
 				String selectedItem = this.comboHint.selectionModelProperty().getValue().getSelectedItem();
 				System.out.println( "selectedItem:" + selectedItem );
 				int pos = this.caretPositionProperty().getValue().intValue();

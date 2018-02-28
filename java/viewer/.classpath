@@ -12,12 +12,12 @@
 	<classpathentry kind="lib" path="lib/excel/poi-ooxml-3.17.jar"/>
 	<classpathentry kind="lib" path="lib/excel/poi-ooxml-schemas-3.17.jar"/>
 	<classpathentry kind="lib" path="lib/excel/xmlbeans-2.6.0.jar"/>
-	<classpathentry kind="lib" path="C:/myjava/MiluDBViewer.git/java/viewer/lib/oracle/ojdbc8.jar"/>
-	<classpathentry kind="lib" path="C:/myjava/MiluDBViewer.git/java/viewer/lib/postgresql/postgresql-42.1.4.jar"/>
-	<classpathentry kind="lib" path="C:/myjava/MiluDBViewer.git/java/viewer/lib/mysql/mysql-connector-java-5.1.45-bin.jar"/>
-	<classpathentry kind="lib" path="C:/myjava/MiluDBViewer.git/java/viewer/lib/cassandra/cassandra-jdbc-driver-0.6.4-shaded.jar"/>
 	<classpathentry kind="lib" path="lib/oracle/xmlparserv2.jar"/>
 	<classpathentry kind="lib" path="lib/oracle/xdb6.jar"/>
 	<classpathentry kind="lib" path="lib/oracle/orai18n.jar"/>
+	<classpathentry kind="lib" path="lib/cassandra/cassandra-jdbc-driver-0.6.4-shaded.jar"/>
+	<classpathentry kind="lib" path="lib/mysql/mysql-connector-java-5.1.45-bin.jar"/>
+	<classpathentry kind="lib" path="lib/oracle/ojdbc8.jar"/>
+	<classpathentry kind="lib" path="lib/postgresql/postgresql-42.1.4.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

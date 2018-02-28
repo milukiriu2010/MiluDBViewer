@@ -5,6 +5,7 @@ import java.util.ResourceBundle;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.Future;
 
 import javafx.application.Platform;
 import javafx.geometry.Insets;
@@ -41,6 +42,7 @@ import milu.db.explain.ExplainDBFactory;
 import milu.db.explain.ExplainDBAbstract;
 import milu.task.ToggleHVTask;
 import milu.task.ExecQueryTask;
+import milu.task.ExplainTask;
 
 import milu.conf.AppConf;
 
@@ -262,7 +264,7 @@ public class DBSqlTab extends Tab
 		final ExecQueryTask execQueryTask = 
 			new ExecQueryTask( myDBAbs, appConf, this.textAreaSQL.getSQL(), this.tableViewSQL );
 		// execute task
-		this.service.submit( execQueryTask );
+		final Future futureExecQueryTask = this.service.submit( execQueryTask );
 		
 		execQueryTask.progressProperty().addListener
 		(
@@ -273,9 +275,21 @@ public class DBSqlTab extends Tab
 				if ( newVal.doubleValue() == 0.0 )
 				{
 					this.dbView.taskProcessing();
-					Label label = new Label( langRB.getString("LABEL_PROCESSING") );
+					VBox vBox = new VBox(2);
+					Label  labelProcess = new Label( langRB.getString("LABEL_PROCESSING") );
+					Button btnCancel    = new Button( langRB.getString("BTN_CANCEL") );
+					vBox.getChildren().addAll( labelProcess, btnCancel );
+					
+					btnCancel.setOnAction
+					(
+						(event)->
+						{
+							futureExecQueryTask.cancel(true);
+						}
+					);
+					
 					this.lowerPane.getChildren().clear();
-					this.lowerPane.getChildren().add( label );
+					this.lowerPane.getChildren().add( vBox );
 					System.out.println( "ExecQueryTask:clear" );
 				}
 				// task done.
@@ -299,7 +313,7 @@ public class DBSqlTab extends Tab
 			{
 				System.out.println( "ExecQueryTask:Value[" + obs.getClass() + "]oldVal[" + oldVal + "]newVal[" + newVal + "]" );
 				this.lowerPane.getChildren().clear();
-				// task start.
+				// task exception.
 				if ( newVal instanceof MyDBOverFetchSizeException )
 				{
 					Label     labelTitle = new Label( langRB.getString("TITLE_OVER_FETCH_SIZE") );
@@ -432,10 +446,110 @@ public class DBSqlTab extends Tab
 		}
 	}
 	*/
+	/**
+	 * Override from ExecExplainDBInterface
+	 */
+	@Override
+	public void Explain( MyDBAbstract myDBAbs )
+	{
+		long startTime = System.nanoTime();
+		final ExplainTask explainTask = 
+				new ExplainTask( myDBAbs, this.textAreaSQL.getSQL(), this.tableViewSQL );
+		// execute task
+		final Future futureExplainTask = this.service.submit( explainTask );		
+
+		explainTask.progressProperty().addListener
+		(
+			(obs,oldVal,newVal)->
+			{
+				System.out.println( "ExplainTask:Progress[" + obs.getClass() + "]oldVal[" + oldVal + "]newVal[" + newVal + "]" );
+				// task start.
+				if ( newVal.doubleValue() == 0.0 )
+				{
+					this.dbView.taskProcessing();
+					VBox vBox = new VBox(2);
+					Label  labelProcess = new Label( langRB.getString("LABEL_PROCESSING") );
+					Button btnCancel    = new Button( langRB.getString("BTN_CANCEL") );
+					vBox.getChildren().addAll( labelProcess, btnCancel );
+					
+					btnCancel.setOnAction
+					(
+						(event)->
+						{
+							futureExplainTask.cancel(true);
+						}
+					);
+					
+					this.lowerPane.getChildren().clear();
+					this.lowerPane.getChildren().add( vBox );
+					System.out.println( "ExplainTask:clear" );
+				}
+				// task done.
+				else if ( newVal.doubleValue() == 1.0 )
+				{
+					this.lowerPane.getChildren().clear();
+					this.lowerPane.getChildren().add( this.tableViewSQL );
+					// Record Count
+					this.setCount( this.tableViewSQL.getRowSize() );
+					this.dbView.taskDone();
+					long endTime = System.nanoTime();
+					this.setExecTime( endTime - startTime );
+					System.out.println( "ExplainTask:set" );
+				}
+			}
+		);
+		
+		explainTask.valueProperty().addListener
+		(
+			(obs,oldVal,newVal)->
+			{
+				System.out.println( "ExplainTask:Value[" + obs.getClass() + "]oldVal[" + oldVal + "]newVal[" + newVal + "]" );
+				this.lowerPane.getChildren().clear();
+				// task exception.
+				if ( newVal instanceof SQLException )
+				{
+		    		this.showSQLException( (SQLException)newVal, myDBAbs );
+				}
+				else if ( newVal instanceof Exception )
+				{
+					Label     labelTitle = new Label( langRB.getString("TITLE_EXEC_QUERY_ERROR") );
+					
+					String    strMsg     = newVal.getMessage();
+					TextArea  txtMsg     = new TextArea( strMsg );
+					txtMsg.setPrefColumnCount( MyTool.getCharCount( strMsg, "\n" )+1 );
+					txtMsg.setEditable( false );
+					
+					String    strExp     = MyTool.getExceptionString( newVal );
+					TextArea  txtExp     = new TextArea( strExp );
+					txtExp.setPrefRowCount( MyTool.getCharCount( strExp, "\n" )+1 );
+					txtExp.setEditable( false );
+					
+					VBox vBoxExp = new VBox(2);
+					vBoxExp.getChildren().addAll( labelTitle, txtMsg, txtExp );
+					
+					SplitPane splitPane = new SplitPane();
+					splitPane.setOrientation(Orientation.VERTICAL);
+					splitPane.getItems().addAll( vBoxExp , this.tableViewSQL );
+					splitPane.setDividerPositions( 0.3f, 0.7f );
+					this.lowerPane.getChildren().add( splitPane );
+				}
+
+				// Record Count
+				this.setCount( this.tableViewSQL.getRowSize() );
+				this.dbView.taskDone();
+				long endTime = System.nanoTime();
+				this.setExecTime( endTime - startTime );
+				System.out.println( "ExecQueryTask:set" );
+			}
+		);
+		
+		
+	}
 	
 	/**
 	 * Override from ExecExplainDBInterface
 	 */
+	/*
 	@Override
 	public void Explain( MyDBAbstract myDBAbs )
 	{
@@ -471,6 +585,7 @@ public class DBSqlTab extends Tab
 			explainDBAbs = null;
 		}
 	}
+	*/
 	
 	private void showSQLException( SQLException sqlEx, MyDBAbstract myDBAbs )
 	{
