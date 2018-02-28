@@ -14,6 +14,7 @@ public class ToggleHVTask extends Task<Double>
 	
 	public ToggleHVTask( ToggleHorizontalVerticalInterface toggleHVInteface, int cnt )
 	{
+		super();
 		this.toggleHVInteface = toggleHVInteface;
 		this.cnt = cnt;
 	}
@@ -36,8 +37,6 @@ public class ToggleHVTask extends Task<Double>
 			(
 				()->
 				{
-					
-					
 					this.toggleHVInteface.switchDirection();
 					System.out.println( "ToggleHVTask:runlater." );
 					this.updateProgress( MAX, MAX );

@@ -145,6 +145,20 @@ public class SqlTableView extends TableView<List<String>>
 		this.setOnContextMenuRequested( (event)->{ contextMenu.show( this, event.getScreenX(), event.getScreenY() ); } );
 	}
 	
+	public synchronized int getRowSize()
+	{
+		// Horizontal
+		if ( this.tableViewSQLDirection == Orientation.HORIZONTAL )
+		{
+			return this.getItems().size();
+		}
+		// Vertical
+		else
+		{
+			return this.getColumns().size();
+		}
+	}
+	
 	/**************************************************
 	 * Override from ToggleHorizontalVerticalInterface
 	 ************************************************** 
