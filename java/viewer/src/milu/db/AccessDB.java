@@ -9,7 +9,6 @@ import java.sql.ResultSetMetaData;
 import java.sql.Statement;
 import java.sql.SQLException;
 
-import milu.conf.AppConf;
 import milu.db.MyDBOverFetchSizeException;
 
 public class AccessDB

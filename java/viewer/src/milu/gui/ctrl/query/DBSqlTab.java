@@ -1,6 +1,5 @@
 package milu.gui.ctrl.query;
 
-import java.util.List;
 import java.util.ResourceBundle;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -37,9 +36,6 @@ import milu.gui.view.DBView;
 import milu.tool.MyTool;
 import milu.db.MyDBAbstract;
 import milu.db.MyDBOverFetchSizeException;
-import milu.db.AccessDB;
-import milu.db.explain.ExplainDBFactory;
-import milu.db.explain.ExplainDBAbstract;
 import milu.task.ToggleHVTask;
 import milu.task.ExecQueryTask;
 import milu.task.ExplainTask;
@@ -264,7 +260,7 @@ public class DBSqlTab extends Tab
 		final ExecQueryTask execQueryTask = 
 			new ExecQueryTask( myDBAbs, appConf, this.textAreaSQL.getSQL(), this.tableViewSQL );
 		// execute task
-		final Future futureExecQueryTask = this.service.submit( execQueryTask );
+		final Future<?> futureExecQueryTask = this.service.submit( execQueryTask );
 		
 		execQueryTask.progressProperty().addListener
 		(
@@ -456,7 +452,7 @@ public class DBSqlTab extends Tab
 		final ExplainTask explainTask = 
 				new ExplainTask( myDBAbs, this.textAreaSQL.getSQL(), this.tableViewSQL );
 		// execute task
-		final Future futureExplainTask = this.service.submit( explainTask );		
+		final Future<?> futureExplainTask = this.service.submit( explainTask );		
 
 		explainTask.progressProperty().addListener
 		(

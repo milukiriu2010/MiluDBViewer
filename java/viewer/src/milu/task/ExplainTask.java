@@ -1,6 +1,5 @@
 package milu.task;
 
-import javafx.application.Platform;
 import javafx.concurrent.Task;
 
 import java.sql.SQLException;

@@ -12,8 +12,7 @@ import java.sql.SQLException;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import javafx.stage.Window;
-
-import milu.gui.dlg.DBSettingDialog;
+import milu.gui.dlg.db.DBSettingDialog;
 import milu.gui.view.DBView;
 
 import milu.db.MyDBAbstract;

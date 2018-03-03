@@ -10,7 +10,9 @@ create table m_country
 )
 /
 
-insert into m_country values( 1, 'Japan', '日本', '日本', 'Japon', 'Japon' );
+insert into m_country values( 1, 'America', 'アメリカ', '美国', 'Amérique', 'America' );
+
+insert into m_country values( 81, 'Japan', '日本', '日本', 'Japon', 'Japon' );
 
 
 -- create table m_国名

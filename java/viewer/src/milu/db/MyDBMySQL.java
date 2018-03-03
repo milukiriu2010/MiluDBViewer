@@ -2,10 +2,22 @@ package milu.db;
 
 import java.util.Map;
 
-import milu.entity.schema.SchemaEntity.SCHEMA_TYPE;
-
+/**
+ * 
+ * [SUPPORT OBJECT]
+ * ROOT_TABLE
+ * ROOT_VIEW
+ * ROOT_SYSTEM_VIEW
+ * ROOT_FUNC
+ * ROOT_PROC
+ * ROOT_TRIGGER
+ * 
+ * @author milu
+ *
+ */
 public class MyDBMySQL extends MyDBAbstract 
 {
+	/*
 	public MyDBMySQL()
 	{
 		this.suppoertedTypeLst.add( SCHEMA_TYPE.ROOT_TABLE );
@@ -15,7 +27,7 @@ public class MyDBMySQL extends MyDBAbstract
 		this.suppoertedTypeLst.add( SCHEMA_TYPE.ROOT_PROC );
 		this.suppoertedTypeLst.add( SCHEMA_TYPE.ROOT_TRIGGER );
 	}
-	
+	*/
 	/**
 	 * Load JDBC Driver
 	 ***********************************************
@@ -33,7 +45,15 @@ public class MyDBMySQL extends MyDBAbstract
 	 */
 	public String getDriverUrl( Map<String, String> dbOptMap )
 	{
-		this.createConnectionParameter(dbOptMap);
+		// URL Example
+		// ---------------------------------------------------
+		// jdbc:mysql://localhost:3306/sakila
+		// ---------------------------------------------------
+		// https://www.javatpoint.com/example-to-connect-to-the-mysql-database
+		this.url = 
+			"jdbc:mysql://"+
+			dbOptMap.get( "Host" )+":"+dbOptMap.get( "Port" )+"/"+
+			dbOptMap.get( "DBName" );
 		return this.url;
 	}
 	
@@ -56,7 +76,7 @@ public class MyDBMySQL extends MyDBAbstract
 	{
 		return "MySQL";
 	}
-	
+	/*
 	@Override
 	protected void createConnectionParameter(Map<String, String> dbOptMap) 
 	{
@@ -70,7 +90,7 @@ public class MyDBMySQL extends MyDBAbstract
 			dbOptMap.get( "Host" )+":"+dbOptMap.get( "Port" )+"/"+
 			dbOptMap.get( "DBName" );
 	}
-	
+	*/
 	/**
 	 * SQL to get schema lists of schema.
 	 * call by getSchemaLst

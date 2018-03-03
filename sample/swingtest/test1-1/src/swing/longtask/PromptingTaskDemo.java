@@ -1,7 +1,6 @@
 package swing.longtask;
 import java.util.concurrent.*;
 import javafx.application.Application;
-import static javafx.application.Application.launch;
 import javafx.application.Platform;
 import javafx.beans.property.*;
 import javafx.concurrent.Task;
@@ -67,7 +66,7 @@ class LoadTextTask extends Task<Void> {
 
         if ("MISSING".equals(nextText)) {
           updateMessage("Prompting for missing text for line: " + curIdx);
-          FutureTask<String> futureTask = new FutureTask(
+          FutureTask<String> futureTask = new FutureTask<>(
             new MissingTextPrompt(
               container.getScene().getWindow()
             )

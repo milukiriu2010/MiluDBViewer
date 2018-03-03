@@ -8,9 +8,6 @@ package milu.conf;
  */
 final public class AppConf
 {
-	// Singleton Instance
-	private static AppConf instance = null;
-	
 	// Max fetch rows when selecting.
 	protected int fetchMax = 100;
 	

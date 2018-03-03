@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.ArrayList;
-import java.util.stream.Collectors;
 
 import milu.ctrl.ChangeLangInterface;
 import milu.ctrl.visitor.VisitorInterface;

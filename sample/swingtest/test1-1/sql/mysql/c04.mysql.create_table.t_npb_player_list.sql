@@ -1,13 +1,12 @@
 create table t_npb_player_list
 (
-    id                int(5)           primary key,
-    team_id       varchar(10),
+    id                int(10)           primary key,
+    team_id           varchar(10),
     sei               varchar(20)  not null,
-    mei              varchar(20)  not null,
-    pos_id         varchar(10),
-    country_id    int(5),
+    mei               varchar(20)  not null,
+    pos_id            varchar(10),
+    country_id        int(5),
     foreign key( team_id ) references m_npb_team_list( id )  on update cascade on delete no action,
-    foreign key( pos_id )  references m_npb_position( id )   on update cascade on delete no action,
     foreign key( pos_id )  references m_npb_position( id )   on update cascade on delete no action
 );
 

@@ -1,13 +1,11 @@
 create table t_soccer_player_list
 (
-	id				number(10),
+	id				varchar2(10),
 	english_name	varchar2(40)  not null,
 	japanese_name	varchar2(40),
-	chinese_name	varchar2(40),
-	french_name		varchar2(40),
-	spanish_name	varchar2(40),
+	org_lang_name	varchar2(40),
 	nick_name		varchar2(20),
-	country_id		number(4),
+	country_id		number(5),
 	position		varchar2(2),
 	birthday		date,
 	constraint pk_t_soccer_player_list_id primary key ( id ),
@@ -19,114 +17,114 @@ create index i_t_soccer_player_list_engname on t_soccer_player_list( english_nam
 
 create sequence seq_t_soccer_player_list_id minvalue 1000000 maxvalue 9999999 increment by 10 start with 1000000 cache 20 noorder;
 
-insert into t_soccer_player_list values
+insert into t_soccer_player_list
+( id, english_name, japanese_name, org_lang_name, nick_name, country_id, position, birthday )
+values
 (
-seq_t_soccer_player_list_id.nextval,
+'JP0001',
 'Eiji Kawashima',
 '川島 永嗣',
+'川島 永嗣',
 NULL,
-NULL,
-NULL,
-NULL,
-1,
+81,
 'GK',
-to_date( '19830320', 'YYYYMMDD' )
+'1983-03-20'
 );
 
-insert into t_soccer_player_list values
+insert into t_soccer_player_list 
+( id, english_name, japanese_name, org_lang_name, nick_name, country_id, position, birthday )
+values
 (
-seq_t_soccer_player_list_id.nextval,
+'JP0002',
 'Maya Yoshida',
 '吉田 麻也',
+'吉田 麻也',
 NULL,
-NULL,
-NULL,
-NULL,
-1,
+81,
 'DF',
-to_date( '19880824', 'YYYYMMDD' )
+'1988-08-24'
 );
 
-insert into t_soccer_player_list values
+insert into t_soccer_player_list 
+( id, english_name, japanese_name, org_lang_name, nick_name, country_id, position, birthday )
+values
 (
-seq_t_soccer_player_list_id.nextval,
+'JP0003',
 'Hiroki Sakai',
 '酒井 宏',
+'酒井 宏',
 NULL,
-NULL,
-NULL,
-NULL,
-1,
+81,
 'DF',
-to_date( '19900412', 'YYYYMMDD' )
+'1990-04-12'
 );
 
-insert into t_soccer_player_list values
+insert into t_soccer_player_list 
+( id, english_name, japanese_name, org_lang_name, nick_name, country_id, position, birthday )
+values
 (
-seq_t_soccer_player_list_id.nextval,
+'JP0004',
 'Yuto Nagatomo',
 '長友 佑都',
+'長友 佑都',
 NULL,
-NULL,
-NULL,
-NULL,
-1,
+81,
 'DF',
-to_date( '19860912', 'YYYYMMDD' )
+'1986-09-12'
 );
 
-insert into t_soccer_player_list values
+insert into t_soccer_player_list 
+( id, english_name, japanese_name, org_lang_name, nick_name, country_id, position, birthday )
+values
 (
-seq_t_soccer_player_list_id.nextval,
+'JP0005',
 'Makoto Hasebe',
 '長谷部 誠',
+'長谷部 誠',
 NULL,
-NULL,
-NULL,
-NULL,
-1,
+81,
 'MF',
-to_date( '19840118', 'YYYYMMDD' )
+'1984-01-18'
 );
 
-insert into t_soccer_player_list values
+insert into t_soccer_player_list 
+( id, english_name, japanese_name, org_lang_name, nick_name, country_id, position, birthday )
+values
 (
-seq_t_soccer_player_list_id.nextval,
+'JP0006',
 'Genki Haraguchi',
 '原口　元気',
+'原口　元気',
 NULL,
-NULL,
-NULL,
-NULL,
-1,
+81,
 'MF',
-to_date( '19910509', 'YYYYMMDD' )
+'1991-05-09'
 );
 
-insert into t_soccer_player_list values
+insert into t_soccer_player_list 
+( id, english_name, japanese_name, org_lang_name, nick_name, country_id, position, birthday )
+values
 (
-seq_t_soccer_player_list_id.nextval,
+'JP0007',
 'Takashi Inui',
 '乾 貴士',
+'乾 貴士',
 NULL,
-NULL,
-NULL,
-NULL,
-1,
+81,
 'MF',
-to_date( '19880602', 'YYYYMMDD' )
+'1988-06-02'
 );
 
-insert into t_soccer_player_list values
+insert into t_soccer_player_list 
+( id, english_name, japanese_name, org_lang_name, nick_name, country_id, position, birthday )
+values
 (
-seq_t_soccer_player_list_id.nextval,
+'JP0008',
 'Yuya Osako',
 '大迫 勇也',
+'大迫 勇也',
 NULL,
-NULL,
-NULL,
-NULL,
-1,
+81,
 'FW',
-to_date( '19900518', 'YYYYMMDD' )
+'1990-05-18'
 );
