@@ -1,3 +1,7 @@
+psql -U postgres
+psql -U milu -d miludb2
+
+
 # https://www.codementor.io/devops/tutorial/getting-started-postgresql-server-mac-osx
 
 create role milu with login password 'milu';
