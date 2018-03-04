@@ -1,5 +1,6 @@
 package milu.gui.dlg.db;
 
+import java.util.Map;
 import java.util.ResourceBundle;
 import javafx.scene.layout.Pane;
 
@@ -11,12 +12,12 @@ import milu.db.MyDBCassandra;
 
 public class UrlPaneFactory implements PaneFactory 
 {
-
 	@Override
-	public Pane createPane(MyDBAbstract myDBAbs, ResourceBundle langRB ) 
+	public UrlPaneAbstract createPane( MyDBAbstract myDBAbs, ResourceBundle extLangRB, Map<String,String> mapProp )
 	{
-		// TODO Auto-generated method stub
-		return null;
+		UrlPaneAbstract urlPaneAbs = new UrlPaneCommon();
+		urlPaneAbs.createPane(myDBAbs, extLangRB, mapProp);
+		return urlPaneAbs;
 	}
 
 }

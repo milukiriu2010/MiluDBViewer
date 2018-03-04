@@ -1,5 +1,6 @@
 package milu.gui.dlg.db;
 
+import java.util.Map;
 import java.util.ResourceBundle;
 import javafx.scene.layout.Pane;
 
@@ -7,5 +8,5 @@ import milu.db.MyDBAbstract;
 
 public interface PaneFactory
 {
-	public Pane createPane( MyDBAbstract myDBAbs, ResourceBundle langRB );
+	public UrlPaneAbstract createPane( MyDBAbstract myDBAbs, ResourceBundle extLangRB, Map<String,String> mapProp );
 }

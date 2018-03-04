@@ -19,6 +19,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.Node;
 
 import javafx.scene.image.Image;
 
@@ -58,7 +59,6 @@ public class DBSettingDialog extends Dialog<MyDBAbstract>
 	List<MyDBAbstract> dbTypeList = null;
 	
 	// ComboBox for DB type(Oracle/MySQL/Postgresql...)
-	//private ComboBox<String>   comboBoxDBType = new ComboBox<String>();
 	private ComboBox<MyDBAbstract>  comboBoxDBType = new ComboBox<MyDBAbstract>();
 	
 	// field for user
@@ -78,6 +78,9 @@ public class DBSettingDialog extends Dialog<MyDBAbstract>
 	
 	// field for URL
 	private TextArea  urlTextArea       = new TextArea();
+	
+	// pane for Dialog
+	BorderPane brdPane = new BorderPane();
 	
 	// Button "OK"
 	ButtonType okButtonType = null;
@@ -129,30 +132,38 @@ public class DBSettingDialog extends Dialog<MyDBAbstract>
 		paneDBOpt.add( this.usernameTextField, 1, 1 );
 		paneDBOpt.add( new Label( this.langRB.getString( "LABEL_PASSWORD" )), 0, 2 );
 		paneDBOpt.add( this.passwordTextField, 1, 2 );
+		/*
 		paneDBOpt.add( new Label( this.langRB.getString( "LABEL_DB_NAME" )) , 0, 3 );
 		paneDBOpt.add( this.dbnameTextField  , 1, 3 );
 		paneDBOpt.add( new Label( this.langRB.getString( "LABEL_HOST_OR_IPADDRESS" )), 0, 4 );
 		paneDBOpt.add( this.hostTextField    , 1, 4 );
 		paneDBOpt.add( new Label( this.langRB.getString( "LABEL_PORT" )), 0, 5 );
 		paneDBOpt.add( this.portTextField    , 1, 5 );
+		*/
 		
 		// pane for Dialog
-		BorderPane paneDlg = new BorderPane();
-		paneDlg.setTop( hBox );
-		paneDlg.setCenter( paneDBOpt );
-		paneDlg.setBottom( this.urlTextArea );
+		this.brdPane.setTop( hBox );
+		this.brdPane.setCenter( paneDBOpt );
+		//this.brdPane.setBottom( this.urlTextArea );
+		
+
 		
 		// set pane on dialog
-		this.getDialogPane().setContent( paneDlg );
+		this.getDialogPane().setContent( this.brdPane );
 		
 		// add button connect and cancel
 		this.okButtonType            = new ButtonType( langRB.getString( "BTN_OK" )    , ButtonData.OK_DONE );
 		ButtonType cancelButtonType  = new ButtonType( langRB.getString( "BTN_CANCEL" ), ButtonData.CANCEL_CLOSE );
 		//this.getDialogPane().getButtonTypes().addAll( this.okButtonType, ButtonType.CANCEL );
 		this.getDialogPane().getButtonTypes().addAll( this.okButtonType, cancelButtonType );
-		
+
 		// Set default selection on ComboBox(DB Type)
 		this.comboBoxDBType.getSelectionModel().selectFirst();
+		MyDBAbstract selectedMyDBAbs = this.comboBoxDBType.getSelectionModel().getSelectedItem();
+		PaneFactory paneFactory = new UrlPaneFactory();
+		UrlPaneAbstract urlPaneAbs = paneFactory.createPane( selectedMyDBAbs, langRB, new HashMap<String,String>() );
+		this.brdPane.setBottom( urlPaneAbs );
+		
 		// Set default value on field for Port
 		this.portTextField.setText( String.valueOf(this.comboBoxDBType.getValue().getDefaultPort()) );
 		// Set default value on field for URL
@@ -187,8 +198,18 @@ public class DBSettingDialog extends Dialog<MyDBAbstract>
 			// -------------------------------------------------------------------------------------------
 			( ov, oldVal, newVal )->
 			{
-				this.portTextField.setText( String.valueOf(newVal.getDefaultPort()) );
-				this.setUrlTextArea();
+				//this.portTextField.setText( String.valueOf(newVal.getDefaultPort()) );
+				//this.setUrlTextArea();
+		
+				Node bottomNode = this.brdPane.getBottom();
+				if ( bottomNode instanceof UrlPaneAbstract )
+				{
+					UrlPaneAbstract urlPaneAbs1 = (UrlPaneAbstract)bottomNode;
+					Map<String, String> mapProp = urlPaneAbs1.getProp();
+					PaneFactory paneFactory = new UrlPaneFactory();
+					UrlPaneAbstract urlPaneAbs2 = paneFactory.createPane( newVal, langRB, mapProp );
+					this.brdPane.setBottom( urlPaneAbs2 );
+				}
 			}
 		);
 		
@@ -287,6 +308,13 @@ public class DBSettingDialog extends Dialog<MyDBAbstract>
 	// "OK" Button Event
 	private void setActionBtnOK( ActionEvent event )
 	{
+		/*
+		Node bottomNode = this.brdPane.getBottom();
+		if ( bottomNode instanceof UrlPaneAbstract )
+		{
+			UrlPaneAbstract urlPaneAbs1 = (UrlPaneAbstract)bottomNode;
+		}
+		*/
 		Map<String,String> dbOptMap = new HashMap<String,String>();
 		
 		//dbOptMap.put( "DBType"  , this.comboBoxDBType.getValue().toString() );

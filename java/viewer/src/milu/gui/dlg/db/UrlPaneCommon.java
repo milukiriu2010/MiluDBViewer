@@ -10,12 +10,11 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 
 import milu.db.MyDBAbstract;
 
-public class UrlPaneCommon extends Pane implements UrlInterface 
+public class UrlPaneCommon extends UrlPaneAbstract
 {
 	private MyDBAbstract  myDBAbs       = null;
 	
@@ -31,7 +30,7 @@ public class UrlPaneCommon extends Pane implements UrlInterface
 	// field for URL
 	private TextArea  urlTextArea       = new TextArea();
 	
-	public void createPane( MyDBAbstract myDBAbs, ResourceBundle langRB )
+	public void createPane( MyDBAbstract myDBAbs, ResourceBundle extLangRB, Map<String,String> mapProp )
 	{
 		this.myDBAbs = myDBAbs;
 		
@@ -40,12 +39,13 @@ public class UrlPaneCommon extends Pane implements UrlInterface
 		gridPane.setHgap( 5 );
 		gridPane.setVgap( 2 );
 		gridPane.setPadding( new Insets( 10, 10, 10, 10 ) );
-		gridPane.add( new Label( langRB.getString( "LABEL_DB_NAME" )) , 0, 0 );
+		gridPane.add( new Label( extLangRB.getString( "LABEL_DB_NAME" )) , 0, 0 );
 		gridPane.add( this.dbnameTextField  , 1, 0 );
-		gridPane.add( new Label( langRB.getString( "LABEL_HOST_OR_IPADDRESS" )), 0, 1 );
+		gridPane.add( new Label( extLangRB.getString( "LABEL_HOST_OR_IPADDRESS" )), 0, 1 );
 		gridPane.add( this.hostTextField    , 1, 1 );
-		gridPane.add( new Label( langRB.getString( "LABEL_PORT" )), 0, 2 );
+		gridPane.add( new Label( extLangRB.getString( "LABEL_PORT" )), 0, 2 );
 		gridPane.add( this.portTextField    , 1, 2 );
+		
 		
 		VBox vBox = new VBox(2);
 		vBox.getChildren().addAll( gridPane, this.urlTextArea );
@@ -53,6 +53,19 @@ public class UrlPaneCommon extends Pane implements UrlInterface
 		this.getChildren().addAll( vBox );
 		
 		this.setAction();
+		
+		String dbName = mapProp.get("DBName");
+		if ( dbName != null )
+		{
+			this.dbnameTextField.setText( dbName );
+		}
+		String host = mapProp.get("Host");
+		if ( host != null )
+		{
+			this.hostTextField.setText( host );
+		}
+		this.portTextField.setText( String.valueOf(myDBAbs.getDefaultPort()) );
+		this.setUrlTextArea();
 	}
 	
 	private void setAction()
@@ -89,8 +102,11 @@ public class UrlPaneCommon extends Pane implements UrlInterface
 		(
 			(obs, oldVal, newVal) ->
 			{
+				if ( newVal == null )
+				{
+				}
 				// "Numeric" or "No Input" are allowed.
-				if ( newVal.length() == 0 )
+				else if ( newVal.length() == 0 )
 				{
 				}
 				// if alphabets or marks are input, back to previous input.
@@ -103,7 +119,20 @@ public class UrlPaneCommon extends Pane implements UrlInterface
 			}
 		);
 	}
+	
+	@Override
+	public Map<String,String> getProp()
+	{
+		Map<String,String> dbOptMap = new HashMap<String,String>();
+		
+		dbOptMap.put( "DBName"  , this.dbnameTextField.getText() );
+		dbOptMap.put( "Host"    , this.hostTextField.getText() );
+		dbOptMap.put( "Port"    , this.portTextField.getText() );
+		
+		return dbOptMap;
+	}
 
+	/*
 	@Override
 	public void setUrl(String url) 
 	{
@@ -124,6 +153,7 @@ public class UrlPaneCommon extends Pane implements UrlInterface
 		this.portTextField.setText( String.valueOf(port) );
 		this.setUrlTextArea();
 	}
+	*/
 	
 	private void setUrlTextArea()
 	{
