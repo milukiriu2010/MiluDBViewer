@@ -9,14 +9,44 @@ import javafx.geometry.Insets;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Toggle;
+import javafx.scene.control.ToggleButton;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
 import milu.db.MyDBAbstract;
 
-public class UrlPaneCommon extends UrlPaneAbstract
+public class UrlPaneOracle extends UrlPaneAbstract
 {
-	private MyDBAbstract  myDBAbs       = null;
+	// Property File for this class 
+	private static final String PROPERTY_FILENAME = 
+			"conf.lang.dlg.db.UrlPaneOracle";
+
+	// Language Resource
+	private ResourceBundle langRB = ResourceBundle.getBundle( PROPERTY_FILENAME );	
+	
+	// Language Resource(from External Class)
+	private ResourceBundle extLangRB = null;
+	
+	private MyDBAbstract   myDBAbs        = null;
+	
+	private HBox           hBoxToggle     = new HBox(2);
+	
+	private ToggleGroup    tglGroup       = new ToggleGroup();
+	
+	// ToggleButton for Basic
+	private ToggleButton   tglBtnBasic    = new ToggleButton();
+	
+	// ToggleButton for TNS
+	private ToggleButton   tglBtnTNS      = new ToggleButton();
+	
+	// ToggleButton for Free Hand
+	private ToggleButton   tglBtnFreeHand = new ToggleButton();
+	
+	
+	
 	
 	// field for DB Name
 	private TextField dbnameTextField   = new TextField();
@@ -32,8 +62,24 @@ public class UrlPaneCommon extends UrlPaneAbstract
 	
 	public void createPane( MyDBAbstract myDBAbs, ResourceBundle extLangRB, Map<String,String> mapProp )
 	{
-		this.myDBAbs = myDBAbs;
+		this.myDBAbs   = myDBAbs;
+		this.extLangRB = extLangRB;
 		
+		// ToggleButton for Basic
+		this.tglBtnBasic.setText(langRB.getString("TOGGLE_BASIC"));
+		this.tglBtnBasic.setToggleGroup( this.tglGroup );
+		// ToggleButton for TNS
+		this.tglBtnTNS.setText(langRB.getString("TOGGLE_TNS"));
+		this.tglBtnTNS.setToggleGroup( this.tglGroup );
+		// ToggleButton for Free Hand
+		this.tglBtnFreeHand.setText(langRB.getString("TOGGLE_FREE"));
+		this.tglBtnFreeHand.setToggleGroup( this.tglGroup );
+		
+		this.hBoxToggle.getChildren().addAll( this.tglBtnBasic, this.tglBtnTNS, this.tglBtnFreeHand );
+		
+		this.tglBtnBasic.setSelected(true);
+		this.setPaneBasic();
+		/*
 		// set all objects on pane.
 		GridPane gridPane = new GridPane();
 		gridPane.setHgap( 5 );
@@ -52,8 +98,10 @@ public class UrlPaneCommon extends UrlPaneAbstract
 		this.urlTextArea.setWrapText(true);		
 		
 		VBox vBox = new VBox(2);
-		vBox.getChildren().addAll( gridPane, this.urlTextArea );
+		vBox.getChildren().addAll( this.hBoxToggle, gridPane, this.urlTextArea );
+		
 		this.getChildren().addAll( vBox );
+		*/
 		
 		this.setAction();
 		
@@ -73,6 +121,36 @@ public class UrlPaneCommon extends UrlPaneAbstract
 	
 	private void setAction()
 	{
+		// --------------------------------------------
+		// Selected Toggle Button is changed
+		// --------------------------------------------
+		this.tglGroup.selectedToggleProperty().addListener
+		(
+			(obs,oldVal,newVal)->
+			{
+				if ( oldVal != null )
+				{
+					System.out.println( "obs[" + obs.getClass() + 
+							"]oldVal" + oldVal.getClass() + 
+							"]newVal[" + newVal.getClass() + "]" );
+				}
+				
+				if ( newVal == this.tglBtnBasic )
+				{
+					this.setPaneBasic();
+				}
+				else if ( newVal == this.tglBtnTNS )
+				{
+					
+				}
+				else if ( newVal == this.tglBtnFreeHand )
+				{
+					this.setPaneFreeHand();
+				}
+			}
+		);
+		
+		
 		// --------------------------------------------
 		// Update urlTextField, when DBName is changed
 		// --------------------------------------------
@@ -119,6 +197,46 @@ public class UrlPaneCommon extends UrlPaneAbstract
 				this.setUrlTextArea();
 			}
 		);
+	}
+	
+	private void setPaneBasic()
+	{
+		this.getChildren().removeAll( this.getChildren() );
+		
+		// set all objects on pane.
+		GridPane gridPane = new GridPane();
+		gridPane.setHgap( 5 );
+		gridPane.setVgap( 2 );
+		gridPane.setPadding( new Insets( 10, 10, 10, 10 ) );
+		gridPane.add( new Label( extLangRB.getString( "LABEL_DB_NAME" )) , 0, 0 );
+		gridPane.add( this.dbnameTextField  , 1, 0 );
+		gridPane.add( new Label( extLangRB.getString( "LABEL_HOST_OR_IPADDRESS" )), 0, 1 );
+		gridPane.add( this.hostTextField    , 1, 1 );
+		gridPane.add( new Label( extLangRB.getString( "LABEL_PORT" )), 0, 2 );
+		gridPane.add( this.portTextField    , 1, 2 );
+		
+		// Set default value on field for URL
+		this.setUrlTextArea();
+		this.urlTextArea.setEditable( false );
+		this.urlTextArea.setWrapText(true);		
+		
+		VBox vBox = new VBox(2);
+		vBox.getChildren().addAll( this.hBoxToggle, gridPane, this.urlTextArea );
+		
+		this.getChildren().addAll( vBox );
+	}
+	
+	private void setPaneFreeHand()
+	{
+		this.getChildren().removeAll( this.getChildren() );
+		
+		this.urlTextArea.setEditable( true );
+		this.urlTextArea.setWrapText(true);		
+		
+		VBox vBox = new VBox(2);
+		vBox.getChildren().addAll( this.hBoxToggle, this.urlTextArea );
+		
+		this.getChildren().addAll( vBox );
 	}
 	
 	@Override

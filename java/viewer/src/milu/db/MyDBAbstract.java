@@ -93,6 +93,11 @@ abstract public class MyDBAbstract
 		return this.url;
 	}
 	
+	public void setUrl( String url )
+	{
+		this.url = url;
+	}
+	
 	public synchronized SchemaEntity getSchemaRoot()
 	{
 		return this.schemaRoot;

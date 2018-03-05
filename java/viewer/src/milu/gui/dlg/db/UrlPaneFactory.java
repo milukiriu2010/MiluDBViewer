@@ -15,9 +15,17 @@ public class UrlPaneFactory implements PaneFactory
 	@Override
 	public UrlPaneAbstract createPane( MyDBAbstract myDBAbs, ResourceBundle extLangRB, Map<String,String> mapProp )
 	{
-		UrlPaneAbstract urlPaneAbs = new UrlPaneCommon();
+		UrlPaneAbstract urlPaneAbs = null;
+		
+		if ( myDBAbs instanceof MyDBOracle )
+		{
+			urlPaneAbs = new UrlPaneOracle();
+		}
+		else
+		{
+			urlPaneAbs = new UrlPaneCommon();
+		}
 		urlPaneAbs.createPane(myDBAbs, extLangRB, mapProp);
 		return urlPaneAbs;
 	}
-
 }

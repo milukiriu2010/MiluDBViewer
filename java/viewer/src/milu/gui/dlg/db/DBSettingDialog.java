@@ -29,6 +29,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 
 import javafx.stage.Stage;
+import javafx.stage.Window;
 
 import javafx.event.ActionEvent;
 import javafx.application.Platform;
@@ -182,6 +183,9 @@ public class DBSettingDialog extends Dialog<MyDBAbstract>
 		// http://krr.blog.shinobi.jp/javafx/javafx%20ui%E3%82%B3%E3%83%B3%E3%83%88%E3%83%AD%E3%83%BC%E3%83%AB%E3%81%AE%E9%81%B8%E6%8A%9E%E3%83%BB%E3%83%95%E3%82%A9%E3%83%BC%E3%82%AB%E3%82%B9
 		// https://sites.google.com/site/63rabbits3/javafx2/jfx2coding/dialogbox
 		Platform.runLater( ()->{ this.comboBoxDBType.requestFocus(); } );
+		
+		// set size
+		this.setResizable( true );
 	}
 	
 	private void setAction()
@@ -210,6 +214,11 @@ public class DBSettingDialog extends Dialog<MyDBAbstract>
 					UrlPaneAbstract urlPaneAbs2 = paneFactory.createPane( newVal, langRB, mapProp );
 					this.brdPane.setBottom( urlPaneAbs2 );
 				}
+				
+				
+				// https://stackoverflow.com/questions/44675375/failure-to-get-the-stage-of-a-dialog
+				Stage stage = (Stage)this.getDialogPane().getScene().getWindow();
+				stage.sizeToScene();
 			}
 		);
 		
@@ -308,13 +317,52 @@ public class DBSettingDialog extends Dialog<MyDBAbstract>
 	// "OK" Button Event
 	private void setActionBtnOK( ActionEvent event )
 	{
-		/*
 		Node bottomNode = this.brdPane.getBottom();
 		if ( bottomNode instanceof UrlPaneAbstract )
 		{
 			UrlPaneAbstract urlPaneAbs1 = (UrlPaneAbstract)bottomNode;
+			// call "myDBAbs.getDriverUrl"
+			urlPaneAbs1.setUrl();
 		}
-		*/
+		
+		MyDBAbstract myDBAbs = null;
+		try
+		{
+			myDBAbs = this.comboBoxDBType.getValue();
+			myDBAbs.setUsername( this.usernameTextField.getText() );
+			myDBAbs.setPassword( this.passwordTextField.getText() );
+			
+			// Connect to DB
+			myDBAbs.connect();
+		}
+		catch ( ClassNotFoundException cnfEx )
+		{
+    		MyAlertDialog alertDlg = new MyAlertDialog( AlertType.WARNING );
+    		alertDlg.setHeaderText( langRB.getString( "TITLE_DB_DRIVER_ERROR" ) );
+    		alertDlg.setTxtExp( cnfEx );
+    		alertDlg.showAndWait();
+		}
+		catch ( SQLException sqlEx )
+		{
+    		MyAlertDialog alertDlg = new MyAlertDialog( AlertType.WARNING );
+    		alertDlg.setHeaderText( langRB.getString( "TITLE_DB_CONNECT_ERROR" ) );
+    		alertDlg.setTxtExp( sqlEx );
+    		alertDlg.showAndWait();
+		}
+		
+		// If DB connection is failed, this dialog keeps to open.
+		if ( myDBAbs.isConnected() == false ) 
+		{
+			// The conditions are not fulfilled so we consume the event
+			// to prevent the dialog to close
+			event.consume();
+		}
+	}
+
+	/*
+	// "OK" Button Event
+	private void setActionBtnOK( ActionEvent event )
+	{
 		Map<String,String> dbOptMap = new HashMap<String,String>();
 		
 		//dbOptMap.put( "DBType"  , this.comboBoxDBType.getValue().toString() );
@@ -359,6 +407,7 @@ public class DBSettingDialog extends Dialog<MyDBAbstract>
 			event.consume();
 		}
 	}
+	*/
 	
 	private void setUrlTextArea()
 	{
