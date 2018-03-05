@@ -20,7 +20,7 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.Node;
-
+import javafx.scene.Scene;
 import javafx.scene.image.Image;
 
 import javafx.geometry.Insets;
@@ -40,6 +40,7 @@ import javafx.collections.ObservableList;
 import milu.db.MyDBAbstract;
 import milu.db.MyDBFactory;
 import milu.gui.dlg.MyAlertDialog;
+import milu.ctrl.MainController;
 
 // Dialog sample
 // http://code.makery.ch/blog/javafx-dialogs-official/
@@ -52,6 +53,8 @@ public class DBSettingDialog extends Dialog<MyDBAbstract>
 
 	// Language Resource
 	private ResourceBundle langRB = ResourceBundle.getBundle( PROPERTY_FILENAME );
+	
+	private MainController mainCtrl = null; 
 	
 	// Thread Pool
 	//private ExecutorService  service = Executors.newSingleThreadExecutor();
@@ -86,8 +89,10 @@ public class DBSettingDialog extends Dialog<MyDBAbstract>
 	// Button "OK"
 	ButtonType okButtonType = null;
 	
-	public DBSettingDialog()
+	public DBSettingDialog( MainController mainCtrl )
 	{
+		this.mainCtrl = mainCtrl;
+		
 		// Set dialog title.
 		this.setTitle( langRB.getString( "TITLE_DB_SETTING" ) );
 		
@@ -162,7 +167,7 @@ public class DBSettingDialog extends Dialog<MyDBAbstract>
 		this.comboBoxDBType.getSelectionModel().selectFirst();
 		MyDBAbstract selectedMyDBAbs = this.comboBoxDBType.getSelectionModel().getSelectedItem();
 		PaneFactory paneFactory = new UrlPaneFactory();
-		UrlPaneAbstract urlPaneAbs = paneFactory.createPane( selectedMyDBAbs, langRB, new HashMap<String,String>() );
+		UrlPaneAbstract urlPaneAbs = paneFactory.createPane( this.mainCtrl, selectedMyDBAbs, langRB, new HashMap<String,String>() );
 		this.brdPane.setBottom( urlPaneAbs );
 		
 		// Set default value on field for Port
@@ -175,6 +180,13 @@ public class DBSettingDialog extends Dialog<MyDBAbstract>
 		// Window Icon
 		Stage stage = (Stage)this.getDialogPane().getScene().getWindow();
 		stage.getIcons().add( new Image( "file:resources/images/winicon.gif" ) );
+		
+		// set css for this dialog
+		Scene scene = this.getDialogPane().getScene();
+		scene.getStylesheets().add
+		(
+			getClass().getResource("/conf/css/dlg/DBSettingDialog.css").toExternalForm()
+		);
 		
 		// set Action
 		this.setAction();
@@ -211,7 +223,7 @@ public class DBSettingDialog extends Dialog<MyDBAbstract>
 					UrlPaneAbstract urlPaneAbs1 = (UrlPaneAbstract)bottomNode;
 					Map<String, String> mapProp = urlPaneAbs1.getProp();
 					PaneFactory paneFactory = new UrlPaneFactory();
-					UrlPaneAbstract urlPaneAbs2 = paneFactory.createPane( newVal, langRB, mapProp );
+					UrlPaneAbstract urlPaneAbs2 = paneFactory.createPane( this.mainCtrl, newVal, langRB, mapProp );
 					this.brdPane.setBottom( urlPaneAbs2 );
 				}
 				

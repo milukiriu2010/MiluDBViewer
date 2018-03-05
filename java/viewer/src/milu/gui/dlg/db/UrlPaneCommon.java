@@ -13,10 +13,13 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 
 import milu.db.MyDBAbstract;
+import milu.ctrl.MainController;
 
 public class UrlPaneCommon extends UrlPaneAbstract
 {
-	private MyDBAbstract  myDBAbs       = null;
+	private MainController mainCtrl     = null;
+	
+	private MyDBAbstract   myDBAbs      = null;
 	
 	// field for DB Name
 	private TextField dbnameTextField   = new TextField();
@@ -30,7 +33,7 @@ public class UrlPaneCommon extends UrlPaneAbstract
 	// field for URL
 	private TextArea  urlTextArea       = new TextArea();
 	
-	public void createPane( MyDBAbstract myDBAbs, ResourceBundle extLangRB, Map<String,String> mapProp )
+	public void createPane( MainController mainCtrl, MyDBAbstract myDBAbs, ResourceBundle extLangRB, Map<String,String> mapProp )
 	{
 		this.myDBAbs = myDBAbs;
 		

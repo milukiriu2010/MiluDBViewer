@@ -1,0 +1,9 @@
+.copyable-label, .copyable-label:focused {
+    -fx-background-color: transparent ;
+    -fx-background-insets: 0px ;
+}
+
+.url {
+	-fx-text-fill: #0000ff;
+	-fx-underline: true;
+}

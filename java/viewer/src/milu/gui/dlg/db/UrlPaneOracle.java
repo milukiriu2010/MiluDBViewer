@@ -6,6 +6,7 @@ import java.util.ResourceBundle;
 
 import javafx.beans.property.StringProperty;
 import javafx.geometry.Insets;
+import javafx.scene.Cursor;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
@@ -15,8 +16,10 @@ import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.application.Application;
 
 import milu.db.MyDBAbstract;
+import milu.ctrl.MainController;
 
 public class UrlPaneOracle extends UrlPaneAbstract
 {
@@ -29,6 +32,8 @@ public class UrlPaneOracle extends UrlPaneAbstract
 	
 	// Language Resource(from External Class)
 	private ResourceBundle extLangRB = null;
+	
+	private MainController mainCtrl       = null;
 	
 	private MyDBAbstract   myDBAbs        = null;
 	
@@ -46,7 +51,9 @@ public class UrlPaneOracle extends UrlPaneAbstract
 	private ToggleButton   tglBtnFreeHand = new ToggleButton();
 	
 	
-	
+	// ----------------------------------------------------
+	// Items for "Basic"
+	// ----------------------------------------------------
 	
 	// field for DB Name
 	private TextField dbnameTextField   = new TextField();
@@ -57,11 +64,17 @@ public class UrlPaneOracle extends UrlPaneAbstract
 	// field for Port
 	private TextField portTextField     = new TextField();
 	
+	// ----------------------------------------------------
+	// Items for "Free Hand"
+	// ----------------------------------------------------
+	private Label     lblUrl            = new Label();
+	
 	// field for URL
 	private TextArea  urlTextArea       = new TextArea();
 	
-	public void createPane( MyDBAbstract myDBAbs, ResourceBundle extLangRB, Map<String,String> mapProp )
+	public void createPane( MainController mainCtrl, MyDBAbstract myDBAbs, ResourceBundle extLangRB, Map<String,String> mapProp )
 	{
+		this.mainCtrl  = mainCtrl;
 		this.myDBAbs   = myDBAbs;
 		this.extLangRB = extLangRB;
 		
@@ -102,6 +115,14 @@ public class UrlPaneOracle extends UrlPaneAbstract
 		
 		this.getChildren().addAll( vBox );
 		*/
+		
+		
+		// ----------------------------------------------------
+		// Items for "Free Hand"
+		// ----------------------------------------------------
+		this.lblUrl.setText( "https://docs.oracle.com/cd/B28359_01/java.111/b31224/urls.htm" );
+		this.lblUrl.setCursor( Cursor.HAND );
+		this.lblUrl.getStyleClass().add("url");
 		
 		this.setAction();
 		
@@ -197,6 +218,16 @@ public class UrlPaneOracle extends UrlPaneAbstract
 				this.setUrlTextArea();
 			}
 		);
+		
+		
+		this.lblUrl.setOnMouseClicked
+		(
+			(event)->
+			{
+				Application application = this.mainCtrl.getApplication();
+				application.getHostServices().showDocument( this.lblUrl.getText() );
+			}
+		);
 	}
 	
 	private void setPaneBasic()
@@ -234,7 +265,7 @@ public class UrlPaneOracle extends UrlPaneAbstract
 		this.urlTextArea.setWrapText(true);		
 		
 		VBox vBox = new VBox(2);
-		vBox.getChildren().addAll( this.hBoxToggle, this.urlTextArea );
+		vBox.getChildren().addAll( this.hBoxToggle, this.urlTextArea, this.lblUrl );
 		
 		this.getChildren().addAll( vBox );
 	}

@@ -12,6 +12,8 @@ import java.sql.SQLException;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import javafx.stage.Window;
+import javafx.application.Application;
+
 import milu.gui.dlg.db.DBSettingDialog;
 import milu.gui.view.DBView;
 
@@ -22,6 +24,9 @@ import milu.conf.AppConf;
 
 public class MainController
 {
+	// Application
+	private Application application = null;
+	
 	// Application Configuration
 	private AppConf  appConf = new AppConf();
 	
@@ -37,6 +42,16 @@ public class MainController
 	
 	public MainController()
 	{
+	}
+	
+	public void setApplication( Application application )
+	{
+		this.application = application;
+	}
+	
+	public Application getApplication()
+	{
+		return this.application;
 	}
 	
 	public AppConf getAppConf()
@@ -140,7 +155,7 @@ public class MainController
 		// How to close on pressing 'x'
 		// https://stackoverflow.com/questions/32048348/javafx-scene-control-dialogr-wont-close-on-pressing-x
 		// -----------------------------------------
-		DBSettingDialog dlg = new DBSettingDialog();
+		DBSettingDialog dlg = new DBSettingDialog( this );
 		Window       window = dlg.getDialogPane().getScene().getWindow();
 		window.setOnCloseRequest( event ->{ window.hide(); this.close(null); } );
 		

@@ -4,6 +4,8 @@ import java.util.Map;
 import java.util.ResourceBundle;
 import javafx.scene.layout.Pane;
 
+import milu.ctrl.MainController;
+
 import milu.db.MyDBAbstract;
 import milu.db.MyDBPostgres;
 import milu.db.MyDBMySQL;
@@ -13,7 +15,7 @@ import milu.db.MyDBCassandra;
 public class UrlPaneFactory implements PaneFactory 
 {
 	@Override
-	public UrlPaneAbstract createPane( MyDBAbstract myDBAbs, ResourceBundle extLangRB, Map<String,String> mapProp )
+	public UrlPaneAbstract createPane( MainController mainCtrl, MyDBAbstract myDBAbs, ResourceBundle extLangRB, Map<String,String> mapProp )
 	{
 		UrlPaneAbstract urlPaneAbs = null;
 		
@@ -25,7 +27,7 @@ public class UrlPaneFactory implements PaneFactory
 		{
 			urlPaneAbs = new UrlPaneCommon();
 		}
-		urlPaneAbs.createPane(myDBAbs, extLangRB, mapProp);
+		urlPaneAbs.createPane( mainCtrl, myDBAbs, extLangRB, mapProp);
 		return urlPaneAbs;
 	}
 }

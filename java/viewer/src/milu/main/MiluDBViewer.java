@@ -21,6 +21,7 @@ public class MiluDBViewer extends Application
 		MainController mainCtrl = new MainController();
     	try
     	{
+    		mainCtrl.setApplication( this );
     		mainCtrl.loadImages();
     		mainCtrl.createNewDBConnectionAndOpenNewWindow();
     	}

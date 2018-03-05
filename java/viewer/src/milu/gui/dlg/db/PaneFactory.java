@@ -2,11 +2,11 @@ package milu.gui.dlg.db;
 
 import java.util.Map;
 import java.util.ResourceBundle;
-import javafx.scene.layout.Pane;
 
+import milu.ctrl.MainController;
 import milu.db.MyDBAbstract;
 
 public interface PaneFactory
 {
-	public UrlPaneAbstract createPane( MyDBAbstract myDBAbs, ResourceBundle extLangRB, Map<String,String> mapProp );
+	public UrlPaneAbstract createPane( MainController mainCtrl, MyDBAbstract myDBAbs, ResourceBundle extLangRB, Map<String,String> mapProp );
 }
