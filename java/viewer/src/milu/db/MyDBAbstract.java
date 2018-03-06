@@ -2,6 +2,7 @@ package milu.db;
 
 import java.util.Map;
 import java.util.HashMap;
+import java.util.Properties;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -31,11 +32,6 @@ abstract public class MyDBAbstract
 	// DB properties
 	protected Map<String,String>  dbOpts = new HashMap<>();
 	
-	/*
-	// Supported Type List
-	protected List<SchemaEntity.SCHEMA_TYPE>  suppoertedTypeLst = 
-			new ArrayList<SchemaEntity.SCHEMA_TYPE>();
-	*/	
 	// SchemaEntity Root
 	protected SchemaEntity schemaRoot = null;
 	
@@ -93,12 +89,62 @@ abstract public class MyDBAbstract
 	 */
 	public String getUrl()
 	{
-		return this.url;
+		if ( this.dbOpts.size() == 0 )
+		{	
+			return this.url;
+		}
+		else
+		{
+			StringBuffer sb = new StringBuffer("?");
+			this.dbOpts.forEach( (k,v)->sb.append(k+"="+v) );
+			return this.url + sb.toString();
+		}
 	}
 	
 	public void setUrl( String url )
 	{
-		this.url = url;
+		this.dbOpts.clear();
+		if ( url == null )
+		{
+			this.url = url;
+			return;
+		}
+		else if ( url.indexOf('?') == -1 )
+		{
+			this.url = url;
+		}
+		else
+		{
+			int pos = url.indexOf('?');
+			this.url = url.substring( 0, pos );
+			String strParam = url.substring( pos+1 );
+			String[] strKVs = strParam.split("&");
+			for ( String strKV : strKVs )
+			{
+				int posK = strKV.indexOf('=');
+				if ( posK != -1 )
+				{
+					String k = strKV.substring(0,posK);
+					String v = strKV.substring(posK+1);
+					if ( "user".equals(k) )
+					{
+						this.username = v;
+					}
+					else if ( "password".equals(k) )
+					{
+						this.password = v;
+					}
+					else
+					{
+						this.dbOpts.put( k, v );
+					}
+				}
+				else
+				{
+					this.dbOpts.put( strKV, null );
+				}
+			}
+		}
 	}
 	
 	public synchronized SchemaEntity getSchemaRoot()
@@ -106,26 +152,23 @@ abstract public class MyDBAbstract
 		return this.schemaRoot;
 	}
 	
-	/*
-	public List<SchemaEntity.SCHEMA_TYPE> getSupportedTypeLst()
+	private Properties createProp()
 	{
-		return this.suppoertedTypeLst;
+		Properties prop = new Properties();
+		
+		if ( this.username != null )
+		{
+			prop.setProperty( "user", this.username );
+		}
+		if ( this.password != null )
+		{
+			prop.setProperty( "password", this.password );
+		}
+		
+		this.dbOpts.forEach( (k,v)->prop.setProperty(k,v) );
+		
+		return prop;
 	}
-	*/
-	
-	/***********************************************
-	 * Create URL for Connection
-	 ***********************************************
-	 * @param  dbOptMap 
-	 *  Parameters for DB Connection
-	 *	  UserName
-	 *	  Password
-	 *	  DBName
-	 *    Host
-	 *    Port
-	 *********************************************** 
-	 */
-	//abstract protected void createConnectionParameter( Map<String,String> dbOptMap );
 	
 	/***********************************************
 	 * Connect to DB
@@ -141,7 +184,6 @@ abstract public class MyDBAbstract
 	 * @throws ClassNotFoundException
 	 * @throws SQLException 
 	 */
-	//public synchronized void connect( Map<String,String> dbOptMap ) 
 	public synchronized void connect() 
 		 throws ClassNotFoundException, SQLException
 	{
@@ -158,26 +200,12 @@ abstract public class MyDBAbstract
 		// Load Driver
 	    this.loadDriver();
 	    
-	    /*
-	    // set username
-	    this.username = dbOptMap.get( "UserName" );
-	    
-	    // set password
-	    this.password = dbOptMap.get( "Password" );
-	    */
-	    
-	    /*
-	    // Create URL for DB Connection
-		this.createConnectionParameter( dbOptMap );
-	    */
-	    
 		System.out.println( "URL     :" + this.url );
 		System.out.println( "UserName:" + this.username );
-		//System.out.println( "Password:" + this.password );
 		
 		// Connection
-		this.conn = 
-	    	DriverManager.getConnection( this.url, this.username, this.password );
+		//this.conn =	DriverManager.getConnection( this.url, this.username, this.password );
+		this.conn =	DriverManager.getConnection( this.url, this.createProp() );
 		this.conn.setAutoCommit( false );
 		
 		this.schemaRoot = SchemaEntityFactory.createInstance( this.url, SchemaEntity.SCHEMA_TYPE.ROOT );
@@ -206,8 +234,8 @@ abstract public class MyDBAbstract
 		
 		this.conn = null;
 		// Connection
-		this.conn = 
-	    	DriverManager.getConnection( this.url, this.username, this.password );
+		//this.conn = DriverManager.getConnection( this.url, this.username, this.password );
+		this.conn =	DriverManager.getConnection( this.url, this.createProp() );
 		this.conn.setAutoCommit( false );
 		System.out.println( "DB[" + this.url + "] Connected!!" );
 	}

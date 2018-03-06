@@ -19,7 +19,11 @@ public class UrlPaneFactory implements PaneFactory
 	{
 		UrlPaneAbstract urlPaneAbs = null;
 		
-		if ( myDBAbs instanceof MyDBOracle )
+		if ( myDBAbs instanceof MyDBMySQL )
+		{
+			urlPaneAbs = new UrlPaneMySQL();
+		}
+		else if ( myDBAbs instanceof MyDBOracle )
 		{
 			urlPaneAbs = new UrlPaneOracle();
 		}
