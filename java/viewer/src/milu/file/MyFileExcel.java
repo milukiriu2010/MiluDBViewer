@@ -99,6 +99,12 @@ public class MyFileExcel extends MyFileAbstract
 	}
 	
 	@Override
+	public String load() throws IOException
+	{
+		throw new UnsupportedOperationException();
+	}
+	
+	@Override
 	public void save( List<String> headLst, List<List<String>> dataLst )
 		throws IOException
 	{

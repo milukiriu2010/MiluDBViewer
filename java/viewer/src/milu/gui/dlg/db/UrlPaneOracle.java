@@ -2,7 +2,11 @@ package milu.gui.dlg.db;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.List;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
+import java.io.File;
+import java.io.IOException;
 
 import javafx.beans.property.StringProperty;
 import javafx.geometry.Insets;
@@ -10,25 +14,35 @@ import javafx.scene.Cursor;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
-import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.image.ImageView;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.Button;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.application.Application;
+import javafx.stage.DirectoryChooser;
 
 import milu.db.MyDBAbstract;
 import milu.ctrl.MainController;
 
+import milu.file.MyFileAbstract;
+import milu.file.MyFileFactory;
+import milu.gui.dlg.MyAlertDialog;
+
 public class UrlPaneOracle extends UrlPaneAbstract
 {
+	/*
 	// Property File for this class 
 	private static final String PROPERTY_FILENAME = 
 			"conf.lang.dlg.db.UrlPaneOracle";
 
 	// Language Resource
-	private ResourceBundle langRB = ResourceBundle.getBundle( PROPERTY_FILENAME );	
+	private ResourceBundle langRB = ResourceBundle.getBundle( PROPERTY_FILENAME );
+	*/	
 	
 	// Language Resource(from External Class)
 	private ResourceBundle extLangRB = null;
@@ -50,11 +64,9 @@ public class UrlPaneOracle extends UrlPaneAbstract
 	// ToggleButton for Free Hand
 	private ToggleButton   tglBtnFreeHand = new ToggleButton();
 	
-	
 	// ----------------------------------------------------
 	// Items for "Basic"
 	// ----------------------------------------------------
-	
 	// field for DB Name
 	private TextField dbnameTextField   = new TextField();
 	
@@ -65,7 +77,16 @@ public class UrlPaneOracle extends UrlPaneAbstract
 	private TextField portTextField     = new TextField();
 	
 	// ----------------------------------------------------
-	// Items for "Free Hand"
+	// Items for "TNS"
+	// ----------------------------------------------------
+	private ComboBox<String> tnsNamesCombo = new ComboBox<>();
+	
+	private TextField tnsAdminTextField    = new TextField();
+	
+	private Button    folderBtn            = new Button();
+	
+	// ----------------------------------------------------
+	// Items for "FreeHand"
 	// ----------------------------------------------------
 	private Label     lblUrl            = new Label();
 	
@@ -79,53 +100,23 @@ public class UrlPaneOracle extends UrlPaneAbstract
 		this.extLangRB = extLangRB;
 		
 		// ToggleButton for Basic
-		this.tglBtnBasic.setText(langRB.getString("TOGGLE_BASIC"));
+		this.tglBtnBasic.setText(extLangRB.getString("TOGGLE_BASIC"));
 		this.tglBtnBasic.setToggleGroup( this.tglGroup );
 		// ToggleButton for TNS
-		this.tglBtnTNS.setText(langRB.getString("TOGGLE_TNS"));
+		this.tglBtnTNS.setText(extLangRB.getString("TOGGLE_TNS"));
 		this.tglBtnTNS.setToggleGroup( this.tglGroup );
 		// ToggleButton for Free Hand
-		this.tglBtnFreeHand.setText(langRB.getString("TOGGLE_FREE"));
+		this.tglBtnFreeHand.setText(extLangRB.getString("TOGGLE_FREE"));
 		this.tglBtnFreeHand.setToggleGroup( this.tglGroup );
 		
 		this.hBoxToggle.getChildren().addAll( this.tglBtnBasic, this.tglBtnTNS, this.tglBtnFreeHand );
 		
 		this.tglBtnBasic.setSelected(true);
 		this.setPaneBasic();
-		/*
-		// set all objects on pane.
-		GridPane gridPane = new GridPane();
-		gridPane.setHgap( 5 );
-		gridPane.setVgap( 2 );
-		gridPane.setPadding( new Insets( 10, 10, 10, 10 ) );
-		gridPane.add( new Label( extLangRB.getString( "LABEL_DB_NAME" )) , 0, 0 );
-		gridPane.add( this.dbnameTextField  , 1, 0 );
-		gridPane.add( new Label( extLangRB.getString( "LABEL_HOST_OR_IPADDRESS" )), 0, 1 );
-		gridPane.add( this.hostTextField    , 1, 1 );
-		gridPane.add( new Label( extLangRB.getString( "LABEL_PORT" )), 0, 2 );
-		gridPane.add( this.portTextField    , 1, 2 );
-		
-		// Set default value on field for URL
-		this.setUrlTextArea();
-		this.urlTextArea.setEditable( false );
-		this.urlTextArea.setWrapText(true);		
-		
-		VBox vBox = new VBox(2);
-		vBox.getChildren().addAll( this.hBoxToggle, gridPane, this.urlTextArea );
-		
-		this.getChildren().addAll( vBox );
-		*/
-		
 		
 		// ----------------------------------------------------
-		// Items for "Free Hand"
+		// Items for "Basic"
 		// ----------------------------------------------------
-		this.lblUrl.setText( "https://docs.oracle.com/cd/B28359_01/java.111/b31224/urls.htm" );
-		this.lblUrl.setCursor( Cursor.HAND );
-		this.lblUrl.getStyleClass().add("url");
-		
-		this.setAction();
-		
 		String dbName = mapProp.get("DBName");
 		if ( dbName != null )
 		{
@@ -137,6 +128,49 @@ public class UrlPaneOracle extends UrlPaneAbstract
 			this.hostTextField.setText( host );
 		}
 		this.portTextField.setText( String.valueOf(myDBAbs.getDefaultPort()) );
+		
+		// ----------------------------------------------------
+		// Items for "TNS"
+		// ----------------------------------------------------
+		this.tnsNamesCombo.setEditable(true);
+		
+		if ( System.getenv("TNS_ADMIN") != null )
+		{
+			String tns_admin = System.getenv("TNS_ADMIN");
+			if ( new File(tns_admin).exists() )
+			{
+				this.tnsAdminTextField.setText( tns_admin );
+			}
+		}
+		else if ( System.getenv("ORACLE_HOME") != null )
+		{
+			String oracle_home = System.getenv("ORACLE_HOME");
+			String tns_admin1 = oracle_home + java.io.File.separator + "network" + java.io.File.separator + "admin";
+			String tns_admin2 = oracle_home + java.io.File.separator + "NETWORK" + java.io.File.separator + "ADMIN";
+			if ( new File(tns_admin1).exists() )
+			{
+				this.tnsAdminTextField.setText( tns_admin1 );
+			}
+			else if ( new File(tns_admin2).exists() )
+			{
+				this.tnsAdminTextField.setText( tns_admin2 );
+			}
+		}
+		
+		ImageView   ivFolder = new ImageView( this.mainCtrl.getImage("file:resources/images/folder.png") );
+		ivFolder.setFitWidth(16);
+		ivFolder.setFitHeight(16);
+		this.folderBtn.setGraphic( ivFolder );
+		
+		// ----------------------------------------------------
+		// Items for "Freehand"
+		// ----------------------------------------------------
+		this.lblUrl.setText( "https://docs.oracle.com/cd/B28359_01/java.111/b31224/urls.htm" );
+		this.lblUrl.setCursor( Cursor.HAND );
+		this.lblUrl.getStyleClass().add("url");
+		
+		this.setAction();
+		
 		this.setUrlTextArea();
 	}
 	
@@ -149,20 +183,13 @@ public class UrlPaneOracle extends UrlPaneAbstract
 		(
 			(obs,oldVal,newVal)->
 			{
-				if ( oldVal != null )
-				{
-					System.out.println( "obs[" + obs.getClass() + 
-							"]oldVal" + oldVal.getClass() + 
-							"]newVal[" + newVal.getClass() + "]" );
-				}
-				
 				if ( newVal == this.tglBtnBasic )
 				{
 					this.setPaneBasic();
 				}
 				else if ( newVal == this.tglBtnTNS )
 				{
-					
+					this.setPaneTNS();
 				}
 				else if ( newVal == this.tglBtnFreeHand )
 				{
@@ -170,7 +197,6 @@ public class UrlPaneOracle extends UrlPaneAbstract
 				}
 			}
 		);
-		
 		
 		// --------------------------------------------
 		// Update urlTextField, when DBName is changed
@@ -219,6 +245,53 @@ public class UrlPaneOracle extends UrlPaneAbstract
 			}
 		);
 		
+		this.tnsNamesCombo.valueProperty().addListener
+		(
+			(obs,oldVal,newVal)->
+			{
+				System.out.println( "TNSName:ComboBox:" + newVal );
+				this.setUrlTextArea();
+			}
+		);
+		
+		// https://stackoverflow.com/questions/37923502/how-to-get-entered-value-in-editable-combobox-in-javafx
+		this.tnsNamesCombo.getEditor().focusedProperty().addListener
+		(
+			(obs,oldVal,newVal)->
+			{
+				// lose focus
+				if ( newVal == false )
+				{
+					System.out.println( "TNSName:ComboBox:lose focus." );
+					this.tnsNamesCombo.setValue( this.tnsNamesCombo.getEditor().getText() );
+				}
+			}
+		);
+		
+		this.folderBtn.setOnAction
+		(
+			(event)->
+			{
+				DirectoryChooser dc = new DirectoryChooser();
+				File dir = dc.showDialog(null);
+				if ( dir != null )
+				{
+					this.tnsAdminTextField.setText( dir.getAbsolutePath() );
+					this.loadTnsNamesOra( dir );
+				}
+			}
+		);
+		
+		this.tnsAdminTextField.focusedProperty().addListener
+		(
+			(event)->
+			{
+				System.out.println( "TNSAdmin:lose focus." );
+				String dirPath = this.tnsAdminTextField.getText();
+				File dir = new File( dirPath );
+				this.loadTnsNamesOra( dir );
+			}
+		);
 		
 		this.lblUrl.setOnMouseClicked
 		(
@@ -234,7 +307,7 @@ public class UrlPaneOracle extends UrlPaneAbstract
 	{
 		this.getChildren().removeAll( this.getChildren() );
 		
-		// set all objects on pane.
+		// set objects on GridPane
 		GridPane gridPane = new GridPane();
 		gridPane.setHgap( 5 );
 		gridPane.setVgap( 2 );
@@ -252,7 +325,33 @@ public class UrlPaneOracle extends UrlPaneAbstract
 		this.urlTextArea.setWrapText(true);		
 		
 		VBox vBox = new VBox(2);
-		vBox.getChildren().addAll( this.hBoxToggle, gridPane, this.urlTextArea );
+		vBox.getChildren().addAll( this.hBoxToggle, gridPane, this.urlTextArea, this.lblUrl );
+		
+		this.getChildren().addAll( vBox );
+	}
+	
+	private void setPaneTNS()
+	{
+		this.getChildren().removeAll( this.getChildren() );
+		
+		// set objects on GridPane
+		GridPane gridPane = new GridPane();
+		gridPane.setHgap( 5 );
+		gridPane.setVgap( 2 );
+		gridPane.setPadding( new Insets( 10, 10, 10, 10 ) );
+		gridPane.add( new Label( extLangRB.getString( "LABEL_TNS_ADMIN" )), 0, 0 );
+		gridPane.add( this.tnsAdminTextField, 1, 0 );
+		gridPane.add( this.folderBtn, 2, 0 );
+		gridPane.add( new Label( extLangRB.getString( "LABEL_TNS_NAMES" )), 0, 1 );
+		gridPane.add( this.tnsNamesCombo    , 1, 1 );
+		
+		// Set default value on field for URL
+		this.setUrlTextArea();
+		this.urlTextArea.setEditable( false );
+		this.urlTextArea.setWrapText(true);			
+		
+		VBox vBox = new VBox(2);
+		vBox.getChildren().addAll( this.hBoxToggle, gridPane, this.urlTextArea, this.lblUrl );
 		
 		this.getChildren().addAll( vBox );
 	}
@@ -275,9 +374,17 @@ public class UrlPaneOracle extends UrlPaneAbstract
 	{
 		Map<String,String> dbOptMap = new HashMap<String,String>();
 		
-		dbOptMap.put( "DBName"  , this.dbnameTextField.getText() );
-		dbOptMap.put( "Host"    , this.hostTextField.getText() );
-		dbOptMap.put( "Port"    , this.portTextField.getText() );
+		if ( this.tglBtnBasic.isSelected() )
+		{
+			dbOptMap.put( "DBName"  , this.dbnameTextField.getText() );
+			dbOptMap.put( "Host"    , this.hostTextField.getText() );
+			dbOptMap.put( "Port"    , this.portTextField.getText() );
+		}
+		else if ( this.tglBtnTNS.isSelected() )
+		{
+			dbOptMap.put( "TNSName"  , this.tnsNamesCombo.getValue() );
+			dbOptMap.put( "TNSAdmin" , this.tnsAdminTextField.getText() );
+		}		
 		
 		return dbOptMap;
 	}
@@ -287,38 +394,59 @@ public class UrlPaneOracle extends UrlPaneAbstract
 	{
 		Map<String,String> dbOptMap = new HashMap<String,String>();
 		
-		dbOptMap.put( "DBName"  , this.dbnameTextField.getText() );
-		dbOptMap.put( "Host"    , this.hostTextField.getText() );
-		dbOptMap.put( "Port"    , this.portTextField.getText() );
-		
-		this.myDBAbs.getDriverUrl(dbOptMap);
+		if ( this.tglBtnBasic.isSelected() )
+		{
+			dbOptMap.put( "DBName"  , this.dbnameTextField.getText() );
+			dbOptMap.put( "Host"    , this.hostTextField.getText() );
+			dbOptMap.put( "Port"    , this.portTextField.getText() );
+			this.myDBAbs.getDriverUrl(dbOptMap);
+		}
+		else if ( this.tglBtnTNS.isSelected() )
+		{
+			dbOptMap.put( "TNSName"  , this.tnsNamesCombo.getValue() );
+			dbOptMap.put( "TNSAdmin" , this.tnsAdminTextField.getText() );
+			this.myDBAbs.getDriverUrl(dbOptMap);
+		}
+		else if ( this.tglBtnFreeHand.isSelected() )
+		{
+			this.myDBAbs.setUrl( this.urlTextArea.getText() );
+		}
 	}
 
-	/*
-	@Override
-	public String getUrl() 
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void setPort( int port )
-	{
-		this.portTextField.setText( String.valueOf(port) );
-		this.setUrlTextArea();
-	}
-	*/
-	
 	private void setUrlTextArea()
 	{
-		Map<String,String> dbOptMap = new HashMap<String,String>();
-		
-		dbOptMap.put( "DBName"  , this.dbnameTextField.getText() );
-		dbOptMap.put( "Host"    , this.hostTextField.getText() );
-		dbOptMap.put( "Port"    , this.portTextField.getText() );
-		
-		this.urlTextArea.setText( this.myDBAbs.getDriverUrl( dbOptMap ) );
+		this.setUrl();
+		this.urlTextArea.setText( this.myDBAbs.getUrl() );
 	}
 	
+	private List<String> loadTnsNamesOra( File dir )
+	{
+		List<String> tnsNameLst = new ArrayList<>();
+		
+		File file = new File( dir.getAbsolutePath() + File.separator + "tnsnames.ora" );
+		if ( file.exists() == false )
+		{
+			return tnsNameLst;
+		}
+		
+		MyFileAbstract myFileAbs = MyFileFactory.getInstance(file);
+		
+		try
+		{
+			myFileAbs.open( file );
+			String strTNSFile = myFileAbs.load();
+			// ^([^#()\W ][a-zA-Z.]*(?:[.][a-zA-Z]*\s?=)?)
+			System.out.println( "=== tnsnames.ora ===" );
+			System.out.println( strTNSFile );
+		}
+		catch ( IOException ioEx )
+		{
+    		MyAlertDialog alertDlg = new MyAlertDialog( AlertType.WARNING );
+    		alertDlg.setHeaderText( extLangRB.getString( "TITLE_FILE_NOT_FOUND" ) );
+    		alertDlg.setTxtExp( ioEx );
+    		alertDlg.showAndWait();
+    	}
+		
+		return tnsNameLst;
+	}
 }

@@ -13,6 +13,10 @@ public class MyFileFactory
 		{
 			return new MyFileExcel();
 		}
+		else if ( "ora".equals( ext ) )
+		{
+			return new MyFileTnsNamesOra();
+		}
 		else
 		{
 			return null;

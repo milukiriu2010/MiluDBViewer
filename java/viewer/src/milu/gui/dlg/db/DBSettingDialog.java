@@ -2,6 +2,7 @@ package milu.gui.dlg.db;
 
 import java.util.List;
 import java.util.ArrayList;
+import java.util.ListIterator;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.ResourceBundle;
@@ -27,9 +28,9 @@ import javafx.geometry.Insets;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 
 import javafx.stage.Stage;
-import javafx.stage.Window;
 
 import javafx.event.ActionEvent;
 import javafx.application.Platform;
@@ -86,6 +87,9 @@ public class DBSettingDialog extends Dialog<MyDBAbstract>
 	// pane for Dialog
 	BorderPane brdPane = new BorderPane();
 	
+	// VBox
+	VBox       vBox    = new VBox(2);
+	
 	// Button "OK"
 	ButtonType okButtonType = null;
 	
@@ -121,19 +125,19 @@ public class DBSettingDialog extends Dialog<MyDBAbstract>
 		// field for Port
 		this.portTextField.setPromptText( this.langRB.getString( "PROMPT_PORT" ) );
 		
+		/*
 		HBox hBox = new HBox( 2 );
 		hBox.getChildren().add( new Label( this.langRB.getString( "LABEL_DB_TYPE" )) );
 		hBox.getChildren().add( this.comboBoxDBType );
+		*/
 		
 		// set all objects on pane.
 		GridPane paneDBOpt = new GridPane();
 		paneDBOpt.setHgap( 5 );
 		paneDBOpt.setVgap( 2 );
 		paneDBOpt.setPadding( new Insets( 10, 10, 10, 10 ) );
-		/*
 		paneDBOpt.add( new Label( this.langRB.getString( "LABEL_DB_TYPE" )) , 0, 0 );
 		paneDBOpt.add( this.comboBoxDBType   , 1, 0 );
-		*/
 		paneDBOpt.add( new Label( this.langRB.getString( "LABEL_USERNAME" )), 0, 1 );
 		paneDBOpt.add( this.usernameTextField, 1, 1 );
 		paneDBOpt.add( new Label( this.langRB.getString( "LABEL_PASSWORD" )), 0, 2 );
@@ -148,8 +152,10 @@ public class DBSettingDialog extends Dialog<MyDBAbstract>
 		*/
 		
 		// pane for Dialog
-		this.brdPane.setTop( hBox );
-		this.brdPane.setCenter( paneDBOpt );
+		this.vBox.getChildren().add( paneDBOpt );
+		this.brdPane.setCenter( this.vBox );
+		//this.brdPane.setTop( hBox );
+		//this.brdPane.setCenter( paneDBOpt );
 		//this.brdPane.setBottom( this.urlTextArea );
 		
 
@@ -168,7 +174,8 @@ public class DBSettingDialog extends Dialog<MyDBAbstract>
 		MyDBAbstract selectedMyDBAbs = this.comboBoxDBType.getSelectionModel().getSelectedItem();
 		PaneFactory paneFactory = new UrlPaneFactory();
 		UrlPaneAbstract urlPaneAbs = paneFactory.createPane( this.mainCtrl, selectedMyDBAbs, langRB, new HashMap<String,String>() );
-		this.brdPane.setBottom( urlPaneAbs );
+		//this.brdPane.setBottom( urlPaneAbs );
+		this.vBox.getChildren().add( urlPaneAbs );
 		
 		// Set default value on field for Port
 		this.portTextField.setText( String.valueOf(this.comboBoxDBType.getValue().getDefaultPort()) );
@@ -179,7 +186,7 @@ public class DBSettingDialog extends Dialog<MyDBAbstract>
 		
 		// Window Icon
 		Stage stage = (Stage)this.getDialogPane().getScene().getWindow();
-		stage.getIcons().add( new Image( "file:resources/images/winicon.gif" ) );
+		stage.getIcons().add( this.mainCtrl.getImage( "file:resources/images/winicon.gif" ) );
 		
 		// set css for this dialog
 		Scene scene = this.getDialogPane().getScene();
@@ -197,7 +204,7 @@ public class DBSettingDialog extends Dialog<MyDBAbstract>
 		Platform.runLater( ()->{ this.comboBoxDBType.requestFocus(); } );
 		
 		// set size
-		this.setResizable( true );
+		//this.setResizable( true );
 	}
 	
 	private void setAction()
@@ -217,6 +224,7 @@ public class DBSettingDialog extends Dialog<MyDBAbstract>
 				//this.portTextField.setText( String.valueOf(newVal.getDefaultPort()) );
 				//this.setUrlTextArea();
 		
+				/*
 				Node bottomNode = this.brdPane.getBottom();
 				if ( bottomNode instanceof UrlPaneAbstract )
 				{
@@ -225,6 +233,23 @@ public class DBSettingDialog extends Dialog<MyDBAbstract>
 					PaneFactory paneFactory = new UrlPaneFactory();
 					UrlPaneAbstract urlPaneAbs2 = paneFactory.createPane( this.mainCtrl, newVal, langRB, mapProp );
 					this.brdPane.setBottom( urlPaneAbs2 );
+				}
+				*/
+				
+				ListIterator<Node> nodeLstIterator = this.vBox.getChildren().listIterator();
+				while ( nodeLstIterator.hasNext() )
+				{
+					Node node = nodeLstIterator.next();
+					if ( node instanceof UrlPaneAbstract )
+					{
+						UrlPaneAbstract urlPaneAbs1 = (UrlPaneAbstract)node;
+						Map<String, String> mapProp = urlPaneAbs1.getProp();
+						this.vBox.getChildren().remove( node );
+						PaneFactory paneFactory = new UrlPaneFactory();
+						UrlPaneAbstract urlPaneAbs2 = paneFactory.createPane( this.mainCtrl, newVal, langRB, mapProp );
+						this.vBox.getChildren().add( urlPaneAbs2 );
+						break;
+					}
 				}
 				
 				
@@ -329,6 +354,7 @@ public class DBSettingDialog extends Dialog<MyDBAbstract>
 	// "OK" Button Event
 	private void setActionBtnOK( ActionEvent event )
 	{
+		/*
 		Node bottomNode = this.brdPane.getBottom();
 		if ( bottomNode instanceof UrlPaneAbstract )
 		{
@@ -336,6 +362,18 @@ public class DBSettingDialog extends Dialog<MyDBAbstract>
 			// call "myDBAbs.getDriverUrl"
 			urlPaneAbs1.setUrl();
 		}
+		*/
+		ListIterator<Node> nodeLstIterator = this.vBox.getChildren().listIterator();
+		while ( nodeLstIterator.hasNext() )
+		{
+			Node node = nodeLstIterator.next();
+			if ( node instanceof UrlPaneAbstract )
+			{
+				UrlPaneAbstract urlPaneAbs1 = (UrlPaneAbstract)node;
+				urlPaneAbs1.setUrl();
+			}
+		}
+		
 		
 		MyDBAbstract myDBAbs = null;
 		try

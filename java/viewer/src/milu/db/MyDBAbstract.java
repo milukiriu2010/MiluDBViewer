@@ -1,8 +1,7 @@
 package milu.db;
 
 import java.util.Map;
-
-import milu.entity.schema.SchemaEntity;
+import java.util.HashMap;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -10,6 +9,7 @@ import java.sql.Statement;
 
 import java.sql.SQLException;
 
+import milu.entity.schema.SchemaEntity;
 import milu.entity.schema.SchemaEntityFactory;
 
 abstract public class MyDBAbstract
@@ -27,6 +27,9 @@ abstract public class MyDBAbstract
 	
 	// DB URL
 	protected String  url = null;
+	
+	// DB properties
+	protected Map<String,String>  dbOpts = new HashMap<>();
 	
 	/*
 	// Supported Type List

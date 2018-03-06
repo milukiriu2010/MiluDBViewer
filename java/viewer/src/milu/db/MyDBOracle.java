@@ -50,6 +50,17 @@ public class MyDBOracle extends MyDBAbstract
 	/**
 	 * Get Driver URL
 	 ***********************************************
+	 * https://docs.oracle.com/cd/B28359_01/java.111/b31224/urls.htm
+	 * [Thin-style Service Name Syntax]
+	 * jdbc:oracle:thin:@localhost:1521/xe
+	 *   Host   => localhost
+	 *   Port   => 1521
+	 *   DBName => xe
+	 * [TNSNames Alias Syntax]
+	 * jdbc:oracle:thin:@orcl
+	 *   TNSName => orcl
+	 *   TNSAdmin => /opt/oracle/12.2/product/network/admin
+	 * 
 	 */
 	public String getDriverUrl( Map<String, String> dbOptMap )
 	{
@@ -62,10 +73,21 @@ public class MyDBOracle extends MyDBAbstract
 		//   "ORA-12505 :TNS listener does not currently know of SID given in connect descriptor"
 		// so, change to (2) style.
 		// https://stackoverflow.com/questions/30861061/ora-12505-tns-listener-does-not-currently-know-of-sid-given-in-connect-descript
-		this.url = 
-				"jdbc:oracle:thin:@"+
-				dbOptMap.get( "Host" )+":"+dbOptMap.get( "Port" )+"/"+
+		if ( dbOptMap.size() == 0 || dbOptMap.containsKey("Port") )
+		{
+			this.url = "jdbc:oracle:thin:@" +
+				dbOptMap.get( "Host" ) + ":" +
+				dbOptMap.get( "Port" ) + "/" +
 				dbOptMap.get( "DBName" );
+		}
+		else if ( dbOptMap.containsKey( "TNSName" ) )
+		{
+			this.url = "jdbc:oracle:thin:@"+ dbOptMap.get( "TNSName" );
+			if ( dbOptMap.containsKey( "TNSAdmin" ) )
+			{
+				System.setProperty( "oracle.net.tns_admin", dbOptMap.get( "TNSAdmin" ) );
+			}
+		}
 		return this.url;
 	}
 	

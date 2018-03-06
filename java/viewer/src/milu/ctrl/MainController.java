@@ -115,6 +115,8 @@ public class MainController
 				"file:resources/images/winicon.gif",
 				// DBSqlTab
 				"file:resources/images/sql.png",
+				// DBSettingDialog
+				"file:resources/images/folder.png",
 			};
 		
 		for ( String image : images )
