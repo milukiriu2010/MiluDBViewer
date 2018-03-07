@@ -173,7 +173,7 @@ public class DBSettingDialog extends Dialog<MyDBAbstract>
 		this.comboBoxDBType.getSelectionModel().selectFirst();
 		MyDBAbstract selectedMyDBAbs = this.comboBoxDBType.getSelectionModel().getSelectedItem();
 		PaneFactory paneFactory = new UrlPaneFactory();
-		UrlPaneAbstract urlPaneAbs = paneFactory.createPane( this.mainCtrl, selectedMyDBAbs, langRB, new HashMap<String,String>() );
+		UrlPaneAbstract urlPaneAbs = paneFactory.createPane( this, this.mainCtrl, selectedMyDBAbs, langRB, new HashMap<String,String>() );
 		//this.brdPane.setBottom( urlPaneAbs );
 		this.vBox.getChildren().add( urlPaneAbs );
 		
@@ -204,7 +204,7 @@ public class DBSettingDialog extends Dialog<MyDBAbstract>
 		Platform.runLater( ()->{ this.comboBoxDBType.requestFocus(); } );
 		
 		// set size
-		//this.setResizable( true );
+		this.setResizable( true );
 	}
 	
 	private void setAction()
@@ -246,7 +246,7 @@ public class DBSettingDialog extends Dialog<MyDBAbstract>
 						Map<String, String> mapProp = urlPaneAbs1.getProp();
 						this.vBox.getChildren().remove( node );
 						PaneFactory paneFactory = new UrlPaneFactory();
-						UrlPaneAbstract urlPaneAbs2 = paneFactory.createPane( this.mainCtrl, newVal, langRB, mapProp );
+						UrlPaneAbstract urlPaneAbs2 = paneFactory.createPane( this, this.mainCtrl, newVal, langRB, mapProp );
 						this.vBox.getChildren().add( urlPaneAbs2 );
 						break;
 					}

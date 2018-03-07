@@ -34,7 +34,7 @@ import milu.file.MyFileAbstract;
 import milu.file.MyFileFactory;
 import milu.gui.dlg.MyAlertDialog;
 
-public class UrlPaneMySQL extends UrlPaneAbstract
+public class UrlPaneCassandra extends UrlPaneAbstract
 {
 	// Language Resource(from External Class)
 	private ResourceBundle extLangRB = null;
@@ -121,7 +121,7 @@ public class UrlPaneMySQL extends UrlPaneAbstract
 		// ----------------------------------------------------
 		// Items for "Freehand"
 		// ----------------------------------------------------
-		this.tmplTextField.setText("jdbc:mysql://[host1][:3306][,[host2][:port2]]...[/[database]][?autoReconnect=true][&autoClosePStmtStreams=true]");
+		this.tmplTextField.setText("jdbc:c*://[host][:9042]/[keyspace][?consistencyLevel=ONE|ANY|...][&compression=LZ4|SNAPPY]");
 		this.tmplTextField.setEditable(false);
 
 		ImageView   ivCopy = new ImageView( this.mainCtrl.getImage("file:resources/images/copy.png") );
@@ -132,7 +132,7 @@ public class UrlPaneMySQL extends UrlPaneAbstract
 		// ----------------------------------------------------
 		// Items for "All"
 		// ----------------------------------------------------
-		this.lblUrl.setText( "https://dev.mysql.com/doc/connector-j/5.1/en/connector-j-reference-configuration-properties.html" );
+		this.lblUrl.setText( "https://github.com/zhicwu/cassandra-jdbc-driver" );
 		this.lblUrl.setCursor( Cursor.HAND );
 		this.lblUrl.getStyleClass().add("url");
 		
@@ -237,7 +237,7 @@ public class UrlPaneMySQL extends UrlPaneAbstract
 		gridPane.setHgap( 5 );
 		gridPane.setVgap( 2 );
 		gridPane.setPadding( new Insets( 10, 10, 10, 10 ) );
-		gridPane.add( new Label( extLangRB.getString( "LABEL_DB_NAME" )) , 0, 0 );
+		gridPane.add( new Label( extLangRB.getString( "LABEL_CASSANDRA_KEYSPACE" )) , 0, 0 );
 		gridPane.add( this.dbnameTextField  , 1, 0 );
 		gridPane.add( new Label( extLangRB.getString( "LABEL_HOST_OR_IPADDRESS" )), 0, 1 );
 		gridPane.add( this.hostTextField    , 1, 1 );

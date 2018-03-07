@@ -22,6 +22,7 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.Dialog;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.ImageView;
 import javafx.scene.control.ComboBox;
@@ -31,7 +32,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.application.Application;
 import javafx.stage.DirectoryChooser;
-
+import javafx.stage.Stage;
 import milu.db.MyDBAbstract;
 import milu.ctrl.MainController;
 
@@ -41,17 +42,10 @@ import milu.gui.dlg.MyAlertDialog;
 
 public class UrlPaneOracle extends UrlPaneAbstract
 {
-	/*
-	// Property File for this class 
-	private static final String PROPERTY_FILENAME = 
-			"conf.lang.dlg.db.UrlPaneOracle";
-
-	// Language Resource
-	private ResourceBundle langRB = ResourceBundle.getBundle( PROPERTY_FILENAME );
-	*/	
-	
 	// Language Resource(from External Class)
 	private ResourceBundle extLangRB = null;
+	
+	private Dialog<?>      dlg            = null;
 	
 	private MainController mainCtrl       = null;
 	
@@ -94,13 +88,22 @@ public class UrlPaneOracle extends UrlPaneAbstract
 	// ----------------------------------------------------
 	// Items for "FreeHand"
 	// ----------------------------------------------------
+	private TextField tmplTextField     = new TextField();
+	
+	private Button    tmplBtn           = new Button();	
+	
+	// ----------------------------------------------------
+	// Items for "All"
+	// ----------------------------------------------------
 	private Label     lblUrl            = new Label();
 	
 	// field for URL
 	private TextArea  urlTextArea       = new TextArea();
 	
-	public void createPane( MainController mainCtrl, MyDBAbstract myDBAbs, ResourceBundle extLangRB, Map<String,String> mapProp )
+	@Override
+	public void createPane( Dialog<?> dlg, MainController mainCtrl, MyDBAbstract myDBAbs, ResourceBundle extLangRB, Map<String,String> mapProp )
 	{
+		this.dlg       = dlg;
 		this.mainCtrl  = mainCtrl;
 		this.myDBAbs   = myDBAbs;
 		this.extLangRB = extLangRB;
@@ -171,6 +174,17 @@ public class UrlPaneOracle extends UrlPaneAbstract
 		// ----------------------------------------------------
 		// Items for "Freehand"
 		// ----------------------------------------------------
+		this.tmplTextField.setText("jdbc:oracle:thin:@//<host>[:1521]/<service_name>[?internal_logon=sysdba|sysoper]");
+		this.tmplTextField.setEditable(false);
+
+		ImageView   ivCopy = new ImageView( this.mainCtrl.getImage("file:resources/images/copy.png") );
+		ivCopy.setFitWidth(16);
+		ivCopy.setFitHeight(16);
+		this.tmplBtn.setGraphic(ivCopy);
+		
+		// ----------------------------------------------------
+		// Items for "All"
+		// ----------------------------------------------------
 		this.lblUrl.setText( "https://docs.oracle.com/cd/B28359_01/java.111/b31224/urls.htm" );
 		this.lblUrl.setCursor( Cursor.HAND );
 		this.lblUrl.getStyleClass().add("url");
@@ -201,6 +215,8 @@ public class UrlPaneOracle extends UrlPaneAbstract
 				{
 					this.setPaneFreeHand();
 				}
+				Stage stage = (Stage)this.dlg.getDialogPane().getScene().getWindow();
+				stage.sizeToScene();
 			}
 		);
 		
@@ -299,6 +315,14 @@ public class UrlPaneOracle extends UrlPaneAbstract
 			}
 		);
 		
+		this.tmplBtn.setOnAction
+		(
+			(event)->
+			{
+				this.urlTextArea.setText( this.tmplTextField.getText() );
+			}
+		);
+		
 		this.lblUrl.setOnMouseClicked
 		(
 			(event)->
@@ -318,7 +342,7 @@ public class UrlPaneOracle extends UrlPaneAbstract
 		gridPane.setHgap( 5 );
 		gridPane.setVgap( 2 );
 		gridPane.setPadding( new Insets( 10, 10, 10, 10 ) );
-		gridPane.add( new Label( extLangRB.getString( "LABEL_DB_NAME" )) , 0, 0 );
+		gridPane.add( new Label( extLangRB.getString( "LABEL_ORACLE_SID" )) , 0, 0 );
 		gridPane.add( this.dbnameTextField  , 1, 0 );
 		gridPane.add( new Label( extLangRB.getString( "LABEL_HOST_OR_IPADDRESS" )), 0, 1 );
 		gridPane.add( this.hostTextField    , 1, 1 );
@@ -345,7 +369,8 @@ public class UrlPaneOracle extends UrlPaneAbstract
 		gridPane.setHgap( 5 );
 		gridPane.setVgap( 2 );
 		gridPane.setPadding( new Insets( 10, 10, 10, 10 ) );
-		gridPane.add( new Label( extLangRB.getString( "LABEL_TNS_ADMIN" )), 0, 0 );
+		Label lblTnsAdmin = new Label( extLangRB.getString( "LABEL_TNS_ADMIN" )); 
+		gridPane.add( lblTnsAdmin, 0, 0 );
 		gridPane.add( this.tnsAdminTextField, 1, 0 );
 		gridPane.add( this.folderBtn, 2, 0 );
 		gridPane.add( new Label( extLangRB.getString( "LABEL_TNS_NAMES" )), 0, 1 );
@@ -354,7 +379,15 @@ public class UrlPaneOracle extends UrlPaneAbstract
 		// Set default value on field for URL
 		this.setUrlTextArea();
 		this.urlTextArea.setEditable( false );
-		this.urlTextArea.setWrapText(true);			
+		this.urlTextArea.setWrapText(true);
+		
+		// Fit width
+		// ------------------------------------------
+		// |  TextArea                              |
+		// ------------------------------------------
+		// |  Label | TextField            | Button |
+		// ------------------------------------------
+		this.tnsAdminTextField.setPrefWidth( this.urlTextArea.getWidth() - lblTnsAdmin.getWidth() - this.folderBtn.getWidth() );
 		
 		VBox vBox = new VBox(2);
 		vBox.getChildren().addAll( this.hBoxToggle, gridPane, this.urlTextArea, this.lblUrl );
@@ -368,9 +401,20 @@ public class UrlPaneOracle extends UrlPaneAbstract
 		
 		this.urlTextArea.setEditable( true );
 		this.urlTextArea.setWrapText(true);		
+
+		// Fit width
+		// ------------------------------------------
+		// |  TextArea                              |
+		// ------------------------------------------
+		// |  TextField                    | Button |
+		// ------------------------------------------
+		this.tmplTextField.setPrefWidth( this.urlTextArea.getWidth() - this.tmplBtn.getWidth() );
+		
+		HBox hBox = new HBox(2);
+		hBox.getChildren().addAll( this.tmplTextField, this.tmplBtn );
 		
 		VBox vBox = new VBox(2);
-		vBox.getChildren().addAll( this.hBoxToggle, this.urlTextArea, this.lblUrl );
+		vBox.getChildren().addAll( this.hBoxToggle, this.urlTextArea, this.lblUrl, hBox );
 		
 		this.getChildren().addAll( vBox );
 	}

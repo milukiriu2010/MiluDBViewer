@@ -9,8 +9,10 @@ import javafx.geometry.Insets;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Dialog;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
+
 
 import milu.db.MyDBAbstract;
 import milu.ctrl.MainController;
@@ -33,7 +35,8 @@ public class UrlPaneCommon extends UrlPaneAbstract
 	// field for URL
 	private TextArea  urlTextArea       = new TextArea();
 	
-	public void createPane( MainController mainCtrl, MyDBAbstract myDBAbs, ResourceBundle extLangRB, Map<String,String> mapProp )
+	@Override
+	public void createPane( Dialog<?> dlg, MainController mainCtrl, MyDBAbstract myDBAbs, ResourceBundle extLangRB, Map<String,String> mapProp )
 	{
 		this.myDBAbs = myDBAbs;
 		
