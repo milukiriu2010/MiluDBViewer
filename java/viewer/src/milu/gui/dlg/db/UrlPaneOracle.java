@@ -4,11 +4,17 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.ResourceBundle;
+import java.util.regex.Pattern;
+import java.util.regex.Matcher;
+import java.util.regex.PatternSyntaxException;
 import java.io.File;
 import java.io.IOException;
 
 import javafx.beans.property.StringProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.scene.Cursor;
 import javafx.scene.control.Label;
@@ -421,6 +427,8 @@ public class UrlPaneOracle extends UrlPaneAbstract
 	
 	private List<String> loadTnsNamesOra( File dir )
 	{
+		this.tnsNamesCombo.getItems().removeAll( this.tnsNamesCombo.getItems() );
+		
 		List<String> tnsNameLst = new ArrayList<>();
 		
 		File file = new File( dir.getAbsolutePath() + File.separator + "tnsnames.ora" );
@@ -436,8 +444,44 @@ public class UrlPaneOracle extends UrlPaneAbstract
 			myFileAbs.open( file );
 			String strTNSFile = myFileAbs.load();
 			// ^([^#()\W ][a-zA-Z.]*(?:[.][a-zA-Z]*\s?=)?)
-			System.out.println( "=== tnsnames.ora ===" );
-			System.out.println( strTNSFile );
+			//System.out.println( "=== tnsnames.ora ===" );
+			//System.out.println( strTNSFile );
+			
+			/*
+			String[] strTNSLst = strTNSFile.split( "\n" );
+			for ( String strTNS : strTNSLst )
+			{
+				try
+				{
+					System.out.println( "strTNS[" + strTNS + "]" );
+					Pattern p = Pattern.compile("^\\w+\\s*=");
+					Matcher m = p.matcher(strTNS);
+					while ( m.find() )
+					{
+						String resultStr = strTNS.replaceAll( "^(\\w+)\\s*=(.|\\s)*", "$1" );
+						this.tnsNamesCombo.getItems().addAll( resultStr );
+						break;
+					}
+				}
+				catch ( PatternSyntaxException psEx )
+				{
+					System.out.println( psEx.getMessage() );
+				}
+			}
+			*/
+			
+			Pattern p = Pattern.compile("^(\\w+)\\s*=", Pattern.MULTILINE|Pattern.DOTALL);
+			Matcher m = p.matcher(strTNSFile);
+			//m.replaceAll("$1");
+			List<String> itemLst = new ArrayList<>();
+			while ( m.find() )
+			{
+				itemLst.add( m.group().replaceAll("^(\\w+)\\s*=", "$1") );
+				//this.tnsNamesCombo.getItems().addAll( m.group().replaceAll("^(\\w+)\\s*=", "$1") );
+			}
+			ObservableList<String> obsItemLst = FXCollections.observableList( itemLst );
+			Collections.sort( obsItemLst );
+			this.tnsNamesCombo.setItems(obsItemLst);
 		}
 		catch ( IOException ioEx )
 		{

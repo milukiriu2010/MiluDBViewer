@@ -13,6 +13,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.SplitPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
 import net.sf.jsqlparser.parser.CCJSqlParserUtil;
@@ -53,7 +54,8 @@ import net.sf.jsqlparser.util.TablesNamesFinder;
 public class JSQLParseExample2 extends Application
 {
 	private TextArea  taSQL    = new TextArea();
-	private Button    btnGo    = new Button("Go");
+	private Button    btnParse = new Button("parse");
+	private Button    btnParseExpression = new Button("parseExpression");
 	private TextArea  taResult = new TextArea();
 	
 	
@@ -82,10 +84,14 @@ public class JSQLParseExample2 extends Application
 			"order by u.uid, u.firmst_name"
 		);
 		
-		btnGo.setOnAction( e->parse() );
+		btnParse.setOnAction( e->parse() );
+		btnParseExpression.setOnAction( e->parseExpression() );
+		
+		HBox hBox = new HBox(2);
+		hBox.getChildren().addAll( btnParse, btnParseExpression );
 		
 		VBox vBox = new VBox(2);
-		vBox.getChildren().addAll( taSQL, btnGo );
+		vBox.getChildren().addAll( taSQL, hBox );
 		
 		SplitPane sp = new SplitPane();
 		sp.setOrientation( Orientation.VERTICAL );
@@ -119,6 +125,30 @@ public class JSQLParseExample2 extends Application
 					sb.append( "TABLE:" + tbl2 + "\n" );
 				}				
 			}
+		}
+		catch ( JSQLParserException jsqlEx )
+		{
+			//jsqlEx.printStackTrace();
+			StringWriter sw = new StringWriter();
+			PrintWriter  pw = new PrintWriter(sw);
+			jsqlEx.printStackTrace(pw);
+			sb.append( "=== JSQLParserException =============\n" );
+			sb.append( sw.toString() );
+		}
+		finally
+		{
+			this.taResult.setText( sb.toString() );
+		}
+	}
+	
+	private void parseExpression()
+	{
+		StringBuffer sb = new StringBuffer();
+		try
+		{
+			String sqlStr = this.taSQL.getText();
+			Expression expr = CCJSqlParserUtil.parseExpression(sqlStr);
+			processExpression( expr, 0, sb );
 		}
 		catch ( JSQLParserException jsqlEx )
 		{
