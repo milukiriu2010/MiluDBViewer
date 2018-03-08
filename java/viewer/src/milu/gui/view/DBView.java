@@ -27,6 +27,7 @@ import milu.gui.ctrl.query.DBSqlTab;
 import milu.gui.ctrl.schema.DBSchemaTab;
 import milu.db.MyDBAbstract;
 import milu.task.CollectTask;
+import milu.tool.MyTool;
 
 public class DBView extends Stage
 	implements 
@@ -90,9 +91,6 @@ public class DBView extends Stage
 		
 		// Create ToolBar
 		this.createToolBar();
-		
-        // set action
-        this.setAction();
         
 		// View for SQL
 		DBSqlTab dbSqlTab = new DBSqlTab( this );
@@ -111,6 +109,9 @@ public class DBView extends Stage
 		// put items on Pane
         this.brdPane.setTop( vboxMenu );
         this.brdPane.setCenter( this.tabPane );
+		
+        // set action
+        this.setAction();
         
         // Stage for New Window
         // http://o7planning.org/en/11533/opening-a-new-window-in-javafx
@@ -241,6 +242,36 @@ public class DBView extends Stage
 				}
 			}
 		);
+		
+		/*
+		Child Node:class javafx.scene.control.skin.TabPaneSkin$TabHeaderArea
+		  Child Node:class javafx.scene.layout.StackPane
+		  Child Node:class javafx.scene.control.skin.TabPaneSkin$TabHeaderArea$1
+		    Child Node:class javafx.scene.control.skin.TabPaneSkin$TabHeaderSkin
+		      Child Node:class javafx.scene.control.skin.TabPaneSkin$TabHeaderSkin$4
+		        Child Node:class javafx.scene.control.Label
+		          Child Node:class javafx.scene.control.Label
+		            Child Node:class javafx.scene.image.ImageView
+		            Child Node:class com.sun.javafx.scene.control.LabeledText
+		        Child Node:class javafx.scene.control.skin.TabPaneSkin$TabHeaderSkin$2
+		        Child Node:class javafx.scene.layout.Region
+		  Child Node:class javafx.scene.control.skin.TabPaneSkin$TabControlButtons
+		    Child Node:class javafx.scene.control.skin.TabPaneSkin$TabControlButtons$1
+		      Child Node:class javafx.scene.layout.Pane
+		        Child Node:class javafx.scene.layout.StackPane
+		*/
+		/**/
+		this.tabPane.setOnMouseEntered
+		(
+			(event)->
+			{
+				System.out.println( "=== DBView: MouseEntered ===" );
+				//MyTool.skimThroughChildren( this.tabPane, 0 );
+				//String strLabel = MyTool.findTabText( this.tabPane, null );
+				//System.out.println( "findTabText:hit:" + strLabel );
+			}
+		);
+		/**/
 	}
 	
 	public void taskProcessing()

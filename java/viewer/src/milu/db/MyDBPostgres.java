@@ -61,17 +61,4 @@ public class MyDBPostgres extends MyDBAbstract
 	{
 		return "PostgreSQL";
 	}
-	
-	/*
-	@Override
-	protected void createConnectionParameter(Map<String, String> dbOptMap) 
-	{
-		// URL Example
-		// "jdbc:postgresql://localhost:5432/miludb"
-		this.url = 
-				"jdbc:postgresql://"+
-				dbOptMap.get( "Host" )+":"+dbOptMap.get( "Port" )+"/"+
-				dbOptMap.get( "DBName" );
-	}
-	*/
 }

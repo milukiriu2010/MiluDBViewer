@@ -21,21 +21,6 @@ import java.util.Map;
  */
 public class MyDBOracle extends MyDBAbstract 
 {
-	/*
-	public MyDBOracle()
-	{
-		this.suppoertedTypeLst.add( SCHEMA_TYPE.ROOT_TABLE );
-		this.suppoertedTypeLst.add( SCHEMA_TYPE.ROOT_VIEW );
-		this.suppoertedTypeLst.add( SCHEMA_TYPE.ROOT_MATERIALIZED_VIEW );
-		this.suppoertedTypeLst.add( SCHEMA_TYPE.ROOT_FUNC );
-		this.suppoertedTypeLst.add( SCHEMA_TYPE.ROOT_PROC );
-		this.suppoertedTypeLst.add( SCHEMA_TYPE.ROOT_PACKAGE_DEF );
-		this.suppoertedTypeLst.add( SCHEMA_TYPE.ROOT_PACKAGE_BODY );
-		this.suppoertedTypeLst.add( SCHEMA_TYPE.ROOT_TYPE );
-		this.suppoertedTypeLst.add( SCHEMA_TYPE.ROOT_TRIGGER );
-		this.suppoertedTypeLst.add( SCHEMA_TYPE.ROOT_SEQUENCE );
-	}
-	*/
 	/**
 	 * Load JDBC Driver
 	 ***********************************************
@@ -110,27 +95,4 @@ public class MyDBOracle extends MyDBAbstract
 	{
 		return "Oracle";
 	}
-	
-	/**
-	 * 
-	 */
-	/*
-	@Override
-	protected void createConnectionParameter(Map<String, String> dbOptMap) 
-	{
-		// URL Example
-		// ---------------------------------------------------
-		// (1) jdbc:oracle:thin:@localhost:1521:xe
-		// (2) jdbc:oracle:thin:@localhost:1521/xe
-		// ---------------------------------------------------
-		// When using (1) stype, this ORA error happens.
-		//   "ORA-12505 :TNS listener does not currently know of SID given in connect descriptor"
-		// so, change to (2) style.
-		// https://stackoverflow.com/questions/30861061/ora-12505-tns-listener-does-not-currently-know-of-sid-given-in-connect-descript
-		this.url = 
-				"jdbc:oracle:thin:@"+
-				dbOptMap.get( "Host" )+":"+dbOptMap.get( "Port" )+"/"+
-				dbOptMap.get( "DBName" );
-	}
-	*/
 }

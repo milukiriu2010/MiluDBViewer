@@ -1,4 +1,4 @@
-package swing;
+package fx.cursor;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.scene.Cursor;

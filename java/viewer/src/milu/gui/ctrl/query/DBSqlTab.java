@@ -21,6 +21,9 @@ import javafx.scene.layout.VBox;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.AnchorPane;
 
+import javafx.collections.ObservableList;
+import javafx.scene.Node;
+
 import java.sql.SQLException;
 
 import milu.ctrl.ExecQueryDBInterface;
@@ -122,6 +125,18 @@ public class DBSqlTab extends Tab
 		splitPane.setOrientation(Orientation.VERTICAL);
 		splitPane.getItems().addAll( this.upperPane, this.lowerPane );
 		splitPane.setDividerPositions( 0.3f, 0.7f );
+		
+		/*
+		splitPane.heightProperty().addListener
+		(
+			(obs,oldVal,newVal)->
+			{
+				MyTool.skimThroughChildren( splitPane, 0 );
+			}
+		);
+		*/
+		this.tableViewSQL.prefHeightProperty().bind( this.lowerPane.heightProperty() );
+		
 		
 		BorderPane brdPane = new BorderPane();
 		brdPane.setCenter( splitPane );
@@ -293,6 +308,7 @@ public class DBSqlTab extends Tab
 				{
 					this.lowerPane.getChildren().clear();
 					this.lowerPane.getChildren().add( this.tableViewSQL );
+					this.tableViewSQL.prefHeightProperty().bind( this.lowerPane.heightProperty() );
 					// Record Count
 					this.setCount( this.tableViewSQL.getRowSize() );
 					this.dbView.taskDone();
@@ -318,6 +334,7 @@ public class DBSqlTab extends Tab
 					int lfCnt = MyTool.getCharCount( msg, "\n" ); 
 					txtMsg.setPrefRowCount( lfCnt+1 );
 					
+					this.tableViewSQL.prefHeightProperty().unbind();
 					this.lowerPane.getChildren().addAll( labelTitle, txtMsg, this.tableViewSQL );
 				}
 				else if ( newVal instanceof SQLException )
@@ -345,6 +362,8 @@ public class DBSqlTab extends Tab
 					splitPane.setOrientation(Orientation.VERTICAL);
 					splitPane.getItems().addAll( vBoxExp , this.tableViewSQL );
 					splitPane.setDividerPositions( 0.3f, 0.7f );
+					
+					this.tableViewSQL.prefHeightProperty().unbind();
 					this.lowerPane.getChildren().add( splitPane );
 				}
 
@@ -485,6 +504,7 @@ public class DBSqlTab extends Tab
 				{
 					this.lowerPane.getChildren().clear();
 					this.lowerPane.getChildren().add( this.tableViewSQL );
+					this.tableViewSQL.prefHeightProperty().bind( this.lowerPane.heightProperty() );
 					// Record Count
 					this.setCount( this.tableViewSQL.getRowSize() );
 					this.dbView.taskDone();
@@ -527,6 +547,8 @@ public class DBSqlTab extends Tab
 					splitPane.setOrientation(Orientation.VERTICAL);
 					splitPane.getItems().addAll( vBoxExp , this.tableViewSQL );
 					splitPane.setDividerPositions( 0.3f, 0.7f );
+					
+					this.tableViewSQL.prefHeightProperty().unbind();
 					this.lowerPane.getChildren().add( splitPane );
 				}
 
@@ -633,6 +655,8 @@ public class DBSqlTab extends Tab
 		splitPane.setOrientation(Orientation.VERTICAL);
 		splitPane.getItems().addAll( vBoxExp , this.tableViewSQL );
 		splitPane.setDividerPositions( 0.3f, 0.7f );
+		
+		this.tableViewSQL.prefHeightProperty().unbind();
 		this.lowerPane.getChildren().add( splitPane );
 	}
 	

@@ -72,23 +72,14 @@ public class DBSettingDialog extends Dialog<MyDBAbstract>
 	// field for password
 	private PasswordField passwordTextField = new PasswordField();
 	
-	// field for DB Name
-	private TextField dbnameTextField   = new TextField();
-	
-	// field for Host/IPAddress
-	private TextField hostTextField     = new TextField();
-	
-	// field for Port
-	private TextField portTextField     = new TextField();
-	
-	// field for URL
-	private TextArea  urlTextArea       = new TextArea();
-	
 	// pane for Dialog
 	BorderPane brdPane = new BorderPane();
 	
 	// VBox
 	VBox       vBox    = new VBox(2);
+	
+	// UrlPaneAbstract Map
+	Map<MyDBAbstract,UrlPaneAbstract>  urlPaneAbsMap = new HashMap<>();
 	
 	// Button "OK"
 	ButtonType okButtonType = null;
@@ -116,21 +107,6 @@ public class DBSettingDialog extends Dialog<MyDBAbstract>
 		// field for password
 		this.passwordTextField.setPromptText( this.langRB.getString( "PROMPT_PASSWORD" ) );
 		
-		// field for DB Name
-		this.dbnameTextField.setPromptText( this.langRB.getString( "PROMPT_DB_NAME" ) );
-		
-		// field for Host/IPAddress
-		this.hostTextField.setPromptText( this.langRB.getString( "PROMPT_HOST_OR_IPADDRESS" ) );
-		
-		// field for Port
-		this.portTextField.setPromptText( this.langRB.getString( "PROMPT_PORT" ) );
-		
-		/*
-		HBox hBox = new HBox( 2 );
-		hBox.getChildren().add( new Label( this.langRB.getString( "LABEL_DB_TYPE" )) );
-		hBox.getChildren().add( this.comboBoxDBType );
-		*/
-		
 		// set all objects on pane.
 		GridPane paneDBOpt = new GridPane();
 		paneDBOpt.setHgap( 5 );
@@ -142,23 +118,10 @@ public class DBSettingDialog extends Dialog<MyDBAbstract>
 		paneDBOpt.add( this.usernameTextField, 1, 1 );
 		paneDBOpt.add( new Label( this.langRB.getString( "LABEL_PASSWORD" )), 0, 2 );
 		paneDBOpt.add( this.passwordTextField, 1, 2 );
-		/*
-		paneDBOpt.add( new Label( this.langRB.getString( "LABEL_DB_NAME" )) , 0, 3 );
-		paneDBOpt.add( this.dbnameTextField  , 1, 3 );
-		paneDBOpt.add( new Label( this.langRB.getString( "LABEL_HOST_OR_IPADDRESS" )), 0, 4 );
-		paneDBOpt.add( this.hostTextField    , 1, 4 );
-		paneDBOpt.add( new Label( this.langRB.getString( "LABEL_PORT" )), 0, 5 );
-		paneDBOpt.add( this.portTextField    , 1, 5 );
-		*/
 		
 		// pane for Dialog
 		this.vBox.getChildren().add( paneDBOpt );
 		this.brdPane.setCenter( this.vBox );
-		//this.brdPane.setTop( hBox );
-		//this.brdPane.setCenter( paneDBOpt );
-		//this.brdPane.setBottom( this.urlTextArea );
-		
-
 		
 		// set pane on dialog
 		this.getDialogPane().setContent( this.brdPane );
@@ -174,15 +137,8 @@ public class DBSettingDialog extends Dialog<MyDBAbstract>
 		MyDBAbstract selectedMyDBAbs = this.comboBoxDBType.getSelectionModel().getSelectedItem();
 		PaneFactory paneFactory = new UrlPaneFactory();
 		UrlPaneAbstract urlPaneAbs = paneFactory.createPane( this, this.mainCtrl, selectedMyDBAbs, langRB, new HashMap<String,String>() );
-		//this.brdPane.setBottom( urlPaneAbs );
+		this.urlPaneAbsMap.put( selectedMyDBAbs, urlPaneAbs );
 		this.vBox.getChildren().add( urlPaneAbs );
-		
-		// Set default value on field for Port
-		this.portTextField.setText( String.valueOf(this.comboBoxDBType.getValue().getDefaultPort()) );
-		// Set default value on field for URL
-		this.setUrlTextArea();
-		this.urlTextArea.setEditable( false );
-		this.urlTextArea.setWrapText(true);
 		
 		// Window Icon
 		Stage stage = (Stage)this.getDialogPane().getScene().getWindow();
@@ -204,7 +160,7 @@ public class DBSettingDialog extends Dialog<MyDBAbstract>
 		Platform.runLater( ()->{ this.comboBoxDBType.requestFocus(); } );
 		
 		// set size
-		this.setResizable( true );
+		//this.setResizable( true );
 	}
 	
 	private void setAction()
@@ -221,21 +177,6 @@ public class DBSettingDialog extends Dialog<MyDBAbstract>
 			// -------------------------------------------------------------------------------------------
 			( ov, oldVal, newVal )->
 			{
-				//this.portTextField.setText( String.valueOf(newVal.getDefaultPort()) );
-				//this.setUrlTextArea();
-		
-				/*
-				Node bottomNode = this.brdPane.getBottom();
-				if ( bottomNode instanceof UrlPaneAbstract )
-				{
-					UrlPaneAbstract urlPaneAbs1 = (UrlPaneAbstract)bottomNode;
-					Map<String, String> mapProp = urlPaneAbs1.getProp();
-					PaneFactory paneFactory = new UrlPaneFactory();
-					UrlPaneAbstract urlPaneAbs2 = paneFactory.createPane( this.mainCtrl, newVal, langRB, mapProp );
-					this.brdPane.setBottom( urlPaneAbs2 );
-				}
-				*/
-				
 				ListIterator<Node> nodeLstIterator = this.vBox.getChildren().listIterator();
 				while ( nodeLstIterator.hasNext() )
 				{
@@ -245,8 +186,20 @@ public class DBSettingDialog extends Dialog<MyDBAbstract>
 						UrlPaneAbstract urlPaneAbs1 = (UrlPaneAbstract)node;
 						Map<String, String> mapProp = urlPaneAbs1.getProp();
 						this.vBox.getChildren().remove( node );
-						PaneFactory paneFactory = new UrlPaneFactory();
-						UrlPaneAbstract urlPaneAbs2 = paneFactory.createPane( this, this.mainCtrl, newVal, langRB, mapProp );
+						
+						UrlPaneAbstract urlPaneAbs2 = null;
+						// ReUse object, if selected before.
+						if ( this.urlPaneAbsMap.containsKey(newVal) )
+						{
+							urlPaneAbs2 = this.urlPaneAbsMap.get(newVal); 
+						}
+						// Create object, if never selected before.
+						else
+						{
+							PaneFactory paneFactory = new UrlPaneFactory();
+							urlPaneAbs2 = paneFactory.createPane( this, this.mainCtrl, newVal, langRB, mapProp );
+							this.urlPaneAbsMap.put( newVal, urlPaneAbs2 );
+						}
 						this.vBox.getChildren().add( urlPaneAbs2 );
 						break;
 					}
@@ -255,50 +208,6 @@ public class DBSettingDialog extends Dialog<MyDBAbstract>
 				// https://stackoverflow.com/questions/44675375/failure-to-get-the-stage-of-a-dialog
 				Stage stage = (Stage)this.getDialogPane().getScene().getWindow();
 				stage.sizeToScene();
-			}
-		);
-		
-		// --------------------------------------------
-		// Update urlTextField, when DBName is changed
-		// --------------------------------------------
-		this.dbnameTextField.textProperty().addListener
-		(
-			(obs, oldVal, newVal) ->
-			{
-				this.setUrlTextArea();
-			}
-		);
-		
-		// --------------------------------------------
-		// Update urlTextField, when Host is changed
-		// --------------------------------------------
-		this.hostTextField.textProperty().addListener
-		(
-			(obs, oldVal, newVal) ->
-			{
-				this.setUrlTextArea();
-			}
-		);
-		
-		// --------------------------------------------
-		// restriction for TextField "Port"
-		// https://stackoverflow.com/questions/15615890/recommended-way-to-restrict-input-in-javafx-textfield
-		// --------------------------------------------
-		this.portTextField.textProperty().addListener
-		(
-			(obs, oldVal, newVal) ->
-			{
-				// "Numeric" or "No Input" are allowed.
-				if ( newVal.length() == 0 )
-				{
-				}
-				// if alphabets or marks are input, back to previous input.
-				else if ( newVal.matches( "^[0-9]+$" ) == false )
-				{
-					((StringProperty)obs).setValue( oldVal );
-				}
-				
-				this.setUrlTextArea();
 			}
 		);
 		
@@ -353,15 +262,6 @@ public class DBSettingDialog extends Dialog<MyDBAbstract>
 	// "OK" Button Event
 	private void setActionBtnOK( ActionEvent event )
 	{
-		/*
-		Node bottomNode = this.brdPane.getBottom();
-		if ( bottomNode instanceof UrlPaneAbstract )
-		{
-			UrlPaneAbstract urlPaneAbs1 = (UrlPaneAbstract)bottomNode;
-			// call "myDBAbs.getDriverUrl"
-			urlPaneAbs1.setUrl();
-		}
-		*/
 		ListIterator<Node> nodeLstIterator = this.vBox.getChildren().listIterator();
 		while ( nodeLstIterator.hasNext() )
 		{
@@ -373,7 +273,6 @@ public class DBSettingDialog extends Dialog<MyDBAbstract>
 			}
 		}
 		
-		
 		MyDBAbstract myDBAbs = null;
 		try
 		{
@@ -407,67 +306,4 @@ public class DBSettingDialog extends Dialog<MyDBAbstract>
 			event.consume();
 		}
 	}
-
-	/*
-	// "OK" Button Event
-	private void setActionBtnOK( ActionEvent event )
-	{
-		Map<String,String> dbOptMap = new HashMap<String,String>();
-		
-		//dbOptMap.put( "DBType"  , this.comboBoxDBType.getValue().toString() );
-		//dbOptMap.put( "UserName", this.usernameTextField.getText() );
-		//dbOptMap.put( "Password", this.passwordTextField.getText() );
-		dbOptMap.put( "DBName"  , this.dbnameTextField.getText() );
-		dbOptMap.put( "Host"    , this.hostTextField.getText() );
-		dbOptMap.put( "Port"    , this.portTextField.getText() );
-		
-		MyDBAbstract myDBAbs = null;
-		try
-		{
-			myDBAbs = this.comboBoxDBType.getValue();
-			myDBAbs.setUsername( this.usernameTextField.getText() );
-			myDBAbs.setPassword( this.passwordTextField.getText() );
-			myDBAbs.getDriverUrl(dbOptMap);
-			
-			// Connect to DB
-			//myDBAbs.connect( dbOptMap );
-			myDBAbs.connect();
-		}
-		catch ( ClassNotFoundException cnfEx )
-		{
-    		MyAlertDialog alertDlg = new MyAlertDialog( AlertType.WARNING );
-    		alertDlg.setHeaderText( langRB.getString( "TITLE_DB_DRIVER_ERROR" ) );
-    		alertDlg.setTxtExp( cnfEx );
-    		alertDlg.showAndWait();
-		}
-		catch ( SQLException sqlEx )
-		{
-    		MyAlertDialog alertDlg = new MyAlertDialog( AlertType.WARNING );
-    		alertDlg.setHeaderText( langRB.getString( "TITLE_DB_CONNECT_ERROR" ) );
-    		alertDlg.setTxtExp( sqlEx );
-    		alertDlg.showAndWait();
-		}
-		
-		// If DB connection is failed, this dialog keeps to open.
-		if ( myDBAbs.isConnected() == false ) 
-		{
-			// The conditions are not fulfilled so we consume the event
-			// to prevent the dialog to close
-			event.consume();
-		}
-	}
-	*/
-	
-	private void setUrlTextArea()
-	{
-		MyDBAbstract myDBAbs = this.comboBoxDBType.getValue();
-		Map<String,String> dbOptMap = new HashMap<String,String>();
-		
-		dbOptMap.put( "DBName"  , this.dbnameTextField.getText() );
-		dbOptMap.put( "Host"    , this.hostTextField.getText() );
-		dbOptMap.put( "Port"    , this.portTextField.getText() );
-		
-		this.urlTextArea.setText( myDBAbs.getDriverUrl( dbOptMap ) );
-	}
-	
 }

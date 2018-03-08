@@ -9,20 +9,40 @@ import javafx.geometry.Insets;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleButton;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.Dialog;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-
-
+import javafx.stage.Stage;
 import milu.db.MyDBAbstract;
 import milu.ctrl.MainController;
 
 public class UrlPaneCommon extends UrlPaneAbstract
 {
+	// Language Resource(from External Class)
+	private ResourceBundle extLangRB = null;
+	
+	private Dialog<?>      dlg          = null;
+	
 	private MainController mainCtrl     = null;
 	
 	private MyDBAbstract   myDBAbs      = null;
 	
+	private HBox           hBoxToggle     = new HBox(2);
+	
+	private ToggleGroup    tglGroup       = new ToggleGroup();
+	
+	// ToggleButton for Basic
+	private ToggleButton   tglBtnBasic    = new ToggleButton();
+	
+	// ToggleButton for Free Hand
+	private ToggleButton   tglBtnFreeHand = new ToggleButton();
+	
+	// ----------------------------------------------------
+	// Items for "Basic"
+	// ----------------------------------------------------
 	// field for DB Name
 	private TextField dbnameTextField   = new TextField();
 	
@@ -32,37 +52,35 @@ public class UrlPaneCommon extends UrlPaneAbstract
 	// field for Port
 	private TextField portTextField     = new TextField();
 	
+	// ----------------------------------------------------
+	// Items for "All"
+	// ----------------------------------------------------
 	// field for URL
 	private TextArea  urlTextArea       = new TextArea();
 	
 	@Override
 	public void createPane( Dialog<?> dlg, MainController mainCtrl, MyDBAbstract myDBAbs, ResourceBundle extLangRB, Map<String,String> mapProp )
 	{
-		this.myDBAbs = myDBAbs;
+		this.dlg       = dlg;
+		this.mainCtrl  = mainCtrl;
+		this.myDBAbs   = myDBAbs;
+		this.extLangRB = extLangRB;
 		
-		// set all objects on pane.
-		GridPane gridPane = new GridPane();
-		gridPane.setHgap( 5 );
-		gridPane.setVgap( 2 );
-		gridPane.setPadding( new Insets( 10, 10, 10, 10 ) );
-		gridPane.add( new Label( extLangRB.getString( "LABEL_DB_NAME" )) , 0, 0 );
-		gridPane.add( this.dbnameTextField  , 1, 0 );
-		gridPane.add( new Label( extLangRB.getString( "LABEL_HOST_OR_IPADDRESS" )), 0, 1 );
-		gridPane.add( this.hostTextField    , 1, 1 );
-		gridPane.add( new Label( extLangRB.getString( "LABEL_PORT" )), 0, 2 );
-		gridPane.add( this.portTextField    , 1, 2 );
+		// ToggleButton for Basic
+		this.tglBtnBasic.setText(extLangRB.getString("TOGGLE_BASIC"));
+		this.tglBtnBasic.setToggleGroup( this.tglGroup );
+		// ToggleButton for Free Hand
+		this.tglBtnFreeHand.setText(extLangRB.getString("TOGGLE_FREE"));
+		this.tglBtnFreeHand.setToggleGroup( this.tglGroup );
 		
-		// Set default value on field for URL
-		this.setUrlTextArea();
-		this.urlTextArea.setEditable( false );
-		this.urlTextArea.setWrapText(true);		
+		this.hBoxToggle.getChildren().addAll( this.tglBtnBasic, this.tglBtnFreeHand );
 		
-		VBox vBox = new VBox(2);
-		vBox.getChildren().addAll( gridPane, this.urlTextArea );
-		this.getChildren().addAll( vBox );
+		this.tglBtnBasic.setSelected(true);
+		this.setPaneBasic();
 		
-		this.setAction();
-		
+		// ----------------------------------------------------
+		// Items for "Basic"
+		// ----------------------------------------------------
 		String dbName = mapProp.get("DBName");
 		if ( dbName != null )
 		{
@@ -74,11 +92,34 @@ public class UrlPaneCommon extends UrlPaneAbstract
 			this.hostTextField.setText( host );
 		}
 		this.portTextField.setText( String.valueOf(myDBAbs.getDefaultPort()) );
+		
+		this.setAction();
+		
 		this.setUrlTextArea();
 	}
 	
 	private void setAction()
 	{
+		// --------------------------------------------
+		// Selected Toggle Button is changed
+		// --------------------------------------------
+		this.tglGroup.selectedToggleProperty().addListener
+		(
+			(obs,oldVal,newVal)->
+			{
+				if ( newVal == this.tglBtnBasic )
+				{
+					this.setPaneBasic();
+				}
+				else if ( newVal == this.tglBtnFreeHand )
+				{
+					this.setPaneFreeHand();
+				}
+				Stage stage = (Stage)this.dlg.getDialogPane().getScene().getWindow();
+				stage.sizeToScene();
+			}
+		);		
+		
 		// --------------------------------------------
 		// Update urlTextField, when DBName is changed
 		// --------------------------------------------
@@ -127,6 +168,47 @@ public class UrlPaneCommon extends UrlPaneAbstract
 		);
 	}
 	
+	
+	private void setPaneBasic()
+	{
+		this.getChildren().removeAll( this.getChildren() );
+		
+		// set objects on GridPane
+		GridPane gridPane = new GridPane();
+		gridPane.setHgap( 5 );
+		gridPane.setVgap( 2 );
+		gridPane.setPadding( new Insets( 10, 10, 10, 10 ) );
+		gridPane.add( new Label( extLangRB.getString( "LABEL_DB_NAME" )) , 0, 0 );
+		gridPane.add( this.dbnameTextField  , 1, 0 );
+		gridPane.add( new Label( extLangRB.getString( "LABEL_HOST_OR_IPADDRESS" )), 0, 1 );
+		gridPane.add( this.hostTextField    , 1, 1 );
+		gridPane.add( new Label( extLangRB.getString( "LABEL_PORT" )), 0, 2 );
+		gridPane.add( this.portTextField    , 1, 2 );
+		
+		// Set default value on field for URL
+		this.setUrlTextArea();
+		this.urlTextArea.setEditable( false );
+		this.urlTextArea.setWrapText(true);		
+		
+		VBox vBox = new VBox(2);
+		vBox.getChildren().addAll( this.hBoxToggle, gridPane, this.urlTextArea );
+		
+		this.getChildren().addAll( vBox );
+	}
+	
+	private void setPaneFreeHand()
+	{
+		this.getChildren().removeAll( this.getChildren() );
+		
+		this.urlTextArea.setEditable( true );
+		this.urlTextArea.setWrapText(true);
+		
+		VBox vBox = new VBox(2);
+		vBox.getChildren().addAll( this.hBoxToggle, this.urlTextArea );
+		
+		this.getChildren().addAll( vBox );
+	}
+	
 	@Override
 	public Map<String,String> getProp()
 	{
@@ -150,22 +232,6 @@ public class UrlPaneCommon extends UrlPaneAbstract
 		
 		this.myDBAbs.getDriverUrl(dbOptMap);
 	}
-
-	/*
-	@Override
-	public String getUrl() 
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void setPort( int port )
-	{
-		this.portTextField.setText( String.valueOf(port) );
-		this.setUrlTextArea();
-	}
-	*/
 	
 	private void setUrlTextArea()
 	{

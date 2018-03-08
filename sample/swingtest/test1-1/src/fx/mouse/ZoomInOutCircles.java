@@ -1,4 +1,4 @@
-package swing.mouse;
+package fx.mouse;
 
 import javafx.application.Application;
 import javafx.scene.Group;

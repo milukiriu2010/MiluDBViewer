@@ -1,4 +1,4 @@
-package swing;
+package fx.table;
 
 import javafx.application.Application;
 import javafx.beans.property.SimpleStringProperty;

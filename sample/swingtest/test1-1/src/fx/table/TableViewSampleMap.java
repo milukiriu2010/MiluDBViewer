@@ -1,4 +1,4 @@
-package swing;
+package fx.table;
 
 import java.util.HashMap;
 import java.util.Map;

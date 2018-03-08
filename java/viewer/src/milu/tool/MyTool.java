@@ -3,7 +3,9 @@ package milu.tool;
 import java.io.File;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.util.Collections;
 
+import javafx.collections.ObservableList;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
@@ -11,6 +13,8 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.shape.Path;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.control.skin.TabPaneSkin;
+import javafx.scene.control.Label;
 
 public class MyTool
 {
@@ -127,6 +131,47 @@ public class MyTool
 		return null;
 	}
 	
+	public static String findTabText(Node node,Node checkNode) 
+	{
+		if ( node == null )
+		{
+			return null;
+		}
+		
+		if ( node instanceof Parent )
+		{
+			Parent parent = (Parent)node;
+			String strLabel = null;
+			for ( Node n : parent.getChildrenUnmodifiable() )
+			{
+				String className = n.getClass().getName();
+				//System.out.println( "findTabText:className:" + className );
+				if ( checkNode == null )
+				{
+					if ( className.contains("TabHeader") )
+					//if ( n instanceof TabHeaderArea )
+					{
+						strLabel = findTabText( n, n );
+					}
+				}
+				else
+				{
+					if ( n instanceof Label )
+					{
+						strLabel = ((Label)n).getText();
+						//System.out.println( "findTabText:hit:" + strLabel );
+					}
+					if ( strLabel == null )
+					{
+						strLabel = findTabText( n, checkNode );
+					}
+				}
+			}
+			return strLabel;
+		}
+		return null;
+	}
+	
 	public static void skimThroughParent( Node node )
 	{
 		if ( node == null )
@@ -137,6 +182,24 @@ public class MyTool
 		for ( Node n = node; n != null; n = n.getParent() )
 		{
 			System.out.println( "skimThroughParent:" + n.getClass().getName() );
+		}
+	}
+	
+	public static void skimThroughChildren( Node node, int level )
+	{
+		if ( node == null )
+		{
+			return;
+		}
+		if ( node instanceof Parent )
+		{
+			String tab = String.join("", Collections.nCopies(level, "  ") );
+			Parent parent = (Parent)node;
+			for ( Node n : parent.getChildrenUnmodifiable() )
+			{
+				System.out.println( tab + "Child Node:" + n.getClass() );
+				skimThroughChildren( n, level+1 );
+			}		
 		}
 	}
 	

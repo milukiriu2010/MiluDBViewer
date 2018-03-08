@@ -20,7 +20,11 @@ public class UrlPaneFactory implements PaneFactory
 	{
 		UrlPaneAbstract urlPaneAbs = null;
 		
-		if ( myDBAbs instanceof MyDBMySQL )
+		if ( myDBAbs instanceof MyDBPostgres )
+		{
+			urlPaneAbs = new UrlPanePostgres();
+		}
+		else if ( myDBAbs instanceof MyDBMySQL )
 		{
 			urlPaneAbs = new UrlPaneMySQL();
 		}
