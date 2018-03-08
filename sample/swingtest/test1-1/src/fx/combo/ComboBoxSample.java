@@ -26,7 +26,9 @@ public class ComboBoxSample extends Application
     
     String address = " ";
     
-    @Override public void start(Stage stage) {
+    @Override
+    @SuppressWarnings ({"rawtypes","unchecked"})
+    public void start(Stage stage) {
         stage.setTitle("ComboBoxSample");
         Scene scene = new Scene(new Group(), 450, 250);
         

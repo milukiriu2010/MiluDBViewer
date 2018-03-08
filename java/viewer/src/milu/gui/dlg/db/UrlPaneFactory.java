@@ -2,7 +2,6 @@ package milu.gui.dlg.db;
 
 import java.util.Map;
 import java.util.ResourceBundle;
-import javafx.scene.layout.Pane;
 import javafx.scene.control.Dialog;
 
 import milu.ctrl.MainController;

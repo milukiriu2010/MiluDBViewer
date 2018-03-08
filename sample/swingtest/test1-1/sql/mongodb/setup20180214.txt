@@ -6,3 +6,12 @@ https://docs.mongodb.com/getting-started/shell/tutorial/install-mongodb-on-windo
 
 https://docs.mongodb.com/manual/tutorial/enable-authentication/
 
+"C:\Program Files\MongoDB\Server\3.6\bin\mongod.exe" --auth --port 27017 --dbpath c:\my\mongodb\data
+
+mongo --port 27017 -u "milu" -p "milu" --authenticationDatabase "admin"
+
+=========================================
+
+https://docs.mongodb.com/getting-started/shell/import-data/
+
+mongoimport --db test --collection restaurants --drop --file primer-dataset.json

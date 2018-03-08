@@ -21,9 +21,6 @@ import javafx.scene.layout.VBox;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.AnchorPane;
 
-import javafx.collections.ObservableList;
-import javafx.scene.Node;
-
 import java.sql.SQLException;
 
 import milu.ctrl.ExecQueryDBInterface;

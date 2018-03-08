@@ -5,7 +5,6 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.Collections;
 
-import javafx.collections.ObservableList;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
@@ -13,7 +12,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.shape.Path;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.control.skin.TabPaneSkin;
+//import javafx.scene.control.skin.TabPaneSkin;
 import javafx.scene.control.Label;
 
 public class MyTool

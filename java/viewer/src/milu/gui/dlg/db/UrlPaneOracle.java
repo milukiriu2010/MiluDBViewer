@@ -8,7 +8,6 @@ import java.util.Collections;
 import java.util.ResourceBundle;
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
-import java.util.regex.PatternSyntaxException;
 import java.io.File;
 import java.io.IOException;
 

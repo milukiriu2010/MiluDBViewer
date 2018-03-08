@@ -2,11 +2,7 @@ package milu.gui.dlg.db;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.List;
-import java.util.ArrayList;
 import java.util.ResourceBundle;
-import java.io.File;
-import java.io.IOException;
 
 import javafx.beans.property.StringProperty;
 import javafx.geometry.Insets;
@@ -17,22 +13,15 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.Dialog;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.ImageView;
-import javafx.scene.control.ComboBox;
 import javafx.scene.control.Button;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.application.Application;
-import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
 import milu.db.MyDBAbstract;
 import milu.ctrl.MainController;
-
-import milu.file.MyFileAbstract;
-import milu.file.MyFileFactory;
-import milu.gui.dlg.MyAlertDialog;
 
 public class UrlPaneCassandra extends UrlPaneAbstract
 {
