@@ -260,7 +260,7 @@ public class DBView extends Stage
 		      Child Node:class javafx.scene.layout.Pane
 		        Child Node:class javafx.scene.layout.StackPane
 		*/
-		/**/
+		/*
 		this.tabPane.setOnMouseEntered
 		(
 			(event)->
@@ -271,7 +271,7 @@ public class DBView extends Stage
 				//System.out.println( "findTabText:hit:" + strLabel );
 			}
 		);
-		/**/
+		*/
 	}
 	
 	public void taskProcessing()

@@ -1,4 +1,4 @@
-package swing.text;
+package fx.text;
 
 import javafx.application.Application;
 import javafx.event.EventHandler;

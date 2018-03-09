@@ -56,10 +56,12 @@ public class SelectedItemHandlerRootTable extends SelectedItemHandlerAbstract
 		{
 			String schemaName = itemParent.getValue().toString();
 			
+			// Search [SCHEMA]
 			SearchSchemaEntityInterface sseVisitorTN = new SearchSchemaEntityVisitorFactory().createInstance(SchemaEntity.SCHEMA_TYPE.SCHEMA, schemaName);
 			this.myDBAbs.getSchemaRoot().accept(sseVisitorTN);
 			SchemaEntity schemaEntity = sseVisitorTN.getHitSchemaEntity();
 			
+			// Search [ROOT_TABLE]
 			SearchSchemaEntityInterface sseVisitorT = new SearchSchemaEntityVisitorFactory().createInstance(SchemaEntity.SCHEMA_TYPE.ROOT_TABLE );
 			schemaEntity.accept( sseVisitorT );
 			SchemaEntity rootTableEntity = sseVisitorT.getHitSchemaEntity();

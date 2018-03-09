@@ -1,4 +1,4 @@
-package swing.text;
+package fx.text;
 
 import java.io.File;
 

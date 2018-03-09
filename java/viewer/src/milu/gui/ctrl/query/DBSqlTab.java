@@ -14,6 +14,7 @@ import javafx.scene.control.Tab;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.Button;
+import javafx.scene.Node;
 
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
@@ -184,6 +185,20 @@ public class DBSqlTab extends Tab
 				}
 			}
 		);
+		/*
+		this.getGraphic().setOnMouseEntered
+		(
+			(event)->
+			{
+				System.out.println( "DBSqlTab:Mouse Entered." );
+				if ( this.selectedProperty().getValue() == false )
+				{
+					Node node = this.getContent();
+					System.out.println( "DBSqlTab:No Focus" );
+				}
+			}
+		);
+		*/
 	}
 
 	/**
