@@ -9,6 +9,7 @@ import java.util.Locale;
 
 import java.sql.SQLException;
 
+import javafx.scene.control.TabPane;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import javafx.stage.Window;
@@ -16,6 +17,7 @@ import javafx.application.Application;
 
 import milu.gui.dlg.db.DBSettingDialog;
 import milu.gui.view.DBView;
+import milu.gui.ctrl.common.DraggingTabPaneSupport;
 
 import milu.db.MyDBAbstract;
 import milu.entity.schema.SchemaEntity;
@@ -36,6 +38,9 @@ public class MainController
 	
 	// DBView list
 	private List<DBView> dbViewLst = new ArrayList<DBView>();
+	
+	// DraggingTabPaneSupport Map
+	private Map<MyDBAbstract,DraggingTabPaneSupport>  draggingTabPaneMap = new HashMap<>();
 	
 	// Image Map
 	private Map<String,Image> imageMap = new HashMap<>();
@@ -289,6 +294,21 @@ public class MainController
 		System.out.println( "MiluDBViewer Exit." );
 		// "hs_err_pid*.log" is created, when no DBView.
 		System.exit( 0 );
+	}
+	
+	public void addDraggingTabPaneMap( MyDBAbstract myDBAbs, TabPane tabPane )
+	{
+		if ( this.draggingTabPaneMap.containsKey(myDBAbs) )
+		{
+			DraggingTabPaneSupport dtps = this.draggingTabPaneMap.get( myDBAbs );
+			dtps.addSupport( tabPane );
+		}
+		else
+		{
+			DraggingTabPaneSupport dtps = new DraggingTabPaneSupport();
+			dtps.addSupport( tabPane );
+			this.draggingTabPaneMap.put( myDBAbs, dtps );
+		}
 	}
 	
 	/*********************************

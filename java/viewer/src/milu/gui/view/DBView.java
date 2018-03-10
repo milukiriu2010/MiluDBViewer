@@ -103,8 +103,9 @@ public class DBView extends Stage
 		this.tabPane = new TabPane();
 		this.tabPane.getTabs().add( dbSqlTab );
 		// Enable tag dragging
-		DraggingTabPaneSupport  dragSupport = new DraggingTabPaneSupport();
-		dragSupport.addSupport( this.tabPane );
+		//DraggingTabPaneSupport  dragSupport = new DraggingTabPaneSupport();
+		//dragSupport.addSupport( this.tabPane );
+		this.mainCtrl.addDraggingTabPaneMap( this.myDBAbs, this.tabPane );
 		
 		// put items on Pane
         this.brdPane.setTop( vboxMenu );

@@ -97,12 +97,6 @@ public class DBSettingDialog extends Dialog<MyDBAbstract>
 		ObservableList<MyDBAbstract>  obsList = FXCollections.observableArrayList( this.dbTypeList );
 		this.comboBoxDBType.setItems( obsList );
 		
-		// field for user
-		this.usernameTextField.setPromptText( this.langRB.getString( "PROMPT_USERNAME" ) );
-		
-		// field for password
-		this.passwordTextField.setPromptText( this.langRB.getString( "PROMPT_PASSWORD" ) );
-		
 		// set all objects on pane.
 		GridPane paneDBOpt = new GridPane();
 		paneDBOpt.setHgap( 5 );

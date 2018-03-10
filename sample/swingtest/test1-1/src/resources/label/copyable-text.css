@@ -7,3 +7,14 @@
 	-fx-text-fill: #0000ff;
 	-fx-underline: true;
 }
+
+.table_name {
+	-fx-border-color: #000000;
+	-fx-background-color: #ffffff;
+}
+
+.label_table {
+	-fx-border-color: #000000;
+	-fx-border-width: 2;
+	-fx-background-color: #ffffff;
+}
