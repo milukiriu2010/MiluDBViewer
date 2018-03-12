@@ -14,6 +14,7 @@ import java.io.IOException;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
 import javafx.geometry.Insets;
 import javafx.scene.Cursor;
 import javafx.scene.control.Label;
@@ -30,6 +31,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
 import milu.db.MyDBAbstract;
@@ -79,6 +81,10 @@ public class UrlPaneOracle extends UrlPaneAbstract
 	// Items for "TNS"
 	// ----------------------------------------------------
 	private ComboBox<String> tnsNamesCombo = new ComboBox<>();
+	
+	private final ObservableList<String>  hints = FXCollections.observableArrayList();
+	
+	private FilteredList<String>  filteredItems = null;
 	
 	private TextField tnsAdminTextField    = new TextField();
 	
@@ -174,6 +180,9 @@ public class UrlPaneOracle extends UrlPaneAbstract
 		
 		// TNS Name
 		this.tnsNamesCombo.setEditable(true);
+		this.filteredItems = new FilteredList<String>( this.hints, pre->true );
+		this.tnsNamesCombo.setItems( this.filteredItems );
+		
 		String dirPath = this.tnsAdminTextField.getText();
 		if ( dirPath.length() > 0 )
 		{
@@ -301,7 +310,55 @@ public class UrlPaneOracle extends UrlPaneAbstract
 				{
 					System.out.println( "TNSName:ComboBox:lose focus." );
 					this.tnsNamesCombo.setValue( this.tnsNamesCombo.getEditor().getText() );
+					this.tnsNamesCombo.hide();
 				}
+				// get focus
+				else if ( newVal == true )
+				{
+					this.tnsNamesCombo.show();
+				}
+			}
+		);
+		
+		// https://stackoverflow.com/questions/19010619/javafx-filtered-combobox
+		this.tnsNamesCombo.getEditor().textProperty().addListener
+		(
+			(obs,oldVal,newVal)->
+			{
+				final TextField editor   = this.tnsNamesCombo.getEditor();
+				final String    selected = this.tnsNamesCombo.getSelectionModel().getSelectedItem();
+				
+				// This needs run on the GUI thread to avoid the error described
+				// here: https://bugs.openjdk.java.net/browse/JDK-8081700.
+				Platform.runLater
+				(
+					()->
+					{
+						// If the no item in the list is selected 
+						// or 
+						// the selected item isn't equal to the current input, we refilter the list.
+						if ( selected == null || !selected.equals(editor.getText()) )
+						{
+							this.filteredItems.setPredicate
+							(
+								(item)->
+								{
+			                        // We return true for any items that starts with the
+			                        // same letters as the input. We use toUpperCase to
+			                        // avoid case sensitivity.
+			                        if ( item.toUpperCase().startsWith(newVal.toUpperCase()) ) 
+			                        {
+			                            return true;
+			                        } 
+			                        else
+			                        {
+			                            return false;
+			                        }									
+								}
+							);
+						}
+					}
+				);
 			}
 		);
 		
@@ -516,7 +573,12 @@ public class UrlPaneOracle extends UrlPaneAbstract
 			}
 			ObservableList<String> obsItemLst = FXCollections.observableList( itemLst );
 			Collections.sort( obsItemLst );
-			this.tnsNamesCombo.setItems(obsItemLst);
+			
+			this.hints.removeAll( this.hints );
+			this.hints.addAll( obsItemLst );
+			
+			// list back to full
+			this.filteredItems.setPredicate( pre->true );
 		}
 		catch ( IOException ioEx )
 		{

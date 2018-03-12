@@ -33,6 +33,7 @@ public class LabelTable extends Group
 		for ( String colName: colNameList )
 		{
 			Label lblColumn = new Label( colName );
+			lblColumn.getStyleClass().add("column_w");
 			this.lblColumnLst.add( lblColumn );
 			this.vBox.getChildren().add(lblColumn);
 		}
@@ -44,6 +45,24 @@ public class LabelTable extends Group
 	{
 		Bounds b = this.lblTable.getBoundsInLocal();
 		return b;
+	}
+	
+	public List<Label> getColumnLabelLst()
+	{
+		return this.lblColumnLst;
+	}
+	
+	public Label getColumnLabel( String column )
+	{
+		Label lblColumn = null;
+		for ( Label lbl : this.lblColumnLst )
+		{
+			if ( lbl.getText().equals( column ) )
+			{
+				lblColumn = lbl;
+			}
+		}
+		return lblColumn;
 	}
 	
 	public Point2D getTablePoint2D()

@@ -13,6 +13,14 @@
 	-fx-background-color: #ffffff;
 }
 
+.column_w {
+	-fx-background-color: #ffffff;
+}
+
+.column_y {
+	-fx-background-color: #ff0000;
+}
+
 .label_table {
 	-fx-border-color: #000000;
 	-fx-border-width: 2;

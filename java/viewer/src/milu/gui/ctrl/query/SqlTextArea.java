@@ -82,7 +82,7 @@ public class SqlTextArea extends TextArea
 			this.comboHint.setVisible( false );
 			
 			// https://stackoverflow.com/questions/19010619/javafx-filtered-combobox
-			this.filteredItems = new FilteredList<String>( hints, p -> true);
+			this.filteredItems = new FilteredList<String>( this.hints, p -> true);
 			this.comboHint.setItems( this.filteredItems );		
 		}
 		
@@ -119,7 +119,8 @@ public class SqlTextArea extends TextArea
 				}
 			}
 		);
-			
+		
+		// close ComboBox, when mouse clicked
 		this.addEventFilter
 		(
 			MouseEvent.MOUSE_PRESSED , 
@@ -127,6 +128,8 @@ public class SqlTextArea extends TextArea
 			{
 				System.out.println( "--- TextArea MousePressed -----------" );
 				this.comboHint.setVisible(false);
+				this.comboHint.hide();
+				this.sbOnTheWay = null;				
 			}
 		);
 	}
@@ -246,6 +249,7 @@ public class SqlTextArea extends TextArea
 				// ComboBox is invisible
 				if ( isVisibleComboHint == false )
 				{
+					// Key Typed PERIOD
 					if ( ".".equals(chr) )
 					{
 						this.resetComboBox();
@@ -273,6 +277,7 @@ public class SqlTextArea extends TextArea
 				// ComboBox is visible
 				else
 				{
+					// Key Typed ENTER
 					if ( "\r".equals(chr) || "\n".equals(chr) )
 					{
 						String selectedItem = this.comboHint.selectionModelProperty().getValue().getSelectedItem();
@@ -291,9 +296,10 @@ public class SqlTextArea extends TextArea
 						}
 						
 						this.comboHint.setVisible(false);
-						//this.comboHint.hide();
+						this.comboHint.hide();
 						this.sbOnTheWay = null;
 					}
+					// Key Typed except "ENTER"
 					else
 					{
 						this.sbOnTheWay.append( chr );
@@ -330,8 +336,9 @@ public class SqlTextArea extends TextArea
 						
 						if ( this.filteredItems.size() == 0 )
 						{
-							this.comboHint.hide();
 							this.comboHint.setVisible(false);
+							this.comboHint.hide();
+							this.sbOnTheWay = null;
 						}
 					}
 				}
