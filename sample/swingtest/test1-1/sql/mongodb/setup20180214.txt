@@ -8,7 +8,11 @@ https://docs.mongodb.com/manual/tutorial/enable-authentication/
 
 "C:\Program Files\MongoDB\Server\3.6\bin\mongod.exe" --auth --port 27017 --dbpath c:\my\mongodb\data
 
+mongod  --auth --port 27017 --dbpath c:\my\mongodb\data
+
 mongo --port 27017 -u "milu" -p "milu" --authenticationDatabase "admin"
+
+mongo --port 27017 -u "mongo" -p "mongo" --authenticationDatabase "admin"
 
 =========================================
 

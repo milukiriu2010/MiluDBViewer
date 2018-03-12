@@ -6,3 +6,22 @@ db.createUser(
     roles: [ { role: "userAdminAnyDatabase", db: "admin" } ]
   }
 )
+
+https://qiita.com/t2hk/items/45a04875dc6d8be9b004
+
+use admin
+db.createUser(
+  {
+    user: "mongo",
+	pwd:  "mongo",
+	roles: [ { role:"readWrite", db:"sample" } ]
+  }
+)
+
+db.createUser(
+  {
+    user: "milurw",
+	pwd:  "milurw",
+	roles: [ { role:"readWriteAnyDatabase", db:"admin" } ]
+  }
+)
