@@ -15,23 +15,6 @@ abstract public class FuncDBAbstract
 	{
 		this.myDBAbs = myDBAbs;
 	}
-	/*
-	public List<SchemaEntity> getEntityLst()
-	{
-		List<SchemaEntity>  funcEntityLst = new ArrayList<>();
-		for ( Map<String,String> func : this.funcLst )
-		{
-			SchemaEntity eachFuncEntity = SchemaEntityFactory.createInstance( func.get("funcName"), SchemaEntity.SCHEMA_TYPE.FUNC );
-			String strStatus = func.get("status");
-			if ( strStatus != null && "INVALID".equals(strStatus) )
-			{
-				eachFuncEntity.setState( SchemaEntity.STATE.INVALID );
-			}
-			funcEntityLst.add( eachFuncEntity );
-		}
-		return funcEntityLst;
-	}	
-	*/
 	
 	// select Function List
 	abstract public List<SchemaEntity> selectEntityLst( String schemaName ) throws SQLException;

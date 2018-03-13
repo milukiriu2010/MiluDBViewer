@@ -17,7 +17,7 @@ public abstract class TableDBAbstract
 	protected MyDBAbstract  myDBAbs = null;
 	
 	// Table List
-	protected List<Map<String,String>>  tableLst = new ArrayList<>();
+	//protected List<Map<String,String>>  tableLst = new ArrayList<>();
 	
 	public void setMyDBAbstract( MyDBAbstract myDBAbs )
 	{

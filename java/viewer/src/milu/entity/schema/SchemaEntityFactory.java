@@ -70,7 +70,6 @@ public class SchemaEntityFactory
 		}
 		else
 		{
-			//return new SchemaEntity( name, schemaType );
 			return null;
 		}
 	}
@@ -129,9 +128,12 @@ public class SchemaEntityFactory
 		{
 			return new SchemaEntityRootSequence();
 		}
+		else if ( schemaType == SchemaEntity.SCHEMA_TYPE.ROOT_ER )
+		{
+			return new SchemaEntityRootER();
+		}
 		else
 		{
-			//return new SchemaEntity( schemaType );
 			return null;
 		}
 	}

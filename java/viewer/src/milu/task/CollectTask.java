@@ -22,6 +22,9 @@ import milu.db.type.TypeDBFactory;
 import milu.db.view.ViewDBFactory;
 import milu.db.sysview.SystemViewDBFactory;
 import milu.db.trigger.TriggerDBFactory;
+import milu.db.abs.AbsDBFactory;
+import milu.db.abs.ObjDBFactory;
+import milu.db.abs.ObjDBInterface;
 import milu.entity.schema.SchemaEntity;
 import milu.entity.schema.SchemaEntityFactory;
 
@@ -46,6 +49,7 @@ public class CollectTask extends Task<Double>
 			this.updateProgress( progress, MAX );
 			
 			SchemaEntity schemaRoot = myDBAbs.getSchemaRoot();
+			// Start to retrieve, if no child objects, 
 			if ( schemaRoot.getEntityLst().size() == 0 )
 			{
 				System.out.println( "Schema retriving..." );
@@ -69,6 +73,7 @@ public class CollectTask extends Task<Double>
 					//System.out.println( "schemaEntityLst:size:" + schemaEntityLst.size() );
 				}
 			}
+			// Skip retrieving, if there are child objects,
 			else
 			{
 				System.out.println( "Schema already retrieved." );
@@ -132,6 +137,7 @@ public class CollectTask extends Task<Double>
 			//     -[ROOT_TYPE]              => add
 			//     -[ROOT_TRIGGER]           => add			
 			//     -[ROOT_SEQUENCE]          => add
+			//     -[ROOT_ER]                => add
 			// ---------------------------------------
 			SchemaEntity rootTableEntity        = SchemaEntityFactory.createInstance( SchemaEntity.SCHEMA_TYPE.ROOT_TABLE );
 			schemaEntity.addEntity( rootTableEntity );
@@ -189,6 +195,12 @@ public class CollectTask extends Task<Double>
 			{
 				SchemaEntity rootSequenceEntity     = SchemaEntityFactory.createInstance( SchemaEntity.SCHEMA_TYPE.ROOT_SEQUENCE );
 				schemaEntity.addEntity( rootSequenceEntity );
+			}
+			ObjDBFactory fkDBFactory = AbsDBFactory.getFactory( AbsDBFactory.FACTORY_TYPE.FOREIGN_KEY );
+			if ( fkDBFactory.getInstance(myDBAbs) != null )
+			{
+				SchemaEntity rootEREntity     = SchemaEntityFactory.createInstance( SchemaEntity.SCHEMA_TYPE.ROOT_ER );
+				schemaEntity.addEntity( rootEREntity );
 			}
 			
 			// ---------------------------------------

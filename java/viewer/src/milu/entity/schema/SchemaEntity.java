@@ -45,6 +45,8 @@ abstract public class SchemaEntity
 	//		 - [3:TYPE]
 	//     - [2:ROOT_SEQ]
 	//		 - [3:SEQ]
+	//     - [2:ROOT_ER]
+	//       - [3:ER]
 	// ---------------------------------------
 	public enum SCHEMA_TYPE
 	{
@@ -111,7 +113,11 @@ abstract public class SchemaEntity
 				// 2
 				ROOT_SEQUENCE,
 					// 3
-					SEQUENCE
+					SEQUENCE,
+				// 2
+				ROOT_ER,
+					// 3
+					FOREIGN_KEY
 	}
 	
 	public enum STATE

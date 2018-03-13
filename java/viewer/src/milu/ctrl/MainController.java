@@ -103,6 +103,7 @@ public class MainController
 				"file:resources/images/trigger_root.png",
 				"file:resources/images/type_root.png",
 				"file:resources/images/view_root.png",
+				"file:resources/images/ER_root.png",
 				// MainMenuBar
 				"file:resources/images/config.png",
 				"file:resources/images/quit.png",
