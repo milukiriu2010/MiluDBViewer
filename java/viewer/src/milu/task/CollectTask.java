@@ -24,7 +24,6 @@ import milu.db.sysview.SystemViewDBFactory;
 import milu.db.trigger.TriggerDBFactory;
 import milu.db.abs.AbsDBFactory;
 import milu.db.abs.ObjDBFactory;
-import milu.db.abs.ObjDBInterface;
 import milu.entity.schema.SchemaEntity;
 import milu.entity.schema.SchemaEntityFactory;
 
@@ -70,7 +69,6 @@ public class CollectTask extends Task<Double>
 					}
 					
 					schemaRoot.addEntityAll(schemaEntityLst);
-					//System.out.println( "schemaEntityLst:size:" + schemaEntityLst.size() );
 				}
 			}
 			// Skip retrieving, if there are child objects,

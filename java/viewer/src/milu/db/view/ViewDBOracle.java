@@ -31,12 +31,6 @@ public class ViewDBOracle extends ViewDBAbstract
 		{
 			while ( rs.next() )
 			{
-				/*
-				Map<String, String> mapView = new HashMap<String,String>();
-				mapView.put( "viewName", rs.getString("object_name") );
-				mapView.put( "status"  , rs.getString("status") );
-				this.viewLst.add( mapView );
-				*/
 				SchemaEntity viewEntity = SchemaEntityFactory.createInstance( rs.getString("object_name"), SchemaEntity.SCHEMA_TYPE.VIEW );
 				String strStatus = rs.getString("status");
 				if ( strStatus != null && "INVALID".equals(strStatus) )

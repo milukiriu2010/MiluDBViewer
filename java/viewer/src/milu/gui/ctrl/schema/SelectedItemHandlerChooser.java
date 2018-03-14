@@ -47,6 +47,7 @@ public class SelectedItemHandlerChooser
 		SelectedItemHandlerAbstract handleRootTrigger          = new SelectedItemHandlerRootTrigger();
 		SelectedItemHandlerAbstract handleEachTrigger          = new SelectedItemHandlerEachTrigger();
 		SelectedItemHandlerAbstract handleRootSequence         = new SelectedItemHandlerRootSequence();
+		SelectedItemHandlerAbstract handleRootER               = new SelectedItemHandlerRootER();
 		
 		handleRoot.addNextHandler( handleEachTable );
 		handleRoot.addNextHandler( handleRootTable );
@@ -73,6 +74,7 @@ public class SelectedItemHandlerChooser
 		handleRoot.addNextHandler( handleRootTrigger );
 		handleRoot.addNextHandler( handleEachTrigger );
 		handleRoot.addNextHandler( handleRootSequence );
+		handleRoot.addNextHandler( handleRootER );
 		
 		SelectedItemHandlerAbstract handleNext = handleRoot;
 		

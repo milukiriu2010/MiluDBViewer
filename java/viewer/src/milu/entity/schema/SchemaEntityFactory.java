@@ -68,6 +68,10 @@ public class SchemaEntityFactory
 		{
 			return new SchemaEntityEachSequence( name );
 		}
+		else if ( schemaType == SchemaEntity.SCHEMA_TYPE.FOREIGN_KEY )
+		{
+			return new SchemaEntityEachFK( name );
+		}
 		else
 		{
 			return null;

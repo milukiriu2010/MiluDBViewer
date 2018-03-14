@@ -17,23 +17,7 @@ public abstract class ViewDBAbstract
 	{
 		this.myDBAbs = myDBAbs;
 	}
-	/*
-	public List<SchemaEntity> getViewEntityLst()
-	{
-		List<SchemaEntity>  viewEntityLst = new ArrayList<>();
-		for ( Map<String,String> view : this.viewLst )
-		{
-			SchemaEntity eachViewEntity = SchemaEntityFactory.createInstance( view.get("viewName"), SchemaEntity.SCHEMA_TYPE.VIEW );
-			String strStatus = view.get("status");
-			if ( strStatus != null && "INVALID".equals(strStatus) )
-			{
-				eachViewEntity.setState( SchemaEntity.STATE.INVALID );
-			}
-			viewEntityLst.add( eachViewEntity );
-		}
-		return viewEntityLst;
-	}	
-	*/
+	
 	abstract public List<SchemaEntity> selectEntityLst( String schemaName ) throws SQLException;
 	
 	abstract protected String listSQL( String schemaName );

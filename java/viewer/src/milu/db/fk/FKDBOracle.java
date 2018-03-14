@@ -1,9 +1,13 @@
 package milu.db.fk;
 
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.List;
 
 import milu.entity.schema.SchemaEntity;
+import milu.entity.schema.SchemaEntityFactory;
 
 public class FKDBOracle extends FKDBAbstract
 {
@@ -13,15 +17,54 @@ public class FKDBOracle extends FKDBAbstract
 	@Override
 	public List<SchemaEntity> selectEntityLst(String schemaName) throws SQLException
 	{
-		return null;
+		List<SchemaEntity>  fkEntityLst = new ArrayList<>();
+
+		String sql = this.listSQL( schemaName );
+		System.out.println( " -- selectEntityLst(FK) ---------" );
+		System.out.println( sql );
+		System.out.println( " ----------------------------------" );
+		
+		try
+		(
+			Statement stmt = this.myDBAbs.createStatement();
+			ResultSet rs   = stmt.executeQuery( sql );
+		)
+		{
+			while ( rs.next() )
+			{
+				SchemaEntity fkEntity = SchemaEntityFactory.createInstance( rs.getString("constraint_name"), SchemaEntity.SCHEMA_TYPE.FOREIGN_KEY );
+				String strStatus = rs.getString("status");
+				if ( strStatus != null && "ENABLED".equals(strStatus) == false )
+				{
+					fkEntity.setState( SchemaEntity.STATE.INVALID );
+				}
+				fkEntityLst.add( fkEntity );
+			}
+		}
+		
+		return fkEntityLst;
 	}
 	
 
 	@Override
 	protected String listSQL(String schemaName)
 	{
-		// TODO Auto-generated method stub
-		return null;
+		String sql = 
+			" select \n" +
+			"   owner, \n"             +    // src owner
+			"   constraint_name, \n"   +	// src fk name
+			"   table_name, \n"        +	// src table
+			"   r_owner, \n"           +	// dst owner
+			"   r_constraint_name, \n" +	// dst constraint name
+			"   status \n" +				// status
+			" from \n" +
+			"   all_constraints \n" +
+			" where \n" +
+			"   constraint_type='R' \n" + 
+			"   and \n" + 
+			"   owner = '" + schemaName + "' \n" +
+			" order by constraint_name";
+		return sql;
 	}
 
 }
