@@ -136,8 +136,14 @@ abstract public class SchemaEntity
 	
 	protected STATE        state = STATE.VALID;
 	
+	// [KEY]
+	// (1) COLUMN
+	// (2) TYPE
+	// (3) NULL?
+	// (4) DEFAULT
 	protected List<Map<String,String>>  definitionLst = new ArrayList<>();
 	
+	// children
 	protected List<SchemaEntity>  entityLst = new ArrayList<>();
 	
 	// Property File for this class 

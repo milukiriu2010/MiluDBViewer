@@ -50,11 +50,11 @@ public class FKDBOracle extends FKDBAbstract
 	protected String listSQL(String schemaName)
 	{
 		String sql = 
-			" select \n" +
-			"   owner, \n"             +    // src owner
+			" select distinct \n" +
+			"   owner, \n"             +    // src fk schema & src table schema
 			"   constraint_name, \n"   +	// src fk name
-			"   table_name, \n"        +	// src table
-			"   r_owner, \n"           +	// dst owner
+			"   table_name, \n"        +	// src table name
+			"   r_owner, \n"           +	// dst constraint owner
 			"   r_constraint_name, \n" +	// dst constraint name
 			"   status \n" +				// status
 			" from \n" +
