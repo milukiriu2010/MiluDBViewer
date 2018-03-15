@@ -36,7 +36,7 @@ import milu.gui.ctrl.query.SqlTableView;
 import milu.gui.view.DBView;
 import milu.tool.MyTool;
 import milu.db.MyDBAbstract;
-import milu.db.MyDBOverFetchSizeException;
+import milu.db.access.MyDBOverFetchSizeException;
 import milu.task.ToggleHVTask;
 import milu.task.ExecQueryTask;
 import milu.task.ExplainTask;

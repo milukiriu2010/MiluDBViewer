@@ -15,7 +15,8 @@ import milu.db.MyDBAbstract;
 
 import milu.gui.view.DBView;
 import milu.gui.ctrl.schema.SchemaTreeView;
-import milu.gui.ctrl.schema.SelectedItemHandlerChooser;
+import milu.gui.ctrl.schema.handle.SelectedItemHandlerAbstract;
+import milu.gui.ctrl.schema.handle.SelectedItemHandlerChooser;
 import milu.gui.dlg.MyAlertDialog;
 import milu.ctrl.ExecQueryDBInterface;
 import milu.ctrl.MainController;
