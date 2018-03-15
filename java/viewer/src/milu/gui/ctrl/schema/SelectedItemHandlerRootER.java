@@ -7,6 +7,7 @@ import javafx.scene.control.TreeItem;
 import javafx.collections.ObservableList;
 
 import milu.entity.schema.SchemaEntity;
+import milu.entity.schema.SchemaEntityEachFK;
 
 import milu.db.abs.AbsDBFactory;
 import milu.db.abs.ObjDBFactory;
@@ -71,14 +72,19 @@ public class SelectedItemHandlerRootER extends SelectedItemHandlerAbstract
 			ObjDBFactory objDBFactory = AbsDBFactory.getFactory( AbsDBFactory.FACTORY_TYPE.FOREIGN_KEY );
 			//FKDBFactory  fkDBFactory = (FKDBFactory)objDBFactory;
 			ObjDBInterface objDBInf = objDBFactory.getInstance(myDBAbs);
-			//FKDBAbstract fkDBAbs = (FKDBAbstract)objDBInf;
 			if ( objDBInf != null )
 			{
 				String schemaName = itemParent.getValue().toString();
 				List<SchemaEntity> fkEntityLst = objDBInf.selectEntityLst(schemaName);
 				this.schemaTreeView.addEntityLst( itemSelected, fkEntityLst );
+				FKDBAbstract fkDBAbs = (FKDBAbstract)objDBInf;
+				for ( SchemaEntity seEntity : fkEntityLst )
+				{
+					SchemaEntityEachFK fkEntity = (SchemaEntityEachFK) seEntity;
+					fkDBAbs.selectSrcColumnMap(fkEntity);
+					fkDBAbs.selectDstColumnMap(fkEntity);
+				}
 			}
-			
 		}
 	}
 

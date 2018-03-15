@@ -17,16 +17,23 @@ import javafx.scene.Group;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 
-public class LabelTableDiagram extends Application 
+public class LabelTableDiagram2 extends Application 
 {
 	private Point2D  srcP = null;
 
 	@Override
 	public void start(Stage stage) throws Exception 
 	{
+		ScrollPane scrollPane = new ScrollPane();
+		scrollPane.setPrefSize(640, 480);
 		Group root = new Group();
-		Scene scene = new Scene( root, 640, 480 );
+		scrollPane.setContent( root );
+		scrollPane.setPannable(true);
+		scrollPane.setFitToHeight(true);
+		Scene scene = new Scene( scrollPane, 640, 480 );
+		//Scene scene = new Scene( root, 640, 480 );
         scene.getStylesheets().add(getClass().getResource("/resources/label/copyable-text.css").toExternalForm());
 		
         //////////////////////////////////////////////////////////////////

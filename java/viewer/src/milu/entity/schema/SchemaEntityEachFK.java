@@ -6,17 +6,19 @@ import java.util.LinkedHashMap;
 public class SchemaEntityEachFK extends SchemaEntity 
 {
 	// schema of Foreign Key
-	private String schemaFK = null;
+	private String srcFKSchema = null;
 	
-	// = super.name, so comment out
 	// name of Foreign Key
-	//private String nameFK   = null;
+	// -------------------------------------
+	// = super.name
+	// -------------------------------------
+	private String srcConstraintName   = null;
 	
 	// schema of the table(FK/src)   
-	private String srcSchema = null;
+	private String srcTableSchema = null;
 
 	// table(FK/src)
-	private String srcTable  = null;
+	private String srcTableName  = null;
 	
 	// columns(FK/src)
 	// [KEY]
@@ -25,12 +27,14 @@ public class SchemaEntityEachFK extends SchemaEntity
 	//   position
 	private Map<String,String> srcColumnMap = new LinkedHashMap<>();
 	
+	// constraint name(FK/dst)
+	private String dstConstraintName = null;
 	
 	// schema of the table(FK/dst)
-	private String dstSchema = null;
+	private String dstTableSchema = null;
 	
 	// table(FK/dst)
-	private String dstTable  = null;
+	private String dstTableName  = null;
 	
 	// columns(FK/dst)
 	// [KEY]
@@ -47,47 +51,51 @@ public class SchemaEntityEachFK extends SchemaEntity
 	}
 	
 	// schema of Foreign Key
-	public String getSchemaFK()
+	public String getSrcFKSchema()
 	{
-		return this.schemaFK;
+		return this.srcFKSchema;
 	}
 
-	public void setSchemaFK( String schemaFK )
+	public void setSrcFKSchema( String srcFKSchema )
 	{
-		this.schemaFK = schemaFK;
+		this.srcFKSchema = srcFKSchema;
 	}
 	
 	// name of Foreign Key
-	//public String getNameFK()
-	//{
-	//	return this.nameFK;
-	//}
-	
-	//public void setNameFK( String nameFK )
-	//{
-	//	this.nameFK = nameFK;
-	//}
-	
-	// schema of the table(FK/src)   
-	public String getSrcSchema()
+	// -------------------------------------
+	// = super.name
+	// -------------------------------------
+	public String getSrcConstraintName()
 	{
-		return this.srcSchema;
+		return this.srcConstraintName;
 	}
 	
-	public void setSrcSchema( String srcSchema )
+	public void setSrcConstraintName( String srcConstraintName )
 	{
-		this.srcSchema = srcSchema;
+		this.srcConstraintName = srcConstraintName;
+		this.name = this.srcConstraintName;
+	}
+	
+	// schema of the table(FK/src)
+	public String getSrcTableSchema()
+	{
+		return this.srcTableSchema;
+	}
+	
+	public void setSrcTableSchema( String srcTableSchema )
+	{
+		this.srcTableSchema = srcTableSchema;
 	}
 
 	// table(FK/src)
-	public String getSrcTable()
+	public String getSrcTableName()
 	{
-		return this.srcTable;
+		return this.srcTableName;
 	}
 	
-	public void setSrcTable( String srcTable )
+	public void setSrcTableName( String srcTableName )
 	{
-		this.srcTable = srcTable;
+		this.srcTableName = srcTableName;
 	}
 	
 	// columns(FK/src)
@@ -105,26 +113,37 @@ public class SchemaEntityEachFK extends SchemaEntity
 		this.srcColumnMap.put( columnName, pos );
 	}
 	
-	// schema of the table(FK/dst)
-	public String getDstSchema()
+	// name of constraint name for referenced
+	public String getDstConstraintName()
 	{
-		return this.dstSchema;
+		return this.dstConstraintName;
 	}
 	
-	public void setDstSchema( String dstSchema )
+	public void setDstConstraintName( String dstConstraintName )
 	{
-		this.dstSchema = dstSchema;
+		this.dstConstraintName = dstConstraintName;
+	}
+	
+	// schema of the table(FK/dst)
+	public String getDstTableSchema()
+	{
+		return this.dstTableSchema;
+	}
+	
+	public void setDstTableSchema( String dstTableSchema )
+	{
+		this.dstTableSchema = dstTableSchema;
 	}
 	
 	// table(FK/dst)
-	public String getDstTable()
+	public String getDstTableName()
 	{
-		return this.dstTable;
+		return this.dstTableName;
 	}
 	
-	public void setDstTable( String dstTable )
+	public void setDstTableName( String dstTableName )
 	{
-		this.dstTable = dstTable;
+		this.dstTableName = dstTableName;
 	}
 	
 	// columns(FK/dst)

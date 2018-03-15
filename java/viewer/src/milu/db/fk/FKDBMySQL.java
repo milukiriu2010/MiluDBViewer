@@ -4,7 +4,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import milu.entity.schema.SchemaEntity;
 import milu.entity.schema.SchemaEntityEachFK;
@@ -35,11 +37,12 @@ public class FKDBMySQL extends FKDBAbstract
 			{
 				SchemaEntity seEntity = SchemaEntityFactory.createInstance( rs.getString("constraint_name"), SchemaEntity.SCHEMA_TYPE.FOREIGN_KEY );
 				SchemaEntityEachFK fkEntity = (SchemaEntityEachFK)seEntity;
-				fkEntity.setSchemaFK( rs.getString("constraint_schema") );
-				fkEntity.setSrcSchema( rs.getString("table_schema") );
-				fkEntity.setSrcTable( rs.getString("table_name") );
-				fkEntity.setDstSchema( rs.getString("referenced_table_schema") );
-				fkEntity.setDstTable( rs.getString("referenced_table_name") );
+				fkEntity.setSrcFKSchema( rs.getString("constraint_schema") );
+				fkEntity.setSrcConstraintName( rs.getString("constraint_name") );
+				fkEntity.setSrcTableSchema( rs.getString("table_schema") );
+				fkEntity.setSrcTableName( rs.getString("table_name") );
+				fkEntity.setDstTableSchema( rs.getString("referenced_table_schema") );
+				fkEntity.setDstTableName( rs.getString("referenced_table_name") );
 				fkEntityLst.add( fkEntity );
 			}
 		}
@@ -69,4 +72,23 @@ public class FKDBMySQL extends FKDBAbstract
 		return sql;
 	}
 
+	@Override
+	public Map<String, String> selectSrcColumnMap( SchemaEntityEachFK fkEntity ) throws SQLException
+	{
+		Map<String, String> columnMap = new LinkedHashMap<>();
+		
+		
+		
+		return columnMap;
+	}
+
+	@Override
+	public Map<String, String> selectDstColumnMap( SchemaEntityEachFK fkEntity ) throws SQLException
+	{
+		Map<String, String> columnMap = new LinkedHashMap<>();
+		
+		
+		
+		return columnMap;
+	}
 }
