@@ -1,4 +1,4 @@
-package swing.event;
+package fx.event;
 
 import javafx.application.Application;
 import javafx.event.ActionEvent;

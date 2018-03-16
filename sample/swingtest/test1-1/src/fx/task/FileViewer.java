@@ -1,4 +1,4 @@
-package swing.longtask;
+package fx.task;
 
 import java.io.IOException;
 import javafx.application.Application;

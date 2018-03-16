@@ -1,4 +1,4 @@
-package swing;
+package fx.key;
 
 import javafx.application.Application;
 import javafx.stage.Stage;

@@ -1,4 +1,4 @@
-package swing.longtask;
+package fx.task;
 
 import java.io.BufferedReader;
 import java.io.File;

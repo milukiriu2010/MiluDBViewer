@@ -1,4 +1,4 @@
-package swing.longtask;
+package fx.task;
 import java.util.concurrent.*;
 import javafx.application.Application;
 import javafx.application.Platform;

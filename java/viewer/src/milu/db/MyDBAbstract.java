@@ -156,11 +156,11 @@ abstract public class MyDBAbstract
 	{
 		Properties prop = new Properties();
 		
-		if ( this.username != null )
+		if ( this.username != null && this.username.length() != 0 )
 		{
 			prop.setProperty( "user", this.username );
 		}
-		if ( this.password != null )
+		if ( this.password != null && this.username.length() != 0 )
 		{
 			prop.setProperty( "password", this.password );
 		}
@@ -205,7 +205,18 @@ abstract public class MyDBAbstract
 		
 		// Connection
 		//this.conn =	DriverManager.getConnection( this.url, this.username, this.password );
-		this.conn =	DriverManager.getConnection( this.url, this.createProp() );
+		//this.conn =	DriverManager.getConnection( this.url, this.createProp() );
+		
+		Properties prop = this.createProp();
+		if ( prop.isEmpty() == true )
+		{
+			this.conn =	DriverManager.getConnection( this.url );
+		}
+		else
+		{
+			this.conn =	DriverManager.getConnection( this.url, prop );
+		}
+		
 		this.conn.setAutoCommit( false );
 		
 		this.schemaRoot = SchemaEntityFactory.createInstance( this.url, SchemaEntity.SCHEMA_TYPE.ROOT );

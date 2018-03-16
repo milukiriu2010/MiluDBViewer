@@ -1,9 +1,7 @@
-package swing.longtask;
+package fx.task;
 
 import javafx.application.Application;
 import javafx.stage.Stage;
-
-import javafx.application.Platform;
 
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
@@ -19,7 +17,7 @@ import javafx.event.*;
 import java.util.concurrent.*;
 
 // http://itpro.nikkeibp.co.jp/article/COLUMN/20130828/500602/
-public class LongTermTask3 extends Application {
+public class LongTermTask2 extends Application {
 	
 	// スレッドプール
     private ExecutorService service = Executors.newSingleThreadExecutor();	
@@ -55,9 +53,6 @@ public class LongTermTask3 extends Application {
         button.setOnAction(new javafx.event.EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent t) {
-                // ボタンを使用できないようにする
-                button.setDisable(true);
-                
                 // 非同期にタスクを実行
                 Runnable task = new Runnable() {
                     @Override
@@ -65,15 +60,6 @@ public class LongTermTask3 extends Application {
                     	System.out.println( "start." );
                         // 長い時間のかかる処理
                         longExecution();
-                        
-                        // JavaFX Application Threadへのアクセス
-                        Platform.runLater(new Runnable() {
-                            @Override
-                            public void run() {
-                                // ボタンを使用可能に戻す
-                                button.setDisable(false);
-                            }
-                        });                        
                     }
                 };
                 service.submit(task);
@@ -88,11 +74,7 @@ public class LongTermTask3 extends Application {
         try {
             Thread.sleep(10_000);
             System.out.print( "finished." );
-        } 
-        catch (InterruptedException ex)
-        {
-        	System.out.print( "interrupted." );
-        }
+        } catch (InterruptedException ex) {}
     }
 
     public static void main(String... args) {

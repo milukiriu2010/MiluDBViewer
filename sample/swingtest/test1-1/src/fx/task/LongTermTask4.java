@@ -1,4 +1,4 @@
-package swing.longtask;
+package fx.task;
 
 import javafx.application.Application;
 import javafx.stage.Stage;

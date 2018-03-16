@@ -1,4 +1,4 @@
-package swing.longtask;
+package fx.task;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;

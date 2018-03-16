@@ -1,4 +1,4 @@
-package swing;
+package fx.progress;
 
 import javafx.application.Application;
 import javafx.geometry.Pos;

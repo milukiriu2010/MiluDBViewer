@@ -1,4 +1,4 @@
-package swing.overlay;
+package fx.overlay;
 
 import java.util.List;
 

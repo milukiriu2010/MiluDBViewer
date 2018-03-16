@@ -1,7 +1,9 @@
-package swing.longtask;
+package fx.task;
 
 import javafx.application.Application;
 import javafx.stage.Stage;
+
+import javafx.application.Platform;
 
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
@@ -14,8 +16,13 @@ import javafx.event.*;
 
 //import java.beans.*;
 
+import java.util.concurrent.*;
+
 // http://itpro.nikkeibp.co.jp/article/COLUMN/20130828/500602/
-public class LongTermTask extends Application {
+public class LongTermTask3 extends Application {
+	
+	// スレッドプール
+    private ExecutorService service = Executors.newSingleThreadExecutor();	
 
     @Override
     public void start(Stage stage) {
@@ -48,8 +55,28 @@ public class LongTermTask extends Application {
         button.setOnAction(new javafx.event.EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent t) {
-                // 長い時間のかかる処理
-                longExecution();
+                // ボタンを使用できないようにする
+                button.setDisable(true);
+                
+                // 非同期にタスクを実行
+                Runnable task = new Runnable() {
+                    @Override
+                    public void run() {
+                    	System.out.println( "start." );
+                        // 長い時間のかかる処理
+                        longExecution();
+                        
+                        // JavaFX Application Threadへのアクセス
+                        Platform.runLater(new Runnable() {
+                            @Override
+                            public void run() {
+                                // ボタンを使用可能に戻す
+                                button.setDisable(false);
+                            }
+                        });                        
+                    }
+                };
+                service.submit(task);
             }
         });
         
@@ -60,7 +87,12 @@ public class LongTermTask extends Application {
     private void longExecution() {
         try {
             Thread.sleep(10_000);
-        } catch (InterruptedException ex) {}
+            System.out.print( "finished." );
+        } 
+        catch (InterruptedException ex)
+        {
+        	System.out.print( "interrupted." );
+        }
     }
 
     public static void main(String... args) {

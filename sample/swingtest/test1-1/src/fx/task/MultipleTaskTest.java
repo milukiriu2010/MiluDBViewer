@@ -1,4 +1,4 @@
-package swing.longtask;
+package fx.task;
 
 import java.util.ArrayList;
 import java.util.List;

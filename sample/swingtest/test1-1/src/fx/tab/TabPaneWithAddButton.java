@@ -1,4 +1,4 @@
-package swing;
+package fx.tab;
 
 import javafx.application.Application;
 import javafx.event.ActionEvent;

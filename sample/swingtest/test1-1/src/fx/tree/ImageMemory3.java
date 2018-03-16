@@ -1,4 +1,4 @@
-package swing.tree;
+package fx.tree;
 
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -9,7 +9,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
-public class ImageMemory1 extends Application {
+public class ImageMemory3 extends Application {
 	
     public static void main(String[] args) {
         launch(args);
@@ -20,10 +20,12 @@ public class ImageMemory1 extends Application {
 	{
 		TreeItem<String> rootItem = new TreeItem<String>( "root" );
 		rootItem.setExpanded(true);
+		
+		Image image = new Image("file:resources/images/madonna.png" );
+        ImageView iv = new ImageView( image );
+        iv.setFitHeight( 16 );
+        iv.setFitWidth( 16 );        	
         for (int i = 1; i <= 100; i++) {
-            ImageView iv = new ImageView( new Image("file:resources/images/madonna.png" ) );
-            iv.setFitHeight( 16 );
-            iv.setFitWidth( 16 );        	
         	
             TreeItem<String> item = new TreeItem<String>("Message" + i, iv );            
             rootItem.getChildren().add(item);

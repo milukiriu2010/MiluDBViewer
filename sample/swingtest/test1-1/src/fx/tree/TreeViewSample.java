@@ -1,4 +1,4 @@
-package swing.tree;
+package fx.tree;
 
 import javafx.application.Application;
 import javafx.scene.Node;

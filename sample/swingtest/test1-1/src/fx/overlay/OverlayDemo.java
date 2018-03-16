@@ -1,4 +1,4 @@
-package swing.overlay;
+package fx.overlay;
 
 import javafx.application.Application;
 import javafx.scene.Scene;

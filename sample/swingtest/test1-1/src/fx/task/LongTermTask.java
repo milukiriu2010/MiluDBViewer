@@ -1,4 +1,4 @@
-package swing.longtask;
+package fx.task;
 
 import javafx.application.Application;
 import javafx.stage.Stage;
@@ -14,13 +14,8 @@ import javafx.event.*;
 
 //import java.beans.*;
 
-import java.util.concurrent.*;
-
 // http://itpro.nikkeibp.co.jp/article/COLUMN/20130828/500602/
-public class LongTermTask2 extends Application {
-	
-	// スレッドプール
-    private ExecutorService service = Executors.newSingleThreadExecutor();	
+public class LongTermTask extends Application {
 
     @Override
     public void start(Stage stage) {
@@ -53,16 +48,8 @@ public class LongTermTask2 extends Application {
         button.setOnAction(new javafx.event.EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent t) {
-                // 非同期にタスクを実行
-                Runnable task = new Runnable() {
-                    @Override
-                    public void run() {
-                    	System.out.println( "start." );
-                        // 長い時間のかかる処理
-                        longExecution();
-                    }
-                };
-                service.submit(task);
+                // 長い時間のかかる処理
+                longExecution();
             }
         });
         
@@ -73,7 +60,6 @@ public class LongTermTask2 extends Application {
     private void longExecution() {
         try {
             Thread.sleep(10_000);
-            System.out.print( "finished." );
         } catch (InterruptedException ex) {}
     }
 
