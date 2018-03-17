@@ -7,7 +7,7 @@ import java.util.ResourceBundle;
 import java.util.ArrayList;
 
 import milu.ctrl.ChangeLangInterface;
-import milu.ctrl.visitor.VisitorInterface;
+import milu.entity.schema.search.VisitorInterface;
 
 // This class will be abstract
 abstract public class SchemaEntity

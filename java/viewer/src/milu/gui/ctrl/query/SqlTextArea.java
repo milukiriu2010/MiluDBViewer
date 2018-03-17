@@ -22,11 +22,11 @@ import javafx.scene.shape.Path;
 import net.sf.jsqlparser.JSQLParserException;
 
 import milu.ctrl.sqlparse.SQLParse;
-import milu.ctrl.visitor.SearchSchemaEntityInterface;
-import milu.ctrl.visitor.SearchSchemaEntityVisitorFactory;
 import milu.tool.MyTool;
 import milu.gui.view.DBView;
 import milu.entity.schema.SchemaEntity;
+import milu.entity.schema.search.SearchSchemaEntityInterface;
+import milu.entity.schema.search.SearchSchemaEntityVisitorFactory;
 import milu.db.MyDBAbstract;
 
 public class SqlTextArea extends TextArea

@@ -139,7 +139,7 @@ public class FKDBMySQL extends FKDBAbstract
 			"  referenced_table_name = '" + tableName + "' \n" +
 			"order by position_in_unique_constraint";
 		
-		System.out.println( " -- selectSrcColumnMap(FK) ---------" );
+		System.out.println( " -- selectDstColumnMap(FK) ---------" );
 		System.out.println( sql );
 		System.out.println( " ----------------------------------" );
 		

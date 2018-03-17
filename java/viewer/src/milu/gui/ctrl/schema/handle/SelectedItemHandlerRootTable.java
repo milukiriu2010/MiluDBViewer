@@ -8,9 +8,9 @@ import javafx.collections.ObservableList;
 import javafx.collections.FXCollections;
 
 import milu.entity.schema.SchemaEntity;
+import milu.entity.schema.search.SearchSchemaEntityInterface;
+import milu.entity.schema.search.SearchSchemaEntityVisitorFactory;
 import milu.gui.ctrl.schema.SchemaTableViewTab;
-import milu.ctrl.visitor.SearchSchemaEntityInterface;
-import milu.ctrl.visitor.SearchSchemaEntityVisitorFactory;
 
 /**
  * This class is invoked, when "root table" item is clicked on SchemaTreeView.

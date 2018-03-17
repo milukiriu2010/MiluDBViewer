@@ -1,4 +1,4 @@
-package milu.ctrl.visitor;
+package milu.entity.schema.search;
 
 import milu.entity.schema.SchemaEntity;
 

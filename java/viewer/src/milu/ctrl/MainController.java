@@ -21,7 +21,7 @@ import milu.gui.ctrl.common.DraggingTabPaneSupport;
 
 import milu.db.MyDBAbstract;
 import milu.entity.schema.SchemaEntity;
-import milu.ctrl.visitor.ChangeLangSchemaEntityVisitor;
+import milu.entity.schema.search.ChangeLangSchemaEntityVisitor;
 import milu.conf.AppConf;
 
 public class MainController

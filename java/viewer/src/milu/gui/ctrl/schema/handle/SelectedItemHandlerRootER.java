@@ -122,9 +122,11 @@ public class SelectedItemHandlerRootER extends SelectedItemHandlerAbstract
 			return;
 		}
 		
-		// Create SchemaERViewTab, if it doesn't xist.
+		// Create SchemaERViewTab, if it doesn't exist.
 		SchemaERViewTab newTab = new SchemaERViewTab( schemaName );
 		newTab.setId( id );
+		newTab.setMyDBAbstract(myDBAbs);
+		newTab.setSchemaEntityRootER(selectedEntity);
 		
 		// set icon on Tab
 		MainController mainController = this.dbView.getMainController();

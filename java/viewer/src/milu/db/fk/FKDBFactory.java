@@ -4,6 +4,7 @@ import milu.db.MyDBAbstract;
 import milu.db.abs.ObjDBInterface;
 import milu.db.abs.ObjDBFactory;
 
+import milu.db.MyDBPostgres;
 import milu.db.MyDBMySQL;
 import milu.db.MyDBOracle;
 
@@ -13,7 +14,11 @@ public class FKDBFactory implements ObjDBFactory
 	public ObjDBInterface getInstance( MyDBAbstract myDBAbs ) 
 	{
 		FKDBAbstract fkDBAbs = null;
-		if ( myDBAbs instanceof MyDBMySQL )
+		if ( myDBAbs instanceof MyDBPostgres )
+		{
+			fkDBAbs = new FKDBPostgres();
+		}
+		else if ( myDBAbs instanceof MyDBMySQL )
 		{
 			fkDBAbs = new FKDBMySQL();
 		}

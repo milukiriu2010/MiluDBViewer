@@ -1,0 +1,21 @@
+
+.column_red {
+	-fx-background-color: #ff0000;
+}
+
+.column_green {
+	-fx-background-color: #00ff00;
+}
+
+.column_blue {
+	-fx-background-color: #0000ff;
+}
+
+.column_cyan {
+	-fx-background-color: #00ffff;
+}
+
+.path_green {
+	-fx-stroke: #00ff00;
+	-fx-stroke-width: 3;
+}

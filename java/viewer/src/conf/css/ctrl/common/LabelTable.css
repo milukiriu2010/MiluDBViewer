@@ -1,0 +1,14 @@
+.label_table {
+	-fx-border-color: #000000;
+	-fx-border-width: 2;
+	-fx-background-color: #ffffff;
+}
+
+.table_name {
+	-fx-border-color: #000000;
+	-fx-background-color: #ffffff;
+}
+
+.column_white {
+	-fx-background-color: #ffffff;
+}

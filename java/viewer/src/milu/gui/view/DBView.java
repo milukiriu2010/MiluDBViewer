@@ -20,14 +20,12 @@ import milu.ctrl.ToggleHorizontalVerticalInterface;
 import milu.ctrl.CopyInterface;
 import milu.ctrl.ChangeLangInterface;
 import milu.ctrl.MainController;
-import milu.gui.ctrl.common.DraggingTabPaneSupport;
 import milu.gui.ctrl.menu.MainMenuBar;
 import milu.gui.ctrl.menu.MainToolBar;
 import milu.gui.ctrl.query.DBSqlTab;
 import milu.gui.ctrl.schema.DBSchemaTab;
 import milu.db.MyDBAbstract;
 import milu.task.CollectTask;
-import milu.tool.MyTool;
 
 public class DBView extends Stage
 	implements 
@@ -103,8 +101,6 @@ public class DBView extends Stage
 		this.tabPane = new TabPane();
 		this.tabPane.getTabs().add( dbSqlTab );
 		// Enable tag dragging
-		//DraggingTabPaneSupport  dragSupport = new DraggingTabPaneSupport();
-		//dragSupport.addSupport( this.tabPane );
 		this.mainCtrl.addDraggingTabPaneMap( this.myDBAbs, this.tabPane );
 		
 		// put items on Pane
@@ -120,6 +116,10 @@ public class DBView extends Stage
         // load css on DBView elements
 		scene.getStylesheets().add
 		(
+			getClass().getResource("/conf/css/ctrl/common/LabelTable.css").toExternalForm()
+		);
+		scene.getStylesheets().add
+		(
 			getClass().getResource("/conf/css/ctrl/menu/MainToolBar.css").toExternalForm()
 		);
 		scene.getStylesheets().add
@@ -129,6 +129,10 @@ public class DBView extends Stage
 		scene.getStylesheets().add
 		(
 			getClass().getResource("/conf/css/ctrl/query/DBSqlTab.css").toExternalForm()
+		);
+		scene.getStylesheets().add
+		(
+			getClass().getResource("/conf/css/ctrl/schema/SchemaERView.css").toExternalForm()
 		);
         this.setScene(scene);
 		// Window Title
