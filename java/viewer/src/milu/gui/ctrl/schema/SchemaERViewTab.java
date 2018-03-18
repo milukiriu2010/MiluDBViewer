@@ -1,15 +1,12 @@
 package milu.gui.ctrl.schema;
 
 import javafx.scene.control.Tab;
-import javafx.scene.control.ScrollPane;
 
 import milu.entity.schema.SchemaEntity;
 import milu.db.MyDBAbstract;
 
 public class SchemaERViewTab extends Tab 
 {
-	private ScrollPane   root = new ScrollPane();
-	
 	private SchemaERView pane = new SchemaERView();
 	
 	public SchemaERViewTab( String tabName )
@@ -18,9 +15,7 @@ public class SchemaERViewTab extends Tab
 		
 		this.setText( tabName );
 		
-		this.root.setContent( this.pane );
-		
-		this.setContent( this.root );
+		this.setContent( this.pane );
 	}
 	
 	public void setMyDBAbstract( MyDBAbstract myDBAbs )

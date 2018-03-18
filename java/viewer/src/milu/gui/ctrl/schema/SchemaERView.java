@@ -18,7 +18,6 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.shape.LineTo;
 import javafx.scene.shape.MoveTo;
 import javafx.scene.shape.Path;
-import javafx.application.Platform;
 
 import milu.db.MyDBAbstract;
 import milu.entity.schema.SchemaEntity;
@@ -103,7 +102,7 @@ public class SchemaERView extends ScrollPane
 				this.root.getChildren().add( srcLabelTable );
 				this.slMap.put(srcTableEntity, srcLabelTable );
 				
-				srcLabelTable.setLayoutX( 100+(i%3)*80 );
+				srcLabelTable.setLayoutX( 20+(i%4)*140 );
 				srcLabelTable.setLayoutY( 100+i*100 );
 				this.setAction(srcLabelTable);
 			}
@@ -137,7 +136,7 @@ public class SchemaERView extends ScrollPane
 				this.root.getChildren().add( dstLabelTable );
 				this.slMap.put(dstTableEntity, dstLabelTable );
 				
-				dstLabelTable.setLayoutX( 200+(i%3)*80 );
+				dstLabelTable.setLayoutX( 180+(i%4)*140 );
 				dstLabelTable.setLayoutY( 100+i*100 );
 				this.setAction(dstLabelTable);
 			}
@@ -212,14 +211,14 @@ public class SchemaERView extends ScrollPane
     	DoubleProperty y1 = t1.layoutYProperty();
     	Bounds         b1 = t1.getBoundsInLocal();
     	DoubleProperty w1 = new SimpleDoubleProperty( b1.getWidth() );
-    	DoubleProperty h1 = new SimpleDoubleProperty( b1.getHeight() );
+    	//DoubleProperty h1 = new SimpleDoubleProperty( b1.getHeight() );
     	
     	// tlink1
     	Label          lbl1 = t1.getColumnLabel( tlink1 );
     	DoubleProperty xl1  = lbl1.layoutXProperty();
     	DoubleProperty yl1  = lbl1.layoutYProperty();
     	Bounds         bl1  = lbl1.getBoundsInParent();
-    	DoubleProperty wl1  = new SimpleDoubleProperty( bl1.getWidth() );
+    	//DoubleProperty wl1  = new SimpleDoubleProperty( bl1.getWidth() );
     	DoubleProperty hl1  = new SimpleDoubleProperty( bl1.getHeight() );
     	
     	System.out.println( String.format( "    t1:x=%3.3f/y=%3.3f",  x1.getValue(),  y1.getValue() ) );
@@ -230,14 +229,14 @@ public class SchemaERView extends ScrollPane
     	DoubleProperty y2 = t2.layoutYProperty();
     	Bounds         b2 = t2.getBoundsInLocal();
     	DoubleProperty w2 = new SimpleDoubleProperty( b2.getWidth() );
-    	DoubleProperty h2 = new SimpleDoubleProperty( b2.getHeight() );
+    	//DoubleProperty h2 = new SimpleDoubleProperty( b2.getHeight() );
     	
     	// tlink2
     	Label          lbl2 = t2.getColumnLabel( tlink2 );
     	DoubleProperty xl2  = lbl2.layoutXProperty();
     	DoubleProperty yl2  = lbl2.layoutYProperty();
     	Bounds         bl2  = lbl2.getBoundsInParent();
-    	DoubleProperty wl2  = new SimpleDoubleProperty( bl2.getWidth() );
+    	//DoubleProperty wl2  = new SimpleDoubleProperty( bl2.getWidth() );
     	DoubleProperty hl2  = new SimpleDoubleProperty( bl2.getHeight() );
     	
     	DoubleBinding  x1b = x1.add(w1.divide(2)).add(xl1.doubleValue());
@@ -266,46 +265,30 @@ public class SchemaERView extends ScrollPane
     	path.toBack();
     	
     	// src mouse enter
-    	lbl1.setOnMouseEntered
-    	( 
-    		(event)->
-    		{ 
-    			lbl1.getStyleClass().add("column_red");
-    			lbl2.getStyleClass().add("column_cyan");
-    			path.getStyleClass().add("path_green");
-    		} 
-    	);
+    	lbl1.setOnMouseEntered(	(event)->this.addStyleClass(lbl1, lbl2, path) );
     	// src mouse exit
-    	lbl1.setOnMouseExited
-    	(  
-    		(event)->
-    		{ 
-    			lbl1.getStyleClass().remove("column_red"); 
-    			lbl2.getStyleClass().remove("column_cyan");
-    			path.getStyleClass().remove("path_green");
-    		} 
-    	);
+    	lbl1.setOnMouseExited( (event)->this.removeStyleClass(lbl1, lbl2, path)	);
     	// dst mouse enter
-    	lbl2.setOnMouseEntered
-    	( 
-    		(event)->
-    		{ 
-    			lbl1.getStyleClass().add("column_red");
-    			lbl2.getStyleClass().add("column_cyan");
-    			path.getStyleClass().add("path_green");
-    		} 
-    	);
+    	lbl2.setOnMouseEntered(	(event)->this.addStyleClass(lbl1, lbl2, path) ); 
     	// dst mouse exit
-    	lbl2.setOnMouseExited
-    	(  
-    		(event)->
-    		{ 
-    			lbl1.getStyleClass().remove("column_red"); 
-    			lbl2.getStyleClass().remove("column_cyan"); 
-    			path.getStyleClass().remove("path_green");
-    		} 
-    	);
-
+    	lbl2.setOnMouseExited( (event)->this.removeStyleClass(lbl1, lbl2, path)	);
+    	// path mouse enter
+    	path.setOnMouseEntered( (event)->this.addStyleClass(lbl1, lbl2, path) );
+    	// path mouse exit
+    	path.setOnMouseExited( (event)->this.removeStyleClass(lbl1, lbl2, path) );
+	}
+	
+	private void addStyleClass( Label lbl1, Label lbl2, Path path )
+	{
+		lbl1.getStyleClass().add("column_red");
+		lbl2.getStyleClass().add("column_cyan");
+		path.getStyleClass().add("path_green");
 	}
 
+	private void removeStyleClass( Label lbl1, Label lbl2, Path path )
+	{
+		lbl1.getStyleClass().remove("column_red"); 
+		lbl2.getStyleClass().remove("column_cyan"); 
+		path.getStyleClass().remove("path_green");
+	}
 }

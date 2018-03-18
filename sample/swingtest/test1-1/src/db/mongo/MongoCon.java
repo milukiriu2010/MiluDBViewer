@@ -1,31 +1,13 @@
 package db.mongo;
 
-import com.mongodb.BasicDBObject;
-import com.mongodb.BulkWriteOperation;
-import com.mongodb.BulkWriteResult;
-import com.mongodb.Cursor;
 import com.mongodb.DB;
 import com.mongodb.DBCollection;
 import com.mongodb.DBCursor;
-import com.mongodb.DBObject;
 import com.mongodb.MongoClient;
-import com.mongodb.ParallelScanOptions;
 import com.mongodb.ServerAddress;
 import com.mongodb.MongoCredential;
-import java.net.UnknownHostException;
-import java.util.Date;
-
-import com.mongodb.BasicDBObject;
-import com.mongodb.DB;
-import com.mongodb.DBCollection;
-import com.mongodb.Mongo;
-import com.mongodb.MongoException;
 
 
-import java.util.List;
-import java.util.Set;
-
-import static java.util.concurrent.TimeUnit.SECONDS;
 
 import java.util.Arrays;
 
@@ -47,6 +29,7 @@ public class MongoCon
                 Arrays.asList(credential)
 			);
 		
+		@SuppressWarnings("deprecation")
 		DB db = mongoClient.getDB( "sample" );
 		
 		DBCollection coll = db.getCollection("sample_coll");
@@ -63,6 +46,7 @@ public class MongoCon
 		finally
 		{
 			cursor.close();
+			mongoClient.close();
 		}
 		/**/
 		

@@ -13,7 +13,6 @@ import javafx.scene.shape.LineTo;
 import javafx.scene.shape.MoveTo;
 import javafx.scene.shape.Path;
 import javafx.scene.Cursor;
-import javafx.scene.Group;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.scene.control.Label;
@@ -151,14 +150,14 @@ public class LabelTableDiagram3 extends Application
     	DoubleProperty y1 = t1.layoutYProperty();
     	Bounds         b1 = t1.getBoundsInLocal();
     	DoubleProperty w1 = new SimpleDoubleProperty( b1.getWidth() );
-    	DoubleProperty h1 = new SimpleDoubleProperty( b1.getHeight() );
+    	//DoubleProperty h1 = new SimpleDoubleProperty( b1.getHeight() );
     	
     	// tlink1
     	Label          lbl1 = t1.getColumnLabel( tlink1 );
     	DoubleProperty xl1  = lbl1.layoutXProperty();
     	DoubleProperty yl1  = lbl1.layoutYProperty();
     	Bounds         bl1  = lbl1.getBoundsInParent();
-    	DoubleProperty wl1  = new SimpleDoubleProperty( bl1.getWidth() );
+    	//DoubleProperty wl1  = new SimpleDoubleProperty( bl1.getWidth() );
     	DoubleProperty hl1  = new SimpleDoubleProperty( bl1.getHeight() );
     	
     	System.out.println( String.format( "    t1:x=%3.3f/y=%3.3f",  x1.getValue(),  y1.getValue() ) );
@@ -169,14 +168,14 @@ public class LabelTableDiagram3 extends Application
     	DoubleProperty y2 = t2.layoutYProperty();
     	Bounds         b2 = t2.getBoundsInLocal();
     	DoubleProperty w2 = new SimpleDoubleProperty( b2.getWidth() );
-    	DoubleProperty h2 = new SimpleDoubleProperty( b2.getHeight() );
+    	//DoubleProperty h2 = new SimpleDoubleProperty( b2.getHeight() );
     	
     	// tlink2
     	Label          lbl2 = t2.getColumnLabel( tlink2 );
     	DoubleProperty xl2  = lbl2.layoutXProperty();
     	DoubleProperty yl2  = lbl2.layoutYProperty();
     	Bounds         bl2  = lbl2.getBoundsInParent();
-    	DoubleProperty wl2  = new SimpleDoubleProperty( bl2.getWidth() );
+    	//DoubleProperty wl2  = new SimpleDoubleProperty( bl2.getWidth() );
     	DoubleProperty hl2  = new SimpleDoubleProperty( bl2.getHeight() );
     	
     	DoubleBinding  x1b = x1.add(w1.divide(2)).add(xl1.doubleValue());
@@ -223,7 +222,7 @@ public class LabelTableDiagram3 extends Application
     	);
 
 	}
-	
+	/*
 	private void getPosition( LabelTable t1 )
 	{
     	DoubleProperty x1 = t1.layoutXProperty();
@@ -246,7 +245,7 @@ public class LabelTableDiagram3 extends Application
     	}
     	
 	}
-
+	*/
 	public static void main(String[] args) 
 	{
 		// TODO Auto-generated method stub

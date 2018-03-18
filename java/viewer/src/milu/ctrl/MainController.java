@@ -72,6 +72,7 @@ public class MainController
 				"file:resources/images/index_p.png",
 				"file:resources/images/index_u.png",
 				"file:resources/images/index_f.png",
+				"file:resources/images/index_fk.png",
 				"file:resources/images/index_i.png",
 				"file:resources/images/order_a.png",
 				"file:resources/images/order_d.png",

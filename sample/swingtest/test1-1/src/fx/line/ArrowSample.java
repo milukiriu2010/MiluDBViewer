@@ -26,6 +26,8 @@ public class ArrowSample extends Application {
 	                arrow.setStartX(evt.getX());
 	                arrow.setStartY(evt.getY());
 	                break;
+	            default:
+	            	break;
 	        }
 	    });
 

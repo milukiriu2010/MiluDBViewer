@@ -11,12 +11,9 @@ import javafx.scene.control.TabPane;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
-import javafx.stage.Popup;
 import javafx.stage.Screen;
 import javafx.scene.image.WritableImage;
 import javafx.scene.image.ImageView;
-import javafx.scene.Scene;
-import javafx.stage.Window;
 import javafx.scene.control.Tooltip;
 import javafx.util.Duration;
 

@@ -9,9 +9,7 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
-import javafx.beans.property.DoubleProperty;
-import javafx.beans.property.ReadOnlyDoubleProperty;
-
+import javafx.application.Platform;
 
 import milu.entity.schema.SchemaEntity;
 
@@ -27,34 +25,6 @@ public class LabelTable extends Group
 	private List<Label>  lblColumnLst = new ArrayList<>();
 	
 	private VBox   vBox = new VBox(2);
-	
-	/*
-	public LabelTable( String schemaName, String tableName, List<String> colNameList )
-	{
-		super();
-		
-		this.schemaName = schemaName;
-		
-		this.vBox.getStyleClass().add("label_table");
-		
-		this.lblTable.setText( tableName );
-		this.lblTable.getStyleClass().add("table_name");
-		this.lblTable.prefWidth(-1);
-		this.lblTable.prefWidth(-1);
-		
-		this.vBox.getChildren().add(this.lblTable);
-		
-		for ( String colName: colNameList )
-		{
-			Label lblColumn = new Label( colName );
-			lblColumn.getStyleClass().add("column_w");
-			this.lblColumnLst.add( lblColumn );
-			this.vBox.getChildren().add(lblColumn);
-		}
-		
-		this.getChildren().add( this.vBox );
-	}
-	*/
 	
 	public LabelTable( SchemaEntity tblEntity )
 	{
@@ -84,8 +54,35 @@ public class LabelTable extends Group
 		}
 		this.getChildren().add( this.vBox );
 		
-		//ReadOnlyDoubleProperty w1 = this.vBox.widthProperty();
-		//this.lblTable.prefWidthProperty().bind(w1);
+		// set Label(lblTable) width to the longest Label(lblColumn) width
+		Platform.runLater
+		( 
+			()->
+			{
+				double maxW = this.lblTable.widthProperty().get();
+				Label lblMax = this.lblTable;
+				for ( Label lblColumn : this.lblColumnLst )
+				{
+					double colW = lblColumn.widthProperty().get();
+					if ( colW > maxW )
+					{
+						maxW = colW;
+						lblMax = lblColumn;
+					}
+				}
+				if ( lblMax != this.lblTable )
+				{
+					this.lblTable.prefWidthProperty().bind(lblMax.widthProperty());
+				}
+				for ( Label lblColumn : this.lblColumnLst )
+				{
+					if ( lblMax != lblColumn )
+					{
+						lblColumn.prefWidthProperty().bind(lblMax.widthProperty());
+					}
+				}
+			} 
+		);
 	}
 	
 	public Bounds getTableBoundsInLocal()
@@ -116,32 +113,4 @@ public class LabelTable extends Group
 	{
 		return new Point2D( this.lblTable.getWidth(), this.lblTable.getHeight() );
 	}
-	/*
-	@Override
-	public boolean equals( Object obj )
-	{
-		if ( obj == null )
-		{
-			return false;
-		}
-		
-		if ( obj instanceof LabelTable )
-		{
-			LabelTable lt = (LabelTable)obj;
-			if ( this.schemaName.equals( lt.schemaName ) == false )
-			{
-				return false;
-			}
-			if ( this.lblTable.getText().equals( lt.lblTable.getText() ) == false )
-			{
-				return false;
-			}
-			return true;
-		}
-		else
-		{
-			return false;
-		}
-	}
-	*/
 }

@@ -160,6 +160,7 @@ public class SchemaTreeView extends TreeView<SchemaEntity>
 		MainController mainController = dbView.getMainController();
 		
 		String imageResourceName = schemaEntity.getImageResourceName();
+		//System.out.println( "image:" + imageResourceName );
 		ImageView iv = new ImageView( mainController.getImage(imageResourceName) );
 		iv.setFitHeight( 16 );
 		iv.setFitWidth( 16 );

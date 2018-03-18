@@ -141,56 +141,6 @@ public class LabelTableDiagram2 extends Application
 		);
 	}
 	
-	private void connect( LabelTable t1, LabelTable t2, Group parent )
-	{
-    	DoubleProperty x1 = t1.layoutXProperty();
-    	DoubleProperty y1 = t1.layoutYProperty();
-    	Bounds         b1l = t1.getBoundsInLocal();
-    	Bounds         b1p = t1.getBoundsInParent();
-    	Bounds         b1o = t1.getLayoutBounds();
-    	//Bounds         b1 = t1.getTableBoundsInLocal();
-    	Point2D        p1 = t1.getTablePoint2D();
-    	DoubleProperty w1 = new SimpleDoubleProperty( b1l.getWidth() );
-    	DoubleProperty h1 = new SimpleDoubleProperty( b1l.getHeight() );
-    	System.out.println( String.format( "b1l:x=%3.3f/y=%3.3f", b1l.getWidth(), b1l.getHeight() ) );
-    	System.out.println( String.format( "b1p:x=%3.3f/y=%3.3f", b1p.getWidth(), b1p.getHeight() ) );
-    	System.out.println( String.format( "b1o:x=%3.3f/y=%3.3f", b1o.getWidth(), b1o.getHeight() ) );
-    	System.out.println( String.format( "p1 :x=%3.3f/y=%3.3f", p1.getX()     , p1.getY() ) );
-    	
-    	DoubleProperty x2 = t2.layoutXProperty();
-    	DoubleProperty y2 = t2.layoutYProperty();
-    	//Bounds         b2 = t2.getBoundsInLocal();
-    	//Bounds         b2 = t2.getBoundsInParent();
-    	Bounds         b2 = t2.getLayoutBounds();
-    	DoubleProperty w2 = new SimpleDoubleProperty( b2.getWidth() );
-    	DoubleProperty h2 = new SimpleDoubleProperty( b2.getHeight() );
-    	
-    	DoubleBinding  x1b = x1.add(w1.divide(2));
-    	DoubleBinding  y1b = y1.add(h1.divide(2));
-    	
-    	DoubleBinding  x2b = x2.add(w2.divide(2));
-    	DoubleBinding  y2b = y2.add(h2.divide(2));
-    	
-    	MoveTo mt = new MoveTo();
-    	mt.xProperty().bind( x1b );
-    	mt.yProperty().bind( y1b );
-    	
-    	LineTo lt1 = new LineTo();
-    	lt1.xProperty().bind( x2b );
-    	lt1.yProperty().bind( y1b );
-    
-    	
-    	LineTo lt2 = new LineTo();
-    	lt2.xProperty().bind( x2b );
-    	lt2.yProperty().bind( y2b );
-    	
-    	Path path = new Path();
-    	path.getElements().addAll( mt, lt1, lt2 );
-    	parent.getChildren().add( path );
-    	path.getStrokeDashArray().addAll( 2.0, 4.0 );
-    	path.toBack();
-	}
-	
 	private void connect( LabelTable t1, String tlink1, LabelTable t2, String tlink2, Group parent )
 	{
 		// t1
@@ -198,14 +148,14 @@ public class LabelTableDiagram2 extends Application
     	DoubleProperty y1 = t1.layoutYProperty();
     	Bounds         b1 = t1.getBoundsInLocal();
     	DoubleProperty w1 = new SimpleDoubleProperty( b1.getWidth() );
-    	DoubleProperty h1 = new SimpleDoubleProperty( b1.getHeight() );
+    	//DoubleProperty h1 = new SimpleDoubleProperty( b1.getHeight() );
     	
     	// tlink1
     	Label          lbl1 = t1.getColumnLabel( tlink1 );
     	DoubleProperty xl1  = lbl1.layoutXProperty();
     	DoubleProperty yl1  = lbl1.layoutYProperty();
     	Bounds         bl1  = lbl1.getBoundsInParent();
-    	DoubleProperty wl1  = new SimpleDoubleProperty( bl1.getWidth() );
+    	//DoubleProperty wl1  = new SimpleDoubleProperty( bl1.getWidth() );
     	DoubleProperty hl1  = new SimpleDoubleProperty( bl1.getHeight() );
     	
     	System.out.println( String.format( "    t1:x=%3.3f/y=%3.3f",  x1.getValue(),  y1.getValue() ) );
@@ -216,14 +166,14 @@ public class LabelTableDiagram2 extends Application
     	DoubleProperty y2 = t2.layoutYProperty();
     	Bounds         b2 = t2.getBoundsInLocal();
     	DoubleProperty w2 = new SimpleDoubleProperty( b2.getWidth() );
-    	DoubleProperty h2 = new SimpleDoubleProperty( b2.getHeight() );
+    	//DoubleProperty h2 = new SimpleDoubleProperty( b2.getHeight() );
     	
     	// tlink2
     	Label          lbl2 = t2.getColumnLabel( tlink2 );
     	DoubleProperty xl2  = lbl2.layoutXProperty();
     	DoubleProperty yl2  = lbl2.layoutYProperty();
     	Bounds         bl2  = lbl2.getBoundsInParent();
-    	DoubleProperty wl2  = new SimpleDoubleProperty( bl2.getWidth() );
+    	//DoubleProperty wl2  = new SimpleDoubleProperty( bl2.getWidth() );
     	DoubleProperty hl2  = new SimpleDoubleProperty( bl2.getHeight() );
     	
     	DoubleBinding  x1b = x1.add(w1.divide(2)).add(xl1.doubleValue());
@@ -270,7 +220,7 @@ public class LabelTableDiagram2 extends Application
     	);
 
 	}
-	
+	/*
 	private void getPosition( LabelTable t1 )
 	{
     	DoubleProperty x1 = t1.layoutXProperty();
@@ -293,7 +243,7 @@ public class LabelTableDiagram2 extends Application
     	}
     	
 	}
-
+	*/
 	public static void main(String[] args) 
 	{
 		// TODO Auto-generated method stub

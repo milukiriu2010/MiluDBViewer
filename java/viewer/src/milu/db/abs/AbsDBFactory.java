@@ -1,6 +1,5 @@
 package milu.db.abs;
 
-import milu.db.MyDBAbstract;
 import milu.db.fk.FKDBFactory;
 
 public class AbsDBFactory

@@ -47,7 +47,7 @@ public class SchemaEntityEachFK extends SchemaEntity
 	{
 		super( name, SchemaEntity.SCHEMA_TYPE.FOREIGN_KEY );
 		
-		this.imageResourceName = "file:resources/images/index_i.png";
+		this.imageResourceName = "file:resources/images/index_fk.png";
 	}
 	
 	// schema of Foreign Key
