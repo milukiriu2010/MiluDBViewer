@@ -92,19 +92,26 @@ public class SchemaERView extends ScrollPane
 			
 			// SRC LabelTable
 			LabelTable  srcLabelTable = null;
-			if ( this.slMap.containsKey(srcTableEntity) == true )
+			if ( srcTableEntity != null )
 			{
-				srcLabelTable = this.slMap.get(srcTableEntity);
+				if ( this.slMap.containsKey(srcTableEntity) == true )
+				{
+					srcLabelTable = this.slMap.get(srcTableEntity);
+				}
+				else
+				{
+					srcLabelTable = new LabelTable(srcTableEntity);
+					this.root.getChildren().add( srcLabelTable );
+					this.slMap.put(srcTableEntity, srcLabelTable );
+					
+					srcLabelTable.setLayoutX( 20+(i%4)*140 );
+					srcLabelTable.setLayoutY( 100+i*100 );
+					this.setAction(srcLabelTable);
+				}
 			}
 			else
 			{
-				srcLabelTable = new LabelTable(srcTableEntity);
-				this.root.getChildren().add( srcLabelTable );
-				this.slMap.put(srcTableEntity, srcLabelTable );
-				
-				srcLabelTable.setLayoutX( 20+(i%4)*140 );
-				srcLabelTable.setLayoutY( 100+i*100 );
-				this.setAction(srcLabelTable);
+				System.out.println( "Not Found:i[" + i + "]srcTableSchema[" + srcTableSchema + "]srcTableName[" + srcTableName + "]" );
 			}
 			
 			// --- DST ----------------------------------------------
@@ -126,19 +133,26 @@ public class SchemaERView extends ScrollPane
 			
 			// DST LabelTable
 			LabelTable  dstLabelTable = null;
-			if ( this.slMap.containsKey(dstTableEntity) == true )
+			if ( dstTableEntity != null )
 			{
-				dstLabelTable = this.slMap.get(dstTableEntity);
+				if ( this.slMap.containsKey(dstTableEntity) == true )
+				{
+					dstLabelTable = this.slMap.get(dstTableEntity);
+				}
+				else
+				{
+					dstLabelTable = new LabelTable(dstTableEntity);
+					this.root.getChildren().add( dstLabelTable );
+					this.slMap.put(dstTableEntity, dstLabelTable );
+					
+					dstLabelTable.setLayoutX( 180+(i%4)*140 );
+					dstLabelTable.setLayoutY( 100+i*100 );
+					this.setAction(dstLabelTable);
+				}
 			}
 			else
 			{
-				dstLabelTable = new LabelTable(dstTableEntity);
-				this.root.getChildren().add( dstLabelTable );
-				this.slMap.put(dstTableEntity, dstLabelTable );
-				
-				dstLabelTable.setLayoutX( 180+(i%4)*140 );
-				dstLabelTable.setLayoutY( 100+i*100 );
-				this.setAction(dstLabelTable);
+				System.out.println( "Not Found:i[" + i + "]dstTableSchema[" + dstTableSchema + "]dstTableName[" + dstTableName + "]" );			
 			}
 			
 			// -- SRC/DST Column Map ----------------------------
@@ -206,6 +220,11 @@ public class SchemaERView extends ScrollPane
 	
 	private void connect( LabelTable t1, String tlink1, LabelTable t2, String tlink2 )
 	{
+		if ( t1 == null || t2 == null )
+		{
+			return;
+		}
+		
 		// t1
     	DoubleProperty x1 = t1.layoutXProperty();
     	DoubleProperty y1 = t1.layoutYProperty();
@@ -221,8 +240,8 @@ public class SchemaERView extends ScrollPane
     	//DoubleProperty wl1  = new SimpleDoubleProperty( bl1.getWidth() );
     	DoubleProperty hl1  = new SimpleDoubleProperty( bl1.getHeight() );
     	
-    	System.out.println( String.format( "    t1:x=%3.3f/y=%3.3f",  x1.getValue(),  y1.getValue() ) );
-    	System.out.println( String.format( "tlink1:x=%3.3f/y=%3.3f", xl1.getValue(), yl1.getValue() ) );
+    	//System.out.println( String.format( "    t1:x=%3.3f/y=%3.3f",  x1.getValue(),  y1.getValue() ) );
+    	//System.out.println( String.format( "tlink1:x=%3.3f/y=%3.3f", xl1.getValue(), yl1.getValue() ) );
     	
     	// t2
     	DoubleProperty x2 = t2.layoutXProperty();
