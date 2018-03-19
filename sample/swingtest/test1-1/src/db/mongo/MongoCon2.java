@@ -7,6 +7,10 @@ import com.mongodb.MongoCredential;
 import com.mongodb.MongoClientOptions;
 import com.mongodb.WriteConcern;
 import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.MongoCollection;
+import org.bson.Document;
+import com.mongodb.client.FindIterable;
+import com.mongodb.client.MongoCursor;
 
 public class MongoCon2 
 {
@@ -35,25 +39,24 @@ public class MongoCon2
 		
 		MongoDatabase mongoDB = mongoClient.getDatabase( "sample" );
 		
-		/*
-		DB db = mongoClient.getDB( "sample" );
+		MongoCollection<Document> coll = mongoDB.getCollection( "sample_coll" );
+		System.out.println( "document count=" + coll.count() );
 		
-		DBCollection coll = db.getCollection("sample_coll");
-		
-		System.out.println( "document count=" + coll.getCount() );
-		DBCursor cursor = coll.find();
+		FindIterable<?> findIterable = coll.find();
+		MongoCursor<?> iterator = findIterable.iterator();
 		try
 		{
-			while ( cursor.hasNext() )
+			while ( iterator.hasNext() )
 			{
-				System.out.println( "item:" + cursor.next() );
+				System.out.println( "item:" + iterator.next() );
 			}
 		}
 		finally
 		{
-			cursor.close();
+			iterator.close();
 		}
-		*/
+		
+		mongoClient.close();
 	}
 
 }

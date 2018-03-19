@@ -14,7 +14,7 @@ mongo --port 27017 -u "milu" -p "milu" --authenticationDatabase "admin"
 
 mongo --port 27017 -u "mongo" -p "mongo" --authenticationDatabase "admin"
 
-mongo --port 27017 -u "mongorw" -p "mongorw" --authenticationDatabase "admin"
+mongo --port 27017 -u "milurw" -p "milurw" --authenticationDatabase "admin"
 
 =========================================
 
