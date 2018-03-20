@@ -104,7 +104,7 @@ public class SchemaERView extends ScrollPane
 					this.root.getChildren().add( srcLabelTable );
 					this.slMap.put(srcTableEntity, srcLabelTable );
 					
-					srcLabelTable.setLayoutX( 20+(i%4)*140 );
+					srcLabelTable.setLayoutX( 20+(i%6)*140 );
 					srcLabelTable.setLayoutY( 100+i*100 );
 					this.setAction(srcLabelTable);
 				}
@@ -124,7 +124,7 @@ public class SchemaERView extends ScrollPane
 			// Search DST [SCHEMA]
 			SearchSchemaEntityInterface searchDstSchemaVisitor = new SearchSchemaEntityVisitorFactory().createInstance(SchemaEntity.SCHEMA_TYPE.SCHEMA, dstTableSchema );
 			rootEntity.accept(searchDstSchemaVisitor);
-			SchemaEntity dstSchemaEntity = searchSrcSchemaVisitor.getHitSchemaEntity();
+			SchemaEntity dstSchemaEntity = searchDstSchemaVisitor.getHitSchemaEntity();
 			
 			// Search DST [TABLE]
 			SearchSchemaEntityInterface searchDstTableVisitor = new SearchSchemaEntityVisitorFactory().createInstance(SchemaEntity.SCHEMA_TYPE.TABLE, dstTableName );
@@ -145,7 +145,7 @@ public class SchemaERView extends ScrollPane
 					this.root.getChildren().add( dstLabelTable );
 					this.slMap.put(dstTableEntity, dstLabelTable );
 					
-					dstLabelTable.setLayoutX( 180+(i%4)*140 );
+					dstLabelTable.setLayoutX( 180+(i%6)*140 );
 					dstLabelTable.setLayoutY( 100+i*100 );
 					this.setAction(dstLabelTable);
 				}
@@ -174,7 +174,26 @@ public class SchemaERView extends ScrollPane
 					
 					final LabelTable srcLabelTableF = srcLabelTable;
 					final LabelTable dstLabelTableF = dstLabelTable;
-					Platform.runLater( ()->this.connect( srcLabelTableF, srcColumn, dstLabelTableF, dstColumn ) );
+					Platform.runLater
+					( 
+						()->
+						{
+							try
+							{
+								if ( System.getProperty("os.name").contains("Windows") == true )
+								{
+								}
+								else
+								{
+									Thread.sleep(100);
+								}
+							}
+							catch ( InterruptedException intEx )
+							{
+							}
+							this.connect( srcLabelTableF, srcColumn, dstLabelTableF, dstColumn );
+						}
+					);
 				}
 			}
 			else
@@ -299,6 +318,7 @@ public class SchemaERView extends ScrollPane
 	
 	private void addStyleClass( Label lbl1, Label lbl2, Path path )
 	{
+		//System.out.println( "addStyle["+lbl1.getText()+"]["+lbl2.getText()+"]" );
 		lbl1.getStyleClass().add("column_red");
 		lbl2.getStyleClass().add("column_cyan");
 		path.getStyleClass().add("path_green");
@@ -306,6 +326,7 @@ public class SchemaERView extends ScrollPane
 
 	private void removeStyleClass( Label lbl1, Label lbl2, Path path )
 	{
+		//System.out.println( "delStyle["+lbl1.getText()+"]["+lbl2.getText()+"]" );
 		lbl1.getStyleClass().remove("column_red"); 
 		lbl2.getStyleClass().remove("column_cyan"); 
 		path.getStyleClass().remove("path_green");

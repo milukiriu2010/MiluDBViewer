@@ -327,6 +327,8 @@ public class SystemInfoDialog extends Dialog<Boolean>
         
         // Data List
         List<List<String>>  dataLst = new ArrayList<List<String>>();
+        
+        /*
         // Display Size
         List<String> dispSizeLst = new ArrayList<String>();
         dispSizeLst.add( langRB.getString("ITEM_DISP_SIZE") );
@@ -344,6 +346,31 @@ public class SystemInfoDialog extends Dialog<Boolean>
         dispDPILst.add( langRB.getString("ITEM_DISP_DPI") );
         dispDPILst.add( String.format( "%d",(int)Screen.getPrimary().getDpi()) );
         dataLst.add(dispDPILst);
+        */
+        
+        int dispID = 1;
+        for ( Screen  screen : Screen.getScreens() )
+        {
+            // Display Size
+            List<String> dispSizeLst = new ArrayList<String>();
+            dispSizeLst.add( langRB.getString("ITEM_DISP_SIZE") + "(" + dispID + ")" );
+    		Rectangle2D  rec = screen.getBounds();
+            dispSizeLst.add( String.format( "%d x %d",(int)rec.getWidth(),(int)rec.getHeight()) );
+            dataLst.add(dispSizeLst);
+            // Display Size(Visual)
+            List<String> dispSizeVisualLst = new ArrayList<String>();
+            dispSizeVisualLst.add( langRB.getString("ITEM_DISP_SIZE_VISUAL") + "(" + dispID + ")" );
+    		Rectangle2D  recVisual = screen.getVisualBounds();
+            dispSizeVisualLst.add( String.format( "%d x %d",(int)recVisual.getWidth(),(int)recVisual.getHeight()) );
+            dataLst.add(dispSizeVisualLst);
+            // Display DPI
+            List<String> dispDPILst = new ArrayList<String>();
+            dispDPILst.add( langRB.getString("ITEM_DISP_DPI") + "(" + dispID + ")" );
+            dispDPILst.add( String.format( "%d",(int)screen.getDpi()) );
+            dataLst.add(dispDPILst);
+            
+            dispID++;
+        }
         
         dispTableView.setTableViewSQL( headLst, dataLst );
 	}

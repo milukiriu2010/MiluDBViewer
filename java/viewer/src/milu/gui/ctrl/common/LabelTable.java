@@ -59,6 +59,19 @@ public class LabelTable extends Group
 		( 
 			()->
 			{
+				try
+				{
+					if ( System.getProperty("os.name").contains("Windows") == true )
+					{
+					}
+					else
+					{
+						Thread.sleep(100);
+					}
+				}
+				catch ( InterruptedException intEx )
+				{
+				}
 				double maxW = this.lblTable.widthProperty().get();
 				Label lblMax = this.lblTable;
 				for ( Label lblColumn : this.lblColumnLst )

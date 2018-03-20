@@ -1,39 +1,46 @@
- select
-    fk.table_name, 
-    fk.constraint_name,   
-    fk.r_constraint_name,   
-    fk.position, 
-    fk.column_name,   
-    cref.table_name r_table_name,   
-    ccref.position 
-    r_position, 
-    ccref.column_name 
-    r_column_name 
- from
-    user_constraints cref, 
-    user_cons_columns ccref, 
-    (   
-      select 
-        c.table_name, 
-        c.constraint_name,     
-        c.r_constraint_name,     
-        cc.position, 
-        cc.column_name   
-      from 
-        user_constraints c, 
-        user_cons_columns cc   
-      where 
-        c.table_name  = cc.table_name   
-        and 
-        c.constraint_name = cc.constraint_name   
-        and 
-        c.constraint_type = 'R'   
-      order by cc.table_name, cc.constraint_name, cc.position 
-    ) fk 
+select  
+  acs.owner            acs_owner, 
+  acs.constraint_name  acs_constraint_name,  
+  acs.table_name       acs_table_name,  
+  acd.owner            acd_owner,  
+  acd.constraint_name  acd_constraint_name,  
+  acd.table_name       acd_table_name,  
+  acs.status           acs_status  
+from  
+  (   
+  select 
+    owner, 
+    constraint_name, 
+    table_name, 
+    r_owner, 
+    r_constraint_name, 
+    status 
+  from 
+    all_constraints 
   where 
-    fk.r_constraint_name = cref.constraint_name 
+    constraint_type='R' 
     and 
-    cref.constraint_name = ccref.constraint_name 
-    and 
-    fk.position = ccref.position 
-  order by fk.table_name, fk.constraint_name, fk.position
+    owner = 'MILU' 
+  ) acs,  
+  all_constraints acd 
+where 
+  acs.r_owner = acd.owner 
+  and 
+  acs.r_constraint_name = acd.constraint_name  
+order by acs.constraint_name
+
+=============================================================
+
+select 
+  column_name, 
+  position 
+from 
+  all_cons_columns 
+where 
+  owner = 'MILU' 
+  and 
+  constraint_name = 'FK_SOCCERPLAYERLST_COUNTRY_ID' 
+  and 
+  table_name = 'T_SOCCER_PLAYER_LIST' 
+order by position
+
