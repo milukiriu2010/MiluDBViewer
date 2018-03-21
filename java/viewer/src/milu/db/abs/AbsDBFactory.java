@@ -1,16 +1,22 @@
 package milu.db.abs;
 
+import milu.db.sequence.SequenceDBFactory;
 import milu.db.fk.FKDBFactory;
 
 public class AbsDBFactory
 {
 	public enum FACTORY_TYPE
 	{
+		SEQUENCE,
 		FOREIGN_KEY
 	}
 	public static ObjDBFactory getFactory( FACTORY_TYPE factoryType )
 	{
-		if ( factoryType == FACTORY_TYPE.FOREIGN_KEY )
+		if ( factoryType == FACTORY_TYPE.SEQUENCE )
+		{
+			return new SequenceDBFactory();
+		}
+		else if ( factoryType == FACTORY_TYPE.FOREIGN_KEY )
 		{
 			return new FKDBFactory();
 		}

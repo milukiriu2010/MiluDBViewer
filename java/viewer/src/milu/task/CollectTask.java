@@ -15,7 +15,7 @@ import milu.db.packagedef.PackageDefDBFactory;
 import milu.db.proc.ProcDBFactory;
 import milu.db.schema.SchemaDBAbstract;
 import milu.db.schema.SchemaDBFactory;
-import milu.db.sequence.SequenceDBFactory;
+//import milu.db.sequence.SequenceDBFactory;
 import milu.db.table.TableDBAbstract;
 import milu.db.table.TableDBFactory;
 import milu.db.type.TypeDBFactory;
@@ -189,7 +189,8 @@ public class CollectTask extends Task<Double>
 				SchemaEntity rootTriggerEntity          = SchemaEntityFactory.createInstance( SchemaEntity.SCHEMA_TYPE.ROOT_TRIGGER );
 				schemaEntity.addEntity( rootTriggerEntity );
 			}
-			if ( SequenceDBFactory.getInstance(myDBAbs) != null )
+			ObjDBFactory sequenceDBFactory = AbsDBFactory.getFactory( AbsDBFactory.FACTORY_TYPE.SEQUENCE );
+			if ( sequenceDBFactory.getInstance(myDBAbs) != null )
 			{
 				SchemaEntity rootSequenceEntity     = SchemaEntityFactory.createInstance( SchemaEntity.SCHEMA_TYPE.ROOT_SEQUENCE );
 				schemaEntity.addEntity( rootSequenceEntity );

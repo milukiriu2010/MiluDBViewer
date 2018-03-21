@@ -12,7 +12,7 @@ import milu.db.MyDBMySQL;
 import milu.db.MyDBOracle;
 import milu.db.MyDBCassandra;
 
-public class UrlPaneFactory implements PaneFactory 
+class UrlPaneFactory implements PaneFactory 
 {
 	@Override
 	public UrlPaneAbstract createPane( Dialog<?> dlg, MainController mainCtrl, MyDBAbstract myDBAbs, ResourceBundle extLangRB, Map<String,String> mapProp )

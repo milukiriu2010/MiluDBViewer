@@ -6,8 +6,10 @@ import java.util.List;
 import javafx.scene.control.TreeItem;
 import javafx.collections.ObservableList;
 
-import milu.db.sequence.SequenceDBAbstract;
-import milu.db.sequence.SequenceDBFactory;
+import milu.db.abs.AbsDBFactory;
+import milu.db.abs.ObjDBFactory;
+import milu.db.abs.ObjDBInterface;
+
 import milu.entity.schema.SchemaEntity;
 
 
@@ -37,18 +39,6 @@ import milu.entity.schema.SchemaEntity;
  */
 public class SelectedItemHandlerRootSequence extends SelectedItemHandlerAbstract
 {
-	/*
-	public SelectedItemHandlerRootSequence
-	( 
-		SchemaTreeView schemaTreeView, 
-		TabPane        tabPane,
-		MyDBAbstract   myDBAbs,
-		SelectedItemHandlerAbstract.REFRESH_TYPE  refreshType
-	)
-	{
-		super( schemaTreeView, tabPane, myDBAbs, refreshType );
-	}
-	*/
 	@Override
 	protected boolean isMyResponsible()
 	{
@@ -74,16 +64,12 @@ public class SelectedItemHandlerRootSequence extends SelectedItemHandlerAbstract
 		// get View List & add list as children
 		if ( itemChildren.size() == 0 )
 		{
-			/*
-			String schema = itemParent.getValue().toString();
-			List<List<String>> dataLst = myDBAbs.getSchemaSequence( schema );
-			this.schemaTreeView.setSequenceData( itemSelected, dataLst );
-			*/
-			SequenceDBAbstract sequenceDBAbs = SequenceDBFactory.getInstance(myDBAbs);
-			if ( sequenceDBAbs != null )
+			ObjDBFactory objDBFactory = AbsDBFactory.getFactory( AbsDBFactory.FACTORY_TYPE.SEQUENCE );
+			ObjDBInterface objDBInf = objDBFactory.getInstance(myDBAbs);
+			if ( objDBInf != null )
 			{
 				String schemaName = itemParent.getValue().toString();
-				List<SchemaEntity> sequenceEntityLst = sequenceDBAbs.selectEntityLst(schemaName);
+				List<SchemaEntity> sequenceEntityLst = objDBInf.selectEntityLst(schemaName);
 				this.schemaTreeView.addEntityLst( itemSelected, sequenceEntityLst );
 			}
 		}

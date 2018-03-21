@@ -22,11 +22,9 @@ import javafx.stage.Stage;
 import javafx.stage.Window;
 
 import milu.ctrl.ChangeLangInterface;
-
-import milu.gui.dlg.AppSettingDialog;
 import milu.gui.dlg.SystemInfoDialog;
 import milu.gui.dlg.VersionDialog;
-
+import milu.gui.dlg.app.AppSettingDialog;
 import milu.gui.view.DBView;
 import milu.ctrl.MainController;
 

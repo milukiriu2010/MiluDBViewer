@@ -99,7 +99,6 @@ public class SelectedItemHandlerRootER extends SelectedItemHandlerAbstract
 		if ( itemChildren.size() == 0 )
 		{
 			ObjDBFactory objDBFactory = AbsDBFactory.getFactory( AbsDBFactory.FACTORY_TYPE.FOREIGN_KEY );
-			//FKDBFactory  fkDBFactory = (FKDBFactory)objDBFactory;
 			ObjDBInterface objDBInf = objDBFactory.getInstance(myDBAbs);
 			if ( objDBInf != null )
 			{

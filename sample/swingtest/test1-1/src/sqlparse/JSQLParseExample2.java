@@ -15,6 +15,8 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.SplitPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.ToggleButton;
 
 import net.sf.jsqlparser.parser.CCJSqlParserUtil;
 
@@ -34,6 +36,12 @@ import net.sf.jsqlparser.statement.select.ValuesList;
 import net.sf.jsqlparser.statement.select.OrderByElement;
 import net.sf.jsqlparser.statement.Statement; 
 import net.sf.jsqlparser.JSQLParserException;
+
+import net.sf.jsqlparser.util.cnfexpression.MultipleExpression;
+
+import net.sf.jsqlparser.expression.operators.arithmetic.Multiplication;
+
+import net.sf.jsqlparser.statement.insert.Insert;
 
 import net.sf.jsqlparser.expression.Expression;
 import net.sf.jsqlparser.expression.Alias;
@@ -87,11 +95,100 @@ public class JSQLParseExample2 extends Application
 		btnParse.setOnAction( e->parse() );
 		btnParseExpression.setOnAction( e->parseExpression() );
 		
-		HBox hBox = new HBox(2);
-		hBox.getChildren().addAll( btnParse, btnParseExpression );
+		HBox hBoxParse = new HBox(2);
+		hBoxParse.getChildren().addAll( btnParse, btnParseExpression );
+		
+		ToggleGroup tglGroup = new ToggleGroup();
+		ToggleButton tb1 = new ToggleButton( "select" );
+		tb1.setToggleGroup(tglGroup);
+		ToggleButton tb2 = new ToggleButton( "insert" );
+		tb2.setToggleGroup(tglGroup);
+		ToggleButton tb3 = new ToggleButton( "cal" );
+		tb3.setToggleGroup(tglGroup);
+		ToggleButton tb4 = new ToggleButton( "select schema" );
+		tb4.setToggleGroup(tglGroup);
+		tglGroup.selectedToggleProperty().addListener
+		(
+			(obs,oldVal,newVal)->
+			{
+				if ( newVal  == tb1 )
+				{
+					taSQL.setText
+					(
+						"SELECT \n" + 
+						"  u.first_name as fn, \n" + 
+						"  u.last_name ln, \n" + 
+						"  c.name cn, \n" + 
+						"   ( select count(*) from a ) cnt \n" + 
+						"FROM \n " + 
+						"  user u join country c on u.uid = c.cid  join \n" +
+						"  continent cn on c.cid = cn.cnid \n" +
+						"WHERE \n" +
+						"  u.uid >= 10000 and u.uid < 20000 \n" +
+						"order by u.uid, u.firmst_name"
+					);
+				}
+				else if ( newVal == tb2 )
+				{
+					taSQL.setText
+					(
+						"insert into country \n" +
+						"( ID, NAME ) \n" +
+						"VALUES \n" +
+						"( 81, 'JAPAN')"
+					);
+				}
+				else if ( newVal == tb3 )
+				{
+					taSQL.setText( "4*(5+1)" );
+				}
+				else if ( newVal == tb4 )
+				{
+					taSQL.setText
+					(
+						"select c.id, c.name from sakila.country c where c.id = 80"
+						/*
+						"select \n" + 
+						"  acs1.constraint_schema         acs_constraint_schema, \n" + 
+						"  acs1.constraint_name           acs_constraint_name, \n" +
+						"  acs1.table_schema              acs_table_schema, \n" +
+						"  acs1.table_name                acs_table_name, \n" +
+						"  acs2.unique_constraint_schema  acd_constraint_schema, \n" +
+						"  acs2.unique_constraint_name    acd_constraint_name, \n" +
+						"  acd.table_schema               acd_table_schema, \n" +
+						"  acd.table_name                 acd_table_name \n" +
+						"from \n" +
+						"  information_schema.table_constraints  acs1 \n" + 
+						"  left join \n" +
+						"  information_schema.referential_constraints acs2 \n" + 
+						"  on \n" +
+						"  acs1.constraint_catalog = acs2.constraint_catalog \n" + 
+						"  and \n" +
+						"  acs1.constraint_schema = acs2.constraint_schema \n" + 
+						"  and \n" +
+						"  acs1.constraint_name = acs2.constraint_name \n" + 
+						"  left join \n" +
+						"  information_schema.table_constraints  acd \n" + 
+						"  on \n" +
+						"  acs2.unique_constraint_catalog = acd.constraint_catalog \n" + 
+						"  and \n" +
+						"  acs2.unique_constraint_schema   = acd.constraint_schema \n" + 
+						"  and \n" +
+						"  acs2.unique_constraint_name = acd.constraint_name \n" + 
+						"where \n" +
+						"  acs1.constraint_type = 'FOREIGN KEY' \n" + 
+						"order by acs1.constraint_name"
+						*/
+					);
+				}
+			}
+		);
+		
+		HBox hBoxTG = new HBox(2);
+		hBoxTG.getChildren().addAll( tb1, tb2, tb3, tb4 );
 		
 		VBox vBox = new VBox(2);
-		vBox.getChildren().addAll( taSQL, hBox );
+		vBox.getChildren().addAll( taSQL, hBoxParse, hBoxTG );
 		
 		SplitPane sp = new SplitPane();
 		sp.setOrientation( Orientation.VERTICAL );
@@ -111,7 +208,7 @@ public class JSQLParseExample2 extends Application
 		{
 			String sqlStr = this.taSQL.getText();
 			Statement stmt = CCJSqlParserUtil.parse(sqlStr);
-			if ( stmt instanceof Select)
+			if ( stmt instanceof Select )
 			{
 				Select select = (Select)stmt;
 				processSelectBody( select.getSelectBody(), 0, sb );
@@ -124,6 +221,16 @@ public class JSQLParseExample2 extends Application
 					String tbl2 = tblLst2.get(i);
 					sb.append( "TABLE:" + tbl2 + "\n" );
 				}				
+			}
+			else if ( stmt instanceof Insert )
+			{
+				Insert insert = (Insert)stmt;
+				sb.append( "=== getColumns =====================\n" );
+				for ( Column column : insert.getColumns() )
+				{
+					processColumn( column, 0, sb );
+					sb.append( "----------------------" );
+				}
 			}
 		}
 		catch ( JSQLParserException jsqlEx )
@@ -312,7 +419,7 @@ public class JSQLParseExample2 extends Application
         }
         else
         {
-        	sb.append( "FromItem:UnkonwnClass" + fromItem.toString() + "\n" );
+        	sb.append( tab + "FromItem:UnkonwnClass:" + fromItem.getClass() + ":" + fromItem.toString() + "\n" );
         }
     } 	
     
@@ -345,9 +452,22 @@ public class JSQLParseExample2 extends Application
     	{
     		processColumn( (Column)expression, level, sb );
     	}
+    	else if ( expression instanceof MultipleExpression )
+    	{
+    		for ( Expression expressionEach : ((MultipleExpression)expression).getList() )
+    		{
+    			processExpression( expressionEach, level+1, sb );
+    		}
+    	}
+    	else if ( expression instanceof Multiplication )
+    	{
+    		sb.append( tab + "Multiplication:" + ((Multiplication)expression).getStringExpression() );
+    		processExpression( ((Multiplication)expression).getLeftExpression(), level+1, sb );
+    		processExpression( ((Multiplication)expression).getRightExpression(), level+1, sb );
+    	}
     	else
     	{
-    		sb.append( "Expression:UnkonwnClass" + expression.toString() + "\n" );
+    		sb.append( tab + "Expression:UnkonwnClass:" + expression.getClass() + ":" + expression.toString() + "\n" );
     	}
     }
     

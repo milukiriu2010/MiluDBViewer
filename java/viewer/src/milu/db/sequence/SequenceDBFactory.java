@@ -1,12 +1,15 @@
 package milu.db.sequence;
 
+import milu.db.abs.ObjDBInterface;
+import milu.db.abs.ObjDBFactory;
+
 import milu.db.MyDBAbstract;
 import milu.db.MyDBPostgres;
 import milu.db.MyDBOracle;
 
-public class SequenceDBFactory 
+public class SequenceDBFactory implements ObjDBFactory
 {
-	public static SequenceDBAbstract getInstance( MyDBAbstract myDBAbs )
+	public ObjDBInterface getInstance( MyDBAbstract myDBAbs )
 	{
 		SequenceDBAbstract sequenceDBAbs = null;
 		if ( myDBAbs instanceof MyDBPostgres )

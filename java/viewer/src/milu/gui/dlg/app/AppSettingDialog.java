@@ -1,9 +1,5 @@
-package milu.gui.dlg;
+package milu.gui.dlg.app;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.InputStream;
 import java.util.ResourceBundle;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
@@ -12,7 +8,6 @@ import javafx.scene.control.Control;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.ListView;
 import javafx.scene.control.ButtonBar.ButtonData;
-import javafx.scene.image.Image;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.geometry.Insets;
@@ -28,7 +23,6 @@ import javafx.application.Platform;
 import javafx.beans.property.StringProperty;
 
 import milu.conf.AppConf;
-import milu.ctrl.ApplyInterface;
 import milu.entity.AppSettingEntity;
 import milu.ctrl.MainController;
 
@@ -36,7 +30,7 @@ public class AppSettingDialog extends Dialog<Boolean>
 {
 	// Property File for this class 
 	private static final String PROPERTY_FILENAME = 
-		"conf.lang.dlg.AppSettingDialog";
+		"conf.lang.dlg.app.AppSettingDialog";
 
 	// Language Resource
 	private ResourceBundle langRB = ResourceBundle.getBundle( PROPERTY_FILENAME );
@@ -48,13 +42,13 @@ public class AppSettingDialog extends Dialog<Boolean>
 	private ButtonType okButtonType = null;
 	
 	// Main Controller
-	private MainController mainController = null;
+	private MainController mainCtrl = null;
 	
-	public AppSettingDialog( MainController mainController )
+	public AppSettingDialog( MainController mainCtrl )
 	{
 		super();
 		
-		this.mainController = mainController;
+		this.mainCtrl = mainCtrl;
 		
 		// Set dialog title.
 		this.setTitle( langRB.getString( "TITLE_APP_SETTING" ) );
@@ -74,7 +68,11 @@ public class AppSettingDialog extends Dialog<Boolean>
         //paneDlg.setPadding( new Insets( 10, 20, 10, 20 ) );
         BorderPane.setMargin( this.listViewConf, new Insets( 5, 5, 5, 5 ) );
         paneDlg.setLeft( this.listViewConf );
-        paneDlg.setCenter( new DBConfPane() );
+        //paneDlg.setCenter( new DBConfPane() );
+        
+        PaneFactory paneFactory = new AppPaneFactory();
+        AppPaneAbstract appPaneAbs = paneFactory.createPane( AppSettingEntity.APPSET_TYPE.TYPE_DB, this, this.mainCtrl, this.langRB );
+        paneDlg.setCenter( appPaneAbs );
 		
 		// set pane on dialog
 		this.getDialogPane().setContent( paneDlg );
@@ -92,24 +90,14 @@ public class AppSettingDialog extends Dialog<Boolean>
 		);
 		
         // Window Icon
-		try
-		{
-			InputStream inputStreamWinIcon = new FileInputStream( "resources" + File.separator + "images" + File.separator + "winicon.gif" );
-			Image imgWinIcon = new Image( inputStreamWinIcon );
-			Stage stage = (Stage)this.getDialogPane().getScene().getWindow();
-			stage.getIcons().add( imgWinIcon );
-		}
-		catch ( FileNotFoundException fnfEx )
-		{
-			fnfEx.printStackTrace();
-		}
+		Stage stage = (Stage)this.getDialogPane().getScene().getWindow();
+		stage.getIcons().add( this.mainCtrl.getImage( "file:resources/images/winicon.gif" ) );
 		
 		// set Action
 		this.setAction();
 	
 		// set Focus on listView 
 		Platform.runLater( ()->{ this.listViewConf.requestFocus(); } );
-		
 	}
 	
 	private void setAction()
@@ -164,21 +152,28 @@ public class AppSettingDialog extends Dialog<Boolean>
 			( obs, oldVal, newVal ) ->
 			{
 				//System.out.println( "obs[" + obs.getValue() + "]newVal[" + newVal + "]" );
+				/*
 				AppSettingFactory af = new AppSettingFactory();
 				Pane pane = af.getInstance( newVal.getType() );
 				// Get BorderPane on DialogPane
-				//BorderPane paneOnDlg = (BorderPane)getDialogPane().getChildren().get( 0 );
-				//pane.setMaxWidth( Control.USE_COMPUTED_SIZE );
-				//pane.setPrefWidth( Double.MAX_VALUE );
 		    	Node paneOnDlg = getDialogPane().getContent();
 		    	((BorderPane)paneOnDlg).setCenter( pane );
-				//paneDlg.setManaged( false );
-				
+		    	
 				af = null;
+		    	*/
+				
+		        PaneFactory paneFactory = new AppPaneFactory();
+		        AppPaneAbstract appPaneAbs = paneFactory.createPane( newVal.getType(), this, this.mainCtrl, this.langRB );
+		    	Node paneOnDlg = getDialogPane().getContent();
+		    	((BorderPane)paneOnDlg).setCenter( appPaneAbs );
+		    	
+				Stage stage = (Stage)this.getDialogPane().getScene().getWindow();
+				stage.sizeToScene();
 			}
 		);
 	}
 	
+	/*
 	class AppSettingFactory
 	{
 		public Pane getInstance( AppSettingEntity.APPSET_TYPE key )
@@ -190,7 +185,7 @@ public class AppSettingDialog extends Dialog<Boolean>
 			}
 			else if ( AppSettingEntity.APPSET_TYPE.TYPE_GENERAL.equals( key ) )
 			{
-				pane = new GeneralConfPane();
+				pane = new AppPaneGeneralConf();
 			}
 			
 			return pane;
@@ -210,7 +205,7 @@ public class AppSettingDialog extends Dialog<Boolean>
 			
 			HBox     hbxRowMax = new HBox( 2 );
 			Label    lblRowMax = new Label( langRB.getString( "LABEL_ROW_MAX" ) );
-			AppConf  appConf   = mainController.getAppConf();
+			AppConf  appConf   = mainCtrl.getAppConf();
 			this.txtRowMax.setText( String.valueOf( appConf.getFetchMax() ) );
 			hbxRowMax.getChildren().addAll( lblRowMax, this.txtRowMax );
 			
@@ -238,18 +233,13 @@ public class AppSettingDialog extends Dialog<Boolean>
 			);
 		}
 		
-		/******************************************
-		 * 
-		 * @see milu.ctrl.ApplyInterface#apply()
-		 ******************************************
-		 */
 		@Override
 		public boolean apply()
 		{
 			String strRowMax = this.txtRowMax.getText();
 			if ( strRowMax.length() > 0 )
 			{
-				AppConf  appConf   = mainController.getAppConf();
+				AppConf  appConf   = mainCtrl.getAppConf();
 				appConf.setFetchMax( Integer.valueOf( strRowMax ) );
 			}
 			return true;
@@ -267,16 +257,11 @@ public class AppSettingDialog extends Dialog<Boolean>
 			this.setTop( title );
 		}
 		
-		/*********************************************
-		 * 
-		 *********************************************
-		 * @see milu.ctrl.ApplyInterface#apply()
-		 *********************************************
-		 */
 		@Override
 		public boolean apply()
 		{
 			return true;
 		}
 	}
+	*/
 }

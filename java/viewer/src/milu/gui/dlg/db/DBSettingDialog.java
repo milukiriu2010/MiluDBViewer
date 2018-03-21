@@ -41,7 +41,6 @@ import milu.ctrl.MainController;
 
 // Dialog sample
 // http://code.makery.ch/blog/javafx-dialogs-official/
-//public class DBSettingDialog extends Dialog<Map<String,String>>
 public class DBSettingDialog extends Dialog<MyDBAbstract>
 {
 	// Property File for this class 
@@ -52,9 +51,6 @@ public class DBSettingDialog extends Dialog<MyDBAbstract>
 	private ResourceBundle langRB = ResourceBundle.getBundle( PROPERTY_FILENAME );
 	
 	private MainController mainCtrl = null; 
-	
-	// Thread Pool
-	//private ExecutorService  service = Executors.newSingleThreadExecutor();
 	
 	// DB Type List
 	List<MyDBAbstract> dbTypeList = null;

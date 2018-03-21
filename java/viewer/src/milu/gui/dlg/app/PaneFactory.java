@@ -1,4 +1,4 @@
-package milu.gui.dlg.db;
+package milu.gui.dlg.app;
 
 import java.util.Map;
 import java.util.ResourceBundle;
@@ -7,17 +7,17 @@ import javafx.scene.control.Dialog;
 
 import milu.ctrl.MainController;
 import milu.db.MyDBAbstract;
+import milu.entity.AppSettingEntity;
 
 interface PaneFactory
 {
 	/**
 	 * 
+	 * @param key
 	 * @param dlg
 	 * @param mainCtrl
-	 * @param myDBAbs
 	 * @param extLangRB
-	 * @param mapProp
 	 * @return
 	 */
-	public UrlPaneAbstract createPane( Dialog<?> dlg, MainController mainCtrl, MyDBAbstract myDBAbs, ResourceBundle extLangRB, Map<String,String> mapProp );
+	public AppPaneAbstract createPane( AppSettingEntity.APPSET_TYPE key, Dialog<?> dlg, MainController mainCtrl, ResourceBundle extLangRB );
 }

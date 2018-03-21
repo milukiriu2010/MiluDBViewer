@@ -11,5 +11,13 @@ import milu.ctrl.MainController;
 abstract class UrlPaneAbstract extends Pane
 	implements UrlInterface
 {
+	/**
+	 * 
+	 * @param dlg
+	 * @param mainCtrl
+	 * @param myDBAbs
+	 * @param extLangRB
+	 * @param mapProp
+	 */
 	abstract public void createPane( Dialog<?> dlg, MainController mainCtrl, MyDBAbstract myDBAbs, ResourceBundle extLangRB, Map<String,String> mapProp );
 }
