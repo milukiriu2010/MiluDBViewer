@@ -9,21 +9,25 @@ import milu.db.MyDBAbstract;
 import milu.db.explain.ExplainDBFactory;
 import milu.db.explain.ExplainDBAbstract;
 
+import milu.ctrl.MainController;
+
 import milu.gui.ctrl.query.SqlTableView;
 
 
 public class ExplainTask extends Task<Exception> 
 {
-	private MyDBAbstract myDBAbs = null;
-	private String       sql     = null;
-	private SqlTableView tableViewSQL = null;
+	private MyDBAbstract   myDBAbs      = null;
+	private MainController mainCtrl     = null;
+	private String         sql          = null;
+	private SqlTableView   tableViewSQL = null;
 	private Exception    taskEx = null;
 	
-	public ExplainTask( MyDBAbstract myDBAbs, String sql, SqlTableView tableViewSQL )
+	public ExplainTask( MyDBAbstract myDBAbs, MainController mainCtrl, String sql, SqlTableView tableViewSQL )
 	{
 		super();
-		this.myDBAbs = myDBAbs;
-		this.sql     = sql;
+		this.myDBAbs  = myDBAbs;
+		this.mainCtrl = mainCtrl;
+		this.sql      = sql;
 		this.tableViewSQL = tableViewSQL;
 	}	
 
@@ -32,7 +36,7 @@ public class ExplainTask extends Task<Exception>
 	{
 		final double MAX = 100.0;
 		
-		ExplainDBAbstract explainDBAbs = ExplainDBFactory.getInstance(myDBAbs);
+		ExplainDBAbstract explainDBAbs = ExplainDBFactory.getInstance(this.myDBAbs,this.mainCtrl);
 		try
 		{
 			System.out.println( "ExplainTask." );
@@ -48,13 +52,13 @@ public class ExplainTask extends Task<Exception>
 		}
 		catch ( SQLException sqlEx )
 		{
-			this.taskEx = sqlEx;			
-			return sqlEx;			
+			this.taskEx = sqlEx;
+			return sqlEx;	
 		}
 		catch ( Exception ex )
 		{
 			this.taskEx = ex;			
-			return ex;			
+			return ex;	
 		}
 		finally
 		{

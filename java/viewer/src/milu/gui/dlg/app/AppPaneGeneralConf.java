@@ -3,25 +3,12 @@ package milu.gui.dlg.app;
 import java.util.ResourceBundle;
 
 import javafx.scene.control.Dialog;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.control.Label;
 
 import milu.ctrl.MainController;
-import milu.db.MyDBAbstract;
 
 public class AppPaneGeneralConf extends AppPaneAbstract 
 {
-	// Language Resource(from External Class)
-	private ResourceBundle extLangRB = null;
-	
-	private Dialog<?>      dlg            = null;
-	
-	private MainController mainCtrl       = null;
-	
-	// Label of title
-	private Label  lblTitle = new Label();
-	
 	@Override
 	public void createPane( Dialog<?> dlg, MainController mainCtrl, ResourceBundle extLangRB )
 	{

@@ -4,26 +4,17 @@ import java.util.ResourceBundle;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
-import javafx.scene.control.Control;
 import javafx.scene.control.Dialog;
-import javafx.scene.control.ListView;
+import javafx.scene.control.TreeView;
+import javafx.scene.control.TreeItem;
 import javafx.scene.control.ButtonBar.ButtonData;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
 import javafx.geometry.Insets;
-import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.application.Platform;
-import javafx.beans.property.StringProperty;
 
-import milu.conf.AppConf;
-import milu.entity.AppSettingEntity;
 import milu.ctrl.MainController;
 
 public class AppSettingDialog extends Dialog<Boolean>
@@ -36,7 +27,7 @@ public class AppSettingDialog extends Dialog<Boolean>
 	private ResourceBundle langRB = ResourceBundle.getBundle( PROPERTY_FILENAME );
 
 	// Configuration List
-	private ListView<AppSettingEntity> listViewConf = new ListView<AppSettingEntity>();
+	private TreeView<AppSettingEntity> treeViewConf = new TreeView<AppSettingEntity>();
 	
 	// Apply&Close Button
 	private ButtonType okButtonType = null;
@@ -53,22 +44,29 @@ public class AppSettingDialog extends Dialog<Boolean>
 		// Set dialog title.
 		this.setTitle( langRB.getString( "TITLE_APP_SETTING" ) );
 		
-		// set items on ListView
-		ObservableList<AppSettingEntity> itemsConf = 
-			FXCollections.observableArrayList
-			(
-				new AppSettingEntity( langRB.getString( "ITEM_DB" )     , AppSettingEntity.APPSET_TYPE.TYPE_DB ),
-				new AppSettingEntity( langRB.getString( "ITEM_GENERAL" ), AppSettingEntity.APPSET_TYPE.TYPE_GENERAL )
-			);
-		this.listViewConf.setItems( itemsConf );
-		this.listViewConf.setMaxWidth( Control.USE_PREF_SIZE );
+		// set items on TreeView
+		TreeItem<AppSettingEntity>  treeItemRoot = 
+			new TreeItem<>( new AppSettingEntity( "" , AppSettingEntity.APPSET_TYPE.TYPE_ROOT ) );
+		TreeItem<AppSettingEntity>  treeItemDB = 
+			new TreeItem<>( new AppSettingEntity( langRB.getString( "ITEM_DB" ), AppSettingEntity.APPSET_TYPE.TYPE_DB ) );
+		TreeItem<AppSettingEntity>  treeItemDBPostgreSQL = 
+				new TreeItem<>( new AppSettingEntity( langRB.getString( "ITEM_DB_POSTGRESQL" ), AppSettingEntity.APPSET_TYPE.TYPE_DB_POSTGRESQL ) );
+		TreeItem<AppSettingEntity>  treeItemGeneral = 
+			new TreeItem<>( new AppSettingEntity( langRB.getString( "ITEM_GENERAL" ), AppSettingEntity.APPSET_TYPE.TYPE_GENERAL ) );
+
+		treeItemRoot.getChildren().add( treeItemDB );
+		treeItemDB.getChildren().add( treeItemDBPostgreSQL );
+		treeItemRoot.getChildren().add( treeItemGeneral );
+		treeItemRoot.setExpanded(true);
+		
+		this.treeViewConf.setRoot( treeItemRoot );
 		
 		// pane for Dialog
         BorderPane paneDlg = new BorderPane();
-        //paneDlg.setPadding( new Insets( 10, 20, 10, 20 ) );
-        BorderPane.setMargin( this.listViewConf, new Insets( 5, 5, 5, 5 ) );
-        paneDlg.setLeft( this.listViewConf );
-        //paneDlg.setCenter( new DBConfPane() );
+        //BorderPane.setMargin( this.listViewConf, new Insets( 5, 5, 5, 5 ) );
+        //paneDlg.setLeft( this.listViewConf );
+        BorderPane.setMargin( this.treeViewConf, new Insets( 5, 5, 5, 5 ) );
+        paneDlg.setLeft( this.treeViewConf );
         
         PaneFactory paneFactory = new AppPaneFactory();
         AppPaneAbstract appPaneAbs = paneFactory.createPane( AppSettingEntity.APPSET_TYPE.TYPE_DB, this, this.mainCtrl, this.langRB );
@@ -97,7 +95,7 @@ public class AppSettingDialog extends Dialog<Boolean>
 		this.setAction();
 	
 		// set Focus on listView 
-		Platform.runLater( ()->{ this.listViewConf.requestFocus(); } );
+		Platform.runLater( ()->{ this.treeViewConf.requestFocus(); } );
 	}
 	
 	private void setAction()
@@ -147,23 +145,14 @@ public class AppSettingDialog extends Dialog<Boolean>
 		// 		)
 		// }
 		// -------------------------------------------------------------
-		this.listViewConf.getSelectionModel().selectedItemProperty().addListener
+		this.treeViewConf.getSelectionModel().selectedItemProperty().addListener
 		(
 			( obs, oldVal, newVal ) ->
 			{
 				//System.out.println( "obs[" + obs.getValue() + "]newVal[" + newVal + "]" );
-				/*
-				AppSettingFactory af = new AppSettingFactory();
-				Pane pane = af.getInstance( newVal.getType() );
-				// Get BorderPane on DialogPane
-		    	Node paneOnDlg = getDialogPane().getContent();
-		    	((BorderPane)paneOnDlg).setCenter( pane );
-		    	
-				af = null;
-		    	*/
 				
 		        PaneFactory paneFactory = new AppPaneFactory();
-		        AppPaneAbstract appPaneAbs = paneFactory.createPane( newVal.getType(), this, this.mainCtrl, this.langRB );
+		        AppPaneAbstract appPaneAbs = paneFactory.createPane( newVal.getValue().getType(), this, this.mainCtrl, this.langRB );
 		    	Node paneOnDlg = getDialogPane().getContent();
 		    	((BorderPane)paneOnDlg).setCenter( appPaneAbs );
 		    	
@@ -172,96 +161,4 @@ public class AppSettingDialog extends Dialog<Boolean>
 			}
 		);
 	}
-	
-	/*
-	class AppSettingFactory
-	{
-		public Pane getInstance( AppSettingEntity.APPSET_TYPE key )
-		{
-			Pane pane = null;
-			if ( AppSettingEntity.APPSET_TYPE.TYPE_DB.equals( key ) )
-			{
-				pane = new DBConfPane();
-			}
-			else if ( AppSettingEntity.APPSET_TYPE.TYPE_GENERAL.equals( key ) )
-			{
-				pane = new AppPaneGeneralConf();
-			}
-			
-			return pane;
-		}
-	}
-	
-	class DBConfPane extends BorderPane
-		implements ApplyInterface
-	{	
-		// TextField for "Fetch Row Size"
-		TextField  txtRowMax = new TextField();
-		
-		public DBConfPane()
-		{
-			Label  title  = new Label( langRB.getString( "TITLE_DB_CONF_PANE" ) );
-			title.getStyleClass().add("label-title");
-			
-			HBox     hbxRowMax = new HBox( 2 );
-			Label    lblRowMax = new Label( langRB.getString( "LABEL_ROW_MAX" ) );
-			AppConf  appConf   = mainCtrl.getAppConf();
-			this.txtRowMax.setText( String.valueOf( appConf.getFetchMax() ) );
-			hbxRowMax.getChildren().addAll( lblRowMax, this.txtRowMax );
-			
-			// put controls on pane
-			this.setTop( title );
-			this.setCenter( hbxRowMax );
-			
-			// restriction for TextField "Fetch Row Size"
-			// https://stackoverflow.com/questions/15615890/recommended-way-to-restrict-input-in-javafx-textfield
-			this.txtRowMax.textProperty().addListener
-			(
-				(obs, oldVal, newVal) ->
-				{
-					// "Numeric" or "No Input" are allowed.
-					if ( newVal.length() == 0 )
-					{
-						
-					}
-					// if alphabets or marks are input, back to previous input.
-					else if ( newVal.matches( "^[0-9]+$" ) == false )
-					{
-						((StringProperty)obs).setValue( oldVal );
-					}
-				}
-			);
-		}
-		
-		@Override
-		public boolean apply()
-		{
-			String strRowMax = this.txtRowMax.getText();
-			if ( strRowMax.length() > 0 )
-			{
-				AppConf  appConf   = mainCtrl.getAppConf();
-				appConf.setFetchMax( Integer.valueOf( strRowMax ) );
-			}
-			return true;
-		}
-	}
-	
-	class GeneralConfPane extends BorderPane
-		implements ApplyInterface
-	{
-		public GeneralConfPane()
-		{
-			Label  title = new Label( langRB.getString( "TITLE_GENERAL_CONF_PANE" ) );
-			title.getStyleClass().add("label-title");
-			
-			this.setTop( title );
-		}
-		
-		@Override
-		public boolean apply()
-		{
-			return true;
-		}
-	}
-	*/
 }

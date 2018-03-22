@@ -6,26 +6,29 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
 import java.util.ArrayList;
-import java.util.Map;
-import java.util.HashMap;
 
 import milu.db.MyDBAbstract;
+import milu.db.abs.ObjDBInterface;
 import milu.entity.schema.SchemaEntity;
 import milu.entity.schema.SchemaEntityFactory;
 
-public abstract class SchemaDBAbstract 
+public abstract class SchemaDBAbstract implements ObjDBInterface
 {
 	// DB Access Object
 	protected MyDBAbstract  myDBAbs = null;
 	
+	/*
 	// Schema Name List
 	protected List<Map<String,String>>  schemaNameLst = new ArrayList<>();
+	*/
 	
-	public SchemaDBAbstract( MyDBAbstract myDBAbs )
+	@Override
+	public void setMyDBAbstract( MyDBAbstract myDBAbs )
 	{
 		this.myDBAbs = myDBAbs;
 	}
 	
+	/*
 	public List<Map<String,String>> getSchemaNameLst()
 	{
 		return this.schemaNameLst;
@@ -48,9 +51,13 @@ public abstract class SchemaDBAbstract
 	{
 		this.schemaNameLst.clear();
 	}
+	*/
 	
-	public void selectSchemaLst() throws SQLException
+	@Override
+	public List<SchemaEntity> selectEntityLst( String tmp ) throws SQLException
 	{
+		List<SchemaEntity>  schemaEntityLst = new ArrayList<>();
+		
 		String sql = this.schemaLstSQL();
 		
 		System.out.println( " -- selectSchemaLst ------------------" );
@@ -64,10 +71,17 @@ public abstract class SchemaDBAbstract
 		{
 			while ( rs.next() )
 			{
+				/*
 				Map<String,String> dataRow = new HashMap<>();
 				dataRow.put( "schemaName", rs.getString(1) );
 				this.schemaNameLst.add( dataRow );
+				*/
+				
+				SchemaEntity eachSchemaEntity = SchemaEntityFactory.createInstance( rs.getString(1), SchemaEntity.SCHEMA_TYPE.SCHEMA );
+				schemaEntityLst.add( eachSchemaEntity );
 			}
+			
+			return schemaEntityLst;
 		}
 	}
 	

@@ -1,34 +1,41 @@
 package milu.db.schema;
 
+import milu.db.abs.ObjDBInterface;
+import milu.db.abs.ObjDBFactory;
+
 import milu.db.MyDBAbstract;
 import milu.db.MyDBPostgres;
 import milu.db.MyDBMySQL;
 import milu.db.MyDBOracle;
 import milu.db.MyDBCassandra;
 
-public class SchemaDBFactory 
+public class SchemaDBFactory implements ObjDBFactory 
 {
-	public static SchemaDBAbstract getInstance( MyDBAbstract myDBAbs )
+	public ObjDBInterface getInstance( MyDBAbstract myDBAbs )
 	{
+		SchemaDBAbstract schemaDBAbs = null;
 		if ( myDBAbs instanceof MyDBPostgres )
 		{
-			return new SchemaDBPostgres( myDBAbs );
+			schemaDBAbs = new SchemaDBPostgres();
 		}
 		else if ( myDBAbs instanceof MyDBMySQL )
 		{
-			return new SchemaDBMySQL( myDBAbs );
+			schemaDBAbs = new SchemaDBMySQL();
 		}
 		else if ( myDBAbs instanceof MyDBOracle )
 		{
-			return new SchemaDBOracle( myDBAbs );
+			schemaDBAbs = new SchemaDBOracle();
 		}
 		else if ( myDBAbs instanceof MyDBCassandra )
 		{
-			return new SchemaDBCassandra( myDBAbs );
+			schemaDBAbs = new SchemaDBCassandra();
 		}
 		else
 		{
 			return null;
 		}
+		
+		schemaDBAbs.setMyDBAbstract(myDBAbs);
+		return schemaDBAbs;
 	}
 }

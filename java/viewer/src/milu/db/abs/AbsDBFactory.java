@@ -1,5 +1,6 @@
 package milu.db.abs;
 
+import milu.db.schema.SchemaDBFactory;
 import milu.db.sequence.SequenceDBFactory;
 import milu.db.fk.FKDBFactory;
 
@@ -7,12 +8,18 @@ public class AbsDBFactory
 {
 	public enum FACTORY_TYPE
 	{
+		SCHEMA,
 		SEQUENCE,
 		FOREIGN_KEY
 	}
+	
 	public static ObjDBFactory getFactory( FACTORY_TYPE factoryType )
 	{
-		if ( factoryType == FACTORY_TYPE.SEQUENCE )
+		if ( factoryType == FACTORY_TYPE.SCHEMA )
+		{
+			return new SchemaDBFactory();
+		}
+		else if ( factoryType == FACTORY_TYPE.SEQUENCE )
 		{
 			return new SequenceDBFactory();
 		}

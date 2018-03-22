@@ -7,16 +7,11 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-import milu.db.MyDBAbstract;
+import milu.conf.AppConf;
 
 public class ExplainDBPostgres 
 	extends ExplainDBAbstract
 {
-	public ExplainDBPostgres( MyDBAbstract myDBAbs )
-	{
-		super( myDBAbs );
-	}
-	
 	@Override
 	public void explain(String sql) throws SQLException
 	{
@@ -27,8 +22,14 @@ public class ExplainDBPostgres
 		{
 			this.clear();
 			
+			AppConf appConf = this.mainCtrl.getAppConf();
+			String explainFormat = appConf.getPostgresExplainFormat();
+			
 			stmt = this.myDBAbs.createStatement();
-			String sqlExplain = "explain " + sql;
+			String sqlExplain = 
+					"explain " +  
+					"(format " + explainFormat + ")" + 
+					sql;
 			rs   = stmt.executeQuery( sqlExplain );
 			
 			// Get Column Attribute

@@ -1,12 +1,10 @@
 package milu.gui.dlg.app;
 
-import java.util.Map;
 import java.util.ResourceBundle;
 
 import javafx.scene.control.Dialog;
 import milu.ctrl.MainController;
-import milu.entity.AppSettingEntity;
-import milu.entity.AppSettingEntity.APPSET_TYPE;
+import milu.gui.dlg.app.AppSettingEntity.APPSET_TYPE;
 
 class AppPaneFactory implements PaneFactory 
 {
@@ -17,6 +15,10 @@ class AppPaneFactory implements PaneFactory
 		if ( AppSettingEntity.APPSET_TYPE.TYPE_DB.equals( key ) )
 		{
 			appPaneAbs = new AppPaneDBConf();
+		}
+		else if ( AppSettingEntity.APPSET_TYPE.TYPE_DB_POSTGRESQL.equals( key ) )
+		{
+			appPaneAbs = new AppPaneDBConfPostgres();
 		}
 		else if ( AppSettingEntity.APPSET_TYPE.TYPE_GENERAL.equals( key ) )
 		{

@@ -1,8 +1,8 @@
 package milu.task;
 
-import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
+import java.sql.SQLException;
 
 import javafx.concurrent.Task;
 
@@ -13,17 +13,19 @@ import milu.db.mateview.MaterializedViewDBFactory;
 import milu.db.packagebody.PackageBodyDBFactory;
 import milu.db.packagedef.PackageDefDBFactory;
 import milu.db.proc.ProcDBFactory;
-import milu.db.schema.SchemaDBAbstract;
-import milu.db.schema.SchemaDBFactory;
-//import milu.db.sequence.SequenceDBFactory;
+//import milu.db.schema.SchemaDBAbstract;
+//import milu.db.schema.SchemaDBFactory;
 import milu.db.table.TableDBAbstract;
 import milu.db.table.TableDBFactory;
 import milu.db.type.TypeDBFactory;
 import milu.db.view.ViewDBFactory;
 import milu.db.sysview.SystemViewDBFactory;
 import milu.db.trigger.TriggerDBFactory;
+
 import milu.db.abs.AbsDBFactory;
 import milu.db.abs.ObjDBFactory;
+import milu.db.abs.ObjDBInterface;
+
 import milu.entity.schema.SchemaEntity;
 import milu.entity.schema.SchemaEntityFactory;
 
@@ -52,12 +54,12 @@ public class CollectTask extends Task<Double>
 			if ( schemaRoot.getEntityLst().size() == 0 )
 			{
 				System.out.println( "Schema retriving..." );
-				SchemaDBAbstract schemaDBAbs = SchemaDBFactory.getInstance( myDBAbs );
-				if ( schemaDBAbs != null )
+				ObjDBFactory schemaDBFactory = AbsDBFactory.getFactory( AbsDBFactory.FACTORY_TYPE.SCHEMA );
+				if ( schemaDBFactory != null )
 				{
 					// select Schema list
-					schemaDBAbs.selectSchemaLst();
-					List<SchemaEntity> schemaEntityLst = schemaDBAbs.getSchemaEntityLst();
+					ObjDBInterface schemaDBAbs = schemaDBFactory.getInstance(myDBAbs);
+					List<SchemaEntity> schemaEntityLst = schemaDBAbs.selectEntityLst( null );
 					int schemaEntityLstSize = schemaEntityLst.size();
 					for ( int i = 0; i < schemaEntityLstSize; i++ )
 					{

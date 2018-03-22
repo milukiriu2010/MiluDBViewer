@@ -11,18 +11,6 @@ import milu.entity.schema.SchemaEntity;
  */
 public class SelectedItemHandlerRoot extends SelectedItemHandlerAbstract
 {
-	/*
-	public SelectedItemHandlerRoot
-	( 
-		SchemaTreeView schemaTreeView, 
-		TabPane        tabPane,
-		MyDBAbstract   myDBAbs,
-		SelectedItemHandlerAbstract.REFRESH_TYPE  refreshType
-	)
-	{
-		super( schemaTreeView, tabPane, myDBAbs, refreshType );
-	}
-	*/
 	@Override
 	protected boolean isMyResponsible()
 	{
@@ -42,16 +30,6 @@ public class SelectedItemHandlerRoot extends SelectedItemHandlerAbstract
 			UnsupportedOperationException,
 			SQLException
 	{
-		/*
-		SchemaDBAbstract schemaDBAbs = SchemaDBFactory.getInstance( this.myDBAbs );
-		if ( schemaDBAbs != null )
-		{
-			schemaDBAbs.selectSchemaLst();
-			List<Map<String,String>> schemaNameLst = schemaDBAbs.getSchemaNameLst();
-			this.schemaTreeView.setInitialData( this.myDBAbs.getUrl(), schemaNameLst, this.myDBAbs.getSupportedTypeLst() );
-		}
-		*/
-		
 		SchemaEntity rootEntity = this.myDBAbs.getSchemaRoot();
 		if ( rootEntity != null )
 		{

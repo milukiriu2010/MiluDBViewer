@@ -64,58 +64,58 @@ public class MainToolBar extends ToolBar
 	
 	private void setMenu()
 	{
-		MainController mainController = this.dbView.getMainController();
+		MainController mainCtrl = this.dbView.getMainController();
 		
 		// Button to get data
-		ImageView ivGo = new ImageView( mainController.getImage("file:resources/images/execsql.png") );
+		ImageView ivGo = new ImageView( mainCtrl.getImage("file:resources/images/execsql.png") );
 		ivGo.setFitWidth( 32 );
 		ivGo.setFitHeight( 32 );
 		this.btnGo = new Button( "", ivGo );
 		
 		// Button to get explain
-		ImageView   ivExplain = new ImageView( mainController.getImage("file:resources/images/explain.png") );
+		ImageView   ivExplain = new ImageView( mainCtrl.getImage("file:resources/images/explain.png") );
 		ivExplain.setFitWidth( 32 );
 		ivExplain.setFitHeight( 32 );
 		this.btnExplain = new Button( "", ivExplain );
 		
 		// Button to toggle Horizontal/Vertical mode
-		ImageView ivToggleHV = new ImageView( mainController.getImage("file:resources/images/direction.png") );
+		ImageView ivToggleHV = new ImageView( mainCtrl.getImage("file:resources/images/direction.png") );
 		ivToggleHV.setFitWidth( 32 );
 		ivToggleHV.setFitHeight( 32 );
 		this.btnToggleHV = new Button( "", ivToggleHV );
 		
 		// Button to add a new tab
-		ImageView ivNewTab = new ImageView( mainController.getImage("file:resources/images/newtab.png") );
+		ImageView ivNewTab = new ImageView( mainCtrl.getImage("file:resources/images/newtab.png") );
 		ivNewTab.setFitWidth( 32 );
 		ivNewTab.setFitHeight( 32 );
 		this.btnNewTab = new Button( "", ivNewTab );
 		
 		// Button to add a new window
-		ImageView ivNewWin = new ImageView( mainController.getImage("file:resources/images/newwin.png") );
+		ImageView ivNewWin = new ImageView( mainCtrl.getImage("file:resources/images/newwin.png") );
 		ivNewWin.setFitWidth( 32 );
 		ivNewWin.setFitHeight( 32 );
 		this.btnNewWin = new Button( "", ivNewWin );
 		
 		// Button for new db connection
-		ImageView   ivNewCon = new ImageView( mainController.getImage("file:resources/images/connect.png") );
+		ImageView   ivNewCon = new ImageView( mainCtrl.getImage("file:resources/images/connect.png") );
 		ivNewCon.setFitWidth( 32 );
 		ivNewCon.setFitHeight( 32 );
 		this.btnNewCon = new Button( "", ivNewCon );
 		
 		// Button to copy table data(no column)
-		ImageView ivCopyTblNoHead = new ImageView( mainController.getImage("file:resources/images/copy.png") );
+		ImageView ivCopyTblNoHead = new ImageView( mainCtrl.getImage("file:resources/images/copy.png") );
 		ivCopyTblNoHead.setFitWidth( 32 );
 		ivCopyTblNoHead.setFitHeight( 32 );
 		this.btnCopyTblNoHead = new Button( "", ivCopyTblNoHead );
 		
 		// Button to copy table data(with column)
-		ImageView ivCopyTblWithHead = new ImageView( mainController.getImage("file:resources/images/copy2.png") );
+		ImageView ivCopyTblWithHead = new ImageView( mainCtrl.getImage("file:resources/images/copy2.png") );
 		ivCopyTblWithHead.setFitWidth( 32 );
 		ivCopyTblWithHead.setFitHeight( 32 );
 		this.btnCopyTblWithHead = new Button( "", ivCopyTblWithHead );
 		
 		// Button to Open Schema View
-		ImageView ivSchema = new ImageView( mainController.getImage("file:resources/images/schema.png") );
+		ImageView ivSchema = new ImageView( mainCtrl.getImage("file:resources/images/schema.png") );
 		ivSchema.setFitWidth( 32 );
 		ivSchema.setFitHeight( 32 );
 		this.btnSchema = new Button( "", ivSchema );
@@ -127,7 +127,7 @@ public class MainToolBar extends ToolBar
 			this.btnGo
 		);
 		
-		if ( ExplainDBFactory.getInstance( this.dbView.getMyDBAbstract() ) != null )
+		if ( ExplainDBFactory.getInstance( this.dbView.getMyDBAbstract(), mainCtrl ) != null )
 		{
 			this.getItems().add( this.btnExplain );
 		}

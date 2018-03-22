@@ -12,17 +12,7 @@ import milu.conf.AppConf;
 import milu.ctrl.MainController;
 
 public class AppPaneDBConf extends AppPaneAbstract 
-{
-	// Language Resource(from External Class)
-	private ResourceBundle extLangRB = null;
-	
-	private Dialog<?>      dlg            = null;
-	
-	private MainController mainCtrl       = null;
-	
-	// Label of title
-	private Label  lblTitle = new Label();
-	
+{	
 	// TextField for "Fetch Row Size"
 	TextField  txtRowMax = new TextField();
 
@@ -32,7 +22,7 @@ public class AppPaneDBConf extends AppPaneAbstract
 		this.dlg       = dlg;
 		this.mainCtrl  = mainCtrl;
 		this.extLangRB = extLangRB;
-
+		
 		this.setPane();
 		
 		this.setAction();

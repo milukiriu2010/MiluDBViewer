@@ -7,15 +7,8 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-import milu.db.MyDBAbstract;
-
 public class ExplainDBMySQL extends ExplainDBAbstract 
 {
-	public ExplainDBMySQL( MyDBAbstract myDBAbs )
-	{
-		super( myDBAbs );
-	}
-
 	@Override
 	public void explain(String sql) throws SQLException
 	{

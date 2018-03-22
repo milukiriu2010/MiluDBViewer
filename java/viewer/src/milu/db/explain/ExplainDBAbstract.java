@@ -6,21 +6,37 @@ import java.util.ArrayList;
 import java.sql.SQLException;
 
 import milu.db.MyDBAbstract;
+import milu.ctrl.MainController;
 
 abstract public class ExplainDBAbstract
 {
 	// DB Access Object
 	protected MyDBAbstract  myDBAbs = null;
 	
+	// Main Controller
+	protected MainController mainCtrl = null;
+	
 	// Column Name List
-	protected List<String>  colNameLst      = new ArrayList<String>();
+	protected List<String>  colNameLst   = new ArrayList<String>();
 	
 	// Data List
-	protected List<List<String>> dataLst    = new ArrayList<List<String>>();
+	protected List<List<String>> dataLst = new ArrayList<List<String>>();
 	
+	/*
 	public ExplainDBAbstract( MyDBAbstract myDBAbs )
 	{
 		this.myDBAbs = myDBAbs;
+	}
+	*/
+	
+	public void setMyDBAbstract( MyDBAbstract myDBAbs )
+	{
+		this.myDBAbs = myDBAbs;
+	}
+	
+	public void setMainController( MainController mainCtrl )
+	{
+		this.mainCtrl = mainCtrl;
 	}
 	
 	public List<String> getColNameLst()

@@ -70,48 +70,6 @@ public class DraggingTabPaneSupport
         }
         
         Node graphic = tab.getGraphic();
-        /*
-        final Popup popup = new Popup();
-        popup.setAutoHide(true);
-        graphic.setOnMouseEntered
-		(
-			(event)->
-			{
-				System.out.println( "Tab:Mouse Entered." );
-				if ( tab.selectedProperty().getValue() == false )
-				{
-					System.out.println( "Tab:No Focus" );
-					Node nodeOnTab = tab.getContent();
-					//WritableImage imgOnTab = new WritableImage( (int)nodeOnTab.prefWidth(-1)/2, (int)nodeOnTab.prefHeight(-1)/2 );
-					WritableImage imgOnTab = new WritableImage( 640, 480 );
-					nodeOnTab.snapshot( null, imgOnTab );
-					
-					ImageView ivOnTab = new ImageView( imgOnTab );
-					popup.getContent().add( ivOnTab );
-					Scene scene = nodeOnTab.getScene();
-					Window window = scene.getWindow();
-					double ex = event.getSceneX();
-					double ey = event.getSceneY();
-					double sx = scene.getX();
-					double sy = scene.getY();
-					double wx = window.getX();
-					double wy = window.getY();
-					double x = ex + sx + wx;
-					double y = ey + sy + wy;
-					//double x = event.getSceneX()+window.getX();
-					//double y = event.getSceneY()+window.getY();
-					System.out.println( String.format("x=%3.3f,ex=%3.3f,sx=%3.3f,wx=%3.3f", x, ex, sx, wx) );
-					System.out.println( String.format("y=%3.3f,ey=%3.3f,sy=%3.3f,wy=%3.3f", y, ey, sy, wy) );
-					popup.show( nodeOnTab, x+20, y+20 );
-				}
-			}
-		);
-        
-        graphic.setOnMouseExited
-        (
-        	(event)->{ popup.hide(); }
-        );
-        */
         tab.setOnSelectionChanged
         (
         	(event)->
@@ -127,7 +85,7 @@ public class DraggingTabPaneSupport
         				if ( eachTab.getTooltip() == null )
         				{
         					// Graphic on Tab
-	        				Node graphicOnTab = eachTab.getGraphic();
+	        				//Node graphicOnTab = eachTab.getGraphic();
 	        				// Content on Tab
 	    					Node contentOnTab = eachTab.getContent();
 	    					

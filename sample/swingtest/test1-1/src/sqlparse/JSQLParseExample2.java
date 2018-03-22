@@ -20,6 +20,9 @@ import javafx.scene.control.ToggleButton;
 
 import net.sf.jsqlparser.parser.CCJSqlParserUtil;
 
+import net.sf.jsqlparser.statement.Statement;
+import net.sf.jsqlparser.statement.Statements;
+
 import net.sf.jsqlparser.statement.select.FromItem;
 import net.sf.jsqlparser.statement.select.Join;
 import net.sf.jsqlparser.statement.select.Select;
@@ -34,7 +37,6 @@ import net.sf.jsqlparser.statement.select.AllColumns;
 import net.sf.jsqlparser.statement.select.AllTableColumns;
 import net.sf.jsqlparser.statement.select.ValuesList;
 import net.sf.jsqlparser.statement.select.OrderByElement;
-import net.sf.jsqlparser.statement.Statement; 
 import net.sf.jsqlparser.JSQLParserException;
 
 import net.sf.jsqlparser.util.cnfexpression.MultipleExpression;
@@ -63,6 +65,7 @@ public class JSQLParseExample2 extends Application
 {
 	private TextArea  taSQL    = new TextArea();
 	private Button    btnParse = new Button("parse");
+	private Button    btnParseStatements = new Button("parseStatements");
 	private Button    btnParseExpression = new Button("parseExpression");
 	private TextArea  taResult = new TextArea();
 	
@@ -93,10 +96,11 @@ public class JSQLParseExample2 extends Application
 		);
 		
 		btnParse.setOnAction( e->parse() );
+		btnParseStatements.setOnAction( e->parseStatements() );
 		btnParseExpression.setOnAction( e->parseExpression() );
 		
 		HBox hBoxParse = new HBox(2);
-		hBoxParse.getChildren().addAll( btnParse, btnParseExpression );
+		hBoxParse.getChildren().addAll( btnParse, btnParseStatements, btnParseExpression );
 		
 		ToggleGroup tglGroup = new ToggleGroup();
 		ToggleButton tb1 = new ToggleButton( "select" );
@@ -107,6 +111,8 @@ public class JSQLParseExample2 extends Application
 		tb3.setToggleGroup(tglGroup);
 		ToggleButton tb4 = new ToggleButton( "select schema" );
 		tb4.setToggleGroup(tglGroup);
+		ToggleButton tb5 = new ToggleButton( "script" );
+		tb5.setToggleGroup(tglGroup);
 		tglGroup.selectedToggleProperty().addListener
 		(
 			(obs,oldVal,newVal)->
@@ -181,11 +187,20 @@ public class JSQLParseExample2 extends Application
 						*/
 					);
 				}
+				else if ( newVal == tb5 )
+				{
+					taSQL.setText
+					(
+						"select * from table; \n" +
+						"select c.id, count(*) cnt from sakila.country c group by c.id having count(*) > 2; \n" +
+						"update country set population= 100 where id = 5; "
+					);
+				}
 			}
 		);
 		
 		HBox hBoxTG = new HBox(2);
-		hBoxTG.getChildren().addAll( tb1, tb2, tb3, tb4 );
+		hBoxTG.getChildren().addAll( tb1, tb2, tb3, tb4, tb5 );
 		
 		VBox vBox = new VBox(2);
 		vBox.getChildren().addAll( taSQL, hBoxParse, hBoxTG );
@@ -208,29 +223,34 @@ public class JSQLParseExample2 extends Application
 		{
 			String sqlStr = this.taSQL.getText();
 			Statement stmt = CCJSqlParserUtil.parse(sqlStr);
-			if ( stmt instanceof Select )
+			process( stmt, sb );
+		}
+		catch ( JSQLParserException jsqlEx )
+		{
+			//jsqlEx.printStackTrace();
+			StringWriter sw = new StringWriter();
+			PrintWriter  pw = new PrintWriter(sw);
+			jsqlEx.printStackTrace(pw);
+			sb.append( "=== JSQLParserException =============\n" );
+			sb.append( sw.toString() );
+		}
+		finally
+		{
+			this.taResult.setText( sb.toString() );
+		}
+	}
+	
+	private void parseStatements()
+	{
+		StringBuffer sb = new StringBuffer();
+		try
+		{
+			String sqlStr = this.taSQL.getText();
+			Statements stmts = CCJSqlParserUtil.parseStatements(sqlStr);
+			for ( Statement stmt : stmts.getStatements() )
 			{
-				Select select = (Select)stmt;
-				processSelectBody( select.getSelectBody(), 0, sb );
-				
-				sb.append( "=== TablesNamesFinder =====================\n" );
-				TablesNamesFinder tablesNamesFinder = new TablesNamesFinder();
-				List<String> tblLst2 = tablesNamesFinder.getTableList(select);
-				for ( int i = 0; i < tblLst2.size(); i++ )
-				{
-					String tbl2 = tblLst2.get(i);
-					sb.append( "TABLE:" + tbl2 + "\n" );
-				}				
-			}
-			else if ( stmt instanceof Insert )
-			{
-				Insert insert = (Insert)stmt;
-				sb.append( "=== getColumns =====================\n" );
-				for ( Column column : insert.getColumns() )
-				{
-					processColumn( column, 0, sb );
-					sb.append( "----------------------" );
-				}
+				process( stmt, sb );
+				sb.append( "\n%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n\n" );
 			}
 		}
 		catch ( JSQLParserException jsqlEx )
@@ -245,6 +265,34 @@ public class JSQLParseExample2 extends Application
 		finally
 		{
 			this.taResult.setText( sb.toString() );
+		}
+	}
+	
+	private void process( Statement stmt, StringBuffer sb )
+	{
+		if ( stmt instanceof Select )
+		{
+			Select select = (Select)stmt;
+			processSelectBody( select.getSelectBody(), 0, sb );
+			
+			sb.append( "=== TablesNamesFinder =====================\n" );
+			TablesNamesFinder tablesNamesFinder = new TablesNamesFinder();
+			List<String> tblLst2 = tablesNamesFinder.getTableList(select);
+			for ( int i = 0; i < tblLst2.size(); i++ )
+			{
+				String tbl2 = tblLst2.get(i);
+				sb.append( "TABLE:" + tbl2 + "\n" );
+			}				
+		}
+		else if ( stmt instanceof Insert )
+		{
+			Insert insert = (Insert)stmt;
+			sb.append( "=== getColumns =====================\n" );
+			for ( Column column : insert.getColumns() )
+			{
+				processColumn( column, 0, sb );
+				sb.append( "----------------------" );
+			}
 		}
 	}
 	
@@ -311,7 +359,7 @@ public class JSQLParseExample2 extends Application
 			sb.append( tab + "=== getWhere =====================\n" );
 			processExpression( pl.getWhere(), level+1, sb);
 			
-			sb.append( tab + "=== 	getGroupByColumnReferences =====================\n" );
+			sb.append( tab + "=== getGroupByColumnReferences =====================\n" );
 			List<Expression> groupLst = pl.getGroupByColumnReferences();
 			if ( groupLst != null )
 			{
@@ -357,11 +405,11 @@ public class JSQLParseExample2 extends Application
     	}
     	else if ( selectItem instanceof AllColumns )
     	{
-    		
+    		sb.append( tab + "SelectItem:AllColumns:" + selectItem.toString() + "\n" );
     	}
         else
         {
-        	sb.append( "SelectItem:UnkonwnClass" + selectItem.toString() + "\n" );
+        	sb.append( tab + "SelectItem:UnkonwnClass:" + selectItem.toString() + "\n" );
         }    	
 		
 	}

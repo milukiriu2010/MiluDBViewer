@@ -9,22 +9,13 @@ package milu.conf;
 final public class AppConf
 {
 	// Max fetch rows when selecting.
-	protected int fetchMax = 100;
+	private int fetchMax = 100;
 	
-	/*
-	public static AppConf getInstance()
-	{
-		if ( instance == null )
-		{
-			instance = new AppConf();
-		}
-		return instance;
-	}
-	*/
+	// PostgreSQL - Explain Format
+	private String postgresExplainFormat = "TEXT";
 	
 	public AppConf()
 	{
-		
 	}
 	
 	/**
@@ -41,5 +32,15 @@ final public class AppConf
 	public void setFetchMax( int fetchMax )
 	{
 		this.fetchMax = fetchMax;
+	}
+	
+	public String getPostgresExplainFormat()
+	{
+		return this.postgresExplainFormat;
+	}
+	
+	public void setPostgresExplainFormat( String postgresExplainFormat )
+	{
+		this.postgresExplainFormat = postgresExplainFormat;
 	}
 }

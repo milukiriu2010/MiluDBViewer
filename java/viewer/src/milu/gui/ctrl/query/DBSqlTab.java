@@ -96,7 +96,6 @@ public class DBSqlTab extends Tab
 		
         // http://tutorials.jenkov.com/javafx/textarea.html
 		this.textAreaSQL  = new SqlTextArea( dbView );
-        //this.textAreaSQL  = new SqlTextArea( this.upperPane );
         // AnchorPane
         this.upperPane.getChildren().add( this.textAreaSQL );
         this.textAreaSQL.init();
@@ -123,15 +122,6 @@ public class DBSqlTab extends Tab
 		splitPane.getItems().addAll( this.upperPane, this.lowerPane );
 		splitPane.setDividerPositions( 0.3f, 0.7f );
 		
-		/*
-		splitPane.heightProperty().addListener
-		(
-			(obs,oldVal,newVal)->
-			{
-				MyTool.skimThroughChildren( splitPane, 0 );
-			}
-		);
-		*/
 		this.tableViewSQL.prefHeightProperty().bind( this.lowerPane.heightProperty() );
 		
 		
@@ -141,10 +131,10 @@ public class DBSqlTab extends Tab
 		
 		this.setContent( brdPane );
 		
-		MainController mainController = this.dbView.getMainController();
+		MainController mainCtrl = this.dbView.getMainController();
 		
 		// set icon on Tab
-		ImageView iv = new ImageView( mainController.getImage("file:resources/images/sql.png") );
+		ImageView iv = new ImageView( mainCtrl.getImage("file:resources/images/sql.png") );
 		iv.setFitHeight( 16 );
 		iv.setFitWidth( 16 );
 		this.setGraphic( iv );
@@ -479,11 +469,12 @@ public class DBSqlTab extends Tab
 	public void Explain( MyDBAbstract myDBAbs )
 	{
 		long startTime = System.nanoTime();
+		
 		final ExplainTask explainTask = 
-				new ExplainTask( myDBAbs, this.textAreaSQL.getSQL(), this.tableViewSQL );
+				new ExplainTask( myDBAbs, this.dbView.getMainController(), this.textAreaSQL.getSQL(), this.tableViewSQL );
 		// execute task
 		final Future<?> futureExplainTask = this.service.submit( explainTask );		
-
+		
 		explainTask.progressProperty().addListener
 		(
 			(obs,oldVal,newVal)->

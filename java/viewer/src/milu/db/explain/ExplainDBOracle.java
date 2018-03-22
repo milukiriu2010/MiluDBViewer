@@ -1,22 +1,14 @@
 package milu.db.explain;
 
 import java.sql.ResultSet;
-//import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import milu.db.MyDBAbstract;
-
 public class ExplainDBOracle extends ExplainDBAbstract 
 {
-	public ExplainDBOracle( MyDBAbstract myDBAbs )
-	{
-		super( myDBAbs );
-	}
-	
 	@Override
 	public void explain(String sql) throws SQLException 
 	{
