@@ -7,24 +7,25 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import milu.db.abs.ObjDBInterface;
+
 import milu.db.MyDBAbstract;
 import milu.entity.schema.SchemaEntity;
 import milu.entity.schema.SchemaEntityFactory;
 
-public abstract class TableDBAbstract
+public abstract class TableDBAbstract implements ObjDBInterface
 {
 	// DB Access Object
 	protected MyDBAbstract  myDBAbs = null;
-	
-	// Table List
-	//protected List<Map<String,String>>  tableLst = new ArrayList<>();
-	
+
+	@Override
 	public void setMyDBAbstract( MyDBAbstract myDBAbs )
 	{
 		this.myDBAbs = myDBAbs;
 	}
 	
 	// select Table List
+	@Override
 	public List<SchemaEntity> selectEntityLst( String schemaName ) throws SQLException
 	{
 		List<SchemaEntity>  tableEntityLst = new ArrayList<>();
@@ -54,6 +55,7 @@ public abstract class TableDBAbstract
 	abstract protected String listSQL( String schemaName );
 	
 	// select Table Definition
+	@Override
 	abstract public List<Map<String,String>> selectDefinition( String schemaName, String tableName ) throws SQLException;
 	
 	// SQL for Table Definition

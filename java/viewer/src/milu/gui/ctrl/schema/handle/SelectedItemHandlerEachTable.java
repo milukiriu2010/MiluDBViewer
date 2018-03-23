@@ -8,8 +8,9 @@ import javafx.collections.ObservableList;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TreeItem;
 import javafx.scene.image.ImageView;
-import milu.db.table.TableDBAbstract;
-import milu.db.table.TableDBFactory;
+import milu.db.abs.AbsDBFactory;
+import milu.db.abs.ObjDBFactory;
+import milu.db.abs.ObjDBInterface;
 import milu.entity.schema.SchemaEntity;
 import milu.gui.ctrl.schema.SchemaTableViewTab;
 import milu.ctrl.MainController;
@@ -101,7 +102,13 @@ public class SelectedItemHandlerEachTable extends SelectedItemHandlerAbstract
 		List<Map<String,String>>  dataLst = selectedEntity.getDefinitionLst();
 		if ( dataLst.size() == 0 )
 		{
-			TableDBAbstract tableDBAbs = TableDBFactory.getInstance(this.myDBAbs);
+			//TableDBAbstract tableDBAbs = TableDBFactory.getInstance(this.myDBAbs);
+			ObjDBFactory tableDBFactory = AbsDBFactory.getFactory( AbsDBFactory.FACTORY_TYPE.TABLE );
+			if ( tableDBFactory == null )
+			{
+				return;
+			}
+			ObjDBInterface tableDBAbs = tableDBFactory.getInstance(myDBAbs);
 			if ( tableDBAbs == null )
 			{
 				return;

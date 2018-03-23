@@ -32,13 +32,12 @@ import javafx.scene.input.ClipboardContent;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-
-import milu.ctrl.ToggleHorizontalVerticalInterface;
-import milu.ctrl.CopyInterface;
-import milu.ctrl.ChangeLangInterface;
 import milu.tool.MyTool;
 import milu.file.MyFileAbstract;
 import milu.file.MyFileFactory;
+import milu.gui.ctrl.common.ChangeLangInterface;
+import milu.gui.ctrl.common.CopyInterface;
+import milu.gui.ctrl.common.ToggleHorizontalVerticalInterface;
 import milu.gui.dlg.MyAlertDialog;
 
 public class SqlTableView extends TableView<List<String>>

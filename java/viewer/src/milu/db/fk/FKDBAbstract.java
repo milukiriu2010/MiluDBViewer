@@ -42,4 +42,10 @@ public abstract class FKDBAbstract implements ObjDBInterface
 	// [VALUE]
 	//   position
 	abstract public Map<String, String> selectDstColumnMap( SchemaEntityEachFK fkEntity ) throws SQLException;
+	
+	@Override
+	public List<Map<String,String>> selectDefinition( String schemaName, String objName ) throws SQLException
+	{
+		throw new UnsupportedOperationException();
+	}	
 }

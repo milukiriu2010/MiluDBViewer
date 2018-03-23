@@ -9,7 +9,22 @@ package milu.conf;
 final public class AppConf
 {
 	// Max fetch rows when selecting.
-	private int fetchMax = 100;
+	private Integer fetchMax = 100;
+	
+	// PostgreSQL - Explain Analyze
+	private Boolean postgresExplainAnalyze = false;
+	
+	// PostgreSQL - Explain Verbose
+	private Boolean postgresExplainVerbose = false;
+	
+	// PostgreSQL - Explain Costs
+	private Boolean postgresExplainCosts   = true;
+	
+	// PostgreSQL - Explain Buffers
+	private Boolean postgresExplainBuffers = false;
+	
+	// PostgreSQL - Explain Timing
+	private Boolean postgresExplainTiming  = false;
 	
 	// PostgreSQL - Explain Format
 	private String postgresExplainFormat = "TEXT";
@@ -21,7 +36,7 @@ final public class AppConf
 	/**
 	 * get max fetch rows
 	 */
-	public int getFetchMax()
+	public Integer getFetchMax()
 	{
 		return this.fetchMax;
 	}
@@ -29,11 +44,67 @@ final public class AppConf
 	/**
 	 * set max fetch rows
 	 */
-	public void setFetchMax( int fetchMax )
+	public void setFetchMax( Integer fetchMax )
 	{
 		this.fetchMax = fetchMax;
 	}
 	
+	// PostgreSQL - Explain Analyze
+	public Boolean getPostgresExplainAnalyze()
+	{
+		return postgresExplainAnalyze;
+	}
+	
+	public void setPostgresExplainAnalyze( Boolean postgresExplainAnalyze )
+	{
+		this.postgresExplainAnalyze = postgresExplainAnalyze;
+	}
+	
+	// PostgreSQL - Explain Verbose
+	public Boolean getPostgresExplainVerbose()
+	{
+		return this.postgresExplainVerbose;
+	}
+	
+	public void setPostgresExplainVerbose( Boolean postgresExplainVerbose )
+	{
+		this.postgresExplainVerbose = postgresExplainVerbose;
+	}
+	
+	// PostgreSQL - Explain Costs
+	public Boolean getPostgresExplainCosts()
+	{
+		return this.postgresExplainCosts;
+	}
+	
+	public void setPostgresExplainCosts( Boolean postgresExplainCosts )
+	{
+		this.postgresExplainCosts = postgresExplainCosts;
+	}
+	
+	// PostgreSQL - Explain Buffers
+	public Boolean getPostgresExplainBuffers()
+	{
+		return this.postgresExplainBuffers;
+	}
+	
+	public void setPostgresExplainBuffers( Boolean postgresExplainBuffers )
+	{
+		this.postgresExplainBuffers = postgresExplainBuffers;
+	}
+	
+	// PostgreSQL - Explain Timing
+	public Boolean getPostgresExplainTiming()
+	{
+		return this.postgresExplainTiming;
+	}
+	
+	public void setPostgresExplainTiming( Boolean postgresExplainTiming )
+	{
+		this.postgresExplainTiming = postgresExplainTiming;
+	}
+	
+	// PostgreSQL - Explain Format
 	public String getPostgresExplainFormat()
 	{
 		return this.postgresExplainFormat;

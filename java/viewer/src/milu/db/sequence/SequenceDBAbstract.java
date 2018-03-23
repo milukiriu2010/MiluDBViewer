@@ -2,6 +2,7 @@ package milu.db.sequence;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Map;
 
 import milu.db.MyDBAbstract;
 import milu.db.abs.ObjDBInterface;
@@ -26,4 +27,9 @@ public abstract class SequenceDBAbstract implements ObjDBInterface
 	
 	abstract protected String listSQL( String schemaName );		
 	
+	@Override
+	public List<Map<String,String>> selectDefinition( String schemaName, String objName ) throws SQLException
+	{
+		throw new UnsupportedOperationException();
+	}
 }

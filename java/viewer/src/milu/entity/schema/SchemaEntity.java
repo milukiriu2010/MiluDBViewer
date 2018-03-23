@@ -6,8 +6,8 @@ import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.ArrayList;
 
-import milu.ctrl.ChangeLangInterface;
 import milu.entity.schema.search.VisitorInterface;
+import milu.gui.ctrl.common.ChangeLangInterface;
 
 // This class will be abstract
 abstract public class SchemaEntity

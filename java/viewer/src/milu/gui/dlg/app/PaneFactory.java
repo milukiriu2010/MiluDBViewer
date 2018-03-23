@@ -16,5 +16,5 @@ interface PaneFactory
 	 * @param extLangRB
 	 * @return
 	 */
-	public AppPaneAbstract createPane( AppSettingEntity.APPSET_TYPE key, Dialog<?> dlg, MainController mainCtrl, ResourceBundle extLangRB );
+	public AppPaneAbstract createPane( AppSettingMenu.APPSET_TYPE key, Dialog<?> dlg, MainController mainCtrl, ResourceBundle extLangRB );
 }

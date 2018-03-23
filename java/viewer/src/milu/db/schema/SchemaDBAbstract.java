@@ -5,6 +5,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
+import java.util.Map;
 import java.util.ArrayList;
 
 import milu.db.MyDBAbstract;
@@ -17,41 +18,11 @@ public abstract class SchemaDBAbstract implements ObjDBInterface
 	// DB Access Object
 	protected MyDBAbstract  myDBAbs = null;
 	
-	/*
-	// Schema Name List
-	protected List<Map<String,String>>  schemaNameLst = new ArrayList<>();
-	*/
-	
 	@Override
 	public void setMyDBAbstract( MyDBAbstract myDBAbs )
 	{
 		this.myDBAbs = myDBAbs;
 	}
-	
-	/*
-	public List<Map<String,String>> getSchemaNameLst()
-	{
-		return this.schemaNameLst;
-	}
-	
-	public List<SchemaEntity> getSchemaEntityLst()
-	{
-		List<SchemaEntity>  schemaEntityLst = new ArrayList<>();
-		for ( Map<String,String> schemaName : this.schemaNameLst )
-		{
-			SchemaEntity eachSchemaEntity = SchemaEntityFactory.createInstance( schemaName.get("schemaName"), SchemaEntity.SCHEMA_TYPE.SCHEMA );
-			//SchemaEntity rootTableEntity  = SchemaEntityFactory.createInstance( SchemaEntity.SCHEMA_TYPE.ROOT_TABLE );
-			//eachSchemaEntity.addEntity( rootTableEntity );
-			schemaEntityLst.add( eachSchemaEntity );
-		}
-		return schemaEntityLst;
-	}
-	
-	protected void clear()
-	{
-		this.schemaNameLst.clear();
-	}
-	*/
 	
 	@Override
 	public List<SchemaEntity> selectEntityLst( String tmp ) throws SQLException
@@ -85,5 +56,11 @@ public abstract class SchemaDBAbstract implements ObjDBInterface
 		}
 	}
 	
-	abstract protected String schemaLstSQL();	
+	abstract protected String schemaLstSQL();
+	
+	@Override
+	public List<Map<String,String>> selectDefinition( String schemaName, String objName ) throws SQLException
+	{
+		throw new UnsupportedOperationException();
+	}
 }

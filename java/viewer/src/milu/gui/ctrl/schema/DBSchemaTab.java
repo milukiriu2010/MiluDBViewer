@@ -14,15 +14,15 @@ import javafx.geometry.Orientation;
 import milu.db.MyDBAbstract;
 
 import milu.gui.view.DBView;
+import milu.gui.ctrl.common.ChangeLangInterface;
+import milu.gui.ctrl.common.ExecQueryDBInterface;
+import milu.gui.ctrl.common.RefreshInterface;
+import milu.gui.ctrl.common.ToggleHorizontalVerticalInterface;
 import milu.gui.ctrl.schema.SchemaTreeView;
 import milu.gui.ctrl.schema.handle.SelectedItemHandlerAbstract;
 import milu.gui.ctrl.schema.handle.SelectedItemHandlerChooser;
 import milu.gui.dlg.MyAlertDialog;
-import milu.ctrl.ExecQueryDBInterface;
 import milu.ctrl.MainController;
-import milu.ctrl.RefreshInterface;
-import milu.ctrl.ToggleHorizontalVerticalInterface;
-import milu.ctrl.ChangeLangInterface;
 
 public class DBSchemaTab extends Tab
 	implements 

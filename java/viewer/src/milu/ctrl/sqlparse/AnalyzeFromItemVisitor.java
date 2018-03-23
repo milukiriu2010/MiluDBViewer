@@ -10,4 +10,6 @@ public interface AnalyzeFromItemVisitor extends FromItemVisitor
 	public List<String> getTableLst();
 	
 	public Map<String,String> getAliasMap();
+	
+	public Map<String,List<String>> getSchemaTableMap();
 }

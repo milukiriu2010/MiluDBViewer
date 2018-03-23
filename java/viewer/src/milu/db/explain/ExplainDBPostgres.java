@@ -23,12 +23,24 @@ public class ExplainDBPostgres
 			this.clear();
 			
 			AppConf appConf = this.mainCtrl.getAppConf();
-			String explainFormat = appConf.getPostgresExplainFormat();
+			Boolean explainAnalyze = appConf.getPostgresExplainAnalyze();
+			Boolean explainVerbose = appConf.getPostgresExplainVerbose();
+			Boolean explainCosts   = appConf.getPostgresExplainCosts();
+			Boolean explainBuffers = appConf.getPostgresExplainBuffers();
+			Boolean explainTiming  = appConf.getPostgresExplainTiming();
+			String  explainFormat  = appConf.getPostgresExplainFormat();
 			
 			stmt = this.myDBAbs.createStatement();
 			String sqlExplain = 
-					"explain " +  
-					"(format " + explainFormat + ")" + 
+					"explain " +
+					"(" +
+					"analyze " + explainAnalyze + "," +
+					"verbose " + explainVerbose + "," +
+					"costs "   + explainCosts   + "," +
+					"buffers " + explainBuffers + "," +
+					"timing "  + explainTiming  + "," +
+					"format "  + explainFormat  + 
+					")" + 
 					sql;
 			rs   = stmt.executeQuery( sqlExplain );
 			

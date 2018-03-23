@@ -156,4 +156,10 @@ public class FKDBMySQL extends FKDBAbstract
 		
 		return fkEntity.getDstColumnMap();
 	}
+	
+	@Override
+	public List<Map<String,String>> selectDefinition( String schemaName, String objName ) throws SQLException
+	{
+		throw new UnsupportedOperationException();
+	}
 }

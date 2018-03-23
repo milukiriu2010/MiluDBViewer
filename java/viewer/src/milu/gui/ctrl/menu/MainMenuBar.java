@@ -20,8 +20,7 @@ import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
 import javafx.stage.Stage;
 import javafx.stage.Window;
-
-import milu.ctrl.ChangeLangInterface;
+import milu.gui.ctrl.common.ChangeLangInterface;
 import milu.gui.dlg.SystemInfoDialog;
 import milu.gui.dlg.VersionDialog;
 import milu.gui.dlg.app.AppSettingDialog;

@@ -36,29 +36,20 @@ public class SqlTextArea extends TextArea
 	private ComboBox<String>  comboHint = new ComboBox<>();
 	
 	private final ObservableList<String>  hints = FXCollections.observableArrayList();
-	/*
-			(
-					"createIndex",
-					"createProcedure",
-					"createPackage",
-					"createTable",
-					"createView",
-					"deleteIndex",
-					"deleteProcedure",
-					"deletePackage",
-					"deleteTable",
-					"deleteView"
-				);
-				*/
+	
 	private FilteredList<String>  filteredItems = null;
 	
-	private StringBuffer sbOnTheWay = new StringBuffer();
+	private StringBuffer  sbOnTheWay = new StringBuffer();
 	
-	private AnchorPane        parentPane = null;
+	private AnchorPane    parentPane = null;
 	
+	// Schema List, analzed by jsqlparser
+	private List<String>  schemaLst = new ArrayList<>();
+	
+	// Table List, analyzed by jsqlparser
 	private List<String>  tableLst = new ArrayList<>();
 	
-	// Alias <=> Table
+	// Alias <=> Table, analyzed by jsqlparser
 	private Map<String,String>  aliasMap = new HashMap<>();
 	
 	private String  strLastWord = "";
@@ -129,7 +120,7 @@ public class SqlTextArea extends TextArea
 				System.out.println( "--- TextArea MousePressed -----------" );
 				this.comboHint.setVisible(false);
 				this.comboHint.hide();
-				this.sbOnTheWay = null;				
+				this.sbOnTheWay.setLength(0);;				
 			}
 		);
 	}
@@ -149,26 +140,6 @@ public class SqlTextArea extends TextArea
 				// ComboBox is invisible
 				if ( isVisibleComboHint == false )
 				{
-					/*
-					if ( KeyCode.PERIOD.equals(keyCode) )
-					{
-						Path caret = MyTool.findCaret(this);
-						Point2D screenLoc = MyTool.findScreenLocation(caret,this);
-						System.out.println( "X:" + screenLoc.getX() + "/Y:" + screenLoc.getY() );
-						AnchorPane.setLeftAnchor( this.comboHint, screenLoc.getX() );
-						AnchorPane.setTopAnchor( this.comboHint, screenLoc.getY() );
-						
-						// list back to full.
-						this.filteredItems.setPredicate( (item)->{ return true;	} );
-						
-						this.comboHint.getSelectionModel().selectFirst();
-						this.comboHint.setVisible(true);
-						this.comboHint.show();
-						
-						this.sbOnTheWay = null;
-						this.sbOnTheWay = new StringBuffer();
-					}
-					*/
 				}
 				// ComboBox is visible
 				else
@@ -206,13 +177,13 @@ public class SqlTextArea extends TextArea
 						
 						this.comboHint.setVisible(false);
 						this.comboHint.hide();
-						this.sbOnTheWay = null;
+						this.sbOnTheWay.setLength(0);			
 					}
 					else if ( KeyCode.ESCAPE.equals( keyCode ) ) 
 					{
 						this.comboHint.setVisible(false);
 						this.comboHint.hide();
-						this.sbOnTheWay = null;
+						this.sbOnTheWay.setLength(0);			
 					}
 				}
 			}
@@ -223,7 +194,6 @@ public class SqlTextArea extends TextArea
 			(event)->
 			{
 				System.out.println( "--- TextArea KeyTyped -------------" );
-				//System.out.println( "CaretPosition:" + this.getCaretPosition() );
 				
 				String chr = event.getCharacter();
 				System.out.println( "Character:" + chr );
@@ -235,8 +205,9 @@ public class SqlTextArea extends TextArea
 					sqlParse.setStrSQL( this.getSQL() );
 					sqlParse.parse();
 					
-					this.tableLst = sqlParse.getTableLst();
-					this.aliasMap = sqlParse.getAliasMap();
+					this.schemaLst = sqlParse.getSchemaLst();
+					this.tableLst  = sqlParse.getTableLst();
+					this.aliasMap  = sqlParse.getAliasMap();
 				}
 				catch ( JSQLParserException parseExp )
 				{
@@ -269,8 +240,7 @@ public class SqlTextArea extends TextArea
 							this.comboHint.setVisible(true);
 							this.comboHint.show();
 							
-							this.sbOnTheWay = null;
-							this.sbOnTheWay = new StringBuffer();
+							this.sbOnTheWay.setLength(0);				
 						}
 					}
 				}
@@ -297,7 +267,7 @@ public class SqlTextArea extends TextArea
 						
 						this.comboHint.setVisible(false);
 						this.comboHint.hide();
-						this.sbOnTheWay = null;
+						this.sbOnTheWay.setLength(0);			
 					}
 					// Key Typed except "ENTER"
 					else
@@ -338,7 +308,7 @@ public class SqlTextArea extends TextArea
 						{
 							this.comboHint.setVisible(false);
 							this.comboHint.hide();
-							this.sbOnTheWay = null;
+							this.sbOnTheWay.setLength(0);
 						}
 					}
 				}
@@ -415,28 +385,25 @@ public class SqlTextArea extends TextArea
 
 	private void extractLastWord()
 	{
-		String strBeforeCaret = this.getText().substring(0, this.getCaretPosition() );
+		String strBeforeCaret = this.getText().substring( 0, this.getCaretPosition() );
 		int lastIndex = MyTool.lastIndexOf( '\n', strBeforeCaret );
 		String strThisLine = strBeforeCaret;
+		// Cut string before "return code(\n)"
 		if ( lastIndex != -1 )
 		{
 			strThisLine = this.getText().substring( lastIndex+1, this.getCaretPosition() );
 		}
 		// "select * from dual" => dual  
-		//String strAfterSpace = strBeforeCaret.replaceAll( ".*\\s+(\\S+)", "$1" );
 		String strAfterSpace = strThisLine.replaceAll( ".*\\s+(\\S+)", "$1" );
 		System.out.println( "strAfterSpace[" + strAfterSpace + "]" );
 		// "user_data.a" => "user_data"
-		// "user_data "  => "user_data" 
+		// "user_data "  => "user_data"
 		this.strLastWord = strAfterSpace.replaceAll("(\\s|\\..*$)", "" );
 		System.out.println( "extractLastWord[" + this.strLastWord + "]" );
 	}
 	
 	private boolean resetComboBox()
 	{
-		//this.comboHint.getItems().removeAll( this.hints );
-		
-		
 		System.out.println( "resetComoboBox start." );
 		String tableName = null;
 		if ( this.aliasMap.containsKey(this.strLastWord) )

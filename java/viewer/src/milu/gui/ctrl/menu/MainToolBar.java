@@ -10,7 +10,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
-import milu.ctrl.ChangeLangInterface;
+import milu.gui.ctrl.common.ChangeLangInterface;
 import milu.gui.view.DBView;
 import milu.ctrl.MainController;
 

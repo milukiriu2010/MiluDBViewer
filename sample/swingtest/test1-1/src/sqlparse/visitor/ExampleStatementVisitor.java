@@ -1,5 +1,8 @@
 package sqlparse.visitor;
 
+import java.util.List;
+import java.util.ArrayList;
+
 import net.sf.jsqlparser.statement.Commit;
 import net.sf.jsqlparser.statement.SetStatement;
 import net.sf.jsqlparser.statement.StatementVisitor;
@@ -28,11 +31,31 @@ public class ExampleStatementVisitor implements StatementVisitor
 {
 	private SelectVisitor selectVisitor = null;
 	
+	private String sqlType = null;
+	
+	private List<String>  sqlLst = new ArrayList<>();
+	
+	private List<String>  tableLst = new ArrayList<>();
+	
 	public ExampleStatementVisitor( SelectVisitor selectVisitor )
 	{
 		this.selectVisitor = selectVisitor;
 	}
 	
+	public String getSqlType()
+	{
+		return this.sqlType;
+	}
+	
+	public List<String> getSqlLst()
+	{
+		return this.sqlLst;
+	}
+	
+	public List<String> getTableLst()
+	{
+		return this.tableLst;
+	}
 
 	@Override
 	public void visit(Commit arg0) {
@@ -41,21 +64,28 @@ public class ExampleStatementVisitor implements StatementVisitor
 	}
 
 	@Override
-	public void visit(Delete arg0) {
-		// TODO Auto-generated method stub
-
+	public void visit(Delete delete)
+	{
+		this.sqlType = "DELETE";
+		this.tableLst.clear();
+		//delete.getTables().forEach( (table)->this.tableLst.add(table.getName()) );
+		this.tableLst.add( delete.getTable().getName() );
 	}
 
 	@Override
-	public void visit(Update arg0) {
-		// TODO Auto-generated method stub
-
+	public void visit(Update update)
+	{
+		this.sqlType = "UPDATE";
+		this.tableLst.clear();
+		update.getTables().forEach( (table)->this.tableLst.add(table.getName()) );
 	}
 
 	@Override
-	public void visit(Insert arg0) {
-		// TODO Auto-generated method stub
-
+	public void visit(Insert insert) 
+	{
+		this.sqlType = "INSERT";
+		this.tableLst.clear();
+		this.tableLst.add( insert.getTable().getName() );
 	}
 
 	@Override
@@ -110,7 +140,8 @@ public class ExampleStatementVisitor implements StatementVisitor
 	public void visit(Statements stmts)
 	{
 		System.out.println( "StatementVisitor:Statements[" + stmts.getStatements().size() + "]");
-
+		this.sqlLst.clear();
+		stmts.getStatements().forEach( (stmt)->this.sqlLst.add(stmt.toString()) );
 	}
 
 	@Override
@@ -132,8 +163,9 @@ public class ExampleStatementVisitor implements StatementVisitor
 	}
 
 	@Override
-	public void visit(Select select) {
-		// TODO Auto-generated method stub
+	public void visit(Select select) 
+	{
+		this.sqlType = "SELECT";		
 		System.out.println( "StatementVisitor:Select[" + select + "]" );
 		
 		SelectBody selectBody = select.getSelectBody();
@@ -144,15 +176,16 @@ public class ExampleStatementVisitor implements StatementVisitor
 	}
 
 	@Override
-	public void visit(Upsert arg0) {
+	public void visit(Upsert arg0) 
+	{
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
-	public void visit(UseStatement arg0) {
+	public void visit(UseStatement arg0) 
+	{
 		// TODO Auto-generated method stub
-
 	}
 
 }

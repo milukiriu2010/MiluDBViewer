@@ -1,10 +1,8 @@
 package milu.task;
 
 import javafx.concurrent.Task;
-
+import milu.gui.ctrl.common.ToggleHorizontalVerticalInterface;
 import javafx.application.Platform;
-
-import milu.ctrl.ToggleHorizontalVerticalInterface;
 
 public class ToggleHVTask extends Task<Double> 
 {

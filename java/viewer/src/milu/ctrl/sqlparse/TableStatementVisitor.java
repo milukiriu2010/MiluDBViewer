@@ -1,5 +1,8 @@
 package milu.ctrl.sqlparse;
 
+import java.util.List;
+import java.util.ArrayList;
+
 import net.sf.jsqlparser.statement.Commit;
 import net.sf.jsqlparser.statement.SetStatement;
 import net.sf.jsqlparser.statement.Statements;
@@ -24,6 +27,8 @@ import net.sf.jsqlparser.statement.upsert.Upsert;
 public class TableStatementVisitor implements AnalyzeStatementVisitor 
 {
 	private AnalyzeSelectVisitor  analyzeSelectVisitor = null;
+	
+	private List<String> sqlLst = new ArrayList<>(); 
 
 	@Override
 	public void visit(Commit arg0) {
@@ -98,9 +103,10 @@ public class TableStatementVisitor implements AnalyzeStatementVisitor
 	}
 
 	@Override
-	public void visit(Statements arg0) {
-		// TODO Auto-generated method stub
-
+	public void visit(Statements stmts) 
+	{
+		this.sqlLst.clear();
+		stmts.getStatements().forEach( (stmt)->this.sqlLst.add(stmt.toString()) );
 	}
 
 	@Override
@@ -147,6 +153,12 @@ public class TableStatementVisitor implements AnalyzeStatementVisitor
 	public void setAnalyzeSelectVistor(AnalyzeSelectVisitor analyzeSelectVisitor) 
 	{
 		this.analyzeSelectVisitor = analyzeSelectVisitor;
+	}
+	
+	@Override
+	public List<String> getSqlLst()
+	{
+		return this.sqlLst;
 	}
 
 }

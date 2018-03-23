@@ -23,14 +23,13 @@ import javafx.scene.layout.AnchorPane;
 
 import java.sql.SQLException;
 
-import milu.ctrl.ExecQueryDBInterface;
-import milu.ctrl.ExecExplainDBInterface;
-import milu.ctrl.ToggleHorizontalVerticalInterface;
-import milu.ctrl.CounterInterface;
-import milu.ctrl.CopyInterface;
-import milu.ctrl.ChangeLangInterface;
 import milu.ctrl.MainController;
-
+import milu.gui.ctrl.common.ChangeLangInterface;
+import milu.gui.ctrl.common.CopyInterface;
+import milu.gui.ctrl.common.CounterInterface;
+import milu.gui.ctrl.common.ExecExplainDBInterface;
+import milu.gui.ctrl.common.ExecQueryDBInterface;
+import milu.gui.ctrl.common.ToggleHorizontalVerticalInterface;
 import milu.gui.ctrl.query.SqlTableView;
 import milu.gui.view.DBView;
 import milu.tool.MyTool;
@@ -174,20 +173,6 @@ public class DBSqlTab extends Tab
 				}
 			}
 		);
-		/*
-		this.getGraphic().setOnMouseEntered
-		(
-			(event)->
-			{
-				System.out.println( "DBSqlTab:Mouse Entered." );
-				if ( this.selectedProperty().getValue() == false )
-				{
-					Node node = this.getContent();
-					System.out.println( "DBSqlTab:No Focus" );
-				}
-			}
-		);
-		*/
 	}
 
 	/**
@@ -223,8 +208,6 @@ public class DBSqlTab extends Tab
 	@Override
 	public void switchDirection()
 	{
-		//this.tableViewSQL.switchDirection();
-		
 		long startTime = System.nanoTime();
 		int cnt = this.tableViewSQL.getRowSize();
 		if ( cnt > 0 )

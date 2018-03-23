@@ -15,6 +15,10 @@ public class SQLParse
 {
 	private String strSQL = null;
 	
+	// Schema List
+	private List<String> schemaLst = new ArrayList<>();
+	
+	// Table List
 	private List<String> tableLst = new ArrayList<>();
 	
 	// Alias <=> Table
@@ -29,11 +33,17 @@ public class SQLParse
 		this.strSQL = strSQL;
 	}
 	
+	public List<String> getSchemaLst()
+	{
+		return this.schemaLst;
+	}
+	
 	public List<String> getTableLst()
 	{
 		return this.tableLst;
 	}
 	
+	// Alias <=> Table
 	public Map<String,String> getAliasMap()
 	{
 		return this.aliasMap;
@@ -60,5 +70,10 @@ public class SQLParse
 		
 		this.aliasMap = analyzeFromItemVisitor.getAliasMap();
 		this.aliasMap.forEach( (k,v)->System.out.println( "parse alias:k[" + k + "]v[" + v + "]" ) );
+		
+		this.schemaLst.clear();
+		// Schema <=> Table List
+		Map<String,List<String>> schemaTableMap = analyzeFromItemVisitor.getSchemaTableMap();
+		schemaTableMap.forEach( (k,v)->{ this.schemaLst.add(k); System.out.println( "parse schema:" + k ); } ); 
 	}
 }

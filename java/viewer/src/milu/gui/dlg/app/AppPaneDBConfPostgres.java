@@ -16,7 +16,33 @@ import milu.ctrl.MainController;
 
 public class AppPaneDBConfPostgres extends AppPaneAbstract 
 {
-	private ToggleGroup tglFormat = new ToggleGroup();
+	// Explain Analyze
+	private ToggleGroup tglAnalyze     = new ToggleGroup();
+	private RadioButton rbAnalyzeTrue  = new RadioButton("True");
+	private RadioButton rbAnalyzeFalse = new RadioButton("False");
+	
+	// Explain Verbose
+	private ToggleGroup tglVerbose     = new ToggleGroup();
+	private RadioButton rbVerboseTrue  = new RadioButton("True");
+	private RadioButton rbVerboseFalse = new RadioButton("False");
+	
+	// Explain Costs
+	private ToggleGroup tglCosts       = new ToggleGroup();
+	private RadioButton rbCostsTrue    = new RadioButton("True");
+	private RadioButton rbCostsFalse   = new RadioButton("False");
+	
+	// Explain Buffers
+	private ToggleGroup tglBuffers     = new ToggleGroup();
+	private RadioButton rbBuffersTrue  = new RadioButton("True");
+	private RadioButton rbBuffersFalse = new RadioButton("False");
+	
+	// Explain Timing
+	private ToggleGroup tglTiming      = new ToggleGroup();
+	private RadioButton rbTimingTrue   = new RadioButton("True");
+	private RadioButton rbTimingFalse  = new RadioButton("False");
+	
+	// Explain Format
+	private ToggleGroup tglFormat    = new ToggleGroup();
 	private RadioButton rbFormatText = new RadioButton("TEXT");
 	private RadioButton rbFormatXML  = new RadioButton("XML");
 	private RadioButton rbFormatJSon = new RadioButton("JSON");
@@ -38,12 +64,111 @@ public class AppPaneDBConfPostgres extends AppPaneAbstract
 	{
 		this.getChildren().removeAll( this.getChildren() );
 		
-		// set objects
+		AppConf  appConf   = mainCtrl.getAppConf();
+		
+		// set title
 		this.lblTitle.setText( this.extLangRB.getString( "TITLE_DB_CONF_PANE_POSTGRES" ) );
 		this.lblTitle.getStyleClass().add("label-title");
 		
 		Label lblExplain = new Label("EXPLAIN");
 		
+		// Explain Analyze
+		Label lblAnalyze  = new Label("ANALYZE");
+		rbAnalyzeTrue.setToggleGroup(tglAnalyze);
+		rbAnalyzeFalse.setToggleGroup(tglAnalyze);
+		
+		// select default RadioButton(explain analyze)
+		if ( appConf.getPostgresExplainAnalyze() )
+		{
+			rbAnalyzeTrue.setSelected(true);
+		}
+		else
+		{
+			rbAnalyzeFalse.setSelected(true);
+			
+			// "buffers","timing" options are available, when "analyze" option is true.
+			rbBuffersTrue.setDisable(true);
+			rbBuffersFalse.setDisable(true);
+			rbTimingTrue.setDisable(true);
+			rbTimingFalse.setDisable(true);
+		}
+		
+		HBox hBoxAnalyze = new HBox(2);
+		hBoxAnalyze.getChildren().addAll( rbAnalyzeTrue, rbAnalyzeFalse );
+		
+		// Explain Verbose
+		Label lblVerbose  = new Label("VERBOSE");
+		rbVerboseTrue.setToggleGroup(tglVerbose);
+		rbVerboseFalse.setToggleGroup(tglVerbose);
+		
+		// select default RadioButton(explain verbose)
+		if ( appConf.getPostgresExplainVerbose() )
+		{
+			rbVerboseTrue.setSelected(true);
+		}
+		else
+		{
+			rbVerboseFalse.setSelected(true);
+		}
+		
+		HBox hBoxVerbose = new HBox(2);
+		hBoxVerbose.getChildren().addAll( rbVerboseTrue, rbVerboseFalse );
+		
+		// Explain Costs
+		Label lblCosts  = new Label("COSTS");
+		rbCostsTrue.setToggleGroup(tglCosts);
+		rbCostsFalse.setToggleGroup(tglCosts);
+		
+		// select default RadioButton(explain costs)
+		if ( appConf.getPostgresExplainCosts() )
+		{
+			rbCostsTrue.setSelected(true);
+		}
+		else
+		{
+			rbCostsFalse.setSelected(true);
+		}
+		
+		HBox hBoxCosts = new HBox(2);
+		hBoxCosts.getChildren().addAll( rbCostsTrue, rbCostsFalse );
+		
+		// Explain Buffers
+		Label lblBuffers  = new Label("BUFFERS");
+		rbBuffersTrue.setToggleGroup(tglBuffers);
+		rbBuffersFalse.setToggleGroup(tglBuffers);
+		
+		// select default RadioButton(explain buffers)
+		if ( appConf.getPostgresExplainBuffers() )
+		{
+			rbBuffersTrue.setSelected(true);
+		}
+		else
+		{
+			rbBuffersFalse.setSelected(true);
+		}
+		
+		HBox hBoxBuffers = new HBox(2);
+		hBoxBuffers.getChildren().addAll( rbBuffersTrue, rbBuffersFalse );
+		
+		// Explain Timing
+		Label lblTiming  = new Label("TIMING");
+		rbTimingTrue.setToggleGroup(tglTiming);
+		rbTimingFalse.setToggleGroup(tglTiming);
+		
+		// select default RadioButton(explain timing)
+		if ( appConf.getPostgresExplainTiming() )
+		{
+			rbTimingTrue.setSelected(true);
+		}
+		else
+		{
+			rbTimingFalse.setSelected(true);
+		}
+		
+		HBox hBoxTiming = new HBox(2);
+		hBoxTiming.getChildren().addAll( rbTimingTrue, rbTimingFalse );
+
+		// Explain Format
 		Label lblFormat  = new Label("FORMAT");
 		rbFormatText.setToggleGroup(tglFormat);
 		rbFormatXML.setToggleGroup(tglFormat);
@@ -53,8 +178,7 @@ public class AppPaneDBConfPostgres extends AppPaneAbstract
 		HBox hBoxFormat = new HBox(2);
 		hBoxFormat.getChildren().addAll( rbFormatText, rbFormatXML, rbFormatJSon, rbFormatYaml );
 
-		AppConf  appConf   = mainCtrl.getAppConf();
-		// select defautl radiobutton(explain format)
+		// select default RadioButton(explain format)
 		for ( Node nodeFormat : hBoxFormat.getChildrenUnmodifiable() )
 		{
 			if ( nodeFormat instanceof RadioButton )
@@ -68,8 +192,25 @@ public class AppPaneDBConfPostgres extends AppPaneAbstract
 			}
 		}
 		
+		// set objects
 		VBox vBox = new VBox(2);
-		vBox.getChildren().addAll( this.lblTitle, lblExplain, lblFormat, hBoxFormat );
+		vBox.getChildren().addAll
+		( 
+			this.lblTitle, 
+			lblExplain,
+			lblAnalyze,
+			hBoxAnalyze,
+			lblVerbose,
+			hBoxVerbose,
+			lblCosts,
+			hBoxCosts,
+			lblBuffers,
+			hBoxBuffers,
+			lblTiming,
+			hBoxTiming,
+			lblFormat, 
+			hBoxFormat 
+		);
 		
 		// put controls on pane
 		this.getChildren().addAll( vBox );
@@ -77,16 +218,28 @@ public class AppPaneDBConfPostgres extends AppPaneAbstract
 	
 	private void setAction()
 	{
-		this.tglFormat.selectedToggleProperty().addListener
+		// "buffers","timing" options are available, when "analyze" option is true. 
+		this.rbAnalyzeTrue.selectedProperty().addListener
 		(
 			(obs,oldVal,newVal)->
 			{
-				/*
-				if ( newVal instanceof RadioButton )
+				if ( newVal.booleanValue() == true )
 				{
-					RadioButton rb = (RadioButton)newVal;
+					this.rbBuffersTrue.setDisable(false);
+					this.rbBuffersFalse.setDisable(false);
+					this.rbTimingTrue.setDisable(false);
+					this.rbTimingFalse.setDisable(false);
 				}
-				*/
+				else
+				{
+					this.rbBuffersTrue.setDisable(true);
+					this.rbBuffersFalse.setDisable(true);
+					this.rbTimingTrue.setDisable(true);
+					this.rbTimingFalse.setDisable(true);
+					
+					this.rbBuffersFalse.setSelected(true);
+					this.rbTimingFalse.setSelected(true);
+				}
 			}
 		);
 	}
@@ -95,11 +248,59 @@ public class AppPaneDBConfPostgres extends AppPaneAbstract
 	public boolean apply() 
 	{
 		AppConf  appConf   = mainCtrl.getAppConf();
-		Toggle tgl = this.tglFormat.getSelectedToggle();
-		if ( tgl instanceof RadioButton )
+		
+		// Explain Analyze
+		if ( ((RadioButton)this.tglAnalyze.getSelectedToggle()) == this.rbAnalyzeTrue )
 		{
-			appConf.setPostgresExplainFormat( ((RadioButton)tgl).getText() );
+			appConf.setPostgresExplainAnalyze( true );
 		}
+		else
+		{
+			appConf.setPostgresExplainAnalyze( false );
+		}
+		
+		// Explain Verbose
+		if ( ((RadioButton)this.tglVerbose.getSelectedToggle()) == this.rbVerboseTrue )
+		{
+			appConf.setPostgresExplainVerbose( true );
+		}
+		else
+		{
+			appConf.setPostgresExplainVerbose( false );
+		}
+		
+		// Explain Costs
+		if ( ((RadioButton)this.tglCosts.getSelectedToggle()) == this.rbCostsTrue )
+		{
+			appConf.setPostgresExplainCosts( true );
+		}
+		else
+		{
+			appConf.setPostgresExplainCosts( false );
+		}
+		
+		// Explain Buffers
+		if ( ((RadioButton)this.tglBuffers.getSelectedToggle()) == this.rbBuffersTrue )
+		{
+			appConf.setPostgresExplainBuffers( true );
+		}
+		else
+		{
+			appConf.setPostgresExplainBuffers( false );
+		}
+		
+		// Explain Timing
+		if ( ((RadioButton)this.tglTiming.getSelectedToggle()) == this.rbTimingTrue )
+		{
+			appConf.setPostgresExplainTiming( true );
+		}
+		else
+		{
+			appConf.setPostgresExplainTiming( false );
+		}
+		
+		// Explain Format
+		appConf.setPostgresExplainFormat( ((RadioButton)this.tglFormat.getSelectedToggle()).getText() );
 		
 		return true;
 	}

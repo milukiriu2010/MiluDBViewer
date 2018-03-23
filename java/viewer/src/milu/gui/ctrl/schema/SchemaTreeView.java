@@ -14,10 +14,9 @@ import javafx.scene.effect.Blend;
 import javafx.scene.effect.BlendMode;
 import javafx.collections.ObservableList;
 import javafx.beans.property.BooleanProperty;
+import milu.gui.ctrl.common.ChangeLangInterface;
 import milu.gui.view.DBView;
 import milu.ctrl.MainController;
-
-import milu.ctrl.ChangeLangInterface;
 import milu.entity.schema.SchemaEntity;
 
 public class SchemaTreeView extends TreeView<SchemaEntity>

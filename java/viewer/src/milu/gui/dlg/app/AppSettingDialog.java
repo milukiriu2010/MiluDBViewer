@@ -27,7 +27,7 @@ public class AppSettingDialog extends Dialog<Boolean>
 	private ResourceBundle langRB = ResourceBundle.getBundle( PROPERTY_FILENAME );
 
 	// Configuration List
-	private TreeView<AppSettingEntity> treeViewConf = new TreeView<AppSettingEntity>();
+	private TreeView<AppSettingMenu> treeViewConf = new TreeView<AppSettingMenu>();
 	
 	// Apply&Close Button
 	private ButtonType okButtonType = null;
@@ -45,14 +45,14 @@ public class AppSettingDialog extends Dialog<Boolean>
 		this.setTitle( langRB.getString( "TITLE_APP_SETTING" ) );
 		
 		// set items on TreeView
-		TreeItem<AppSettingEntity>  treeItemRoot = 
-			new TreeItem<>( new AppSettingEntity( "" , AppSettingEntity.APPSET_TYPE.TYPE_ROOT ) );
-		TreeItem<AppSettingEntity>  treeItemDB = 
-			new TreeItem<>( new AppSettingEntity( langRB.getString( "ITEM_DB" ), AppSettingEntity.APPSET_TYPE.TYPE_DB ) );
-		TreeItem<AppSettingEntity>  treeItemDBPostgreSQL = 
-				new TreeItem<>( new AppSettingEntity( langRB.getString( "ITEM_DB_POSTGRESQL" ), AppSettingEntity.APPSET_TYPE.TYPE_DB_POSTGRESQL ) );
-		TreeItem<AppSettingEntity>  treeItemGeneral = 
-			new TreeItem<>( new AppSettingEntity( langRB.getString( "ITEM_GENERAL" ), AppSettingEntity.APPSET_TYPE.TYPE_GENERAL ) );
+		TreeItem<AppSettingMenu>  treeItemRoot = 
+			new TreeItem<>( new AppSettingMenu( "" , AppSettingMenu.APPSET_TYPE.TYPE_ROOT ) );
+		TreeItem<AppSettingMenu>  treeItemDB = 
+			new TreeItem<>( new AppSettingMenu( langRB.getString( "ITEM_DB" ), AppSettingMenu.APPSET_TYPE.TYPE_DB ) );
+		TreeItem<AppSettingMenu>  treeItemDBPostgreSQL = 
+				new TreeItem<>( new AppSettingMenu( langRB.getString( "ITEM_DB_POSTGRESQL" ), AppSettingMenu.APPSET_TYPE.TYPE_DB_POSTGRESQL ) );
+		TreeItem<AppSettingMenu>  treeItemGeneral = 
+			new TreeItem<>( new AppSettingMenu( langRB.getString( "ITEM_GENERAL" ), AppSettingMenu.APPSET_TYPE.TYPE_GENERAL ) );
 
 		treeItemRoot.getChildren().add( treeItemDB );
 		treeItemDB.getChildren().add( treeItemDBPostgreSQL );
@@ -69,7 +69,7 @@ public class AppSettingDialog extends Dialog<Boolean>
         paneDlg.setLeft( this.treeViewConf );
         
         PaneFactory paneFactory = new AppPaneFactory();
-        AppPaneAbstract appPaneAbs = paneFactory.createPane( AppSettingEntity.APPSET_TYPE.TYPE_DB, this, this.mainCtrl, this.langRB );
+        AppPaneAbstract appPaneAbs = paneFactory.createPane( AppSettingMenu.APPSET_TYPE.TYPE_DB, this, this.mainCtrl, this.langRB );
         paneDlg.setCenter( appPaneAbs );
 		
 		// set pane on dialog

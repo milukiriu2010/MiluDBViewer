@@ -1,4 +1,4 @@
-package milu.ctrl;
+package milu.gui.ctrl.common;
 
 import milu.db.MyDBAbstract;
 
