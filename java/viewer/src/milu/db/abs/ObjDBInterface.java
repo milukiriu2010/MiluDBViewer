@@ -14,4 +14,7 @@ public interface ObjDBInterface
 	public List<SchemaEntity> selectEntityLst( String objName ) throws SQLException;
 	
 	public List<Map<String,String>> selectDefinition( String schemaName, String objName ) throws SQLException;
+	
+	// Source of Function
+	public String getSRC( String schemaName, String objName ) throws SQLException;
 }

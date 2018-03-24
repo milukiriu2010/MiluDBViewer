@@ -9,6 +9,7 @@ import javafx.scene.control.TabPane;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.AnchorPane;
 import javafx.geometry.Orientation;
 
 import milu.db.MyDBAbstract;
@@ -39,6 +40,10 @@ public class DBSchemaTab extends Tab
 	private ResourceBundle langRB = ResourceBundle.getBundle( PROPERTY_FILENAME );
 	
 	private DBView          dbView = null;
+	
+	// upper pane on SplitPane
+	private AnchorPane      upperPane = new AnchorPane();
+	
 	private SchemaTreeView  schemaTreeView = null;
 	private TabPane         tabPane = null;
 	
@@ -56,10 +61,17 @@ public class DBSchemaTab extends Tab
 		//DraggingTabPaneSupport  dragSupport = new DraggingTabPaneSupport();
 		//dragSupport.addSupport( this.tabPane );
 		
+		this.upperPane.getChildren().add( this.schemaTreeView );
+		this.schemaTreeView.init();
+		AnchorPane.setTopAnchor( this.schemaTreeView, 0.0 );
+		AnchorPane.setBottomAnchor( this.schemaTreeView, 0.0 );
+		AnchorPane.setLeftAnchor( this.schemaTreeView, 0.0 );
+		AnchorPane.setRightAnchor( this.schemaTreeView, 0.0 );
 		
 		SplitPane splitPane = new SplitPane();
 		splitPane.setOrientation(Orientation.VERTICAL);
-		splitPane.getItems().addAll( this.schemaTreeView, this.tabPane );
+		//splitPane.getItems().addAll( this.schemaTreeView, this.tabPane );
+		splitPane.getItems().addAll( this.upperPane, this.tabPane );
 		splitPane.setDividerPositions( 0.5f, 0.5f );
 		
 		BorderPane brdPane = new BorderPane();

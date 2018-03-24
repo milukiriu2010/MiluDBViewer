@@ -7,7 +7,6 @@ import java.sql.SQLException;
 import javafx.concurrent.Task;
 
 import milu.db.MyDBAbstract;
-import milu.db.func.FuncDBFactory;
 import milu.db.aggregate.AggregateDBFactory;
 import milu.db.mateview.MaterializedViewDBFactory;
 import milu.db.packagebody.PackageBodyDBFactory;
@@ -160,7 +159,8 @@ public class CollectTask extends Task<Double>
 			SchemaEntity rootMaterializedViewEntity = SchemaEntityFactory.createInstance( SchemaEntity.SCHEMA_TYPE.ROOT_MATERIALIZED_VIEW );
 			schemaEntity.addEntity( rootMaterializedViewEntity );
 		}
-		if ( FuncDBFactory.getInstance(myDBAbs) != null )
+		ObjDBFactory funcDBFactory = AbsDBFactory.getFactory( AbsDBFactory.FACTORY_TYPE.FUNC );
+		if ( funcDBFactory.getInstance(myDBAbs) != null )
 		{
 			SchemaEntity rootFuncEntity             = SchemaEntityFactory.createInstance( SchemaEntity.SCHEMA_TYPE.ROOT_FUNC );
 			schemaEntity.addEntity( rootFuncEntity );

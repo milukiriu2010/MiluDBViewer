@@ -143,6 +143,9 @@ abstract public class SchemaEntity
 	// (4) DEFAULT
 	protected List<Map<String,String>>  definitionLst = new ArrayList<>();
 	
+	// parent
+	protected SchemaEntity        parentEntity = null;
+	
 	// children
 	protected List<SchemaEntity>  entityLst = new ArrayList<>();
 	
@@ -250,19 +253,41 @@ abstract public class SchemaEntity
 		this.imageResourceName = imageResourceName;
 	}
 	
+	// get parent
+	public SchemaEntity getParentEntity()
+	{
+		return this.parentEntity;
+	}
+	
+	public void setParentEntity( SchemaEntity parentEntity )
+	{
+		this.parentEntity = parentEntity;
+	}
+	
+	// get children
 	public List<SchemaEntity> getEntityLst()
 	{
 		return this.entityLst;
 	}
 	
+	// add child
 	public void addEntity( SchemaEntity schemaEntity )
 	{
 		this.entityLst.add( schemaEntity );
+		schemaEntity.setParentEntity(this);
 	}
 	
+	// add children
 	public void addEntityAll( Collection<? extends SchemaEntity> schemaEntityLst )
 	{
 		this.entityLst.addAll( schemaEntityLst );
+		schemaEntityLst.forEach( (schemaEntity)->schemaEntity.setParentEntity(this) );
+	}
+	
+	// del children
+	public void delEntityAll()
+	{
+		this.entityLst.removeAll( this.entityLst );
 	}
 	
 	public void accept( VisitorInterface visitor )

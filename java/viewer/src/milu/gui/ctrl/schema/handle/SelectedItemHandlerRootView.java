@@ -62,23 +62,27 @@ public class SelectedItemHandlerRootView extends SelectedItemHandlerAbstract
 			UnsupportedOperationException, 
 			SQLException
 	{
+		SchemaEntity selectedEntity = this.itemSelected.getValue();
 		TreeItem<SchemaEntity> itemParent   = this.itemSelected.getParent();
 		ObservableList<TreeItem<SchemaEntity>> itemChildren = this.itemSelected.getChildren();
 		
 		// get View List & add list as children
 		if ( itemChildren.size() == 0 )
 		{
-			String schema = itemParent.getValue().toString();
-			ViewDBAbstract viewDBAbs = ViewDBFactory.getInstance(myDBAbs);
-			if ( viewDBAbs != null )
+			if ( selectedEntity.getEntityLst().size() == 0 )
 			{
-				/*
-				viewDBAbs.selectViewLst( schema );
-				List<Map<String,String>> dataLst = viewDBAbs.getDataLst();
-				this.schemaTreeView.setViewData( itemSelected, dataLst );
-				*/
-				List<SchemaEntity> viewEntityLst = viewDBAbs.selectEntityLst( schema );
-				this.schemaTreeView.addEntityLst( itemSelected, viewEntityLst );
+				String schema = itemParent.getValue().toString();
+				ViewDBAbstract viewDBAbs = ViewDBFactory.getInstance(myDBAbs);
+				if ( viewDBAbs != null )
+				{
+					List<SchemaEntity> viewEntityLst = viewDBAbs.selectEntityLst( schema );
+					selectedEntity.addEntityAll(viewEntityLst);
+					this.schemaTreeView.addEntityLst( itemSelected, viewEntityLst );
+				}
+			}
+			else
+			{
+				this.schemaTreeView.addEntityLst( itemSelected, selectedEntity.getEntityLst() );
 			}
 		}
 		

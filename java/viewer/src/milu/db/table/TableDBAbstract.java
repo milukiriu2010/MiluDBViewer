@@ -60,4 +60,10 @@ public abstract class TableDBAbstract implements ObjDBInterface
 	
 	// SQL for Table Definition
 	abstract protected String definitionSQL( String schemaName, String tableName );
+	
+	@Override
+	public String getSRC( String schemaName, String objName ) throws SQLException
+	{
+		throw new UnsupportedOperationException();
+	}
 }

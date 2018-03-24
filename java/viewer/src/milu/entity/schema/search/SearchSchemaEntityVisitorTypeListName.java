@@ -1,0 +1,66 @@
+package milu.entity.schema.search;
+
+import java.util.List;
+
+import milu.entity.schema.SchemaEntity;
+
+public class SearchSchemaEntityVisitorTypeListName 
+	implements 
+		VisitorInterface, 
+		SearchSchemaEntityInterface 
+{
+	private List<SchemaEntity.SCHEMA_TYPE> searchSchemaTypeLst = null;
+	
+	private String  searchName = null;
+	
+	private SchemaEntity hitSchemaEntity = null;
+	
+	public SearchSchemaEntityVisitorTypeListName( List<SchemaEntity.SCHEMA_TYPE> searchSchemaTypeLst, String  searchName )
+	{
+		this.searchSchemaTypeLst = searchSchemaTypeLst;
+		this.searchName       = searchName;
+	}
+	
+	@Override
+	public SchemaEntity getHitSchemaEntity()
+	{
+		return this.hitSchemaEntity;
+	}
+	
+	@Override
+	public void visit(SchemaEntity schemaEntity) 
+	{
+		if ( schemaEntity == null )
+		{
+			return;
+		}
+		
+		SchemaEntity.SCHEMA_TYPE schemaType = schemaEntity.getType();
+		String name = schemaEntity.getName();
+		if ( ( this.searchSchemaTypeLst.contains(schemaType) ) && name.equals(this.searchName) )
+		{
+			this.hitSchemaEntity = schemaEntity;
+			return;
+		}
+		else if ( ( this.searchSchemaTypeLst.contains(schemaType) ) && name.equals(this.searchName.toUpperCase()) )
+		{
+			this.hitSchemaEntity = schemaEntity;
+			return;
+		}
+		else if ( ( this.searchSchemaTypeLst.contains(schemaType) ) && name.equals(this.searchName.toLowerCase()) )
+		{
+			this.hitSchemaEntity = schemaEntity;
+			return;
+		}
+		
+		for ( SchemaEntity child : schemaEntity.getEntityLst() )
+		{
+			this.visit( child );
+			if ( this.hitSchemaEntity != null )
+			{
+				return;
+			}
+		}
+	}
+
+}

@@ -7,9 +7,9 @@ import javafx.scene.control.Tab;
 import javafx.scene.control.TreeItem;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-
-import milu.db.func.FuncDBAbstract;
-import milu.db.func.FuncDBFactory;
+import milu.db.abs.AbsDBFactory;
+import milu.db.abs.ObjDBFactory;
+import milu.db.abs.ObjDBInterface;
 import milu.entity.schema.SchemaEntity;
 import milu.gui.ctrl.schema.SchemaProcViewTab;
 
@@ -70,16 +70,12 @@ public class SelectedItemHandlerRootFunc extends SelectedItemHandlerAbstract
 		// get View List & add list as children
 		if ( itemChildren.size() == 0 )
 		{
-			/*
-			String schema = itemParent.getValue().toString();
-			List<List<String>> dataLst = myDBAbs.getSchemaFunc( schema );
-			this.schemaTreeView.setFuncData( itemSelected, dataLst );
-			*/
-			FuncDBAbstract funcDBAbs = FuncDBFactory.getInstance(myDBAbs);
-			if ( funcDBAbs != null )
+			ObjDBFactory objDBFactory = AbsDBFactory.getFactory( AbsDBFactory.FACTORY_TYPE.FUNC );
+			ObjDBInterface objDBInf = objDBFactory.getInstance(myDBAbs);
+			if ( objDBInf != null )
 			{
 				String schemaName = itemParent.getValue().toString();
-				List<SchemaEntity> funcEntityLst = funcDBAbs.selectEntityLst(schemaName);
+				List<SchemaEntity> funcEntityLst = objDBInf.selectEntityLst(schemaName);
 				this.schemaTreeView.addEntityLst( itemSelected, funcEntityLst );
 			}
 		}

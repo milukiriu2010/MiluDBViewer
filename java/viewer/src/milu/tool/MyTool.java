@@ -6,14 +6,15 @@ import java.io.StringWriter;
 import java.util.Collections;
 
 import javafx.geometry.Bounds;
+import javafx.geometry.Orientation;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.shape.Path;
 import javafx.scene.layout.AnchorPane;
-//import javafx.scene.control.skin.TabPaneSkin;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollBar;
 
 public class MyTool
 {
@@ -128,6 +129,26 @@ public class MyTool
 			}
 		}
 		return null;
+	}
+	
+	// https://stackoverflow.com/questions/24810197/how-to-know-if-a-scroll-bar-is-visible-on-a-javafx-tableview
+	public static ScrollBar getScrollBarVertical( Node node )
+	{
+		ScrollBar result = null;
+		
+		for ( Node n: node.lookupAll(".scroll-bar") )
+		{
+			if ( n instanceof ScrollBar )
+			{
+				ScrollBar bar = (ScrollBar)n;
+				if ( bar.getOrientation().equals(Orientation.VERTICAL) )
+				{
+					result = bar;
+				}
+			}
+		}
+		
+		return result;
 	}
 	
 	public static String findTabText(Node node,Node checkNode) 

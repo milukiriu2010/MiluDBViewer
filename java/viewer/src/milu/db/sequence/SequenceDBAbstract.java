@@ -32,4 +32,10 @@ public abstract class SequenceDBAbstract implements ObjDBInterface
 	{
 		throw new UnsupportedOperationException();
 	}
+		
+	@Override
+	public String getSRC( String schemaName, String objName ) throws SQLException
+	{
+		throw new UnsupportedOperationException();
+	}
 }

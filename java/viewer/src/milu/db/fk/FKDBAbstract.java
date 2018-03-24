@@ -47,5 +47,11 @@ public abstract class FKDBAbstract implements ObjDBInterface
 	public List<Map<String,String>> selectDefinition( String schemaName, String objName ) throws SQLException
 	{
 		throw new UnsupportedOperationException();
-	}	
+	}
+	
+	@Override
+	public String getSRC( String schemaName, String objName ) throws SQLException
+	{
+		throw new UnsupportedOperationException();
+	}
 }

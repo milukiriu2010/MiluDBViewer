@@ -80,6 +80,8 @@ public class FKDBPostgres extends FKDBAbstract
 			"  and \n" +
 			"  acs2.unique_constraint_name = acd.constraint_name \n"        +
 			"where \n" +
+			"  acs1.constraint_schema = '" + schemaName + "' \n" +
+			"  and \n" +
 			"  acs1.constraint_type = 'FOREIGN KEY' \n" +
 			"order by acs1.constraint_name";				
 				

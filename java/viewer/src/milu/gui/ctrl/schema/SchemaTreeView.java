@@ -7,15 +7,22 @@ import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.Label;
+import javafx.scene.control.ScrollBar;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.shape.Line;
 import javafx.scene.Group;
 import javafx.scene.effect.Blend;
 import javafx.scene.effect.BlendMode;
 import javafx.collections.ObservableList;
 import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.binding.Bindings;
+
 import milu.gui.ctrl.common.ChangeLangInterface;
 import milu.gui.view.DBView;
+import milu.tool.MyTool;
 import milu.ctrl.MainController;
 import milu.entity.schema.SchemaEntity;
 
@@ -36,6 +43,12 @@ public class SchemaTreeView extends TreeView<SchemaEntity>
 	// Root Item of this Tree
 	private TreeItem<SchemaEntity> item0Root = null;
 	
+	// Parent pane of this class
+	private AnchorPane    parentPane = null;
+	
+	// children count of selected item
+	private Label lblChildrenCnt = new Label("0");
+	
 	public SchemaTreeView( DBView dbView )
 	{
 		super();
@@ -54,10 +67,58 @@ public class SchemaTreeView extends TreeView<SchemaEntity>
 				//TreeItem<SchemaEntity> itemChanged = (TreeItem<SchemaEntity>)newVal;
 				//System.out.println( "SchemaTreeView itemChanged:" + itemChanged.getValue() );
 				dbView.Go();
+				// children count of selected item
+				this.lblChildrenCnt.textProperty().bind
+				(
+					Bindings.convert
+					(
+						new SimpleIntegerProperty( newVal.getChildren().size() )
+					)
+				);
+				
+				// shift label position
+				// -------------------------------------------------------
+				// vertical scrollbar invisible => margin 0
+				// vertical scrollbar visible   => margin scrollbar width
+				ScrollBar scrollBarVertical = MyTool.getScrollBarVertical(this);
+				if ( scrollBarVertical != null )
+				{
+					scrollBarVertical.visibleProperty().addListener
+					(
+						(obs2,oldVal2,newVal2)->
+						{
+							if ( newVal2 == true )
+							{
+								AnchorPane.setRightAnchor( this.lblChildrenCnt, scrollBarVertical.getWidth() );
+							}
+							else
+							{
+								AnchorPane.setRightAnchor( this.lblChildrenCnt, 0.0 );
+							}
+						}
+					);
+				}
 			}
 		);
 		
 		this.setContextMenu();
+	}
+	
+	/**
+	 *  Call after this class added on AnchorPane
+	 */
+	public void init()
+	{
+		this.parentPane = MyTool.findAnchorPane( this );
+		if ( this.parentPane != null )
+		{
+			this.parentPane.getChildren().add( this.lblChildrenCnt );
+			AnchorPane.setTopAnchor( this.lblChildrenCnt, 0.0 );
+			//AnchorPane.setBottomAnchor( this.lblChildrenCnt, 0.0 );
+			//AnchorPane.setLeftAnchor( this.lblChildrenCnt, 0.0 );
+			AnchorPane.setRightAnchor( this.lblChildrenCnt, 0.0 );
+			
+		}
 	}
 	
 	private void setContextMenu()
@@ -85,9 +146,12 @@ public class SchemaTreeView extends TreeView<SchemaEntity>
 						this.dbView.Refresh();
 						break;
 					default:
-						// remove children & refresh
+						// remove children on TreeView
 						ObservableList<TreeItem<SchemaEntity>>  itemChildren2 = itemSelected.getChildren();
 						itemSelected.getChildren().removeAll( itemChildren2 );
+						// remove children of selected SchemaEntity
+						scEnt.delEntityAll();
+						// refresh
 						this.dbView.Refresh();
 						break;
 				}
@@ -107,6 +171,7 @@ public class SchemaTreeView extends TreeView<SchemaEntity>
 					// do not show ContextMenu when these items are selected.
 					case ROOT:
 					case SCHEMA:
+					case ROOT_TABLE:
 					//case INDEX:
 					case INDEX_COLUMN:
 					case ROOT_SYSTEM_VIEW:

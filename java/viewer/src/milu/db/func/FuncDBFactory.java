@@ -1,14 +1,17 @@
 package milu.db.func;
 
+import milu.db.abs.ObjDBInterface;
+import milu.db.abs.ObjDBFactory;
+
 import milu.db.MyDBAbstract;
 import milu.db.MyDBPostgres;
 import milu.db.MyDBMySQL;
 import milu.db.MyDBOracle;
 import milu.db.MyDBCassandra;
 
-public class FuncDBFactory 
+public class FuncDBFactory implements ObjDBFactory
 {
-	public static FuncDBAbstract getInstance( MyDBAbstract myDBAbs )
+	public ObjDBInterface getInstance( MyDBAbstract myDBAbs )
 	{
 		FuncDBAbstract funcDBAbs = null;
 		if ( myDBAbs instanceof MyDBPostgres )

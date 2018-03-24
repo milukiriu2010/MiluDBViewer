@@ -42,6 +42,9 @@ public class ExplainDBPostgres
 					"format "  + explainFormat  + 
 					")" + 
 					sql;
+			System.out.println( " -- explain(postgres) -------------" );
+			System.out.println( sqlExplain );
+			System.out.println( " ----------------------------------" );
 			rs   = stmt.executeQuery( sqlExplain );
 			
 			// Get Column Attribute

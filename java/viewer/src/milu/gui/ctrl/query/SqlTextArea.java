@@ -6,6 +6,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Font;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -41,10 +42,8 @@ public class SqlTextArea extends TextArea
 	
 	private StringBuffer  sbOnTheWay = new StringBuffer();
 	
+	// Parent pane of this class
 	private AnchorPane    parentPane = null;
-	
-	// Schema List, analzed by jsqlparser
-	private List<String>  schemaLst = new ArrayList<>();
 	
 	// Table List, analyzed by jsqlparser
 	private List<String>  tableLst = new ArrayList<>();
@@ -205,7 +204,6 @@ public class SqlTextArea extends TextArea
 					sqlParse.setStrSQL( this.getSQL() );
 					sqlParse.parse();
 					
-					this.schemaLst = sqlParse.getSchemaLst();
 					this.tableLst  = sqlParse.getTableLst();
 					this.aliasMap  = sqlParse.getAliasMap();
 				}
@@ -398,13 +396,17 @@ public class SqlTextArea extends TextArea
 		System.out.println( "strAfterSpace[" + strAfterSpace + "]" );
 		// "user_data.a" => "user_data"
 		// "user_data "  => "user_data"
-		this.strLastWord = strAfterSpace.replaceAll("(\\s|\\..*$)", "" );
+		//this.strLastWord = strAfterSpace.replaceAll("(\\s|\\..*$)", "" );
+		
+		// "user_data "  => "user_data"
+		this.strLastWord = strAfterSpace.replaceAll("\\s+$", "" );
 		System.out.println( "extractLastWord[" + this.strLastWord + "]" );
 	}
 	
 	private boolean resetComboBox()
 	{
-		System.out.println( "resetComoboBox start." );
+		System.out.println( "resetComboBox start." );
+		/*
 		String tableName = null;
 		if ( this.aliasMap.containsKey(this.strLastWord) )
 		{
@@ -421,9 +423,53 @@ public class SqlTextArea extends TextArea
 			return false;
 		}
 		System.out.println( "Search Table=>" + tableName );
+		*/
+		
+		
+		// "information_schema.tables" 
+		//   0 => "information_schema"
+		//   1 => "tables"
+		String[] splitLastWord = this.strLastWord.split("\\.");
+		String tableNameComp = null;
+		if ( splitLastWord.length == 0 )
+		{
+			System.out.println( "no word" );
+			this.hints.removeAll( this.hints );
+			return false;
+		}
+		else if ( splitLastWord.length >= 1 )
+		{
+			tableNameComp = splitLastWord[splitLastWord.length-1];
+		}
+		
+		String tableName = null;
+		if ( this.aliasMap.containsKey(tableNameComp) )
+		{
+			tableName = this.aliasMap.get(tableNameComp);
+		}
+		else if ( this.tableLst.contains(tableNameComp) )
+		{
+			tableName = tableNameComp;
+		}
+		else
+		{
+			System.out.println( "no table/alias" );
+			this.hints.removeAll( this.hints );
+			return false;
+		}
+		System.out.println( "Search Table=>" + tableName );
 		
 		MyDBAbstract myDBAbs = this.dbView.getMyDBAbstract();
-		SearchSchemaEntityInterface sseVisitorTN = new SearchSchemaEntityVisitorFactory().createInstance(SchemaEntity.SCHEMA_TYPE.TABLE, tableName);
+		//SearchSchemaEntityInterface sseVisitorTN = new SearchSchemaEntityVisitorFactory().createInstance(SchemaEntity.SCHEMA_TYPE.TABLE, tableName);
+		List<SchemaEntity.SCHEMA_TYPE> schemaTypeLst = 
+			Arrays.asList
+			( 
+				SchemaEntity.SCHEMA_TYPE.TABLE,
+				SchemaEntity.SCHEMA_TYPE.VIEW,
+				SchemaEntity.SCHEMA_TYPE.SYSTEM_VIEW,
+				SchemaEntity.SCHEMA_TYPE.MATERIALIZED_VIEW
+			);
+		SearchSchemaEntityInterface sseVisitorTN = new SearchSchemaEntityVisitorFactory().createInstance( schemaTypeLst, tableName );
 		myDBAbs.getSchemaRoot().accept(sseVisitorTN);
 		SchemaEntity hitEntity = sseVisitorTN.getHitSchemaEntity();
 		if ( hitEntity == null )

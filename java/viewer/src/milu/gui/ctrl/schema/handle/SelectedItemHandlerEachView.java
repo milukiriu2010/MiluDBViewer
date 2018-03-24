@@ -53,6 +53,7 @@ public class SelectedItemHandlerEachView extends SelectedItemHandlerAbstract
 			UnsupportedOperationException, 
 			SQLException
 	{
+		SchemaEntity selectedEntity = this.itemSelected.getValue();
 		TreeItem<SchemaEntity> itemParent   = this.itemSelected.getParent();
 		String schemaName = itemParent.getParent().getValue().toString();
 		String viewName   = itemSelected.getValue().getName();
@@ -97,12 +98,21 @@ public class SelectedItemHandlerEachView extends SelectedItemHandlerAbstract
 		newTab.setGraphic( iv );
 		
 		// get view definition
-		ViewDBAbstract viewDBAbs = ViewDBFactory.getInstance(myDBAbs);
-		if ( viewDBAbs == null )
+		List<Map<String,String>> dataLst = null;
+		if ( selectedEntity.getDefinitionLst().size() == 0 )
 		{
-			return;
+			ViewDBAbstract viewDBAbs = ViewDBFactory.getInstance(myDBAbs);
+			if ( viewDBAbs == null )
+			{
+				return;
+			}
+			dataLst = viewDBAbs.selectDefinition(schemaName, viewName );
+			selectedEntity.setDefinitionlst(dataLst);
 		}
-		List<Map<String,String>> dataLst = viewDBAbs.selectDefinition(schemaName, viewName );
+		else
+		{
+			dataLst = selectedEntity.getDefinitionLst();
+		}
 		
 		// table header
 		List<String> headLst = new ArrayList<String>();

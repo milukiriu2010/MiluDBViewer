@@ -63,4 +63,10 @@ public abstract class SchemaDBAbstract implements ObjDBInterface
 	{
 		throw new UnsupportedOperationException();
 	}
+	
+	@Override
+	public String getSRC( String schemaName, String funcName ) throws SQLException
+	{
+		throw new UnsupportedOperationException();
+	}
 }

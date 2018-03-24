@@ -55,6 +55,7 @@ public class SelectedItemHandlerEachMaterializedView extends SelectedItemHandler
 			UnsupportedOperationException, 
 			SQLException
 	{
+		SchemaEntity selectedEntity = this.itemSelected.getValue();
 		TreeItem<SchemaEntity> itemParent   = this.itemSelected.getParent();
 		String schemaName           = itemParent.getParent().getValue().toString();
 		String materializedViewName = itemSelected.getValue().getName();
@@ -105,6 +106,7 @@ public class SelectedItemHandlerEachMaterializedView extends SelectedItemHandler
 			return;
 		}
 		List<Map<String,String>> dataLst = mateViewDBAbs.selectDefinition( schemaName, materializedViewName );
+		selectedEntity.setDefinitionlst(dataLst);
 		
 		// table header
 		List<String> headLst = new ArrayList<String>();
