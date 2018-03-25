@@ -2,6 +2,7 @@ package milu.db.abs;
 
 import milu.db.schema.SchemaDBFactory;
 import milu.db.table.TableDBFactory;
+import milu.db.sysview.SystemViewDBFactory;
 import milu.db.func.FuncDBFactory;
 import milu.db.sequence.SequenceDBFactory;
 import milu.db.fk.FKDBFactory;
@@ -12,6 +13,7 @@ public class AbsDBFactory
 	{
 		SCHEMA,
 		TABLE,
+		SYSTEM_VIEW,
 		FUNC,
 		SEQUENCE,
 		FOREIGN_KEY
@@ -26,6 +28,10 @@ public class AbsDBFactory
 		else if ( factoryType == FACTORY_TYPE.TABLE )
 		{
 			return new TableDBFactory();
+		}
+		else if ( factoryType == FACTORY_TYPE.SYSTEM_VIEW )
+		{
+			return new SystemViewDBFactory();
 		}
 		else if ( factoryType == FACTORY_TYPE.FUNC )
 		{

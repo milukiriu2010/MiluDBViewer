@@ -132,6 +132,10 @@ public class DBView extends Stage
 		);
 		scene.getStylesheets().add
 		(
+			getClass().getResource("/conf/css/ctrl/schema/SchemaTreeView.css").toExternalForm()
+		);
+		scene.getStylesheets().add
+		(
 			getClass().getResource("/conf/css/ctrl/schema/SchemaERView.css").toExternalForm()
 		);
         this.setScene(scene);

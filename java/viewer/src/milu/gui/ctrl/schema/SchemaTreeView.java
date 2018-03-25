@@ -47,13 +47,15 @@ public class SchemaTreeView extends TreeView<SchemaEntity>
 	private AnchorPane    parentPane = null;
 	
 	// children count of selected item
-	private Label lblChildrenCnt = new Label("0");
+	private Label lblChildrenCnt = new Label("");
 	
 	public SchemaTreeView( DBView dbView )
 	{
 		super();
 		
 		this.dbView = dbView;
+		
+		this.lblChildrenCnt.getStyleClass().add("SchemaTreeView_LabelChildrenCount");
 		
 		// When the selected item is changed & the item doesn't have children,
 		// call "Exec Query" to get children items.
@@ -80,26 +82,11 @@ public class SchemaTreeView extends TreeView<SchemaEntity>
 				// -------------------------------------------------------
 				// vertical scrollbar invisible => margin 0
 				// vertical scrollbar visible   => margin scrollbar width
-				ScrollBar scrollBarVertical = MyTool.getScrollBarVertical(this);
-				if ( scrollBarVertical != null )
-				{
-					scrollBarVertical.visibleProperty().addListener
-					(
-						(obs2,oldVal2,newVal2)->
-						{
-							if ( newVal2 == true )
-							{
-								AnchorPane.setRightAnchor( this.lblChildrenCnt, scrollBarVertical.getWidth() );
-							}
-							else
-							{
-								AnchorPane.setRightAnchor( this.lblChildrenCnt, 0.0 );
-							}
-						}
-					);
-				}
+				this.shiftLabelChildrenCountPosition();
+				
 			}
 		);
+		
 		
 		this.setContextMenu();
 	}
@@ -216,6 +203,42 @@ public class SchemaTreeView extends TreeView<SchemaEntity>
 		*/
 	}
 	
+	// shift label position
+	// -------------------------------------------------------
+	// vertical scrollbar invisible => margin 0
+	// vertical scrollbar visible   => margin scrollbar width
+	private void shiftLabelChildrenCountPosition()
+	{
+		ScrollBar scrollBarVertical = MyTool.getScrollBarVertical(this);
+		if ( scrollBarVertical != null )
+		{
+			System.out.println( "SchemaTreeView:ScrollBar Found." );
+			AnchorPane.setRightAnchor( this.lblChildrenCnt, scrollBarVertical.getWidth() );
+			// "visibleProperty" doesn't work on some PC.
+			scrollBarVertical.visibleProperty().addListener
+			(
+				(obs2,oldVal2,newVal2)->
+				{
+					if ( newVal2 == true )
+					{
+						System.out.println( "SchemaTreeView:ScrollBar Found - visible." );
+						AnchorPane.setRightAnchor( this.lblChildrenCnt, scrollBarVertical.getWidth() );
+					}
+					else
+					{
+						System.out.println( "SchemaTreeView:ScrollBar Found - invisible." );
+						AnchorPane.setRightAnchor( this.lblChildrenCnt, 0.0 );
+					}
+				}
+			);
+		}
+		else
+		{
+			System.out.println( "SchemaTreeView:ScrollBar not Found." );
+		}
+		
+	}
+	
 	@SuppressWarnings("unchecked")
 	private TreeItem<SchemaEntity> addItem
 		( TreeItem<SchemaEntity>   itemParent, 
@@ -264,8 +287,14 @@ public class SchemaTreeView extends TreeView<SchemaEntity>
 		        if ( obj instanceof TreeItem )
 		        {
 		        	TreeItem<SchemaEntity> itemTarget = (TreeItem<SchemaEntity>)obj;
+		        	// itemTarget is on top of TreeView
 		        	scrollBack( itemTarget );
 		        }
+				// shift label position
+				// -------------------------------------------------------
+				// vertical scrollbar invisible => margin 0
+				// vertical scrollbar visible   => margin scrollbar width
+				this.shiftLabelChildrenCountPosition();
 		    }
 		);
 		

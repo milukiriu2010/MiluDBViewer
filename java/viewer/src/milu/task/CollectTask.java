@@ -14,7 +14,6 @@ import milu.db.packagedef.PackageDefDBFactory;
 import milu.db.proc.ProcDBFactory;
 import milu.db.type.TypeDBFactory;
 import milu.db.view.ViewDBFactory;
-import milu.db.sysview.SystemViewDBFactory;
 import milu.db.trigger.TriggerDBFactory;
 
 import milu.db.abs.AbsDBFactory;
@@ -149,7 +148,8 @@ public class CollectTask extends Task<Double>
 			SchemaEntity rootViewEntity         = SchemaEntityFactory.createInstance( SchemaEntity.SCHEMA_TYPE.ROOT_VIEW );
 			schemaEntity.addEntity( rootViewEntity );
 		}
-		if ( SystemViewDBFactory.getInstance(myDBAbs) != null )
+		ObjDBFactory systemViewDBFactory = AbsDBFactory.getFactory( AbsDBFactory.FACTORY_TYPE.SYSTEM_VIEW );
+		if ( systemViewDBFactory.getInstance(myDBAbs) != null )
 		{
 			SchemaEntity rootSystemViewEntity         = SchemaEntityFactory.createInstance( SchemaEntity.SCHEMA_TYPE.ROOT_SYSTEM_VIEW );
 			schemaEntity.addEntity( rootSystemViewEntity );

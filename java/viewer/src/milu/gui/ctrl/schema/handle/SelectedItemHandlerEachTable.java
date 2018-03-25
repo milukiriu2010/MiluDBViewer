@@ -114,6 +114,7 @@ public class SelectedItemHandlerEachTable extends SelectedItemHandlerAbstract
 				return;
 			}
 			dataLst = tableDBAbs.selectDefinition(schemaName, tableName);
+			selectedEntity.setDefinitionlst(dataLst);
 		}
 		
 		// table header

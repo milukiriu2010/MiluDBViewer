@@ -31,18 +31,6 @@ import milu.db.view.ViewDBAbstract;
  */
 public class SelectedItemHandlerRootView extends SelectedItemHandlerAbstract
 {
-	/*
-	public SelectedItemHandlerRootView
-	( 
-		SchemaTreeView schemaTreeView, 
-		TabPane        tabPane,
-		MyDBAbstract   myDBAbs,
-		SelectedItemHandlerAbstract.REFRESH_TYPE  refreshType
-	)
-	{
-		super( schemaTreeView, tabPane, myDBAbs, refreshType );
-	}
-	*/
 	@Override
 	protected boolean isMyResponsible()
 	{

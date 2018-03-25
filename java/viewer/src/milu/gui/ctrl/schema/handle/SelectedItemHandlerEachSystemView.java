@@ -9,9 +9,9 @@ import javafx.scene.control.Tab;
 import javafx.scene.control.TreeItem;
 import javafx.scene.image.ImageView;
 import javafx.collections.ObservableList;
-
-import milu.db.sysview.SystemViewDBAbstract;
-import milu.db.sysview.SystemViewDBFactory;
+import milu.db.abs.AbsDBFactory;
+import milu.db.abs.ObjDBFactory;
+import milu.db.abs.ObjDBInterface;
 import milu.entity.schema.SchemaEntity;
 import milu.gui.ctrl.schema.SchemaTableViewTab;
 import milu.ctrl.MainController;
@@ -100,13 +100,22 @@ public class SelectedItemHandlerEachSystemView extends SelectedItemHandlerAbstra
 		newTab.setGraphic( iv );
 		
 		// get view definition
-		SystemViewDBAbstract sysViewDBAbs = SystemViewDBFactory.getInstance(myDBAbs);
-		if ( sysViewDBAbs == null )
+		List<Map<String,String>>  dataLst = selectedEntity.getDefinitionLst();
+		if ( dataLst.size() == 0 )
 		{
-			return;
+			ObjDBFactory systemViewDBFactory = AbsDBFactory.getFactory( AbsDBFactory.FACTORY_TYPE.SYSTEM_VIEW );
+			if ( systemViewDBFactory == null )
+			{
+				return;
+			}
+			ObjDBInterface systemViewDBAbs = systemViewDBFactory.getInstance(myDBAbs);
+			if ( systemViewDBAbs == null )
+			{
+				return;
+			}
+			dataLst = systemViewDBAbs.selectDefinition(schameName, systemViewName);
+			selectedEntity.setDefinitionlst(dataLst);
 		}
-		List<Map<String,String>>  dataLst = sysViewDBAbs.selectDefinition(schameName, systemViewName);
-		selectedEntity.setDefinitionlst(dataLst);
 		
 		// table header
 		List<String> headLst = new ArrayList<String>();

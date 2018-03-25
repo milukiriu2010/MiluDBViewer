@@ -7,9 +7,9 @@ import javafx.scene.control.Tab;
 import javafx.scene.control.TreeItem;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-
-import milu.db.sysview.SystemViewDBAbstract;
-import milu.db.sysview.SystemViewDBFactory;
+import milu.db.abs.AbsDBFactory;
+import milu.db.abs.ObjDBFactory;
+import milu.db.abs.ObjDBInterface;
 import milu.entity.schema.SchemaEntity;
 import milu.gui.ctrl.schema.SchemaTableViewTab;
 
@@ -35,18 +35,6 @@ import milu.gui.ctrl.schema.SchemaTableViewTab;
  */
 public class SelectedItemHandlerRootSystemView extends SelectedItemHandlerAbstract
 {
-	/*
-	public SelectedItemHandlerRootSystemView
-	( 
-		SchemaTreeView schemaTreeView, 
-		TabPane        tabPane,
-		MyDBAbstract   myDBAbs,
-		SelectedItemHandlerAbstract.REFRESH_TYPE  refreshType
-	)
-	{
-		super( schemaTreeView, tabPane, myDBAbs, refreshType );
-	}
-	*/
 	@Override
 	protected boolean isMyResponsible()
 	{
@@ -66,23 +54,33 @@ public class SelectedItemHandlerRootSystemView extends SelectedItemHandlerAbstra
 			UnsupportedOperationException, 
 			SQLException
 	{
+		SchemaEntity selectedEntity = this.itemSelected.getValue();
 		TreeItem<SchemaEntity> itemParent   = this.itemSelected.getParent();
 		ObservableList<TreeItem<SchemaEntity>> itemChildren = this.itemSelected.getChildren();
 		
 		// get View List & add list as children
 		if ( itemChildren.size() == 0 )
 		{
-			/*
-			String schema = itemParent.getValue().toString();
-			List<List<String>> dataLst = myDBAbs.getSchemaSystemView( schema );
-			this.schemaTreeView.setSystemViewData( itemSelected, dataLst );
-			*/
-			SystemViewDBAbstract systemViewDBAbs = SystemViewDBFactory.getInstance(myDBAbs);
-			if ( systemViewDBAbs != null )
+			if ( selectedEntity.getEntityLst().size() == 0 )
 			{
+				ObjDBFactory systemViewDBFactory = AbsDBFactory.getFactory( AbsDBFactory.FACTORY_TYPE.SYSTEM_VIEW );
+				if ( systemViewDBFactory == null )
+				{
+					return;
+				}
+				ObjDBInterface systemViewDBAbs = systemViewDBFactory.getInstance(myDBAbs);
+				if ( systemViewDBAbs == null )
+				{
+					return;
+				}
 				String schemaName = itemParent.getValue().toString();
-				List<SchemaEntity> viewEntityLst = systemViewDBAbs.selectEntityLst(schemaName);
-				this.schemaTreeView.addEntityLst( itemSelected, viewEntityLst );
+				List<SchemaEntity> systemViewEntityLst = systemViewDBAbs.selectEntityLst(schemaName);
+				selectedEntity.addEntityAll(systemViewEntityLst);
+				this.schemaTreeView.addEntityLst( itemSelected, systemViewEntityLst );
+			}
+			else
+			{
+				this.schemaTreeView.addEntityLst( itemSelected, selectedEntity.getEntityLst() );
 			}
 		}
 		
