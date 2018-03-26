@@ -6,6 +6,7 @@ class AppSettingMenu
 	{
 		TYPE_ROOT,
 		TYPE_DB,
+		TYPE_DB_MYSQL,
 		TYPE_DB_ORACLE,
 		TYPE_DB_POSTGRESQL,
 		TYPE_GENERAL

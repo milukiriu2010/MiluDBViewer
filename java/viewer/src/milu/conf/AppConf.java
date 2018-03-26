@@ -11,6 +11,15 @@ final public class AppConf
 	// Max fetch rows when selecting.
 	private Integer fetchMax = 100;
 	
+	// MySQL - Explain Extended
+	private Boolean mysqlExplainExtended   = false;
+	
+	// MySQL - Explain Partitions
+	private Boolean mysqlExplainOartitions = false;
+	
+	// MySQL - Explain Format
+	private String  mysqlExplainFormat     = "TRADITIONAL";
+	
 	// Oracle - TNS Admin
 	private String  oracleTnsAdmin = "";
 	
@@ -50,6 +59,39 @@ final public class AppConf
 	public void setFetchMax( Integer fetchMax )
 	{
 		this.fetchMax = fetchMax;
+	}
+	
+	// MySQL - Explain Extended
+	public Boolean getMySQLExplainExtended()
+	{
+		return this.mysqlExplainExtended;
+	}
+	
+	public void setMySQLExplainExtended( Boolean mysqlExplainExtended )
+	{
+		this.mysqlExplainExtended = mysqlExplainExtended;
+	}
+	
+	// MySQL - Explain Partitions
+	public Boolean getMySQLExplainPartitions()
+	{
+		return this.mysqlExplainOartitions;
+	}
+	
+	public void setMySQLExplainPartitions( Boolean mysqlExplainOartitions )
+	{
+		this.mysqlExplainOartitions = mysqlExplainOartitions;
+	}
+	
+	// MySQL - Explain Format
+	public String getMySQLExplainFormat()
+	{
+		return this.mysqlExplainFormat;
+	}
+	
+	public void setMySQLExplainFormat( String mysqlExplainFormat )
+	{
+		this.mysqlExplainFormat = mysqlExplainFormat;
 	}
 	
 	// Oracle - TNS Admin

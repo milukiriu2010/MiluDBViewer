@@ -52,6 +52,8 @@ public class AppSettingDialog extends Dialog<Boolean>
 			new TreeItem<>( new AppSettingMenu( "" , AppSettingMenu.APPSET_TYPE.TYPE_ROOT ) );
 		TreeItem<AppSettingMenu>  treeItemDB = 
 			new TreeItem<>( new AppSettingMenu( langRB.getString( "ITEM_DB" ), AppSettingMenu.APPSET_TYPE.TYPE_DB ) );
+		TreeItem<AppSettingMenu>  treeItemDBMySQL = 
+			new TreeItem<>( new AppSettingMenu( langRB.getString( "ITEM_DB_MYSQL" ), AppSettingMenu.APPSET_TYPE.TYPE_DB_MYSQL ) );
 		TreeItem<AppSettingMenu>  treeItemDBOracle = 
 			new TreeItem<>( new AppSettingMenu( langRB.getString( "ITEM_DB_ORACLE" ), AppSettingMenu.APPSET_TYPE.TYPE_DB_ORACLE ) );
 		TreeItem<AppSettingMenu>  treeItemDBPostgreSQL = 
@@ -60,6 +62,7 @@ public class AppSettingDialog extends Dialog<Boolean>
 			new TreeItem<>( new AppSettingMenu( langRB.getString( "ITEM_GENERAL" ), AppSettingMenu.APPSET_TYPE.TYPE_GENERAL ) );
 
 		treeItemRoot.getChildren().add( treeItemDB );
+		treeItemDB.getChildren().add( treeItemDBMySQL );
 		treeItemDB.getChildren().add( treeItemDBOracle );
 		treeItemDB.getChildren().add( treeItemDBPostgreSQL );
 		treeItemRoot.getChildren().add( treeItemGeneral );

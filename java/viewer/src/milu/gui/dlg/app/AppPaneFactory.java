@@ -16,6 +16,10 @@ class AppPaneFactory implements PaneFactory
 		{
 			appPaneAbs = new AppPaneDBConf();
 		}
+		else if ( AppSettingMenu.APPSET_TYPE.TYPE_DB_MYSQL.equals( key ) )
+		{
+			appPaneAbs = new AppPaneDBConfMySQL();
+		}
 		else if ( AppSettingMenu.APPSET_TYPE.TYPE_DB_ORACLE.equals( key ) )
 		{
 			appPaneAbs = new AppPaneDBConfOracle();

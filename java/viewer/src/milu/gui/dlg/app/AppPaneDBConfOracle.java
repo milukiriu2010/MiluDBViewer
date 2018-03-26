@@ -6,14 +6,11 @@ import java.util.ResourceBundle;
 import javafx.scene.control.Button;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
-import javafx.scene.control.ToggleGroup;
 import javafx.scene.image.ImageView;
-import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import javafx.stage.DirectoryChooser;
 import javafx.scene.layout.HBox;
-import javafx.scene.Node;
 
 import milu.conf.AppConf;
 import milu.ctrl.MainController;
