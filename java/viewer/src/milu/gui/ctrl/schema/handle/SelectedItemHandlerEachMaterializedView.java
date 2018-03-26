@@ -9,9 +9,9 @@ import javafx.scene.control.Tab;
 import javafx.scene.control.TreeItem;
 import javafx.scene.image.ImageView;
 import javafx.collections.ObservableList;
-
-import milu.db.mateview.MaterializedViewDBAbstract;
-import milu.db.mateview.MaterializedViewDBFactory;
+import milu.db.abs.AbsDBFactory;
+import milu.db.abs.ObjDBFactory;
+import milu.db.abs.ObjDBInterface;
 import milu.entity.schema.SchemaEntity;
 import milu.gui.ctrl.schema.SchemaTableViewTab;
 import milu.ctrl.MainController;
@@ -100,13 +100,22 @@ public class SelectedItemHandlerEachMaterializedView extends SelectedItemHandler
 		newTab.setGraphic( iv );
 		
 		// get view definition
-		MaterializedViewDBAbstract  mateViewDBAbs = MaterializedViewDBFactory.getInstance(myDBAbs);
-		if ( mateViewDBAbs == null )
+		List<Map<String,String>>  dataLst = selectedEntity.getDefinitionLst();
+		if ( dataLst.size() == 0 )
 		{
-			return;
+			ObjDBFactory materializedViewDBFactory = AbsDBFactory.getFactory( AbsDBFactory.FACTORY_TYPE.MATERIALIZED_VIEW );
+			if ( materializedViewDBFactory == null )
+			{
+				return;
+			}
+			ObjDBInterface materializedViewDBAbs = materializedViewDBFactory.getInstance(myDBAbs);
+			if ( materializedViewDBAbs == null )
+			{
+				return;
+			}
+			dataLst = materializedViewDBAbs.selectDefinition( schemaName, materializedViewName );
+			selectedEntity.setDefinitionlst(dataLst);
 		}
-		List<Map<String,String>> dataLst = mateViewDBAbs.selectDefinition( schemaName, materializedViewName );
-		selectedEntity.setDefinitionlst(dataLst);
 		
 		// table header
 		List<String> headLst = new ArrayList<String>();

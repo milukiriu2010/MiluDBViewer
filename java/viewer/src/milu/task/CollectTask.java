@@ -8,7 +8,6 @@ import javafx.concurrent.Task;
 
 import milu.db.MyDBAbstract;
 import milu.db.aggregate.AggregateDBFactory;
-import milu.db.mateview.MaterializedViewDBFactory;
 import milu.db.packagebody.PackageBodyDBFactory;
 import milu.db.packagedef.PackageDefDBFactory;
 import milu.db.proc.ProcDBFactory;
@@ -154,7 +153,8 @@ public class CollectTask extends Task<Double>
 			SchemaEntity rootSystemViewEntity         = SchemaEntityFactory.createInstance( SchemaEntity.SCHEMA_TYPE.ROOT_SYSTEM_VIEW );
 			schemaEntity.addEntity( rootSystemViewEntity );
 		}
-		if ( MaterializedViewDBFactory.getInstance(myDBAbs) != null )
+		ObjDBFactory materializedViewDBFactory = AbsDBFactory.getFactory( AbsDBFactory.FACTORY_TYPE.MATERIALIZED_VIEW );
+		if ( materializedViewDBFactory.getInstance(myDBAbs) != null )
 		{
 			SchemaEntity rootMaterializedViewEntity = SchemaEntityFactory.createInstance( SchemaEntity.SCHEMA_TYPE.ROOT_MATERIALIZED_VIEW );
 			schemaEntity.addEntity( rootMaterializedViewEntity );

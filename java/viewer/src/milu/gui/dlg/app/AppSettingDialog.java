@@ -29,6 +29,9 @@ public class AppSettingDialog extends Dialog<Boolean>
 	// Configuration List
 	private TreeView<AppSettingMenu> treeViewConf = new TreeView<AppSettingMenu>();
 	
+	// Apply Button
+	private ButtonType applyButtonType = null;
+	
 	// Apply&Close Button
 	private ButtonType okButtonType = null;
 	
@@ -49,12 +52,15 @@ public class AppSettingDialog extends Dialog<Boolean>
 			new TreeItem<>( new AppSettingMenu( "" , AppSettingMenu.APPSET_TYPE.TYPE_ROOT ) );
 		TreeItem<AppSettingMenu>  treeItemDB = 
 			new TreeItem<>( new AppSettingMenu( langRB.getString( "ITEM_DB" ), AppSettingMenu.APPSET_TYPE.TYPE_DB ) );
+		TreeItem<AppSettingMenu>  treeItemDBOracle = 
+			new TreeItem<>( new AppSettingMenu( langRB.getString( "ITEM_DB_ORACLE" ), AppSettingMenu.APPSET_TYPE.TYPE_DB_ORACLE ) );
 		TreeItem<AppSettingMenu>  treeItemDBPostgreSQL = 
-				new TreeItem<>( new AppSettingMenu( langRB.getString( "ITEM_DB_POSTGRESQL" ), AppSettingMenu.APPSET_TYPE.TYPE_DB_POSTGRESQL ) );
+			new TreeItem<>( new AppSettingMenu( langRB.getString( "ITEM_DB_POSTGRESQL" ), AppSettingMenu.APPSET_TYPE.TYPE_DB_POSTGRESQL ) );
 		TreeItem<AppSettingMenu>  treeItemGeneral = 
 			new TreeItem<>( new AppSettingMenu( langRB.getString( "ITEM_GENERAL" ), AppSettingMenu.APPSET_TYPE.TYPE_GENERAL ) );
 
 		treeItemRoot.getChildren().add( treeItemDB );
+		treeItemDB.getChildren().add( treeItemDBOracle );
 		treeItemDB.getChildren().add( treeItemDBPostgreSQL );
 		treeItemRoot.getChildren().add( treeItemGeneral );
 		treeItemRoot.setExpanded(true);
@@ -63,8 +69,6 @@ public class AppSettingDialog extends Dialog<Boolean>
 		
 		// pane for Dialog
         BorderPane paneDlg = new BorderPane();
-        //BorderPane.setMargin( this.listViewConf, new Insets( 5, 5, 5, 5 ) );
-        //paneDlg.setLeft( this.listViewConf );
         BorderPane.setMargin( this.treeViewConf, new Insets( 5, 5, 5, 5 ) );
         paneDlg.setLeft( this.treeViewConf );
         
@@ -78,7 +82,8 @@ public class AppSettingDialog extends Dialog<Boolean>
 		// add button "Apply&Close" and "Cancel"
 		this.okButtonType           = new ButtonType( langRB.getString( "BTN_OK" )    , ButtonData.OK_DONE );
 		ButtonType cancelButtonType = new ButtonType( langRB.getString( "BTN_CANCEL" ), ButtonData.CANCEL_CLOSE );
-		this.getDialogPane().getButtonTypes().addAll( okButtonType, cancelButtonType );
+		this.applyButtonType        = new ButtonType( langRB.getString( "BTN_APPLY" ) , ButtonData.APPLY );
+		this.getDialogPane().getButtonTypes().addAll( applyButtonType, okButtonType, cancelButtonType );
 	
 		// set css for this dialog
 		Scene scene = this.getDialogPane().getScene();
@@ -119,7 +124,7 @@ public class AppSettingDialog extends Dialog<Boolean>
 		btnOK.addEventFilter
 		(
 		    ActionEvent.ACTION, 
-		    event -> 
+		    (event)-> 
 		    {
 		    	Node paneOnDlg = getDialogPane().getContent();
 		    	Node node = ((BorderPane)paneOnDlg).getCenter();
@@ -129,6 +134,22 @@ public class AppSettingDialog extends Dialog<Boolean>
 		    	{
 		    		event.consume();
 		    	}
+		    }
+		);
+		
+		// Prevent from closing this dialog,
+		// when clicking "Apply" Button
+		final Button btnApply = (Button)this.getDialogPane().lookupButton( this.applyButtonType );
+		btnApply.addEventFilter
+		(
+		    ActionEvent.ACTION, 
+		    (event)-> 
+		    {
+		    	Node paneOnDlg = getDialogPane().getContent();
+		    	Node node = ((BorderPane)paneOnDlg).getCenter();
+		    	((ApplyInterface)node).apply();
+		    	// always consume
+	    		event.consume();
 		    }
 		);
 		

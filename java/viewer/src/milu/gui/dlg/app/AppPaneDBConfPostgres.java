@@ -67,7 +67,7 @@ public class AppPaneDBConfPostgres extends AppPaneAbstract
 		
 		// set title
 		this.lblTitle.setText( this.extLangRB.getString( "TITLE_DB_CONF_PANE_POSTGRES" ) );
-		this.lblTitle.getStyleClass().add("label-title");
+		this.lblTitle.getStyleClass().add("AppPane_Label_Title");
 		
 		Label lblExplain = new Label("EXPLAIN");
 		

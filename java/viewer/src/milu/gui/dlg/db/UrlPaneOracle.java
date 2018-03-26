@@ -35,6 +35,7 @@ import javafx.application.Platform;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
 import milu.db.MyDBAbstract;
+import milu.conf.AppConf;
 import milu.ctrl.MainController;
 
 import milu.file.MyFileAbstract;
@@ -113,6 +114,8 @@ public class UrlPaneOracle extends UrlPaneAbstract
 		this.myDBAbs   = myDBAbs;
 		this.extLangRB = extLangRB;
 		
+		AppConf  appConf   = this.mainCtrl.getAppConf();
+		
 		// ToggleButton for Basic
 		this.tglBtnBasic.setText(extLangRB.getString("TOGGLE_BASIC"));
 		this.tglBtnBasic.setToggleGroup( this.tglGroup );
@@ -142,12 +145,17 @@ public class UrlPaneOracle extends UrlPaneAbstract
 			this.hostTextField.setText( host );
 		}
 		this.portTextField.setText( String.valueOf(myDBAbs.getDefaultPort()) );
-		
+ 		
 		// ----------------------------------------------------
 		// Items for "TNS"
 		// ----------------------------------------------------
-		// TNS_ADMIN
-		if ( System.getProperty("oracle.net.tns_admin") != null )
+		// TNS_ADMIN(Default Value)
+		if ( appConf.getOracleTnsAdmin().length() > 0 )
+		{
+			String tns_admin = appConf.getOracleTnsAdmin();
+			this.tnsAdminTextField.setText( tns_admin );
+		}
+		else if ( System.getProperty("oracle.net.tns_admin") != null )
 		{
 			String tns_admin = System.getProperty("oracle.net.tns_admin");
 			if ( new File(tns_admin).exists() )
@@ -178,6 +186,16 @@ public class UrlPaneOracle extends UrlPaneAbstract
 			}
 		}
 		
+		// TNS_ADMIN(Default Prompt)
+		if ( System.getProperty("os.name").contains("Windows") )
+		{
+			this.tnsAdminTextField.setPromptText("%ORACLE_HOME%\\network\\admin");
+		}
+		else
+		{
+			this.tnsAdminTextField.setPromptText("$ORACLE_HOME/network/admin");
+		}
+		
 		// TNS Name
 		this.tnsNamesCombo.setEditable(true);
 		this.filteredItems = new FilteredList<String>( this.hints, pre->true );
@@ -190,6 +208,7 @@ public class UrlPaneOracle extends UrlPaneAbstract
 			this.loadTnsNamesOra( dir );
 		}
 		
+		// "select folder" button
 		ImageView   ivFolder = new ImageView( this.mainCtrl.getImage("file:resources/images/folder.png") );
 		ivFolder.setFitWidth(16);
 		ivFolder.setFitHeight(16);

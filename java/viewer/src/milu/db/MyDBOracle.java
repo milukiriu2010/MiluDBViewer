@@ -15,6 +15,7 @@ import java.util.Map;
  * ROOT_TYPE
  * ROOT_TRIGGER
  * ROOT_SEQUENCE
+ * ROOT_ER
  * 
  * @author milu
  *
@@ -65,13 +66,17 @@ public class MyDBOracle extends MyDBAbstract
 				dbOptMap.get( "Port" ) + "/" +
 				dbOptMap.get( "DBName" );
 		}
-		else if ( dbOptMap.containsKey( "TNSName" ) )
+		else if ( 
+			dbOptMap.containsKey( "TNSName" ) && 
+			( dbOptMap.get( "TNSName" ) != null ) &&
+			( dbOptMap.get( "TNSName" ).length() > 0 ) &&
+			dbOptMap.containsKey( "TNSAdmin" ) && 
+			( dbOptMap.get( "TNSAdmin" ) != null ) &&
+			( dbOptMap.get( "TNSAdmin" ).length() > 0 )
+		)
 		{
 			this.url = "jdbc:oracle:thin:@"+ dbOptMap.get( "TNSName" );
-			if ( dbOptMap.containsKey( "TNSAdmin" ) )
-			{
-				System.setProperty( "oracle.net.tns_admin", dbOptMap.get( "TNSAdmin" ) );
-			}
+			System.setProperty( "oracle.net.tns_admin", dbOptMap.get( "TNSAdmin" ) );
 		}
 		return this.url;
 	}

@@ -25,7 +25,7 @@ public class AppPaneGeneralConf extends AppPaneAbstract
 		
 		// set objects
 		this.lblTitle.setText( this.extLangRB.getString( "TITLE_GENERAL_CONF_PANE" ) );
-		this.lblTitle.getStyleClass().add("label-title");
+		this.lblTitle.getStyleClass().add("AppPane_Label_Title");
 		
 		VBox vBox = new VBox(2);
 		vBox.getChildren().addAll( this.lblTitle );

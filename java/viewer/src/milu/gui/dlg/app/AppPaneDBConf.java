@@ -34,7 +34,7 @@ public class AppPaneDBConf extends AppPaneAbstract
 		
 		// set objects
 		this.lblTitle.setText( this.extLangRB.getString( "TITLE_DB_CONF_PANE" ) );
-		this.lblTitle.getStyleClass().add("label-title");
+		this.lblTitle.getStyleClass().add("AppPane_Label_Title");
 		
 		Label    lblRowMax = new Label( this.extLangRB.getString( "LABEL_ROW_MAX" ) );
 		AppConf  appConf   = mainCtrl.getAppConf();

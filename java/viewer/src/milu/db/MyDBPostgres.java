@@ -12,6 +12,7 @@ import java.util.Map;
  * ROOT_TYPE
  * ROOT_TRIGGER
  * ROOT_SEQUENCE
+ * ROOT_ER
  * 
  * @author milu
  *

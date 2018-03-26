@@ -1,13 +1,16 @@
 package milu.db.mateview;
 
+import milu.db.abs.ObjDBFactory;
+import milu.db.abs.ObjDBInterface;
+
 import milu.db.MyDBAbstract;
 import milu.db.MyDBPostgres;
 import milu.db.MyDBOracle;
 import milu.db.MyDBCassandra;
 
-public class MaterializedViewDBFactory 
+public class MaterializedViewDBFactory implements ObjDBFactory
 {
-	public static MaterializedViewDBAbstract getInstance( MyDBAbstract myDBAbs )
+	public ObjDBInterface getInstance( MyDBAbstract myDBAbs )
 	{
 		MaterializedViewDBAbstract materializedViewDBAbs = null;
 		if ( myDBAbs instanceof MyDBPostgres )

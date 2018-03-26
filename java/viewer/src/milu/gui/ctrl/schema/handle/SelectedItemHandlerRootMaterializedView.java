@@ -7,9 +7,9 @@ import javafx.scene.control.Tab;
 import javafx.scene.control.TreeItem;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-
-import milu.db.mateview.MaterializedViewDBAbstract;
-import milu.db.mateview.MaterializedViewDBFactory;
+import milu.db.abs.AbsDBFactory;
+import milu.db.abs.ObjDBFactory;
+import milu.db.abs.ObjDBInterface;
 import milu.entity.schema.SchemaEntity;
 import milu.gui.ctrl.schema.SchemaTableViewTab;
 
@@ -35,18 +35,6 @@ import milu.gui.ctrl.schema.SchemaTableViewTab;
  */
 public class SelectedItemHandlerRootMaterializedView extends SelectedItemHandlerAbstract
 {
-	/*
-	public SelectedItemHandlerRootMaterializedView
-	( 
-		SchemaTreeView schemaTreeView, 
-		TabPane        tabPane,
-		MyDBAbstract   myDBAbs,
-		SelectedItemHandlerAbstract.REFRESH_TYPE  refreshType
-	)
-	{
-		super( schemaTreeView, tabPane, myDBAbs, refreshType );
-	}
-	*/
 	@Override
 	protected boolean isMyResponsible()
 	{
@@ -66,23 +54,32 @@ public class SelectedItemHandlerRootMaterializedView extends SelectedItemHandler
 			UnsupportedOperationException, 
 			SQLException
 	{
+		SchemaEntity selectedEntity = this.itemSelected.getValue();
 		TreeItem<SchemaEntity> itemParent   = this.itemSelected.getParent();
 		ObservableList<TreeItem<SchemaEntity>> itemChildren = this.itemSelected.getChildren();
 		
 		// get View List & add list as children
 		if ( itemChildren.size() == 0 )
 		{
-			/*
-			String schema = itemParent.getValue().toString();
-			List<List<String>> dataLst = myDBAbs.getSchemaMaterializedView( schema );
-			this.schemaTreeView.setMaterializedViewData( itemSelected, dataLst );
-			*/
-			MaterializedViewDBAbstract materializedViewDBAbs = MaterializedViewDBFactory.getInstance(myDBAbs);
-			if ( materializedViewDBAbs != null )
+			if ( selectedEntity.getEntityLst().size() == 0 )
 			{
-				String schemaName = itemParent.getValue().toString();
-				List<SchemaEntity> viewEntityLst = materializedViewDBAbs.selectEntityLst(schemaName);
-				this.schemaTreeView.addEntityLst( itemSelected, viewEntityLst );
+				ObjDBFactory materializedViewDBFactory = AbsDBFactory.getFactory( AbsDBFactory.FACTORY_TYPE.MATERIALIZED_VIEW );
+				if ( materializedViewDBFactory == null )
+				{
+					return;
+				}
+				ObjDBInterface materializedViewDBAbs = materializedViewDBFactory.getInstance(myDBAbs);
+				if ( materializedViewDBAbs != null )
+				{
+					String schemaName = itemParent.getValue().toString();
+					List<SchemaEntity> materializedViewEntityLst = materializedViewDBAbs.selectEntityLst(schemaName);
+					selectedEntity.addEntityAll(materializedViewEntityLst);
+					this.schemaTreeView.addEntityLst( itemSelected, materializedViewEntityLst );
+				}
+				else
+				{
+					this.schemaTreeView.addEntityLst( itemSelected, selectedEntity.getEntityLst() );
+				}
 			}
 		}
 		

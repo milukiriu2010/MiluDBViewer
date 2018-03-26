@@ -11,23 +11,13 @@ import java.util.Map;
  * ROOT_FUNC
  * ROOT_PROC
  * ROOT_TRIGGER
+ * ROOT_ER
  * 
  * @author milu
  *
  */
 public class MyDBMySQL extends MyDBAbstract 
 {
-	/*
-	public MyDBMySQL()
-	{
-		this.suppoertedTypeLst.add( SCHEMA_TYPE.ROOT_TABLE );
-		this.suppoertedTypeLst.add( SCHEMA_TYPE.ROOT_VIEW );
-		this.suppoertedTypeLst.add( SCHEMA_TYPE.ROOT_SYSTEM_VIEW );
-		this.suppoertedTypeLst.add( SCHEMA_TYPE.ROOT_FUNC );
-		this.suppoertedTypeLst.add( SCHEMA_TYPE.ROOT_PROC );
-		this.suppoertedTypeLst.add( SCHEMA_TYPE.ROOT_TRIGGER );
-	}
-	*/
 	/**
 	 * Load JDBC Driver
 	 ***********************************************

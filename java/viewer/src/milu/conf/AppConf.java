@@ -11,6 +11,9 @@ final public class AppConf
 	// Max fetch rows when selecting.
 	private Integer fetchMax = 100;
 	
+	// Oracle - TNS Admin
+	private String  oracleTnsAdmin = "";
+	
 	// PostgreSQL - Explain Analyze
 	private Boolean postgresExplainAnalyze = false;
 	
@@ -47,6 +50,21 @@ final public class AppConf
 	public void setFetchMax( Integer fetchMax )
 	{
 		this.fetchMax = fetchMax;
+	}
+	
+	// Oracle - TNS Admin
+	public String getOracleTnsAdmin()
+	{
+		return this.oracleTnsAdmin;
+	}
+	
+	public void setOracleTnsAdmin( String oracleTnsAdmin )
+	{
+		this.oracleTnsAdmin = oracleTnsAdmin;
+		if ( oracleTnsAdmin == null || oracleTnsAdmin.length() == 0 )
+		{
+			System.clearProperty("oracle.net.tns_admin");
+		}
 	}
 	
 	// PostgreSQL - Explain Analyze

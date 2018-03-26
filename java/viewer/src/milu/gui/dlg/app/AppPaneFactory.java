@@ -16,6 +16,10 @@ class AppPaneFactory implements PaneFactory
 		{
 			appPaneAbs = new AppPaneDBConf();
 		}
+		else if ( AppSettingMenu.APPSET_TYPE.TYPE_DB_ORACLE.equals( key ) )
+		{
+			appPaneAbs = new AppPaneDBConfOracle();
+		}
 		else if ( AppSettingMenu.APPSET_TYPE.TYPE_DB_POSTGRESQL.equals( key ) )
 		{
 			appPaneAbs = new AppPaneDBConfPostgres();
