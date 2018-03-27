@@ -7,10 +7,7 @@ import java.sql.SQLException;
 import javafx.concurrent.Task;
 
 import milu.db.MyDBAbstract;
-import milu.db.proc.ProcDBFactory;
 import milu.db.type.TypeDBFactory;
-import milu.db.view.ViewDBFactory;
-import milu.db.trigger.TriggerDBFactory;
 
 import milu.db.abs.AbsDBFactory;
 import milu.db.abs.ObjDBFactory;
@@ -139,7 +136,8 @@ public class CollectTask extends Task<Double>
 		// ---------------------------------------
 		SchemaEntity rootTableEntity        = SchemaEntityFactory.createInstance( SchemaEntity.SCHEMA_TYPE.ROOT_TABLE );
 		schemaEntity.addEntity( rootTableEntity );
-		if ( ViewDBFactory.getInstance(myDBAbs) != null )
+		ObjDBFactory viewDBFactory = AbsDBFactory.getFactory( AbsDBFactory.FACTORY_TYPE.VIEW );
+		if ( viewDBFactory.getInstance(myDBAbs) != null )
 		{
 			SchemaEntity rootViewEntity         = SchemaEntityFactory.createInstance( SchemaEntity.SCHEMA_TYPE.ROOT_VIEW );
 			schemaEntity.addEntity( rootViewEntity );
@@ -168,7 +166,8 @@ public class CollectTask extends Task<Double>
 			SchemaEntity rootAggregateEntity        = SchemaEntityFactory.createInstance( SchemaEntity.SCHEMA_TYPE.ROOT_AGGREGATE );
 			schemaEntity.addEntity( rootAggregateEntity );
 		}
-		if ( ProcDBFactory.getInstance(myDBAbs) != null )
+		ObjDBFactory procDBFactory = AbsDBFactory.getFactory( AbsDBFactory.FACTORY_TYPE.PROC );
+		if ( procDBFactory.getInstance(myDBAbs) != null )
 		{
 			SchemaEntity rootProcEntity             = SchemaEntityFactory.createInstance( SchemaEntity.SCHEMA_TYPE.ROOT_PROC );
 			schemaEntity.addEntity( rootProcEntity );
@@ -190,7 +189,8 @@ public class CollectTask extends Task<Double>
 			SchemaEntity rootTypeEntity             = SchemaEntityFactory.createInstance( SchemaEntity.SCHEMA_TYPE.ROOT_TYPE );
 			schemaEntity.addEntity( rootTypeEntity );
 		}
-		if ( TriggerDBFactory.getInstance(myDBAbs) != null )
+		ObjDBFactory triggerDBFactory = AbsDBFactory.getFactory( AbsDBFactory.FACTORY_TYPE.TRIGGER );
+		if ( triggerDBFactory.getInstance(myDBAbs) != null )
 		{
 			SchemaEntity rootTriggerEntity          = SchemaEntityFactory.createInstance( SchemaEntity.SCHEMA_TYPE.ROOT_TRIGGER );
 			schemaEntity.addEntity( rootTriggerEntity );

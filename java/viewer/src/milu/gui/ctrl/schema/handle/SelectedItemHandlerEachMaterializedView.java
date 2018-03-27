@@ -103,17 +103,17 @@ public class SelectedItemHandlerEachMaterializedView extends SelectedItemHandler
 		List<Map<String,String>>  dataLst = selectedEntity.getDefinitionLst();
 		if ( dataLst.size() == 0 )
 		{
-			ObjDBFactory materializedViewDBFactory = AbsDBFactory.getFactory( AbsDBFactory.FACTORY_TYPE.MATERIALIZED_VIEW );
-			if ( materializedViewDBFactory == null )
+			ObjDBFactory objDBFactory = AbsDBFactory.getFactory( AbsDBFactory.FACTORY_TYPE.MATERIALIZED_VIEW );
+			if ( objDBFactory == null )
 			{
 				return;
 			}
-			ObjDBInterface materializedViewDBAbs = materializedViewDBFactory.getInstance(myDBAbs);
-			if ( materializedViewDBAbs == null )
+			ObjDBInterface objDBInf = objDBFactory.getInstance(myDBAbs);
+			if ( objDBInf == null )
 			{
 				return;
 			}
-			dataLst = materializedViewDBAbs.selectDefinition( schemaName, materializedViewName );
+			dataLst = objDBInf.selectDefinition( schemaName, materializedViewName );
 			selectedEntity.setDefinitionlst(dataLst);
 		}
 		

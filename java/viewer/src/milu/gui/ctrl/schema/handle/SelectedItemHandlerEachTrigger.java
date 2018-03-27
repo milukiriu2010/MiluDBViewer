@@ -5,8 +5,9 @@ import javafx.scene.control.Tab;
 import javafx.scene.control.TreeItem;
 import javafx.scene.image.ImageView;
 
-import milu.db.trigger.TriggerDBAbstract;
-import milu.db.trigger.TriggerDBFactory;
+import milu.db.abs.AbsDBFactory;
+import milu.db.abs.ObjDBFactory;
+import milu.db.abs.ObjDBInterface;
 import milu.entity.schema.SchemaEntity;
 import milu.gui.ctrl.schema.SchemaProcViewTab;
 import milu.ctrl.MainController;
@@ -60,6 +61,7 @@ public class SelectedItemHandlerEachTrigger extends SelectedItemHandlerAbstract
 			UnsupportedOperationException,
 			SQLException
 	{
+		SchemaEntity selectedEntity = this.itemSelected.getValue();
 		TreeItem<SchemaEntity> itemParent = itemSelected.getParent();
 		String schemaName   = itemParent.getParent().getValue().toString();
 		String triggerName  = itemSelected.getValue().getName();
@@ -104,13 +106,24 @@ public class SelectedItemHandlerEachTrigger extends SelectedItemHandlerAbstract
 		iv.setFitWidth( 16 );
 		newTab.setGraphic( iv );
 		
-		// get table definition
-		TriggerDBAbstract triggerDBAbs = TriggerDBFactory.getInstance(myDBAbs);
-		if ( triggerDBAbs == null )
+		// get trigger definition
+		String strSrc = selectedEntity.getSrcSQL();
+		if ( strSrc == null )
 		{
-			return;
+			ObjDBFactory objDBFactory = AbsDBFactory.getFactory( AbsDBFactory.FACTORY_TYPE.TRIGGER );
+			if ( objDBFactory == null )
+			{
+				return;
+			}
+			ObjDBInterface objDBInf = objDBFactory.getInstance(myDBAbs);
+			if ( objDBInf == null )
+			{
+				return;
+			}
+			strSrc = objDBInf.getSRC( schemaName, triggerName );
+			selectedEntity.setSrcSQL(strSrc);
 		}
-		String strSrc = triggerDBAbs.getSRC(schemaName, triggerName);
+		
 		
 		// set type source in SqlTextArea
 		newTab.setSrcText( strSrc );

@@ -10,8 +10,9 @@ import javafx.scene.control.TreeItem;
 import javafx.scene.image.ImageView;
 import javafx.collections.ObservableList;
 
-import milu.db.view.ViewDBAbstract;
-import milu.db.view.ViewDBFactory;
+import milu.db.abs.AbsDBFactory;
+import milu.db.abs.ObjDBFactory;
+import milu.db.abs.ObjDBInterface;
 import milu.entity.schema.SchemaEntity;
 import milu.gui.ctrl.schema.SchemaTableViewTab;
 import milu.ctrl.MainController;
@@ -98,9 +99,10 @@ public class SelectedItemHandlerEachView extends SelectedItemHandlerAbstract
 		newTab.setGraphic( iv );
 		
 		// get view definition
-		List<Map<String,String>> dataLst = null;
-		if ( selectedEntity.getDefinitionLst().size() == 0 )
+		List<Map<String,String>>  dataLst = selectedEntity.getDefinitionLst();
+		if ( dataLst.size() == 0 )
 		{
+			/*
 			ViewDBAbstract viewDBAbs = ViewDBFactory.getInstance(myDBAbs);
 			if ( viewDBAbs == null )
 			{
@@ -108,10 +110,19 @@ public class SelectedItemHandlerEachView extends SelectedItemHandlerAbstract
 			}
 			dataLst = viewDBAbs.selectDefinition(schemaName, viewName );
 			selectedEntity.setDefinitionlst(dataLst);
-		}
-		else
-		{
-			dataLst = selectedEntity.getDefinitionLst();
+			*/
+			ObjDBFactory objDBFactory = AbsDBFactory.getFactory( AbsDBFactory.FACTORY_TYPE.VIEW );
+			if ( objDBFactory == null )
+			{
+				return;
+			}
+			ObjDBInterface objDBInf = objDBFactory.getInstance(myDBAbs);
+			if ( objDBInf == null )
+			{
+				return;
+			}
+			dataLst = objDBInf.selectDefinition(schemaName, viewName);
+			selectedEntity.setDefinitionlst(dataLst);
 		}
 		
 		// table header

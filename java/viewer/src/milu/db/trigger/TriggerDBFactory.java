@@ -1,13 +1,16 @@
 package milu.db.trigger;
 
+import milu.db.abs.ObjDBInterface;
+import milu.db.abs.ObjDBFactory;
+
 import milu.db.MyDBAbstract;
 import milu.db.MyDBPostgres;
 import milu.db.MyDBMySQL;
 import milu.db.MyDBOracle;
 
-public class TriggerDBFactory 
+public class TriggerDBFactory implements ObjDBFactory
 {
-	public static TriggerDBAbstract getInstance( MyDBAbstract myDBAbs )
+	public ObjDBInterface getInstance( MyDBAbstract myDBAbs )
 	{
 		TriggerDBAbstract triggerDBAbs = null;
 		if ( myDBAbs instanceof MyDBPostgres )

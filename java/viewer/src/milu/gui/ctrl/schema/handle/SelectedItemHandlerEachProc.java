@@ -5,8 +5,9 @@ import javafx.scene.control.Tab;
 import javafx.scene.control.TreeItem;
 import javafx.scene.image.ImageView;
 
-import milu.db.proc.ProcDBAbstract;
-import milu.db.proc.ProcDBFactory;
+import milu.db.abs.AbsDBFactory;
+import milu.db.abs.ObjDBFactory;
+import milu.db.abs.ObjDBInterface;
 import milu.entity.schema.SchemaEntity;
 import milu.gui.ctrl.schema.SchemaProcViewTab;
 import milu.ctrl.MainController;
@@ -52,6 +53,7 @@ public class SelectedItemHandlerEachProc extends SelectedItemHandlerAbstract
 			UnsupportedOperationException,
 			SQLException
 	{
+		SchemaEntity selectedEntity = this.itemSelected.getValue();
 		TreeItem<SchemaEntity> itemParent = itemSelected.getParent();
 		String schemaName = itemParent.getParent().getValue().toString();
 		String procName   = itemSelected.getValue().getName();
@@ -97,13 +99,31 @@ public class SelectedItemHandlerEachProc extends SelectedItemHandlerAbstract
 		iv.setFitWidth( 16 );
 		newTab.setGraphic( iv );
 		
-		// get table definition
+		// get procedure ddl
+		/*
 		ProcDBAbstract procDBAbs = ProcDBFactory.getInstance(myDBAbs);
 		if ( procDBAbs == null )
 		{
 			return;
 		}
 		String strSrc = procDBAbs.getSRC(schemaName, procName);
+		*/
+		String strSrc = selectedEntity.getSrcSQL();
+		if ( strSrc == null )
+		{
+			ObjDBFactory objDBFactory = AbsDBFactory.getFactory( AbsDBFactory.FACTORY_TYPE.PROC );
+			if ( objDBFactory == null )
+			{
+				return;
+			}
+			ObjDBInterface objDBInf = objDBFactory.getInstance(myDBAbs);
+			if ( objDBInf == null )
+			{
+				return;
+			}
+			strSrc = objDBInf.getSRC( schemaName, procName );
+			selectedEntity.setSrcSQL(strSrc);
+		}
 		
 		// set procedure source in SqlTextArea
 		newTab.setSrcText( strSrc );

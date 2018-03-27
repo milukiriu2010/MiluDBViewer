@@ -8,10 +8,11 @@ import javafx.scene.control.TreeItem;
 import javafx.collections.ObservableList;
 import javafx.collections.FXCollections;
 
-import milu.db.view.ViewDBFactory;
+import milu.db.abs.AbsDBFactory;
+import milu.db.abs.ObjDBFactory;
+import milu.db.abs.ObjDBInterface;
 import milu.entity.schema.SchemaEntity;
 import milu.gui.ctrl.schema.SchemaTableViewTab;
-import milu.db.view.ViewDBAbstract;
 
 /**
  * This class is invoked, when "root view" item is clicked on SchemaTreeView.
@@ -59,6 +60,7 @@ public class SelectedItemHandlerRootView extends SelectedItemHandlerAbstract
 		{
 			if ( selectedEntity.getEntityLst().size() == 0 )
 			{
+				/*
 				String schema = itemParent.getValue().toString();
 				ViewDBAbstract viewDBAbs = ViewDBFactory.getInstance(myDBAbs);
 				if ( viewDBAbs != null )
@@ -67,6 +69,21 @@ public class SelectedItemHandlerRootView extends SelectedItemHandlerAbstract
 					selectedEntity.addEntityAll(viewEntityLst);
 					this.schemaTreeView.addEntityLst( itemSelected, viewEntityLst );
 				}
+				*/
+				ObjDBFactory objDBFactory = AbsDBFactory.getFactory( AbsDBFactory.FACTORY_TYPE.VIEW );
+				if ( objDBFactory == null )
+				{
+					return;
+				}
+				ObjDBInterface objDBInf = objDBFactory.getInstance(myDBAbs);
+				if ( objDBInf == null )
+				{
+					return;
+				}
+				String schemaName = itemParent.getValue().toString();
+				List<SchemaEntity> entityLst = objDBInf.selectEntityLst(schemaName);
+				selectedEntity.addEntityAll(entityLst);
+				this.schemaTreeView.addEntityLst( itemSelected, entityLst );
 			}
 			else
 			{

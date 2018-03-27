@@ -7,6 +7,8 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import milu.conf.AppConf;
+
 public class ExplainDBMySQL extends ExplainDBAbstract 
 {
 	@Override
@@ -20,7 +22,27 @@ public class ExplainDBMySQL extends ExplainDBAbstract
 			this.clear();
 			
 			stmt = this.myDBAbs.createStatement();
-			String sqlExplain = "explain " + sql;
+			
+			
+			AppConf appConf = this.mainCtrl.getAppConf();
+			String explainType = null;
+			if ( appConf.getMySQLExplainExtended() )
+			{
+				explainType = "extended";
+			}
+			else if ( appConf.getMySQLExplainPartitions() )
+			{
+				explainType = "partitions";
+			}
+			else if ( explainType == null )
+			{
+				explainType = "format=" + appConf.getMySQLExplainFormat();
+			}
+			
+			String sqlExplain = "explain " + explainType + " " + sql;
+			System.out.println( " -- explain(mysql) -------------" );
+			System.out.println( sqlExplain );
+			System.out.println( " ----------------------------------" );
 			rs   = stmt.executeQuery( sqlExplain );
 			
 			// Get Column Attribute

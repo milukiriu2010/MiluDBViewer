@@ -8,8 +8,9 @@ import javafx.scene.control.TreeItem;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
-import milu.db.trigger.TriggerDBAbstract;
-import milu.db.trigger.TriggerDBFactory;
+import milu.db.abs.AbsDBFactory;
+import milu.db.abs.ObjDBFactory;
+import milu.db.abs.ObjDBInterface;
 import milu.entity.schema.SchemaEntity;
 import milu.gui.ctrl.schema.SchemaProcViewTab;
 
@@ -37,18 +38,6 @@ import milu.gui.ctrl.schema.SchemaProcViewTab;
  */
 public class SelectedItemHandlerRootTrigger extends SelectedItemHandlerAbstract
 {
-	/*
-	public SelectedItemHandlerRootTrigger
-	( 
-		SchemaTreeView schemaTreeView, 
-		TabPane        tabPane,
-		MyDBAbstract   myDBAbs,
-		SelectedItemHandlerAbstract.REFRESH_TYPE  refreshType
-	)
-	{
-		super( schemaTreeView, tabPane, myDBAbs, refreshType );
-	}
-	*/
 	@Override
 	protected boolean isMyResponsible()
 	{
@@ -68,23 +57,33 @@ public class SelectedItemHandlerRootTrigger extends SelectedItemHandlerAbstract
 			UnsupportedOperationException, 
 			SQLException
 	{
+		SchemaEntity selectedEntity = this.itemSelected.getValue();
 		TreeItem<SchemaEntity> itemParent   = this.itemSelected.getParent();
 		ObservableList<TreeItem<SchemaEntity>> itemChildren = this.itemSelected.getChildren();
 		
-		// get View List & add list as children
+		// get tigger List & add list as children
 		if ( itemChildren.size() == 0 )
 		{
-			/*
-			String schema = itemParent.getValue().toString();
-			List<List<String>> dataLst = myDBAbs.getSchemaTrigger( schema );
-			this.schemaTreeView.setTriggerData( itemSelected, dataLst );
-			*/
-			TriggerDBAbstract triggerDBAbs = TriggerDBFactory.getInstance(myDBAbs);
-			if ( triggerDBAbs != null )
+			if ( selectedEntity.getEntityLst().size() == 0 )
 			{
+				ObjDBFactory objDBFactory = AbsDBFactory.getFactory( AbsDBFactory.FACTORY_TYPE.TRIGGER );
+				if ( objDBFactory == null )
+				{
+					return;
+				}
+				ObjDBInterface objDBInf = objDBFactory.getInstance(myDBAbs);
+				if ( objDBInf == null )
+				{
+					return;
+				}
 				String schemaName = itemParent.getValue().toString();
-				List<SchemaEntity> triggerEntityLst =  triggerDBAbs.selectEntityLst(schemaName);
-				this.schemaTreeView.addEntityLst( itemSelected, triggerEntityLst );
+				List<SchemaEntity> entityLst = objDBInf.selectEntityLst(schemaName);
+				selectedEntity.addEntityAll(entityLst);
+				this.schemaTreeView.addEntityLst( itemSelected, entityLst );
+			}
+			else
+			{
+				this.schemaTreeView.addEntityLst( itemSelected, selectedEntity.getEntityLst() );
 			}
 		}
 		

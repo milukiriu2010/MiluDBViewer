@@ -1,12 +1,15 @@
 package milu.db.proc;
 
+import milu.db.abs.ObjDBInterface;
+import milu.db.abs.ObjDBFactory;
+
 import milu.db.MyDBAbstract;
 import milu.db.MyDBMySQL;
 import milu.db.MyDBOracle;
 
-public class ProcDBFactory 
+public class ProcDBFactory implements ObjDBFactory
 {
-	public static ProcDBAbstract getInstance( MyDBAbstract myDBAbs )
+	public ObjDBInterface getInstance( MyDBAbstract myDBAbs )
 	{
 		ProcDBAbstract procDBAbs = null;
 		

@@ -57,9 +57,9 @@ public class SelectedItemHandlerEachSystemView extends SelectedItemHandlerAbstra
 	{
 		SchemaEntity selectedEntity = this.itemSelected.getValue();
 		TreeItem<SchemaEntity> itemParent   = this.itemSelected.getParent();
-		String schameName     = itemParent.getParent().getValue().toString();
+		String schemaName     = itemParent.getParent().getValue().toString();
 		String systemViewName = itemSelected.getValue().getName();
-		String id             = schameName + "@system_view@" + systemViewName;
+		String id             = schemaName + "@system_view@" + systemViewName;
 		System.out.println( "setSystemViewDef:" + systemViewName );
 		
 		final ObservableList<Tab> tabLst =  this.tabPane.getTabs();
@@ -103,17 +103,17 @@ public class SelectedItemHandlerEachSystemView extends SelectedItemHandlerAbstra
 		List<Map<String,String>>  dataLst = selectedEntity.getDefinitionLst();
 		if ( dataLst.size() == 0 )
 		{
-			ObjDBFactory systemViewDBFactory = AbsDBFactory.getFactory( AbsDBFactory.FACTORY_TYPE.SYSTEM_VIEW );
-			if ( systemViewDBFactory == null )
+			ObjDBFactory objDBFactory = AbsDBFactory.getFactory( AbsDBFactory.FACTORY_TYPE.SYSTEM_VIEW );
+			if ( objDBFactory == null )
 			{
 				return;
 			}
-			ObjDBInterface systemViewDBAbs = systemViewDBFactory.getInstance(myDBAbs);
-			if ( systemViewDBAbs == null )
+			ObjDBInterface objDBInf = objDBFactory.getInstance(myDBAbs);
+			if ( objDBInf == null )
 			{
 				return;
 			}
-			dataLst = systemViewDBAbs.selectDefinition(schameName, systemViewName);
+			dataLst = objDBInf.selectDefinition(schemaName, systemViewName);
 			selectedEntity.setDefinitionlst(dataLst);
 		}
 		

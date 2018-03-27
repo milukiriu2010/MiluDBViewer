@@ -1,13 +1,17 @@
 package milu.db.view;
 
+import milu.db.abs.ObjDBInterface;
+import milu.db.abs.ObjDBFactory;
+
 import milu.db.MyDBAbstract;
 import milu.db.MyDBPostgres;
+import milu.db.abs.ObjDBFactory;
 import milu.db.MyDBMySQL;
 import milu.db.MyDBOracle;
 
-public class ViewDBFactory
+public class ViewDBFactory implements ObjDBFactory
 {
-	public static ViewDBAbstract getInstance( MyDBAbstract myDBAbs )
+	public ObjDBInterface getInstance( MyDBAbstract myDBAbs )
 	{
 		ViewDBAbstract viewDBAbs = null;
 		

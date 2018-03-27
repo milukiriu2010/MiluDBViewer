@@ -47,7 +47,7 @@ public class SchemaTreeView extends TreeView<SchemaEntity>
 	private AnchorPane    parentPane = null;
 	
 	// children count of selected item
-	private Label lblChildrenCnt = new Label("");
+	private Label lblChildrenCnt = new Label("*");
 	
 	public SchemaTreeView( DBView dbView )
 	{
