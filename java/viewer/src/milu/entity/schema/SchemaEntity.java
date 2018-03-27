@@ -143,6 +143,9 @@ abstract public class SchemaEntity
 	// (4) DEFAULT
 	protected List<Map<String,String>>  definitionLst = new ArrayList<>();
 	
+	// DDL
+	protected String       srcSQL = null;
+	
 	// parent
 	protected SchemaEntity        parentEntity = null;
 	
@@ -241,6 +244,16 @@ abstract public class SchemaEntity
 			}
 		}
 		return filteredLst;
+	}
+	
+	public String getSrcSQL()
+	{
+		return this.srcSQL;
+	}
+	
+	public void setSrcSQL( String srcSQL)
+	{
+		this.srcSQL = srcSQL;
 	}
 	
 	public String getImageResourceName()

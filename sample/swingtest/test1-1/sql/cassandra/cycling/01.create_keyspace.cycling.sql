@@ -87,16 +87,16 @@ PRIMARY KEY (age, cid)
 WITH caching = { 'keys' : 'ALL', 'rows_per_partition' : '100' }
    AND comment = 'Based on table cyclist' ;
 
-CREATE MATERIALIZED VIEW cyclist_by_birthday 
+CREATE MATERIALIZED VIEW cycling.cyclist_by_birthday 
 AS SELECT age, birthday, name, country 
 FROM cyclist_mv 
-WHERE birthday IS NOT NULL AND cid IS NOT NULL
+WHERE birthday IS NOT NULL AND cid IS NOT NULL 
 PRIMARY KEY (birthday, cid);
 
-CREATE MATERIALIZED VIEW cyclist_by_country 
+CREATE MATERIALIZED VIEW cycling.cyclist_by_country 
 AS SELECT age,birthday, name, country 
 FROM cyclist_mv 
-WHERE country IS NOT NULL AND cid IS NOT NULL
+WHERE country IS NOT NULL AND cid IS NOT NULL 
 PRIMARY KEY (country, cid);
 
 --------------------------------------------------------

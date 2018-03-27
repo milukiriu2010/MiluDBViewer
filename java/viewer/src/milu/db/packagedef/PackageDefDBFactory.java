@@ -1,11 +1,15 @@
 package milu.db.packagedef;
 
+import milu.db.abs.ObjDBInterface;
+import milu.db.abs.ObjDBFactory;
+
 import milu.db.MyDBAbstract;
 import milu.db.MyDBOracle;
 
-public class PackageDefDBFactory 
+public class PackageDefDBFactory implements ObjDBFactory 
 {
-	public static PackageDefDBAbstract getInstance( MyDBAbstract myDBAbs )
+	@Override
+	public ObjDBInterface getInstance( MyDBAbstract myDBAbs )
 	{
 		PackageDefDBAbstract packageDefDBAbs = null;
 		if ( myDBAbs instanceof MyDBOracle )

@@ -5,8 +5,9 @@ import javafx.scene.control.Tab;
 import javafx.scene.control.TreeItem;
 import javafx.scene.image.ImageView;
 
-import milu.db.packagebody.PackageBodyDBAbstract;
-import milu.db.packagebody.PackageBodyDBFactory;
+import milu.db.abs.AbsDBFactory;
+import milu.db.abs.ObjDBFactory;
+import milu.db.abs.ObjDBInterface;
 import milu.entity.schema.SchemaEntity;
 import milu.gui.ctrl.schema.SchemaProcViewTab;
 import milu.ctrl.MainController;
@@ -56,6 +57,7 @@ public class SelectedItemHandlerEachPackageBody extends SelectedItemHandlerAbstr
 			UnsupportedOperationException,
 			SQLException
 	{
+		SchemaEntity selectedEntity = this.itemSelected.getValue();
 		TreeItem<SchemaEntity> itemParent = itemSelected.getParent();
 		String schemaName      = itemParent.getParent().getValue().toString();
 		String packageBodyName = itemSelected.getValue().getName();
@@ -101,14 +103,22 @@ public class SelectedItemHandlerEachPackageBody extends SelectedItemHandlerAbstr
 		newTab.setGraphic( iv );
 		
 		// get table definition
-		//String strSrc = 
-		//		myDBAbs.getPackageBodySourceBySchemaPackageBody( schema, packageBodyName );
-		PackageBodyDBAbstract packageBodyDBAbs = PackageBodyDBFactory.getInstance(myDBAbs);
-		if ( packageBodyDBAbs == null )
+		String strSrc = selectedEntity.getSrcSQL();
+		if ( strSrc == null )
 		{
-			return;
+			ObjDBFactory objDBFactory = AbsDBFactory.getFactory( AbsDBFactory.FACTORY_TYPE.PACKAGE_BODY );
+			if ( objDBFactory == null )
+			{
+				return;
+			}
+			ObjDBInterface objDBInf = objDBFactory.getInstance(myDBAbs);
+			if ( objDBInf == null )
+			{
+				return;
+			}
+			strSrc = objDBInf.getSRC( schemaName, packageBodyName );
+			selectedEntity.setSrcSQL(strSrc);
 		}
-		String strSrc = packageBodyDBAbs.getSRC(schemaName, packageBodyName);
 		
 		// set package source in SqlTextArea
 		newTab.setSrcText( strSrc );

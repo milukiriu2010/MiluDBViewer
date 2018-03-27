@@ -7,9 +7,6 @@ import java.sql.SQLException;
 import javafx.concurrent.Task;
 
 import milu.db.MyDBAbstract;
-import milu.db.aggregate.AggregateDBFactory;
-import milu.db.packagebody.PackageBodyDBFactory;
-import milu.db.packagedef.PackageDefDBFactory;
 import milu.db.proc.ProcDBFactory;
 import milu.db.type.TypeDBFactory;
 import milu.db.view.ViewDBFactory;
@@ -165,7 +162,8 @@ public class CollectTask extends Task<Double>
 			SchemaEntity rootFuncEntity             = SchemaEntityFactory.createInstance( SchemaEntity.SCHEMA_TYPE.ROOT_FUNC );
 			schemaEntity.addEntity( rootFuncEntity );
 		}
-		if ( AggregateDBFactory.getInstance(myDBAbs) != null )
+		ObjDBFactory aggregateDBFactory = AbsDBFactory.getFactory( AbsDBFactory.FACTORY_TYPE.AGGREGATE );
+		if ( aggregateDBFactory.getInstance(myDBAbs) != null )
 		{
 			SchemaEntity rootAggregateEntity        = SchemaEntityFactory.createInstance( SchemaEntity.SCHEMA_TYPE.ROOT_AGGREGATE );
 			schemaEntity.addEntity( rootAggregateEntity );
@@ -175,12 +173,14 @@ public class CollectTask extends Task<Double>
 			SchemaEntity rootProcEntity             = SchemaEntityFactory.createInstance( SchemaEntity.SCHEMA_TYPE.ROOT_PROC );
 			schemaEntity.addEntity( rootProcEntity );
 		}
-		if ( PackageDefDBFactory.getInstance(myDBAbs) != null )
+		ObjDBFactory packageDefDBFactory = AbsDBFactory.getFactory( AbsDBFactory.FACTORY_TYPE.PACKAGE_DEF );
+		if ( packageDefDBFactory.getInstance(myDBAbs) != null )
 		{
 			SchemaEntity rootPackageDefEntity   = SchemaEntityFactory.createInstance( SchemaEntity.SCHEMA_TYPE.ROOT_PACKAGE_DEF );
 			schemaEntity.addEntity( rootPackageDefEntity );
 		}
-		if ( PackageBodyDBFactory.getInstance(myDBAbs) != null )
+		ObjDBFactory packageBodyDBFactory = AbsDBFactory.getFactory( AbsDBFactory.FACTORY_TYPE.PACKAGE_BODY );
+		if ( packageBodyDBFactory.getInstance(myDBAbs) != null )
 		{
 			SchemaEntity rootPackageBodyEntity  = SchemaEntityFactory.createInstance( SchemaEntity.SCHEMA_TYPE.ROOT_PACKAGE_BODY );
 			schemaEntity.addEntity( rootPackageBodyEntity );

@@ -7,6 +7,7 @@ import javafx.scene.control.Tab;
 import javafx.scene.control.TreeItem;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+
 import milu.db.abs.AbsDBFactory;
 import milu.db.abs.ObjDBFactory;
 import milu.db.abs.ObjDBInterface;
@@ -33,18 +34,6 @@ import milu.gui.ctrl.schema.SchemaProcViewTab;
  */
 public class SelectedItemHandlerRootFunc extends SelectedItemHandlerAbstract
 {
-	/*
-	public SelectedItemHandlerRootFunc
-	( 
-		SchemaTreeView schemaTreeView, 
-		TabPane        tabPane,
-		MyDBAbstract   myDBAbs,
-		SelectedItemHandlerAbstract.REFRESH_TYPE  refreshType
-	)
-	{
-		super( schemaTreeView, tabPane, myDBAbs, refreshType );
-	}
-	*/
 	@Override
 	protected boolean isMyResponsible()
 	{
@@ -64,19 +53,33 @@ public class SelectedItemHandlerRootFunc extends SelectedItemHandlerAbstract
 			UnsupportedOperationException, 
 			SQLException
 	{
+		SchemaEntity selectedEntity = this.itemSelected.getValue();
 		TreeItem<SchemaEntity> itemParent   = this.itemSelected.getParent();
 		ObservableList<TreeItem<SchemaEntity>> itemChildren = this.itemSelected.getChildren();
 		
-		// get View List & add list as children
+		// get function List & add list as children
 		if ( itemChildren.size() == 0 )
 		{
-			ObjDBFactory objDBFactory = AbsDBFactory.getFactory( AbsDBFactory.FACTORY_TYPE.FUNC );
-			ObjDBInterface objDBInf = objDBFactory.getInstance(myDBAbs);
-			if ( objDBInf != null )
+			if ( selectedEntity.getEntityLst().size() == 0 )
 			{
+				ObjDBFactory objDBFactory = AbsDBFactory.getFactory( AbsDBFactory.FACTORY_TYPE.FUNC );
+				if ( objDBFactory == null )
+				{
+					return;
+				}
+				ObjDBInterface objDBInf = objDBFactory.getInstance(myDBAbs);
+				if ( objDBInf == null )
+				{
+					return;
+				}
 				String schemaName = itemParent.getValue().toString();
-				List<SchemaEntity> funcEntityLst = objDBInf.selectEntityLst(schemaName);
-				this.schemaTreeView.addEntityLst( itemSelected, funcEntityLst );
+				List<SchemaEntity> entityLst = objDBInf.selectEntityLst(schemaName);
+				selectedEntity.addEntityAll(entityLst);
+				this.schemaTreeView.addEntityLst( itemSelected, entityLst );
+			}
+			else
+			{
+				this.schemaTreeView.addEntityLst( itemSelected, selectedEntity.getEntityLst() );
 			}
 		}
 		

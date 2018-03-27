@@ -16,6 +16,7 @@ import javafx.event.ActionEvent;
 import javafx.application.Platform;
 
 import milu.ctrl.MainController;
+import milu.gui.ctrl.common.ButtonOrderNoneDialogPane;
 
 public class AppSettingDialog extends Dialog<Boolean>
 {
@@ -43,6 +44,9 @@ public class AppSettingDialog extends Dialog<Boolean>
 		super();
 		
 		this.mainCtrl = mainCtrl;
+		
+		// set DialogPane which has no button order.
+		this.setDialogPane( new ButtonOrderNoneDialogPane() );
 		
 		// Set dialog title.
 		this.setTitle( langRB.getString( "TITLE_APP_SETTING" ) );

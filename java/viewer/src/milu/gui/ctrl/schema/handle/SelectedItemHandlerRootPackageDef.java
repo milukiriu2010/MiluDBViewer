@@ -8,8 +8,9 @@ import javafx.scene.control.TreeItem;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
-import milu.db.packagedef.PackageDefDBAbstract;
-import milu.db.packagedef.PackageDefDBFactory;
+import milu.db.abs.AbsDBFactory;
+import milu.db.abs.ObjDBFactory;
+import milu.db.abs.ObjDBInterface;
 import milu.entity.schema.SchemaEntity;
 import milu.gui.ctrl.schema.SchemaProcViewTab;
 
@@ -37,18 +38,6 @@ import milu.gui.ctrl.schema.SchemaProcViewTab;
  */
 public class SelectedItemHandlerRootPackageDef extends SelectedItemHandlerAbstract
 {
-	/*
-	public SelectedItemHandlerRootPackageDef
-	( 
-		SchemaTreeView schemaTreeView, 
-		TabPane        tabPane,
-		MyDBAbstract   myDBAbs,
-		SelectedItemHandlerAbstract.REFRESH_TYPE  refreshType
-	)
-	{
-		super( schemaTreeView, tabPane, myDBAbs, refreshType );
-	}
-	*/
 	@Override
 	protected boolean isMyResponsible()
 	{
@@ -68,23 +57,33 @@ public class SelectedItemHandlerRootPackageDef extends SelectedItemHandlerAbstra
 			UnsupportedOperationException, 
 			SQLException
 	{
+		SchemaEntity selectedEntity = this.itemSelected.getValue();
 		TreeItem<SchemaEntity> itemParent   = this.itemSelected.getParent();
 		ObservableList<TreeItem<SchemaEntity>> itemChildren = this.itemSelected.getChildren();
 		
-		// get View List & add list as children
+		// get package definition List & add list as children
 		if ( itemChildren.size() == 0 )
 		{
-			/*
-			String schema = itemParent.getValue().toString();
-			List<List<String>> dataLst = myDBAbs.getSchemaPackageDef( schema );
-			this.schemaTreeView.setPackageDefData( itemSelected, dataLst );
-			*/
-			PackageDefDBAbstract packageDefDBAbs = PackageDefDBFactory.getInstance(myDBAbs);
-			if ( packageDefDBAbs != null )
+			if ( selectedEntity.getEntityLst().size() == 0 )
 			{
+				ObjDBFactory packageDefDBFactory = AbsDBFactory.getFactory( AbsDBFactory.FACTORY_TYPE.PACKAGE_DEF );
+				if ( packageDefDBFactory == null )
+				{
+					return;
+				}
+				ObjDBInterface packageDefDBAbs = packageDefDBFactory.getInstance(myDBAbs);
+				if ( packageDefDBAbs == null )
+				{
+					return;
+				}
 				String schemaName = itemParent.getValue().toString();
 				List<SchemaEntity> packageDefEntityLst = packageDefDBAbs.selectEntityLst(schemaName);
+				selectedEntity.addEntityAll(packageDefEntityLst);
 				this.schemaTreeView.addEntityLst( itemSelected, packageDefEntityLst );
+			}
+			else
+			{
+				this.schemaTreeView.addEntityLst( itemSelected, selectedEntity.getEntityLst() );
 			}
 		}
 		

@@ -8,8 +8,9 @@ import javafx.scene.control.TreeItem;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
-import milu.db.packagebody.PackageBodyDBAbstract;
-import milu.db.packagebody.PackageBodyDBFactory;
+import milu.db.abs.AbsDBFactory;
+import milu.db.abs.ObjDBFactory;
+import milu.db.abs.ObjDBInterface;
 import milu.entity.schema.SchemaEntity;
 import milu.gui.ctrl.schema.SchemaProcViewTab;
 
@@ -39,18 +40,6 @@ import milu.gui.ctrl.schema.SchemaProcViewTab;
  */
 public class SelectedItemHandlerRootPackageBody extends SelectedItemHandlerAbstract
 {
-	/*
-	public SelectedItemHandlerRootPackageBody
-	( 
-		SchemaTreeView schemaTreeView, 
-		TabPane        tabPane,
-		MyDBAbstract   myDBAbs,
-		SelectedItemHandlerAbstract.REFRESH_TYPE  refreshType
-	)
-	{
-		super( schemaTreeView, tabPane, myDBAbs, refreshType );
-	}
-	*/
 	@Override
 	protected boolean isMyResponsible()
 	{
@@ -70,23 +59,33 @@ public class SelectedItemHandlerRootPackageBody extends SelectedItemHandlerAbstr
 			UnsupportedOperationException, 
 			SQLException
 	{
+		SchemaEntity selectedEntity = this.itemSelected.getValue();
 		TreeItem<SchemaEntity> itemParent   = this.itemSelected.getParent();
 		ObservableList<TreeItem<SchemaEntity>> itemChildren = this.itemSelected.getChildren();
 		
-		// get View List & add list as children
+		// get package body List & add list as children
 		if ( itemChildren.size() == 0 )
 		{
-			/*
-			String schema = itemParent.getValue().toString();
-			List<List<String>> dataLst = myDBAbs.getSchemaPackageBody( schema );
-			this.schemaTreeView.setPackageBodyData( itemSelected, dataLst );
-			*/
-			PackageBodyDBAbstract packageBodyDBAbs = PackageBodyDBFactory.getInstance(myDBAbs);
-			if ( packageBodyDBAbs != null )
+			if ( selectedEntity.getEntityLst().size() == 0 )
 			{
+				ObjDBFactory packageBodyDBFactory = AbsDBFactory.getFactory( AbsDBFactory.FACTORY_TYPE.PACKAGE_BODY );
+				if ( packageBodyDBFactory == null )
+				{
+					return;
+				}
+				ObjDBInterface packageBodyDBAbs = packageBodyDBFactory.getInstance(myDBAbs);
+				if ( packageBodyDBAbs == null )
+				{
+					return;
+				}
 				String schemaName = itemParent.getValue().toString();
 				List<SchemaEntity> packageBodyEntityLst = packageBodyDBAbs.selectEntityLst(schemaName);
+				selectedEntity.addEntityAll(packageBodyEntityLst);
 				this.schemaTreeView.addEntityLst( itemSelected, packageBodyEntityLst );
+			}
+			else
+			{
+				this.schemaTreeView.addEntityLst( itemSelected, selectedEntity.getEntityLst() );
 			}
 		}
 		

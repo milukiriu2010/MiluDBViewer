@@ -4,8 +4,9 @@ import javafx.collections.ObservableList;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TreeItem;
 import javafx.scene.image.ImageView;
-import milu.db.aggregate.AggregateDBAbstract;
-import milu.db.aggregate.AggregateDBFactory;
+import milu.db.abs.AbsDBFactory;
+import milu.db.abs.ObjDBFactory;
+import milu.db.abs.ObjDBInterface;
 import milu.entity.schema.SchemaEntity;
 import milu.gui.ctrl.schema.SchemaProcViewTab;
 import milu.ctrl.MainController;
@@ -51,6 +52,7 @@ public class SelectedItemHandlerEachAggregate extends SelectedItemHandlerAbstrac
 			UnsupportedOperationException,
 			SQLException
 	{
+		SchemaEntity selectedEntity = this.itemSelected.getValue();
 		TreeItem<SchemaEntity> itemParent = itemSelected.getParent();
 		String schemaName     = itemParent.getParent().getValue().toString();
 		String aggregateName  = itemSelected.getValue().getName();
@@ -80,7 +82,6 @@ public class SelectedItemHandlerEachAggregate extends SelectedItemHandlerAbstrac
 			}
 		}		
 		
-		
 		// Create DBSchemaProcViewTab, if it doesn't exist.
 		SchemaProcViewTab newTab = new SchemaProcViewTab( this.dbView );
 		newTab.setId( id );
@@ -95,17 +96,25 @@ public class SelectedItemHandlerEachAggregate extends SelectedItemHandlerAbstrac
 		iv.setFitWidth( 16 );
 		newTab.setGraphic( iv );
 		
-		// get table definition
-		//String strSrc = 
-		//	myDBAbs.getAggregateSourceBySchemaAggregate( schema, aggregateName );
-		AggregateDBAbstract aggregateDBAbs = AggregateDBFactory.getInstance(myDBAbs);
-		if ( aggregateDBAbs == null )
+		// get aggregate ddl
+		String strSrc = selectedEntity.getSrcSQL();
+		if ( strSrc == null )
 		{
-			return;
+			ObjDBFactory objDBFactory = AbsDBFactory.getFactory( AbsDBFactory.FACTORY_TYPE.AGGREGATE );
+			if ( objDBFactory == null )
+			{
+				return;
+			}
+			ObjDBInterface objDBInf = objDBFactory.getInstance(myDBAbs);
+			if ( objDBInf == null )
+			{
+				return;
+			}
+			strSrc = objDBInf.getSRC( schemaName, aggregateName );
+			selectedEntity.setSrcSQL(strSrc);
 		}
-		String strSrc = aggregateDBAbs.getSRC(schemaName, aggregateName);
 		
-		// set function source in SqlTextArea
+		// set aggregate source in SqlTextArea
 		newTab.setSrcText( strSrc );
 	}
 	

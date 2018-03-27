@@ -69,17 +69,18 @@ public class SelectedItemHandlerRootMaterializedView extends SelectedItemHandler
 					return;
 				}
 				ObjDBInterface materializedViewDBAbs = materializedViewDBFactory.getInstance(myDBAbs);
-				if ( materializedViewDBAbs != null )
+				if ( materializedViewDBAbs == null )
 				{
-					String schemaName = itemParent.getValue().toString();
-					List<SchemaEntity> materializedViewEntityLst = materializedViewDBAbs.selectEntityLst(schemaName);
-					selectedEntity.addEntityAll(materializedViewEntityLst);
-					this.schemaTreeView.addEntityLst( itemSelected, materializedViewEntityLst );
+					return;
 				}
-				else
-				{
-					this.schemaTreeView.addEntityLst( itemSelected, selectedEntity.getEntityLst() );
-				}
+				String schemaName = itemParent.getValue().toString();
+				List<SchemaEntity> materializedViewEntityLst = materializedViewDBAbs.selectEntityLst(schemaName);
+				selectedEntity.addEntityAll(materializedViewEntityLst);
+				this.schemaTreeView.addEntityLst( itemSelected, materializedViewEntityLst );
+			}
+			else
+			{
+				this.schemaTreeView.addEntityLst( itemSelected, selectedEntity.getEntityLst() );
 			}
 		}
 		

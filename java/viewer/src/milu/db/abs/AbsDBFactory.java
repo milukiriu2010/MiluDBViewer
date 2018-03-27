@@ -5,6 +5,9 @@ import milu.db.table.TableDBFactory;
 import milu.db.mateview.MaterializedViewDBFactory;
 import milu.db.sysview.SystemViewDBFactory;
 import milu.db.func.FuncDBFactory;
+import milu.db.aggregate.AggregateDBFactory;
+import milu.db.packagedef.PackageDefDBFactory;
+import milu.db.packagebody.PackageBodyDBFactory;
 import milu.db.sequence.SequenceDBFactory;
 import milu.db.fk.FKDBFactory;
 
@@ -17,6 +20,9 @@ public class AbsDBFactory
 		MATERIALIZED_VIEW,
 		SYSTEM_VIEW,
 		FUNC,
+		AGGREGATE,
+		PACKAGE_DEF,
+		PACKAGE_BODY,
 		SEQUENCE,
 		FOREIGN_KEY
 	}
@@ -42,6 +48,18 @@ public class AbsDBFactory
 		else if ( factoryType == FACTORY_TYPE.FUNC )
 		{
 			return new FuncDBFactory();
+		}
+		else if ( factoryType == FACTORY_TYPE.AGGREGATE )
+		{
+			return new AggregateDBFactory();
+		}
+		else if ( factoryType == FACTORY_TYPE.PACKAGE_DEF )
+		{
+			return new PackageDefDBFactory();
+		}
+		else if ( factoryType == FACTORY_TYPE.PACKAGE_BODY )
+		{
+			return new PackageBodyDBFactory();
 		}
 		else if ( factoryType == FACTORY_TYPE.SEQUENCE )
 		{

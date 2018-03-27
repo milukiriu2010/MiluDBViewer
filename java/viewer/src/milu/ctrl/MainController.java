@@ -32,12 +32,17 @@ public class MainController
 	// Application Configuration
 	private AppConf  appConf = new AppConf();
 	
+	/*
 	// DB connection list
 	// put MyDBAbstract Object after connected to DB.
 	private List<MyDBAbstract> myDBAbsLst = new ArrayList<MyDBAbstract>();
 	
 	// DBView list
 	private List<DBView> dbViewLst = new ArrayList<DBView>();
+	*/
+	
+	// DB Connection <=> DBView List Map
+	private Map<MyDBAbstract,List<DBView>> myDBViewMap = new HashMap<>();
 	
 	// DraggingTabPaneSupport Map
 	private Map<MyDBAbstract,DraggingTabPaneSupport>  draggingTabPaneMap = new HashMap<>();
@@ -141,6 +146,7 @@ public class MainController
 	private void closeAllDB()
 	{
 		// close DB connection
+		/*
 		for ( int i = 0; i < this.myDBAbsLst.size(); i++ )
 		{
 			MyDBAbstract myDBAbs = this.myDBAbsLst.get( i );
@@ -153,6 +159,21 @@ public class MainController
 				// suppress error
 			}
 		}
+		*/
+		this.myDBViewMap.forEach
+		( 
+			(myDBAbs,dbViewLst)->
+			{
+				try
+				{
+					myDBAbs.close();
+				}
+				catch ( SQLException sqlEx )
+				{
+					// suppress error
+				}
+			}
+		);
 	}
 	
 	/**
@@ -178,14 +199,12 @@ public class MainController
 			MyDBAbstract myDBAbs = result.get();
 		
 			// add myDBAbs to a DB connection list.
-			this.myDBAbsLst.add( myDBAbs );
+			//this.myDBAbsLst.add( myDBAbs );
 
 			// get Active Window(JavaFX9)
 			// https://stackoverflow.com/questions/32922424/how-to-get-the-current-opened-stage-in-javafx
 			List<Window>  focusWinLst = Stage.getWindows().filtered( window2->window2.isFocused() );
 			System.out.println( "focusWinLst.size:" + focusWinLst.size() );
-			//List<Window>  showingWinLst = Stage.getWindows().filtered( window3->window3.isShowing() );
-			//System.out.println( "showingWinLst.size:" + showingWinLst.size() );
 			DBView dbView = null;
 			if ( focusWinLst.size() > 0 )
 			{
@@ -211,7 +230,18 @@ public class MainController
 	{
 		// Open a view for SQL result
 		DBView dbView = new DBView( this, myDBAbs );
-		dbViewLst.add( dbView );
+		//dbViewLst.add( dbView );
+		if ( this.myDBViewMap.containsKey(myDBAbs) )
+		{
+			List<DBView> dbViewLst = this.myDBViewMap.get(myDBAbs);
+			dbViewLst.add(dbView);
+		}
+		else
+		{
+			List<DBView> dbViewLst = new ArrayList<>();
+			dbViewLst.add(dbView);
+			this.myDBViewMap.put( myDBAbs , dbViewLst );
+		}
 		dbView.start();
 		
 		// Open a new window at little bit right+lower.
@@ -229,6 +259,7 @@ public class MainController
 	 */
 	public void close( DBView dbView )
 	{
+		/*
 		// Call when pushing 'x' on DBSettingDialog
 		if ( dbView == null )
 		{
@@ -284,6 +315,35 @@ public class MainController
 				this.quit();
 			}
 		}
+		*/
+		MyDBAbstract myDBAbs = dbView.getMyDBAbstract();
+		List<DBView> dbViewLst = this.myDBViewMap.get(myDBAbs);
+		dbViewLst.remove(dbView);
+		
+		// close myDBAbs & remove from map, 
+		// if there is no active DBView for myDBAbs
+		if ( dbViewLst.size() == 0 )
+		{
+			try
+			{
+				myDBAbs.close();
+			}
+			catch ( SQLException sqlEx )
+			{
+				// suppress error
+			}
+			this.myDBViewMap.remove(myDBAbs);
+			myDBAbs = null;
+		}
+		else
+		{
+			System.out.println( "Active DBView still exists." );
+		}
+		
+		if ( this.myDBViewMap.size() == 0 )
+		{
+			this.quit();
+		}
 	}
 	
 	/*********************************
@@ -329,6 +389,7 @@ public class MainController
 		Locale.setDefault( nextLocale );
 		
 		SchemaEntity.loadResourceBundle();
+		/*
 		for ( MyDBAbstract myDBAbs : this.myDBAbsLst )
 		{
 			SchemaEntity schemaRoot = myDBAbs.getSchemaRoot();
@@ -339,6 +400,16 @@ public class MainController
 		{
 			dbView.changeLang();
 		}
+		*/
+		this.myDBViewMap.forEach
+		( 
+			(myDBAbs, dbViewLst)->
+			{
+				SchemaEntity schemaRoot = myDBAbs.getSchemaRoot();
+				schemaRoot.accept(new ChangeLangSchemaEntityVisitor());
+				dbViewLst.forEach( (dbView)->dbView.changeLang() );
+			}
+		);
 		
 		System.out.println( "changeLang done." );
 	}

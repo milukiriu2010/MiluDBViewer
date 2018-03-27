@@ -58,19 +58,33 @@ public class SelectedItemHandlerRootSequence extends SelectedItemHandlerAbstract
 			UnsupportedOperationException, 
 			SQLException
 	{
+		SchemaEntity selectedEntity = this.itemSelected.getValue();
 		TreeItem<SchemaEntity> itemParent   = this.itemSelected.getParent();
 		ObservableList<TreeItem<SchemaEntity>> itemChildren = this.itemSelected.getChildren();
 		
 		// get View List & add list as children
 		if ( itemChildren.size() == 0 )
 		{
-			ObjDBFactory objDBFactory = AbsDBFactory.getFactory( AbsDBFactory.FACTORY_TYPE.SEQUENCE );
-			ObjDBInterface objDBInf = objDBFactory.getInstance(myDBAbs);
-			if ( objDBInf != null )
+			if ( selectedEntity.getEntityLst().size() == 0 )
 			{
+				ObjDBFactory objDBFactory = AbsDBFactory.getFactory( AbsDBFactory.FACTORY_TYPE.SEQUENCE );
+				if ( objDBFactory == null )
+				{
+					return;
+				}
+				ObjDBInterface objDBInf = objDBFactory.getInstance(myDBAbs);
+				if ( objDBInf == null )
+				{
+					return;
+				}
 				String schemaName = itemParent.getValue().toString();
 				List<SchemaEntity> sequenceEntityLst = objDBInf.selectEntityLst(schemaName);
+				selectedEntity.addEntityAll(sequenceEntityLst);
 				this.schemaTreeView.addEntityLst( itemSelected, sequenceEntityLst );
+			}
+			else
+			{
+				this.schemaTreeView.addEntityLst( itemSelected, selectedEntity.getEntityLst() );
 			}
 		}
 	}

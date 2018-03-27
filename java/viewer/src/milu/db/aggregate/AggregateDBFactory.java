@@ -1,11 +1,14 @@
 package milu.db.aggregate;
 
+import milu.db.abs.ObjDBFactory;
+import milu.db.abs.ObjDBInterface;
+
 import milu.db.MyDBAbstract;
 import milu.db.MyDBCassandra;
 
-public class AggregateDBFactory
+public class AggregateDBFactory implements ObjDBFactory
 {
-	public static AggregateDBAbstract getInstance( MyDBAbstract myDBAbs )
+	public ObjDBInterface getInstance( MyDBAbstract myDBAbs )
 	{
 		AggregateDBAbstract aggregateDBAbs = null;
 		if ( myDBAbs instanceof MyDBCassandra )

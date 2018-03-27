@@ -32,6 +32,10 @@ class AppPaneFactory implements PaneFactory
 		{
 			appPaneAbs = new AppPaneGeneralConf();
 		}
+		else
+		{
+			appPaneAbs = new AppPaneGeneralConf();
+		}
 		
 		appPaneAbs.createPane( dlg, mainCtrl, extLangRB );
 		return appPaneAbs;

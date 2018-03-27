@@ -36,6 +36,7 @@ import javafx.collections.ObservableList;
 
 import milu.db.MyDBAbstract;
 import milu.db.MyDBFactory;
+import milu.gui.ctrl.common.ButtonOrderNoneDialogPane;
 import milu.gui.dlg.MyAlertDialog;
 import milu.ctrl.MainController;
 
@@ -79,6 +80,9 @@ public class DBSettingDialog extends Dialog<MyDBAbstract>
 	public DBSettingDialog( MainController mainCtrl )
 	{
 		this.mainCtrl = mainCtrl;
+		
+		// set DialogPane which has no button order.
+		this.setDialogPane( new ButtonOrderNoneDialogPane() );
 		
 		// Set dialog title.
 		this.setTitle( langRB.getString( "TITLE_DB_SETTING" ) );

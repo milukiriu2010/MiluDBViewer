@@ -5,39 +5,25 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import milu.db.MyDBAbstract;
+import milu.db.abs.ObjDBInterface;
 import milu.entity.schema.SchemaEntity;
 import milu.entity.schema.SchemaEntityFactory;
 
-public abstract class PackageDefDBAbstract 
+public abstract class PackageDefDBAbstract implements ObjDBInterface 
 {
 	// DB Access Object
 	protected MyDBAbstract  myDBAbs = null;
 	
+	@Override
 	public void setMyDBAbstract( MyDBAbstract myDBAbs )
 	{
 		this.myDBAbs = myDBAbs;
 	}
 
-	/*
-	public List<SchemaEntity> getEntityLst()
-	{
-		List<SchemaEntity>  packageDefEntityLst = new ArrayList<>();
-		for ( Map<String,String> packageDef : this.packageDefLst )
-		{
-			SchemaEntity eachPackageDefEntity = SchemaEntityFactory.createInstance( packageDef.get("packageDefName"), SchemaEntity.SCHEMA_TYPE.PACKAGE_DEF );
-			String strStatus = packageDef.get("status");
-			if ( strStatus != null && "INVALID".equals(strStatus) )
-			{
-				eachPackageDefEntity.setState( SchemaEntity.STATE.INVALID );
-			}
-			packageDefEntityLst.add( eachPackageDefEntity );
-		}
-		return packageDefEntityLst;
-	}
-	*/	
-	
+	@Override
 	public List<SchemaEntity> selectEntityLst( String schemaName ) throws SQLException
 	{
 		List<SchemaEntity>  packageDefEntityLst = new ArrayList<>();
@@ -55,12 +41,6 @@ public abstract class PackageDefDBAbstract
 		{
 			while ( rs.next() )
 			{
-				/*
-				Map<String,String> dataRow = new HashMap<>();
-				dataRow.put( "packageDefName", rs.getString("object_name") );
-				dataRow.put( "status"        , rs.getString("status") );
-				this.packageDefLst.add( dataRow );
-				*/
 				SchemaEntity packageDefEntity = SchemaEntityFactory.createInstance( rs.getString("object_name"), SchemaEntity.SCHEMA_TYPE.PACKAGE_DEF );
 				String strStatus = rs.getString("status");
 				if ( strStatus != null && "INVALID".equals(strStatus) )
@@ -75,7 +55,14 @@ public abstract class PackageDefDBAbstract
 	}
 	
 	abstract protected String listSQL( String schemaName );
+	
+	@Override
+	public List<Map<String,String>> selectDefinition( String schemaName, String objName ) throws SQLException
+	{
+		throw new UnsupportedOperationException();
+	}
 
 	// Source of Package Definition
+	@Override
 	abstract public String getSRC( String schemaName, String packageDefName ) throws SQLException;
 }

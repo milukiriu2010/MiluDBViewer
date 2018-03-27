@@ -50,6 +50,7 @@ public class SelectedItemHandlerEachFunc extends SelectedItemHandlerAbstract
 			UnsupportedOperationException,
 			SQLException
 	{
+		SchemaEntity selectedEntity = this.itemSelected.getValue();
 		TreeItem<SchemaEntity> itemParent = itemSelected.getParent();
 		String schemaName = itemParent.getParent().getValue().toString();
 		String funcName   = itemSelected.getValue().getName();
@@ -94,14 +95,23 @@ public class SelectedItemHandlerEachFunc extends SelectedItemHandlerAbstract
 		iv.setFitWidth( 16 );
 		newTab.setGraphic( iv );
 		
-		// get table definition
-		ObjDBFactory objDBFactory = AbsDBFactory.getFactory( AbsDBFactory.FACTORY_TYPE.FUNC );
-		ObjDBInterface objDBInf = objDBFactory.getInstance(myDBAbs);
-		if ( objDBInf == null )
+		// get function ddl
+		String strSrc = selectedEntity.getSrcSQL();
+		if ( strSrc == null )
 		{
-			return;
+			ObjDBFactory objDBFactory = AbsDBFactory.getFactory( AbsDBFactory.FACTORY_TYPE.FUNC );
+			if ( objDBFactory == null )
+			{
+				return;
+			}
+			ObjDBInterface objDBInf = objDBFactory.getInstance(myDBAbs);
+			if ( objDBInf == null )
+			{
+				return;
+			}
+			strSrc = objDBInf.getSRC( schemaName, funcName );
+			selectedEntity.setSrcSQL(strSrc);
 		}
-		String strSrc = objDBInf.getSRC( schemaName, funcName );
 		
 		// set function source in SqlTextArea
 		newTab.setSrcText( strSrc );
