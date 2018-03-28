@@ -2,6 +2,8 @@ package milu.db.abs;
 
 import milu.db.schema.SchemaDBFactory;
 import milu.db.table.TableDBFactory;
+import milu.db.index.IndexDBFactory;
+import milu.db.indexcolumn.IndexColumnDBFactory;
 import milu.db.view.ViewDBFactory;
 import milu.db.mateview.MaterializedViewDBFactory;
 import milu.db.sysview.SystemViewDBFactory;
@@ -11,6 +13,7 @@ import milu.db.proc.ProcDBFactory;
 import milu.db.packagedef.PackageDefDBFactory;
 import milu.db.packagebody.PackageBodyDBFactory;
 import milu.db.trigger.TriggerDBFactory;
+import milu.db.type.TypeDBFactory;
 import milu.db.sequence.SequenceDBFactory;
 import milu.db.fk.FKDBFactory;
 
@@ -20,6 +23,8 @@ public class AbsDBFactory
 	{
 		SCHEMA,
 		TABLE,
+		INDEX,
+		INDEX_COLUMN,
 		VIEW,
 		MATERIALIZED_VIEW,
 		SYSTEM_VIEW,
@@ -29,6 +34,7 @@ public class AbsDBFactory
 		PACKAGE_DEF,
 		PACKAGE_BODY,
 		TRIGGER,
+		TYPE,
 		SEQUENCE,
 		FOREIGN_KEY
 	}
@@ -42,6 +48,14 @@ public class AbsDBFactory
 		else if ( factoryType == FACTORY_TYPE.TABLE )
 		{
 			return new TableDBFactory();
+		}
+		else if ( factoryType == FACTORY_TYPE.INDEX )
+		{
+			return new IndexDBFactory();
+		}
+		else if ( factoryType == FACTORY_TYPE.INDEX_COLUMN )
+		{
+			return new IndexColumnDBFactory();
 		}
 		else if ( factoryType == FACTORY_TYPE.VIEW )
 		{
@@ -78,6 +92,10 @@ public class AbsDBFactory
 		else if ( factoryType == FACTORY_TYPE.TRIGGER )
 		{
 			return new TriggerDBFactory();
+		}
+		else if ( factoryType == FACTORY_TYPE.TYPE )
+		{
+			return new TypeDBFactory();
 		}
 		else if ( factoryType == FACTORY_TYPE.SEQUENCE )
 		{

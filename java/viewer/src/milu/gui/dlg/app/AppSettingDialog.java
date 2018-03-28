@@ -73,6 +73,8 @@ public class AppSettingDialog extends Dialog<Boolean>
 		treeItemRoot.setExpanded(true);
 		
 		this.treeViewConf.setRoot( treeItemRoot );
+		// do not show root item
+		this.treeViewConf.setShowRoot(false);
 		
 		// pane for Dialog
         BorderPane paneDlg = new BorderPane();

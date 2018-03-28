@@ -1,13 +1,16 @@
 package milu.db.type;
 
+import milu.db.abs.ObjDBInterface;
+import milu.db.abs.ObjDBFactory;
+
 import milu.db.MyDBAbstract;
 import milu.db.MyDBPostgres;
 import milu.db.MyDBOracle;
 import milu.db.MyDBCassandra;
 
-public class TypeDBFactory 
+public class TypeDBFactory implements ObjDBFactory
 {
-	public static TypeDBAbstract getInstance( MyDBAbstract myDBAbs )
+	public ObjDBInterface getInstance( MyDBAbstract myDBAbs )
 	{
 		TypeDBAbstract typeDBAbs = null;
 		

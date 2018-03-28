@@ -5,8 +5,9 @@ import javafx.scene.control.Tab;
 import javafx.scene.control.TreeItem;
 import javafx.scene.image.ImageView;
 
-import milu.db.type.TypeDBAbstract;
-import milu.db.type.TypeDBFactory;
+import milu.db.abs.AbsDBFactory;
+import milu.db.abs.ObjDBFactory;
+import milu.db.abs.ObjDBInterface;
 import milu.entity.schema.SchemaEntity;
 import milu.gui.ctrl.schema.SchemaProcViewTab;
 import milu.ctrl.MainController;
@@ -58,6 +59,7 @@ public class SelectedItemHandlerEachType extends SelectedItemHandlerAbstract
 			UnsupportedOperationException,
 			SQLException
 	{
+		SchemaEntity selectedEntity = this.itemSelected.getValue();
 		TreeItem<SchemaEntity> itemParent = itemSelected.getParent();
 		String schemaName = itemParent.getParent().getValue().toString();
 		String typeName   = itemSelected.getValue().getName();
@@ -102,13 +104,31 @@ public class SelectedItemHandlerEachType extends SelectedItemHandlerAbstract
 		iv.setFitWidth( 16 );
 		newTab.setGraphic( iv );
 		
-		// get table definition
+		// get type definition
+		/*
 		TypeDBAbstract typeDBAbs = TypeDBFactory.getInstance(myDBAbs);
 		if ( typeDBAbs == null )
 		{
 			return;
 		}
 		String strSrc = typeDBAbs.getSRC(schemaName, typeName);
+		*/
+		String strSrc = selectedEntity.getSrcSQL();
+		if ( strSrc == null )
+		{
+			ObjDBFactory objDBFactory = AbsDBFactory.getFactory( AbsDBFactory.FACTORY_TYPE.TYPE );
+			if ( objDBFactory == null )
+			{
+				return;
+			}
+			ObjDBInterface objDBInf = objDBFactory.getInstance(myDBAbs);
+			if ( objDBInf == null )
+			{
+				return;
+			}
+			strSrc = objDBInf.getSRC( schemaName, typeName );
+			selectedEntity.setSrcSQL(strSrc);
+		}
 		
 		// set type source in SqlTextArea
 		newTab.setSrcText( strSrc );

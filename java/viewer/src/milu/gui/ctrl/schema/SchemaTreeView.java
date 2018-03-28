@@ -87,6 +87,7 @@ public class SchemaTreeView extends TreeView<SchemaEntity>
 			}
 		);
 		
+		this.setAction();
 		
 		this.setContextMenu();
 	}
@@ -171,11 +172,12 @@ public class SchemaTreeView extends TreeView<SchemaEntity>
 				}
 			} 
 		);
+		//this.setContextMenu(contextMenu);
 	}
 	
-	// https://stackoverflow.com/questions/38101041/javafx-treeview-restore-scroll-state
 	private void setAction()
 	{
+		// https://stackoverflow.com/questions/38101041/javafx-treeview-restore-scroll-state
 		/*
 		Set<Node> nodes = this.lookupAll(".scroll-bar");
 		for (Node node : nodes) {
@@ -201,6 +203,7 @@ public class SchemaTreeView extends TreeView<SchemaEntity>
 			}
 		}
 		*/
+		
 	}
 	
 	// shift label position
@@ -377,7 +380,6 @@ public class SchemaTreeView extends TreeView<SchemaEntity>
 			}
 		}
 		
-		this.setAction();
 		itemTarget.setExpanded(true);
 		this.scrollBack(itemTarget);
 	}

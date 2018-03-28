@@ -8,8 +8,9 @@ import javafx.scene.control.TreeItem;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
-import milu.db.type.TypeDBAbstract;
-import milu.db.type.TypeDBFactory;
+import milu.db.abs.AbsDBFactory;
+import milu.db.abs.ObjDBFactory;
+import milu.db.abs.ObjDBInterface;
 import milu.entity.schema.SchemaEntity;
 import milu.gui.ctrl.schema.SchemaProcViewTab;
 
@@ -35,18 +36,6 @@ import milu.gui.ctrl.schema.SchemaProcViewTab;
  */
 public class SelectedItemHandlerRootType extends SelectedItemHandlerAbstract
 {
-	/*
-	public SelectedItemHandlerRootType
-	( 
-		SchemaTreeView schemaTreeView, 
-		TabPane        tabPane,
-		MyDBAbstract   myDBAbs,
-		SelectedItemHandlerAbstract.REFRESH_TYPE  refreshType
-	)
-	{
-		super( schemaTreeView, tabPane, myDBAbs, refreshType );
-	}
-	*/
 	@Override
 	protected boolean isMyResponsible()
 	{
@@ -66,17 +55,14 @@ public class SelectedItemHandlerRootType extends SelectedItemHandlerAbstract
 			UnsupportedOperationException, 
 			SQLException
 	{
+		SchemaEntity selectedEntity = this.itemSelected.getValue();
 		TreeItem<SchemaEntity> itemParent   = this.itemSelected.getParent();
 		ObservableList<TreeItem<SchemaEntity>> itemChildren = this.itemSelected.getChildren();
 		
-		// get View List & add list as children
+		// get type List & add list as children
+		/*
 		if ( itemChildren.size() == 0 )
 		{
-			/*
-			String schema = itemParent.getValue().toString();
-			List<List<String>> dataLst = myDBAbs.getSchemaType( schema );
-			this.schemaTreeView.setTypeData( itemSelected, dataLst );
-			*/
 			TypeDBAbstract typeDBAbs = TypeDBFactory.getInstance(myDBAbs);
 			if ( typeDBAbs != null )
 			{
@@ -85,6 +71,32 @@ public class SelectedItemHandlerRootType extends SelectedItemHandlerAbstract
 				this.schemaTreeView.addEntityLst( itemSelected, typeEntityLst );
 			}
 		}
+		*/
+		if ( itemChildren.size() == 0 )
+		{
+			if ( selectedEntity.getEntityLst().size() == 0 )
+			{
+				ObjDBFactory objDBFactory = AbsDBFactory.getFactory( AbsDBFactory.FACTORY_TYPE.TYPE );
+				if ( objDBFactory == null )
+				{
+					return;
+				}
+				ObjDBInterface objDBInf = objDBFactory.getInstance(myDBAbs);
+				if ( objDBInf == null )
+				{
+					return;
+				}
+				String schemaName = itemParent.getValue().toString();
+				List<SchemaEntity> entityLst = objDBInf.selectEntityLst(schemaName);
+				selectedEntity.addEntityAll(entityLst);
+				this.schemaTreeView.addEntityLst( itemSelected, entityLst );
+			}
+			else
+			{
+				this.schemaTreeView.addEntityLst( itemSelected, selectedEntity.getEntityLst() );
+			}
+		}
+		
 		
 		// Delete DBSchemaTableViewTab, if already exists. 
 		if ( this.refreshType == SelectedItemHandlerAbstract.REFRESH_TYPE.WITH_REFRESH )

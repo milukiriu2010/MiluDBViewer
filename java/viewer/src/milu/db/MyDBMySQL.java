@@ -28,6 +28,11 @@ public class MyDBMySQL extends MyDBAbstract
 	{
 		Class.forName( "com.mysql.jdbc.Driver" );
 	}
+
+	@Override
+	protected void loadSpecial()
+	{
+	}
 	
 	/**
 	 * Get Driver URL

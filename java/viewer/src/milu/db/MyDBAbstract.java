@@ -32,6 +32,9 @@ abstract public class MyDBAbstract
 	// DB properties
 	protected Map<String,String>  dbOpts = new HashMap<>();
 	
+	// DB properties(special)
+	protected Map<String,String>  dbOptsSpecial = new HashMap<>();
+	
 	// SchemaEntity Root
 	protected SchemaEntity schemaRoot = null;
 	
@@ -47,6 +50,8 @@ abstract public class MyDBAbstract
 	 * @throws ClassNotFoundException
 	 */
 	abstract protected void loadDriver() throws ClassNotFoundException;
+	
+	abstract protected void loadSpecial();
 	
 	/**
 	 * Get Driver URL
@@ -200,13 +205,13 @@ abstract public class MyDBAbstract
 		// Load Driver
 	    this.loadDriver();
 	    
+	    // Load special environment
+	    this.loadSpecial();
+	    
 		System.out.println( "URL     :" + this.url );
 		System.out.println( "UserName:" + this.username );
 		
 		// Connection
-		//this.conn =	DriverManager.getConnection( this.url, this.username, this.password );
-		//this.conn =	DriverManager.getConnection( this.url, this.createProp() );
-		
 		Properties prop = this.createProp();
 		if ( prop.isEmpty() == true )
 		{

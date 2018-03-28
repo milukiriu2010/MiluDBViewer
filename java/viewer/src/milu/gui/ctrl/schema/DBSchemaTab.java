@@ -123,6 +123,14 @@ public class DBSchemaTab extends Tab
     		alertDlg.showAndWait();
     		alertDlg = null;
 		}
+		catch ( Exception ex )
+		{
+			MyAlertDialog alertDlg = new MyAlertDialog(AlertType.WARNING);
+			alertDlg.setHeaderText( langRB.getString("TITLE_MISC_ERROR") );
+    		alertDlg.setTxtExp( ex );
+    		alertDlg.showAndWait();
+    		alertDlg = null;
+		}
 	}
 	
 	/**************************************************
@@ -155,6 +163,14 @@ public class DBSchemaTab extends Tab
 			MyAlertDialog alertDlg = new MyAlertDialog(AlertType.WARNING);
 			alertDlg.setHeaderText( langRB.getString("TITLE_EXEC_QUERY_ERROR") );
     		alertDlg.setTxtExp( sqlEx, myDBAbs );
+    		alertDlg.showAndWait();
+    		alertDlg = null;
+		}
+		catch ( Exception ex )
+		{
+			MyAlertDialog alertDlg = new MyAlertDialog(AlertType.WARNING);
+			alertDlg.setHeaderText( langRB.getString("TITLE_MISC_ERROR") );
+    		alertDlg.setTxtExp( ex );
     		alertDlg.showAndWait();
     		alertDlg = null;
 		}

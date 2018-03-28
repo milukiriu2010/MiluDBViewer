@@ -41,6 +41,14 @@ public class MaterializedViewDBCassandra extends MaterializedViewDBAbstract {
 				
 			}
 		}
+		catch ( SQLException sqlEx )
+		{
+			throw sqlEx;
+		}
+		catch ( Exception ex )
+		{
+			throw new SQLException( ex );
+		}
 		
 		return viewEntityLst;
 	}

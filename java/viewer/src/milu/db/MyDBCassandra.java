@@ -16,20 +16,15 @@ import java.util.Map;
  */
 public class MyDBCassandra extends MyDBAbstract
 {
-	/*
-	public MyDBCassandra()
-	{
-		this.suppoertedTypeLst.add( SCHEMA_TYPE.ROOT_TABLE );
-		this.suppoertedTypeLst.add( SCHEMA_TYPE.ROOT_MATERIALIZED_VIEW );
-		this.suppoertedTypeLst.add( SCHEMA_TYPE.ROOT_FUNC );
-		this.suppoertedTypeLst.add( SCHEMA_TYPE.ROOT_AGGREGATE );
-		this.suppoertedTypeLst.add( SCHEMA_TYPE.ROOT_TYPE );
-	}
-	*/
 	@Override
 	protected void loadDriver() throws ClassNotFoundException
 	{
 		Class.forName( "com.github.cassandra.jdbc.CassandraDriver" );
+	}
+
+	@Override
+	protected void loadSpecial()
+	{
 	}
 
 	@Override

@@ -7,7 +7,6 @@ import java.sql.SQLException;
 import javafx.concurrent.Task;
 
 import milu.db.MyDBAbstract;
-import milu.db.type.TypeDBFactory;
 
 import milu.db.abs.AbsDBFactory;
 import milu.db.abs.ObjDBFactory;
@@ -106,7 +105,6 @@ public class CollectTask extends Task<Double>
 	private void selectTableLst( SchemaEntity schemaEntity, int schemaEntityLstPos, int schemaEntityLstSize )
 		throws SQLException
 	{
-		//TableDBAbstract tableDBAbs = TableDBFactory.getInstance(this.myDBAbs);
 		ObjDBFactory tableDBFactory = AbsDBFactory.getFactory( AbsDBFactory.FACTORY_TYPE.TABLE );
 		if ( tableDBFactory == null )
 		{
@@ -184,9 +182,10 @@ public class CollectTask extends Task<Double>
 			SchemaEntity rootPackageBodyEntity  = SchemaEntityFactory.createInstance( SchemaEntity.SCHEMA_TYPE.ROOT_PACKAGE_BODY );
 			schemaEntity.addEntity( rootPackageBodyEntity );
 		}
-		if ( TypeDBFactory.getInstance(myDBAbs) != null )
+		ObjDBFactory typeDBFactory = AbsDBFactory.getFactory( AbsDBFactory.FACTORY_TYPE.TYPE );
+		if ( typeDBFactory.getInstance(myDBAbs) != null )
 		{
-			SchemaEntity rootTypeEntity             = SchemaEntityFactory.createInstance( SchemaEntity.SCHEMA_TYPE.ROOT_TYPE );
+			SchemaEntity rootTypeEntity = SchemaEntityFactory.createInstance( SchemaEntity.SCHEMA_TYPE.ROOT_TYPE );
 			schemaEntity.addEntity( rootTypeEntity );
 		}
 		ObjDBFactory triggerDBFactory = AbsDBFactory.getFactory( AbsDBFactory.FACTORY_TYPE.TRIGGER );

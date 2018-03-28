@@ -1,12 +1,15 @@
 package milu.gui.ctrl.schema.handle;
 
 import java.sql.SQLException;
+import java.util.List;
 
 import javafx.scene.control.TreeItem;
 import javafx.collections.ObservableList;
 
+import milu.db.abs.AbsDBFactory;
+import milu.db.abs.ObjDBFactory;
+import milu.db.abs.ObjDBInterface;
 import milu.db.index.IndexDBAbstract;
-import milu.db.index.IndexDBFactory;
 import milu.entity.schema.SchemaEntity;
 
 /**
@@ -27,18 +30,6 @@ import milu.entity.schema.SchemaEntity;
  */
 public class SelectedItemHandlerRootIndex extends SelectedItemHandlerAbstract
 {
-	/*
-	public SelectedItemHandlerRootIndex
-	( 
-		SchemaTreeView schemaTreeView, 
-		TabPane        tabPane,
-		MyDBAbstract   myDBAbs,
-		SelectedItemHandlerAbstract.REFRESH_TYPE  refreshType
-	)
-	{
-		super( schemaTreeView, tabPane, myDBAbs, refreshType );
-	}
-	*/
 	@Override
 	protected boolean isMyResponsible()
 	{
@@ -58,18 +49,14 @@ public class SelectedItemHandlerRootIndex extends SelectedItemHandlerAbstract
 			UnsupportedOperationException, 
 			SQLException
 	{
+		SchemaEntity selectedEntity = this.itemSelected.getValue();
 		TreeItem<SchemaEntity> itemParent   = this.itemSelected.getParent();
 		ObservableList<TreeItem<SchemaEntity>> itemChildren = this.itemSelected.getChildren();
 		
+		// get function List & add list as children
+		/*
 		if ( itemChildren.size() == 0 )
 		{
-			/*
-			String schema = itemParent.getParent().getParent().getValue().toString();
-			String table  = itemParent.getValue().toString();
-			List<Map<String,String>> dataLst = 
-					myDBAbs.getIndexBySchemaTable( schema, table );
-			this.schemaTreeView.setIndexData( itemSelected, dataLst );
-			*/
 			String schemaName = itemParent.getParent().getParent().getValue().toString();
 			String tableName  = itemParent.getValue().toString();
 			IndexDBAbstract indexDBAbs = IndexDBFactory.getInstance( this.myDBAbs );
@@ -79,6 +66,32 @@ public class SelectedItemHandlerRootIndex extends SelectedItemHandlerAbstract
 				this.schemaTreeView.addEntityLst( this.itemSelected, indexDBAbs.getEntityLst() );
 			}
 		}
+		*/
+		if ( itemChildren.size() == 0 )
+		{
+			if ( selectedEntity.getEntityLst().size() == 0 )
+			{
+				ObjDBFactory objDBFactory = AbsDBFactory.getFactory( AbsDBFactory.FACTORY_TYPE.INDEX );
+				if ( objDBFactory == null )
+				{
+					return;
+				}
+				ObjDBInterface objDBInf = objDBFactory.getInstance(myDBAbs);
+				if ( objDBInf == null )
+				{
+					return;
+				}
+				String schemaName = itemParent.getParent().getParent().getValue().toString();
+				String tableName  = itemParent.getValue().toString();
+				List<SchemaEntity> entityLst = ((IndexDBAbstract)objDBInf).selectEntityLst(schemaName,tableName);
+				selectedEntity.addEntityAll(entityLst);
+				this.schemaTreeView.addEntityLst( itemSelected, entityLst );
+			}
+			else
+			{
+				this.schemaTreeView.addEntityLst( itemSelected, selectedEntity.getEntityLst() );
+			}
+		}		
 	}
 
 }

@@ -4,12 +4,15 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+
+import milu.entity.schema.SchemaEntity;
 
 public class IndexColumnDBMySQL extends IndexColumnDBAbstract 
 {
 	@Override
-	public void selectEntityLst(String schemaName, String tableName, String indexName) 
+	public List<SchemaEntity> selectEntityLst(String schemaName, String tableName, String indexName) 
 		throws SQLException 
 	{
 		this.clear();
@@ -31,6 +34,7 @@ public class IndexColumnDBMySQL extends IndexColumnDBAbstract
 				mapColumn.put( "columnName", rs.getString(1) );
 				this.indexColumnLst.add( mapColumn );
 			}
+			return this.getEntityLst();
 		}
 	}
 

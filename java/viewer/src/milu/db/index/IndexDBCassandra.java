@@ -8,10 +8,12 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-public class IndexDBCassandra extends IndexDBAbstract {
+import milu.entity.schema.SchemaEntity;
 
+public class IndexDBCassandra extends IndexDBAbstract 
+{
 	@Override
-	public void selectEntityLst(String schemaName, String tableName) throws SQLException 
+	public List<SchemaEntity> selectEntityLst(String schemaName, String tableName) throws SQLException 
 	{
 		this.clear();
 
@@ -69,6 +71,8 @@ public class IndexDBCassandra extends IndexDBAbstract {
 				clusteringKey.put( "index_keys", String.join( ",", clusteringColumnLst ) );
 				this.indexLst.add( clusteringKey );
 			}
+			
+			return this.getEntityLst();
 		}
 	}
 

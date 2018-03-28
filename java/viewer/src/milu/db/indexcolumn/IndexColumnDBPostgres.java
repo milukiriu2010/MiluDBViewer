@@ -4,13 +4,16 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Map;
-import java.util.HashMap;
 
-public class IndexColumnDBPostgres 
-	extends IndexColumnDBAbstract
+import milu.entity.schema.SchemaEntity;
+
+import java.util.HashMap;
+import java.util.List;
+
+public class IndexColumnDBPostgres extends IndexColumnDBAbstract
 {
 	@Override
-	public void selectEntityLst( String schemaName, String tableName, String indexName ) throws SQLException
+	public List<SchemaEntity> selectEntityLst( String schemaName, String tableName, String indexName ) throws SQLException
 	{
 		this.clear();
 		
@@ -48,6 +51,7 @@ public class IndexColumnDBPostgres
 					this.indexColumnLst.add( mapColumn );
 				}
 			}
+			return this.getEntityLst();
 		}
 	}
 	

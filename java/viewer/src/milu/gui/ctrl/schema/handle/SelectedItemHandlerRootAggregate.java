@@ -62,7 +62,7 @@ public class SelectedItemHandlerRootAggregate extends SelectedItemHandlerAbstrac
 		{
 			if ( selectedEntity.getEntityLst().size() == 0 )
 			{
-				ObjDBFactory objDBFactory = AbsDBFactory.getFactory( AbsDBFactory.FACTORY_TYPE.FUNC );
+				ObjDBFactory objDBFactory = AbsDBFactory.getFactory( AbsDBFactory.FACTORY_TYPE.AGGREGATE );
 				if ( objDBFactory == null )
 				{
 					return;

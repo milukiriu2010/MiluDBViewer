@@ -6,11 +6,13 @@ import java.util.Map;
 
 import java.sql.SQLException;
 
+import milu.db.abs.ObjDBInterface;
+
 import milu.db.MyDBAbstract;
 import milu.entity.schema.SchemaEntity;
 import milu.entity.schema.SchemaEntityFactory;
 
-public abstract class IndexColumnDBAbstract
+public abstract class IndexColumnDBAbstract implements ObjDBInterface
 {
 	// DB Access Object
 	protected MyDBAbstract  myDBAbs = null;
@@ -18,17 +20,18 @@ public abstract class IndexColumnDBAbstract
 	// Column Name List
 	protected List<Map<String,String>>  indexColumnLst = new ArrayList<>();
 	
-	public void setMyDBAbstract( MyDBAbstract myDBAbs )
-	{
-		this.myDBAbs = myDBAbs;
-	}
-	
 	protected void clear()
 	{
 		this.indexColumnLst.clear();
 	}
 	
-	public List<SchemaEntity> getEntityLst()
+	@Override
+	public void setMyDBAbstract( MyDBAbstract myDBAbs )
+	{
+		this.myDBAbs = myDBAbs;
+	}
+	
+	protected List<SchemaEntity> getEntityLst()
 	{
 		List<SchemaEntity>  indexColumnEntityLst = new ArrayList<>();
 		for ( Map<String,String> indexColumn : this.indexColumnLst )
@@ -54,7 +57,25 @@ public abstract class IndexColumnDBAbstract
 		return indexColumnEntityLst;
 	}
 	
-	abstract public void selectEntityLst( String schemaName, String tableName, String indexName ) throws SQLException;
+	@Override
+	public List<SchemaEntity> selectEntityLst( String schemaName ) throws SQLException
+	{
+		throw new UnsupportedOperationException();
+	}
+	
+	abstract public List<SchemaEntity> selectEntityLst( String schemaName, String tableName, String indexName ) throws SQLException;
 	
 	abstract protected String listSQL( String schemaName, String tableName, String indexName );
+	
+	@Override
+	public List<Map<String,String>> selectDefinition( String schemaName, String objName ) throws SQLException
+	{
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public String getSRC( String schemaName, String funcName ) throws SQLException
+	{
+		throw new UnsupportedOperationException();
+	}
 }

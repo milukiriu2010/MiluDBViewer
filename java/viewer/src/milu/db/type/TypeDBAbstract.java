@@ -2,11 +2,14 @@ package milu.db.type;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Map;
+
+import milu.db.abs.ObjDBInterface;
 
 import milu.db.MyDBAbstract;
 import milu.entity.schema.SchemaEntity;
 
-abstract public class TypeDBAbstract 
+abstract public class TypeDBAbstract implements ObjDBInterface
 {
 	// DB Access Object
 	protected MyDBAbstract  myDBAbs = null;
@@ -15,28 +18,20 @@ abstract public class TypeDBAbstract
 	{
 		this.myDBAbs = myDBAbs;
 	}
-	/*
-	public List<SchemaEntity> getEntityLst()
-	{
-		List<SchemaEntity>  typeEntityLst = new ArrayList<>();
-		for ( Map<String,String> type : this.typeLst )
-		{
-			SchemaEntity eachFuncEntity = SchemaEntityFactory.createInstance( type.get("typeName"), SchemaEntity.SCHEMA_TYPE.TYPE );
-			String strStatus = type.get("status");
-			if ( strStatus != null && "INVALID".equals(strStatus) )
-			{
-				eachFuncEntity.setState( SchemaEntity.STATE.INVALID );
-			}
-			typeEntityLst.add( eachFuncEntity );
-		}
-		return typeEntityLst;
-	}	
-	*/
+	
+	@Override
 	abstract public List<SchemaEntity> selectEntityLst( String schemaName ) throws SQLException;
 	
 	abstract protected String listSQL( String schemaName );
-
+	
+	@Override
+	public List<Map<String,String>> selectDefinition( String schemaName, String objName ) throws SQLException
+	{
+		throw new UnsupportedOperationException();
+	}
+	
 	// Source of Type
+	@Override
 	abstract public String getSRC( String schemaName, String typeName ) throws SQLException;
 
 }

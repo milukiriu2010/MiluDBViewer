@@ -1,14 +1,17 @@
 package milu.db.indexcolumn;
 
+import milu.db.abs.ObjDBInterface;
+import milu.db.abs.ObjDBFactory;
+
 import milu.db.MyDBAbstract;
 import milu.db.MyDBPostgres;
 import milu.db.MyDBMySQL;
 import milu.db.MyDBOracle;
 import milu.db.MyDBCassandra;
 
-public class IndexColumnDBFactory
+public class IndexColumnDBFactory implements ObjDBFactory
 {
-	public static IndexColumnDBAbstract getInstance( MyDBAbstract myDBAbs )
+	public ObjDBInterface getInstance( MyDBAbstract myDBAbs )
 	{
 		IndexColumnDBAbstract indexColumnDBAbs = null;
 		

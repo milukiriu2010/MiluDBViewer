@@ -32,6 +32,16 @@ public class MyDBOracle extends MyDBAbstract
 	{
 		Class.forName( "oracle.jdbc.driver.OracleDriver" );
 	}
+
+	@Override
+	protected void loadSpecial()
+	{
+		//System.setProperty( "oracle.net.tns_admin", dbOptMap.get( "TNSAdmin" ) );
+		
+		// set system property(TNS)
+		//   oracle.net.tns_admin => TNS_ADMIN
+		this.dbOptsSpecial.forEach( (k,v)->System.setProperty(k,v) );
+	}
 	
 	/**
 	 * Get Driver URL
@@ -76,7 +86,8 @@ public class MyDBOracle extends MyDBAbstract
 		)
 		{
 			this.url = "jdbc:oracle:thin:@"+ dbOptMap.get( "TNSName" );
-			System.setProperty( "oracle.net.tns_admin", dbOptMap.get( "TNSAdmin" ) );
+			//System.setProperty( "oracle.net.tns_admin", dbOptMap.get( "TNSAdmin" ) );
+			this.dbOptsSpecial.put( "oracle.net.tns_admin", dbOptMap.get( "TNSAdmin" ) );
 		}
 		return this.url;
 	}

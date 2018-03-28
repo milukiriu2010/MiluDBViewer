@@ -29,6 +29,11 @@ public class MyDBPostgres extends MyDBAbstract
 	{
 		Class.forName( "org.postgresql.Driver" );
 	}
+
+	@Override
+	protected void loadSpecial()
+	{
+	}
 	
 	/**
 	 * Get Driver URL

@@ -1,12 +1,17 @@
 package milu.gui.ctrl.schema.handle;
 
+import javafx.collections.ObservableList;
 import javafx.scene.control.TreeItem;
 
+import milu.db.abs.AbsDBFactory;
+import milu.db.abs.ObjDBFactory;
+import milu.db.abs.ObjDBInterface;
 import milu.db.indexcolumn.IndexColumnDBAbstract;
-import milu.db.indexcolumn.IndexColumnDBFactory;
+
 import milu.entity.schema.SchemaEntity;
 
 import java.sql.SQLException;
+import java.util.List;
 
 /**
  * This class is invoked, when "index" item is clicked on SchemaTreeView.
@@ -44,22 +49,52 @@ public class SelectedItemHandlerEachIndex extends SelectedItemHandlerAbstract
 			UnsupportedOperationException,
 			SQLException
 	{
+		/*
 		if ( this.itemSelected.getChildren().size() > 0 )
 		{
 			return;
 		}
-		
+		*/
+		SchemaEntity selectedEntity = this.itemSelected.getValue();
 		TreeItem<SchemaEntity> itemParent = itemSelected.getParent();
 		String schemaName = itemParent.getParent().getParent().getParent().getValue().toString();
 		String tableName  = this.itemSelected.getParent().getParent().getValue().getName();
 		String indexName  = this.itemSelected.getValue().getName();
+		ObservableList<TreeItem<SchemaEntity>> itemChildren = this.itemSelected.getChildren();
 		
+		/*
 		IndexColumnDBAbstract indexColumnDBAbs = IndexColumnDBFactory.getInstance( this.myDBAbs );
 		if ( indexColumnDBAbs != null )
 		{
 			indexColumnDBAbs.selectEntityLst( schemaName, tableName, indexName );
 			this.schemaTreeView.addEntityLst( itemSelected, indexColumnDBAbs.getEntityLst() );
 		}
+		*/
+		
+		if ( itemChildren.size() == 0 )
+		{
+			if ( selectedEntity.getEntityLst().size() == 0 )
+			{
+				ObjDBFactory objDBFactory = AbsDBFactory.getFactory( AbsDBFactory.FACTORY_TYPE.INDEX_COLUMN );
+				if ( objDBFactory == null )
+				{
+					return;
+				}
+				ObjDBInterface objDBInf = objDBFactory.getInstance(myDBAbs);
+				if ( objDBInf == null )
+				{
+					return;
+				}
+				List<SchemaEntity> entityLst = ((IndexColumnDBAbstract)objDBInf).selectEntityLst(schemaName,tableName,indexName);
+				selectedEntity.addEntityAll(entityLst);
+				this.schemaTreeView.addEntityLst( itemSelected, entityLst );
+			}
+			else
+			{
+				this.schemaTreeView.addEntityLst( itemSelected, selectedEntity.getEntityLst() );
+			}
+		}		
+		
 	}
 	
 }

@@ -4,13 +4,16 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+
+import milu.entity.schema.SchemaEntity;
 
 public class IndexDBOracle extends IndexDBAbstract 
 {
 
 	@Override
-	public void selectEntityLst(String schemaName, String tableName) throws SQLException 
+	public List<SchemaEntity> selectEntityLst(String schemaName, String tableName) throws SQLException 
 	{
 		this.clear();
 
@@ -36,6 +39,8 @@ public class IndexDBOracle extends IndexDBAbstract
 				this.indexLst.add( dataRow );
 			}
 		}
+		
+		return this.getEntityLst();
 	}
 
 	@Override
