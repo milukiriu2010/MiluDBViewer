@@ -8,6 +8,8 @@ import java.util.Collections;
 import javafx.geometry.Bounds;
 import javafx.geometry.Orientation;
 import javafx.geometry.Point2D;
+import javafx.scene.image.ImageView;
+import javafx.scene.image.Image;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -59,6 +61,14 @@ public class MyTool
 		PrintWriter  pw = new PrintWriter( sw );
 		exp.printStackTrace( pw );
 		return sw.toString();
+	}
+	
+	public static ImageView createImageView( int width, int height, Image image )
+	{
+		ImageView iv = new ImageView( image );
+		iv.setFitWidth( width );
+		iv.setFitHeight( height );
+		return iv;
 	}
 
 	public static Path findCaret(Parent parent) 

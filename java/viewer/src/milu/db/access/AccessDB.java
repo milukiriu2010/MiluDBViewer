@@ -102,12 +102,6 @@ public class AccessDB
 			}
 			System.out.println( "----------------------------" );
 			
-			/*
-			// Get "Fetch Max"
-			AppConf appConf = AppConf.getInstance();
-			int fetchMax = appConf.getFetchMax();
-			*/
-			
 			// Fetch Count
 			int fetchCnt = 0;
 			while ( rs.next() )
@@ -165,15 +159,6 @@ public class AccessDB
 			catch ( SQLException sqlEx2 )
 			{
 				// suppress close error
-			}
-			
-			try
-			{
-				this.myDBAbs.rollback();
-			}
-			catch ( SQLException sqlEx3 )
-			{
-				// suppress rollback error
 			}
 			
 			if ( lastEx != null )

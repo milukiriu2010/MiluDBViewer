@@ -30,6 +30,7 @@ import milu.gui.ctrl.common.CopyInterface;
 import milu.gui.ctrl.common.CounterInterface;
 import milu.gui.ctrl.common.ExecExplainDBInterface;
 import milu.gui.ctrl.common.ExecQueryDBInterface;
+import milu.gui.ctrl.common.FocusInterface;
 import milu.gui.ctrl.common.ToggleHorizontalVerticalInterface;
 import milu.gui.ctrl.query.SqlTableView;
 import milu.gui.view.DBView;
@@ -49,6 +50,7 @@ public class DBSqlScriptTab extends Tab
 		ToggleHorizontalVerticalInterface,
 		CounterInterface,
 		CopyInterface,
+		FocusInterface,
 		ChangeLangInterface
 {
 	// Property File for this class 
@@ -143,7 +145,7 @@ public class DBSqlScriptTab extends Tab
 		this.setGraphic( iv );
 		
 		// Tab Title
-		this.setText( "SQL" + Integer.valueOf( counterOpend ) );
+		this.setText( "X SQL" + Integer.valueOf( counterOpend ) );
 		
 		this.setAction();
 	}
@@ -182,6 +184,7 @@ public class DBSqlScriptTab extends Tab
 	/**
 	 * set Focus on TextArea
 	 */
+	@Override
 	public void setFocus()
 	{
 		// https://sites.google.com/site/63rabbits3/javafx2/jfx2coding/dialogbox

@@ -1,6 +1,7 @@
 package milu.gui.ctrl.menu;
 
 import java.util.ResourceBundle;
+import java.sql.SQLException;
 
 import javafx.scene.control.Button;
 import javafx.scene.control.Separator;
@@ -12,6 +13,7 @@ import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
 import milu.gui.ctrl.common.ChangeLangInterface;
 import milu.gui.view.DBView;
+import milu.tool.MyTool;
 import milu.ctrl.MainController;
 
 import milu.db.explain.ExplainDBFactory;
@@ -29,17 +31,21 @@ public class MainToolBar extends ToolBar
 	private DBView  dbView = null;
 	
 	// Button to get data
-	private Button btnGo = null;
+	private Button btnGo       = null;
 	// Button to get explain
-	private Button btnExplain = null;
+	private Button btnExplain  = null;
 	// Button to toggle Horizontal/Vertical mode
 	private Button btnToggleHV = null;
+	// Button to commit
+	private Button btnCommit   = new Button();
+	// Button to rollback
+	private Button btnRollback = new Button();
 	// Button to add new tab
-	private Button btnNewTab = null;
+	private Button btnNewTab   = null;
 	// Button to add new window
-	private Button btnNewWin = null;
+	private Button btnNewWin   = null;
 	// Button to add new DB connection
-	private Button btnNewCon = null;
+	private Button btnNewCon   = null;
 	// Button to copy table data(no column)
 	private Button btnCopyTblNoHead = null;
 	// Button to copy table data(with column)
@@ -83,6 +89,12 @@ public class MainToolBar extends ToolBar
 		ivToggleHV.setFitWidth( 32 );
 		ivToggleHV.setFitHeight( 32 );
 		this.btnToggleHV = new Button( "", ivToggleHV );
+		
+		// Button to commit
+		this.btnCommit.setGraphic( MyTool.createImageView( 32, 32, mainCtrl.getImage("file:resources/images/commit.png") ) );
+		
+		// Button to rollback
+		this.btnRollback.setGraphic( MyTool.createImageView( 32, 32, mainCtrl.getImage("file:resources/images/rollback.png") ) );
 		
 		// Button to add a new tab
 		ImageView ivNewTab = new ImageView( mainCtrl.getImage("file:resources/images/newtab.png") );
@@ -156,6 +168,38 @@ public class MainToolBar extends ToolBar
 		// Explain button clicked
 		this.btnExplain.setOnAction( event->this.dbView.execExplain() );
 		
+		// Commit button clicked
+		this.btnCommit.setOnAction
+		( 
+			(event)->
+			{
+				try
+				{
+					this.dbView.getMyDBAbstract().commit();
+				}
+				catch ( SQLException sqlEx )
+				{
+					
+				}
+			}
+		);
+		
+		// Rollback button clicked
+		this.btnCommit.setOnAction
+		( 
+			(event)->
+			{
+				try
+				{
+					this.dbView.getMyDBAbstract().rollback();
+				}
+				catch ( SQLException sqlEx )
+				{
+					
+				}
+			}
+		);
+		
 		// "Toggle H/V" button clicked
 		this.btnToggleHV.setOnAction( (event)->{ this.dbView.switchDirection();	} );
 		
@@ -188,15 +232,9 @@ public class MainToolBar extends ToolBar
 		// ---------------------------------
 		this.btnGo.getScene().getAccelerators().put
 		(
-			new KeyCodeCombination( KeyCode.G, KeyCombination.CONTROL_DOWN ),	
-			new Runnable()
-			{
-				@Override
-				public void run()
-				{
-					dbView.Go();
-				}
-			}
+			new KeyCodeCombination( KeyCode.G, KeyCombination.CONTROL_DOWN ),
+			// Runnable.run()
+			()->dbView.Go()
 		);
 		
 		// ---------------------------------
@@ -206,14 +244,7 @@ public class MainToolBar extends ToolBar
 		this.btnToggleHV.getScene().getAccelerators().put
 		(
 			new KeyCodeCombination( KeyCode.D, KeyCombination.CONTROL_DOWN ),	
-			new Runnable()
-			{
-				@Override
-				public void run()
-				{
-					dbView.switchDirection();
-				}
-			}
+			()->dbView.switchDirection()
 		);
 		
 		// ---------------------------------
@@ -223,14 +254,12 @@ public class MainToolBar extends ToolBar
 		this.btnNewTab.getScene().getAccelerators().put
 		(
 			new KeyCodeCombination( KeyCode.T, KeyCombination.CONTROL_DOWN ),	
-			new Runnable()
-			{
-				@Override
-				public void run()
-				{
-					dbView.createNewTab();
-				}
-			}
+			()->dbView.createNewTab()
+		);
+		this.btnNewTab.getScene().getAccelerators().put
+		(
+			new KeyCodeCombination( KeyCode.T, KeyCombination.CONTROL_DOWN, KeyCombination.ALT_DOWN ),	
+			()->dbView.createNewTab()
 		);
 		
 		// ---------------------------------
@@ -240,14 +269,7 @@ public class MainToolBar extends ToolBar
 		this.btnNewWin.getScene().getAccelerators().put
 		(
 			new KeyCodeCombination( KeyCode.N, KeyCombination.CONTROL_DOWN ),	
-			new Runnable()
-			{
-				@Override
-				public void run()
-				{
-					dbView.createNewWindow();
-				}
-			}
+			()->dbView.createNewWindow()
 		);
 
 		// ------------------------------------------------------------
@@ -257,14 +279,7 @@ public class MainToolBar extends ToolBar
 		this.btnCopyTblNoHead.getScene().getAccelerators().put
 		(
 			new KeyCodeCombination( KeyCode.C, KeyCombination.ALT_DOWN ),	
-			new Runnable()
-			{
-				@Override
-				public void run()
-				{
-					dbView.copyTableNoHead();
-				}
-			}
+			()->dbView.copyTableNoHead()
 		);
 
 		// ------------------------------------------------------------
@@ -275,14 +290,7 @@ public class MainToolBar extends ToolBar
 		(
 			//new KeyCodeCombination( KeyCode.C, KeyCombination.ALT_DOWN | KeyCombination.SHIFT_DOWN ),	
 			KeyCombination.keyCombination( "ALT+SHIFT+C" ),
-			new Runnable()
-			{
-				@Override
-				public void run()
-				{
-					dbView.copyTableWithHead();
-				}
-			}
+			()->dbView.copyTableWithHead()
 		);
 	}
 	

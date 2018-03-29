@@ -118,6 +118,8 @@ public class MainController
 				"file:resources/images/execsql.png",
 				"file:resources/images/explain.png",
 				"file:resources/images/direction.png",
+				"file:resources/images/commit.png",
+				"file:resources/images/rollback.png",
 				"file:resources/images/newtab.png",
 				"file:resources/images/newwin.png",
 				"file:resources/images/connect.png",

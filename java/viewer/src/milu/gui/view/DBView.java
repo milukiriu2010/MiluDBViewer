@@ -2,6 +2,8 @@ package milu.gui.view;
 
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 import javafx.scene.layout.BorderPane;
@@ -18,11 +20,13 @@ import milu.gui.ctrl.common.ChangeLangInterface;
 import milu.gui.ctrl.common.CopyInterface;
 import milu.gui.ctrl.common.ExecExplainDBInterface;
 import milu.gui.ctrl.common.ExecQueryDBInterface;
+import milu.gui.ctrl.common.FocusInterface;
 import milu.gui.ctrl.common.RefreshInterface;
 import milu.gui.ctrl.common.ToggleHorizontalVerticalInterface;
 import milu.gui.ctrl.menu.MainMenuBar;
 import milu.gui.ctrl.menu.MainToolBar;
 import milu.gui.ctrl.query.DBSqlTab;
+import milu.gui.ctrl.query.DBSqlScriptTab;
 import milu.gui.ctrl.schema.DBSchemaTab;
 import milu.db.MyDBAbstract;
 import milu.task.CollectTask;
@@ -54,6 +58,9 @@ public class DBView extends Stage
 	
 	// Message from Task
 	private Label  lblMsg = new Label();
+	
+	// debug
+	private int debug = 0;
 	
 	// ---------------------------
 	// Constractor
@@ -137,6 +144,28 @@ public class DBView extends Stage
 		scene.getStylesheets().add
 		(
 			getClass().getResource("/conf/css/ctrl/schema/SchemaERView.css").toExternalForm()
+		);
+		scene.addEventHandler
+		( 
+			KeyEvent.KEY_PRESSED, 
+			(key)->
+			{
+				if ( key.getCode() == KeyCode.ALT )
+				{
+					this.debug = 1;
+				}
+			}
+		);
+		scene.addEventHandler
+		( 
+			KeyEvent.KEY_RELEASED, 
+			(key)->
+			{
+				if ( key.getCode() == KeyCode.ALT )
+				{
+					this.debug = 0;
+				}
+			}
 		);
         this.setScene(scene);
 		// Window Title
@@ -388,11 +417,19 @@ public class DBView extends Stage
 	 */
 	public void createNewTab()
 	{
-		DBSqlTab newTab = new DBSqlTab( this );
+		Tab newTab = null;
+		if ( this.debug == 0 )
+		{
+			newTab = new DBSqlTab( this );
+		}
+		else
+		{
+			newTab = new DBSqlScriptTab( this );
+		}
 		this.tabPane.getTabs().add( newTab );
 		this.tabPane.getSelectionModel().select( newTab );
 		// set Focus on TextArea of DBSqlTab.
-		newTab.setFocus();
+		((FocusInterface)newTab).setFocus();
 	}
 
 	/********************************
