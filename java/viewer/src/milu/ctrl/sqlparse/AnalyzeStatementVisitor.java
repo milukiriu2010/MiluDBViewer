@@ -9,4 +9,8 @@ public interface AnalyzeStatementVisitor extends StatementVisitor
 	public void setAnalyzeSelectVistor( AnalyzeSelectVisitor analyzeSelectVisitor );
 	
 	public List<String> getSqlLst();
+	
+	public SQLBag.COMMAND getCommand();
+	
+	public SQLBag.TYPE getType();
 }

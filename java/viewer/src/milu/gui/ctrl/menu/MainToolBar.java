@@ -149,6 +149,8 @@ public class MainToolBar extends ToolBar
 			this.btnToggleHV,
 			this.btnCopyTblNoHead,
 			this.btnCopyTblWithHead,
+			this.btnCommit,
+			this.btnRollback,
 			new Separator(),
 			this.btnNewTab,
 			this.btnNewWin,
@@ -169,36 +171,10 @@ public class MainToolBar extends ToolBar
 		this.btnExplain.setOnAction( event->this.dbView.execExplain() );
 		
 		// Commit button clicked
-		this.btnCommit.setOnAction
-		( 
-			(event)->
-			{
-				try
-				{
-					this.dbView.getMyDBAbstract().commit();
-				}
-				catch ( SQLException sqlEx )
-				{
-					
-				}
-			}
-		);
+		this.btnCommit.setOnAction(	(event)->this.dbView.commit() );
 		
 		// Rollback button clicked
-		this.btnCommit.setOnAction
-		( 
-			(event)->
-			{
-				try
-				{
-					this.dbView.getMyDBAbstract().rollback();
-				}
-				catch ( SQLException sqlEx )
-				{
-					
-				}
-			}
-		);
+		this.btnCommit.setOnAction(	(event)->this.dbView.rollback()	);
 		
 		// "Toggle H/V" button clicked
 		this.btnToggleHV.setOnAction( (event)->{ this.dbView.switchDirection();	} );
@@ -342,6 +318,22 @@ public class MainToolBar extends ToolBar
 		Tooltip tipExplain = new Tooltip( this.langRB.getString( "TIP_EXEC_EXPLAIN" ) );
 		tipExplain.getStyleClass().add("mytooltip");
 		this.btnExplain.setTooltip( tipExplain );
+		
+		// ----------------------------------------------
+		// ToolTip
+		//   Button[Commit] 
+		// ----------------------------------------------
+		Tooltip tipCommit = new Tooltip( this.langRB.getString( "TIP_COMMIT" ) );
+		tipCommit.getStyleClass().add("mytooltip");
+		this.btnCommit.setTooltip( tipCommit );
+		
+		// ----------------------------------------------
+		// ToolTip
+		//   Button[Rollback] 
+		// ----------------------------------------------
+		Tooltip tipRollback = new Tooltip( this.langRB.getString( "TIP_ROLLBACK" ) );
+		tipRollback.getStyleClass().add("mytooltip");
+		this.btnRollback.setTooltip( tipRollback );
 		
 		// ----------------------------------------------
 		// ToolTip

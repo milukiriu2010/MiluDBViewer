@@ -10,6 +10,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.LinkedHashMap;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -21,8 +22,13 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.shape.Path;
 
 import net.sf.jsqlparser.JSQLParserException;
+import net.sf.jsqlparser.parser.CCJSqlParserUtil;
+import net.sf.jsqlparser.statement.Statement;
+import net.sf.jsqlparser.statement.Statements;
 
+import milu.ctrl.sqlparse.SQLBag;
 import milu.ctrl.sqlparse.SQLParse;
+import milu.ctrl.sqlparse.SQLBag.COMMAND;
 import milu.tool.MyTool;
 import milu.gui.view.DBView;
 import milu.entity.schema.SchemaEntity;
@@ -485,5 +491,36 @@ public class SqlTextArea extends TextArea
 		this.hints.addAll( columnLst );
 		
 		return true;
+	}
+	
+	//public List<Map<SQLBag.COMMAND,List<SQLBag>>> analyzeSQL()
+	public List<SQLBag> getSQLBagLst()
+	{
+		SQLParse sqlParse = new SQLParse();
+		try
+		{
+			String sqlStr = this.getText();
+			sqlParse.setStrSQL(sqlStr);
+			sqlParse.parseStatements();
+		}
+		catch ( JSQLParserException jsqlEx )
+		{
+		}
+
+		return sqlParse.getSQLBagLst();
+		/*
+		List<SQLBag> sqlBagLstTmp = new ArrayList<>();
+		Map<SQLBag.COMMAND,List<SQLBag>> sqlBagComMapTmp = new LinkedHashMap<>(); 
+		
+		List<SQLBag> sqlBagLstOrg = sqlParse.getSQLBagLst();
+		SQLBag.COMMAND comPre = COMMAND.UNKNOWN_COMMAND;
+		for ( SQLBag sqlBag : sqlBagLstOrg )
+		{
+			SQLBag.COMMAND comNow = sqlBag.getCommand();
+			
+		}
+
+		return null;
+		*/
 	}
 }

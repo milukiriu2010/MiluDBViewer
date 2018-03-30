@@ -168,4 +168,16 @@ public class AccessDB
 			
 		}
 	}
+	
+	public int transaction( String sql, final int rowNum )
+		throws SQLException
+	{
+		try
+		(
+			Statement stmt   = this.myDBAbs.createStatement();
+		)
+		{
+			return stmt.executeUpdate(sql);
+		}
+	}
 }

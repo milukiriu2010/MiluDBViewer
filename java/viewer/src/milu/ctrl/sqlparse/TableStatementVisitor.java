@@ -1,6 +1,10 @@
 package milu.ctrl.sqlparse;
 
 import java.util.List;
+
+import milu.ctrl.sqlparse.SQLBag.COMMAND;
+import milu.ctrl.sqlparse.SQLBag.TYPE;
+
 import java.util.ArrayList;
 
 import net.sf.jsqlparser.statement.Commit;
@@ -28,8 +32,12 @@ public class TableStatementVisitor implements AnalyzeStatementVisitor
 {
 	private AnalyzeSelectVisitor  analyzeSelectVisitor = null;
 	
-	private List<String> sqlLst = new ArrayList<>(); 
-
+	private List<String> sqlLst = new ArrayList<>();
+	
+	private SQLBag.COMMAND  sqlCommand = COMMAND.UNKNOWN_COMMAND;
+	
+	private SQLBag.TYPE     sqlType    = TYPE.UNKNOWN_TYPE;
+	
 	@Override
 	public void visit(Commit arg0) {
 		// TODO Auto-generated method stub
@@ -37,21 +45,24 @@ public class TableStatementVisitor implements AnalyzeStatementVisitor
 	}
 
 	@Override
-	public void visit(Delete arg0) {
-		// TODO Auto-generated method stub
-
+	public void visit(Delete delete) 
+	{
+		this.sqlCommand = SQLBag.COMMAND.TRANSACTION;
+		this.sqlType    = SQLBag.TYPE.DELETE;
 	}
 
 	@Override
-	public void visit(Update arg0) {
-		// TODO Auto-generated method stub
-
+	public void visit(Update update) 
+	{
+		this.sqlCommand = SQLBag.COMMAND.TRANSACTION;
+		this.sqlType    = SQLBag.TYPE.UPDATE;
 	}
 
 	@Override
-	public void visit(Insert arg0) {
-		// TODO Auto-generated method stub
-
+	public void visit(Insert insert)
+	{
+		this.sqlCommand = SQLBag.COMMAND.TRANSACTION;
+		this.sqlType    = SQLBag.TYPE.INSERT;
 	}
 
 	@Override
@@ -130,6 +141,8 @@ public class TableStatementVisitor implements AnalyzeStatementVisitor
 	@Override
 	public void visit(Select select) 
 	{
+		this.sqlCommand = SQLBag.COMMAND.QUERY;
+		this.sqlType    = SQLBag.TYPE.SELECT;
 		SelectBody selectBody = select.getSelectBody();
 		if ( selectBody != null )
 		{
@@ -159,6 +172,18 @@ public class TableStatementVisitor implements AnalyzeStatementVisitor
 	public List<String> getSqlLst()
 	{
 		return this.sqlLst;
+	}
+	
+	@Override
+	public SQLBag.COMMAND getCommand()
+	{
+		return this.sqlCommand;
+	}
+	
+	@Override
+	public SQLBag.TYPE getType()
+	{
+		return this.sqlType;
 	}
 
 }

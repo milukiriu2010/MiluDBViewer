@@ -1,5 +1,6 @@
 package milu.gui.ctrl.query;
 
+import java.util.List;
 import java.util.ResourceBundle;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -25,6 +26,7 @@ import javafx.scene.layout.AnchorPane;
 import java.sql.SQLException;
 
 import milu.ctrl.MainController;
+import milu.ctrl.sqlparse.SQLBag;
 import milu.gui.ctrl.common.ChangeLangInterface;
 import milu.gui.ctrl.common.CopyInterface;
 import milu.gui.ctrl.common.CounterInterface;
@@ -264,6 +266,17 @@ public class DBSqlScriptTab extends Tab
 		long startTime = System.nanoTime();
 		MainController mainController = this.dbView.getMainController();
 		AppConf appConf = mainController.getAppConf();
+		
+		List<SQLBag> sqlBagLst = this.textAreaSQL.getSQLBagLst();
+		
+		for ( SQLBag sqlBag : sqlBagLst )
+		{
+			System.out.println( "SQL    :" + sqlBag.getSQL() );
+			System.out.println( "Command:" + sqlBag.getCommand() );
+			System.out.println( "Type   :" + sqlBag.getType() );
+			System.out.println( "============================" );
+		}
+		
 		/*
 		final ExecQueryTask execQueryTask = 
 			new ExecQueryTask( myDBAbs, appConf, this.textAreaSQL.getSQL(), this.tableViewSQL );

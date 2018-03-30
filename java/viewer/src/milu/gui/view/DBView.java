@@ -2,6 +2,7 @@ package milu.gui.view;
 
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.control.Label;
@@ -11,6 +12,8 @@ import javafx.collections.ObservableList;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
+import java.sql.SQLException;
+import java.util.ResourceBundle;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -28,6 +31,7 @@ import milu.gui.ctrl.menu.MainToolBar;
 import milu.gui.ctrl.query.DBSqlTab;
 import milu.gui.ctrl.query.DBSqlScriptTab;
 import milu.gui.ctrl.schema.DBSchemaTab;
+import milu.gui.dlg.MyAlertDialog;
 import milu.db.MyDBAbstract;
 import milu.task.CollectTask;
 
@@ -35,6 +39,12 @@ public class DBView extends Stage
 	implements 
 		ChangeLangInterface
 {
+	// Property File for this class 
+	private static final String PROPERTY_FILENAME = 
+		 	"conf.lang.gui.view.DBView";
+
+	private ResourceBundle langRB = ResourceBundle.getBundle( PROPERTY_FILENAME );	
+	
 	// Main Controller
 	private MainController mainCtrl = null;
 	
@@ -512,6 +522,53 @@ public class DBView extends Stage
 		this.Go();
 	}
 	
+	public void commit()
+	{
+		try
+		{
+			this.myDBAbs.commit();
+		}
+		catch ( SQLException sqlEx )
+		{
+			MyAlertDialog alertDlg = new MyAlertDialog(AlertType.WARNING);
+			alertDlg.setHeaderText( langRB.getString("TITLE_EXEC_QUERY_ERROR") );
+    		alertDlg.setTxtExp( sqlEx, myDBAbs );
+    		alertDlg.showAndWait();
+    		alertDlg = null;
+		}
+		catch ( Exception ex )
+		{
+			MyAlertDialog alertDlg = new MyAlertDialog(AlertType.WARNING);
+			alertDlg.setHeaderText( langRB.getString("TITLE_MISC_ERROR") );
+    		alertDlg.setTxtExp( ex );
+    		alertDlg.showAndWait();
+    		alertDlg = null;
+		}
+	}
+	
+	public void rollback()
+	{
+		try
+		{
+			this.myDBAbs.rollback();
+		}
+		catch ( SQLException sqlEx )
+		{
+			MyAlertDialog alertDlg = new MyAlertDialog(AlertType.WARNING);
+			alertDlg.setHeaderText( langRB.getString("TITLE_EXEC_QUERY_ERROR") );
+    		alertDlg.setTxtExp( sqlEx, myDBAbs );
+    		alertDlg.showAndWait();
+    		alertDlg = null;
+		}
+		catch ( Exception ex )
+		{
+			MyAlertDialog alertDlg = new MyAlertDialog(AlertType.WARNING);
+			alertDlg.setHeaderText( langRB.getString("TITLE_MISC_ERROR") );
+    		alertDlg.setTxtExp( ex );
+    		alertDlg.showAndWait();
+    		alertDlg = null;
+		}
+	}
 	
 	/**************************************************
 	 * Override from ChangeLangInterface
