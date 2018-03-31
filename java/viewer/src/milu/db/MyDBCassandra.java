@@ -1,5 +1,6 @@
 package milu.db;
 
+import java.sql.SQLException;
 import java.util.Map;
 
 /**
@@ -52,14 +53,8 @@ public class MyDBCassandra extends MyDBAbstract
 		return "Cassandra";
 	}
 
-	/*
 	@Override
-	protected void createConnectionParameter(Map<String, String> dbOptMap) 
+	public void processAfterException() throws SQLException
 	{
-		this.url =
-			"jdbc:c*:datastax://"+
-			dbOptMap.get( "Host" )+":"+dbOptMap.get( "Port" )+"/"+
-			dbOptMap.get( "DBName" );
 	}
-	*/
 }

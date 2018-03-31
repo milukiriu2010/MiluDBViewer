@@ -1,5 +1,6 @@
 package milu.gui.ctrl.query;
 
+import java.util.List;
 import java.util.ResourceBundle;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -90,7 +91,7 @@ public class DBResultTab extends Tab
         hBox.getChildren().addAll( this.labelCntSQL, this.labelExecTimeSQL );
         
 		
-		this.tableViewSQL.prefHeightProperty().bind( this.lowerPane.heightProperty() );
+		//this.tableViewSQL.prefHeightProperty().bind( this.lowerPane.heightProperty() );
 		
 		BorderPane brdPane = new BorderPane();
 		brdPane.setCenter( this.lowerPane );
@@ -105,13 +106,9 @@ public class DBResultTab extends Tab
 		iv.setFitHeight( 16 );
 		iv.setFitWidth( 16 );
 		this.setGraphic( iv );
-		
-		// Tab Title
-		this.setText( "Result" );
-		
+				
 		this.setAction();
 	}
-	
 	
 	private void setAction()
 	{
@@ -142,6 +139,11 @@ public class DBResultTab extends Tab
 				}
 			}
 		);
+	}
+	
+	public void setDataOnTableViewSQL( List<String> headLst, List<List<String>> dataLst )
+	{
+		this.tableViewSQL.setTableViewSQL(headLst, dataLst);
 	}
 	
 	/**************************************************

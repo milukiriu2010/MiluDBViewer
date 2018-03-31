@@ -42,6 +42,7 @@ import milu.db.access.MyDBOverFetchSizeException;
 import milu.task.ToggleHVTask;
 import milu.task.ExecQueryTask;
 import milu.task.ExplainTask;
+import milu.task.ExecScriptTask;
 
 import milu.conf.AppConf;
 
@@ -217,6 +218,12 @@ public class DBSqlScriptTab extends Tab
 	@Override
 	public void switchDirection()
 	{
+		Tab selectedTab = this.tabPane.getSelectionModel().getSelectedItem();
+		if ( selectedTab instanceof ToggleHorizontalVerticalInterface )
+		{
+			((ToggleHorizontalVerticalInterface)selectedTab).switchDirection();
+		}
+		
 		/*
 		long startTime = System.nanoTime();
 		int cnt = this.tableViewSQL.getRowSize();
@@ -267,27 +274,34 @@ public class DBSqlScriptTab extends Tab
 		MainController mainController = this.dbView.getMainController();
 		AppConf appConf = mainController.getAppConf();
 		
-		List<SQLBag> sqlBagLst = this.textAreaSQL.getSQLBagLst();
+		this.tabPane.getTabs().removeAll(this.tabPane.getTabs());
 		
-		for ( SQLBag sqlBag : sqlBagLst )
+		List<SQLBag> sqlBagLst = this.textAreaSQL.getSQLBagLst();
+		if ( sqlBagLst.size() == 0 )
 		{
-			System.out.println( "SQL    :" + sqlBag.getSQL() );
-			System.out.println( "Command:" + sqlBag.getCommand() );
-			System.out.println( "Type   :" + sqlBag.getType() );
-			System.out.println( "============================" );
+			String strSQL = this.textAreaSQL.getSQL();
+			SQLBag sqlBag = new SQLBag();
+			sqlBag.setSQL(strSQL);
+			sqlBag.setCommand(SQLBag.COMMAND.QUERY);
+			sqlBag.setType(SQLBag.TYPE.SELECT);
+			sqlBagLst.add(sqlBag);
 		}
 		
-		/*
-		final ExecQueryTask execQueryTask = 
-			new ExecQueryTask( myDBAbs, appConf, this.textAreaSQL.getSQL(), this.tableViewSQL );
-		// execute task
-		final Future<?> futureExecQueryTask = this.service.submit( execQueryTask );
+		ExecScriptTask execScriptTask = new ExecScriptTask();
+		execScriptTask.setDBView(this.dbView);
+		execScriptTask.setMyDBAbstract(myDBAbs);
+		execScriptTask.setAppConf(appConf);
+		execScriptTask.setSQLBagLst(sqlBagLst);
+		execScriptTask.setTabPane(this.tabPane);
 		
-		execQueryTask.progressProperty().addListener
+		// execute task
+		final Future<?> futureExecScriptTask = this.service.submit( execScriptTask );
+		
+		execScriptTask.progressProperty().addListener
 		(
 			(obs,oldVal,newVal)->
 			{
-				System.out.println( "ExecQueryTask:Progress[" + obs.getClass() + "]oldVal[" + oldVal + "]newVal[" + newVal + "]" );
+				System.out.println( "ExecScriptTask:Progress[" + obs.getClass() + "]oldVal[" + oldVal + "]newVal[" + newVal + "]" );
 				// task start.
 				if ( newVal.doubleValue() == 0.0 )
 				{
@@ -301,35 +315,33 @@ public class DBSqlScriptTab extends Tab
 					(
 						(event)->
 						{
-							futureExecQueryTask.cancel(true);
+							futureExecScriptTask.cancel(true);
 						}
 					);
 					
 					this.lowerPane.getChildren().clear();
 					this.lowerPane.getChildren().add( vBox );
-					System.out.println( "ExecQueryTask:clear" );
+					System.out.println( "ExecScriptTask:clear" );
 				}
 				// task done.
 				else if ( newVal.doubleValue() == 1.0 )
 				{
 					this.lowerPane.getChildren().clear();
-					this.lowerPane.getChildren().add( this.tableViewSQL );
-					this.tableViewSQL.prefHeightProperty().bind( this.lowerPane.heightProperty() );
-					// Record Count
-					this.setCount( this.tableViewSQL.getRowSize() );
+					this.lowerPane.getChildren().add( this.tabPane );
 					this.dbView.taskDone();
 					long endTime = System.nanoTime();
 					this.setExecTime( endTime - startTime );
-					System.out.println( "ExecQueryTask:set" );
+					System.out.println( "ExecScriptTask:set" );
 				}
 			}
 		);
 		
-		execQueryTask.valueProperty().addListener
+		/*
+		execScriptTask.valueProperty().addListener
 		(
 			(obs,oldVal,newVal)->
 			{
-				System.out.println( "ExecQueryTask:Value[" + obs.getClass() + "]oldVal[" + oldVal + "]newVal[" + newVal + "]" );
+				System.out.println( "ExecScriptTask:Value[" + obs.getClass() + "]oldVal[" + oldVal + "]newVal[" + newVal + "]" );
 				this.lowerPane.getChildren().clear();
 				// task exception.
 				if ( newVal instanceof MyDBOverFetchSizeException )
@@ -378,7 +390,7 @@ public class DBSqlScriptTab extends Tab
 				this.dbView.taskDone();
 				long endTime = System.nanoTime();
 				this.setExecTime( endTime - startTime );
-				System.out.println( "ExecQueryTask:set" );
+				System.out.println( "ExecScriptTask:set" );
 			}
 		);
 		*/

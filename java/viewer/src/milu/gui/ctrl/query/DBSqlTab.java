@@ -1,5 +1,6 @@
 package milu.gui.ctrl.query;
 
+import java.util.List;
 import java.util.ResourceBundle;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -24,6 +25,7 @@ import javafx.scene.layout.AnchorPane;
 import java.sql.SQLException;
 
 import milu.ctrl.MainController;
+import milu.ctrl.sqlparse.SQLBag;
 import milu.gui.ctrl.common.ChangeLangInterface;
 import milu.gui.ctrl.common.CopyInterface;
 import milu.gui.ctrl.common.CounterInterface;
@@ -259,8 +261,21 @@ public class DBSqlTab extends Tab
 		MainController mainController = this.dbView.getMainController();
 		AppConf appConf = mainController.getAppConf();
 		
-		final ExecQueryTask execQueryTask = 
-			new ExecQueryTask( myDBAbs, appConf, this.textAreaSQL.getSQL(), this.tableViewSQL );
+		List<SQLBag> sqlBagLst = this.textAreaSQL.getSQLBagLst();
+		System.out.println( "SQLBag:" + sqlBagLst.size() );
+		
+		final ExecQueryTask execQueryTask = new ExecQueryTask();
+		execQueryTask.setMyDBAbstract(myDBAbs);
+		execQueryTask.setAppConf(appConf);
+		execQueryTask.setSqlTableView(this.tableViewSQL);
+		if ( sqlBagLst.size() == 1 )
+		{
+			execQueryTask.setSQLBag( sqlBagLst.get(0) );
+		}
+		else
+		{
+			execQueryTask.setSQL( this.textAreaSQL.getSQL() );
+		}
 		// execute task
 		final Future<?> futureExecQueryTask = this.service.submit( execQueryTask );
 		

@@ -53,6 +53,8 @@ abstract public class MyDBAbstract
 	
 	abstract protected void loadSpecial();
 	
+	abstract public void processAfterException() throws SQLException;
+	
 	/**
 	 * Get Driver URL
 	 ***********************************************
@@ -298,6 +300,7 @@ abstract public class MyDBAbstract
 		if ( this.conn != null )
 		{
 			this.conn.commit();
+			System.out.println( "commit" );
 		}
 	}
 	
@@ -312,6 +315,7 @@ abstract public class MyDBAbstract
 		if ( this.conn != null )
 		{
 			this.conn.rollback();
+			System.out.println( "rollback" );
 		}
 	}
 	

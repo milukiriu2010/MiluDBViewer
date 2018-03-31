@@ -174,7 +174,7 @@ public class MainToolBar extends ToolBar
 		this.btnCommit.setOnAction(	(event)->this.dbView.commit() );
 		
 		// Rollback button clicked
-		this.btnCommit.setOnAction(	(event)->this.dbView.rollback()	);
+		this.btnRollback.setOnAction(	(event)->this.dbView.rollback()	);
 		
 		// "Toggle H/V" button clicked
 		this.btnToggleHV.setOnAction( (event)->{ this.dbView.switchDirection();	} );

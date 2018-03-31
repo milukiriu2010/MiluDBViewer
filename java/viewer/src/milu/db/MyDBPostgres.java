@@ -1,5 +1,6 @@
 package milu.db;
 
+import java.sql.SQLException;
 import java.util.Map;
 
 /**
@@ -67,4 +68,11 @@ public class MyDBPostgres extends MyDBAbstract
 	{
 		return "PostgreSQL";
 	}
+	
+	@Override
+	// https://stackoverflow.com/questions/10399727/psqlexception-current-transaction-is-aborted-commands-ignored-until-end-of-tra
+	public void processAfterException() throws SQLException
+	{
+		this.rollback();
+	}	
 }

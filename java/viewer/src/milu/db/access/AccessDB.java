@@ -72,6 +72,7 @@ public class AccessDB
 		try
 		{
 			this.clear();
+			System.out.println( "select:" + sql );
 			
 			stmt = this.myDBAbs.createStatement();
 			rs   = stmt.executeQuery( sql );
@@ -135,6 +136,19 @@ public class AccessDB
 				fetchCnt++;
 			}
 		}
+		catch ( SQLException sqlEx )
+		{
+			try
+			{
+				this.myDBAbs.processAfterException();
+			}
+			catch ( SQLException sqlEx0 )
+			{
+				// suppress close error
+			}
+			
+			throw sqlEx;
+		}
 		finally
 		{
 			try
@@ -172,12 +186,26 @@ public class AccessDB
 	public int transaction( String sql, final int rowNum )
 		throws SQLException
 	{
+		System.out.println( "transaction:" + sql );
 		try
 		(
 			Statement stmt   = this.myDBAbs.createStatement();
 		)
 		{
 			return stmt.executeUpdate(sql);
+		}
+		catch ( SQLException sqlEx )
+		{
+			try
+			{
+				this.myDBAbs.processAfterException();
+			}
+			catch ( SQLException sqlEx0 )
+			{
+				// suppress close error
+			}
+			
+			throw sqlEx;
 		}
 	}
 }

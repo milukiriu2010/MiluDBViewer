@@ -36,6 +36,11 @@ values
 ( 1005, 'HT', 'マートン', 'マット', 'CF', 1 );
 
 insert into t_npb_player_list
+( id, team_id, sei, mei, pos_id, country_id )
+values
+( 1006, 'HT', 'メッセンジャー', 'ランディ', 'P', 1 );
+
+insert into t_npb_player_list
 values
 ( 2001, 'YG', '東野', '峻', 'P', 81 );
 

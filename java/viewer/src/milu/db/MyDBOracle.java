@@ -1,5 +1,6 @@
 package milu.db;
 
+import java.sql.SQLException;
 import java.util.Map;
 
 /**
@@ -110,5 +111,10 @@ public class MyDBOracle extends MyDBAbstract
 	public String toString()
 	{
 		return "Oracle";
+	}
+
+	@Override
+	public void processAfterException() throws SQLException
+	{
 	}
 }
