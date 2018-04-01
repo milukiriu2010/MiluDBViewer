@@ -25,7 +25,6 @@ public class ExecScriptTask extends Task<Exception>
 	private MyDBAbstract myDBAbs = null;
 	private AppConf      appConf = null;
 	private List<SQLBag> sqlBagLst  = null;
-	//private SqlTableView tableViewSQL = null;
 	private TabPane      tabPane = null;
 	private Exception    taskEx = null;
 	
@@ -57,19 +56,36 @@ public class ExecScriptTask extends Task<Exception>
 	@Override
 	protected Exception call()
 	{
+		System.out.println( "ExecScriptTask:start." );
 		final double MAX = 100.0;
 		this.updateProgress( 0.0, MAX );
+		int size = -1;
+		long startTimeTotal = -1;
+		List<List<String>> resDataLst = new ArrayList<>();
 		
 		try
 		{
 			Thread.sleep( 100 );
-			System.out.println( "ExecScriptTask:start." );
-			int size = this.sqlBagLst.size();
+			size = this.sqlBagLst.size();
+			startTimeTotal = System.nanoTime();
 			for ( int i = 0; i < size; i++ )
 			{
+				long startTime = System.nanoTime();
 				this.updateProgress( i/size, MAX );
 				SQLBag sqlBag = this.sqlBagLst.get(i);
-				this.eachCall(i, sqlBag);
+				Exception eachEx = this.eachCall(i, sqlBag);
+				long endTime = System.nanoTime();
+				
+				List<String> resData = new ArrayList<>();
+				// Script
+				resData.add( "Script" + (i+1) );
+				// Result
+				resData.add( (eachEx == null) ? "OK":"NG" );
+				// Exec Time
+				resData.add( String.format( "%,d", endTime - startTime ) + "nsec" );
+				// SQL
+				resData.add( sqlBag.getSQL() );
+				resDataLst.add(resData);
 			}
 			this.updateProgress( MAX, MAX );
 		}
@@ -81,6 +97,29 @@ public class ExecScriptTask extends Task<Exception>
 		}
 		finally
 		{
+			final long startTimeTotalF = startTimeTotal;
+			if ( size > 1 )
+			{
+				Platform.runLater
+				(
+					()->
+					{
+						List<String>       resHeadLst = new ArrayList<>();
+						resHeadLst.add("Script");
+						resHeadLst.add("Result");
+						resHeadLst.add("Exec Time");
+						resHeadLst.add("SQL");
+						
+						DBResultTab dbResultTab = new DBResultTab( this.dbView );
+						dbResultTab.setText( "Result" );
+						dbResultTab.setDataOnTableViewSQL(resHeadLst, resDataLst);
+						long endTimeTotal = System.nanoTime();
+						dbResultTab.setExecTime( endTimeTotal - startTimeTotalF );
+						this.tabPane.getTabs().add( 0, dbResultTab );
+						this.tabPane.getSelectionModel().select( dbResultTab );
+					}
+				);
+			}
 			if ( this.taskEx != null )
 			{
 				this.updateValue( this.taskEx );
@@ -89,10 +128,12 @@ public class ExecScriptTask extends Task<Exception>
 		return null;
 	}
 	
-	protected void eachCall( int no, SQLBag sqlBag )
+	protected Exception eachCall( int no, SQLBag sqlBag )
 	{
+		long startTime = System.nanoTime();
 		AccessDB   acsDB = new AccessDB( myDBAbs );
 		int procCnt = -1;
+		Exception  eachEx = null;
 		
 		try
 		{
@@ -104,22 +145,28 @@ public class ExecScriptTask extends Task<Exception>
 			{
 				procCnt = acsDB.transaction( sqlBag.getSQL(), -1 );
 			}
+			
+			return eachEx;
 		}
 		catch ( MyDBOverFetchSizeException myDBEx )
 		{
-			this.taskEx = myDBEx;
+			eachEx = myDBEx;
+			return eachEx;
 		}
 		catch ( SQLException sqlEx )
 		{
-			this.taskEx = sqlEx;
+			eachEx = sqlEx;
+			return eachEx;
 		}
 		catch ( Exception ex )
 		{
-			this.taskEx = ex;
+			eachEx = ex;
+			return eachEx;
 		}
 		finally
 		{
 			final int procCntF = procCnt;
+			final Exception eachExF = eachEx;
 			Platform.runLater
 			(
 				()->
@@ -168,9 +215,16 @@ public class ExecScriptTask extends Task<Exception>
 					
 					DBResultTab dbResultTab = new DBResultTab( this.dbView );
 					dbResultTab.setText( "Script " + (no+1) );
-					System.out.println( "headLst.size:" + headLst.size() );
-					System.out.println( "dataLst.size:" + dataLst.size() );
+					dbResultTab.setSQL(sqlBag.getSQL());
 					dbResultTab.setDataOnTableViewSQL(headLst, dataLst);
+					
+					if ( eachExF != null )
+					{
+						dbResultTab.setException(eachExF);
+					}
+					long endTime = System.nanoTime();
+					dbResultTab.setExecTime( endTime - startTime );
+					
 					this.tabPane.getTabs().add( dbResultTab );
 				}
 			);

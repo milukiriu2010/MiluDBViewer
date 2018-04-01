@@ -74,19 +74,17 @@ public class DBSqlScriptTab extends Tab
 	// TextArea for input SQL 
 	private SqlTextArea  textAreaSQL = null;
 	
-	// "SqlTableView & Warning Message" on this Pane.
+	// "TabPane of SQL Results" on this Pane.
 	private VBox         lowerPane = new VBox(2);
 	
-	// TableView for SQL result
-	//private SqlTableView tableViewSQL = null;
 	// TabPane for SQL result
 	private TabPane         tabPane = new TabPane();
 	
 	// Label for SQL result count
-	private Label labelCntSQL = new Label();
+	private Label labelCntSQL = new Label("*");
 	
 	// Label for SQL execution time
-	private Label labelExecTimeSQL = new Label();
+	private Label labelExecTimeSQL = new Label("*");
 	
 	// Thread Pool
 	private ExecutorService service = Executors.newSingleThreadExecutor();	
@@ -111,9 +109,7 @@ public class DBSqlScriptTab extends Tab
         AnchorPane.setLeftAnchor( this.textAreaSQL, 0.0 );
         AnchorPane.setRightAnchor( this.textAreaSQL, 0.0 );
         
-        // https://docs.oracle.com/javafx/2/ui_controls/table-view.htm
-        //this.tableViewSQL = new SqlTableView();
-        //this.lowerPane.getChildren().add( this.tableViewSQL );
+        // TabPane of SQL results
         this.lowerPane.getChildren().add( this.tabPane );
         
 		this.labelCntSQL.getStyleClass().add("label-statusbar");
@@ -129,9 +125,6 @@ public class DBSqlScriptTab extends Tab
 		splitPane.setOrientation(Orientation.VERTICAL);
 		splitPane.getItems().addAll( this.upperPane, this.lowerPane );
 		splitPane.setDividerPositions( 0.3f, 0.7f );
-		
-		//this.tableViewSQL.prefHeightProperty().bind( this.lowerPane.heightProperty() );
-		
 		
 		BorderPane brdPane = new BorderPane();
 		brdPane.setCenter( splitPane );
@@ -223,44 +216,6 @@ public class DBSqlScriptTab extends Tab
 		{
 			((ToggleHorizontalVerticalInterface)selectedTab).switchDirection();
 		}
-		
-		/*
-		long startTime = System.nanoTime();
-		int cnt = this.tableViewSQL.getRowSize();
-		if ( cnt > 0 )
-		{
-			final ToggleHVTask toggleHVTask = new ToggleHVTask( this.tableViewSQL, cnt );
-			// execute task
-			this.service.submit( toggleHVTask );
-			
-			toggleHVTask.progressProperty().addListener
-			(
-				(obs,oldVal,newVal)->
-				{
-					System.out.println( "ToggleHVTask:Progress[" + obs.getClass() + "]oldVal[" + oldVal + "]newVal[" + newVal + "]" );
-					// task start.
-					if ( newVal.doubleValue() == 0.0 )
-					{
-						this.dbView.taskProcessing();
-						Label label = new Label( langRB.getString("LABEL_PROCESSING") );
-						this.lowerPane.getChildren().clear();
-						this.lowerPane.getChildren().add( label );
-						System.out.println( "ToggleHVTask:clear" );
-					}
-					// task done.
-					else if ( newVal.doubleValue() == 1.0 )
-					{
-						this.lowerPane.getChildren().clear();
-						this.lowerPane.getChildren().add( this.tableViewSQL );
-						this.dbView.taskDone();
-						long endTime = System.nanoTime();
-						this.setExecTime( endTime - startTime );
-						System.out.println( "ToggleHVTask:set" );
-					}
-				}
-			);
-		}
-		*/
 	}
 
 	/**************************************************
@@ -277,15 +232,7 @@ public class DBSqlScriptTab extends Tab
 		this.tabPane.getTabs().removeAll(this.tabPane.getTabs());
 		
 		List<SQLBag> sqlBagLst = this.textAreaSQL.getSQLBagLst();
-		if ( sqlBagLst.size() == 0 )
-		{
-			String strSQL = this.textAreaSQL.getSQL();
-			SQLBag sqlBag = new SQLBag();
-			sqlBag.setSQL(strSQL);
-			sqlBag.setCommand(SQLBag.COMMAND.QUERY);
-			sqlBag.setType(SQLBag.TYPE.SELECT);
-			sqlBagLst.add(sqlBag);
-		}
+		this.setCount( sqlBagLst.size() );
 		
 		ExecScriptTask execScriptTask = new ExecScriptTask();
 		execScriptTask.setDBView(this.dbView);
@@ -563,7 +510,11 @@ public class DBSqlScriptTab extends Tab
 	@Override
 	public void copyTableNoHead()
 	{
-		//this.tableViewSQL.copyTableNoHead();
+		Tab selectedTab = this.tabPane.getSelectionModel().getSelectedItem();
+		if ( selectedTab instanceof CopyInterface )
+		{
+			((CopyInterface)selectedTab).copyTableNoHead();
+		}
 	}
 	
 	/**
@@ -572,7 +523,11 @@ public class DBSqlScriptTab extends Tab
 	@Override
 	public void copyTableWithHead()
 	{
-		//this.tableViewSQL.copyTableWithHead();
+		Tab selectedTab = this.tabPane.getSelectionModel().getSelectedItem();
+		if ( selectedTab instanceof CopyInterface )
+		{
+			((CopyInterface)selectedTab).copyTableWithHead();
+		}
 	}
 	
 	/**

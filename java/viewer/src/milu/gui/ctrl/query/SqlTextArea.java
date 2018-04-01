@@ -493,7 +493,6 @@ public class SqlTextArea extends TextArea
 		return true;
 	}
 	
-	//public List<Map<SQLBag.COMMAND,List<SQLBag>>> analyzeSQL()
 	public List<SQLBag> getSQLBagLst()
 	{
 		SQLParse sqlParse = new SQLParse();
@@ -506,21 +505,17 @@ public class SqlTextArea extends TextArea
 		catch ( JSQLParserException jsqlEx )
 		{
 		}
-
-		return sqlParse.getSQLBagLst();
-		/*
-		List<SQLBag> sqlBagLstTmp = new ArrayList<>();
-		Map<SQLBag.COMMAND,List<SQLBag>> sqlBagComMapTmp = new LinkedHashMap<>(); 
-		
-		List<SQLBag> sqlBagLstOrg = sqlParse.getSQLBagLst();
-		SQLBag.COMMAND comPre = COMMAND.UNKNOWN_COMMAND;
-		for ( SQLBag sqlBag : sqlBagLstOrg )
+		List<SQLBag> sqlBagLst = sqlParse.getSQLBagLst();
+		if ( sqlBagLst.size() == 0 )
 		{
-			SQLBag.COMMAND comNow = sqlBag.getCommand();
-			
+			String strSQL = this.getSQL();
+			SQLBag sqlBag = new SQLBag();
+			sqlBag.setSQL(strSQL);
+			sqlBag.setCommand(SQLBag.COMMAND.QUERY);
+			sqlBag.setType(SQLBag.TYPE.SELECT);
+			sqlBagLst.add(sqlBag);
 		}
-
-		return null;
-		*/
+		
+		return sqlBagLst;
 	}
 }

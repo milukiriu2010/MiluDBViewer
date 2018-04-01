@@ -15,6 +15,7 @@ import javafx.scene.control.Tab;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
 
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
@@ -58,6 +59,9 @@ public class DBResultTab extends Tab
 	
 	private DBView          dbView = null;
 	
+	// TextField for SQL
+	private TextField  textFieldSQL = new TextField(); 
+	
 	// "SqlTableView & Warning Message" on this Pane.
 	private VBox         lowerPane = new VBox(2);
 	
@@ -79,6 +83,8 @@ public class DBResultTab extends Tab
 		
 		this.dbView = dbView;
 		
+		this.textFieldSQL.setEditable(false);
+		
         // https://docs.oracle.com/javafx/2/ui_controls/table-view.htm
         this.tableViewSQL = new SqlTableView();
         this.lowerPane.getChildren().add( this.tableViewSQL );
@@ -94,6 +100,7 @@ public class DBResultTab extends Tab
 		//this.tableViewSQL.prefHeightProperty().bind( this.lowerPane.heightProperty() );
 		
 		BorderPane brdPane = new BorderPane();
+		brdPane.setTop( this.textFieldSQL );
 		brdPane.setCenter( this.lowerPane );
 		brdPane.setBottom( hBox );
 		
@@ -141,9 +148,67 @@ public class DBResultTab extends Tab
 		);
 	}
 	
+	public void setSQL( String sql )
+	{
+		if ( sql != null )
+		{
+			this.textFieldSQL.setText(sql);
+		}
+		else
+		{
+			((BorderPane)this.getContent()).setTop(null);
+		}
+	}
+	
 	public void setDataOnTableViewSQL( List<String> headLst, List<List<String>> dataLst )
 	{
 		this.tableViewSQL.setTableViewSQL(headLst, dataLst);
+		this.setCount( this.tableViewSQL.getRowSize() );
+	}
+	
+	public void setException( Exception ex )
+	{
+		this.lowerPane.getChildren().removeAll(this.lowerPane.getChildren());
+		if ( ex instanceof MyDBOverFetchSizeException )
+		{
+			Label     labelTitle = new Label( langRB.getString("TITLE_OVER_FETCH_SIZE") );
+			String    msg        = langRB.getString("WARN_OVER_FETCH_SIZE");
+			TextArea  txtMsg     = new TextArea( msg );
+			int lfCnt = MyTool.getCharCount( msg, "\n" ); 
+			txtMsg.setPrefRowCount( lfCnt+1 );
+			
+			this.tableViewSQL.prefHeightProperty().unbind();
+			this.lowerPane.getChildren().addAll( labelTitle, txtMsg, this.tableViewSQL );
+		}
+		else if ( ex instanceof SQLException )
+		{
+			this.showSQLException( (SQLException)ex, this.dbView.getMyDBAbstract() );
+		}
+		else if ( ex instanceof Exception )
+		{
+			Label     labelTitle = new Label( langRB.getString("TITLE_EXEC_QUERY_ERROR") );
+			
+			String    strMsg     = ex.getMessage();
+			TextArea  txtMsg     = new TextArea( strMsg );
+			txtMsg.setPrefColumnCount( MyTool.getCharCount( strMsg, "\n" )+1 );
+			txtMsg.setEditable( false );
+			
+			String    strExp     = MyTool.getExceptionString( ex );
+			TextArea  txtExp     = new TextArea( strExp );
+			txtExp.setPrefRowCount( MyTool.getCharCount( strExp, "\n" )+1 );
+			txtExp.setEditable( false );
+			
+			VBox vBoxExp = new VBox(2);
+			vBoxExp.getChildren().addAll( labelTitle, txtMsg, txtExp );
+			
+			SplitPane splitPane = new SplitPane();
+			splitPane.setOrientation(Orientation.VERTICAL);
+			splitPane.getItems().addAll( vBoxExp , this.tableViewSQL );
+			splitPane.setDividerPositions( 0.3f, 0.7f );
+			
+			this.tableViewSQL.prefHeightProperty().unbind();
+			this.lowerPane.getChildren().add( splitPane );
+		}
 	}
 	
 	/**************************************************
