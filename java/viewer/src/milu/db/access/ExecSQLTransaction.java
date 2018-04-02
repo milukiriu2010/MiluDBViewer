@@ -21,8 +21,8 @@ public class ExecSQLTransaction extends ExecSQLAbstract
 			this.clear();
 			this.execStartTime = System.nanoTime();
 			
-			this.colNameLst.add( "TYPE" );
-			this.colNameLst.add( "COUNT" );
+			this.colNameLst.add( "Type" );
+			this.colNameLst.add( "Row" );
 			
 			int cnt = stmt.executeUpdate(this.sqlBag.getSQL());
 			List<String> data = new ArrayList<>();

@@ -76,7 +76,10 @@ public class DBSqlScriptTab extends Tab
 	
 	// TextArea for input SQL 
 	private SqlTextArea  textAreaSQL = null;
-	
+
+	// 
+	private SplitPane splitPane = new SplitPane();
+
 	// "TabPane of SQL Results" on this Pane.
 	private VBox         lowerPane = new VBox(2);
 	
@@ -114,7 +117,7 @@ public class DBSqlScriptTab extends Tab
         
         // TabPane of SQL results
         this.tabPane.setTabClosingPolicy( TabClosingPolicy.UNAVAILABLE );
-        this.lowerPane.getChildren().add( this.tabPane );
+        //this.lowerPane.getChildren().add( this.tabPane );
         
 		this.labelCntSQL.getStyleClass().add("label-statusbar");
 		this.labelExecTimeSQL.getStyleClass().add("label-statusbar");
@@ -125,9 +128,9 @@ public class DBSqlScriptTab extends Tab
         
         // SplitPane
         // http://fxexperience.com/2011/06/splitpane-in-javafx-2-0/
-		SplitPane splitPane = new SplitPane();
 		splitPane.setOrientation(Orientation.VERTICAL);
-		splitPane.getItems().addAll( this.upperPane, this.lowerPane );
+		//splitPane.getItems().addAll( this.upperPane, this.lowerPane );
+		splitPane.getItems().addAll( this.upperPane, this.tabPane );
 		splitPane.setDividerPositions( 0.3f, 0.7f );
 		
 		BorderPane brdPane = new BorderPane();
@@ -238,17 +241,17 @@ public class DBSqlScriptTab extends Tab
 		List<SQLBag> sqlBagLst = this.textAreaSQL.getSQLBagLst();
 		this.setCount( sqlBagLst.size() );
 		
-		ExecScriptAllTask execScriptAllTask = new ExecScriptAllTask();
-		execScriptAllTask.setDBView(this.dbView);
-		execScriptAllTask.setMyDBAbstract(myDBAbs);
-		execScriptAllTask.setAppConf(appConf);
-		execScriptAllTask.setSQLBagLst(sqlBagLst);
-		execScriptAllTask.setTabPane(this.tabPane);
+		ExecScriptAllTask task = new ExecScriptAllTask();
+		task.setDBView(this.dbView);
+		task.setMyDBAbstract(myDBAbs);
+		task.setAppConf(appConf);
+		task.setSQLBagLst(sqlBagLst);
+		task.setTabPane(this.tabPane);
 		
 		// execute task
-		final Future<?> futureExecScriptAllTask = this.service.submit( execScriptAllTask );
+		final Future<?> future = this.service.submit( task );
 		
-		execScriptAllTask.progressProperty().addListener
+		task.progressProperty().addListener
 		(
 			(obs,oldVal,newVal)->
 			{
@@ -268,85 +271,38 @@ public class DBSqlScriptTab extends Tab
 					(
 						(event)->
 						{
-							futureExecScriptAllTask.cancel(true);
+							future.cancel(true);
 						}
 					);
 					
-					this.lowerPane.getChildren().clear();
-					this.lowerPane.getChildren().add( vBox );
+					//this.lowerPane.getChildren().clear();
+					//this.lowerPane.getChildren().add( vBox );
+					//this.splitPane.getItems().remove(1,2);
+					//this.splitPane.getItems().add(vBox);
+					Tab tab = new Tab("...");
+					tab.setContent( vBox );
+					this.tabPane.getTabs().add(tab);
 					System.out.println( "ExecScriptAllTask:clear" );
 				}
 				// task done.
 				else if ( newVal.doubleValue() == 1.0 )
 				{
-					this.lowerPane.getChildren().clear();
-					this.lowerPane.getChildren().add( this.tabPane );
+					//this.lowerPane.getChildren().clear();
+					//this.lowerPane.getChildren().add( this.tabPane );
+					//this.splitPane.getItems().remove(1,2);
+					//this.splitPane.getItems().add(this.tabPane);
+					// remove tab for cancel
+					this.tabPane.getTabs().remove(0);
 					this.dbView.taskDone();
 					long endTime = System.nanoTime();
 					this.setExecTime( endTime - startTime );
-					System.out.println( "ExecScriptAllTask:set" );
+					System.out.println( "ExecScriptAllTask:done" );
 				}
 			}
 		);
-		
-		/*
-		execScriptTask.valueProperty().addListener
-		(
-			(obs,oldVal,newVal)->
-			{
-				System.out.println( "ExecScriptTask:Value[" + obs.getClass() + "]oldVal[" + oldVal + "]newVal[" + newVal + "]" );
-				this.lowerPane.getChildren().clear();
-				// task exception.
-				if ( newVal instanceof MyDBOverFetchSizeException )
-				{
-					Label     labelTitle = new Label( langRB.getString("TITLE_OVER_FETCH_SIZE") );
-					String    msg        = langRB.getString("WARN_OVER_FETCH_SIZE");
-					TextArea  txtMsg     = new TextArea( msg );
-					int lfCnt = MyTool.getCharCount( msg, "\n" ); 
-					txtMsg.setPrefRowCount( lfCnt+1 );
-					
-					this.tableViewSQL.prefHeightProperty().unbind();
-					this.lowerPane.getChildren().addAll( labelTitle, txtMsg, this.tableViewSQL );
-				}
-				else if ( newVal instanceof SQLException )
-				{
-		    		this.showSQLException( (SQLException)newVal, myDBAbs );
-				}
-				else if ( newVal instanceof Exception )
-				{
-					Label     labelTitle = new Label( langRB.getString("TITLE_EXEC_QUERY_ERROR") );
-					
-					String    strMsg     = newVal.getMessage();
-					TextArea  txtMsg     = new TextArea( strMsg );
-					txtMsg.setPrefColumnCount( MyTool.getCharCount( strMsg, "\n" )+1 );
-					txtMsg.setEditable( false );
-					
-					String    strExp     = MyTool.getExceptionString( newVal );
-					TextArea  txtExp     = new TextArea( strExp );
-					txtExp.setPrefRowCount( MyTool.getCharCount( strExp, "\n" )+1 );
-					txtExp.setEditable( false );
-					
-					VBox vBoxExp = new VBox(2);
-					vBoxExp.getChildren().addAll( labelTitle, txtMsg, txtExp );
-					
-					SplitPane splitPane = new SplitPane();
-					splitPane.setOrientation(Orientation.VERTICAL);
-					splitPane.getItems().addAll( vBoxExp , this.tableViewSQL );
-					splitPane.setDividerPositions( 0.3f, 0.7f );
-					
-					this.tableViewSQL.prefHeightProperty().unbind();
-					this.lowerPane.getChildren().add( splitPane );
-				}
 
-				// Record Count
-				this.setCount( this.tableViewSQL.getRowSize() );
-				this.dbView.taskDone();
-				long endTime = System.nanoTime();
-				this.setExecTime( endTime - startTime );
-				System.out.println( "ExecScriptTask:set" );
-			}
-		);
-		*/
+		// Exception Returned by Task
+		task.valueProperty().addListener( (obs,oldVal,newVal)->this.showException(newVal,startTime) );
 	}
 	
 	/**
@@ -364,17 +320,17 @@ public class DBSqlScriptTab extends Tab
 		List<SQLBag> sqlBagLst = this.textAreaSQL.getSQLBagLst();
 		this.setCount( sqlBagLst.size() );
 		
-		ExecExplainAllTask execExplainAllTask = new ExecExplainAllTask();
-		execExplainAllTask.setDBView(this.dbView);
-		execExplainAllTask.setMyDBAbstract(myDBAbs);
-		execExplainAllTask.setAppConf(appConf);
-		execExplainAllTask.setSQLBagLst(sqlBagLst);
-		execExplainAllTask.setTabPane(this.tabPane);
+		ExecExplainAllTask task = new ExecExplainAllTask();
+		task.setDBView(this.dbView);
+		task.setMyDBAbstract(myDBAbs);
+		task.setAppConf(appConf);
+		task.setSQLBagLst(sqlBagLst);
+		task.setTabPane(this.tabPane);
 		
 		// execute task
-		final Future<?> futureExecExplainAllTask = this.service.submit( execExplainAllTask );
+		final Future<?> future = this.service.submit( task );
 		
-		execExplainAllTask.progressProperty().addListener
+		task.progressProperty().addListener
 		(
 			(obs,oldVal,newVal)->
 			{
@@ -394,26 +350,35 @@ public class DBSqlScriptTab extends Tab
 					(
 						(event)->
 						{
-							futureExecExplainAllTask.cancel(true);
+							future.cancel(true);
 						}
 					);
 					
-					this.lowerPane.getChildren().clear();
-					this.lowerPane.getChildren().add( vBox );
+					//this.lowerPane.getChildren().clear();
+					//this.lowerPane.getChildren().add( vBox );
+					Tab tab = new Tab("...");
+					tab.setContent( vBox );
+					this.tabPane.getTabs().add(tab);
 					System.out.println( "ExecExplainAllTask:clear" );
 				}
 				// task done.
 				else if ( newVal.doubleValue() == 1.0 )
 				{
-					this.lowerPane.getChildren().clear();
-					this.lowerPane.getChildren().add( this.tabPane );
+					//this.lowerPane.getChildren().clear();
+					//this.lowerPane.getChildren().add( this.tabPane );
+					// remove tab for cancel
+					this.tabPane.getTabs().remove(0);
 					this.dbView.taskDone();
 					long endTime = System.nanoTime();
 					this.setExecTime( endTime - startTime );
 					System.out.println( "ExecExplainAllTask:clear" );
 				}
 			}
-		);		
+		);
+		
+		// Exception Returned by Task
+		task.valueProperty().addListener( (obs,oldVal,newVal)->this.showException(newVal,startTime) );
+
 		/*
 		long startTime = System.nanoTime();
 		
@@ -511,6 +476,33 @@ public class DBSqlScriptTab extends Tab
 		);
 		
 		*/
+	}
+	
+	private void showException( Exception ex, long startTime )
+	{
+		// get Tab "..." 
+		Tab tab = this.tabPane.getTabs().get(0);
+		tab.setContent(null);
+		
+		Label     labelTitle = new Label( langRB.getString("TITLE_EXEC_QUERY_ERROR") );
+		
+		String    strMsg     = ex.getMessage();
+		TextArea  txtMsg     = new TextArea( strMsg );
+		txtMsg.setPrefColumnCount( MyTool.getCharCount( strMsg, "\n" )+1 );
+		txtMsg.setEditable( false );
+		
+		String    strExp     = MyTool.getExceptionString( ex );
+		TextArea  txtExp     = new TextArea( strExp );
+		txtExp.setPrefRowCount( MyTool.getCharCount( strExp, "\n" )+1 );
+		txtExp.setEditable( false );
+		
+		VBox vBoxExp = new VBox(2);
+		vBoxExp.getChildren().addAll( labelTitle, txtMsg, txtExp );
+		
+		tab.setContent(vBoxExp);
+		
+		long endTime = System.nanoTime();
+		this.setExecTime( endTime - startTime );
 	}
 	
 	/*

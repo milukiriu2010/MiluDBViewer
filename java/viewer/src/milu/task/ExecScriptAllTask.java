@@ -125,15 +125,20 @@ public class ExecScriptAllTask extends Task<Exception>
 						resHeadLst.add("Script");
 						resHeadLst.add("Result");
 						resHeadLst.add("Type");
-						resHeadLst.add("Count");
+						resHeadLst.add("Row");
 						resHeadLst.add("Exec Time");
 						resHeadLst.add("SQL");
 						
 						DBResultTab dbResultTab = new DBResultTab( this.dbView );
 						dbResultTab.setText( "Result" );
+						dbResultTab.setSQL(null);
 						dbResultTab.setDataOnTableViewSQL(resHeadLst, resDataLst);
 						long endTimeTotal = System.nanoTime();
 						dbResultTab.setExecTime( endTimeTotal - startTimeTotalF );
+						// 0 => "..." => already remove
+						// 1 => "Result"
+						// 2 => "Script 1"
+						// 3 => "Script 2"
 						this.tabPane.getTabs().add( 0, dbResultTab );
 						this.tabPane.getSelectionModel().select( dbResultTab );
 					}
