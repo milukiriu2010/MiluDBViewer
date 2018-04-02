@@ -15,6 +15,7 @@ import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
+import javafx.scene.control.TabPane.TabClosingPolicy;
 import javafx.scene.control.Button;
 
 import javafx.scene.image.ImageView;
@@ -43,6 +44,8 @@ import milu.task.ToggleHVTask;
 import milu.task.ExecQueryTask;
 import milu.task.ExplainTask;
 import milu.task.ExecScriptTask;
+import milu.task.ExecScriptAllTask;
+import milu.task.ExecExplainAllTask;
 
 import milu.conf.AppConf;
 
@@ -110,6 +113,7 @@ public class DBSqlScriptTab extends Tab
         AnchorPane.setRightAnchor( this.textAreaSQL, 0.0 );
         
         // TabPane of SQL results
+        this.tabPane.setTabClosingPolicy( TabClosingPolicy.UNAVAILABLE );
         this.lowerPane.getChildren().add( this.tabPane );
         
 		this.labelCntSQL.getStyleClass().add("label-statusbar");
@@ -141,7 +145,7 @@ public class DBSqlScriptTab extends Tab
 		this.setGraphic( iv );
 		
 		// Tab Title
-		this.setText( "X SQL" + Integer.valueOf( counterOpend ) );
+		this.setText( "SQL" + Integer.valueOf( counterOpend ) );
 		
 		this.setAction();
 	}
@@ -234,21 +238,21 @@ public class DBSqlScriptTab extends Tab
 		List<SQLBag> sqlBagLst = this.textAreaSQL.getSQLBagLst();
 		this.setCount( sqlBagLst.size() );
 		
-		ExecScriptTask execScriptTask = new ExecScriptTask();
-		execScriptTask.setDBView(this.dbView);
-		execScriptTask.setMyDBAbstract(myDBAbs);
-		execScriptTask.setAppConf(appConf);
-		execScriptTask.setSQLBagLst(sqlBagLst);
-		execScriptTask.setTabPane(this.tabPane);
+		ExecScriptAllTask execScriptAllTask = new ExecScriptAllTask();
+		execScriptAllTask.setDBView(this.dbView);
+		execScriptAllTask.setMyDBAbstract(myDBAbs);
+		execScriptAllTask.setAppConf(appConf);
+		execScriptAllTask.setSQLBagLst(sqlBagLst);
+		execScriptAllTask.setTabPane(this.tabPane);
 		
 		// execute task
-		final Future<?> futureExecScriptTask = this.service.submit( execScriptTask );
+		final Future<?> futureExecScriptAllTask = this.service.submit( execScriptAllTask );
 		
-		execScriptTask.progressProperty().addListener
+		execScriptAllTask.progressProperty().addListener
 		(
 			(obs,oldVal,newVal)->
 			{
-				System.out.println( "ExecScriptTask:Progress[" + obs.getClass() + "]oldVal[" + oldVal + "]newVal[" + newVal + "]" );
+				System.out.println( "ExecScriptAllTask:Progress[" + obs.getClass() + "]oldVal[" + oldVal + "]newVal[" + newVal + "]" );
 				// task start.
 				if ( newVal.doubleValue() == 0.0 )
 				{
@@ -258,17 +262,19 @@ public class DBSqlScriptTab extends Tab
 					Button btnCancel    = new Button( langRB.getString("BTN_CANCEL") );
 					vBox.getChildren().addAll( labelProcess, btnCancel );
 					
+					// Oracle =>
+					//   java.sql.SQLRecoverableException
 					btnCancel.setOnAction
 					(
 						(event)->
 						{
-							futureExecScriptTask.cancel(true);
+							futureExecScriptAllTask.cancel(true);
 						}
 					);
 					
 					this.lowerPane.getChildren().clear();
 					this.lowerPane.getChildren().add( vBox );
-					System.out.println( "ExecScriptTask:clear" );
+					System.out.println( "ExecScriptAllTask:clear" );
 				}
 				// task done.
 				else if ( newVal.doubleValue() == 1.0 )
@@ -278,7 +284,7 @@ public class DBSqlScriptTab extends Tab
 					this.dbView.taskDone();
 					long endTime = System.nanoTime();
 					this.setExecTime( endTime - startTime );
-					System.out.println( "ExecScriptTask:set" );
+					System.out.println( "ExecScriptAllTask:set" );
 				}
 			}
 		);
@@ -349,6 +355,65 @@ public class DBSqlScriptTab extends Tab
 	@Override
 	public void Explain( MyDBAbstract myDBAbs )
 	{
+		long startTime = System.nanoTime();
+		MainController mainController = this.dbView.getMainController();
+		AppConf appConf = mainController.getAppConf();
+		
+		this.tabPane.getTabs().removeAll(this.tabPane.getTabs());
+		
+		List<SQLBag> sqlBagLst = this.textAreaSQL.getSQLBagLst();
+		this.setCount( sqlBagLst.size() );
+		
+		ExecExplainAllTask execExplainAllTask = new ExecExplainAllTask();
+		execExplainAllTask.setDBView(this.dbView);
+		execExplainAllTask.setMyDBAbstract(myDBAbs);
+		execExplainAllTask.setAppConf(appConf);
+		execExplainAllTask.setSQLBagLst(sqlBagLst);
+		execExplainAllTask.setTabPane(this.tabPane);
+		
+		// execute task
+		final Future<?> futureExecExplainAllTask = this.service.submit( execExplainAllTask );
+		
+		execExplainAllTask.progressProperty().addListener
+		(
+			(obs,oldVal,newVal)->
+			{
+				System.out.println( "ExecExplainAllTask:Progress[" + obs.getClass() + "]oldVal[" + oldVal + "]newVal[" + newVal + "]" );
+				// task start.
+				if ( newVal.doubleValue() == 0.0 )
+				{
+					this.dbView.taskProcessing();
+					VBox vBox = new VBox(2);
+					Label  labelProcess = new Label( langRB.getString("LABEL_PROCESSING") );
+					Button btnCancel    = new Button( langRB.getString("BTN_CANCEL") );
+					vBox.getChildren().addAll( labelProcess, btnCancel );
+					
+					// Oracle =>
+					//   java.sql.SQLRecoverableException
+					btnCancel.setOnAction
+					(
+						(event)->
+						{
+							futureExecExplainAllTask.cancel(true);
+						}
+					);
+					
+					this.lowerPane.getChildren().clear();
+					this.lowerPane.getChildren().add( vBox );
+					System.out.println( "ExecExplainAllTask:clear" );
+				}
+				// task done.
+				else if ( newVal.doubleValue() == 1.0 )
+				{
+					this.lowerPane.getChildren().clear();
+					this.lowerPane.getChildren().add( this.tabPane );
+					this.dbView.taskDone();
+					long endTime = System.nanoTime();
+					this.setExecTime( endTime - startTime );
+					System.out.println( "ExecExplainAllTask:clear" );
+				}
+			}
+		);		
 		/*
 		long startTime = System.nanoTime();
 		
@@ -448,6 +513,7 @@ public class DBSqlScriptTab extends Tab
 		*/
 	}
 	
+	/*
 	private void showSQLException( SQLException sqlEx, MyDBAbstract myDBAbs )
 	{
 		System.out.println( "SQLState:" + sqlEx.getSQLState() );
@@ -502,6 +568,7 @@ public class DBSqlScriptTab extends Tab
 		//this.tableViewSQL.prefHeightProperty().unbind();
 		this.lowerPane.getChildren().add( splitPane );
 	}
+	*/
 	
 	/**************************************************
 	 * Override from CopyInterface

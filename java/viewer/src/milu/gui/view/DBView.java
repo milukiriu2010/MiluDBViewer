@@ -108,7 +108,7 @@ public class DBView extends Stage
 		this.createToolBar();
         
 		// View for SQL
-		DBSqlTab dbSqlTab = new DBSqlTab( this );
+		Tab dbSqlTab = new DBSqlScriptTab( this );
 		
 		// VBox for MenuBar/ToolBar
 		VBox vboxMenu = new VBox( 2 );
@@ -203,7 +203,7 @@ public class DBView extends Stage
 		this.setMnemonic();
 		
 		// set Focus on TextArea of DBSqlTab.
-		dbSqlTab.setFocus();
+		((FocusInterface)dbSqlTab).setFocus();
     }
 	
 	// Create MenuBar
@@ -428,6 +428,7 @@ public class DBView extends Stage
 	public void createNewTab()
 	{
 		Tab newTab = null;
+		/*
 		if ( this.debug == 0 )
 		{
 			newTab = new DBSqlTab( this );
@@ -436,6 +437,8 @@ public class DBView extends Stage
 		{
 			newTab = new DBSqlScriptTab( this );
 		}
+		*/
+		newTab = new DBSqlScriptTab( this );
 		this.tabPane.getTabs().add( newTab );
 		this.tabPane.getSelectionModel().select( newTab );
 		// set Focus on TextArea of DBSqlTab.
