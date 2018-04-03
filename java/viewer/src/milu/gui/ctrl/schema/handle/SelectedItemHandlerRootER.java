@@ -138,6 +138,10 @@ public class SelectedItemHandlerRootER extends SelectedItemHandlerAbstract
 		this.tabPane.getTabs().add( newTab );
 		this.tabPane.getSelectionModel().select( newTab );
 		
+		// call after added to TabPane
+		// set Label(lblTable) width to the longest Label(lblColumn) width
+		newTab.calculate();
+		
 	}
 
 }

@@ -174,6 +174,7 @@ public class SchemaERView extends ScrollPane
 					
 					final LabelTable srcLabelTableF = srcLabelTable;
 					final LabelTable dstLabelTableF = dstLabelTable;
+					/*
 					Platform.runLater
 					( 
 						()->
@@ -194,6 +195,27 @@ public class SchemaERView extends ScrollPane
 							this.connect( srcLabelTableF, srcColumn, dstLabelTableF, dstColumn );
 						}
 					);
+					*/
+					
+					Runnable thread = ()->
+					{
+						try
+						{
+							if ( System.getProperty("os.name").contains("Windows") == true )
+							{
+							}
+							else
+							{
+								Thread.sleep(100);
+							}
+						}
+						catch ( InterruptedException intEx )
+						{
+						}
+						Platform.runLater( ()->this.connect( srcLabelTableF, srcColumn, dstLabelTableF, dstColumn ) );
+					};
+					thread.run();
+					
 				}
 			}
 			else
@@ -203,6 +225,16 @@ public class SchemaERView extends ScrollPane
 			
 			i++;
 		}
+	}
+	
+
+	// call after added to TabPane
+	public void calculate()
+	{
+		// set Label(lblTable) width to the longest Label(lblColumn) width
+		this.applyCss();
+		this.layout();
+		this.slMap.forEach( (k,v)->v.calculate() );
 	}
 	
 	
