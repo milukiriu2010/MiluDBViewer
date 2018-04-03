@@ -14,7 +14,8 @@ import milu.gui.ctrl.common.ChangeLangInterface;
 import milu.gui.view.DBView;
 import milu.tool.MyTool;
 import milu.ctrl.MainController;
-
+import milu.db.access.ExecSQLAbstract;
+import milu.db.access.ExecSQLExplainFactory;
 import milu.db.explain.ExplainDBFactory;
 
 public class MainToolBar extends ToolBar
@@ -138,7 +139,15 @@ public class MainToolBar extends ToolBar
 			this.btnGo
 		);
 		
+		/*
 		if ( ExplainDBFactory.getInstance( this.dbView.getMyDBAbstract(), mainCtrl ) != null )
+		{
+			this.getItems().add( this.btnExplain );
+		}
+		*/
+		
+		ExecSQLAbstract execSQLAbs = new ExecSQLExplainFactory().createFactory( null, this.dbView.getMyDBAbstract(), mainCtrl.getAppConf() );
+		if ( execSQLAbs != null )
 		{
 			this.getItems().add( this.btnExplain );
 		}

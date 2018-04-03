@@ -130,6 +130,8 @@ public class MainController
 				"file:resources/images/winicon.gif",
 				// DBSqlTab
 				"file:resources/images/sql.png",
+				"file:resources/images/result.png",
+				//"file:resources/images/script.png",
 				// DBSettingDialog
 				"file:resources/images/folder.png",
 			};

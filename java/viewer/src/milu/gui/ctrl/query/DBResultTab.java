@@ -100,7 +100,7 @@ public class DBResultTab extends Tab
 		MainController mainCtrl = this.dbView.getMainController();
 		
 		// set icon on Tab
-		ImageView iv = new ImageView( mainCtrl.getImage("file:resources/images/sql.png") );
+		ImageView iv = new ImageView( mainCtrl.getImage("file:resources/images/result.png") );
 		iv.setFitHeight( 16 );
 		iv.setFitWidth( 16 );
 		this.setGraphic( iv );

@@ -69,7 +69,8 @@ public class DBSqlScriptTab extends Tab
 	// TextArea for input SQL 
 	private SqlTextArea  textAreaSQL = null;
 
-	// 
+	// Upper => [AnchorPane(upperPane)]-[SqlTextArea(textAreaSQL)]
+	// Lower => [TabPane(tabPane)]
 	private SplitPane splitPane = new SplitPane();
 	
 	// TabPane for SQL result
@@ -117,10 +118,10 @@ public class DBSqlScriptTab extends Tab
         
         // SplitPane
         // http://fxexperience.com/2011/06/splitpane-in-javafx-2-0/
-		splitPane.setOrientation(Orientation.VERTICAL);
+		this.splitPane.setOrientation(Orientation.VERTICAL);
 		//splitPane.getItems().addAll( this.upperPane, this.lowerPane );
-		splitPane.getItems().addAll( this.upperPane, this.tabPane );
-		splitPane.setDividerPositions( 0.3f, 0.7f );
+		this.splitPane.getItems().addAll( this.upperPane, this.tabPane );
+		this.splitPane.setDividerPositions( 0.3f, 0.7f );
 		
 		BorderPane brdPane = new BorderPane();
 		brdPane.setCenter( splitPane );
