@@ -109,7 +109,7 @@ public class SQLParse
 			stmt.accept( analyzeStatementVisitor );
 			
 			// Table List
-			List tableLstTmp = analyzeFromItemVisitor.getTableLst();
+			List<String> tableLstTmp = analyzeFromItemVisitor.getTableLst();
 			this.tableLst.addAll(tableLstTmp);
 			
 			// Alias <=> Table

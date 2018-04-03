@@ -123,7 +123,7 @@ public class UrlPaneMySQL extends UrlPaneAbstract
 		// ----------------------------------------------------
 		this.lblUrl.setText( "https://dev.mysql.com/doc/connector-j/5.1/en/connector-j-reference-configuration-properties.html" );
 		this.lblUrl.setCursor( Cursor.HAND );
-		this.lblUrl.getStyleClass().add("url");
+		this.lblUrl.getStyleClass().add("DBSettingDialog_URL");
 		
 		this.setAction();
 		

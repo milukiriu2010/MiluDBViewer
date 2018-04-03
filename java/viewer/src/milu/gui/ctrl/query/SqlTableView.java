@@ -48,7 +48,7 @@ public class SqlTableView extends TableView<List<String>>
 {
 	// Property File for this class 
 	private static final String PROPERTY_FILENAME = 
-		"conf.lang.ctrl.query.SqlTableView";
+		"conf.lang.gui.ctrl.query.SqlTableView";
 
 	// Language Resource
 	private ResourceBundle langRB = ResourceBundle.getBundle( PROPERTY_FILENAME );
@@ -306,7 +306,7 @@ public class SqlTableView extends TableView<List<String>>
 				
 				// https://stackoverflow.com/questions/16857031/javafx-table-column-different-font-with-css
 				// tableCol:styleClass=table-column
-				tableCol.getStyleClass().add("cell-first");
+				tableCol.getStyleClass().add("SqlTableView_Cell_First");
 				
 				// disable sort of the first column
 				tableCol.setSortable(false);
@@ -388,7 +388,7 @@ public class SqlTableView extends TableView<List<String>>
 				
 				// https://stackoverflow.com/questions/16857031/javafx-table-column-different-font-with-css
 				// tableCol:styleClass=table-column
-				tableCol.getStyleClass().add("cell-first");
+				tableCol.getStyleClass().add("SqlTableView_Cell_First");
 				
 				// disable sort of the first column
 				tableCol.setSortable(false);

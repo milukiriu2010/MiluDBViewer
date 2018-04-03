@@ -1,7 +1,6 @@
 package milu.task;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
 import javafx.application.Platform;
@@ -14,7 +13,6 @@ import milu.gui.ctrl.query.DBResultTab;
 import milu.gui.view.DBView;
 
 import milu.db.access.ExecSQLAbstract;
-import milu.db.access.ExecSQLFactory;
 import milu.db.access.ExecSQLExplainFactory;
 
 public class ExecExplainEach 

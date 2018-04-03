@@ -18,7 +18,7 @@ public class VersionDialog extends Dialog<Boolean>
 {
 	// Property File for this class 
 	private static final String PROPERTY_FILENAME = 
-			"conf.lang.dlg.VersionDialog";
+			"conf.lang.gui.dlg.VersionDialog";
 
 	// Language Resource
 	private ResourceBundle langRB = ResourceBundle.getBundle( PROPERTY_FILENAME );

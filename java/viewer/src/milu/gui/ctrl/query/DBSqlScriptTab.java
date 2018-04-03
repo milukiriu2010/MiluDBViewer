@@ -24,8 +24,6 @@ import javafx.scene.layout.VBox;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.AnchorPane;
 
-import java.sql.SQLException;
-
 import milu.ctrl.MainController;
 import milu.ctrl.sqlparse.SQLBag;
 import milu.gui.ctrl.common.ChangeLangInterface;
@@ -35,15 +33,9 @@ import milu.gui.ctrl.common.ExecExplainDBInterface;
 import milu.gui.ctrl.common.ExecQueryDBInterface;
 import milu.gui.ctrl.common.FocusInterface;
 import milu.gui.ctrl.common.ToggleHorizontalVerticalInterface;
-import milu.gui.ctrl.query.SqlTableView;
 import milu.gui.view.DBView;
 import milu.tool.MyTool;
 import milu.db.MyDBAbstract;
-import milu.db.access.MyDBOverFetchSizeException;
-import milu.task.ToggleHVTask;
-import milu.task.ExecQueryTask;
-import milu.task.ExplainTask;
-import milu.task.ExecScriptTask;
 import milu.task.ExecScriptAllTask;
 import milu.task.ExecExplainAllTask;
 
@@ -61,7 +53,7 @@ public class DBSqlScriptTab extends Tab
 {
 	// Property File for this class 
 	private static final String PROPERTY_FILENAME = 
-		"conf.lang.ctrl.query.DBSqlTab";
+		"conf.lang.gui.ctrl.query.DBSqlTab";
 
 	// Language Resource
 	private ResourceBundle langRB = ResourceBundle.getBundle( PROPERTY_FILENAME );
@@ -79,9 +71,6 @@ public class DBSqlScriptTab extends Tab
 
 	// 
 	private SplitPane splitPane = new SplitPane();
-
-	// "TabPane of SQL Results" on this Pane.
-	private VBox         lowerPane = new VBox(2);
 	
 	// TabPane for SQL result
 	private TabPane         tabPane = new TabPane();
@@ -119,8 +108,8 @@ public class DBSqlScriptTab extends Tab
         this.tabPane.setTabClosingPolicy( TabClosingPolicy.UNAVAILABLE );
         //this.lowerPane.getChildren().add( this.tabPane );
         
-		this.labelCntSQL.getStyleClass().add("label-statusbar");
-		this.labelExecTimeSQL.getStyleClass().add("label-statusbar");
+		this.labelCntSQL.getStyleClass().add("DBSqlTab_Label_On_StatusBar");
+		this.labelExecTimeSQL.getStyleClass().add("DBSqlTab_Label_On_StatusBar");
         
         HBox hBox = new HBox( 10 );
         hBox.setPadding( new Insets( 2, 2, 2, 2 ) );

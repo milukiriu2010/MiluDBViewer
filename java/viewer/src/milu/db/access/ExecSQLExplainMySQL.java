@@ -7,8 +7,6 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-import milu.conf.AppConf;
-
 public class ExecSQLExplainMySQL extends ExecSQLAbstract {
 
 	@Override

@@ -21,7 +21,7 @@ public class MyAlertDialog extends Alert
 {
 	// Property File for this class 
 	private static final String PROPERTY_FILENAME = 
-		"conf.lang.dlg.MyAlertDialog";
+		"conf.lang.gui.dlg.MyAlertDialog";
 	
 	// Language Resource
 	private ResourceBundle langRB = ResourceBundle.getBundle( PROPERTY_FILENAME );

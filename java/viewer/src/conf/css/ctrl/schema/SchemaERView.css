@@ -1,21 +1,13 @@
 
-.column_red {
-	-fx-background-color: #ff0000;
+.SchemaERView_Column_Src {
+	-fx-background-color: #ffc0cb;
 }
 
-.column_green {
-	-fx-background-color: #00ff00;
-}
-
-.column_blue {
-	-fx-background-color: #0000ff;
-}
-
-.column_cyan {
+.SchemaERView_Column_Dst {
 	-fx-background-color: #00ffff;
 }
 
-.path_green {
+.SchemaERView_Path {
 	-fx-stroke: #00ff00;
 	-fx-stroke-width: 3;
 }

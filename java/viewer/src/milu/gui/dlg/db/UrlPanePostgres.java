@@ -122,7 +122,7 @@ public class UrlPanePostgres extends UrlPaneAbstract
 		// ----------------------------------------------------
 		this.lblUrl.setText( "https://jdbc.postgresql.org/documentation/head/connect.html" );
 		this.lblUrl.setCursor( Cursor.HAND );
-		this.lblUrl.getStyleClass().add("url");
+		this.lblUrl.getStyleClass().add("DBSettingDialog_URL");
 		
 		this.setAction();
 		

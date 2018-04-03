@@ -123,7 +123,7 @@ public class UrlPaneCassandra extends UrlPaneAbstract
 		// ----------------------------------------------------
 		this.lblUrl.setText( "https://github.com/zhicwu/cassandra-jdbc-driver" );
 		this.lblUrl.setCursor( Cursor.HAND );
-		this.lblUrl.getStyleClass().add("url");
+		this.lblUrl.getStyleClass().add("DBSettingDialog_URL");
 		
 		this.setAction();
 		

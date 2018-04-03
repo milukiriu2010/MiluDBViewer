@@ -28,7 +28,6 @@ import milu.gui.ctrl.common.RefreshInterface;
 import milu.gui.ctrl.common.ToggleHorizontalVerticalInterface;
 import milu.gui.ctrl.menu.MainMenuBar;
 import milu.gui.ctrl.menu.MainToolBar;
-import milu.gui.ctrl.query.DBSqlTab;
 import milu.gui.ctrl.query.DBSqlScriptTab;
 import milu.gui.ctrl.schema.DBSchemaTab;
 import milu.gui.dlg.MyAlertDialog;

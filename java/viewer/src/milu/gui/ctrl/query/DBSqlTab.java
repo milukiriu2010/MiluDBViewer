@@ -56,7 +56,7 @@ public class DBSqlTab extends Tab
 {
 	// Property File for this class 
 	private static final String PROPERTY_FILENAME = 
-		"conf.lang.ctrl.query.DBSqlTab";
+		"conf.lang.gui.ctrl.query.DBSqlTab";
 
 	// Language Resource
 	private ResourceBundle langRB = ResourceBundle.getBundle( PROPERTY_FILENAME );
@@ -111,8 +111,8 @@ public class DBSqlTab extends Tab
         this.tableViewSQL = new SqlTableView();
         this.lowerPane.getChildren().add( this.tableViewSQL );
         
-		this.labelCntSQL.getStyleClass().add("label-statusbar");
-		this.labelExecTimeSQL.getStyleClass().add("label-statusbar");
+		this.labelCntSQL.getStyleClass().add("DBSqlTab_Label_On_StatusBar");
+		this.labelExecTimeSQL.getStyleClass().add("DBSqlTab_Label_On_StatusBar");
         
         HBox hBox = new HBox( 10 );
         hBox.setPadding( new Insets( 2, 2, 2, 2 ) );

@@ -14,6 +14,7 @@ import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 import javafx.application.Application;
+import javafx.application.Platform;
 
 import milu.gui.dlg.db.DBSettingDialog;
 import milu.gui.view.DBView;
@@ -223,6 +224,7 @@ public class MainController
 		else
 		{
 			System.out.println( "Cancel!!" );
+			this.close(null);
 		}
 		
 		
@@ -318,28 +320,31 @@ public class MainController
 			}
 		}
 		*/
-		MyDBAbstract myDBAbs = dbView.getMyDBAbstract();
-		List<DBView> dbViewLst = this.myDBViewMap.get(myDBAbs);
-		dbViewLst.remove(dbView);
-		
-		// close myDBAbs & remove from map, 
-		// if there is no active DBView for myDBAbs
-		if ( dbViewLst.size() == 0 )
+		if ( dbView != null )
 		{
-			try
+			MyDBAbstract myDBAbs = dbView.getMyDBAbstract();
+			List<DBView> dbViewLst = this.myDBViewMap.get(myDBAbs);
+			dbViewLst.remove(dbView);
+			
+			// close myDBAbs & remove from map, 
+			// if there is no active DBView for myDBAbs
+			if ( dbViewLst.size() == 0 )
 			{
-				myDBAbs.close();
+				try
+				{
+					myDBAbs.close();
+				}
+				catch ( SQLException sqlEx )
+				{
+					// suppress error
+				}
+				this.myDBViewMap.remove(myDBAbs);
+				myDBAbs = null;
 			}
-			catch ( SQLException sqlEx )
+			else
 			{
-				// suppress error
+				System.out.println( "Active DBView still exists." );
 			}
-			this.myDBViewMap.remove(myDBAbs);
-			myDBAbs = null;
-		}
-		else
-		{
-			System.out.println( "Active DBView still exists." );
 		}
 		
 		if ( this.myDBViewMap.size() == 0 )
@@ -357,7 +362,8 @@ public class MainController
 		this.closeAllDB();
 		System.out.println( "MiluDBViewer Exit." );
 		// "hs_err_pid*.log" is created, when no DBView.
-		System.exit( 0 );
+		//System.exit( 0 );
+		Platform.exit();
 	}
 	
 	public void addDraggingTabPaneMap( MyDBAbstract myDBAbs, TabPane tabPane )

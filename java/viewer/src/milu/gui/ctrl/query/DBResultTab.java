@@ -5,9 +5,7 @@ import java.util.ResourceBundle;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.Future;
 
-import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.scene.control.SplitPane;
@@ -21,7 +19,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.AnchorPane;
 
 import java.sql.SQLException;
 
@@ -29,8 +26,6 @@ import milu.ctrl.MainController;
 import milu.gui.ctrl.common.ChangeLangInterface;
 import milu.gui.ctrl.common.CopyInterface;
 import milu.gui.ctrl.common.CounterInterface;
-import milu.gui.ctrl.common.ExecExplainDBInterface;
-import milu.gui.ctrl.common.ExecQueryDBInterface;
 import milu.gui.ctrl.common.ToggleHorizontalVerticalInterface;
 import milu.gui.ctrl.query.SqlTableView;
 import milu.gui.view.DBView;
@@ -38,10 +33,6 @@ import milu.tool.MyTool;
 import milu.db.MyDBAbstract;
 import milu.db.access.MyDBOverFetchSizeException;
 import milu.task.ToggleHVTask;
-import milu.task.ExecQueryTask;
-import milu.task.ExplainTask;
-
-import milu.conf.AppConf;
 
 public class DBResultTab extends Tab
 	implements 
@@ -52,7 +43,7 @@ public class DBResultTab extends Tab
 {
 	// Property File for this class 
 	private static final String PROPERTY_FILENAME = 
-		"conf.lang.ctrl.query.DBSqlTab";
+		"conf.lang.gui.ctrl.query.DBSqlTab";
 
 	// Language Resource
 	private ResourceBundle langRB = ResourceBundle.getBundle( PROPERTY_FILENAME );
@@ -89,8 +80,8 @@ public class DBResultTab extends Tab
         this.tableViewSQL = new SqlTableView();
         this.lowerPane.getChildren().add( this.tableViewSQL );
         
-		this.labelCntSQL.getStyleClass().add("label-statusbar");
-		this.labelExecTimeSQL.getStyleClass().add("label-statusbar");
+		this.labelCntSQL.getStyleClass().add("DBSqlTab_Label_On_StatusBar");
+		this.labelExecTimeSQL.getStyleClass().add("DBSqlTab_Label_On_StatusBar");
         
         HBox hBox = new HBox( 10 );
         hBox.setPadding( new Insets( 2, 2, 2, 2 ) );

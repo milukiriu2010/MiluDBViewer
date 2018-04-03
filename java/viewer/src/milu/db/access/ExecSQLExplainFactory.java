@@ -7,8 +7,6 @@ import milu.db.MyDBPostgres;
 import milu.db.MyDBMySQL;
 import milu.db.MyDBOracle;
 
-import milu.conf.AppConf;
-
 public class ExecSQLExplainFactory extends ExecSQLFactoryAbstract 
 {
 	@Override

@@ -1,14 +1,16 @@
-.label_table {
+.LabelTable_VBox {
 	-fx-border-color: #000000;
 	-fx-border-width: 2;
 	-fx-background-color: #ffffff;
 }
 
-.table_name {
+.LabelTable_Label_Table {
 	-fx-border-color: #000000;
 	-fx-background-color: #ffffff;
+	-fx-padding: 0 2 0 2;
 }
 
-.column_white {
+.LabelTable_Label_Column {
 	-fx-background-color: #ffffff;
+	-fx-padding: 0 2 0 2;
 }

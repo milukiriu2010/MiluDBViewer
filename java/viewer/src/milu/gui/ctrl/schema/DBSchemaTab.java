@@ -34,7 +34,7 @@ public class DBSchemaTab extends Tab
 {
 	// Property File for this class 
 	private static final String PROPERTY_FILENAME = 
-			"conf.lang.ctrl.schema.DBSchemaTab";
+			"conf.lang.gui.ctrl.schema.DBSchemaTab";
 
 	// Language Resource
 	private ResourceBundle langRB = ResourceBundle.getBundle( PROPERTY_FILENAME );

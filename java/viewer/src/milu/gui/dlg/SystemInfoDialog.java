@@ -37,7 +37,7 @@ public class SystemInfoDialog extends Dialog<Boolean>
 {
 	// Property File for this class 
 	private static final String PROPERTY_FILENAME = 
-			"conf.lang.dlg.SystemInfoDialog";
+			"conf.lang.gui.dlg.SystemInfoDialog";
 
 	// Language Resource
 	private ResourceBundle langRB = ResourceBundle.getBundle( PROPERTY_FILENAME );
@@ -240,7 +240,7 @@ public class SystemInfoDialog extends Dialog<Boolean>
 	{
 		// Nodes for Memory Information
 		Label        memLabel = new Label(langRB.getString( "LABEL_MEMINFO" ));
-		memLabel.getStyleClass().add("label-title");
+		memLabel.getStyleClass().add("SystemInfoDialog_Label_Title");
 		Button       btnGC = new Button(langRB.getString("BTN_GC"));
 		btnGC.setOnAction( event->System.gc() );
 		HBox hbox = new HBox(2);
@@ -250,7 +250,7 @@ public class SystemInfoDialog extends Dialog<Boolean>
         
         // Nodes for Display Information
 		Label        dispLabel = new Label(langRB.getString( "LABEL_DISPINFO" ));
-		dispLabel.getStyleClass().add("label-title");
+		dispLabel.getStyleClass().add("SystemInfoDialog_Label_Title");
         SqlTableView dispTableView = new SqlTableView();
         this.setContentForDispInfo( dispTableView );
         

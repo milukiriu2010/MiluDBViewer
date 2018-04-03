@@ -230,7 +230,7 @@ public class UrlPaneOracle extends UrlPaneAbstract
 		// ----------------------------------------------------
 		this.lblUrl.setText( "https://docs.oracle.com/cd/B28359_01/java.111/b31224/urls.htm" );
 		this.lblUrl.setCursor( Cursor.HAND );
-		this.lblUrl.getStyleClass().add("url");
+		this.lblUrl.getStyleClass().add("DBSettingDialog_URL");
 		
 		this.setAction();
 		

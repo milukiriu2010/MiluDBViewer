@@ -32,7 +32,7 @@ public class MainMenuBar extends MenuBar
 {
 	// Property File for this class 
 	private static final String PROPERTY_FILENAME = 
-		 	"conf.lang.ctrl.menu.MainMenuBar";
+		 	"conf.lang.gui.ctrl.menu.MainMenuBar";
 
 	private ResourceBundle langRB = ResourceBundle.getBundle( PROPERTY_FILENAME );
 

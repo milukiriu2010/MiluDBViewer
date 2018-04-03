@@ -351,16 +351,16 @@ public class SchemaERView extends ScrollPane
 	private void addStyleClass( Label lbl1, Label lbl2, Path path )
 	{
 		//System.out.println( "addStyle["+lbl1.getText()+"]["+lbl2.getText()+"]" );
-		lbl1.getStyleClass().add("column_red");
-		lbl2.getStyleClass().add("column_cyan");
-		path.getStyleClass().add("path_green");
+		lbl1.getStyleClass().add("SchemaERView_Column_Src");
+		lbl2.getStyleClass().add("SchemaERView_Column_Dst");
+		path.getStyleClass().add("SchemaERView_Path");
 	}
 
 	private void removeStyleClass( Label lbl1, Label lbl2, Path path )
 	{
 		//System.out.println( "delStyle["+lbl1.getText()+"]["+lbl2.getText()+"]" );
-		lbl1.getStyleClass().remove("column_red"); 
-		lbl2.getStyleClass().remove("column_cyan"); 
-		path.getStyleClass().remove("path_green");
+		lbl1.getStyleClass().remove("SchemaERView_Column_Src"); 
+		lbl2.getStyleClass().remove("SchemaERView_Column_Dst"); 
+		path.getStyleClass().remove("SchemaERView_Path");
 	}
 }

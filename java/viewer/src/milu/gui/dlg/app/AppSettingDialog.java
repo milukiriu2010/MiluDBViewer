@@ -22,7 +22,7 @@ public class AppSettingDialog extends Dialog<Boolean>
 {
 	// Property File for this class 
 	private static final String PROPERTY_FILENAME = 
-		"conf.lang.dlg.app.AppSettingDialog";
+		"conf.lang.gui.dlg.app.AppSettingDialog";
 
 	// Language Resource
 	private ResourceBundle langRB = ResourceBundle.getBundle( PROPERTY_FILENAME );

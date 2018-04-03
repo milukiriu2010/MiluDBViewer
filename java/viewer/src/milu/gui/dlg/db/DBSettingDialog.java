@@ -46,7 +46,7 @@ public class DBSettingDialog extends Dialog<MyDBAbstract>
 {
 	// Property File for this class 
 	private static final String PROPERTY_FILENAME = 
-			"conf.lang.dlg.db.DBSettingDialog";
+			"conf.lang.gui.dlg.db.DBSettingDialog";
 
 	// Language Resource
 	private ResourceBundle langRB = ResourceBundle.getBundle( PROPERTY_FILENAME );

@@ -13,7 +13,6 @@ import milu.db.MyDBAbstract;
 import milu.db.access.AccessDB;
 import milu.db.access.MyDBOverFetchSizeException;
 import milu.gui.ctrl.query.DBResultTab;
-import milu.gui.ctrl.query.SqlTableView;
 import milu.gui.view.DBView;
 
 import milu.conf.AppConf;

@@ -3,17 +3,13 @@ package milu.task;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
 
-import java.sql.SQLException;
 import java.util.List;
 import java.util.ArrayList;
 
 import javafx.scene.control.TabPane;
 
 import milu.db.MyDBAbstract;
-import milu.db.access.AccessDB;
-import milu.db.access.MyDBOverFetchSizeException;
 import milu.gui.ctrl.query.DBResultTab;
-import milu.gui.ctrl.query.SqlTableView;
 import milu.gui.view.DBView;
 
 import milu.conf.AppConf;

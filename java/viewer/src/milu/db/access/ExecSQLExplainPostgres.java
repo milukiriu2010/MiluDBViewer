@@ -7,9 +7,8 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-import milu.conf.AppConf;
-
-public class ExecSQLExplainPostgres extends ExecSQLAbstract {
+public class ExecSQLExplainPostgres extends ExecSQLAbstract 
+{
 
 	@Override
 	public void exec(int checkCnt) throws SQLException, Exception 

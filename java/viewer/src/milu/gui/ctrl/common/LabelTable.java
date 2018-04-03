@@ -9,8 +9,6 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
-import javafx.application.Platform;
-import javafx.scene.Scene;
 
 import milu.entity.schema.SchemaEntity;
 
@@ -33,11 +31,11 @@ public class LabelTable extends Group
 		
 		this.tblEntity = tblEntity;
 		
-		this.vBox.getStyleClass().add("label_table");
+		this.vBox.getStyleClass().add("LabelTable_VBox");
 		
 		// Label of Table
 		this.lblTable.setText( this.tblEntity.getName() );
-		this.lblTable.getStyleClass().add("table_name");
+		this.lblTable.getStyleClass().add("LabelTable_Label_Table");
 		//this.lblTable.applyCss();
 		//this.lblTable.layout();
 		this.lblTable.prefWidth(-1);
@@ -51,7 +49,7 @@ public class LabelTable extends Group
 		{
 			String colName = defMap.get("column_name");
 			Label lblColumn = new Label( colName );
-			lblColumn.getStyleClass().add("column_white");
+			lblColumn.getStyleClass().add("LabelTable_Label_Column");
 			//lblColumn.applyCss();
 			//lblColumn.layout();
 			lblColumn.prefWidth(-1);

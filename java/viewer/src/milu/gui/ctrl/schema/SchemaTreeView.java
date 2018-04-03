@@ -32,7 +32,7 @@ public class SchemaTreeView extends TreeView<SchemaEntity>
 {
 	// Property File for this class 
 	private static final String PROPERTY_FILENAME = 
-			"conf.lang.ctrl.schema.SchemaTreeView";
+			"conf.lang.gui.ctrl.schema.SchemaTreeView";
 	
 	// Language Resource
 	private ResourceBundle langRB = ResourceBundle.getBundle( PROPERTY_FILENAME );

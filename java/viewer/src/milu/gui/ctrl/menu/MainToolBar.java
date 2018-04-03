@@ -1,7 +1,6 @@
 package milu.gui.ctrl.menu;
 
 import java.util.ResourceBundle;
-import java.sql.SQLException;
 
 import javafx.scene.control.Button;
 import javafx.scene.control.Separator;
@@ -23,7 +22,7 @@ public class MainToolBar extends ToolBar
 {
 	// Property File for this class 
 	private static final String PROPERTY_FILENAME = 
-		 	"conf.lang.ctrl.menu.MainToolBar";
+		 	"conf.lang.gui.ctrl.menu.MainToolBar";
 
 	private ResourceBundle langRB = ResourceBundle.getBundle( PROPERTY_FILENAME );
 	
@@ -308,7 +307,7 @@ public class MainToolBar extends ToolBar
 		//   Button[Exec Query] 
 		// ----------------------------------------------
 		Tooltip tipGo = new Tooltip( this.langRB.getString( "TIP_EXECSQL" ) );
-		tipGo.getStyleClass().add("mytooltip");
+		tipGo.getStyleClass().add("MainToolBar_MyToolTip");
 		this.btnGo.setTooltip( tipGo );
 		
 		// ----------------------------------------------
@@ -316,7 +315,7 @@ public class MainToolBar extends ToolBar
 		//   Button[Exec Explain] 
 		// ----------------------------------------------
 		Tooltip tipExplain = new Tooltip( this.langRB.getString( "TIP_EXEC_EXPLAIN" ) );
-		tipExplain.getStyleClass().add("mytooltip");
+		tipExplain.getStyleClass().add("MainToolBar_MyToolTip");
 		this.btnExplain.setTooltip( tipExplain );
 		
 		// ----------------------------------------------
@@ -324,7 +323,7 @@ public class MainToolBar extends ToolBar
 		//   Button[Commit] 
 		// ----------------------------------------------
 		Tooltip tipCommit = new Tooltip( this.langRB.getString( "TIP_COMMIT" ) );
-		tipCommit.getStyleClass().add("mytooltip");
+		tipCommit.getStyleClass().add("MainToolBar_MyToolTip");
 		this.btnCommit.setTooltip( tipCommit );
 		
 		// ----------------------------------------------
@@ -332,7 +331,7 @@ public class MainToolBar extends ToolBar
 		//   Button[Rollback] 
 		// ----------------------------------------------
 		Tooltip tipRollback = new Tooltip( this.langRB.getString( "TIP_ROLLBACK" ) );
-		tipRollback.getStyleClass().add("mytooltip");
+		tipRollback.getStyleClass().add("MainToolBar_MyToolTip");
 		this.btnRollback.setTooltip( tipRollback );
 		
 		// ----------------------------------------------
@@ -340,7 +339,7 @@ public class MainToolBar extends ToolBar
 		//   Button[Toggle Horizontal/Vertical mode] 
 		// ----------------------------------------------
 		Tooltip tipToggleHV = new Tooltip(this.langRB.getString( "TIP_TOGGLE_HV" ));
-		tipToggleHV.getStyleClass().add("mytooltip");
+		tipToggleHV.getStyleClass().add("MainToolBar_MyToolTip");
 		this.btnToggleHV.setTooltip( tipToggleHV );
 
 		// ----------------------------------------------
@@ -348,7 +347,7 @@ public class MainToolBar extends ToolBar
 		//   Button[New Tab] 
 		// ----------------------------------------------
 		Tooltip tipNewTab = new Tooltip(this.langRB.getString( "TIP_NEW_TAB" ));
-		tipNewTab.getStyleClass().add("mytooltip");
+		tipNewTab.getStyleClass().add("MainToolBar_MyToolTip");
 		this.btnNewTab.setTooltip( tipNewTab );
 
 		// ----------------------------------------------
@@ -356,7 +355,7 @@ public class MainToolBar extends ToolBar
 		//   Button[New Window] 
 		// ----------------------------------------------
 		Tooltip tipNewWin = new Tooltip(this.langRB.getString( "TIP_NEW_WIN" ));
-		tipNewWin.getStyleClass().add("mytooltip");
+		tipNewWin.getStyleClass().add("MainToolBar_MyToolTip");
 		this.btnNewWin.setTooltip( tipNewWin );
 
 		// ----------------------------------------------
@@ -364,7 +363,7 @@ public class MainToolBar extends ToolBar
 		//   Button[New DB Connection] 
 		// ----------------------------------------------
 		Tooltip tipNewCon = new Tooltip(this.langRB.getString( "TIP_NEW_CON" ));
-		tipNewCon.getStyleClass().add("mytooltip");
+		tipNewCon.getStyleClass().add("MainToolBar_MyToolTip");
 		this.btnNewCon.setTooltip( tipNewCon );
 
 		// ----------------------------------------------
@@ -372,7 +371,7 @@ public class MainToolBar extends ToolBar
 		//   Button[Copy table data without column] 
 		// ----------------------------------------------
 		Tooltip tipCopyTblNoHead = new Tooltip(this.langRB.getString( "TIP_COPY_TABLE_NO_HEAD" ));
-		tipCopyTblNoHead.getStyleClass().add("mytooltip");
+		tipCopyTblNoHead.getStyleClass().add("MainToolBar_MyToolTip");
 		this.btnCopyTblNoHead.setTooltip( tipCopyTblNoHead );
 
 		// ----------------------------------------------
@@ -380,7 +379,7 @@ public class MainToolBar extends ToolBar
 		//   Button[Copy table data with column] 
 		// ----------------------------------------------
 		Tooltip tipCopyTblWithHead = new Tooltip(this.langRB.getString( "TIP_COPY_TABLE_WITH_HEAD" ));
-		tipCopyTblWithHead.getStyleClass().add("mytooltip");
+		tipCopyTblWithHead.getStyleClass().add("MainToolBar_MyToolTip");
 		this.btnCopyTblWithHead.setTooltip( tipCopyTblWithHead );
 
 		// ----------------------------------------------
@@ -388,7 +387,7 @@ public class MainToolBar extends ToolBar
 		//   Button[Open Schema View] 
 		// ----------------------------------------------
 		Tooltip tipSchema = new Tooltip(this.langRB.getString( "TIP_SCHEMA" ));
-		tipSchema.getStyleClass().add("mytooltip");
+		tipSchema.getStyleClass().add("MainToolBar_MyToolTip");
 		this.btnSchema.setTooltip( tipSchema );
 	}
 	
