@@ -10,6 +10,7 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollBar;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.shape.Line;
 import javafx.scene.Group;
@@ -19,6 +20,7 @@ import javafx.collections.ObservableList;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.binding.Bindings;
+import javafx.collections.transformation.FilteredList;
 
 import milu.gui.ctrl.common.ChangeLangInterface;
 import milu.gui.view.DBView;
@@ -204,6 +206,51 @@ public class SchemaTreeView extends TreeView<SchemaEntity>
 		}
 		*/
 		
+		this.addEventHandler
+		( 
+			KeyEvent.KEY_PRESSED, 
+			(event)->
+			{
+				TreeItem<SchemaEntity> selectedItem = this.getSelectionModel().getSelectedItem();
+				if ( selectedItem == null )
+				{
+					return;
+				}
+				TreeItem<SchemaEntity> parentItem = selectedItem.getParent();
+				if ( parentItem == null )
+				{
+					return;
+				}
+				ObservableList<TreeItem<SchemaEntity>> childrenItem = parentItem.getChildren();
+				String strKey = event.getCode().getChar();
+				
+				// search selectedItem to lastItem
+				TreeItem<SchemaEntity> nextItem = selectedItem.nextSibling();
+				while ( nextItem != null )
+				{
+					String val = nextItem.getValue().getName();
+					if ( val.toUpperCase().startsWith(strKey) )
+					{
+						this.getSelectionModel().select(nextItem);
+						return;
+					}
+					nextItem = nextItem.nextSibling();
+				}
+				
+				// search firstItem to selectedItem
+				nextItem = childrenItem.get(0);
+				while ( nextItem != selectedItem )
+				{
+					String val = nextItem.getValue().getName();
+					if ( val.toUpperCase().startsWith(strKey) )
+					{
+						this.getSelectionModel().select(nextItem);
+						return;
+					}
+					nextItem = nextItem.nextSibling();
+				}
+			}
+		);
 	}
 	
 	// shift label position

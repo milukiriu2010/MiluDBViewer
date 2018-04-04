@@ -14,6 +14,7 @@ import javafx.geometry.Point2D;
 import javafx.scene.Cursor;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.shape.LineTo;
 import javafx.scene.shape.MoveTo;
@@ -334,18 +335,25 @@ public class SchemaERView extends ScrollPane
     	path.getStrokeDashArray().addAll( 2.0, 4.0 );
     	path.toBack();
     	
+    	// https://stackoverflow.com/questions/37821796/difference-between-setonxxx-method-and-addeventhandler-javafx
     	// src mouse enter
-    	lbl1.setOnMouseEntered(	(event)->this.addStyleClass(lbl1, lbl2, path) );
+    	//lbl1.setOnMouseEntered(	(event)->this.addStyleClass(lbl1, lbl2, path) );
+    	lbl1.addEventHandler( MouseEvent.MOUSE_ENTERED,	(event)->this.addStyleClass(lbl1, lbl2, path) );
     	// src mouse exit
-    	lbl1.setOnMouseExited( (event)->this.removeStyleClass(lbl1, lbl2, path)	);
+    	//lbl1.setOnMouseExited( (event)->this.removeStyleClass(lbl1, lbl2, path)	);
+    	lbl1.addEventHandler( MouseEvent.MOUSE_EXITED , (event)->this.removeStyleClass(lbl1, lbl2, path)	);
     	// dst mouse enter
-    	lbl2.setOnMouseEntered(	(event)->this.addStyleClass(lbl1, lbl2, path) ); 
+    	//lbl2.setOnMouseEntered(	(event)->this.addStyleClass(lbl1, lbl2, path) );
+    	lbl2.addEventHandler( MouseEvent.MOUSE_ENTERED,	(event)->this.addStyleClass(lbl1, lbl2, path) ); 
     	// dst mouse exit
-    	lbl2.setOnMouseExited( (event)->this.removeStyleClass(lbl1, lbl2, path)	);
+    	//lbl2.setOnMouseExited( (event)->this.removeStyleClass(lbl1, lbl2, path)	);
+    	lbl2.addEventHandler( MouseEvent.MOUSE_EXITED , (event)->this.removeStyleClass(lbl1, lbl2, path)	);
     	// path mouse enter
-    	path.setOnMouseEntered( (event)->this.addStyleClass(lbl1, lbl2, path) );
+    	//path.setOnMouseEntered( (event)->this.addStyleClass(lbl1, lbl2, path) );
+    	path.addEventHandler( MouseEvent.MOUSE_ENTERED, (event)->this.addStyleClass(lbl1, lbl2, path) );
     	// path mouse exit
-    	path.setOnMouseExited( (event)->this.removeStyleClass(lbl1, lbl2, path) );
+    	//path.setOnMouseExited( (event)->this.removeStyleClass(lbl1, lbl2, path) );
+    	path.addEventHandler( MouseEvent.MOUSE_EXITED , (event)->this.removeStyleClass(lbl1, lbl2, path) );
 	}
 	
 	private void addStyleClass( Label lbl1, Label lbl2, Path path )
