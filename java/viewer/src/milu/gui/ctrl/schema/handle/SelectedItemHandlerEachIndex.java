@@ -49,27 +49,12 @@ public class SelectedItemHandlerEachIndex extends SelectedItemHandlerAbstract
 			UnsupportedOperationException,
 			SQLException
 	{
-		/*
-		if ( this.itemSelected.getChildren().size() > 0 )
-		{
-			return;
-		}
-		*/
 		SchemaEntity selectedEntity = this.itemSelected.getValue();
 		TreeItem<SchemaEntity> itemParent = itemSelected.getParent();
 		String schemaName = itemParent.getParent().getParent().getParent().getValue().toString();
 		String tableName  = this.itemSelected.getParent().getParent().getValue().getName();
 		String indexName  = this.itemSelected.getValue().getName();
 		ObservableList<TreeItem<SchemaEntity>> itemChildren = this.itemSelected.getChildren();
-		
-		/*
-		IndexColumnDBAbstract indexColumnDBAbs = IndexColumnDBFactory.getInstance( this.myDBAbs );
-		if ( indexColumnDBAbs != null )
-		{
-			indexColumnDBAbs.selectEntityLst( schemaName, tableName, indexName );
-			this.schemaTreeView.addEntityLst( itemSelected, indexColumnDBAbs.getEntityLst() );
-		}
-		*/
 		
 		if ( itemChildren.size() == 0 )
 		{

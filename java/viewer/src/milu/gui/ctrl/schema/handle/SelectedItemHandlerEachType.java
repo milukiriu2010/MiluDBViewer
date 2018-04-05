@@ -1,6 +1,7 @@
 package milu.gui.ctrl.schema.handle;
 
 import javafx.collections.ObservableList;
+import javafx.scene.Node;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TreeItem;
 import javafx.scene.image.ImageView;
@@ -10,6 +11,7 @@ import milu.db.abs.ObjDBFactory;
 import milu.db.abs.ObjDBInterface;
 import milu.entity.schema.SchemaEntity;
 import milu.gui.ctrl.schema.SchemaProcViewTab;
+import milu.tool.MyTool;
 import milu.ctrl.MainController;
 
 import java.sql.SQLException;
@@ -98,21 +100,18 @@ public class SelectedItemHandlerEachType extends SelectedItemHandlerAbstract
 		this.tabPane.getSelectionModel().select( newTab );
 		
 		// set icon on Tab
+		/*
 		MainController mainController = this.dbView.getMainController();
 		ImageView iv = new ImageView( mainController.getImage("file:resources/images/type.png") );
 		iv.setFitHeight( 16 );
 		iv.setFitWidth( 16 );
 		newTab.setGraphic( iv );
+		*/
+		MainController mainCtrl = this.dbView.getMainController();
+		Node imageGroup = MyTool.createImageView( 16, 16, mainCtrl, selectedEntity );
+		newTab.setGraphic( imageGroup );		
 		
 		// get type definition
-		/*
-		TypeDBAbstract typeDBAbs = TypeDBFactory.getInstance(myDBAbs);
-		if ( typeDBAbs == null )
-		{
-			return;
-		}
-		String strSrc = typeDBAbs.getSRC(schemaName, typeName);
-		*/
 		String strSrc = selectedEntity.getSrcSQL();
 		if ( strSrc == null )
 		{

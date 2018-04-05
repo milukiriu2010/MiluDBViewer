@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import javafx.scene.Node;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TreeItem;
 import javafx.scene.image.ImageView;
@@ -15,6 +16,7 @@ import milu.db.abs.ObjDBFactory;
 import milu.db.abs.ObjDBInterface;
 import milu.entity.schema.SchemaEntity;
 import milu.gui.ctrl.schema.SchemaTableViewTab;
+import milu.tool.MyTool;
 import milu.ctrl.MainController;
 
 /**
@@ -92,25 +94,21 @@ public class SelectedItemHandlerEachView extends SelectedItemHandlerAbstract
 		this.tabPane.getSelectionModel().select( newTab );
 		
 		// set icon on Tab
+		/*
 		MainController mainController = this.dbView.getMainController();
 		ImageView iv = new ImageView( mainController.getImage("file:resources/images/view.png") );
 		iv.setFitHeight( 16 );
 		iv.setFitWidth( 16 );
 		newTab.setGraphic( iv );
+		*/
+		MainController mainCtrl = this.dbView.getMainController();
+		Node imageGroup = MyTool.createImageView( 16, 16, mainCtrl, selectedEntity );
+		newTab.setGraphic( imageGroup );
 		
 		// get view definition
 		List<Map<String,String>>  dataLst = selectedEntity.getDefinitionLst();
 		if ( dataLst.size() == 0 )
 		{
-			/*
-			ViewDBAbstract viewDBAbs = ViewDBFactory.getInstance(myDBAbs);
-			if ( viewDBAbs == null )
-			{
-				return;
-			}
-			dataLst = viewDBAbs.selectDefinition(schemaName, viewName );
-			selectedEntity.setDefinitionlst(dataLst);
-			*/
 			ObjDBFactory objDBFactory = AbsDBFactory.getFactory( AbsDBFactory.FACTORY_TYPE.VIEW );
 			if ( objDBFactory == null )
 			{

@@ -10,13 +10,19 @@ import javafx.geometry.Orientation;
 import javafx.geometry.Point2D;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.Image;
+import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.shape.Line;
 import javafx.scene.shape.Path;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollBar;
+import javafx.scene.effect.Blend;
+import javafx.scene.effect.BlendMode;
+import milu.ctrl.MainController;
+import milu.entity.schema.SchemaEntity;
 
 public class MyTool
 {
@@ -69,6 +75,34 @@ public class MyTool
 		iv.setFitWidth( width );
 		iv.setFitHeight( height );
 		return iv;
+	}
+	
+	public static Node createImageView( int width, int height, MainController mainCtrl, SchemaEntity schemaEntity )
+	{
+		String imageResourceName = schemaEntity.getImageResourceName();
+		//System.out.println( "image:" + imageResourceName );
+		ImageView iv = new ImageView( mainCtrl.getImage(imageResourceName) );
+		iv.setFitHeight( 16 );
+		iv.setFitWidth( 16 );
+		
+		SchemaEntity.STATE state = schemaEntity.getState();
+		
+		Group imageGroup = new Group();
+		if ( state == SchemaEntity.STATE.VALID )
+		{
+			imageGroup.getChildren().add( iv );
+		}
+		else if ( state == SchemaEntity.STATE.INVALID )
+		{
+			Line lineLTRB = new Line( 0, 0, iv.getFitWidth(), iv.getFitHeight() );
+			lineLTRB.setStyle( "-fx-stroke: red; -fx-stroke-width: 2;" );
+			Line lineRTLB = new Line( iv.getFitWidth(), 0, 0, iv.getFitHeight() );
+			lineRTLB.setStyle( "-fx-stroke: red; -fx-stroke-width: 2;" );
+			imageGroup.getChildren().addAll( iv, lineLTRB, lineRTLB );
+			imageGroup.setEffect( new Blend(BlendMode.OVERLAY) );
+		}
+
+		return imageGroup;
 	}
 
 	public static Path findCaret(Parent parent) 
@@ -201,7 +235,37 @@ public class MyTool
 		}
 		return null;
 	}
+
+	public static Node searchChildNode( Node node, final Class searchNodeClass )
+	{
+		if ( node == null )
+		{
+			return null;
+		}
+		if ( node instanceof Parent )
+		{
+			Parent parent = (Parent)node;
+			for ( Node n : parent.getChildrenUnmodifiable() )
+			{
+				//System.out.println( "SearchNode[" + searchNodeClass.getName() + "]ChildNode[" + n.getClass().getName() + "]" );
+				if ( searchNodeClass.getName().equals(n.getClass().getName()) )
+				{
+					return n;
+				}
+				else
+				{
+					Node nodeResult = searchChildNode( n, searchNodeClass );
+					if ( nodeResult != null )
+					{
+						return nodeResult;
+					}
+				}
+			}		
+		}
+		return null;
+	}
 	
+
 	public static void skimThroughParent( Node node )
 	{
 		if ( node == null )

@@ -130,6 +130,23 @@ public class DBView extends Stage
         // http://o7planning.org/en/11533/opening-a-new-window-in-javafx
         Scene scene = new Scene(this.brdPane, 800, 600 );
         // load css on DBView elements
+        String[] cssLst =
+        	{
+        		"/conf/css/ctrl/common/LabelTable.css",
+        		"/conf/css/ctrl/menu/MainToolBar.css",
+        		"/conf/css/ctrl/query/DBSqlTab.css",
+        		"/conf/css/ctrl/query/SqlTableView.css",
+        		"/conf/css/ctrl/query/SqlTextArea.css",
+        		"/conf/css/ctrl/schema/SchemaTreeView.css",
+        		"/conf/css/ctrl/schema/SchemaERView.css"
+        	};
+        for ( String css : cssLst )
+        {
+    		scene.getStylesheets().add(	getClass().getResource(css).toExternalForm() );
+        }
+        
+        
+        /*
 		scene.getStylesheets().add
 		(
 			getClass().getResource("/conf/css/ctrl/common/LabelTable.css").toExternalForm()
@@ -154,6 +171,7 @@ public class DBView extends Stage
 		(
 			getClass().getResource("/conf/css/ctrl/schema/SchemaERView.css").toExternalForm()
 		);
+		*/
 		scene.addEventHandler
 		( 
 			KeyEvent.KEY_PRESSED, 

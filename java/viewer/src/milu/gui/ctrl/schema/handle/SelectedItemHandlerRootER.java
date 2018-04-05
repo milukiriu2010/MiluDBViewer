@@ -3,6 +3,7 @@ package milu.gui.ctrl.schema.handle;
 import java.sql.SQLException;
 import java.util.List;
 
+import javafx.scene.Node;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TreeItem;
 import javafx.scene.image.ImageView;
@@ -16,6 +17,7 @@ import milu.db.abs.ObjDBFactory;
 import milu.db.abs.ObjDBInterface;
 import milu.db.fk.FKDBAbstract;
 import milu.gui.ctrl.schema.SchemaERViewTab;
+import milu.tool.MyTool;
 
 /**
  * This class is invoked, when "root sequence" item is clicked on SchemaTreeView.
@@ -128,11 +130,16 @@ public class SelectedItemHandlerRootER extends SelectedItemHandlerAbstract
 		newTab.setSchemaEntityRootER(selectedEntity);
 		
 		// set icon on Tab
+		/*
 		MainController mainController = this.dbView.getMainController();
 		ImageView iv = new ImageView( mainController.getImage("file:resources/images/ER_root.png") );
 		iv.setFitHeight( 16 );
 		iv.setFitWidth( 16 );
 		newTab.setGraphic( iv );
+		*/
+		MainController mainCtrl = this.dbView.getMainController();
+		Node imageGroup = MyTool.createImageView( 16, 16, mainCtrl, selectedEntity );
+		newTab.setGraphic( imageGroup );		
 
 		// add on tabpane
 		this.tabPane.getTabs().add( newTab );

@@ -141,7 +141,8 @@ public class SqlTableView extends TableView<List<String>>
 			menuItemSave2Excel
 		);
 		
-		this.setOnContextMenuRequested( (event)->{ contextMenu.show( this, event.getScreenX(), event.getScreenY() ); } );
+		//this.setOnContextMenuRequested( (event)->{ contextMenu.show( this, event.getScreenX(), event.getScreenY() ); } );
+		this.setContextMenu(contextMenu);
 	}
 	
 	public synchronized int getRowSize()
@@ -390,8 +391,6 @@ public class SqlTableView extends TableView<List<String>>
 				// tableCol:styleClass=table-column
 				tableCol.getStyleClass().add("SqlTableView_Cell_First");
 				
-				// disable sort of the first column
-				tableCol.setSortable(false);
 			}
 			// set "Data No" to the second - last column header 
 			else
@@ -402,6 +401,8 @@ public class SqlTableView extends TableView<List<String>>
 				tableCol.setCellFactory( this.cellFactory );
 				tableCol.setOnEditCommit( e->{} );
 			}
+			// disable sort by clicking "Column Header"
+			tableCol.setSortable(false);
 			
 			final int index = i;
 			tableCol.setCellValueFactory

@@ -21,6 +21,9 @@ import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.binding.Bindings;
 import javafx.collections.transformation.FilteredList;
+import javafx.scene.control.skin.TreeViewSkin;
+import javafx.scene.Node;
+import javafx.scene.control.skin.VirtualFlow;
 
 import milu.gui.ctrl.common.ChangeLangInterface;
 import milu.gui.view.DBView;
@@ -71,15 +74,19 @@ public class SchemaTreeView extends TreeView<SchemaEntity>
 				//TreeItem<SchemaEntity> itemChanged = (TreeItem<SchemaEntity>)newVal;
 				//System.out.println( "SchemaTreeView itemChanged:" + itemChanged.getValue() );
 				dbView.Go();
-				// children count of selected item
-				this.lblChildrenCnt.textProperty().bind
-				(
-					Bindings.convert
+				if ( newVal != null )
+				{
+					// scroll, when "<=(arrow)" key is clicked. 
+					this.scrollToSelectedItem(newVal);
+					// set "children count" of selected item
+					this.lblChildrenCnt.textProperty().bind
 					(
-						new SimpleIntegerProperty( newVal.getChildren().size() )
-					)
-				);
-				
+						Bindings.convert
+						(
+							new SimpleIntegerProperty( newVal.getChildren().size() )
+						)
+					);
+				}
 				// shift label position
 				// -------------------------------------------------------
 				// vertical scrollbar invisible => margin 0
@@ -206,6 +213,11 @@ public class SchemaTreeView extends TreeView<SchemaEntity>
 		}
 		*/
 		
+		
+		// search item by "pressed key"
+		// -------------------------------------------------------
+		// search sibling , when selected item is not expanded.
+		// search children, when selected item is expanded.
 		this.addEventHandler
 		( 
 			KeyEvent.KEY_PRESSED, 
@@ -216,7 +228,16 @@ public class SchemaTreeView extends TreeView<SchemaEntity>
 				{
 					return;
 				}
-				TreeItem<SchemaEntity> parentItem = selectedItem.getParent();
+				//System.out.println( "SelectedItem[" + this.getRow(selectedItem) + "]" );
+				TreeItem<SchemaEntity> parentItem = null;
+				if ( selectedItem.isExpanded() )
+				{
+					parentItem = selectedItem;
+				}
+				else
+				{
+					parentItem = selectedItem.getParent();
+				}
 				if ( parentItem == null )
 				{
 					return;
@@ -232,6 +253,14 @@ public class SchemaTreeView extends TreeView<SchemaEntity>
 					if ( val.toUpperCase().startsWith(strKey) )
 					{
 						this.getSelectionModel().select(nextItem);
+						/*
+						int nextItemId = this.getRow(nextItem);
+						if ( ( nextItemId < visibleIdFirst) || ( visibleIdLast < nextItemId ) )
+						{
+							this.scrollTo(nextItemId);
+						}
+						*/
+						this.scrollToSelectedItem(nextItem);
 						return;
 					}
 					nextItem = nextItem.nextSibling();
@@ -239,12 +268,20 @@ public class SchemaTreeView extends TreeView<SchemaEntity>
 				
 				// search firstItem to selectedItem
 				nextItem = childrenItem.get(0);
-				while ( nextItem != selectedItem )
+				while ( ( nextItem != null ) && ( nextItem != selectedItem ) )
 				{
 					String val = nextItem.getValue().getName();
 					if ( val.toUpperCase().startsWith(strKey) )
 					{
 						this.getSelectionModel().select(nextItem);
+						/*
+						int nextItemId = this.getRow(nextItem);
+						if ( ( nextItemId < visibleIdFirst) || ( visibleIdLast < nextItemId ) )
+						{
+							this.scrollTo(nextItemId);
+						}
+						*/
+						this.scrollToSelectedItem(nextItem);
 						return;
 					}
 					nextItem = nextItem.nextSibling();
@@ -294,11 +331,12 @@ public class SchemaTreeView extends TreeView<SchemaEntity>
 		( TreeItem<SchemaEntity>   itemParent, 
 		  SchemaEntity             schemaEntity )
 	{
-		MainController mainController = dbView.getMainController();
+		/*
+		MainController mainCtrl = dbView.getMainController();
 		
 		String imageResourceName = schemaEntity.getImageResourceName();
 		//System.out.println( "image:" + imageResourceName );
-		ImageView iv = new ImageView( mainController.getImage(imageResourceName) );
+		ImageView iv = new ImageView( mainCtrl.getImage(imageResourceName) );
 		iv.setFitHeight( 16 );
 		iv.setFitWidth( 16 );
 		
@@ -318,6 +356,9 @@ public class SchemaTreeView extends TreeView<SchemaEntity>
 			imageGroup.getChildren().addAll( iv, lineLTRB, lineRTLB );
 			imageGroup.setEffect( new Blend(BlendMode.OVERLAY) );
 		}
+		*/
+		MainController mainCtrl = dbView.getMainController();
+		Node imageGroup = MyTool.createImageView( 16, 16, mainCtrl, schemaEntity );
 		
 		TreeItem<SchemaEntity> itemNew = new TreeItem<SchemaEntity>( schemaEntity, imageGroup );
 		if ( itemParent != null )
@@ -337,7 +378,7 @@ public class SchemaTreeView extends TreeView<SchemaEntity>
 		        if ( obj instanceof TreeItem )
 		        {
 		        	TreeItem<SchemaEntity> itemTarget = (TreeItem<SchemaEntity>)obj;
-		        	// itemTarget is on top of TreeView
+		        	// itemTarget is set to the top of TreeView
 		        	scrollBack( itemTarget );
 		        }
 				// shift label position
@@ -351,13 +392,42 @@ public class SchemaTreeView extends TreeView<SchemaEntity>
 		return itemNew;
 	}
 	
-	// When expanding adn unexpanding with too many treeitems, weird scroll occurs.
+	// When expanding and unexpanding with too many treeitems, weird scroll occurs.
 	private void scrollBack( TreeItem<SchemaEntity> itemTarget )
 	{
 		if ( itemTarget.getChildren().size() >= 10 )
 		{
 			int rowId = this.getRow( itemTarget );
 			this.scrollTo( rowId );
+		}
+	}
+	
+	private void scrollToSelectedItem( TreeItem<SchemaEntity> itemTarget )
+	{
+		// https://stackoverflow.com/questions/10113045/javafx-2-0-get-treeitems-or-nodes-currently-visible-on-screen
+		// VirtualFlow => Java 9
+		Node node = MyTool.searchChildNode( this, VirtualFlow.class );
+		VirtualFlow<?> nodeVF = null;
+		int visibleIdFirst = -1;
+		int visibleIdLast  = -1;
+		if ( node instanceof VirtualFlow )
+		{
+			nodeVF = (VirtualFlow<?>)node;
+			if ( nodeVF.getFirstVisibleCell() != null )
+			{
+				visibleIdFirst = nodeVF.getFirstVisibleCell().getIndex();
+			}
+			if ( nodeVF.getLastVisibleCell() != null )
+			{
+				visibleIdLast  = nodeVF.getLastVisibleCell().getIndex();
+			}
+		}
+		int itemTargetId = this.getRow(itemTarget);
+		System.out.println( "VisibleItem[" + visibleIdFirst + "," + visibleIdLast + "," + itemTargetId + "]" );
+		// scroll to the item, if invisible
+		if ( ( itemTargetId <= visibleIdFirst) || ( visibleIdLast <= itemTargetId ) )
+		{
+			this.scrollTo(itemTargetId);
 		}
 	}
 	

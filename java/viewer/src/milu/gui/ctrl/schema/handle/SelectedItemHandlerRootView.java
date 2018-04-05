@@ -60,16 +60,6 @@ public class SelectedItemHandlerRootView extends SelectedItemHandlerAbstract
 		{
 			if ( selectedEntity.getEntityLst().size() == 0 )
 			{
-				/*
-				String schema = itemParent.getValue().toString();
-				ViewDBAbstract viewDBAbs = ViewDBFactory.getInstance(myDBAbs);
-				if ( viewDBAbs != null )
-				{
-					List<SchemaEntity> viewEntityLst = viewDBAbs.selectEntityLst( schema );
-					selectedEntity.addEntityAll(viewEntityLst);
-					this.schemaTreeView.addEntityLst( itemSelected, viewEntityLst );
-				}
-				*/
 				ObjDBFactory objDBFactory = AbsDBFactory.getFactory( AbsDBFactory.FACTORY_TYPE.VIEW );
 				if ( objDBFactory == null )
 				{

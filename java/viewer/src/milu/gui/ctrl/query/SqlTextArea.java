@@ -11,6 +11,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javafx.beans.binding.Bindings;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
@@ -19,7 +21,8 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.shape.Path;
-
+import javafx.scene.control.Label;
+import javafx.scene.control.ScrollBar;
 import net.sf.jsqlparser.JSQLParserException;
 
 import milu.ctrl.sqlparse.SQLBag;
@@ -52,6 +55,13 @@ public class SqlTextArea extends TextArea
 	// Alias <=> Table, analyzed by jsqlparser
 	private Map<String,String>  aliasMap = new HashMap<>();
 	
+	// caret position
+	private Label lblCaretPos = new Label("*");
+	
+	// word after last " (space)"
+	// -----------------------------------------------------------
+	// "select * from information_schema"          => "information_schema"
+	// "select * from information_schema.schemata" => "information_schema.schemata"
 	private String  strLastWord = "";
 	
 	public SqlTextArea( DBView dbView )
@@ -69,12 +79,47 @@ public class SqlTextArea extends TextArea
 		this.parentPane = MyTool.findAnchorPane( this );
 		if ( this.parentPane != null )
 		{
+			// add "Hint ComboBox" on TextArea
 			this.parentPane.getChildren().add( this.comboHint );
 			this.comboHint.setVisible( false );
 			
 			// https://stackoverflow.com/questions/19010619/javafx-filtered-combobox
 			this.filteredItems = new FilteredList<String>( this.hints, p -> true);
-			this.comboHint.setItems( this.filteredItems );		
+			this.comboHint.setItems( this.filteredItems );
+		}
+		
+		if ( this.parentPane != null )
+		{
+			this.lblCaretPos.getStyleClass().add("SqlTextArea_LabelCaretPos");
+			
+			// add "Caret Position Label" on TextArea
+			this.parentPane.getChildren().add( this.lblCaretPos );
+			AnchorPane.setTopAnchor( this.lblCaretPos, 0.0 );
+			AnchorPane.setRightAnchor( this.lblCaretPos, 0.0 );
+			
+			// label for caret position
+			this.caretPositionProperty().addListener
+			(
+				(obs,oldVal,newVal)->
+				{
+					if ( newVal == null )
+					{
+						return;
+					}
+					this.lblCaretPos.textProperty().bind
+					(
+						Bindings.convert
+						(
+							new SimpleIntegerProperty( newVal.intValue() )
+						)
+					);
+					// shift label position
+					// -------------------------------------------------------
+					// vertical scrollbar invisible => margin 0
+					// vertical scrollbar visible   => margin scrollbar width
+					this.shiftLabelCaretPosition();
+				}
+			);
 		}
 		
 		this.setMouseAction();
@@ -85,6 +130,41 @@ public class SqlTextArea extends TextArea
 		}
 		
 		this.setAction();
+	}
+	
+	// shift label position
+	// -------------------------------------------------------
+	// vertical scrollbar invisible => margin 0
+	// vertical scrollbar visible   => margin scrollbar width
+	private void shiftLabelCaretPosition()
+	{
+		ScrollBar scrollBarVertical = MyTool.getScrollBarVertical(this);
+		if ( scrollBarVertical != null )
+		{
+			System.out.println( "SqlTextArea:ScrollBar Found." );
+			AnchorPane.setRightAnchor( this.lblCaretPos, scrollBarVertical.getWidth() );
+			// "visibleProperty" doesn't work on some PC.
+			scrollBarVertical.visibleProperty().addListener
+			(
+				(obs2,oldVal2,newVal2)->
+				{
+					if ( newVal2 == true )
+					{
+						System.out.println( "SqlTextArea:ScrollBar Found - visible." );
+						AnchorPane.setRightAnchor( this.lblCaretPos, scrollBarVertical.getWidth() );
+					}
+					else
+					{
+						System.out.println( "SqlTextArea:ScrollBar Found - invisible." );
+						AnchorPane.setRightAnchor( this.lblCaretPos, 0.0 );
+					}
+				}
+			);
+		}
+		else
+		{
+			System.out.println( "SqlTextArea:ScrollBar not Found." );
+		}
 	}
 	
 	private void setMouseAction()
@@ -368,7 +448,11 @@ public class SqlTextArea extends TextArea
 	
 	public String getSQL()
 	{
-		String strSQL = this.getText();
+		String strSQL = this.getSelectedText();
+		if ( strSQL.length() == 0 )
+		{
+			strSQL = this.getText();
+		}
 		strSQL = strSQL.trim();
 		if ( strSQL.length() < 1 )
 		{
@@ -407,25 +491,6 @@ public class SqlTextArea extends TextArea
 	private boolean resetComboBox()
 	{
 		System.out.println( "resetComboBox start." );
-		/*
-		String tableName = null;
-		if ( this.aliasMap.containsKey(this.strLastWord) )
-		{
-			tableName = this.aliasMap.get(this.strLastWord);
-		}
-		else if ( this.tableLst.contains(this.strLastWord) )
-		{
-			tableName = this.strLastWord;
-		}
-		else
-		{
-			System.out.println( "no table/alias" );
-			this.hints.removeAll( this.hints );
-			return false;
-		}
-		System.out.println( "Search Table=>" + tableName );
-		*/
-		
 		
 		// "information_schema.tables" 
 		//   0 => "information_schema"
@@ -493,7 +558,12 @@ public class SqlTextArea extends TextArea
 		SQLParse sqlParse = new SQLParse();
 		try
 		{
-			String sqlStr = this.getText();
+			//String sqlStr = this.getText();
+			String sqlStr = this.getSelectedText();
+			if ( sqlStr.length() == 0 )
+			{
+				sqlStr = this.getText();
+			}
 			sqlParse.setStrSQL(sqlStr);
 			sqlParse.parseStatements();
 		}
