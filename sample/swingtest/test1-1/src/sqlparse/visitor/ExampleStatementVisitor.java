@@ -58,9 +58,9 @@ public class ExampleStatementVisitor implements StatementVisitor
 	}
 
 	@Override
-	public void visit(Commit arg0) {
-		// TODO Auto-generated method stub
-
+	public void visit(Commit commit) 
+	{
+		this.sqlType = "COMMIT";
 	}
 
 	@Override
@@ -89,51 +89,51 @@ public class ExampleStatementVisitor implements StatementVisitor
 	}
 
 	@Override
-	public void visit(Replace arg0) {
-		// TODO Auto-generated method stub
-
+	public void visit(Replace arg0) 
+	{
+		this.sqlType = "REPLACE";
 	}
 
 	@Override
-	public void visit(Drop arg0) {
-		// TODO Auto-generated method stub
-
+	public void visit(Drop drop) 
+	{
+		this.sqlType = "DROP";
 	}
 
 	@Override
-	public void visit(Truncate arg0) {
-		// TODO Auto-generated method stub
-
+	public void visit(Truncate truncate) 
+	{
+		this.sqlType = "TRUNCATE";
 	}
 
 	@Override
-	public void visit(CreateIndex arg0) {
-		// TODO Auto-generated method stub
-
+	public void visit(CreateIndex createIndex) 
+	{
+		this.sqlType = "CREATE INDEX";
 	}
 
 	@Override
-	public void visit(CreateTable arg0) {
-		// TODO Auto-generated method stub
-
+	public void visit(CreateTable createTable) 
+	{
+		this.sqlType = "CREATE TABLE";
 	}
 
 	@Override
-	public void visit(CreateView arg0) {
-		// TODO Auto-generated method stub
-
+	public void visit(CreateView createView) 
+	{
+		this.sqlType = "CREATE VIEW";
 	}
 
 	@Override
-	public void visit(AlterView arg0) {
-		// TODO Auto-generated method stub
-
+	public void visit(AlterView alterView) 
+	{
+		this.sqlType = "ALTER VIEW";
 	}
 
 	@Override
-	public void visit(Alter arg0) {
-		// TODO Auto-generated method stub
-
+	public void visit(Alter alter)
+	{
+		this.sqlType = "ALTER";
 	}
 
 	@Override
@@ -145,21 +145,21 @@ public class ExampleStatementVisitor implements StatementVisitor
 	}
 
 	@Override
-	public void visit(Execute arg0) {
-		// TODO Auto-generated method stub
-
+	public void visit(Execute execute) 
+	{
+		this.sqlType = "EXECUTE";
 	}
 
 	@Override
-	public void visit(SetStatement arg0) {
-		// TODO Auto-generated method stub
-
+	public void visit(SetStatement setStmt) 
+	{
+		this.sqlType = "SET STATEMENT";
 	}
 
 	@Override
-	public void visit(Merge arg0) {
-		// TODO Auto-generated method stub
-
+	public void visit(Merge merge) 
+	{
+		this.sqlType = "SET STATEMENT";
 	}
 
 	@Override
@@ -176,16 +176,15 @@ public class ExampleStatementVisitor implements StatementVisitor
 	}
 
 	@Override
-	public void visit(Upsert arg0) 
+	public void visit(Upsert upsert) 
 	{
-		// TODO Auto-generated method stub
-
+		this.sqlType = "UPSERT";
 	}
 
 	@Override
-	public void visit(UseStatement arg0) 
+	public void visit(UseStatement useStmt) 
 	{
-		// TODO Auto-generated method stub
+		this.sqlType = "SET STATEMENT";
 	}
 
 }

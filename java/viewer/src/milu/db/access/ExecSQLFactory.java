@@ -26,6 +26,50 @@ public class ExecSQLFactory extends ExecSQLFactoryAbstract {
 		{
 			execSQLAbs = new ExecSQLTransaction();
 		}
+		else if ( SQLBag.TYPE.CREATE_TABLE.equals(sqlBag.getType()) )
+		{
+			execSQLAbs = new ExecSQLTransaction();
+		}
+		else if ( SQLBag.TYPE.CREATE_INDEX.equals(sqlBag.getType()) )
+		{
+			execSQLAbs = new ExecSQLTransaction();
+		}
+		else if ( SQLBag.TYPE.CREATE_VIEW.equals(sqlBag.getType()) )
+		{
+			execSQLAbs = new ExecSQLTransaction();
+		}
+		else if ( SQLBag.TYPE.ALTER_VIEW.equals(sqlBag.getType()) )
+		{
+			execSQLAbs = new ExecSQLTransaction();
+		}
+		else if ( SQLBag.TYPE.ALTER.equals(sqlBag.getType()) )
+		{
+			execSQLAbs = new ExecSQLTransaction();
+		}
+		else if ( SQLBag.TYPE.DROP.equals(sqlBag.getType()) )
+		{
+			execSQLAbs = new ExecSQLTransaction();
+		}
+		else if ( SQLBag.TYPE.TRUNCATE.equals(sqlBag.getType()) )
+		{
+			execSQLAbs = new ExecSQLTransaction();
+		}
+		else if ( SQLBag.TYPE.EXECUTE.equals(sqlBag.getType()) )
+		{
+			execSQLAbs = new ExecSQLTransaction();
+		}
+		else if ( SQLBag.TYPE.MERGE.equals(sqlBag.getType()) )
+		{
+			execSQLAbs = new ExecSQLTransaction();
+		}
+		else if ( SQLBag.TYPE.UPSERT.equals(sqlBag.getType()) )
+		{
+			execSQLAbs = new ExecSQLTransaction();
+		}
+		else if ( SQLBag.TYPE.REPLACE.equals(sqlBag.getType()) )
+		{
+			execSQLAbs = new ExecSQLTransaction();
+		}
 		else
 		{
 			return null;

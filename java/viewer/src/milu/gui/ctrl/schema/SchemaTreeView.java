@@ -20,8 +20,6 @@ import javafx.collections.ObservableList;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.binding.Bindings;
-import javafx.collections.transformation.FilteredList;
-import javafx.scene.control.skin.TreeViewSkin;
 import javafx.scene.Node;
 import javafx.scene.control.skin.VirtualFlow;
 

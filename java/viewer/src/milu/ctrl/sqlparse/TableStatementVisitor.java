@@ -66,51 +66,59 @@ public class TableStatementVisitor implements AnalyzeStatementVisitor
 	}
 
 	@Override
-	public void visit(Replace arg0) {
-		// TODO Auto-generated method stub
-
+	public void visit(Replace replace) 
+	{
+		this.sqlCommand = SQLBag.COMMAND.TRANSACTION;
+		this.sqlType    = SQLBag.TYPE.REPLACE;
 	}
 
 	@Override
-	public void visit(Drop arg0) {
-		// TODO Auto-generated method stub
-
+	public void visit(Drop drop) 
+	{
+		this.sqlCommand = SQLBag.COMMAND.TRANSACTION;
+		this.sqlType    = SQLBag.TYPE.DROP;
 	}
 
 	@Override
-	public void visit(Truncate arg0) {
-		// TODO Auto-generated method stub
-
+	public void visit(Truncate truncate) 
+	{
+		this.sqlCommand = SQLBag.COMMAND.TRANSACTION;
+		this.sqlType    = SQLBag.TYPE.TRUNCATE;
 	}
 
 	@Override
-	public void visit(CreateIndex arg0) {
-		// TODO Auto-generated method stub
-
+	public void visit(CreateIndex createIndex) 
+	{
+		this.sqlCommand = SQLBag.COMMAND.TRANSACTION;
+		this.sqlType    = SQLBag.TYPE.CREATE_INDEX;
 	}
 
 	@Override
-	public void visit(CreateTable arg0) {
-		// TODO Auto-generated method stub
-
+	public void visit(CreateTable createTable) 
+	{
+		this.sqlCommand = SQLBag.COMMAND.TRANSACTION;
+		this.sqlType    = SQLBag.TYPE.CREATE_TABLE;
 	}
 
 	@Override
-	public void visit(CreateView arg0) {
-		// TODO Auto-generated method stub
-
+	public void visit(CreateView createView) 
+	{
+		this.sqlCommand = SQLBag.COMMAND.TRANSACTION;
+		this.sqlType    = SQLBag.TYPE.CREATE_VIEW;
 	}
 
 	@Override
-	public void visit(AlterView arg0) {
-		// TODO Auto-generated method stub
-
+	public void visit(AlterView alterView) 
+	{
+		this.sqlCommand = SQLBag.COMMAND.TRANSACTION;
+		this.sqlType    = SQLBag.TYPE.ALTER_VIEW;
 	}
 
 	@Override
-	public void visit(Alter arg0) {
-		// TODO Auto-generated method stub
-
+	public void visit(Alter alter) 
+	{
+		this.sqlCommand = SQLBag.COMMAND.TRANSACTION;
+		this.sqlType    = SQLBag.TYPE.ALTER;
 	}
 
 	@Override
@@ -121,21 +129,24 @@ public class TableStatementVisitor implements AnalyzeStatementVisitor
 	}
 
 	@Override
-	public void visit(Execute arg0) {
-		// TODO Auto-generated method stub
+	public void visit(Execute execute) 
+	{
+		this.sqlCommand = SQLBag.COMMAND.TRANSACTION;
+		this.sqlType    = SQLBag.TYPE.ALTER;
+	}
+
+	@Override
+	public void visit(SetStatement setStmt) 
+	{
+		// use miludb;
 
 	}
 
 	@Override
-	public void visit(SetStatement arg0) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void visit(Merge arg0) {
-		// TODO Auto-generated method stub
-
+	public void visit(Merge merge)
+	{
+		this.sqlCommand = SQLBag.COMMAND.TRANSACTION;
+		this.sqlType    = SQLBag.TYPE.MERGE;
 	}
 
 	@Override
@@ -151,13 +162,15 @@ public class TableStatementVisitor implements AnalyzeStatementVisitor
 	}
 
 	@Override
-	public void visit(Upsert arg0) {
-		// TODO Auto-generated method stub
-
+	public void visit(Upsert arg0) 
+	{
+		this.sqlCommand = SQLBag.COMMAND.TRANSACTION;
+		this.sqlType    = SQLBag.TYPE.UPSERT;
 	}
 
 	@Override
-	public void visit(UseStatement arg0) {
+	public void visit(UseStatement arg0) 
+	{
 		// TODO Auto-generated method stub
 
 	}
