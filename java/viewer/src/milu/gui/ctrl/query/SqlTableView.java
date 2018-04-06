@@ -23,6 +23,7 @@ import javafx.collections.ObservableList;
 import javafx.geometry.Orientation;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
+import javafx.scene.control.TableColumnBase;
 
 import javafx.util.Callback;
 
@@ -64,7 +65,8 @@ public class SqlTableView extends TableView<List<String>>
 	// tableViewSQL Direction
 	private Orientation tableViewSQLDirection = Orientation.HORIZONTAL;
 
-	@SuppressWarnings({"rawtypes","unchecked"})
+	// @SuppressWarnings({"rawtypes","unchecked"})
+	@SuppressWarnings({"unchecked"})
 	public SqlTableView()
 	{
 		super();
@@ -77,6 +79,7 @@ public class SqlTableView extends TableView<List<String>>
         // -----------------------------------------------------------------
 		// https://stackoverflow.com/questions/37739593/javafx-property-remove-listener-not-work
 		// https://stackoverflow.com/questions/26424769/javafx8-how-to-create-listener-for-selection-of-row-in-tableview
+        /*
 		this.tableViewSQLChangeListner = new ChangeListener<TablePosition>()
 		{
 			@Override
@@ -105,6 +108,37 @@ public class SqlTableView extends TableView<List<String>>
         		}
 			}
 		};
+		*/
+        // ----------------------------------------------------------
+        // new ChangeListener<TablePosition>()
+		//{
+		//	@Override
+		//    public void changed
+		//    (
+		//    	  ObservableValue<? extends TablePosition> obs,
+		//        TablePosition oldVal, 
+		//        TablePosition newVal
+		//    )
+        // ----------------------------------------------------------
+		this.tableViewSQLChangeListner = (obs,oldVal,newVal)->
+			{
+        		if ( newVal.getTableColumn() != null )
+        		{
+        			// set the range of selection on this TableView
+        			// select all rows on the same column
+        			getSelectionModel().selectRange
+    				( 
+    					0, 
+    					newVal.getTableColumn(), 
+    					getItems().size(), 
+    					newVal.getTableColumn() 
+    				);
+        			System.out.println( "---------------" );
+        			System.out.println( "V Selected new TableColumn : " + newVal.getTableColumn().getText() );
+        			System.out.println( "V Selected new column index: " + newVal.getColumn() );
+        			System.out.println( "V Selected old column index: " + oldVal.getColumn() );
+        		}
+			};
 		
 		this.setEditable(true);
 		// Callback for CellEdit

@@ -31,6 +31,7 @@ import com.google.gson.reflect.TypeToken;
 import com.google.gson.GsonBuilder;
 
 import file.json.Task;
+import file.json.Todo;
 import file.json.my.TeamBaseBall.LEAGUE;
 
 public class GsonExample extends Application
@@ -39,7 +40,10 @@ public class GsonExample extends Application
 	private TextArea  taResult  = new TextArea();
 	private Button    btnSimple = new Button("simple");
 	private Button    btnEntry  = new Button("entry");
-	private Button    btnObj2Json   = new Button("obj2json");
+	private Button    btnObj2Json   = new Button("List<Team>2Json");
+	private Button    btnJson2JsonElement = new Button("json2jsonelement");
+	private Button    btnJson2ListTeam = new Button("Json2List<Team>");
+	private Button    btnJson2ListTeamBaseBall = new Button("Json2List<TeamBaseBall>");
 
 	@Override
 	public void start(Stage stage) throws Exception 
@@ -74,15 +78,28 @@ public class GsonExample extends Application
 		btnSimple.setOnAction( e->simple() );
 		btnEntry.setOnAction( e->entry() );
 		btnObj2Json.setOnAction( e->obj2Json() );
+		btnJson2JsonElement.setOnAction( e->json2jsonelement() );
+		btnJson2ListTeam.setOnAction( e->json2ListTeam() );
+		btnJson2ListTeamBaseBall.setOnAction( e->json2ListTeamBaseBall() );
 		
 		HBox hBoxParse = new HBox(2);
-		hBoxParse.getChildren().addAll( btnSimple, btnEntry, btnObj2Json );
+		hBoxParse.getChildren().addAll
+		( 
+			btnSimple, 
+			btnEntry, 
+			btnObj2Json, 
+			btnJson2JsonElement,
+			btnJson2ListTeam,
+			btnJson2ListTeamBaseBall
+		);
 		
 		ToggleGroup tglGroup = new ToggleGroup();
 		ToggleButton tb1 = new ToggleButton( "1" );
 		tb1.setToggleGroup(tglGroup);
 		ToggleButton tb2 = new ToggleButton( "2" );
 		tb2.setToggleGroup(tglGroup);
+		ToggleButton tb3 = new ToggleButton( "3" );
+		tb3.setToggleGroup(tglGroup);
 		
 		tglGroup.selectedToggleProperty().addListener
 		(
@@ -177,11 +194,75 @@ public class GsonExample extends Application
 						"]"
 					);					
 				}
+				else if ( newVal == tb3 )
+				{
+					taJSon.setText
+					(
+						"[\r\n" + 
+						"  {\r\n" + 
+						"    \"league\": \"CENTRAL\",\r\n" + 
+						"    \"type\": \"baseball\",\r\n" + 
+						"    \"name\": \"tigers\",\r\n" + 
+						"    \"playerLst\": [\r\n" + 
+						"      \"nomi\",\r\n" + 
+						"      \"fujinami\"\r\n" + 
+						"    ],\r\n" + 
+						"    \"yearPosMap\": {\r\n" + 
+						"      \"2016\": 4,\r\n" + 
+						"      \"2017\": 2\r\n" + 
+						"    },\r\n" + 
+						"    \"CLASS_META_KEY\": \"file.json.my.TeamBaseBall\"\r\n" + 
+						"  },\r\n" + 
+						"  {\r\n" + 
+						"    \"league\": \"CENTRAL\",\r\n" + 
+						"    \"type\": \"baseball\",\r\n" + 
+						"    \"name\": \"giants\",\r\n" + 
+						"    \"playerLst\": [\r\n" + 
+						"      \"sugano\",\r\n" + 
+						"      \"sawamura\"\r\n" + 
+						"    ],\r\n" + 
+						"    \"yearPosMap\": {\r\n" + 
+						"      \"2016\": 2,\r\n" + 
+						"      \"2017\": 4\r\n" + 
+						"    },\r\n" + 
+						"    \"CLASS_META_KEY\": \"file.json.my.TeamBaseBall\"\r\n" + 
+						"  },\r\n" + 
+						"  {\r\n" + 
+						"    \"level\": 1,\r\n" + 
+						"    \"type\": \"soccer\",\r\n" + 
+						"    \"name\": \"urawa\",\r\n" + 
+						"    \"playerLst\": [\r\n" + 
+						"      \"makino\",\r\n" + 
+						"      \"kouroki\"\r\n" + 
+						"    ],\r\n" + 
+						"    \"yearPosMap\": {\r\n" + 
+						"      \"2016\": 1,\r\n" + 
+						"      \"2017\": 7\r\n" + 
+						"    },\r\n" + 
+						"    \"CLASS_META_KEY\": \"file.json.my.TeamSoccer\"\r\n" + 
+						"  },\r\n" + 
+						"  {\r\n" + 
+						"    \"level\": 1,\r\n" + 
+						"    \"type\": \"soccer\",\r\n" + 
+						"    \"name\": \"kashima\",\r\n" + 
+						"    \"playerLst\": [\r\n" + 
+						"      \"ogasawara\",\r\n" + 
+						"      \"sogahata\"\r\n" + 
+						"    ],\r\n" + 
+						"    \"yearPosMap\": {\r\n" + 
+						"      \"2016\": 11,\r\n" + 
+						"      \"2017\": 2\r\n" + 
+						"    },\r\n" + 
+						"    \"CLASS_META_KEY\": \"file.json.my.TeamSoccer\"\r\n" + 
+						"  }\r\n" + 
+						"]"
+					);
+				}
 			}
 		);
 		
 		HBox hBoxTG = new HBox(2);
-		hBoxTG.getChildren().addAll( tb1, tb2 );		
+		hBoxTG.getChildren().addAll( tb1, tb2, tb3 );		
 		
 		VBox vBox = new VBox(2);
 		vBox.getChildren().addAll( taJSon, hBoxParse, hBoxTG );
@@ -270,7 +351,7 @@ public class GsonExample extends Application
 		TeamBaseBall  tigers = new TeamBaseBall();
 		tigers.setType("baseball");
 		tigers.setName("tigers");
-		tigers.setLeauge( LEAGUE.CENTRAL );
+		tigers.setLeague( LEAGUE.CENTRAL );
 		tigers.addPlayer("nomi");
 		tigers.addPlayer("fujinami");
 		tigers.putYearPosMap( 2016, 4 );
@@ -280,7 +361,7 @@ public class GsonExample extends Application
 		TeamBaseBall  giants = new TeamBaseBall();
 		giants.setType("baseball");
 		giants.setName("giants");
-		giants.setLeauge( LEAGUE.CENTRAL );
+		giants.setLeague( LEAGUE.CENTRAL );
 		giants.addPlayer("sugano");
 		giants.addPlayer("sawamura");
 		giants.putYearPosMap( 2016, 2 );
@@ -309,10 +390,84 @@ public class GsonExample extends Application
 		
 		Type type = new TypeToken<List<Team>>() {}.getType();
 		
-		Gson gson2 = new GsonBuilder().setPrettyPrinting().create();
+		//Gson gson2 = new GsonBuilder().setPrettyPrinting().create();
+		//String json2 = gson2.toJson(teamList, type );
+		
+		// for abstract
+		// https://stackoverflow.com/questions/3629596/deserializing-an-abstract-class-in-gson
+		GsonBuilder gsonBuilder = new GsonBuilder();
+		gsonBuilder.registerTypeAdapter( Team.class, new TeamElementAdapter() );
+		Gson gson2 = gsonBuilder.setPrettyPrinting().create();
 		String json2 = gson2.toJson(teamList, type );
 		
 		taResult.setText(json2);
+	}
+	
+	private void json2jsonelement()
+	{
+		Gson gson = new Gson();
+		
+		JsonElement element = gson.fromJson( taJSon.getText(), JsonElement.class );
+		
+		StringBuffer sb = new StringBuffer( "[json2jsonelement]\n" );
+		
+		analyze( element, 0, sb );
+		
+		taResult.setText(sb.toString());
+	}
+	
+	private void json2ListTeam()
+	{
+		//Gson gson = new Gson();
+		GsonBuilder gsonBuilder = new GsonBuilder();
+		gsonBuilder.registerTypeAdapter( Team.class, new TeamElementAdapter() );
+		Gson gson = gsonBuilder.create();
+		
+		Type type = new TypeToken<ArrayList<Team>>() {}.getType();
+		List<Team> teamList = gson.fromJson( taJSon.getText(), type );
+		
+		StringBuffer sb = new StringBuffer("[json2ListTeam]\n");
+		teamList.forEach
+		(
+			(team)->
+			{
+				sb.append( team.getClass() + "\n" );
+				sb.append( "  " + team.getType() + "\n" );
+				if ( team instanceof TeamBaseBall )
+				{
+					sb.append( "  " + ((TeamBaseBall)team).getLeague().toString() + "\n" );
+				}
+				else if ( team instanceof TeamSoccer )
+				{
+					sb.append( "  " + ((TeamSoccer)team).getLevel() + "\n" );
+				}
+				team.getPlayerLst().forEach( (player)->sb.append( "  " + player + "\n" ) );
+				team.getYearPosMap().forEach( (year,pos)->sb.append( "  " + year + ":" + pos + "\n" ));
+			}
+		);
+		taResult.setText(sb.toString());
+	}
+	
+	private void json2ListTeamBaseBall()
+	{
+		Gson gson = new Gson();
+		
+		Type type = new TypeToken<ArrayList<TeamBaseBall>>() {}.getType();
+		List<Team> teamList = gson.fromJson( taJSon.getText(), type );
+		
+		StringBuffer sb = new StringBuffer("[json2ListTeamBaseBall]\n");
+		teamList.forEach
+		(
+			(team)->
+			{
+				sb.append( team.getClass() + "\n" );
+				sb.append( "  " + team.getType() + "\n" );
+				sb.append( "  " + ((TeamBaseBall)team).getLeague().toString() + "\n" );
+				team.getPlayerLst().forEach( (player)->sb.append( "  " + player + "\n" ) );
+				team.getYearPosMap().forEach( (year,pos)->sb.append( "  " + year + ":" + pos + "\n" ));
+			}
+		);
+		taResult.setText(sb.toString());
 	}
 
 	public static void main(String[] args) {

@@ -83,7 +83,7 @@ public class FilterableTreeItem<T> extends CheckBoxTreeItem<T> {
 	 * {@link ListChangeListener} in {@link TreeItem#childrenListener} to the list
 	 * @param list the list to set
 	 */
-	@SuppressWarnings({ "unchecked", "javadoc" })
+	// @SuppressWarnings({ "unchecked", "javadoc" })
 	protected void setHiddenFieldChildren(ObservableList<TreeItem<T>> list) {
 		/* 2018.03.27 ato de hazusu
 		ReflectionUtil.setFieldValue(this, "children", list); //$NON-NLS-1$

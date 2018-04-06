@@ -265,6 +265,10 @@ public class SchemaTreeView extends TreeView<SchemaEntity>
 				}
 				
 				// search firstItem to selectedItem
+				if ( childrenItem.size() == 0 )
+				{
+					return;
+				}
 				nextItem = childrenItem.get(0);
 				while ( ( nextItem != null ) && ( nextItem != selectedItem ) )
 				{

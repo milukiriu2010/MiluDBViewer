@@ -15,6 +15,12 @@ public abstract class Team
 	
 	protected Map<Integer,Integer>  yearPosMap = new HashMap<>();
 	
+	/*
+	public Team()
+	{
+	}
+	*/
+	
 	public String getType()
 	{
 		return this.type;

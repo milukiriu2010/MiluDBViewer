@@ -2,7 +2,13 @@ package file.json.my;
 
 public class TeamSoccer extends Team 
 {
-	private int level = 2;
+	private int level = -1;
+	
+	/*
+	public TeamSoccer()
+	{
+	}
+	*/
 
 	public int getLevel()
 	{

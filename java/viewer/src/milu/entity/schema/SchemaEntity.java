@@ -158,6 +158,7 @@ abstract public class SchemaEntity
 
 	protected static ResourceBundle langRB = ResourceBundle.getBundle( PROPERTY_FILENAME );	
 	
+	/*
 	public SchemaEntity( SCHEMA_TYPE type )
 	{
 		this.type = type;
@@ -168,11 +169,14 @@ abstract public class SchemaEntity
 		this.name = name;
 		this.type = type;
 	}
+	*/
 	
 	public String toString()
 	{
 		return this.name;
 	}
+	
+	abstract void init();
 	
 	public String getName()
 	{
@@ -181,7 +185,10 @@ abstract public class SchemaEntity
 	
 	public void setName( String name )
 	{
-		this.name = name;
+		if ( name != null )
+		{
+			this.name = name;
+		}
 	}
 	
 	public void setName()
@@ -195,6 +202,11 @@ abstract public class SchemaEntity
 	public SCHEMA_TYPE getType()
 	{
 		return this.type;
+	}
+	
+	public void setType( SCHEMA_TYPE type )
+	{
+		this.type = type;
 	}
 	
 	public STATE getState()

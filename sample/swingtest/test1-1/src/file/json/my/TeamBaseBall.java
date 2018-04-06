@@ -5,17 +5,24 @@ public class TeamBaseBall extends Team
 	public enum LEAGUE
 	{
 		CENTRAL,
-		PACIFIC
+		PACIFIC,
+		UNKOWN
 	}
 	
-	private LEAGUE league = LEAGUE.PACIFIC;
+	private LEAGUE league = LEAGUE.UNKOWN;
 	
-	public LEAGUE getLeauge()
+	/*
+	public TeamBaseBall()
+	{
+	}
+	*/
+	
+	public LEAGUE getLeague()
 	{
 		return this.league;
 	}
 
-	public void setLeauge( LEAGUE league )
+	public void setLeague( LEAGUE league )
 	{
 		this.league = league;
 	}

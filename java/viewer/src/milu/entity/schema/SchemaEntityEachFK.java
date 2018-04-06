@@ -43,10 +43,19 @@ public class SchemaEntityEachFK extends SchemaEntity
 	//   position
 	private Map<String,String> dstColumnMap = new LinkedHashMap<>();
 	
+	/*
 	public SchemaEntityEachFK( String name )
 	{
 		super( name, SchemaEntity.SCHEMA_TYPE.FOREIGN_KEY );
 		
+		this.imageResourceName = "file:resources/images/index_fk.png";
+	}
+	*/
+	
+	@Override
+	void init()
+	{
+		this.type = SchemaEntity.SCHEMA_TYPE.FOREIGN_KEY;
 		this.imageResourceName = "file:resources/images/index_fk.png";
 	}
 	
