@@ -3,8 +3,6 @@ package milu.gui.view;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.Alert.AlertType;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 import javafx.scene.layout.BorderPane;
@@ -18,7 +16,6 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
-import milu.ctrl.MainController;
 import milu.gui.ctrl.common.ChangeLangInterface;
 import milu.gui.ctrl.common.CopyInterface;
 import milu.gui.ctrl.common.ExecExplainDBInterface;
@@ -31,6 +28,7 @@ import milu.gui.ctrl.menu.MainToolBar;
 import milu.gui.ctrl.query.DBSqlScriptTab;
 import milu.gui.ctrl.schema.DBSchemaTab;
 import milu.gui.dlg.MyAlertDialog;
+import milu.main.MainController;
 import milu.db.MyDBAbstract;
 import milu.task.CollectTask;
 
@@ -38,12 +36,6 @@ public class DBView extends Stage
 	implements 
 		ChangeLangInterface
 {
-	// Property File for this class 
-	private static final String PROPERTY_FILENAME = 
-		 	"conf.lang.gui.view.DBView";
-
-	private ResourceBundle langRB = ResourceBundle.getBundle( PROPERTY_FILENAME );	
-	
 	// Main Controller
 	private MainController mainCtrl = null;
 	
@@ -67,9 +59,6 @@ public class DBView extends Stage
 	
 	// Message from Task
 	private Label  lblMsg = new Label();
-	
-	// debug
-	private int debug = 0;
 	
 	// ---------------------------
 	// Constractor
@@ -144,56 +133,6 @@ public class DBView extends Stage
         {
     		scene.getStylesheets().add(	getClass().getResource(css).toExternalForm() );
         }
-        
-        
-        /*
-		scene.getStylesheets().add
-		(
-			getClass().getResource("/conf/css/ctrl/common/LabelTable.css").toExternalForm()
-		);
-		scene.getStylesheets().add
-		(
-			getClass().getResource("/conf/css/ctrl/menu/MainToolBar.css").toExternalForm()
-		);
-		scene.getStylesheets().add
-		(
-			getClass().getResource("/conf/css/ctrl/query/SqlTableView.css").toExternalForm()
-		);
-		scene.getStylesheets().add
-		(
-			getClass().getResource("/conf/css/ctrl/query/DBSqlTab.css").toExternalForm()
-		);
-		scene.getStylesheets().add
-		(
-			getClass().getResource("/conf/css/ctrl/schema/SchemaTreeView.css").toExternalForm()
-		);
-		scene.getStylesheets().add
-		(
-			getClass().getResource("/conf/css/ctrl/schema/SchemaERView.css").toExternalForm()
-		);
-		*/
-		scene.addEventHandler
-		( 
-			KeyEvent.KEY_PRESSED, 
-			(key)->
-			{
-				if ( key.getCode() == KeyCode.ALT )
-				{
-					this.debug = 1;
-				}
-			}
-		);
-		scene.addEventHandler
-		( 
-			KeyEvent.KEY_RELEASED, 
-			(key)->
-			{
-				if ( key.getCode() == KeyCode.ALT )
-				{
-					this.debug = 0;
-				}
-			}
-		);
         this.setScene(scene);
 		// Window Title
         this.setTitle( "MiluDBViewer[URL=" + this.myDBAbs.getUrl() + "][USER=" + this.myDBAbs.getUsername() + "]" );
@@ -445,16 +384,6 @@ public class DBView extends Stage
 	public void createNewTab()
 	{
 		Tab newTab = null;
-		/*
-		if ( this.debug == 0 )
-		{
-			newTab = new DBSqlTab( this );
-		}
-		else
-		{
-			newTab = new DBSqlScriptTab( this );
-		}
-		*/
 		newTab = new DBSqlScriptTab( this );
 		this.tabPane.getTabs().add( newTab );
 		this.tabPane.getSelectionModel().select( newTab );
@@ -550,7 +479,8 @@ public class DBView extends Stage
 		}
 		catch ( SQLException sqlEx )
 		{
-			MyAlertDialog alertDlg = new MyAlertDialog(AlertType.WARNING);
+    		MyAlertDialog alertDlg = new MyAlertDialog( AlertType.WARNING, this.mainCtrl );
+    		ResourceBundle langRB = this.mainCtrl.getLangResource("conf.lang.gui.common.MyAlert");
 			alertDlg.setHeaderText( langRB.getString("TITLE_EXEC_QUERY_ERROR") );
     		alertDlg.setTxtExp( sqlEx, myDBAbs );
     		alertDlg.showAndWait();
@@ -558,7 +488,8 @@ public class DBView extends Stage
 		}
 		catch ( Exception ex )
 		{
-			MyAlertDialog alertDlg = new MyAlertDialog(AlertType.WARNING);
+    		MyAlertDialog alertDlg = new MyAlertDialog( AlertType.WARNING, this.mainCtrl );
+    		ResourceBundle langRB = this.mainCtrl.getLangResource("conf.lang.gui.common.MyAlert");
 			alertDlg.setHeaderText( langRB.getString("TITLE_MISC_ERROR") );
     		alertDlg.setTxtExp( ex );
     		alertDlg.showAndWait();
@@ -574,7 +505,8 @@ public class DBView extends Stage
 		}
 		catch ( SQLException sqlEx )
 		{
-			MyAlertDialog alertDlg = new MyAlertDialog(AlertType.WARNING);
+    		MyAlertDialog alertDlg = new MyAlertDialog( AlertType.WARNING, this.mainCtrl );
+    		ResourceBundle langRB = this.mainCtrl.getLangResource("conf.lang.gui.common.MyAlert");
 			alertDlg.setHeaderText( langRB.getString("TITLE_EXEC_QUERY_ERROR") );
     		alertDlg.setTxtExp( sqlEx, myDBAbs );
     		alertDlg.showAndWait();
@@ -582,7 +514,8 @@ public class DBView extends Stage
 		}
 		catch ( Exception ex )
 		{
-			MyAlertDialog alertDlg = new MyAlertDialog(AlertType.WARNING);
+    		MyAlertDialog alertDlg = new MyAlertDialog( AlertType.WARNING, this.mainCtrl );
+    		ResourceBundle langRB = this.mainCtrl.getLangResource("conf.lang.gui.common.MyAlert");
 			alertDlg.setHeaderText( langRB.getString("TITLE_MISC_ERROR") );
     		alertDlg.setTxtExp( ex );
     		alertDlg.showAndWait();

@@ -3,8 +3,8 @@ package milu.gui.dlg.app;
 import java.util.ResourceBundle;
 
 import javafx.scene.control.Dialog;
-import milu.ctrl.MainController;
 import milu.gui.dlg.app.AppSettingMenu.APPSET_TYPE;
+import milu.main.MainController;
 
 class AppPaneFactory implements PaneFactory 
 {

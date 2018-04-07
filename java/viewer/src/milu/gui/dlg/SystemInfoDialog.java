@@ -15,7 +15,6 @@ import javafx.scene.control.TabPane;
 import javafx.scene.control.TabPane.TabClosingPolicy;
 import javafx.scene.control.Label;
 import javafx.scene.control.Button;
-import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -32,34 +31,32 @@ import javafx.event.ActionEvent;
 import javafx.geometry.Rectangle2D;
 
 import milu.gui.ctrl.query.SqlTableView;
+import milu.gui.view.DBView;
 
 public class SystemInfoDialog extends Dialog<Boolean>
 {
-	// Property File for this class 
-	private static final String PROPERTY_FILENAME = 
-			"conf.lang.gui.dlg.SystemInfoDialog";
-
-	// Language Resource
-	private ResourceBundle langRB = ResourceBundle.getBundle( PROPERTY_FILENAME );
+	private DBView   dbView = null;
 	
 	// TabPane
-	TabPane  tabPane = new TabPane();
+	private TabPane  tabPane = new TabPane();
 	
 	// Tab for System Infomation
-	Tab      sysInfoTab  = new Tab();
+	private Tab      sysInfoTab  = new Tab();
 	
 	// Tab for Environment Variable
-	Tab      envTab  = new Tab();
+	private Tab      envTab  = new Tab();
 	
 	// Tab for Memory Information
-	Tab      memTab  = new Tab();
+	private Tab      memTab  = new Tab();
 	
 	// Interval to get Memory Information
-	Timeline  memTimeLine = new Timeline();
+	private Timeline  memTimeLine = new Timeline();
 
-	public SystemInfoDialog()
+	public SystemInfoDialog( DBView dbView )
 	{
 		super();
+		
+		this.dbView = dbView;
 		
 		// Set Content on System Information Tab
 		this.setContentOnSysInfoTab();
@@ -83,7 +80,7 @@ public class SystemInfoDialog extends Dialog<Boolean>
 		
 		// Window Icon
 		Stage     stage   = (Stage)this.getDialogPane().getScene().getWindow();
-		stage.getIcons().add( new Image( "file:resources/images/winicon.gif" ) );
+		stage.getIcons().add( this.dbView.getMainController().getImage( "file:resources/images/winicon.gif" ) );
 		
 		// set css for this dialog
 		Scene scene = this.getDialogPane().getScene();
@@ -97,6 +94,7 @@ public class SystemInfoDialog extends Dialog<Boolean>
 		this.getDialogPane().setPrefSize( 640, 320 );
 		
 		// set Dialog Title
+		ResourceBundle langRB = this.dbView.getMainController().getLangResource("conf.lang.gui.dlg.SystemInfoDialog");
 		this.setTitle( langRB.getString( "TITLE_SYSINFO" ) );
 		
 		// set Modality
@@ -160,6 +158,8 @@ public class SystemInfoDialog extends Dialog<Boolean>
         List<String> propNameLst = new ArrayList<String>( propNameSet );
         Collections.sort(propNameLst);
         
+		ResourceBundle langRB = this.dbView.getMainController().getLangResource("conf.lang.gui.dlg.SystemInfoDialog");
+        
         // Head List
         List<String> headLst = new ArrayList<String>();
         headLst.add( langRB.getString( "ITEM_KEY" ) );
@@ -188,7 +188,7 @@ public class SystemInfoDialog extends Dialog<Boolean>
         	prop.add( propVal );
         	dataLst.add( prop );
         }
-        SqlTableView propTableView = new SqlTableView();
+        SqlTableView propTableView = new SqlTableView(this.dbView);
         propTableView.setTableViewSQL( headLst, dataLst );
         
         this.sysInfoTab.setContent( propTableView );
@@ -201,6 +201,8 @@ public class SystemInfoDialog extends Dialog<Boolean>
         Map<String, String>  envMap     = System.getenv();
         List<String>         envNameLst = new ArrayList<String>( envMap.keySet() );
         Collections.sort(envNameLst);
+
+		ResourceBundle langRB = this.dbView.getMainController().getLangResource("conf.lang.gui.dlg.SystemInfoDialog");
         
         // Head List
         List<String> headLst = new ArrayList<String>();
@@ -228,7 +230,7 @@ public class SystemInfoDialog extends Dialog<Boolean>
         	dataLst.add( env );
         }
         
-        SqlTableView envTableView = new SqlTableView();
+        SqlTableView envTableView = new SqlTableView(this.dbView);
         envTableView.setTableViewSQL( headLst, dataLst );
         
         this.envTab.setContent( envTableView );        
@@ -238,6 +240,7 @@ public class SystemInfoDialog extends Dialog<Boolean>
 	// Set Content on Memory Information Tab
 	private void setContentOnMemTab()
 	{
+		ResourceBundle langRB = this.dbView.getMainController().getLangResource("conf.lang.gui.dlg.SystemInfoDialog");
 		// Nodes for Memory Information
 		Label        memLabel = new Label(langRB.getString( "LABEL_MEMINFO" ));
 		memLabel.getStyleClass().add("SystemInfoDialog_Label_Title");
@@ -245,13 +248,13 @@ public class SystemInfoDialog extends Dialog<Boolean>
 		btnGC.setOnAction( event->System.gc() );
 		HBox hbox = new HBox(2);
 		hbox.getChildren().addAll( memLabel, btnGC );
-        SqlTableView memTableView = new SqlTableView();
+        SqlTableView memTableView = new SqlTableView(this.dbView);
         memTableView.setId("memTableView");
         
         // Nodes for Display Information
 		Label        dispLabel = new Label(langRB.getString( "LABEL_DISPINFO" ));
 		dispLabel.getStyleClass().add("SystemInfoDialog_Label_Title");
-        SqlTableView dispTableView = new SqlTableView();
+        SqlTableView dispTableView = new SqlTableView(this.dbView);
         this.setContentForDispInfo( dispTableView );
         
         VBox vbox = new VBox( 2 );
@@ -280,6 +283,8 @@ public class SystemInfoDialog extends Dialog<Boolean>
 		long totalMemory  = runtime.totalMemory();
 		long freeMemory   = runtime.freeMemory();
 		//long totalFreeMemory = freeMemory + ( maxMemory - allocatedMemory );
+		
+		ResourceBundle langRB = this.dbView.getMainController().getLangResource("conf.lang.gui.dlg.SystemInfoDialog");
 		
         // Head List
         List<String> headLst = new ArrayList<String>();
@@ -319,6 +324,8 @@ public class SystemInfoDialog extends Dialog<Boolean>
 	private void setContentForDispInfo( SqlTableView dispTableView )
 	{
 		// http://krr.blog.shinobi.jp/javafx/javafx%20scene%E3%83%BBscenegraph%E3%82%AF%E3%83%A9%E3%82%B9
+
+		ResourceBundle langRB = this.dbView.getMainController().getLangResource("conf.lang.gui.dlg.SystemInfoDialog");
 		
         // Head List
         List<String> headLst = new ArrayList<String>();
@@ -327,26 +334,6 @@ public class SystemInfoDialog extends Dialog<Boolean>
         
         // Data List
         List<List<String>>  dataLst = new ArrayList<List<String>>();
-        
-        /*
-        // Display Size
-        List<String> dispSizeLst = new ArrayList<String>();
-        dispSizeLst.add( langRB.getString("ITEM_DISP_SIZE") );
-		Rectangle2D  rec = Screen.getPrimary().getBounds();
-        dispSizeLst.add( String.format( "%d x %d",(int)rec.getWidth(),(int)rec.getHeight()) );
-        dataLst.add(dispSizeLst);
-        // Display Size(Visual)
-        List<String> dispSizeVisualLst = new ArrayList<String>();
-        dispSizeVisualLst.add( langRB.getString("ITEM_DISP_SIZE_VISUAL") );
-		Rectangle2D  recVisual = Screen.getPrimary().getVisualBounds();
-        dispSizeVisualLst.add( String.format( "%d x %d",(int)recVisual.getWidth(),(int)recVisual.getHeight()) );
-        dataLst.add(dispSizeVisualLst);
-        // Display DPI
-        List<String> dispDPILst = new ArrayList<String>();
-        dispDPILst.add( langRB.getString("ITEM_DISP_DPI") );
-        dispDPILst.add( String.format( "%d",(int)Screen.getPrimary().getDpi()) );
-        dataLst.add(dispDPILst);
-        */
         
         int dispID = 1;
         for ( Screen  screen : Screen.getScreens() )

@@ -17,7 +17,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import milu.db.MyDBAbstract;
-import milu.ctrl.MainController;
+import milu.main.MainController;
 
 public class UrlPaneCommon extends UrlPaneAbstract
 {

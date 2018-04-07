@@ -15,6 +15,7 @@ import javafx.geometry.Orientation;
 import milu.db.MyDBAbstract;
 
 import milu.gui.view.DBView;
+import milu.main.MainController;
 import milu.gui.ctrl.common.ChangeLangInterface;
 import milu.gui.ctrl.common.ExecQueryDBInterface;
 import milu.gui.ctrl.common.RefreshInterface;
@@ -23,7 +24,6 @@ import milu.gui.ctrl.schema.SchemaTreeView;
 import milu.gui.ctrl.schema.handle.SelectedItemHandlerAbstract;
 import milu.gui.ctrl.schema.handle.SelectedItemHandlerChooser;
 import milu.gui.dlg.MyAlertDialog;
-import milu.ctrl.MainController;
 
 public class DBSchemaTab extends Tab
 	implements 
@@ -32,13 +32,6 @@ public class DBSchemaTab extends Tab
 		ToggleHorizontalVerticalInterface,
 		ChangeLangInterface
 {
-	// Property File for this class 
-	private static final String PROPERTY_FILENAME = 
-			"conf.lang.gui.ctrl.schema.DBSchemaTab";
-
-	// Language Resource
-	private ResourceBundle langRB = ResourceBundle.getBundle( PROPERTY_FILENAME );
-	
 	private DBView          dbView = null;
 	
 	// upper pane on SplitPane
@@ -110,14 +103,16 @@ public class DBSchemaTab extends Tab
 		}
 		catch ( UnsupportedOperationException uoEx )
 		{
-			MyAlertDialog alertDlg = new MyAlertDialog(AlertType.WARNING);
+			ResourceBundle langRB = this.dbView.getMainController().getLangResource("conf.lang.gui.common.MyAlert");
+			MyAlertDialog alertDlg = new MyAlertDialog( AlertType.WARNING, this.dbView.getMainController() );
 			alertDlg.setHeaderText( langRB.getString("TITLE_UNSUPPORT_ERROR") );
     		alertDlg.showAndWait();
     		alertDlg = null;
 		}
 		catch ( SQLException sqlEx )
 		{
-			MyAlertDialog alertDlg = new MyAlertDialog(AlertType.WARNING);
+			ResourceBundle langRB = this.dbView.getMainController().getLangResource("conf.lang.gui.common.MyAlert");
+			MyAlertDialog alertDlg = new MyAlertDialog( AlertType.WARNING, this.dbView.getMainController() );
 			alertDlg.setHeaderText( langRB.getString("TITLE_EXEC_QUERY_ERROR") );
     		alertDlg.setTxtExp( sqlEx, myDBAbs );
     		alertDlg.showAndWait();
@@ -125,7 +120,8 @@ public class DBSchemaTab extends Tab
 		}
 		catch ( Exception ex )
 		{
-			MyAlertDialog alertDlg = new MyAlertDialog(AlertType.WARNING);
+			ResourceBundle langRB = this.dbView.getMainController().getLangResource("conf.lang.gui.common.MyAlert");
+			MyAlertDialog alertDlg = new MyAlertDialog( AlertType.WARNING, this.dbView.getMainController() );
 			alertDlg.setHeaderText( langRB.getString("TITLE_MISC_ERROR") );
     		alertDlg.setTxtExp( ex );
     		alertDlg.showAndWait();
@@ -153,14 +149,16 @@ public class DBSchemaTab extends Tab
 		}
 		catch ( UnsupportedOperationException uoEx )
 		{
-			MyAlertDialog alertDlg = new MyAlertDialog(AlertType.WARNING);
+			ResourceBundle langRB = this.dbView.getMainController().getLangResource("conf.lang.gui.common.MyAlert");
+			MyAlertDialog alertDlg = new MyAlertDialog( AlertType.WARNING, this.dbView.getMainController() );
 			alertDlg.setHeaderText( langRB.getString("TITLE_UNSUPPORT_ERROR") );
     		alertDlg.showAndWait();
     		alertDlg = null;
 		}
 		catch ( SQLException sqlEx )
 		{
-			MyAlertDialog alertDlg = new MyAlertDialog(AlertType.WARNING);
+			ResourceBundle langRB = this.dbView.getMainController().getLangResource("conf.lang.gui.common.MyAlert");
+			MyAlertDialog alertDlg = new MyAlertDialog( AlertType.WARNING, this.dbView.getMainController() );
 			alertDlg.setHeaderText( langRB.getString("TITLE_EXEC_QUERY_ERROR") );
     		alertDlg.setTxtExp( sqlEx, myDBAbs );
     		alertDlg.showAndWait();
@@ -168,7 +166,8 @@ public class DBSchemaTab extends Tab
 		}
 		catch ( Exception ex )
 		{
-			MyAlertDialog alertDlg = new MyAlertDialog(AlertType.WARNING);
+			ResourceBundle langRB = this.dbView.getMainController().getLangResource("conf.lang.gui.common.MyAlert");
+			MyAlertDialog alertDlg = new MyAlertDialog( AlertType.WARNING, this.dbView.getMainController() );
 			alertDlg.setHeaderText( langRB.getString("TITLE_MISC_ERROR") );
     		alertDlg.setTxtExp( ex );
     		alertDlg.showAndWait();
@@ -193,14 +192,6 @@ public class DBSchemaTab extends Tab
 		}
 	}
 	
-	/**
-	 * Load Language Resource
-	 */
-	private void loadLangResource()
-	{
-		this.langRB = ResourceBundle.getBundle( PROPERTY_FILENAME );
-	}
-	
 	/**************************************************
 	 * Override from ChangeLangInterface
 	 ************************************************** 
@@ -208,7 +199,8 @@ public class DBSchemaTab extends Tab
 	@Override	
 	public void changeLang()
 	{
-		this.loadLangResource();
+		ResourceBundle langRB = this.dbView.getMainController().getLangResource("conf.lang.gui.ctrl.schema.DBSchemaTab");
+		
 		// Tab Title
 		this.setText( langRB.getString("TITLE_TAB") );
 		

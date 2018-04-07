@@ -5,7 +5,7 @@ import java.util.ResourceBundle;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
-import milu.ctrl.MainController;
+import milu.main.MainController;
 
 abstract class AppPaneAbstract extends Pane 
 	implements ApplyInterface 

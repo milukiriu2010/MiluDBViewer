@@ -3,11 +3,9 @@ package milu.gui.dlg.db;
 import java.util.Map;
 import java.util.ResourceBundle;
 import javafx.scene.control.Dialog;
-
-import milu.ctrl.MainController;
-
 import milu.db.MyDBAbstract;
 import milu.db.MyDBPostgres;
+import milu.main.MainController;
 import milu.db.MyDBMySQL;
 import milu.db.MyDBOracle;
 import milu.db.MyDBCassandra;

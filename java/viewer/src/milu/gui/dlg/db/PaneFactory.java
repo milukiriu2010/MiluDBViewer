@@ -4,9 +4,8 @@ import java.util.Map;
 import java.util.ResourceBundle;
 
 import javafx.scene.control.Dialog;
-
-import milu.ctrl.MainController;
 import milu.db.MyDBAbstract;
+import milu.main.MainController;
 
 interface PaneFactory
 {

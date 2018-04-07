@@ -14,19 +14,11 @@ import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 import javafx.event.ActionEvent;
 import javafx.application.Platform;
-
-import milu.ctrl.MainController;
 import milu.gui.ctrl.common.ButtonOrderNoneDialogPane;
+import milu.main.MainController;
 
 public class AppSettingDialog extends Dialog<Boolean>
 {
-	// Property File for this class 
-	private static final String PROPERTY_FILENAME = 
-		"conf.lang.gui.dlg.app.AppSettingDialog";
-
-	// Language Resource
-	private ResourceBundle langRB = ResourceBundle.getBundle( PROPERTY_FILENAME );
-
 	// Configuration List
 	private TreeView<AppSettingMenu> treeViewConf = new TreeView<AppSettingMenu>();
 	
@@ -44,6 +36,7 @@ public class AppSettingDialog extends Dialog<Boolean>
 		super();
 		
 		this.mainCtrl = mainCtrl;
+		ResourceBundle langRB = this.mainCtrl.getLangResource("conf.lang.gui.dlg.app.AppSettingDialog");
 		
 		// set DialogPane which has no button order.
 		this.setDialogPane( new ButtonOrderNoneDialogPane() );
@@ -82,7 +75,7 @@ public class AppSettingDialog extends Dialog<Boolean>
         paneDlg.setLeft( this.treeViewConf );
         
         PaneFactory paneFactory = new AppPaneFactory();
-        AppPaneAbstract appPaneAbs = paneFactory.createPane( AppSettingMenu.APPSET_TYPE.TYPE_DB, this, this.mainCtrl, this.langRB );
+        AppPaneAbstract appPaneAbs = paneFactory.createPane( AppSettingMenu.APPSET_TYPE.TYPE_DB, this, this.mainCtrl, langRB );
         paneDlg.setCenter( appPaneAbs );
 		
 		// set pane on dialog
@@ -182,7 +175,8 @@ public class AppSettingDialog extends Dialog<Boolean>
 				//System.out.println( "obs[" + obs.getValue() + "]newVal[" + newVal + "]" );
 				
 		        PaneFactory paneFactory = new AppPaneFactory();
-		        AppPaneAbstract appPaneAbs = paneFactory.createPane( newVal.getValue().getType(), this, this.mainCtrl, this.langRB );
+		        ResourceBundle langRB = this.mainCtrl.getLangResource("conf.lang.gui.dlg.app.AppSettingDialog");
+		        AppPaneAbstract appPaneAbs = paneFactory.createPane( newVal.getValue().getType(), this, this.mainCtrl, langRB );
 		    	Node paneOnDlg = getDialogPane().getContent();
 		    	((BorderPane)paneOnDlg).setCenter( appPaneAbs );
 		    	

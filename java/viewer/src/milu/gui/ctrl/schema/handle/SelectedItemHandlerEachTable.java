@@ -8,14 +8,13 @@ import javafx.collections.ObservableList;
 import javafx.scene.Node;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TreeItem;
-import javafx.scene.image.ImageView;
 import milu.db.abs.AbsDBFactory;
 import milu.db.abs.ObjDBFactory;
 import milu.db.abs.ObjDBInterface;
 import milu.entity.schema.SchemaEntity;
 import milu.gui.ctrl.schema.SchemaTableViewTab;
+import milu.main.MainController;
 import milu.tool.MyTool;
-import milu.ctrl.MainController;
 
 import java.sql.SQLException;
 
@@ -87,20 +86,13 @@ public class SelectedItemHandlerEachTable extends SelectedItemHandlerAbstract
 		}		
 		
 		// Create SchemaTableViewTab, if it doesn't exist.
-		SchemaTableViewTab newTab = new SchemaTableViewTab();
+		SchemaTableViewTab newTab = new SchemaTableViewTab(this.dbView);
 		newTab.setId( id );
 		newTab.setText( tableName );
 		this.tabPane.getTabs().add( newTab );
 		this.tabPane.getSelectionModel().select( newTab );
 		
 		// set icon on Tab
-		/*
-		MainController mainController = this.dbView.getMainController();
-		ImageView iv = new ImageView( mainController.getImage("file:resources/images/table.png") );
-		iv.setFitHeight( 16 );
-		iv.setFitWidth( 16 );
-		newTab.setGraphic( iv );
-		*/
 		MainController mainCtrl = this.dbView.getMainController();
 		Node imageGroup = MyTool.createImageView( 16, 16, mainCtrl, selectedEntity );
 		newTab.setGraphic( imageGroup );		

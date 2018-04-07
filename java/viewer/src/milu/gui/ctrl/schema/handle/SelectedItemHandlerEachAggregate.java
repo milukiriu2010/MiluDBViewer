@@ -4,14 +4,13 @@ import javafx.collections.ObservableList;
 import javafx.scene.Node;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TreeItem;
-import javafx.scene.image.ImageView;
 import milu.db.abs.AbsDBFactory;
 import milu.db.abs.ObjDBFactory;
 import milu.db.abs.ObjDBInterface;
 import milu.entity.schema.SchemaEntity;
 import milu.gui.ctrl.schema.SchemaProcViewTab;
+import milu.main.MainController;
 import milu.tool.MyTool;
-import milu.ctrl.MainController;
 
 import java.sql.SQLException;
 

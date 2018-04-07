@@ -6,17 +6,16 @@ import java.util.List;
 import javafx.scene.Node;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TreeItem;
-import javafx.scene.image.ImageView;
 import javafx.collections.ObservableList;
 
 import milu.entity.schema.SchemaEntity;
 import milu.entity.schema.SchemaEntityEachFK;
-import milu.ctrl.MainController;
 import milu.db.abs.AbsDBFactory;
 import milu.db.abs.ObjDBFactory;
 import milu.db.abs.ObjDBInterface;
 import milu.db.fk.FKDBAbstract;
 import milu.gui.ctrl.schema.SchemaERViewTab;
+import milu.main.MainController;
 import milu.tool.MyTool;
 
 /**

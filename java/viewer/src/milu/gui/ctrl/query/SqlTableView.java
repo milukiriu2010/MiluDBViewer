@@ -23,7 +23,6 @@ import javafx.collections.ObservableList;
 import javafx.geometry.Orientation;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
-import javafx.scene.control.TableColumnBase;
 
 import javafx.util.Callback;
 
@@ -40,6 +39,7 @@ import milu.gui.ctrl.common.ChangeLangInterface;
 import milu.gui.ctrl.common.CopyInterface;
 import milu.gui.ctrl.common.ToggleHorizontalVerticalInterface;
 import milu.gui.dlg.MyAlertDialog;
+import milu.gui.view.DBView;
 
 public class SqlTableView extends TableView<List<String>>
 	implements 
@@ -47,12 +47,7 @@ public class SqlTableView extends TableView<List<String>>
 		CopyInterface,
 		ChangeLangInterface
 {
-	// Property File for this class 
-	private static final String PROPERTY_FILENAME = 
-		"conf.lang.gui.ctrl.query.SqlTableView";
-
-	// Language Resource
-	private ResourceBundle langRB = ResourceBundle.getBundle( PROPERTY_FILENAME );
+	private DBView  dbView = null;
 	
 	// Listener for "this.tableViewSQLDirection = 2:vertical"
 	// This listner enables to select the whole column, when cliking a cell.
@@ -67,9 +62,11 @@ public class SqlTableView extends TableView<List<String>>
 
 	// @SuppressWarnings({"rawtypes","unchecked"})
 	@SuppressWarnings({"unchecked"})
-	public SqlTableView()
+	public SqlTableView( DBView dbView )
 	{
 		super();
+		
+		this.dbView = dbView;
 		
         // enable to select multi rows
         this.getSelectionModel().setSelectionMode( SelectionMode.MULTIPLE );
@@ -79,36 +76,6 @@ public class SqlTableView extends TableView<List<String>>
         // -----------------------------------------------------------------
 		// https://stackoverflow.com/questions/37739593/javafx-property-remove-listener-not-work
 		// https://stackoverflow.com/questions/26424769/javafx8-how-to-create-listener-for-selection-of-row-in-tableview
-        /*
-		this.tableViewSQLChangeListner = new ChangeListener<TablePosition>()
-		{
-			@Override
-		    public void changed
-		    (
-		    	ObservableValue<? extends TablePosition> obs,
-		        TablePosition oldVal, 
-		        TablePosition newVal
-		    ) 
-			{
-        		if ( newVal.getTableColumn() != null )
-        		{
-        			// set the range of selection on this TableView
-        			// select all rows on the same column
-        			getSelectionModel().selectRange
-    				( 
-    					0, 
-    					newVal.getTableColumn(), 
-    					getItems().size(), 
-    					newVal.getTableColumn() 
-    				);
-        			System.out.println( "---------------" );
-        			System.out.println( "V Selected new TableColumn : " + newVal.getTableColumn().getText() );
-        			System.out.println( "V Selected new column index: " + newVal.getColumn() );
-        			System.out.println( "V Selected old column index: " + oldVal.getColumn() );
-        		}
-			}
-		};
-		*/
         // ----------------------------------------------------------
         // new ChangeListener<TablePosition>()
 		//{
@@ -156,6 +123,7 @@ public class SqlTableView extends TableView<List<String>>
 	
 	private void setContextMenu()
 	{
+		ResourceBundle langRB = this.dbView.getMainController().getLangResource("conf.lang.gui.ctrl.query.SqlTableView");
 		ContextMenu contextMenu = new ContextMenu();
 		
 		MenuItem menuItemCopyTblNoHead = new MenuItem( langRB.getString("MENU_COPY_TABLE_NO_HEAD") );
@@ -658,7 +626,8 @@ public class SqlTableView extends TableView<List<String>>
 			}
 			catch( IOException ioEx )
 			{
-				MyAlertDialog alertDlg = new MyAlertDialog(AlertType.WARNING);
+				ResourceBundle langRB = this.dbView.getMainController().getLangResource("conf.lang.gui.ctrl.query.SqlTableView");
+				MyAlertDialog alertDlg = new MyAlertDialog(AlertType.WARNING,this.dbView.getMainController());
 				alertDlg.setHeaderText( langRB.getString("TITLE_SAVE_ERROR") );
 	    		alertDlg.setTxtExp( ioEx );
 	    		alertDlg.showAndWait();
@@ -746,14 +715,6 @@ public class SqlTableView extends TableView<List<String>>
 		return dataLst;
 	}
 	
-	/**
-	 * Load Language Resource
-	 */
-	private void loadLangResource()
-	{
-		this.langRB = ResourceBundle.getBundle( PROPERTY_FILENAME );
-	}
-	
 	/**************************************************
 	 * Override from ChangeLangInterface
 	 ************************************************** 
@@ -761,7 +722,6 @@ public class SqlTableView extends TableView<List<String>>
 	@Override	
 	public void changeLang()
 	{
-		this.loadLangResource();
 		this.setContextMenu();
 		
 		System.out.println( "TableViewSQL refreshing..." );

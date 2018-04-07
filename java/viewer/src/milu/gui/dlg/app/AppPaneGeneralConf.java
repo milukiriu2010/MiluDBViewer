@@ -4,8 +4,7 @@ import java.util.ResourceBundle;
 
 import javafx.scene.control.Dialog;
 import javafx.scene.layout.VBox;
-
-import milu.ctrl.MainController;
+import milu.main.MainController;
 
 public class AppPaneGeneralConf extends AppPaneAbstract 
 {

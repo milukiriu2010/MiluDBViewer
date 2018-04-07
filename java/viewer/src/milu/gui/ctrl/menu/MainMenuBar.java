@@ -14,7 +14,6 @@ import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.CheckMenuItem;
 import javafx.scene.control.SeparatorMenuItem;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
@@ -25,17 +24,12 @@ import milu.gui.dlg.SystemInfoDialog;
 import milu.gui.dlg.VersionDialog;
 import milu.gui.dlg.app.AppSettingDialog;
 import milu.gui.view.DBView;
-import milu.ctrl.MainController;
+import milu.main.MainController;
+import milu.tool.MyTool;
 
 public class MainMenuBar extends MenuBar
 	implements ChangeLangInterface
 {
-	// Property File for this class 
-	private static final String PROPERTY_FILENAME = 
-		 	"conf.lang.gui.ctrl.menu.MainMenuBar";
-
-	private ResourceBundle langRB = ResourceBundle.getBundle( PROPERTY_FILENAME );
-
 	// Control View
 	private DBView  dbView = null;
 	
@@ -130,15 +124,9 @@ public class MainMenuBar extends MenuBar
 		MainController mainController = this.dbView.getMainController();
 		
 		// set icon on menuItemPref
-		ImageView ivPref = new ImageView( mainController.getImage("file:resources/images/config.png") );
-		ivPref.setFitHeight( 16 );
-		ivPref.setFitWidth( 16 );
-		this.menuItemPref.setGraphic( ivPref );
+		this.menuItemPref.setGraphic( MyTool.createImageView( 16, 16, mainController.getImage("file:resources/images/config.png") ) );
 		// set icon on menuItemQuit
-		ImageView ivQuit = new ImageView( mainController.getImage("file:resources/images/quit.png") );
-		ivQuit.setFitHeight( 16 );
-		ivQuit.setFitWidth( 16 );
-		this.menuItemQuit.setGraphic( ivQuit );
+		this.menuItemQuit.setGraphic( MyTool.createImageView( 16, 16, mainController.getImage("file:resources/images/quit.png") ) );
 		// https://blog.idrsolutions.com/2014/04/tutorial-how-to-setup-key-combinations-in-javafx/
 		// Close [Alt+F4]
 		this.menuItemQuit.setAccelerator( new KeyCodeCombination(KeyCode.F4, KeyCombination.ALT_DOWN ));
@@ -188,16 +176,9 @@ public class MainMenuBar extends MenuBar
 			this.menuItemAbout
 		);
 		// set icon on menuItemSysInfo
-		ImageView ivSysInfo = new ImageView( mainController.getImage("file:resources/images/sysinfo.png") );
-		ivSysInfo.setFitHeight( 16 );
-		ivSysInfo.setFitWidth( 16 );
-		this.menuItemSysInfo.setGraphic( ivSysInfo );
+		this.menuItemSysInfo.setGraphic( MyTool.createImageView( 16, 16, mainController.getImage("file:resources/images/sysinfo.png") ) );
 		// set icon on menuItemAbout
-		ImageView ivAbout = new ImageView( mainController.getImage("file:resources/images/winicon.gif") );
-		ivAbout.setFitHeight( 16 );
-		ivAbout.setFitWidth( 16 );
-		this.menuItemAbout.setGraphic( ivAbout );
-		
+		this.menuItemAbout.setGraphic( MyTool.createImageView( 16, 16, mainController.getImage("file:resources/images/winicon.gif") ) );
 		
 		// put Menu on MenuBar
 		this.getMenus().addAll( this.menuFile, this.menuWin, this.menuHelp, this.menuLang );
@@ -275,11 +256,9 @@ public class MainMenuBar extends MenuBar
 		( 
 			(event)->
 			{
-				//System.out.println("menuWin show"); 
-				//int menuSize = this.menuWin.getItems().size();
 				this.menuWin.getItems().removeAll(this.menuWin.getItems());
 				List<Window>  showingWinLst = Stage.getWindows().filtered( win->win.isShowing() );
-				for ( Window win : showingWinLst)
+				for ( Window win : showingWinLst )
 				{
 					if ( win instanceof DBView )
 					{
@@ -317,7 +296,7 @@ public class MainMenuBar extends MenuBar
 			// ----------------------------------------
 			(actionEvent)->
 			{
-				SystemInfoDialog sysInfoDlg = new SystemInfoDialog();
+				SystemInfoDialog sysInfoDlg = new SystemInfoDialog( this.dbView );
 				sysInfoDlg.showAndWait();
 				sysInfoDlg = null;
 			}
@@ -336,31 +315,13 @@ public class MainMenuBar extends MenuBar
 			// ----------------------------------------
 			(actionEvent)->
 			{
-				VersionDialog verDlg = new VersionDialog();
+				VersionDialog verDlg = new VersionDialog( this.dbView.getMainController() );
 				verDlg.showAndWait();
 				verDlg = null;
 			}
 		);
 		
 		
-	}
-	
-	/**
-	 * Load Language Resource
-	 */
-	private void loadLangResource()
-	{
-		this.langRB = ResourceBundle.getBundle( PROPERTY_FILENAME );
-		/*
-		Enumeration<String> strEnum = this.langRB.getKeys();
-		System.out.println( "--- MainMenuBar Resource Bundle Start -----------" );
-		while ( strEnum.hasMoreElements() )
-		{
-			String key = strEnum.nextElement();
-			System.out.println( "key[" + key + "]val[" + this.langRB.getString( key ) + "]" );
-		}
-		System.out.println( "--- MainMenuBar Resource Bundle End -----------" );
-		*/
 	}
 	
 	/**************************************************
@@ -370,7 +331,8 @@ public class MainMenuBar extends MenuBar
 	@Override	
 	public void changeLang()
 	{
-		this.loadLangResource();
+		MainController mainCtrl = this.dbView.getMainController();
+		ResourceBundle langRB = mainCtrl.getLangResource("conf.lang.gui.ctrl.menu.MainMenuBar");
 		
 		// ----------------------------------------------
 		// Menu 

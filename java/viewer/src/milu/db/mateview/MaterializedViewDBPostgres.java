@@ -31,11 +31,6 @@ public class MaterializedViewDBPostgres extends MaterializedViewDBAbstract {
 		{
 			while ( rs.next() )
 			{
-				/*
-				Map<String, String> mapView = new HashMap<String,String>();
-				mapView.put( "viewName", rs.getString("relname") );
-				this.viewLst.add( mapView );
-				*/
 				SchemaEntity viewEntity = SchemaEntityFactory.createInstance( rs.getString("relname"), SchemaEntity.SCHEMA_TYPE.MATERIALIZED_VIEW );
 				viewEntityLst.add( viewEntity );				
 			}

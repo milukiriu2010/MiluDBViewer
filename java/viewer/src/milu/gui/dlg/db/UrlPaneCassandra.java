@@ -21,7 +21,7 @@ import javafx.scene.layout.VBox;
 import javafx.application.Application;
 import javafx.stage.Stage;
 import milu.db.MyDBAbstract;
-import milu.ctrl.MainController;
+import milu.main.MainController;
 
 public class UrlPaneCassandra extends UrlPaneAbstract
 {

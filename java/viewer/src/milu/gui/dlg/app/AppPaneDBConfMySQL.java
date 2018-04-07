@@ -11,7 +11,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.Node;
 
 import milu.conf.AppConf;
-import milu.ctrl.MainController;
+import milu.main.MainController;
 
 public class AppPaneDBConfMySQL extends AppPaneAbstract 
 {

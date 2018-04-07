@@ -6,6 +6,7 @@ import javafx.scene.control.Tab;
 import javafx.scene.layout.BorderPane;
 import milu.gui.ctrl.common.ToggleHorizontalVerticalInterface;
 import milu.gui.ctrl.query.SqlTableView;
+import milu.gui.view.DBView;
 
 /**
  * Show Table/View Definition
@@ -17,13 +18,16 @@ public class SchemaTableViewTab extends Tab
 	implements
 		ToggleHorizontalVerticalInterface
 {
+	private DBView        dbView       = null;
 	private SqlTableView  sqlTableView = null;
 	
-	public SchemaTableViewTab()
+	public SchemaTableViewTab( DBView dbView )
 	{
 		super();
 		
-		this.sqlTableView = new SqlTableView();
+		this.dbView = dbView;
+		
+		this.sqlTableView = new SqlTableView(this.dbView);
 		
 		BorderPane brdPane = new BorderPane();
 		brdPane.setCenter( this.sqlTableView );

@@ -157,26 +157,13 @@ abstract public class SchemaEntity
 		 	"conf.lang.entity.schema.SchemaEntity";
 
 	protected static ResourceBundle langRB = ResourceBundle.getBundle( PROPERTY_FILENAME );	
-	
-	/*
-	public SchemaEntity( SCHEMA_TYPE type )
-	{
-		this.type = type;
-	}
-	
-	public SchemaEntity( String name, SCHEMA_TYPE type )
-	{
-		this.name = name;
-		this.type = type;
-	}
-	*/
+
+	abstract void init();
 	
 	public String toString()
 	{
 		return this.name;
 	}
-	
-	abstract void init();
 	
 	public String getName()
 	{

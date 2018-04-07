@@ -9,7 +9,6 @@ import com.google.gson.JsonParseException;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonPrimitive;
 
 // https://www.javacodegeeks.com/2012/04/json-with-gson-and-abstract-classes.html
 public class TeamElementAdapter implements JsonSerializer<Object>, JsonDeserializer<Object> 

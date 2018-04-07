@@ -6,7 +6,7 @@ import javafx.scene.control.Dialog;
 
 import javafx.scene.layout.Pane;
 import milu.db.MyDBAbstract;
-import milu.ctrl.MainController;
+import milu.main.MainController;
 
 abstract class UrlPaneAbstract extends Pane
 	implements UrlInterface

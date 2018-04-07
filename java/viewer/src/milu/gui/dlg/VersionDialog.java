@@ -9,32 +9,31 @@ import javafx.scene.control.TabPane;
 import javafx.scene.control.TabPane.TabClosingPolicy;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
-import javafx.scene.image.Image;
 import javafx.scene.control.Tab;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
+import milu.main.MainController;
+
 public class VersionDialog extends Dialog<Boolean>
 {
-	// Property File for this class 
-	private static final String PROPERTY_FILENAME = 
-			"conf.lang.gui.dlg.VersionDialog";
-
-	// Language Resource
-	private ResourceBundle langRB = ResourceBundle.getBundle( PROPERTY_FILENAME );
+	// Main Controller
+	MainController mainCtrl = null;
 	
 	// TabPane
 	TabPane  tabPane = new TabPane();
 	
-	// Tab for Version Infomation
+	// Tab for Version Information
 	Tab      verTab  = new Tab();
 	
 	// Tab for library Information
 	Tab      libTab  = new Tab();
 	
-	public VersionDialog()
+	public VersionDialog( MainController mainCtrl )
 	{
 		super();
+		
+		this.mainCtrl = mainCtrl;
 		
 		// Set Content on Version Information Tab
 		this.setContentOnVerTab();
@@ -55,13 +54,14 @@ public class VersionDialog extends Dialog<Boolean>
 		
 		// Window Icon
 		Stage     stage   = (Stage)this.getDialogPane().getScene().getWindow();
-		stage.getIcons().add( new Image( "file:resources/images/winicon.gif" ) );
+		stage.getIcons().add( this.mainCtrl.getImage( "file:resources/images/winicon.gif" ) );
 		
 		// set size
 		this.setResizable( true );
 		this.getDialogPane().setPrefSize( 640, 320 );
 		
 		// set Dialog Title
+		ResourceBundle langRB = this.mainCtrl.getLangResource("conf.lang.gui.dlg.VersionDialog");
 		this.setTitle( langRB.getString( "TITLE_ABOUT" ) );
 		
 		this.setAction();
@@ -70,7 +70,7 @@ public class VersionDialog extends Dialog<Boolean>
 	private void setAction()
 	{
 		// result when clicking on "Close".
-		this.setResultConverter( (dialogButton)->{ return Boolean.TRUE; } );
+		this.setResultConverter( dialogButton->Boolean.TRUE );
 	}
 	
 	private void setContentOnVerTab()
@@ -80,6 +80,7 @@ public class VersionDialog extends Dialog<Boolean>
 		WebEngine webEngine = webView.getEngine(); 
 		webEngine.load( urlVerInfo.toExternalForm() );
 		this.verTab.setContent( webView );
+		ResourceBundle langRB = this.mainCtrl.getLangResource("conf.lang.gui.dlg.VersionDialog");
 		this.verTab.setText( langRB.getString( "TITLE_ABOUT" ) );
 	}
 	
@@ -90,6 +91,7 @@ public class VersionDialog extends Dialog<Boolean>
 		WebEngine webEngine = webView.getEngine(); 
 		webEngine.load( urlLibInfo.toExternalForm() );
 		this.libTab.setContent( webView );
+		ResourceBundle langRB = this.mainCtrl.getLangResource("conf.lang.gui.dlg.VersionDialog");
 		this.libTab.setText( langRB.getString( "TITLE_LIBRARY" ) );
 	}
 }

@@ -36,11 +36,10 @@ import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
 import milu.db.MyDBAbstract;
 import milu.conf.AppConf;
-import milu.ctrl.MainController;
-
 import milu.file.MyFileAbstract;
 import milu.file.MyFileFactory;
 import milu.gui.dlg.MyAlertDialog;
+import milu.main.MainController;
 
 public class UrlPaneOracle extends UrlPaneAbstract
 {
@@ -601,7 +600,7 @@ public class UrlPaneOracle extends UrlPaneAbstract
 		}
 		catch ( IOException ioEx )
 		{
-    		MyAlertDialog alertDlg = new MyAlertDialog( AlertType.WARNING );
+    		MyAlertDialog alertDlg = new MyAlertDialog( AlertType.WARNING, this.mainCtrl );
     		alertDlg.setHeaderText( extLangRB.getString( "TITLE_FILE_NOT_FOUND" ) );
     		alertDlg.setTxtExp( ioEx );
     		alertDlg.showAndWait();

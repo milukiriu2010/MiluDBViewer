@@ -18,13 +18,10 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TabPane.TabClosingPolicy;
 import javafx.scene.control.Button;
 
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.AnchorPane;
-
-import milu.ctrl.MainController;
 import milu.ctrl.sqlparse.SQLBag;
 import milu.gui.ctrl.common.ChangeLangInterface;
 import milu.gui.ctrl.common.CopyInterface;
@@ -34,6 +31,7 @@ import milu.gui.ctrl.common.ExecQueryDBInterface;
 import milu.gui.ctrl.common.FocusInterface;
 import milu.gui.ctrl.common.ToggleHorizontalVerticalInterface;
 import milu.gui.view.DBView;
+import milu.main.MainController;
 import milu.tool.MyTool;
 import milu.db.MyDBAbstract;
 import milu.task.ExecScriptAllTask;
@@ -51,13 +49,6 @@ public class DBSqlScriptTab extends Tab
 		FocusInterface,
 		ChangeLangInterface
 {
-	// Property File for this class 
-	private static final String PROPERTY_FILENAME = 
-		"conf.lang.gui.ctrl.query.DBSqlTab";
-
-	// Language Resource
-	private ResourceBundle langRB = ResourceBundle.getBundle( PROPERTY_FILENAME );
-	
 	private DBView          dbView = null;
 	
 	// Counter for how many times this class is opened.
@@ -107,7 +98,6 @@ public class DBSqlScriptTab extends Tab
         
         // TabPane of SQL results
         this.tabPane.setTabClosingPolicy( TabClosingPolicy.UNAVAILABLE );
-        //this.lowerPane.getChildren().add( this.tabPane );
         
 		this.labelCntSQL.getStyleClass().add("DBSqlTab_Label_On_StatusBar");
 		this.labelExecTimeSQL.getStyleClass().add("DBSqlTab_Label_On_StatusBar");
@@ -119,7 +109,6 @@ public class DBSqlScriptTab extends Tab
         // SplitPane
         // http://fxexperience.com/2011/06/splitpane-in-javafx-2-0/
 		this.splitPane.setOrientation(Orientation.VERTICAL);
-		//splitPane.getItems().addAll( this.upperPane, this.lowerPane );
 		this.splitPane.getItems().addAll( this.upperPane, this.tabPane );
 		this.splitPane.setDividerPositions( 0.3f, 0.7f );
 		
@@ -132,10 +121,7 @@ public class DBSqlScriptTab extends Tab
 		MainController mainCtrl = this.dbView.getMainController();
 		
 		// set icon on Tab
-		ImageView iv = new ImageView( mainCtrl.getImage("file:resources/images/sql.png") );
-		iv.setFitHeight( 16 );
-		iv.setFitWidth( 16 );
-		this.setGraphic( iv );
+		this.setGraphic( MyTool.createImageView( 16, 16, mainCtrl.getImage("file:resources/images/sql.png") ) );
 		
 		// Tab Title
 		this.setText( "SQL" + Integer.valueOf( counterOpend ) );
@@ -246,6 +232,7 @@ public class DBSqlScriptTab extends Tab
 			(obs,oldVal,newVal)->
 			{
 				System.out.println( "ExecScriptAllTask:Progress[" + obs.getClass() + "]oldVal[" + oldVal + "]newVal[" + newVal + "]" );
+				ResourceBundle langRB = this.dbView.getMainController().getLangResource("conf.lang.gui.ctrl.query.DBSqlTab");
 				// task start.
 				if ( newVal.doubleValue() == 0.0 )
 				{
@@ -265,10 +252,6 @@ public class DBSqlScriptTab extends Tab
 						}
 					);
 					
-					//this.lowerPane.getChildren().clear();
-					//this.lowerPane.getChildren().add( vBox );
-					//this.splitPane.getItems().remove(1,2);
-					//this.splitPane.getItems().add(vBox);
 					Tab tab = new Tab("...");
 					tab.setContent( vBox );
 					this.tabPane.getTabs().add(tab);
@@ -277,10 +260,6 @@ public class DBSqlScriptTab extends Tab
 				// task done.
 				else if ( newVal.doubleValue() == 1.0 )
 				{
-					//this.lowerPane.getChildren().clear();
-					//this.lowerPane.getChildren().add( this.tabPane );
-					//this.splitPane.getItems().remove(1,2);
-					//this.splitPane.getItems().add(this.tabPane);
 					// remove tab for cancel
 					this.tabPane.getTabs().remove(0);
 					this.dbView.taskDone();
@@ -325,6 +304,7 @@ public class DBSqlScriptTab extends Tab
 			(obs,oldVal,newVal)->
 			{
 				System.out.println( "ExecExplainAllTask:Progress[" + obs.getClass() + "]oldVal[" + oldVal + "]newVal[" + newVal + "]" );
+				ResourceBundle langRB = this.dbView.getMainController().getLangResource("conf.lang.gui.ctrl.query.DBSqlTab");
 				// task start.
 				if ( newVal.doubleValue() == 0.0 )
 				{
@@ -368,104 +348,6 @@ public class DBSqlScriptTab extends Tab
 		
 		// Exception Returned by Task
 		task.valueProperty().addListener( (obs,oldVal,newVal)->this.showException(newVal,startTime) );
-
-		/*
-		long startTime = System.nanoTime();
-		
-		final ExplainTask explainTask = 
-				new ExplainTask( myDBAbs, this.dbView.getMainController(), this.textAreaSQL.getSQL(), this.tableViewSQL );
-		// execute task
-		final Future<?> futureExplainTask = this.service.submit( explainTask );		
-		
-		explainTask.progressProperty().addListener
-		(
-			(obs,oldVal,newVal)->
-			{
-				System.out.println( "ExplainTask:Progress[" + obs.getClass() + "]oldVal[" + oldVal + "]newVal[" + newVal + "]" );
-				// task start.
-				if ( newVal.doubleValue() == 0.0 )
-				{
-					this.dbView.taskProcessing();
-					VBox vBox = new VBox(2);
-					Label  labelProcess = new Label( langRB.getString("LABEL_PROCESSING") );
-					Button btnCancel    = new Button( langRB.getString("BTN_CANCEL") );
-					vBox.getChildren().addAll( labelProcess, btnCancel );
-					
-					btnCancel.setOnAction
-					(
-						(event)->
-						{
-							futureExplainTask.cancel(true);
-						}
-					);
-					
-					this.lowerPane.getChildren().clear();
-					this.lowerPane.getChildren().add( vBox );
-					System.out.println( "ExplainTask:clear" );
-				}
-				// task done.
-				else if ( newVal.doubleValue() == 1.0 )
-				{
-					this.lowerPane.getChildren().clear();
-					this.lowerPane.getChildren().add( this.tableViewSQL );
-					this.tableViewSQL.prefHeightProperty().bind( this.lowerPane.heightProperty() );
-					// Record Count
-					this.setCount( this.tableViewSQL.getRowSize() );
-					this.dbView.taskDone();
-					long endTime = System.nanoTime();
-					this.setExecTime( endTime - startTime );
-					System.out.println( "ExplainTask:set" );
-				}
-			}
-		);
-		
-		explainTask.valueProperty().addListener
-		(
-			(obs,oldVal,newVal)->
-			{
-				System.out.println( "ExplainTask:Value[" + obs.getClass() + "]oldVal[" + oldVal + "]newVal[" + newVal + "]" );
-				this.lowerPane.getChildren().clear();
-				// task exception.
-				if ( newVal instanceof SQLException )
-				{
-		    		this.showSQLException( (SQLException)newVal, myDBAbs );
-				}
-				else if ( newVal instanceof Exception )
-				{
-					Label     labelTitle = new Label( langRB.getString("TITLE_EXEC_QUERY_ERROR") );
-					
-					String    strMsg     = newVal.getMessage();
-					TextArea  txtMsg     = new TextArea( strMsg );
-					txtMsg.setPrefColumnCount( MyTool.getCharCount( strMsg, "\n" )+1 );
-					txtMsg.setEditable( false );
-					
-					String    strExp     = MyTool.getExceptionString( newVal );
-					TextArea  txtExp     = new TextArea( strExp );
-					txtExp.setPrefRowCount( MyTool.getCharCount( strExp, "\n" )+1 );
-					txtExp.setEditable( false );
-					
-					VBox vBoxExp = new VBox(2);
-					vBoxExp.getChildren().addAll( labelTitle, txtMsg, txtExp );
-					
-					SplitPane splitPane = new SplitPane();
-					splitPane.setOrientation(Orientation.VERTICAL);
-					splitPane.getItems().addAll( vBoxExp , this.tableViewSQL );
-					splitPane.setDividerPositions( 0.3f, 0.7f );
-					
-					this.tableViewSQL.prefHeightProperty().unbind();
-					this.lowerPane.getChildren().add( splitPane );
-				}
-
-				// Record Count
-				this.setCount( this.tableViewSQL.getRowSize() );
-				this.dbView.taskDone();
-				long endTime = System.nanoTime();
-				this.setExecTime( endTime - startTime );
-				System.out.println( "ExecQueryTask:set" );
-			}
-		);
-		
-		*/
 	}
 	
 	private void showException( Exception ex, long startTime )
@@ -473,6 +355,8 @@ public class DBSqlScriptTab extends Tab
 		// get Tab "..." 
 		Tab tab = this.tabPane.getTabs().get(0);
 		tab.setContent(null);
+		
+		ResourceBundle langRB = this.dbView.getMainController().getLangResource("conf.lang.gui.ctrl.query.DBSqlTab");
 		
 		Label     labelTitle = new Label( langRB.getString("TITLE_EXEC_QUERY_ERROR") );
 		
@@ -494,63 +378,6 @@ public class DBSqlScriptTab extends Tab
 		long endTime = System.nanoTime();
 		this.setExecTime( endTime - startTime );
 	}
-	
-	/*
-	private void showSQLException( SQLException sqlEx, MyDBAbstract myDBAbs )
-	{
-		System.out.println( "SQLState:" + sqlEx.getSQLState() );
-		System.out.println( "ErrorCode:" + sqlEx.getErrorCode() );
-		
-		Label     labelTitle = new Label( langRB.getString("TITLE_EXEC_QUERY_ERROR") );
-		
-		String    strMsg     = sqlEx.getMessage();
-		TextArea  txtMsg     = new TextArea( strMsg );
-		txtMsg.setPrefColumnCount( MyTool.getCharCount( strMsg, "\n" )+1 );
-		txtMsg.setEditable( false );
-		
-		String    strExp     = MyTool.getExceptionString( sqlEx );
-		TextArea  txtExp     = new TextArea( strExp );
-		txtExp.setPrefRowCount( MyTool.getCharCount( strExp, "\n" )+1 );
-		txtExp.setEditable( false );
-		
-		Button    btnReConnect = new Button (langRB.getString("BTN_RECONNECT"));
-		btnReConnect.setOnAction
-		(
-			event->
-			{
-				try
-				{
-					myDBAbs.reconnect();
-					dbView.Go();
-				}
-				catch ( SQLException sqlEx2 )
-				{
-					String strMsg2 = sqlEx2.getMessage();
-					txtMsg.setText(strMsg2);
-					txtMsg.setPrefColumnCount( MyTool.getCharCount( strMsg, "\n" )+1 );
-					
-					String strExp2 = MyTool.getExceptionString( sqlEx2 );
-					txtExp.setText(strExp2);
-					txtExp.setPrefRowCount( MyTool.getCharCount( strExp2, "\n" )+1 );
-				}
-			} 
-		);
-		
-		HBox hBoxExp = new HBox(2);
-		hBoxExp.getChildren().addAll( labelTitle, btnReConnect );
-		
-		VBox vBoxExp = new VBox(2);
-		vBoxExp.getChildren().addAll( hBoxExp, txtMsg, txtExp );
-		
-		SplitPane splitPane = new SplitPane();
-		splitPane.setOrientation(Orientation.VERTICAL);
-		//splitPane.getItems().addAll( vBoxExp , this.tableViewSQL );
-		splitPane.setDividerPositions( 0.3f, 0.7f );
-		
-		//this.tableViewSQL.prefHeightProperty().unbind();
-		this.lowerPane.getChildren().add( splitPane );
-	}
-	*/
 	
 	/**************************************************
 	 * Override from CopyInterface
@@ -579,14 +406,6 @@ public class DBSqlScriptTab extends Tab
 		}
 	}
 	
-	/**
-	 * Load Language Resource
-	 */
-	private void loadLangResource()
-	{
-		this.langRB = ResourceBundle.getBundle( PROPERTY_FILENAME );
-	}
-	
 	/**************************************************
 	 * Override from ChangeLangInterface
 	 ************************************************** 
@@ -594,7 +413,6 @@ public class DBSqlScriptTab extends Tab
 	@Override	
 	public void changeLang()
 	{
-		this.loadLangResource();
 		//this.tableViewSQL.changeLang();
 	}
 	

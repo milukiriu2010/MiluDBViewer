@@ -4,8 +4,6 @@ import javafx.application.Application;
 import javafx.stage.Stage;
 
 import javafx.scene.control.Alert.AlertType;
-
-import milu.ctrl.MainController;
 import milu.gui.dlg.MyAlertDialog;
 
 public class MiluDBViewer extends Application
@@ -22,12 +20,13 @@ public class MiluDBViewer extends Application
     	try
     	{
     		mainCtrl.setApplication( this );
+    		mainCtrl.loadLangResources();
     		mainCtrl.loadImages();
     		mainCtrl.createNewDBConnectionAndOpenNewWindow();
     	}
     	catch ( Exception ex )
     	{
-    		MyAlertDialog alertDlg = new MyAlertDialog( AlertType.WARNING );
+    		MyAlertDialog alertDlg = new MyAlertDialog( AlertType.WARNING, mainCtrl );
     		alertDlg.setHeaderText( "Something Wrong!!" );
     		alertDlg.setTxtExp( ex );
     		alertDlg.showAndWait();

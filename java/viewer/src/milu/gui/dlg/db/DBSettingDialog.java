@@ -38,19 +38,12 @@ import milu.db.MyDBAbstract;
 import milu.db.MyDBFactory;
 import milu.gui.ctrl.common.ButtonOrderNoneDialogPane;
 import milu.gui.dlg.MyAlertDialog;
-import milu.ctrl.MainController;
+import milu.main.MainController;
 
 // Dialog sample
 // http://code.makery.ch/blog/javafx-dialogs-official/
 public class DBSettingDialog extends Dialog<MyDBAbstract>
 {
-	// Property File for this class 
-	private static final String PROPERTY_FILENAME = 
-			"conf.lang.gui.dlg.db.DBSettingDialog";
-
-	// Language Resource
-	private ResourceBundle langRB = ResourceBundle.getBundle( PROPERTY_FILENAME );
-	
 	private MainController mainCtrl = null; 
 	
 	// DB Type List
@@ -85,6 +78,7 @@ public class DBSettingDialog extends Dialog<MyDBAbstract>
 		this.setDialogPane( new ButtonOrderNoneDialogPane() );
 		
 		// Set dialog title.
+		ResourceBundle langRB = this.mainCtrl.getLangResource("conf.lang.gui.dlg.db.DBSettingDialog");
 		this.setTitle( langRB.getString( "TITLE_DB_SETTING" ) );
 		
 		// ComboBox for DB type(Oracle/MySQL/Postgresql...)
@@ -102,11 +96,11 @@ public class DBSettingDialog extends Dialog<MyDBAbstract>
 		paneDBOpt.setHgap( 5 );
 		paneDBOpt.setVgap( 2 );
 		paneDBOpt.setPadding( new Insets( 10, 10, 10, 10 ) );
-		paneDBOpt.add( new Label( this.langRB.getString( "LABEL_DB_TYPE" )) , 0, 0 );
+		paneDBOpt.add( new Label( langRB.getString( "LABEL_DB_TYPE" )) , 0, 0 );
 		paneDBOpt.add( this.comboBoxDBType   , 1, 0 );
-		paneDBOpt.add( new Label( this.langRB.getString( "LABEL_USERNAME" )), 0, 1 );
+		paneDBOpt.add( new Label( langRB.getString( "LABEL_USERNAME" )), 0, 1 );
 		paneDBOpt.add( this.usernameTextField, 1, 1 );
-		paneDBOpt.add( new Label( this.langRB.getString( "LABEL_PASSWORD" )), 0, 2 );
+		paneDBOpt.add( new Label( langRB.getString( "LABEL_PASSWORD" )), 0, 2 );
 		paneDBOpt.add( this.passwordTextField, 1, 2 );
 		
 		// pane for Dialog
@@ -187,6 +181,7 @@ public class DBSettingDialog extends Dialog<MyDBAbstract>
 						else
 						{
 							PaneFactory paneFactory = new UrlPaneFactory();
+				    		ResourceBundle langRB = this.mainCtrl.getLangResource("conf.lang.gui.dlg.db.DBSettingDialog");
 							urlPaneAbs2 = paneFactory.createPane( this, this.mainCtrl, newVal, langRB, mapProp );
 							this.urlPaneAbsMap.put( newVal, urlPaneAbs2 );
 						}
@@ -275,14 +270,16 @@ public class DBSettingDialog extends Dialog<MyDBAbstract>
 		}
 		catch ( ClassNotFoundException cnfEx )
 		{
-    		MyAlertDialog alertDlg = new MyAlertDialog( AlertType.WARNING );
+    		MyAlertDialog alertDlg = new MyAlertDialog( AlertType.WARNING, this.mainCtrl );
+    		ResourceBundle langRB = this.mainCtrl.getLangResource("conf.lang.gui.common.MyAlert");
     		alertDlg.setHeaderText( langRB.getString( "TITLE_DB_DRIVER_ERROR" ) );
     		alertDlg.setTxtExp( cnfEx );
     		alertDlg.showAndWait();
 		}
 		catch ( SQLException sqlEx )
 		{
-    		MyAlertDialog alertDlg = new MyAlertDialog( AlertType.WARNING );
+    		MyAlertDialog alertDlg = new MyAlertDialog( AlertType.WARNING, this.mainCtrl );
+    		ResourceBundle langRB = this.mainCtrl.getLangResource("conf.lang.gui.common.MyAlert");
     		alertDlg.setHeaderText( langRB.getString( "TITLE_DB_CONNECT_ERROR" ) );
     		alertDlg.setTxtExp( sqlEx );
     		alertDlg.showAndWait();

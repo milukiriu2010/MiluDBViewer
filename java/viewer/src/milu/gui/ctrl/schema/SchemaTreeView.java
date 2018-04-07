@@ -9,13 +9,8 @@ import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollBar;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.shape.Line;
-import javafx.scene.Group;
-import javafx.scene.effect.Blend;
-import javafx.scene.effect.BlendMode;
 import javafx.collections.ObservableList;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleIntegerProperty;
@@ -25,21 +20,14 @@ import javafx.scene.control.skin.VirtualFlow;
 
 import milu.gui.ctrl.common.ChangeLangInterface;
 import milu.gui.view.DBView;
+import milu.main.MainController;
 import milu.tool.MyTool;
-import milu.ctrl.MainController;
 import milu.entity.schema.SchemaEntity;
 
 public class SchemaTreeView extends TreeView<SchemaEntity>
 	implements
 		ChangeLangInterface
 {
-	// Property File for this class 
-	private static final String PROPERTY_FILENAME = 
-			"conf.lang.gui.ctrl.schema.SchemaTreeView";
-	
-	// Language Resource
-	private ResourceBundle langRB = ResourceBundle.getBundle( PROPERTY_FILENAME );
-	
 	// Control View
 	private DBView  dbView = null;
 	
@@ -118,6 +106,7 @@ public class SchemaTreeView extends TreeView<SchemaEntity>
 	
 	private void setContextMenu()
 	{
+		ResourceBundle langRB = this.dbView.getMainController().getLangResource("conf.lang.gui.ctrl.schema.SchemaTreeView");
 		ContextMenu  contextMenu = new ContextMenu();
 		
 		MenuItem  menuItemRefresh = new MenuItem( langRB.getString("MENU_REFRESH") );
@@ -333,33 +322,7 @@ public class SchemaTreeView extends TreeView<SchemaEntity>
 		( TreeItem<SchemaEntity>   itemParent, 
 		  SchemaEntity             schemaEntity )
 	{
-		/*
-		MainController mainCtrl = dbView.getMainController();
-		
-		String imageResourceName = schemaEntity.getImageResourceName();
-		//System.out.println( "image:" + imageResourceName );
-		ImageView iv = new ImageView( mainCtrl.getImage(imageResourceName) );
-		iv.setFitHeight( 16 );
-		iv.setFitWidth( 16 );
-		
-		SchemaEntity.STATE state = schemaEntity.getState();
-		
-		Group imageGroup = new Group();
-		if ( state == SchemaEntity.STATE.VALID )
-		{
-			imageGroup.getChildren().add( iv );
-		}
-		else if ( state == SchemaEntity.STATE.INVALID )
-		{
-			Line lineLTRB = new Line( 0, 0, iv.getFitWidth(), iv.getFitHeight() );
-			lineLTRB.setStyle( "-fx-stroke: red; -fx-stroke-width: 2;" );
-			Line lineRTLB = new Line( iv.getFitWidth(), 0, 0, iv.getFitHeight() );
-			lineRTLB.setStyle( "-fx-stroke: red; -fx-stroke-width: 2;" );
-			imageGroup.getChildren().addAll( iv, lineLTRB, lineRTLB );
-			imageGroup.setEffect( new Blend(BlendMode.OVERLAY) );
-		}
-		*/
-		MainController mainCtrl = dbView.getMainController();
+		MainController mainCtrl = this.dbView.getMainController();
 		Node imageGroup = MyTool.createImageView( 16, 16, mainCtrl, schemaEntity );
 		
 		TreeItem<SchemaEntity> itemNew = new TreeItem<SchemaEntity>( schemaEntity, imageGroup );
@@ -522,14 +485,6 @@ public class SchemaTreeView extends TreeView<SchemaEntity>
 		this.scrollBack(itemTarget);
 	}
 	
-	/**
-	 * Load Language Resource
-	 */
-	private void loadLangResource()
-	{
-		this.langRB = ResourceBundle.getBundle( PROPERTY_FILENAME );
-	}
-	
 	/**************************************************
 	 * Override from ChangeLangInterface
 	 ************************************************** 
@@ -537,8 +492,6 @@ public class SchemaTreeView extends TreeView<SchemaEntity>
 	@Override	
 	public void changeLang()
 	{
-		this.loadLangResource();
-		
 		this.setContextMenu();
 	}
 	

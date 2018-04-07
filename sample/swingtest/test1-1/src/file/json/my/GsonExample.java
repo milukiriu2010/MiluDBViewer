@@ -30,8 +30,6 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.google.gson.GsonBuilder;
 
-import file.json.Task;
-import file.json.Todo;
 import file.json.my.TeamBaseBall.LEAGUE;
 
 public class GsonExample extends Application

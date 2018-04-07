@@ -22,13 +22,13 @@ import javafx.scene.layout.BorderPane;
 
 import java.sql.SQLException;
 
-import milu.ctrl.MainController;
 import milu.gui.ctrl.common.ChangeLangInterface;
 import milu.gui.ctrl.common.CopyInterface;
 import milu.gui.ctrl.common.CounterInterface;
 import milu.gui.ctrl.common.ToggleHorizontalVerticalInterface;
 import milu.gui.ctrl.query.SqlTableView;
 import milu.gui.view.DBView;
+import milu.main.MainController;
 import milu.tool.MyTool;
 import milu.db.MyDBAbstract;
 import milu.db.access.MyDBOverFetchSizeException;
@@ -41,13 +41,6 @@ public class DBResultTab extends Tab
 		CounterInterface,
 		ChangeLangInterface
 {
-	// Property File for this class 
-	private static final String PROPERTY_FILENAME = 
-		"conf.lang.gui.ctrl.query.DBSqlTab";
-
-	// Language Resource
-	private ResourceBundle langRB = ResourceBundle.getBundle( PROPERTY_FILENAME );
-	
 	private DBView          dbView = null;
 	
 	// TextField for SQL
@@ -77,7 +70,7 @@ public class DBResultTab extends Tab
 		this.textFieldSQL.setEditable(false);
 		
         // https://docs.oracle.com/javafx/2/ui_controls/table-view.htm
-        this.tableViewSQL = new SqlTableView();
+        this.tableViewSQL = new SqlTableView(this.dbView);
         this.lowerPane.getChildren().add( this.tableViewSQL );
         
 		this.labelCntSQL.getStyleClass().add("DBSqlTab_Label_On_StatusBar");
@@ -160,6 +153,7 @@ public class DBResultTab extends Tab
 	public void setException( Exception ex )
 	{
 		this.lowerPane.getChildren().removeAll(this.lowerPane.getChildren());
+		ResourceBundle langRB = this.dbView.getMainController().getLangResource("conf.lang.gui.ctrl.query.DBSqlTab");
 		if ( ex instanceof MyDBOverFetchSizeException )
 		{
 			Label     labelTitle = new Label( langRB.getString("TITLE_OVER_FETCH_SIZE") );
@@ -225,6 +219,7 @@ public class DBResultTab extends Tab
 	public void switchDirection()
 	{
 		long startTime = System.nanoTime();
+		ResourceBundle langRB = this.dbView.getMainController().getLangResource("conf.lang.gui.ctrl.query.DBSqlTab");
 		int cnt = this.tableViewSQL.getRowSize();
 		if ( cnt > 0 )
 		{
@@ -265,6 +260,7 @@ public class DBResultTab extends Tab
 	{
 		System.out.println( "SQLState:" + sqlEx.getSQLState() );
 		System.out.println( "ErrorCode:" + sqlEx.getErrorCode() );
+		ResourceBundle langRB = this.dbView.getMainController().getLangResource("conf.lang.gui.ctrl.query.DBSqlTab");
 		
 		Label     labelTitle = new Label( langRB.getString("TITLE_EXEC_QUERY_ERROR") );
 		
@@ -335,14 +331,6 @@ public class DBResultTab extends Tab
 		this.tableViewSQL.copyTableWithHead();
 	}
 	
-	/**
-	 * Load Language Resource
-	 */
-	private void loadLangResource()
-	{
-		this.langRB = ResourceBundle.getBundle( PROPERTY_FILENAME );
-	}
-	
 	/**************************************************
 	 * Override from ChangeLangInterface
 	 ************************************************** 
@@ -350,7 +338,6 @@ public class DBResultTab extends Tab
 	@Override	
 	public void changeLang()
 	{
-		this.loadLangResource();
 		this.tableViewSQL.changeLang();
 	}
 	

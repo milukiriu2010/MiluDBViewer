@@ -8,7 +8,6 @@ import java.util.Map;
 import javafx.scene.Node;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TreeItem;
-import javafx.scene.image.ImageView;
 import javafx.collections.ObservableList;
 
 import milu.db.abs.AbsDBFactory;
@@ -16,8 +15,8 @@ import milu.db.abs.ObjDBFactory;
 import milu.db.abs.ObjDBInterface;
 import milu.entity.schema.SchemaEntity;
 import milu.gui.ctrl.schema.SchemaTableViewTab;
+import milu.main.MainController;
 import milu.tool.MyTool;
-import milu.ctrl.MainController;
 
 /**
  * This class is invoked, when "view" item is clicked on SchemaTreeView.
@@ -87,7 +86,7 @@ public class SelectedItemHandlerEachView extends SelectedItemHandlerAbstract
 		}
 		
 		// Create DBSchemaTableViewTab, if it doesn't exist.
-		SchemaTableViewTab newTab = new SchemaTableViewTab();
+		SchemaTableViewTab newTab = new SchemaTableViewTab(this.dbView);
 		newTab.setId( id );
 		newTab.setText( viewName );
 		this.tabPane.getTabs().add( newTab );

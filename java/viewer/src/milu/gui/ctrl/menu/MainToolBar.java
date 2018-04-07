@@ -6,52 +6,44 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Separator;
 import javafx.scene.control.ToolBar;
 import javafx.scene.control.Tooltip;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
 import milu.gui.ctrl.common.ChangeLangInterface;
 import milu.gui.view.DBView;
+import milu.main.MainController;
 import milu.tool.MyTool;
-import milu.ctrl.MainController;
 import milu.db.access.ExecSQLAbstract;
 import milu.db.access.ExecSQLExplainFactory;
-import milu.db.explain.ExplainDBFactory;
 
 public class MainToolBar extends ToolBar
 	implements ChangeLangInterface
 {
-	// Property File for this class 
-	private static final String PROPERTY_FILENAME = 
-		 	"conf.lang.gui.ctrl.menu.MainToolBar";
-
-	private ResourceBundle langRB = ResourceBundle.getBundle( PROPERTY_FILENAME );
-	
 	// DBView
 	private DBView  dbView = null;
 	
 	// Button to get data
-	private Button btnGo       = null;
+	private Button btnGo       = new Button();
 	// Button to get explain
-	private Button btnExplain  = null;
+	private Button btnExplain  = new Button();
 	// Button to toggle Horizontal/Vertical mode
-	private Button btnToggleHV = null;
+	private Button btnToggleHV = new Button();
 	// Button to commit
 	private Button btnCommit   = new Button();
 	// Button to rollback
 	private Button btnRollback = new Button();
 	// Button to add new tab
-	private Button btnNewTab   = null;
+	private Button btnNewTab   = new Button();
 	// Button to add new window
-	private Button btnNewWin   = null;
+	private Button btnNewWin   = new Button();
 	// Button to add new DB connection
-	private Button btnNewCon   = null;
+	private Button btnNewCon   = new Button();
 	// Button to copy table data(no column)
-	private Button btnCopyTblNoHead = null;
+	private Button btnCopyTblNoHead   = new Button();
 	// Button to copy table data(with column)
-	private Button btnCopyTblWithHead = null;
+	private Button btnCopyTblWithHead = new Button();
 	// Button  to Open Schema View
-	private Button btnSchema = null;
+	private Button btnSchema   = new Button();
 	
 	public MainToolBar( DBView dbView )
 	{
@@ -73,64 +65,37 @@ public class MainToolBar extends ToolBar
 		MainController mainCtrl = this.dbView.getMainController();
 		
 		// Button to get data
-		ImageView ivGo = new ImageView( mainCtrl.getImage("file:resources/images/execsql.png") );
-		ivGo.setFitWidth( 32 );
-		ivGo.setFitHeight( 32 );
-		this.btnGo = new Button( "", ivGo );
+		this.btnGo.setGraphic( MyTool.createImageView( 24, 24, mainCtrl.getImage("file:resources/images/execsql.png") ) );
 		
 		// Button to get explain
-		ImageView   ivExplain = new ImageView( mainCtrl.getImage("file:resources/images/explain.png") );
-		ivExplain.setFitWidth( 32 );
-		ivExplain.setFitHeight( 32 );
-		this.btnExplain = new Button( "", ivExplain );
+		this.btnExplain.setGraphic( MyTool.createImageView( 24, 24, mainCtrl.getImage("file:resources/images/explain.png") ) );
 		
 		// Button to toggle Horizontal/Vertical mode
-		ImageView ivToggleHV = new ImageView( mainCtrl.getImage("file:resources/images/direction.png") );
-		ivToggleHV.setFitWidth( 32 );
-		ivToggleHV.setFitHeight( 32 );
-		this.btnToggleHV = new Button( "", ivToggleHV );
+		this.btnToggleHV.setGraphic( MyTool.createImageView( 24, 24, mainCtrl.getImage("file:resources/images/direction.png") ) );
 		
 		// Button to commit
-		this.btnCommit.setGraphic( MyTool.createImageView( 32, 32, mainCtrl.getImage("file:resources/images/commit.png") ) );
+		this.btnCommit.setGraphic( MyTool.createImageView( 24, 24, mainCtrl.getImage("file:resources/images/commit.png") ) );
 		
 		// Button to rollback
-		this.btnRollback.setGraphic( MyTool.createImageView( 32, 32, mainCtrl.getImage("file:resources/images/rollback.png") ) );
+		this.btnRollback.setGraphic( MyTool.createImageView( 24, 24, mainCtrl.getImage("file:resources/images/rollback.png") ) );
 		
 		// Button to add a new tab
-		ImageView ivNewTab = new ImageView( mainCtrl.getImage("file:resources/images/newtab.png") );
-		ivNewTab.setFitWidth( 32 );
-		ivNewTab.setFitHeight( 32 );
-		this.btnNewTab = new Button( "", ivNewTab );
+		this.btnNewTab.setGraphic( MyTool.createImageView( 24, 24, mainCtrl.getImage("file:resources/images/newtab.png") ) );
 		
 		// Button to add a new window
-		ImageView ivNewWin = new ImageView( mainCtrl.getImage("file:resources/images/newwin.png") );
-		ivNewWin.setFitWidth( 32 );
-		ivNewWin.setFitHeight( 32 );
-		this.btnNewWin = new Button( "", ivNewWin );
+		this.btnNewWin.setGraphic( MyTool.createImageView( 24, 24, mainCtrl.getImage("file:resources/images/newwin.png") ) );
 		
 		// Button for new db connection
-		ImageView   ivNewCon = new ImageView( mainCtrl.getImage("file:resources/images/connect.png") );
-		ivNewCon.setFitWidth( 32 );
-		ivNewCon.setFitHeight( 32 );
-		this.btnNewCon = new Button( "", ivNewCon );
+		this.btnNewCon.setGraphic( MyTool.createImageView( 24, 24, mainCtrl.getImage("file:resources/images/connect.png") ) );
 		
 		// Button to copy table data(no column)
-		ImageView ivCopyTblNoHead = new ImageView( mainCtrl.getImage("file:resources/images/copy.png") );
-		ivCopyTblNoHead.setFitWidth( 32 );
-		ivCopyTblNoHead.setFitHeight( 32 );
-		this.btnCopyTblNoHead = new Button( "", ivCopyTblNoHead );
+		this.btnCopyTblNoHead.setGraphic( MyTool.createImageView( 24, 24, mainCtrl.getImage("file:resources/images/copy.png") ) );
 		
 		// Button to copy table data(with column)
-		ImageView ivCopyTblWithHead = new ImageView( mainCtrl.getImage("file:resources/images/copy2.png") );
-		ivCopyTblWithHead.setFitWidth( 32 );
-		ivCopyTblWithHead.setFitHeight( 32 );
-		this.btnCopyTblWithHead = new Button( "", ivCopyTblWithHead );
+		this.btnCopyTblWithHead.setGraphic( MyTool.createImageView( 24, 24, mainCtrl.getImage("file:resources/images/copy2.png") ) );
 		
 		// Button to Open Schema View
-		ImageView ivSchema = new ImageView( mainCtrl.getImage("file:resources/images/schema.png") );
-		ivSchema.setFitWidth( 32 );
-		ivSchema.setFitHeight( 32 );
-		this.btnSchema = new Button( "", ivSchema );
+		this.btnSchema.setGraphic( MyTool.createImageView( 24, 24, mainCtrl.getImage("file:resources/images/schema.png") ) );
 		
 		// put buttons on this ToolBar
 		this.getItems().addAll
@@ -138,13 +103,6 @@ public class MainToolBar extends ToolBar
 			new Separator(),
 			this.btnGo
 		);
-		
-		/*
-		if ( ExplainDBFactory.getInstance( this.dbView.getMyDBAbstract(), mainCtrl ) != null )
-		{
-			this.getItems().add( this.btnExplain );
-		}
-		*/
 		
 		ExecSQLAbstract execSQLAbs = new ExecSQLExplainFactory().createFactory( null, this.dbView.getMyDBAbstract(), mainCtrl.getAppConf() );
 		if ( execSQLAbs != null )
@@ -218,7 +176,7 @@ public class MainToolBar extends ToolBar
 		(
 			new KeyCodeCombination( KeyCode.G, KeyCombination.CONTROL_DOWN ),
 			// Runnable.run()
-			()->dbView.Go()
+			dbView::Go
 		);
 		
 		// ---------------------------------
@@ -228,7 +186,7 @@ public class MainToolBar extends ToolBar
 		this.btnToggleHV.getScene().getAccelerators().put
 		(
 			new KeyCodeCombination( KeyCode.D, KeyCombination.CONTROL_DOWN ),	
-			()->dbView.switchDirection()
+			dbView::switchDirection
 		);
 		
 		// ---------------------------------
@@ -238,13 +196,15 @@ public class MainToolBar extends ToolBar
 		this.btnNewTab.getScene().getAccelerators().put
 		(
 			new KeyCodeCombination( KeyCode.T, KeyCombination.CONTROL_DOWN ),	
-			()->dbView.createNewTab()
+			dbView::createNewTab
 		);
+		/*
 		this.btnNewTab.getScene().getAccelerators().put
 		(
 			new KeyCodeCombination( KeyCode.T, KeyCombination.CONTROL_DOWN, KeyCombination.ALT_DOWN ),	
-			()->dbView.createNewTab()
+			dbView::createNewTab
 		);
+		*/
 		
 		// ---------------------------------
 		// Mnemonic for "Open new window"
@@ -253,7 +213,7 @@ public class MainToolBar extends ToolBar
 		this.btnNewWin.getScene().getAccelerators().put
 		(
 			new KeyCodeCombination( KeyCode.N, KeyCombination.CONTROL_DOWN ),	
-			()->dbView.createNewWindow()
+			dbView::createNewWindow
 		);
 
 		// ------------------------------------------------------------
@@ -263,7 +223,7 @@ public class MainToolBar extends ToolBar
 		this.btnCopyTblNoHead.getScene().getAccelerators().put
 		(
 			new KeyCodeCombination( KeyCode.C, KeyCombination.ALT_DOWN ),	
-			()->dbView.copyTableNoHead()
+			dbView::copyTableNoHead
 		);
 
 		// ------------------------------------------------------------
@@ -274,7 +234,7 @@ public class MainToolBar extends ToolBar
 		(
 			//new KeyCodeCombination( KeyCode.C, KeyCombination.ALT_DOWN | KeyCombination.SHIFT_DOWN ),	
 			KeyCombination.keyCombination( "ALT+SHIFT+C" ),
-			()->dbView.copyTableWithHead()
+			dbView::copyTableWithHead
 		);
 	}
 	
@@ -293,14 +253,6 @@ public class MainToolBar extends ToolBar
 		// disable until finishing to get schema list.
 		this.btnSchema.setDisable(false);
 	}
-
-	/**
-	 * Load Language Resource
-	 */
-	private void loadLangResource()
-	{
-		this.langRB = ResourceBundle.getBundle( PROPERTY_FILENAME );
-	}
 	
 	/**************************************************
 	 * Override from ChangeLangInterface
@@ -309,13 +261,14 @@ public class MainToolBar extends ToolBar
 	@Override	
 	public void changeLang()
 	{
-		this.loadLangResource();
+		MainController mainCtrl = this.dbView.getMainController();
+		ResourceBundle langRB = mainCtrl.getLangResource("conf.lang.gui.ctrl.menu.MainToolBar");
 		
 		// ----------------------------------------------
 		// ToolTip
 		//   Button[Exec Query] 
 		// ----------------------------------------------
-		Tooltip tipGo = new Tooltip( this.langRB.getString( "TIP_EXECSQL" ) );
+		Tooltip tipGo = new Tooltip( langRB.getString( "TIP_EXECSQL" ) );
 		tipGo.getStyleClass().add("MainToolBar_MyToolTip");
 		this.btnGo.setTooltip( tipGo );
 		
@@ -323,7 +276,7 @@ public class MainToolBar extends ToolBar
 		// ToolTip
 		//   Button[Exec Explain] 
 		// ----------------------------------------------
-		Tooltip tipExplain = new Tooltip( this.langRB.getString( "TIP_EXEC_EXPLAIN" ) );
+		Tooltip tipExplain = new Tooltip( langRB.getString( "TIP_EXEC_EXPLAIN" ) );
 		tipExplain.getStyleClass().add("MainToolBar_MyToolTip");
 		this.btnExplain.setTooltip( tipExplain );
 		
@@ -331,7 +284,7 @@ public class MainToolBar extends ToolBar
 		// ToolTip
 		//   Button[Commit] 
 		// ----------------------------------------------
-		Tooltip tipCommit = new Tooltip( this.langRB.getString( "TIP_COMMIT" ) );
+		Tooltip tipCommit = new Tooltip( langRB.getString( "TIP_COMMIT" ) );
 		tipCommit.getStyleClass().add("MainToolBar_MyToolTip");
 		this.btnCommit.setTooltip( tipCommit );
 		
@@ -339,7 +292,7 @@ public class MainToolBar extends ToolBar
 		// ToolTip
 		//   Button[Rollback] 
 		// ----------------------------------------------
-		Tooltip tipRollback = new Tooltip( this.langRB.getString( "TIP_ROLLBACK" ) );
+		Tooltip tipRollback = new Tooltip( langRB.getString( "TIP_ROLLBACK" ) );
 		tipRollback.getStyleClass().add("MainToolBar_MyToolTip");
 		this.btnRollback.setTooltip( tipRollback );
 		
@@ -347,7 +300,7 @@ public class MainToolBar extends ToolBar
 		// ToolTip
 		//   Button[Toggle Horizontal/Vertical mode] 
 		// ----------------------------------------------
-		Tooltip tipToggleHV = new Tooltip(this.langRB.getString( "TIP_TOGGLE_HV" ));
+		Tooltip tipToggleHV = new Tooltip( langRB.getString( "TIP_TOGGLE_HV" ));
 		tipToggleHV.getStyleClass().add("MainToolBar_MyToolTip");
 		this.btnToggleHV.setTooltip( tipToggleHV );
 
@@ -355,7 +308,7 @@ public class MainToolBar extends ToolBar
 		// ToolTip
 		//   Button[New Tab] 
 		// ----------------------------------------------
-		Tooltip tipNewTab = new Tooltip(this.langRB.getString( "TIP_NEW_TAB" ));
+		Tooltip tipNewTab = new Tooltip( langRB.getString( "TIP_NEW_TAB" ));
 		tipNewTab.getStyleClass().add("MainToolBar_MyToolTip");
 		this.btnNewTab.setTooltip( tipNewTab );
 
@@ -363,7 +316,7 @@ public class MainToolBar extends ToolBar
 		// ToolTip
 		//   Button[New Window] 
 		// ----------------------------------------------
-		Tooltip tipNewWin = new Tooltip(this.langRB.getString( "TIP_NEW_WIN" ));
+		Tooltip tipNewWin = new Tooltip( langRB.getString( "TIP_NEW_WIN" ));
 		tipNewWin.getStyleClass().add("MainToolBar_MyToolTip");
 		this.btnNewWin.setTooltip( tipNewWin );
 
@@ -371,7 +324,7 @@ public class MainToolBar extends ToolBar
 		// ToolTip
 		//   Button[New DB Connection] 
 		// ----------------------------------------------
-		Tooltip tipNewCon = new Tooltip(this.langRB.getString( "TIP_NEW_CON" ));
+		Tooltip tipNewCon = new Tooltip( langRB.getString( "TIP_NEW_CON" ));
 		tipNewCon.getStyleClass().add("MainToolBar_MyToolTip");
 		this.btnNewCon.setTooltip( tipNewCon );
 
@@ -379,7 +332,7 @@ public class MainToolBar extends ToolBar
 		// ToolTip
 		//   Button[Copy table data without column] 
 		// ----------------------------------------------
-		Tooltip tipCopyTblNoHead = new Tooltip(this.langRB.getString( "TIP_COPY_TABLE_NO_HEAD" ));
+		Tooltip tipCopyTblNoHead = new Tooltip( langRB.getString( "TIP_COPY_TABLE_NO_HEAD" ));
 		tipCopyTblNoHead.getStyleClass().add("MainToolBar_MyToolTip");
 		this.btnCopyTblNoHead.setTooltip( tipCopyTblNoHead );
 
@@ -387,7 +340,7 @@ public class MainToolBar extends ToolBar
 		// ToolTip
 		//   Button[Copy table data with column] 
 		// ----------------------------------------------
-		Tooltip tipCopyTblWithHead = new Tooltip(this.langRB.getString( "TIP_COPY_TABLE_WITH_HEAD" ));
+		Tooltip tipCopyTblWithHead = new Tooltip( langRB.getString( "TIP_COPY_TABLE_WITH_HEAD" ));
 		tipCopyTblWithHead.getStyleClass().add("MainToolBar_MyToolTip");
 		this.btnCopyTblWithHead.setTooltip( tipCopyTblWithHead );
 
@@ -395,7 +348,7 @@ public class MainToolBar extends ToolBar
 		// ToolTip
 		//   Button[Open Schema View] 
 		// ----------------------------------------------
-		Tooltip tipSchema = new Tooltip(this.langRB.getString( "TIP_SCHEMA" ));
+		Tooltip tipSchema = new Tooltip( langRB.getString( "TIP_SCHEMA" ));
 		tipSchema.getStyleClass().add("MainToolBar_MyToolTip");
 		this.btnSchema.setTooltip( tipSchema );
 	}

@@ -21,8 +21,8 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ScrollBar;
 import javafx.scene.effect.Blend;
 import javafx.scene.effect.BlendMode;
-import milu.ctrl.MainController;
 import milu.entity.schema.SchemaEntity;
+import milu.main.MainController;
 
 public class MyTool
 {
@@ -236,7 +236,7 @@ public class MyTool
 		return null;
 	}
 
-	public static Node searchChildNode( Node node, final Class searchNodeClass )
+	public static Node searchChildNode( Node node, final Class<?> searchNodeClass )
 	{
 		if ( node == null )
 		{

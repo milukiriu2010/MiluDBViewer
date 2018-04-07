@@ -22,7 +22,7 @@ abstract public class SelectedItemHandlerAbstract
 	
 	protected TabPane       tabPane = null;
 	
-	protected DBView                  dbView = null;
+	protected DBView        dbView = null;
 	
 	protected MyDBAbstract  myDBAbs = null;
 	
