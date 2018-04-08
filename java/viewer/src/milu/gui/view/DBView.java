@@ -187,7 +187,9 @@ public class DBView extends Stage
 			(event)->
 			{
 				System.out.println( "dbView Shown." );
-				final CollectTask collectTask = new CollectTask( this.myDBAbs );
+				final CollectTask collectTask = new CollectTask();
+				collectTask.setMainController(this.mainCtrl);
+				collectTask.setMyDBAbstract(this.myDBAbs);
 				// execute task
 				this.service.submit( collectTask );
 				

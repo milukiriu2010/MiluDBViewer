@@ -1,6 +1,7 @@
 package milu.db.mateview;
 
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
@@ -73,6 +74,7 @@ public class MaterializedViewDBPostgres extends MaterializedViewDBAbstract {
 			ResultSet rs = stmt.executeQuery( sql );
 		)
 		{
+			/*
 			while ( rs.next() )
 			{
 				Map<String,String> dataRow = new LinkedHashMap<String,String>();
@@ -83,12 +85,38 @@ public class MaterializedViewDBPostgres extends MaterializedViewDBAbstract {
 				dataRow.put( "data_default"  , rs.getString("data_default") );
 				dataLst.add( dataRow );
 			}
+			*/
+			ResultSetMetaData rsmd = rs.getMetaData();
+			int headCnt = rsmd.getColumnCount();
+			System.out.println( "---DB COLUMN----------------" );
+			for ( int i = 1; i <= headCnt; i++ )
+			{
+				Map<String,String> dataRow = new LinkedHashMap<String,String>();
+				dataRow.put( "column_name"   , rsmd.getColumnName(i) );
+				dataRow.put( "data_type"     , rsmd.getColumnTypeName(i) );
+				dataRow.put( "data_size"     , String.valueOf(rsmd.getPrecision(i)) );
+				String nullAble = "NULL NG";
+				if (rsmd.isNullable(i) == ResultSetMetaData.columnNullable)
+				{
+					nullAble = "NULL OK";
+				}
+				dataRow.put( "nullable"      , nullAble );
+				//dataRow.put( "data_default"  , rs.getString("data_default") );
+				dataLst.add( dataRow );
+			}			
 		}
 		return dataLst;
 	}
 	
 	// SQL for View Definition
 	@Override
+	protected String definitionSQL( String schemaName, String viewName )
+	{
+		String sql = 
+			" select * from " + schemaName + "." + viewName + " limit 1"; 
+		return sql;
+	}
+	/*
 	protected String definitionSQL( String schemaName, String viewName )
 	{
 		String sql = 
@@ -116,5 +144,5 @@ public class MaterializedViewDBPostgres extends MaterializedViewDBAbstract {
 			" order by ordinal_position";
 		return sql;
 	}
-	
+	*/
 }

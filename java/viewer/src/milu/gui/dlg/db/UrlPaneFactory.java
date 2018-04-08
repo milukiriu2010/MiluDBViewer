@@ -35,7 +35,7 @@ class UrlPaneFactory implements PaneFactory
 		}
 		else
 		{
-			urlPaneAbs = new UrlPaneCommon();
+			urlPaneAbs = new UrlPaneGeneral();
 		}
 		urlPaneAbs.createPane( dlg, mainCtrl, myDBAbs, extLangRB, mapProp);
 		return urlPaneAbs;

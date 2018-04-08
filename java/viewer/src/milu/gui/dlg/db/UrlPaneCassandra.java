@@ -73,7 +73,7 @@ public class UrlPaneCassandra extends UrlPaneAbstract
 	private TextArea  urlTextArea       = new TextArea();
 	
 	@Override
-	public void createPane( Dialog<?> dlg, MainController mainCtrl, MyDBAbstract myDBAbs, ResourceBundle extLangRB, Map<String,String> mapProp )
+	void createPane( Dialog<?> dlg, MainController mainCtrl, MyDBAbstract myDBAbs, ResourceBundle extLangRB, Map<String,String> mapProp )
 	{
 		this.dlg       = dlg;
 		this.mainCtrl  = mainCtrl;

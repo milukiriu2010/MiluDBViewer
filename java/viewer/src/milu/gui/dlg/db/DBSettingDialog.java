@@ -87,6 +87,7 @@ public class DBSettingDialog extends Dialog<MyDBAbstract>
 		this.dbTypeList.add( MyDBFactory.getInstance( "PostgreSQL" ) );
 		this.dbTypeList.add( MyDBFactory.getInstance( "MySQL" ) );
 		this.dbTypeList.add( MyDBFactory.getInstance( "Cassandra" ) );
+		this.dbTypeList.add( MyDBFactory.getInstance( "[<<Any>>]" ) );
 		Collections.sort( this.dbTypeList );
 		ObservableList<MyDBAbstract>  obsList = FXCollections.observableArrayList( this.dbTypeList );
 		this.comboBoxDBType.setItems( obsList );
@@ -282,6 +283,14 @@ public class DBSettingDialog extends Dialog<MyDBAbstract>
     		ResourceBundle langRB = this.mainCtrl.getLangResource("conf.lang.gui.common.MyAlert");
     		alertDlg.setHeaderText( langRB.getString( "TITLE_DB_CONNECT_ERROR" ) );
     		alertDlg.setTxtExp( sqlEx );
+    		alertDlg.showAndWait();
+		}
+		catch ( Exception ex )
+		{
+    		MyAlertDialog alertDlg = new MyAlertDialog( AlertType.WARNING, this.mainCtrl );
+    		ResourceBundle langRB = this.mainCtrl.getLangResource("conf.lang.gui.common.MyAlert");
+    		alertDlg.setHeaderText( langRB.getString( "TITLE_MISC_ERROR" ) );
+    		alertDlg.setTxtExp( ex );
     		alertDlg.showAndWait();
 		}
 		

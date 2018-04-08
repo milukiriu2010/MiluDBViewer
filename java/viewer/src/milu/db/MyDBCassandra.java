@@ -18,9 +18,15 @@ import java.util.Map;
 public class MyDBCassandra extends MyDBAbstract
 {
 	@Override
+	void init()
+	{
+		this.driverClassName = "com.github.cassandra.jdbc.CassandraDriver"; 
+	}
+	
+	@Override
 	protected void loadDriver() throws ClassNotFoundException
 	{
-		Class.forName( "com.github.cassandra.jdbc.CassandraDriver" );
+		Class.forName( this.driverClassName );
 	}
 
 	@Override

@@ -1,4 +1,4 @@
-package milu.task;
+package milu.task.query;
 
 import javafx.application.Platform;
 import javafx.concurrent.Task;
@@ -11,11 +11,10 @@ import javafx.scene.control.TabPane;
 import milu.db.MyDBAbstract;
 import milu.gui.ctrl.query.DBResultTab;
 import milu.gui.view.DBView;
-
-import milu.conf.AppConf;
+import milu.main.AppConf;
 import milu.ctrl.sqlparse.SQLBag;
 
-public class ExecExplainAllTask extends Task<Exception> 
+public class ExecScriptAllTask extends Task<Exception> 
 {
 	private DBView       dbView     = null;
 	private MyDBAbstract myDBAbs    = null;
@@ -52,7 +51,7 @@ public class ExecExplainAllTask extends Task<Exception>
 	@Override
 	protected Exception call()
 	{
-		System.out.println( "ExecExplainAllTask:start." );
+		System.out.println( "ExecScriptAllTask:start." );
 		final double MAX = 100.0;
 		this.updateProgress( 0.0, MAX );
 		int size = -1;
@@ -69,20 +68,20 @@ public class ExecExplainAllTask extends Task<Exception>
 				this.updateProgress( i/size, MAX );
 				SQLBag sqlBag = this.sqlBagLst.get(i);
 				
-				ExecExplainEach execExplainEach = new ExecExplainEach();
-				execExplainEach.setNo( (i+1) );
-				execExplainEach.setDBView(this.dbView);
-				execExplainEach.setMyDBAbstract(this.myDBAbs);
-				execExplainEach.setAppConf(this.appConf);
-				execExplainEach.setTabPane(this.tabPane);
-				execExplainEach.setSQLBag(sqlBag);
-				execExplainEach.exec();
+				ExecScriptEach execScriptEach = new ExecScriptEach();
+				execScriptEach.setNo( (i+1) );
+				execScriptEach.setDBView(this.dbView);
+				execScriptEach.setMyDBAbstract(this.myDBAbs);
+				execScriptEach.setAppConf(this.appConf);
+				execScriptEach.setTabPane(this.tabPane);
+				execScriptEach.setSQLBag(sqlBag);
+				execScriptEach.exec();
 				
 				List<String> resData = new ArrayList<>();
 				// Script
 				resData.add( "Script" + (i+1) );
 				// Result
-				Exception eachEx = execExplainEach.getMyEx();
+				Exception eachEx = execScriptEach.getMyEx();
 				String result = "OK";
 				if ( eachEx != null )
 				{
@@ -93,9 +92,9 @@ public class ExecExplainAllTask extends Task<Exception>
 				// Type
 				resData.add( sqlBag.getType().toString() ); 
 				// Cnt
-				resData.add( String.valueOf(execExplainEach.getProcCnt()) );
+				resData.add( String.valueOf(execScriptEach.getProcCnt()) );
 				// Exec Time
-				resData.add( String.format( "%,d", execExplainEach.getExecTime() ) + "nsec" );
+				resData.add( String.format( "%,d", execScriptEach.getExecTime() ) + "nsec" );
 				// SQL
 				resData.add( sqlBag.getSQL() );
 				resDataLst.add(resData);

@@ -6,7 +6,7 @@ import java.util.List;
 
 import milu.ctrl.sqlparse.SQLBag;
 import milu.db.MyDBAbstract;
-import milu.conf.AppConf;
+import milu.main.AppConf;
 
 abstract public class ExecSQLAbstract 
 {

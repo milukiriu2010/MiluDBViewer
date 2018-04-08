@@ -1,5 +1,7 @@
 package milu.entity.schema;
 
+import milu.main.MainController;
+
 public class SchemaEntityFactory
 {
 	public static SchemaEntity createInstance( String name, SchemaEntity.SCHEMA_TYPE schemaType )
@@ -82,7 +84,7 @@ public class SchemaEntityFactory
 		return schemaEntity;
 	}
 	
-	public static SchemaEntity createInstance( SchemaEntity.SCHEMA_TYPE schemaType )
+	public static SchemaEntity createInstance( SchemaEntity.SCHEMA_TYPE schemaType, MainController mainCtrl )
 	{
 		SchemaEntity schemaEntity = null;
 		if ( schemaType == SchemaEntity.SCHEMA_TYPE.ROOT_TABLE )
@@ -145,6 +147,7 @@ public class SchemaEntityFactory
 		{
 			return null;
 		}
+		schemaEntity.setMainController(mainCtrl);
 		schemaEntity.init();
 		return schemaEntity;
 	}

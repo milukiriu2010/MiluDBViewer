@@ -9,6 +9,8 @@ import java.util.ArrayList;
 import milu.entity.schema.search.VisitorInterface;
 import milu.gui.ctrl.common.ChangeLangInterface;
 
+import milu.main.MainController;
+
 // This class will be abstract
 abstract public class SchemaEntity
 	implements ChangeLangInterface
@@ -144,7 +146,7 @@ abstract public class SchemaEntity
 	protected List<Map<String,String>>  definitionLst = new ArrayList<>();
 	
 	// DDL
-	protected String       srcSQL = null;
+	protected String              srcSQL = null;
 	
 	// parent
 	protected SchemaEntity        parentEntity = null;
@@ -152,17 +154,25 @@ abstract public class SchemaEntity
 	// children
 	protected List<SchemaEntity>  entityLst = new ArrayList<>();
 	
+	protected MainController      mainCtrl = null;
+	/*
 	// Property File for this class 
 	protected static final String PROPERTY_FILENAME = 
 		 	"conf.lang.entity.schema.SchemaEntity";
 
-	protected static ResourceBundle langRB = ResourceBundle.getBundle( PROPERTY_FILENAME );	
+	protected static ResourceBundle langRB = ResourceBundle.getBundle( PROPERTY_FILENAME );
+	*/	
 
 	abstract void init();
 	
 	public String toString()
 	{
 		return this.name;
+	}
+	
+	void setMainController( MainController mainCtrl )
+	{
+		this.mainCtrl = mainCtrl;
 	}
 	
 	public String getName()
@@ -180,8 +190,9 @@ abstract public class SchemaEntity
 	
 	public void setName()
 	{
-		if ( this.nameId != null )
+		if ( this.nameId != null && this.mainCtrl != null )
 		{
+			ResourceBundle langRB = this.mainCtrl.getLangResource("conf.lang.entity.schema.SchemaEntity");
 			this.name = langRB.getString( this.nameId );
 		}
 	}
@@ -305,11 +316,6 @@ abstract public class SchemaEntity
 	public void accept( VisitorInterface visitor )
 	{
 		visitor.visit(this);
-	}
-	
-	public static void loadResourceBundle()
-	{
-		langRB = ResourceBundle.getBundle( PROPERTY_FILENAME );
 	}
 	
 	@Override

@@ -31,13 +31,12 @@ import milu.gui.ctrl.common.ExecQueryDBInterface;
 import milu.gui.ctrl.common.FocusInterface;
 import milu.gui.ctrl.common.ToggleHorizontalVerticalInterface;
 import milu.gui.view.DBView;
+import milu.main.AppConf;
 import milu.main.MainController;
+import milu.task.query.ExecExplainAllTask;
+import milu.task.query.ExecScriptAllTask;
 import milu.tool.MyTool;
 import milu.db.MyDBAbstract;
-import milu.task.ExecScriptAllTask;
-import milu.task.ExecExplainAllTask;
-
-import milu.conf.AppConf;
 
 public class DBSqlScriptTab extends Tab
 	implements 

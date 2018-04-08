@@ -11,8 +11,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import javafx.stage.DirectoryChooser;
 import javafx.scene.layout.HBox;
-
-import milu.conf.AppConf;
+import milu.main.AppConf;
 import milu.main.MainController;
 
 public class AppPaneDBConfOracle extends AppPaneAbstract 

@@ -1,9 +1,9 @@
 package milu.db.access;
 
-import milu.conf.AppConf;
 import milu.ctrl.sqlparse.SQLBag;
 import milu.db.MyDBAbstract;
 import milu.db.MyDBPostgres;
+import milu.main.AppConf;
 import milu.db.MyDBMySQL;
 import milu.db.MyDBOracle;
 

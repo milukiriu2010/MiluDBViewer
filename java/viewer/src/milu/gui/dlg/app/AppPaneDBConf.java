@@ -8,7 +8,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import milu.conf.AppConf;
+import milu.main.AppConf;
 import milu.main.MainController;
 
 public class AppPaneDBConf extends AppPaneAbstract 

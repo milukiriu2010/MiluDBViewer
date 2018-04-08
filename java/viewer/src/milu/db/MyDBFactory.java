@@ -4,25 +4,28 @@ public class MyDBFactory
 {
 	public static MyDBAbstract getInstance( String dbType )
 	{
+		MyDBAbstract myDBAbs = null;
 		if ( "Oracle".equals( dbType ) )
 		{
-			return new MyDBOracle();
+			myDBAbs = new MyDBOracle();
 		}
 		else if ( "PostgreSQL".equals( dbType ) )
 		{
-			return new MyDBPostgres();
+			myDBAbs = new MyDBPostgres();
 		}
 		else if ( "MySQL".equals( dbType ) )
 		{
-			return new MyDBMySQL();
+			myDBAbs = new MyDBMySQL();
 		}
 		else if ( "Cassandra".equals( dbType ) )
 		{
-			return new MyDBCassandra();
+			myDBAbs = new MyDBCassandra();
 		}
 		else
 		{
-			return null;
+			myDBAbs = new MyDBGeneral();
 		}
+		myDBAbs.init();
+		return myDBAbs;
 	}
 }

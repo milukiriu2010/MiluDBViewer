@@ -20,6 +20,12 @@ import java.util.Map;
  */
 public class MyDBPostgres extends MyDBAbstract 
 {
+	@Override
+	void init()
+	{
+		this.driverClassName = "org.postgresql.Driver"; 
+	}
+	
 	/**
 	 * Load JDBC Driver
 	 ***********************************************
@@ -28,7 +34,7 @@ public class MyDBPostgres extends MyDBAbstract
 	@Override
 	protected void loadDriver() throws ClassNotFoundException
 	{
-		Class.forName( "org.postgresql.Driver" );
+		Class.forName( this.driverClassName );
 	}
 
 	@Override

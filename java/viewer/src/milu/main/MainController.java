@@ -24,7 +24,6 @@ import milu.gui.ctrl.common.DraggingTabPaneSupport;
 import milu.db.MyDBAbstract;
 import milu.entity.schema.SchemaEntity;
 import milu.entity.schema.search.ChangeLangSchemaEntityVisitor;
-import milu.conf.AppConf;
 
 public class MainController
 {
@@ -46,10 +45,6 @@ public class MainController
 	
 	// Language Resource Map
 	private Map<String,ResourceBundle> langMap = new HashMap<>();
-	
-	public MainController()
-	{
-	}
 	
 	void setApplication( Application application )
 	{
@@ -148,6 +143,7 @@ public class MainController
 	{
 		String[] languagess =
 		{
+			"conf.lang.entity.schema.SchemaEntity",
 			"conf.lang.gui.common.MyAlert",
 			"conf.lang.gui.ctrl.menu.MainMenuBar",
 			"conf.lang.gui.ctrl.menu.MainToolBar",
@@ -350,7 +346,6 @@ public class MainController
 		
 		this.loadLangResources();
 		
-		SchemaEntity.loadResourceBundle();
 		this.myDBViewMap.forEach
 		( 
 			(myDBAbs, dbViewLst)->

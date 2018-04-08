@@ -23,6 +23,12 @@ import java.util.Map;
  */
 public class MyDBOracle extends MyDBAbstract 
 {
+	@Override
+	void init()
+	{
+		this.driverClassName = "com.github.cassandra.jdbc.CassandraDriver"; 
+	}
+	
 	/**
 	 * Load JDBC Driver
 	 ***********************************************
@@ -31,7 +37,7 @@ public class MyDBOracle extends MyDBAbstract
 	@Override
 	protected void loadDriver() throws ClassNotFoundException 
 	{
-		Class.forName( "oracle.jdbc.driver.OracleDriver" );
+		Class.forName( this.driverClassName );
 	}
 
 	@Override

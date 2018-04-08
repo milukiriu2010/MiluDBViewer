@@ -24,7 +24,6 @@ import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.Alert.AlertType;
-import javafx.scene.image.ImageView;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Button;
 import javafx.scene.layout.GridPane;
@@ -35,11 +34,12 @@ import javafx.application.Platform;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
 import milu.db.MyDBAbstract;
-import milu.conf.AppConf;
 import milu.file.MyFileAbstract;
 import milu.file.MyFileFactory;
 import milu.gui.dlg.MyAlertDialog;
+import milu.main.AppConf;
 import milu.main.MainController;
+import milu.tool.MyTool;
 
 public class UrlPaneOracle extends UrlPaneAbstract
 {
@@ -106,7 +106,7 @@ public class UrlPaneOracle extends UrlPaneAbstract
 	private TextArea  urlTextArea       = new TextArea();
 	
 	@Override
-	public void createPane( Dialog<?> dlg, MainController mainCtrl, MyDBAbstract myDBAbs, ResourceBundle extLangRB, Map<String,String> mapProp )
+	void createPane( Dialog<?> dlg, MainController mainCtrl, MyDBAbstract myDBAbs, ResourceBundle extLangRB, Map<String,String> mapProp )
 	{
 		this.dlg       = dlg;
 		this.mainCtrl  = mainCtrl;
@@ -208,10 +208,7 @@ public class UrlPaneOracle extends UrlPaneAbstract
 		}
 		
 		// "select folder" button
-		ImageView   ivFolder = new ImageView( this.mainCtrl.getImage("file:resources/images/folder.png") );
-		ivFolder.setFitWidth(16);
-		ivFolder.setFitHeight(16);
-		this.folderBtn.setGraphic( ivFolder );
+		this.folderBtn.setGraphic( MyTool.createImageView( 16, 16, this.mainCtrl.getImage("file:resources/images/folder.png") ));
 		
 		// ----------------------------------------------------
 		// Items for "Freehand"
@@ -219,10 +216,7 @@ public class UrlPaneOracle extends UrlPaneAbstract
 		this.tmplTextField.setText("jdbc:oracle:thin:@//<host>[:1521]/<service_name>[?internal_logon=sysdba|sysoper]");
 		this.tmplTextField.setEditable(false);
 
-		ImageView   ivCopy = new ImageView( this.mainCtrl.getImage("file:resources/images/copy.png") );
-		ivCopy.setFitWidth(16);
-		ivCopy.setFitHeight(16);
-		this.tmplBtn.setGraphic(ivCopy);
+		this.tmplBtn.setGraphic( MyTool.createImageView( 16, 16, this.mainCtrl.getImage("file:resources/images/copy.png") ));
 		
 		// ----------------------------------------------------
 		// Items for "All"

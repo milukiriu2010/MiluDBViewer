@@ -19,6 +19,12 @@ import java.util.Map;
  */
 public class MyDBMySQL extends MyDBAbstract 
 {
+	@Override
+	void init()
+	{
+		this.driverClassName = "com.mysql.jdbc.Driver"; 
+	}
+	
 	/**
 	 * Load JDBC Driver
 	 ***********************************************
@@ -27,7 +33,7 @@ public class MyDBMySQL extends MyDBAbstract
 	@Override
 	protected void loadDriver() throws ClassNotFoundException 
 	{
-		Class.forName( "com.mysql.jdbc.Driver" );
+		Class.forName( this.driverClassName );
 	}
 
 	@Override

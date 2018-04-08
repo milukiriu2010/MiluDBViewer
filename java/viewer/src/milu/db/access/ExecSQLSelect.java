@@ -20,11 +20,6 @@ public class ExecSQLSelect extends ExecSQLAbstract
 	protected void clear()
 	{
 		super.clear();
-		//this.execStartTime = -1;
-		//this.execEndTime   = -1;
-		//this.colNameLst.clear();
-		//this.dataLst.clear();
-		
 		
 		this.colTypeNameLst.clear();
 		this.colClassNameLst.clear();

@@ -15,11 +15,20 @@ import milu.db.abs.ObjDBInterface;
 import milu.entity.schema.SchemaEntity;
 import milu.entity.schema.SchemaEntityFactory;
 
+import milu.main.MainController;
+
 public class CollectTask extends Task<Double>
 {
+	private MainController mainCtrl = null;
+	
 	private MyDBAbstract myDBAbs = null;
 	
-	public CollectTask( MyDBAbstract myDBAbs )
+	public void setMainController( MainController mainCtrl )
+	{
+		this.mainCtrl = mainCtrl;
+	}
+	
+	public void setMyDBAbstract( MyDBAbstract myDBAbs )
 	{
 		this.myDBAbs = myDBAbs;
 	}
@@ -132,78 +141,78 @@ public class CollectTask extends Task<Double>
 		//     -[ROOT_SEQUENCE]          => add
 		//     -[ROOT_ER]                => add
 		// ---------------------------------------
-		SchemaEntity rootTableEntity        = SchemaEntityFactory.createInstance( SchemaEntity.SCHEMA_TYPE.ROOT_TABLE );
+		SchemaEntity rootTableEntity        = SchemaEntityFactory.createInstance( SchemaEntity.SCHEMA_TYPE.ROOT_TABLE, this.mainCtrl );
 		schemaEntity.addEntity( rootTableEntity );
 		ObjDBFactory viewDBFactory = AbsDBFactory.getFactory( AbsDBFactory.FACTORY_TYPE.VIEW );
 		if ( viewDBFactory.getInstance(myDBAbs) != null )
 		{
-			SchemaEntity rootViewEntity         = SchemaEntityFactory.createInstance( SchemaEntity.SCHEMA_TYPE.ROOT_VIEW );
+			SchemaEntity rootViewEntity         = SchemaEntityFactory.createInstance( SchemaEntity.SCHEMA_TYPE.ROOT_VIEW, this.mainCtrl );
 			schemaEntity.addEntity( rootViewEntity );
 		}
 		ObjDBFactory systemViewDBFactory = AbsDBFactory.getFactory( AbsDBFactory.FACTORY_TYPE.SYSTEM_VIEW );
 		if ( systemViewDBFactory.getInstance(myDBAbs) != null )
 		{
-			SchemaEntity rootSystemViewEntity         = SchemaEntityFactory.createInstance( SchemaEntity.SCHEMA_TYPE.ROOT_SYSTEM_VIEW );
+			SchemaEntity rootSystemViewEntity         = SchemaEntityFactory.createInstance( SchemaEntity.SCHEMA_TYPE.ROOT_SYSTEM_VIEW, this.mainCtrl );
 			schemaEntity.addEntity( rootSystemViewEntity );
 		}
 		ObjDBFactory materializedViewDBFactory = AbsDBFactory.getFactory( AbsDBFactory.FACTORY_TYPE.MATERIALIZED_VIEW );
 		if ( materializedViewDBFactory.getInstance(myDBAbs) != null )
 		{
-			SchemaEntity rootMaterializedViewEntity = SchemaEntityFactory.createInstance( SchemaEntity.SCHEMA_TYPE.ROOT_MATERIALIZED_VIEW );
+			SchemaEntity rootMaterializedViewEntity = SchemaEntityFactory.createInstance( SchemaEntity.SCHEMA_TYPE.ROOT_MATERIALIZED_VIEW, this.mainCtrl );
 			schemaEntity.addEntity( rootMaterializedViewEntity );
 		}
 		ObjDBFactory funcDBFactory = AbsDBFactory.getFactory( AbsDBFactory.FACTORY_TYPE.FUNC );
 		if ( funcDBFactory.getInstance(myDBAbs) != null )
 		{
-			SchemaEntity rootFuncEntity             = SchemaEntityFactory.createInstance( SchemaEntity.SCHEMA_TYPE.ROOT_FUNC );
+			SchemaEntity rootFuncEntity             = SchemaEntityFactory.createInstance( SchemaEntity.SCHEMA_TYPE.ROOT_FUNC, this.mainCtrl );
 			schemaEntity.addEntity( rootFuncEntity );
 		}
 		ObjDBFactory aggregateDBFactory = AbsDBFactory.getFactory( AbsDBFactory.FACTORY_TYPE.AGGREGATE );
 		if ( aggregateDBFactory.getInstance(myDBAbs) != null )
 		{
-			SchemaEntity rootAggregateEntity        = SchemaEntityFactory.createInstance( SchemaEntity.SCHEMA_TYPE.ROOT_AGGREGATE );
+			SchemaEntity rootAggregateEntity        = SchemaEntityFactory.createInstance( SchemaEntity.SCHEMA_TYPE.ROOT_AGGREGATE, this.mainCtrl );
 			schemaEntity.addEntity( rootAggregateEntity );
 		}
 		ObjDBFactory procDBFactory = AbsDBFactory.getFactory( AbsDBFactory.FACTORY_TYPE.PROC );
 		if ( procDBFactory.getInstance(myDBAbs) != null )
 		{
-			SchemaEntity rootProcEntity             = SchemaEntityFactory.createInstance( SchemaEntity.SCHEMA_TYPE.ROOT_PROC );
+			SchemaEntity rootProcEntity             = SchemaEntityFactory.createInstance( SchemaEntity.SCHEMA_TYPE.ROOT_PROC, this.mainCtrl );
 			schemaEntity.addEntity( rootProcEntity );
 		}
 		ObjDBFactory packageDefDBFactory = AbsDBFactory.getFactory( AbsDBFactory.FACTORY_TYPE.PACKAGE_DEF );
 		if ( packageDefDBFactory.getInstance(myDBAbs) != null )
 		{
-			SchemaEntity rootPackageDefEntity   = SchemaEntityFactory.createInstance( SchemaEntity.SCHEMA_TYPE.ROOT_PACKAGE_DEF );
+			SchemaEntity rootPackageDefEntity   = SchemaEntityFactory.createInstance( SchemaEntity.SCHEMA_TYPE.ROOT_PACKAGE_DEF, this.mainCtrl );
 			schemaEntity.addEntity( rootPackageDefEntity );
 		}
 		ObjDBFactory packageBodyDBFactory = AbsDBFactory.getFactory( AbsDBFactory.FACTORY_TYPE.PACKAGE_BODY );
 		if ( packageBodyDBFactory.getInstance(myDBAbs) != null )
 		{
-			SchemaEntity rootPackageBodyEntity  = SchemaEntityFactory.createInstance( SchemaEntity.SCHEMA_TYPE.ROOT_PACKAGE_BODY );
+			SchemaEntity rootPackageBodyEntity  = SchemaEntityFactory.createInstance( SchemaEntity.SCHEMA_TYPE.ROOT_PACKAGE_BODY, this.mainCtrl );
 			schemaEntity.addEntity( rootPackageBodyEntity );
 		}
 		ObjDBFactory typeDBFactory = AbsDBFactory.getFactory( AbsDBFactory.FACTORY_TYPE.TYPE );
 		if ( typeDBFactory.getInstance(myDBAbs) != null )
 		{
-			SchemaEntity rootTypeEntity = SchemaEntityFactory.createInstance( SchemaEntity.SCHEMA_TYPE.ROOT_TYPE );
+			SchemaEntity rootTypeEntity = SchemaEntityFactory.createInstance( SchemaEntity.SCHEMA_TYPE.ROOT_TYPE, this.mainCtrl );
 			schemaEntity.addEntity( rootTypeEntity );
 		}
 		ObjDBFactory triggerDBFactory = AbsDBFactory.getFactory( AbsDBFactory.FACTORY_TYPE.TRIGGER );
 		if ( triggerDBFactory.getInstance(myDBAbs) != null )
 		{
-			SchemaEntity rootTriggerEntity          = SchemaEntityFactory.createInstance( SchemaEntity.SCHEMA_TYPE.ROOT_TRIGGER );
+			SchemaEntity rootTriggerEntity          = SchemaEntityFactory.createInstance( SchemaEntity.SCHEMA_TYPE.ROOT_TRIGGER, this.mainCtrl );
 			schemaEntity.addEntity( rootTriggerEntity );
 		}
 		ObjDBFactory sequenceDBFactory = AbsDBFactory.getFactory( AbsDBFactory.FACTORY_TYPE.SEQUENCE );
 		if ( sequenceDBFactory.getInstance(myDBAbs) != null )
 		{
-			SchemaEntity rootSequenceEntity     = SchemaEntityFactory.createInstance( SchemaEntity.SCHEMA_TYPE.ROOT_SEQUENCE );
+			SchemaEntity rootSequenceEntity     = SchemaEntityFactory.createInstance( SchemaEntity.SCHEMA_TYPE.ROOT_SEQUENCE, this.mainCtrl );
 			schemaEntity.addEntity( rootSequenceEntity );
 		}
 		ObjDBFactory fkDBFactory = AbsDBFactory.getFactory( AbsDBFactory.FACTORY_TYPE.FOREIGN_KEY );
 		if ( fkDBFactory.getInstance(myDBAbs) != null )
 		{
-			SchemaEntity rootEREntity     = SchemaEntityFactory.createInstance( SchemaEntity.SCHEMA_TYPE.ROOT_ER );
+			SchemaEntity rootEREntity     = SchemaEntityFactory.createInstance( SchemaEntity.SCHEMA_TYPE.ROOT_ER, this.mainCtrl );
 			schemaEntity.addEntity( rootEREntity );
 		}
 		
@@ -241,7 +250,7 @@ public class CollectTask extends Task<Double>
 		// ---------------------------------------
 		for ( SchemaEntity tableEntity : tableEntityLst )
 		{
-			SchemaEntity rootIndexEntity = SchemaEntityFactory.createInstance( SchemaEntity.SCHEMA_TYPE.ROOT_INDEX );
+			SchemaEntity rootIndexEntity = SchemaEntityFactory.createInstance( SchemaEntity.SCHEMA_TYPE.ROOT_INDEX, this.mainCtrl );
 			tableEntity.addEntity( rootIndexEntity );
 		}
 	}

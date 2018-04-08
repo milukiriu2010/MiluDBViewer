@@ -3,7 +3,8 @@ package milu.db;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.Properties;
-
+import java.util.List;
+import java.util.ArrayList;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.Statement;
@@ -26,6 +27,12 @@ abstract public class MyDBAbstract
 	// DB Password
 	protected String  password = null;
 	
+	// Driver Class Name
+	protected String  driverClassName = null;
+	
+	// Driver Path
+	protected List<String> driverPathLst = null;
+	
 	// DB URL
 	protected String  url = null;
 	
@@ -44,6 +51,8 @@ abstract public class MyDBAbstract
 		return this.toString().compareTo( obj.toString() );
 	}
 	
+	abstract void init();
+	
 	/**
 	 * Load JDBC Driver
 	 ***********************************************
@@ -54,6 +63,20 @@ abstract public class MyDBAbstract
 	abstract protected void loadSpecial();
 	
 	abstract public void processAfterException() throws SQLException;
+	
+	public void setDriverClassName( String driverClassName )
+	{
+		this.driverClassName = driverClassName;
+	}
+	
+	public void addDriverPath( String driverPath )
+	{
+		if ( this.driverPathLst == null )
+		{
+			this.driverPathLst = new ArrayList<>();
+		}
+		this.driverPathLst.add( driverPath );
+	}
 	
 	/**
 	 * Get Driver URL

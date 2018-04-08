@@ -19,5 +19,5 @@ abstract class UrlPaneAbstract extends Pane
 	 * @param extLangRB
 	 * @param mapProp
 	 */
-	abstract public void createPane( Dialog<?> dlg, MainController mainCtrl, MyDBAbstract myDBAbs, ResourceBundle extLangRB, Map<String,String> mapProp );
+	abstract void createPane( Dialog<?> dlg, MainController mainCtrl, MyDBAbstract myDBAbs, ResourceBundle extLangRB, Map<String,String> mapProp );
 }

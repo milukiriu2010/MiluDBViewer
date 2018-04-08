@@ -94,13 +94,6 @@ public class SelectedItemHandlerEachMaterializedView extends SelectedItemHandler
 		this.tabPane.getSelectionModel().select( newTab );
 		
 		// set icon on Tab
-		/*
-		MainController mainController = this.dbView.getMainController();
-		ImageView iv = new ImageView( mainController.getImage("file:resources/images/materialized_view.png") );
-		iv.setFitHeight( 16 );
-		iv.setFitWidth( 16 );
-		newTab.setGraphic( iv );
-		*/
 		MainController mainCtrl = this.dbView.getMainController();
 		Node imageGroup = MyTool.createImageView( 16, 16, mainCtrl, selectedEntity );
 		newTab.setGraphic( imageGroup );
