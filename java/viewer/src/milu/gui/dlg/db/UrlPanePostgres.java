@@ -25,9 +25,6 @@ import milu.main.MainController;
 
 public class UrlPanePostgres extends UrlPaneAbstract
 {
-	// Language Resource(from External Class)
-	private ResourceBundle extLangRB = null;
-	
 	private Dialog<?>      dlg            = null;
 	
 	private MainController mainCtrl       = null;
@@ -72,12 +69,13 @@ public class UrlPanePostgres extends UrlPaneAbstract
 	private TextArea  urlTextArea       = new TextArea();
 	
 	@Override
-	public void createPane( Dialog<?> dlg, MainController mainCtrl, MyDBAbstract myDBAbs, ResourceBundle extLangRB, Map<String,String> mapProp )
+	public void createPane( Dialog<?> dlg, MainController mainCtrl, MyDBAbstract myDBAbs, Map<String,String> mapProp )
 	{
 		this.dlg       = dlg;
 		this.mainCtrl  = mainCtrl;
 		this.myDBAbs   = myDBAbs;
-		this.extLangRB = extLangRB;
+		
+		ResourceBundle extLangRB = this.mainCtrl.getLangResource("conf.lang.gui.dlg.db.DBSettingDialog");
 		
 		// ToggleButton for Basic
 		this.tglBtnBasic.setText(extLangRB.getString("TOGGLE_BASIC"));
@@ -219,6 +217,8 @@ public class UrlPanePostgres extends UrlPaneAbstract
 	private void setPaneBasic()
 	{
 		this.getChildren().removeAll( this.getChildren() );
+		
+		ResourceBundle extLangRB = this.mainCtrl.getLangResource("conf.lang.gui.dlg.db.DBSettingDialog");
 		
 		// set objects on GridPane
 		GridPane gridPane = new GridPane();

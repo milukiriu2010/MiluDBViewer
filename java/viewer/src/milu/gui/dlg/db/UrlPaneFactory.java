@@ -1,7 +1,6 @@
 package milu.gui.dlg.db;
 
 import java.util.Map;
-import java.util.ResourceBundle;
 import javafx.scene.control.Dialog;
 import milu.db.MyDBAbstract;
 import milu.db.MyDBPostgres;
@@ -13,7 +12,7 @@ import milu.db.MyDBCassandra;
 class UrlPaneFactory implements PaneFactory 
 {
 	@Override
-	public UrlPaneAbstract createPane( Dialog<?> dlg, MainController mainCtrl, MyDBAbstract myDBAbs, ResourceBundle extLangRB, Map<String,String> mapProp )
+	public UrlPaneAbstract createPane( Dialog<?> dlg, MainController mainCtrl, MyDBAbstract myDBAbs, Map<String,String> mapProp )
 	{
 		UrlPaneAbstract urlPaneAbs = null;
 		
@@ -37,7 +36,7 @@ class UrlPaneFactory implements PaneFactory
 		{
 			urlPaneAbs = new UrlPaneGeneral();
 		}
-		urlPaneAbs.createPane( dlg, mainCtrl, myDBAbs, extLangRB, mapProp);
+		urlPaneAbs.createPane( dlg, mainCtrl, myDBAbs, mapProp);
 		return urlPaneAbs;
 	}
 }

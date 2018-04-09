@@ -13,7 +13,6 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.Dialog;
-import javafx.scene.image.ImageView;
 import javafx.scene.control.Button;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -22,12 +21,10 @@ import javafx.application.Application;
 import javafx.stage.Stage;
 import milu.db.MyDBAbstract;
 import milu.main.MainController;
+import milu.tool.MyTool;
 
 public class UrlPaneCassandra extends UrlPaneAbstract
 {
-	// Language Resource(from External Class)
-	private ResourceBundle extLangRB = null;
-	
 	private Dialog<?>      dlg            = null;
 	
 	private MainController mainCtrl       = null;
@@ -73,12 +70,13 @@ public class UrlPaneCassandra extends UrlPaneAbstract
 	private TextArea  urlTextArea       = new TextArea();
 	
 	@Override
-	void createPane( Dialog<?> dlg, MainController mainCtrl, MyDBAbstract myDBAbs, ResourceBundle extLangRB, Map<String,String> mapProp )
+	void createPane( Dialog<?> dlg, MainController mainCtrl, MyDBAbstract myDBAbs, Map<String,String> mapProp )
 	{
 		this.dlg       = dlg;
 		this.mainCtrl  = mainCtrl;
 		this.myDBAbs   = myDBAbs;
-		this.extLangRB = extLangRB;
+		
+		ResourceBundle extLangRB = this.mainCtrl.getLangResource("conf.lang.gui.dlg.db.DBSettingDialog");
 		
 		// ToggleButton for Basic
 		this.tglBtnBasic.setText(extLangRB.getString("TOGGLE_BASIC"));
@@ -113,10 +111,7 @@ public class UrlPaneCassandra extends UrlPaneAbstract
 		this.tmplTextField.setText("jdbc:c*://[host][:9042]/[keyspace][?consistencyLevel=ONE|ANY|...][&compression=LZ4|SNAPPY]");
 		this.tmplTextField.setEditable(false);
 
-		ImageView   ivCopy = new ImageView( this.mainCtrl.getImage("file:resources/images/copy.png") );
-		ivCopy.setFitWidth(16);
-		ivCopy.setFitHeight(16);
-		this.tmplBtn.setGraphic(ivCopy);
+		this.tmplBtn.setGraphic( MyTool.createImageView( 16, 16, this.mainCtrl.getImage("file:resources/images/copy.png") ) );
 		
 		// ----------------------------------------------------
 		// Items for "All"
@@ -220,6 +215,8 @@ public class UrlPaneCassandra extends UrlPaneAbstract
 	private void setPaneBasic()
 	{
 		this.getChildren().removeAll( this.getChildren() );
+
+		ResourceBundle extLangRB = this.mainCtrl.getLangResource("conf.lang.gui.dlg.db.DBSettingDialog");
 		
 		// set objects on GridPane
 		GridPane gridPane = new GridPane();

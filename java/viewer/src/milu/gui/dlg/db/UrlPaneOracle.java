@@ -43,9 +43,6 @@ import milu.tool.MyTool;
 
 public class UrlPaneOracle extends UrlPaneAbstract
 {
-	// Language Resource(from External Class)
-	private ResourceBundle extLangRB = null;
-	
 	private Dialog<?>      dlg            = null;
 	
 	private MainController mainCtrl       = null;
@@ -106,12 +103,13 @@ public class UrlPaneOracle extends UrlPaneAbstract
 	private TextArea  urlTextArea       = new TextArea();
 	
 	@Override
-	void createPane( Dialog<?> dlg, MainController mainCtrl, MyDBAbstract myDBAbs, ResourceBundle extLangRB, Map<String,String> mapProp )
+	void createPane( Dialog<?> dlg, MainController mainCtrl, MyDBAbstract myDBAbs, Map<String,String> mapProp )
 	{
 		this.dlg       = dlg;
 		this.mainCtrl  = mainCtrl;
 		this.myDBAbs   = myDBAbs;
-		this.extLangRB = extLangRB;
+		
+		ResourceBundle extLangRB = this.mainCtrl.getLangResource("conf.lang.gui.dlg.db.DBSettingDialog");
 		
 		AppConf  appConf   = this.mainCtrl.getAppConf();
 		
@@ -421,6 +419,8 @@ public class UrlPaneOracle extends UrlPaneAbstract
 	{
 		this.getChildren().removeAll( this.getChildren() );
 		
+		ResourceBundle extLangRB = this.mainCtrl.getLangResource("conf.lang.gui.dlg.db.DBSettingDialog");
+		
 		// set objects on GridPane
 		GridPane gridPane = new GridPane();
 		gridPane.setHgap( 5 );
@@ -447,6 +447,8 @@ public class UrlPaneOracle extends UrlPaneAbstract
 	private void setPaneTNS()
 	{
 		this.getChildren().removeAll( this.getChildren() );
+		
+		ResourceBundle extLangRB = this.mainCtrl.getLangResource("conf.lang.gui.dlg.db.DBSettingDialog");
 		
 		// set objects on GridPane
 		GridPane gridPane = new GridPane();
@@ -594,6 +596,8 @@ public class UrlPaneOracle extends UrlPaneAbstract
 		}
 		catch ( IOException ioEx )
 		{
+			ResourceBundle extLangRB = this.mainCtrl.getLangResource("conf.lang.gui.common.MyAlert");
+			
     		MyAlertDialog alertDlg = new MyAlertDialog( AlertType.WARNING, this.mainCtrl );
     		alertDlg.setHeaderText( extLangRB.getString( "TITLE_FILE_NOT_FOUND" ) );
     		alertDlg.setTxtExp( ioEx );

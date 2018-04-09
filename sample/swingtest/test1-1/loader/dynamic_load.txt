@@ -1,0 +1,14 @@
+C:\myjava\MiluDBViewer.git\sample\swingtest\test1-1\lib\sqlserver\mssql-jdbc-6.4.0.jre9.jar
+
+com.microsoft.sqlserver.jdbc.SQLServerDriver
+
+jdbc:sqlserver://localhost:1433;databaseName=miludb;
+
+=================================================================
+
+C:\myjava\MiluDBViewer.git\sample\swingtest\test1-1\loader\cassandra\cassandra-jdbc-wrapper-3.1.0.jar
+
+com.github.adejanovski.cassandra.jdbc.CassandraDriver
+
+jdbc:cassandra://127.0.0.1:9042/videodb
+

@@ -121,7 +121,7 @@ public class DBSettingDialog extends Dialog<MyDBAbstract>
 		this.comboBoxDBType.getSelectionModel().selectFirst();
 		MyDBAbstract selectedMyDBAbs = this.comboBoxDBType.getSelectionModel().getSelectedItem();
 		PaneFactory paneFactory = new UrlPaneFactory();
-		UrlPaneAbstract urlPaneAbs = paneFactory.createPane( this, this.mainCtrl, selectedMyDBAbs, langRB, new HashMap<String,String>() );
+		UrlPaneAbstract urlPaneAbs = paneFactory.createPane( this, this.mainCtrl, selectedMyDBAbs, new HashMap<String,String>() );
 		this.urlPaneAbsMap.put( selectedMyDBAbs, urlPaneAbs );
 		this.vBox.getChildren().add( urlPaneAbs );
 		
@@ -182,8 +182,7 @@ public class DBSettingDialog extends Dialog<MyDBAbstract>
 						else
 						{
 							PaneFactory paneFactory = new UrlPaneFactory();
-				    		ResourceBundle langRB = this.mainCtrl.getLangResource("conf.lang.gui.dlg.db.DBSettingDialog");
-							urlPaneAbs2 = paneFactory.createPane( this, this.mainCtrl, newVal, langRB, mapProp );
+							urlPaneAbs2 = paneFactory.createPane( this, this.mainCtrl, newVal, mapProp );
 							this.urlPaneAbsMap.put( newVal, urlPaneAbs2 );
 						}
 						this.vBox.getChildren().add( urlPaneAbs2 );

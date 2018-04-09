@@ -1,7 +1,10 @@
 package milu.db;
 
+import java.sql.Driver;
+import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Map;
+
 import java.util.List;
 import java.util.ArrayList;
 
@@ -9,6 +12,7 @@ import java.nio.file.Paths;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.net.MalformedURLException;
+import java.lang.reflect.InvocationTargetException;
 
 public class MyDBGeneral extends MyDBAbstract 
 {
@@ -18,7 +22,13 @@ public class MyDBGeneral extends MyDBAbstract
 	}
 	
 	@Override
-	protected void loadDriver() throws ClassNotFoundException
+	protected void loadDriver() 
+			throws ClassNotFoundException, 
+					SQLException,
+					InstantiationException,
+					IllegalAccessException,
+					InvocationTargetException,
+					NoSuchMethodException
 	{
 		List<URL> urlLst = new ArrayList<>();
 		this.driverPathLst.forEach
@@ -37,9 +47,16 @@ public class MyDBGeneral extends MyDBAbstract
 			}
 		);
 
-		URL[] urlArr = urlLst.toArray(new URL[urlLst.size()]);
-		URLClassLoader load = URLClassLoader.newInstance( urlArr );
-		load.loadClass(this.driverClassName);
+		URL[] urls = urlLst.toArray(new URL[urlLst.size()]);
+		URLClassLoader loader = new URLClassLoader( urls );
+		Driver d = 
+			(Driver)Class.forName
+			(
+				this.driverClassName, 
+				true, 
+				loader
+			).getDeclaredConstructor().newInstance();
+		DriverManager.registerDriver( new DriverShim(d) );
 	}
 
 	@Override

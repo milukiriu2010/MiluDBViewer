@@ -13,6 +13,7 @@ import java.sql.SQLException;
 
 import milu.entity.schema.SchemaEntity;
 import milu.entity.schema.SchemaEntityFactory;
+import java.lang.reflect.InvocationTargetException;
 
 abstract public class MyDBAbstract
 	implements
@@ -58,7 +59,13 @@ abstract public class MyDBAbstract
 	 ***********************************************
 	 * @throws ClassNotFoundException
 	 */
-	abstract protected void loadDriver() throws ClassNotFoundException;
+	abstract protected void loadDriver() 
+			throws ClassNotFoundException, 
+					SQLException, 
+					InstantiationException,
+					InvocationTargetException, 
+					IllegalAccessException,
+					NoSuchMethodException;
 	
 	abstract protected void loadSpecial();
 	
@@ -215,7 +222,12 @@ abstract public class MyDBAbstract
 	 * @throws SQLException 
 	 */
 	public synchronized void connect() 
-		 throws ClassNotFoundException, SQLException
+		 throws ClassNotFoundException, 
+			 	SQLException,
+				InstantiationException,
+				InvocationTargetException, 
+				IllegalAccessException,
+				NoSuchMethodException
 	{
 		// close connection, if already connected.
 		try
