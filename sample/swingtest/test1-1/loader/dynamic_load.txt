@@ -12,3 +12,12 @@ com.github.adejanovski.cassandra.jdbc.CassandraDriver
 
 jdbc:cassandra://127.0.0.1:9042/videodb
 
+=================================================================
+
+C:\myjava\MiluDBViewer.git\sample\swingtest\test1-1\loader\sqlite\sqlite-jdbc-3.21.0.jar
+
+org.sqlite.JDBC
+
+jdbc:sqlite:C:\\myjava\\MiluDBViewer.git\\sample\\swingtest\\test1-1\\sql\\sqlite\\ex1.db
+
+
