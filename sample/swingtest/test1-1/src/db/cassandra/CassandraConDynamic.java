@@ -36,6 +36,11 @@ public class CassandraConDynamic {
 	        while(drivers.hasMoreElements()){
 	            Driver driver = drivers.nextElement();
 	            System.out.println("driver:"+driver);
+	            DriverPropertyInfo[] driverPropInfoLst = driver.getPropertyInfo( "",null);
+	            for ( DriverPropertyInfo  driverPropInfo : driverPropInfoLst )
+	            {
+	            	System.out.println("  DriverPropertyInfo:name["+ driverPropInfo.name +"]value["+ driverPropInfo.value +"]");
+	            }
 	        }			
 			  
 			//step2 create  the connection object

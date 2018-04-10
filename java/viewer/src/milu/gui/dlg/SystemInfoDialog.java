@@ -4,9 +4,16 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 import java.util.Properties;
 import java.util.ResourceBundle;
 import java.util.Set;
+import java.util.Enumeration;
+
+import java.sql.Driver;
+import java.sql.DriverManager;
+import java.sql.DriverPropertyInfo;
+import java.sql.SQLException;
 
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
@@ -15,6 +22,7 @@ import javafx.scene.control.TabPane;
 import javafx.scene.control.TabPane.TabClosingPolicy;
 import javafx.scene.control.Label;
 import javafx.scene.control.Button;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -40,7 +48,10 @@ public class SystemInfoDialog extends Dialog<Boolean>
 	// TabPane
 	private TabPane  tabPane = new TabPane();
 	
-	// Tab for System Infomation
+    // Head List
+    private List<String> headLst = new ArrayList<String>();
+	
+	// Tab for System Information
 	private Tab      sysInfoTab  = new Tab();
 	
 	// Tab for Environment Variable
@@ -51,12 +62,21 @@ public class SystemInfoDialog extends Dialog<Boolean>
 	
 	// Interval to get Memory Information
 	private Timeline  memTimeLine = new Timeline();
+	
+	// Tab for JDBC Driver Information
+	private Tab      jdbcDriverTab = new Tab();
 
 	public SystemInfoDialog( DBView dbView )
 	{
 		super();
 		
 		this.dbView = dbView;
+		
+		ResourceBundle langRB = this.dbView.getMainController().getLangResource("conf.lang.gui.dlg.SystemInfoDialog");
+		
+        // Head List
+        this.headLst.add( langRB.getString( "ITEM_KEY" ) );
+        this.headLst.add( langRB.getString( "ITEM_VAL" ) );
 		
 		// Set Content on System Information Tab
 		this.setContentOnSysInfoTab();
@@ -67,7 +87,10 @@ public class SystemInfoDialog extends Dialog<Boolean>
 		// Set Content on Memory Information Tab
 		this.setContentOnMemTab();
 		
-		this.tabPane.getTabs().addAll( this.sysInfoTab, this.envTab, this.memTab );
+		// Set Content on JDBC Driver Information Tab
+		this.setContentOnJDBCDriverTab();
+		
+		this.tabPane.getTabs().addAll( this.sysInfoTab, this.envTab, this.jdbcDriverTab, this.memTab );
 		this.tabPane.setTabClosingPolicy( TabClosingPolicy.UNAVAILABLE );
 		
 		BorderPane pane = new BorderPane();
@@ -94,7 +117,6 @@ public class SystemInfoDialog extends Dialog<Boolean>
 		this.getDialogPane().setPrefSize( 640, 320 );
 		
 		// set Dialog Title
-		ResourceBundle langRB = this.dbView.getMainController().getLangResource("conf.lang.gui.dlg.SystemInfoDialog");
 		this.setTitle( langRB.getString( "TITLE_SYSINFO" ) );
 		
 		// set Modality
@@ -158,13 +180,6 @@ public class SystemInfoDialog extends Dialog<Boolean>
         List<String> propNameLst = new ArrayList<String>( propNameSet );
         Collections.sort(propNameLst);
         
-		ResourceBundle langRB = this.dbView.getMainController().getLangResource("conf.lang.gui.dlg.SystemInfoDialog");
-        
-        // Head List
-        List<String> headLst = new ArrayList<String>();
-        headLst.add( langRB.getString( "ITEM_KEY" ) );
-        headLst.add( langRB.getString( "ITEM_VAL" ) );
-        
         // Data List
         List<List<String>>  dataLst = new ArrayList<List<String>>();
         for ( String propName : propNameLst )
@@ -189,9 +204,10 @@ public class SystemInfoDialog extends Dialog<Boolean>
         	dataLst.add( prop );
         }
         SqlTableView propTableView = new SqlTableView(this.dbView);
-        propTableView.setTableViewSQL( headLst, dataLst );
+        propTableView.setTableViewSQL( this.headLst, dataLst );
         
         this.sysInfoTab.setContent( propTableView );
+		ResourceBundle langRB = this.dbView.getMainController().getLangResource("conf.lang.gui.dlg.SystemInfoDialog");
         this.sysInfoTab.setText( langRB.getString( "TITLE_SYSINFO" ) );
 	}
 	
@@ -201,13 +217,6 @@ public class SystemInfoDialog extends Dialog<Boolean>
         Map<String, String>  envMap     = System.getenv();
         List<String>         envNameLst = new ArrayList<String>( envMap.keySet() );
         Collections.sort(envNameLst);
-
-		ResourceBundle langRB = this.dbView.getMainController().getLangResource("conf.lang.gui.dlg.SystemInfoDialog");
-        
-        // Head List
-        List<String> headLst = new ArrayList<String>();
-        headLst.add( langRB.getString( "ITEM_KEY" ) );
-        headLst.add( langRB.getString( "ITEM_VAL" ) );
         
         // Data List
         List<List<String>>  dataLst = new ArrayList<List<String>>();        
@@ -231,9 +240,10 @@ public class SystemInfoDialog extends Dialog<Boolean>
         }
         
         SqlTableView envTableView = new SqlTableView(this.dbView);
-        envTableView.setTableViewSQL( headLst, dataLst );
+        envTableView.setTableViewSQL( this.headLst, dataLst );
         
         this.envTab.setContent( envTableView );        
+		ResourceBundle langRB = this.dbView.getMainController().getLangResource("conf.lang.gui.dlg.SystemInfoDialog");
 		this.envTab.setText( langRB.getString( "TITLE_ENV_VARIABLE" ) );
 	}
 	
@@ -326,11 +336,6 @@ public class SystemInfoDialog extends Dialog<Boolean>
 		// http://krr.blog.shinobi.jp/javafx/javafx%20scene%E3%83%BBscenegraph%E3%82%AF%E3%83%A9%E3%82%B9
 
 		ResourceBundle langRB = this.dbView.getMainController().getLangResource("conf.lang.gui.dlg.SystemInfoDialog");
-		
-        // Head List
-        List<String> headLst = new ArrayList<String>();
-        headLst.add( langRB.getString( "ITEM_KEY" ) );
-        headLst.add( langRB.getString( "ITEM_VAL" ) );
         
         // Data List
         List<List<String>>  dataLst = new ArrayList<List<String>>();
@@ -359,7 +364,65 @@ public class SystemInfoDialog extends Dialog<Boolean>
             dispID++;
         }
         
-        dispTableView.setTableViewSQL( headLst, dataLst );
+        dispTableView.setTableViewSQL( this.headLst, dataLst );
 	}
 	
+	private void setContentOnJDBCDriverTab()
+	{
+		
+		List<Driver> driverLst = new ArrayList<>();
+		Enumeration<Driver> drivers = DriverManager.getDrivers();
+		while (drivers.hasMoreElements())
+		{
+			driverLst.add(drivers.nextElement());
+		}
+		
+		ChoiceBox<Driver>  cbDriver = new ChoiceBox<>();
+		SqlTableView       tvDriver = new SqlTableView(this.dbView);
+		
+		cbDriver.getItems().addAll(driverLst);
+		cbDriver.getSelectionModel().selectFirst();
+		this.changeSelectedDriver( cbDriver.getSelectionModel().getSelectedItem(), tvDriver);
+		cbDriver.valueProperty().addListener( (obs,oldVal,driver)->this.changeSelectedDriver(driver, tvDriver) );
+		
+		BorderPane  brdPane = new BorderPane();
+		brdPane.setTop( cbDriver );
+		brdPane.setCenter( tvDriver );
+		
+		this.jdbcDriverTab.setContent( brdPane );
+		
+		ResourceBundle langRB = this.dbView.getMainController().getLangResource("conf.lang.gui.dlg.SystemInfoDialog");
+		this.jdbcDriverTab.setText( langRB.getString( "TITLE_JDBCINFO" ) );
+	}
+	
+	private void changeSelectedDriver( Driver driver, SqlTableView tvDriver )
+	{
+		try
+		{
+			DriverPropertyInfo[] driverPropInfoLst = driver.getPropertyInfo( "", null );
+			Map<String,String> driverMap = new TreeMap<>(); 
+			for ( DriverPropertyInfo  driverPropInfo : driverPropInfoLst )
+			{
+				driverMap.put( driverPropInfo.name, driverPropInfo.value );
+			}
+			System.out.println( "driverMap.size:" + driverMap.size() );
+			List<List<String>> dataLst = new ArrayList<>();
+			driverMap.forEach
+			(
+				(k,v)->
+				{
+					List<String> data = new ArrayList<>();
+					data.add(k);
+					data.add(v);
+					dataLst.add(data);
+				}
+			);
+			System.out.println( "dataLst.size:" + dataLst.size() );
+			tvDriver.setTableViewSQL( this.headLst, dataLst );
+		}
+		catch ( SQLException sqlEx )
+		{
+			sqlEx.printStackTrace();
+		}		
+	}
 }

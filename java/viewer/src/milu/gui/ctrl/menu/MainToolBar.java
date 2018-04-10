@@ -154,10 +154,10 @@ public class MainToolBar extends ToolBar
 		// "New DB Connection" button clicked
 		this.btnNewCon.setOnAction( (event)->{ this.dbView.createNewDBConnection(); } );
 		
-		// "Copy datas on TableView without column heads" button clicked
+		// "Copy data on TableView without column heads" button clicked
 		this.btnCopyTblNoHead.setOnAction( (event)->{ this.dbView.copyTableNoHead(); } );
 		
-		// "Copy datas on TableView with column heads" button clicked
+		// "Copy data on TableView with column heads" button clicked
 		this.btnCopyTblWithHead.setOnAction( (event)->{ this.dbView.copyTableWithHead(); } );
 		
 		// "Open Schema View" button clicked

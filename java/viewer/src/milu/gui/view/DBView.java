@@ -31,6 +31,7 @@ import milu.gui.dlg.MyAlertDialog;
 import milu.main.MainController;
 import milu.db.MyDBAbstract;
 import milu.task.CollectTask;
+import milu.task.collect.CollectAllTask;
 
 public class DBView extends Stage
 	implements 
@@ -61,7 +62,7 @@ public class DBView extends Stage
 	private Label  lblMsg = new Label();
 	
 	// ---------------------------
-	// Constractor
+	// Constructor
 	// ---------------------------
 	public DBView( MainController mainCtrl, MyDBAbstract myDBAbs )
 	{
@@ -102,10 +103,12 @@ public class DBView extends Stage
 		VBox vboxMenu = new VBox( 2 );
 		vboxMenu.getChildren().addAll( this.mainMenuBar, this.mainToolBar );
 		
-		// TabPane for multi view
+		// TabPane
+		//   => milu.gui.ctrl.query.DBSqlScriptTab
+		//   => milu.gui.ctrl.schema.DBSchemaTab
 		this.tabPane = new TabPane();
 		this.tabPane.getTabs().add( dbSqlTab );
-		// Enable tag dragging
+		// Enable tab dragging
 		this.mainCtrl.addDraggingTabPaneMap( this.myDBAbs, this.tabPane );
 		
 		// put items on Pane
@@ -187,7 +190,8 @@ public class DBView extends Stage
 			(event)->
 			{
 				System.out.println( "dbView Shown." );
-				final CollectTask collectTask = new CollectTask();
+				//final CollectTask collectTask = new CollectTask();
+				final CollectAllTask collectTask = new CollectAllTask();
 				collectTask.setMainController(this.mainCtrl);
 				collectTask.setMyDBAbstract(this.myDBAbs);
 				// execute task
@@ -202,19 +206,29 @@ public class DBView extends Stage
 						if ( newVal.doubleValue() == 1.0 )
 						{
 							//this.mainToolBar.taskDone();
+							System.out.println( "CollectTask:Done[" + newVal + "]" );
 							this.taskDone();
 							this.brdPane.setBottom(null);
 						}
 					}
 				);
 				
+				// "progressProperty <=> messageProperty" is not synchronized.
+				// It shouldn't to call this after "progress = 1.0".
 				collectTask.messageProperty().addListener
 				(
 					(obs,oldVal,newVal)->
 					{
 						System.out.println( "CollectTask:Message[" + newVal + "]" );
-						this.lblMsg.setText(newVal);
-						this.brdPane.setBottom(lblMsg);
+						if ( "".equals(newVal) == false )
+						{
+							this.lblMsg.setText(newVal);
+							this.brdPane.setBottom(lblMsg);
+						}
+						else
+						{
+							this.brdPane.setBottom(null);
+						}
 					}
 				);
 				
