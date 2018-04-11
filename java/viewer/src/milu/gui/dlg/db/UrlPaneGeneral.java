@@ -15,7 +15,6 @@ import javafx.scene.control.Dialog;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
@@ -23,8 +22,8 @@ import javafx.stage.FileChooser;
 import javafx.collections.ObservableList;
 
 import milu.db.MyDBAbstract;
+import milu.gui.ctrl.common.PersistentButtonToggleGroup;
 import milu.main.MainController;
-import milu.tool.MyTool;
 
 public class UrlPaneGeneral extends UrlPaneAbstract
 {	
@@ -36,7 +35,7 @@ public class UrlPaneGeneral extends UrlPaneAbstract
 	
 	private HBox           hBoxToggle     = new HBox(2);
 	
-	private ToggleGroup    tglGroup       = new ToggleGroup();
+	private ToggleGroup    tglGroup       = new PersistentButtonToggleGroup();
 	
 	// ToggleButton for Free Hand
 	private ToggleButton   tglBtnFreeHand = new ToggleButton();

@@ -10,6 +10,7 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.AnchorPane;
+import javafx.application.Platform;
 import javafx.geometry.Orientation;
 
 import milu.db.MyDBAbstract;
@@ -18,6 +19,7 @@ import milu.gui.view.DBView;
 import milu.main.MainController;
 import milu.gui.ctrl.common.ChangeLangInterface;
 import milu.gui.ctrl.common.ExecQueryDBInterface;
+import milu.gui.ctrl.common.FocusInterface;
 import milu.gui.ctrl.common.RefreshInterface;
 import milu.gui.ctrl.common.ToggleHorizontalVerticalInterface;
 import milu.gui.ctrl.schema.SchemaTreeView;
@@ -30,6 +32,7 @@ public class DBSchemaTab extends Tab
 		ExecQueryDBInterface,
 		RefreshInterface,
 		ToggleHorizontalVerticalInterface,
+		FocusInterface,
 		ChangeLangInterface
 {
 	private DBView          dbView = null;
@@ -83,13 +86,26 @@ public class DBSchemaTab extends Tab
 		this.changeLang();
 	}
 	
+	/**
+	 * set Focus on TreeView
+	 */
+	@Override
+	public void setFocus()
+	{
+		// https://sites.google.com/site/63rabbits3/javafx2/jfx2coding/dialogbox
+		// https://stackoverflow.com/questions/20049452/javafx-focusing-textfield-programmatically
+		// call after "new Scene"
+		Platform.runLater( ()->{ this.schemaTreeView.requestFocus(); System.out.println( "schemaTreeView focused."); } );
+	}
+	
 	/**************************************************
 	 * Override from ExecQueryDBInterface
 	 ************************************************** 
 	 */
 	@Override
-	public void Go( MyDBAbstract myDBAbs )
+	public void Go()
 	{
+		MyDBAbstract myDBAbs = this.dbView.getMyDBAbstract();
 		try
 		{
 			SelectedItemHandlerChooser.exec
@@ -134,8 +150,9 @@ public class DBSchemaTab extends Tab
 	 ************************************************** 
 	 */
 	@Override
-	public void Refresh( MyDBAbstract myDBAbs )
+	public void Refresh()
 	{
+		MyDBAbstract myDBAbs = this.dbView.getMyDBAbstract();
 		try
 		{
 			SelectedItemHandlerChooser.exec

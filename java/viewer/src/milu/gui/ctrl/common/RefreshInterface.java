@@ -1,7 +1,5 @@
 package milu.gui.ctrl.common;
 
-import milu.db.MyDBAbstract;
-
 /************************************
  * For "Refresh" Button Interface
  * @author milu
@@ -9,5 +7,5 @@ import milu.db.MyDBAbstract;
  */
 public interface RefreshInterface
 {
-	public void Refresh( MyDBAbstract myDBAbs );
+	public void Refresh();
 }

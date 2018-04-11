@@ -23,6 +23,7 @@ import javafx.scene.control.TabPane.TabClosingPolicy;
 import javafx.scene.control.Label;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.ListView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -36,6 +37,7 @@ import javafx.animation.Timeline;
 import javafx.animation.KeyFrame;
 import javafx.event.EventHandler;
 import javafx.event.ActionEvent;
+import javafx.geometry.Insets;
 import javafx.geometry.Rectangle2D;
 
 import milu.gui.ctrl.query.SqlTableView;
@@ -377,16 +379,52 @@ public class SystemInfoDialog extends Dialog<Boolean>
 			driverLst.add(drivers.nextElement());
 		}
 		
-		ChoiceBox<Driver>  cbDriver = new ChoiceBox<>();
+		//ChoiceBox<Driver>  cbDriver = new ChoiceBox<>();
+		ListView<Driver>   cbDriver = new ListView<>();
 		SqlTableView       tvDriver = new SqlTableView(this.dbView);
 		
 		cbDriver.getItems().addAll(driverLst);
 		cbDriver.getSelectionModel().selectFirst();
 		this.changeSelectedDriver( cbDriver.getSelectionModel().getSelectedItem(), tvDriver);
-		cbDriver.valueProperty().addListener( (obs,oldVal,driver)->this.changeSelectedDriver(driver, tvDriver) );
+		//cbDriver.valueProperty().addListener( (obs,oldVal,driver)->this.changeSelectedDriver(driver, tvDriver) );
+		cbDriver.getSelectionModel().selectedItemProperty().addListener( (obs,oldVal,driver)->this.changeSelectedDriver(driver, tvDriver) );
+		
+		Button btnAdd = new Button( "Add" );
+		Button btnDel = new Button( "Delete" );
+		btnDel.setOnAction
+		(
+			(event)->
+			{
+				Driver selectedDriver = cbDriver.getSelectionModel().getSelectedItem();
+				if ( selectedDriver == null )
+				{
+					return;
+				}
+				try
+				{
+					DriverManager.deregisterDriver(selectedDriver);
+				}
+				catch ( SQLException sqlEx )
+				{
+					sqlEx.printStackTrace();
+				}
+				cbDriver.getItems().remove(selectedDriver);
+			}
+		);
+		
+		
+		HBox   hBoxBtn = new HBox(2);
+		hBoxBtn.getChildren().addAll( btnAdd, btnDel );
+		
+		VBox  vBoxMainte = new VBox(2);
+		vBoxMainte.getChildren().addAll( cbDriver, hBoxBtn );
+
 		
 		BorderPane  brdPane = new BorderPane();
-		brdPane.setTop( cbDriver );
+		brdPane.setPadding( new Insets( 10, 10, 10, 10 ) );
+		BorderPane.setMargin( vBoxMainte, new Insets( 2, 2, 2, 2 ) );
+		BorderPane.setMargin( tvDriver, new Insets( 2, 2, 2, 2 ) );
+		brdPane.setLeft( vBoxMainte );
 		brdPane.setCenter( tvDriver );
 		
 		this.jdbcDriverTab.setContent( brdPane );

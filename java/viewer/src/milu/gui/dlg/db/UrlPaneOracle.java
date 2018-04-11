@@ -33,9 +33,11 @@ import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
+
 import milu.db.MyDBAbstract;
 import milu.file.MyFileAbstract;
 import milu.file.MyFileFactory;
+import milu.gui.ctrl.common.PersistentButtonToggleGroup;
 import milu.gui.dlg.MyAlertDialog;
 import milu.main.AppConf;
 import milu.main.MainController;
@@ -51,7 +53,7 @@ public class UrlPaneOracle extends UrlPaneAbstract
 	
 	private HBox           hBoxToggle     = new HBox(2);
 	
-	private ToggleGroup    tglGroup       = new ToggleGroup();
+	private ToggleGroup    tglGroup       = new PersistentButtonToggleGroup();
 	
 	// ToggleButton for Basic
 	private ToggleButton   tglBtnBasic    = new ToggleButton();

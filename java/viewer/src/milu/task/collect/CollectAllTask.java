@@ -14,7 +14,6 @@ import milu.db.abs.ObjDBFactory;
 import milu.db.abs.ObjDBInterface;
 
 import milu.entity.schema.SchemaEntity;
-import milu.entity.schema.SchemaEntityFactory;
 
 import milu.main.MainController;
 

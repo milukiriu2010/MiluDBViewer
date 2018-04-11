@@ -85,7 +85,7 @@ public class MainToolBar extends ToolBar
 		// Button to add a new window
 		this.btnNewWin.setGraphic( MyTool.createImageView( 24, 24, mainCtrl.getImage("file:resources/images/newwin.png") ) );
 		
-		// Button for new db connection
+		// Button for new DB connection
 		this.btnNewCon.setGraphic( MyTool.createImageView( 24, 24, mainCtrl.getImage("file:resources/images/connect.png") ) );
 		
 		// Button to copy table data(no column)

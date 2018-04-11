@@ -75,11 +75,13 @@ public class MainMenuBar extends MenuBar
 	// ----------------------------------------------
 	// [Help]
     //   - [System Info]
+    //   - [JDBC Info]
 	//   - [About]
     //     etc
 	// ----------------------------------------------
     Menu     menuHelp        = new Menu();
     MenuItem menuItemSysInfo = new MenuItem();
+    MenuItem menuItemJDBC    = new MenuItem("JDBC");
     MenuItem menuItemAbout   = new MenuItem();
     
 	public MainMenuBar( DBView dbView )
@@ -167,16 +169,21 @@ public class MainMenuBar extends MenuBar
 		// Menu 
 		// ----------------------------------------------
 		// [Help]
+	    //   - [System Info]
+	    //   - [JDBC Info]
 		//   - [About]
 	    //     etc
 		// ----------------------------------------------
 		this.menuHelp.getItems().addAll
 		( 
 			this.menuItemSysInfo,
+			this.menuItemJDBC,
 			this.menuItemAbout
 		);
 		// set icon on menuItemSysInfo
 		this.menuItemSysInfo.setGraphic( MyTool.createImageView( 16, 16, mainController.getImage("file:resources/images/sysinfo.png") ) );
+		// set icon on menuItemSysInfo
+		this.menuItemJDBC.setGraphic( MyTool.createImageView( 16, 16, mainController.getImage("file:resources/images/jdbc.png") ) );
 		// set icon on menuItemAbout
 		this.menuItemAbout.setGraphic( MyTool.createImageView( 16, 16, mainController.getImage("file:resources/images/winicon.gif") ) );
 		
@@ -203,18 +210,7 @@ public class MainMenuBar extends MenuBar
 		);
 		
 		// "Quit" menu clicked
-		this.menuItemQuit.setOnAction
-		(
-			// ----------------------------------------
-			// @param actionEvent
-			//   interface EventHandler<ActionEvent>
-			//     void handle(T event)
-			// ----------------------------------------
-			(actionEvent)->
-			{
-				this.dbView.quit();
-			}
-		);
+		this.menuItemQuit.setOnAction(	event->this.dbView.quit() );
 		
 		// [Language]
 		//   - [English] menu clicked
@@ -301,6 +297,13 @@ public class MainMenuBar extends MenuBar
 				sysInfoDlg = null;
 			}
 		);
+		
+		
+		// ----------------------------------------------
+		// [Help]
+		//   - [JDBC Info] menu clicked
+		// ----------------------------------------------
+		this.menuItemJDBC.setOnAction( (event)->this.dbView.openJdbcView() );
 		
 		// ----------------------------------------------
 		// [Help]

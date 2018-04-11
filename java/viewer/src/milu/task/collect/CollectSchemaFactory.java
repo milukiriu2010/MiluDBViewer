@@ -25,6 +25,14 @@ public class CollectSchemaFactory
 		{
 			csAbs = new CollectSchemaTable();
 		}
+		else if (
+			//( AbsDBFactory.FACTORY_TYPE.VIEW.equals(factoryType) ) ||
+			( AbsDBFactory.FACTORY_TYPE.MATERIALIZED_VIEW.equals(factoryType) ) ||
+			( AbsDBFactory.FACTORY_TYPE.SYSTEM_VIEW.equals(factoryType) )
+		)
+		{
+			csAbs = new CollectSchemaDef();
+		}
 		else
 		{
 			csAbs = new CollectSchemaSkip();

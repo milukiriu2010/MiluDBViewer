@@ -26,15 +26,15 @@ public class CollectSchemaDef extends CollectSchemaAbstract
 			String objName = childEntity.getName();
 			List<Map<String,String>>  definitionLst = this.objDBAbs.selectDefinition( schemaName, objName ); 
 			childEntity.setDefinitionlst(definitionLst);
-			System.out.println
-			( 
-				"schema[" + schemaName + 
-				"]schemaType[" + schemaType + 
-				"]obj[" + objName + 
-				"]assignedSize[" + this.assignedSize + 
-				"]progressDiv[" + progressDiv + 
-				"]" 
-			);
+			//System.out.println
+			//( 
+			//	"schema[" + schemaName + 
+			//	"]schemaType[" + schemaType + 
+			//	"]obj[" + objName + 
+			//	"]assignedSize[" + this.assignedSize + 
+			//	"]progressDiv[" + progressDiv + 
+			//	"]" 
+			//);
 			this.progressInf.addProgress(progressDiv);
 			this.progressInf.setMsg( schemaName + "." + objName );
 		}

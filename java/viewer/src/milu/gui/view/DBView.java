@@ -25,12 +25,12 @@ import milu.gui.ctrl.common.RefreshInterface;
 import milu.gui.ctrl.common.ToggleHorizontalVerticalInterface;
 import milu.gui.ctrl.menu.MainMenuBar;
 import milu.gui.ctrl.menu.MainToolBar;
+import milu.gui.ctrl.jdbc.DBJdbcTab;
 import milu.gui.ctrl.query.DBSqlScriptTab;
 import milu.gui.ctrl.schema.DBSchemaTab;
 import milu.gui.dlg.MyAlertDialog;
 import milu.main.MainController;
 import milu.db.MyDBAbstract;
-import milu.task.CollectTask;
 import milu.task.collect.CollectAllTask;
 
 public class DBView extends Stage
@@ -232,6 +232,21 @@ public class DBView extends Stage
 					}
 				);
 				
+				collectTask.valueProperty().addListener
+				(
+					(obs,oldVal,ex)->
+					{
+						if ( ex == null )
+						{
+							return;
+						}
+			    		MyAlertDialog alertDlg = new MyAlertDialog( AlertType.WARNING, this.mainCtrl );
+			    		ResourceBundle langRB = this.mainCtrl.getLangResource("conf.lang.gui.common.MyAlert");
+						alertDlg.setHeaderText( langRB.getString("TITLE_MISC_ERROR") );
+			    		alertDlg.setTxtExp( ex );
+			    		alertDlg.showAndWait();
+			    		alertDlg = null;					}
+				);
 			}
 		);
 		
@@ -328,16 +343,10 @@ public class DBView extends Stage
 	public void Go()
 	{
 		// Call SQL on Selected Tab.
-		try
+		Tab tab = this.tabPane.getSelectionModel().getSelectedItem();
+		if ( tab instanceof ExecQueryDBInterface )
 		{
-			ExecQueryDBInterface eqInterface = 
-					(ExecQueryDBInterface)this.tabPane.getSelectionModel().getSelectedItem();
-			eqInterface.Go( this.myDBAbs );
-		}
-		catch ( ClassCastException ccEx )
-		{
-			// suppress error
-			//ccEx.printStackTrace();
+			((ExecQueryDBInterface)tab).Go();
 		}
 	}
 	
@@ -348,16 +357,10 @@ public class DBView extends Stage
 	public void Refresh()
 	{
 		// Call SQL on Selected Tab.
-		try
+		Tab tab = this.tabPane.getSelectionModel().getSelectedItem();
+		if ( tab instanceof RefreshInterface )
 		{
-			RefreshInterface refreshInterface = 
-				(RefreshInterface)this.tabPane.getSelectionModel().getSelectedItem();
-			refreshInterface.Refresh( this.myDBAbs );
-		}
-		catch ( ClassCastException ccEx )
-		{
-			// suppress error
-			//ccEx.printStackTrace();
+			((RefreshInterface)tab).Refresh();
 		}
 	}
 	
@@ -370,7 +373,7 @@ public class DBView extends Stage
 		Tab tab = this.tabPane.getSelectionModel().getSelectedItem();
 		if ( tab instanceof ExecExplainDBInterface )
 		{
-			((ExecExplainDBInterface)tab).Explain( this.myDBAbs );
+			((ExecExplainDBInterface)tab).Explain();
 		}
 	}
 	
@@ -381,15 +384,10 @@ public class DBView extends Stage
 	public void switchDirection()
 	{
 		// Call switch direction on Selected Tab.
-		try
+		Tab tab = this.tabPane.getSelectionModel().getSelectedItem();
+		if ( tab instanceof ToggleHorizontalVerticalInterface )
 		{
-			ToggleHorizontalVerticalInterface thvInterface = (ToggleHorizontalVerticalInterface)this.tabPane.getSelectionModel().getSelectedItem();
-			thvInterface.switchDirection();
-		}
-		catch ( ClassCastException ccEx )
-		{
-			// suppress error
-			//ccEx.printStackTrace();
+			((ToggleHorizontalVerticalInterface)tab).switchDirection();
 		}
 	}
 
@@ -404,7 +402,10 @@ public class DBView extends Stage
 		this.tabPane.getTabs().add( newTab );
 		this.tabPane.getSelectionModel().select( newTab );
 		// set Focus on TextArea of DBSqlTab.
-		((FocusInterface)newTab).setFocus();
+		if ( newTab instanceof FocusInterface)
+		{
+			((FocusInterface)newTab).setFocus();
+		}
 	}
 
 	/********************************
@@ -432,16 +433,11 @@ public class DBView extends Stage
 	public void copyTableNoHead()
 	{
 		// Call copy on Selected Tab.
-		try
+		Tab tab = this.tabPane.getSelectionModel().getSelectedItem();
+		if ( tab instanceof CopyInterface )
 		{
-			CopyInterface copyInterface = (CopyInterface)this.tabPane.getSelectionModel().getSelectedItem();
-			copyInterface.copyTableNoHead();
-		}
-		catch ( ClassCastException ccEx )
-		{
-			// suppress error
-			//ccEx.printStackTrace();
-		}
+			((CopyInterface)tab).copyTableNoHead();
+		}		
 	}
 	
 	/************************************************
@@ -451,16 +447,11 @@ public class DBView extends Stage
 	public void copyTableWithHead()
 	{
 		// Call copy on Selected Tab.
-		try
+		Tab tab = this.tabPane.getSelectionModel().getSelectedItem();
+		if ( tab instanceof CopyInterface )
 		{
-			CopyInterface copyInterface = (CopyInterface)this.tabPane.getSelectionModel().getSelectedItem();
-			copyInterface.copyTableWithHead();
-		}
-		catch ( ClassCastException ccEx )
-		{
-			// suppress error
-			//ccEx.printStackTrace();
-		}
+			((CopyInterface)tab).copyTableWithHead();
+		}		
 	}
 	
 	/********************************
@@ -469,22 +460,70 @@ public class DBView extends Stage
 	 */
 	public void openSchemaView()
 	{
-		// Activate DBSchemaTab, if already exists.
-		final ObservableList<Tab> tabLst =  this.tabPane.getTabs();
-		for ( Tab tab : tabLst )
+		// https://www.mkyong.com/java8/java-8-streams-filter-examples/
+		// https://stackoverflow.com/questions/35740543/java-8-stream-check-if-instanceof?utm_medium=organic&utm_source=google_rich_qa&utm_campaign=google_rich_qa
+		Tab tab = this.tabPane.getTabs().stream()
+				.filter( DBSchemaTab.class::isInstance )
+				.map( DBSchemaTab.class::cast )
+				.findAny()									// If 'findAny' then return found
+				.orElse(null);								// If not found, return null
+		
+		// found "DBSchemaTab"
+		if ( tab != null )
 		{
-			if ( tab instanceof DBSchemaTab )
-			{
-				this.tabPane.getSelectionModel().select( tab );
-				return;
-			}
+			// Activate DBSchemaTab, if already exists.
+			this.tabPane.getSelectionModel().select( tab );
+		}
+		else
+		{
+			// Create DBSchemaTab, if it doesn't exist.
+			final Tab newTab = new DBSchemaTab( this );
+			this.tabPane.getTabs().add( newTab );
+			this.tabPane.getSelectionModel().select( newTab );
+			this.Go();
+			tab = newTab;
 		}
 		
-		// Create DBSchemaTab, if it doesn't exist.
-		final Tab newTab = new DBSchemaTab( this );
-		this.tabPane.getTabs().add( newTab );
-		this.tabPane.getSelectionModel().select( newTab );
-		this.Go();
+		if ( tab instanceof FocusInterface)
+		{
+			((FocusInterface)tab).setFocus();
+		}
+	}
+	
+	/********************************
+	 * Open JDBC View 
+	 ********************************
+	 */
+	public void openJdbcView()
+	{
+		// https://www.mkyong.com/java8/java-8-streams-filter-examples/
+		// https://stackoverflow.com/questions/35740543/java-8-stream-check-if-instanceof?utm_medium=organic&utm_source=google_rich_qa&utm_campaign=google_rich_qa
+		Tab tab = this.tabPane.getTabs().stream()
+				.filter( DBJdbcTab.class::isInstance )
+				.map( DBJdbcTab.class::cast )
+				.findAny()									// If 'findAny' then return found
+				.orElse(null);								// If not found, return null
+		
+		// found "DBJdbcTab"
+		if ( tab != null )
+		{
+			// Activate DBJdbcTab, if already exists.
+			this.tabPane.getSelectionModel().select( tab );
+		}
+		else
+		{
+			// Create DBSchemaTab, if it doesn't exist.
+			final Tab newTab = new DBJdbcTab( this );
+			this.tabPane.getTabs().add( newTab );
+			this.tabPane.getSelectionModel().select( newTab );
+			this.Go();
+			tab = newTab;
+		}
+		
+		if ( tab instanceof FocusInterface)
+		{
+			((FocusInterface)tab).setFocus();
+		}
 	}
 	
 	public void commit()
@@ -555,22 +594,16 @@ public class DBView extends Stage
 		// ----------------------------------------------
 		// All Tabs
 		// ----------------------------------------------
-		ObservableList<Tab> tabLst = this.tabPane.getTabs();
-		for ( Tab tab : tabLst )
-		{
-			try
+		this.tabPane.getTabs().forEach
+		(
+			(tab)->
 			{
 				if ( tab instanceof ChangeLangInterface )
 				{
-					ChangeLangInterface chInterface = (ChangeLangInterface)tab;
-					chInterface.changeLang();
+					((ChangeLangInterface)tab).changeLang();
 				}
 			}
-			catch ( ClassCastException ccEx )
-			{
-				// suppress error
-				//ccEx.printStackTrace();
-			}
-		}
+		);
+		
 	}
 }

@@ -20,7 +20,9 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.application.Application;
 import javafx.stage.Stage;
+
 import milu.db.MyDBAbstract;
+import milu.gui.ctrl.common.PersistentButtonToggleGroup;
 import milu.main.MainController;
 
 public class UrlPaneMySQL extends UrlPaneAbstract
@@ -33,7 +35,7 @@ public class UrlPaneMySQL extends UrlPaneAbstract
 	
 	private HBox           hBoxToggle     = new HBox(2);
 	
-	private ToggleGroup    tglGroup       = new ToggleGroup();
+	private ToggleGroup    tglGroup       = new PersistentButtonToggleGroup();
 	
 	// ToggleButton for Basic
 	private ToggleButton   tglBtnBasic    = new ToggleButton();

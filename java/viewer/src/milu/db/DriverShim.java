@@ -60,4 +60,9 @@ public class DriverShim implements Driver
 		return this.driver.jdbcCompliant();
 	}
 
+	@Override
+	public String toString()
+	{
+		return this.driver.toString();
+	}
 }

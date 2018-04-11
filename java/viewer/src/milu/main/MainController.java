@@ -106,6 +106,7 @@ public class MainController
 				"file:resources/images/config.png",
 				"file:resources/images/quit.png",
 				"file:resources/images/sysinfo.png",
+				"file:resources/images/jdbc.png",
 				// MainToolBar
 				"file:resources/images/execsql.png",
 				"file:resources/images/explain.png",
@@ -145,6 +146,7 @@ public class MainController
 		{
 			"conf.lang.entity.schema.SchemaEntity",
 			"conf.lang.gui.common.MyAlert",
+			"conf.lang.gui.common.NodeName",
 			"conf.lang.gui.ctrl.menu.MainMenuBar",
 			"conf.lang.gui.ctrl.menu.MainToolBar",
 			"conf.lang.gui.ctrl.query.DBSqlTab",

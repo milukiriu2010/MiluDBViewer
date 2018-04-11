@@ -11,8 +11,16 @@ public class SQLiteConDynamic {
 		try{  
 			//step1 load the driver class
 			System.out.println( "step1" );
-			String driverPath = "C:\\myjava\\MiluDBViewer.git\\sample\\swingtest\\test1-1\\loader\\sqlite\\sqlite-jdbc-3.21.0.jar";
-			URL url = Paths.get(driverPath).toUri().toURL();
+			URL url = null;
+			if ( args.length == 0 || args[0].equals("1") )
+			{
+				String driverPath = "C:\\myjava\\MiluDBViewer.git\\sample\\swingtest\\test1-1\\loader\\sqlite\\sqlite-jdbc-3.21.0.jar";
+				url = Paths.get(driverPath).toUri().toURL();
+			}
+			else if ( args[0].equals("2") )
+			{
+				url = new URL("file:loader/sqlite/sqlite-jdbc-3.21.0.jar");
+			}
 			System.out.println( url );
 			URL[] urls = { url };
 			URLClassLoader loader =	new URLClassLoader( urls );
@@ -29,32 +37,10 @@ public class SQLiteConDynamic {
 			//step2 create  the connection object
 			System.out.println( "step2" );
 			Connection con = null;
-			String urljdbc = null;
-			if ( args.length == 0 || args[0].equals("1") )
-			{
-				urljdbc =  "jdbc:sqlite:C:\\myjava\\MiluDBViewer.git\\sample\\swingtest\\test1-1\\sql\\sqlite\\ex1.db";
-				System.out.println( urljdbc );
-				con = DriverManager.getConnection( urljdbc );
-			}
-			else if ( args[0].equals("2") )
-			{
-				urljdbc =   
-					"jdbc:sqlserver://localhost:1433;" +
-					"databaseName=miludb;integratedSecurity=true;";  
-				System.out.println( urljdbc );
-				con = DriverManager.getConnection( urljdbc );
-			}
-			else if ( args[0].equals("3") )
-			{
-				urljdbc =   
-						"jdbc:sqlserver://localhost:1433;" +
-						"databaseName=miludb;";  
-				System.out.println( urljdbc );
-				Properties prop = new Properties();
-				prop.setProperty("user", "milu");
-				prop.setProperty("password", "milu");
-				con = DriverManager.getConnection( urljdbc,prop );
-			}
+			String urljdbc = 
+				"jdbc:sqlite:C:\\myjava\\MiluDBViewer.git\\sample\\swingtest\\test1-1\\sql\\sqlite\\ex1.db";
+			System.out.println( urljdbc );
+			con = DriverManager.getConnection( urljdbc );
 			
 			//step3 create the statement object
 			System.out.println( "step3" );

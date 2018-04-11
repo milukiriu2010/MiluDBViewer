@@ -205,9 +205,10 @@ public class DBSqlScriptTab extends Tab
 	 ************************************************** 
 	 */
 	@Override
-	public void Go( MyDBAbstract myDBAbs )
+	public void Go()
 	{
 		long startTime = System.nanoTime();
+		MyDBAbstract myDBAbs = this.dbView.getMyDBAbstract();
 		MainController mainController = this.dbView.getMainController();
 		AppConf appConf = mainController.getAppConf();
 		
@@ -277,9 +278,10 @@ public class DBSqlScriptTab extends Tab
 	 * Override from ExecExplainDBInterface
 	 */
 	@Override
-	public void Explain( MyDBAbstract myDBAbs )
+	public void Explain()
 	{
 		long startTime = System.nanoTime();
+		MyDBAbstract myDBAbs = this.dbView.getMyDBAbstract();
 		MainController mainController = this.dbView.getMainController();
 		AppConf appConf = mainController.getAppConf();
 		
