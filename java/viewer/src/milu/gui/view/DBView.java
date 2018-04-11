@@ -489,6 +489,7 @@ public class DBView extends Stage
 			((FocusInterface)tab).setFocus();
 		}
 	}
+
 	
 	/********************************
 	 * Open JDBC View 
@@ -512,8 +513,40 @@ public class DBView extends Stage
 		}
 		else
 		{
-			// Create DBSchemaTab, if it doesn't exist.
+			// Create DBJdbcTab, if it doesn't exist.
 			final Tab newTab = new DBJdbcTab( this );
+			this.tabPane.getTabs().add( newTab );
+			this.tabPane.getSelectionModel().select( newTab );
+			tab = newTab;
+		}
+		
+		if ( tab instanceof FocusInterface)
+		{
+			((FocusInterface)tab).setFocus();
+		}
+	}
+	
+	/*
+	public void openView( Class<?> castClazz )
+	{
+		// https://www.mkyong.com/java8/java-8-streams-filter-examples/
+		// https://stackoverflow.com/questions/35740543/java-8-stream-check-if-instanceof?utm_medium=organic&utm_source=google_rich_qa&utm_campaign=google_rich_qa
+		Tab tab = this.tabPane.getTabs().stream()
+				.filter( castClazz::isInstance )
+				.findAny()									// If 'findAny' then return found
+				.orElse(null);								// If not found, return null
+		
+		// found "castClazz" Tab
+		if ( tab != null )
+		{
+			// Activate "Tab", if already exists.
+			this.tabPane.getSelectionModel().select( tab );
+		}
+		else
+		{
+			// Create "castClazz" Tab, if it doesn't exist.
+			//final Tab newTab = new DBJdbcTab( this );
+			final Tab newTab = castClazz.getDeclaredConstructor().newInstance();
 			this.tabPane.getTabs().add( newTab );
 			this.tabPane.getSelectionModel().select( newTab );
 			this.Go();
@@ -525,6 +558,7 @@ public class DBView extends Stage
 			((FocusInterface)tab).setFocus();
 		}
 	}
+	*/
 	
 	public void commit()
 	{

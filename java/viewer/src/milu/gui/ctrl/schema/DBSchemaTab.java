@@ -17,6 +17,7 @@ import milu.db.MyDBAbstract;
 
 import milu.gui.view.DBView;
 import milu.main.MainController;
+import milu.tool.MyTool;
 import milu.gui.ctrl.common.ChangeLangInterface;
 import milu.gui.ctrl.common.ExecQueryDBInterface;
 import milu.gui.ctrl.common.FocusInterface;
@@ -75,13 +76,6 @@ public class DBSchemaTab extends Tab
 		
 		this.setContent( brdPane );
 		
-		MainController mainController = this.dbView.getMainController();
-		
-		// set icon on Tab
-		ImageView iv = new ImageView(  mainController.getImage("file:resources/images/schema.png") );
-		iv.setFitHeight( 16 );
-		iv.setFitWidth( 16 );
-		this.setGraphic( iv );
 		
 		this.changeLang();
 	}
@@ -216,7 +210,11 @@ public class DBSchemaTab extends Tab
 	@Override	
 	public void changeLang()
 	{
-		ResourceBundle langRB = this.dbView.getMainController().getLangResource("conf.lang.gui.ctrl.schema.DBSchemaTab");
+		MainController mainCtrl = this.dbView.getMainController();
+		ResourceBundle langRB = mainCtrl.getLangResource("conf.lang.gui.ctrl.schema.DBSchemaTab");
+		
+		// set icon on Tab
+		this.setGraphic( MyTool.createImageView( 16, 16, mainCtrl.getImage("file:resources/images/schema.png") ) );
 		
 		// Tab Title
 		this.setText( langRB.getString("TITLE_TAB") );
