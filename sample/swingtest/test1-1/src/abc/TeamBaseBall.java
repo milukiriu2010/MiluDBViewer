@@ -1,4 +1,4 @@
-package file.json.my;
+package abc;
 
 public class TeamBaseBall extends Team
 {
@@ -26,4 +26,11 @@ public class TeamBaseBall extends Team
 	{
 		this.league = league;
 	}
+	
+	@Override
+	public TeamBaseBall clone() throws CloneNotSupportedException
+	{
+		Team clone = super.clone();
+		return (TeamBaseBall)clone;
+	}	
 }

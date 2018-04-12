@@ -1,4 +1,4 @@
-package file.json.my;
+package abc;
 
 public class TeamSoccer extends Team 
 {
@@ -18,5 +18,13 @@ public class TeamSoccer extends Team
 	public void setLevel( int level )
 	{
 		this.level = level;
+	}
+	
+	
+	@Override
+	public TeamSoccer clone() throws CloneNotSupportedException
+	{
+		Team clone = super.clone();
+		return (TeamSoccer)clone;
 	}
 }

@@ -6,6 +6,8 @@ import java.net.URL;
 import java.nio.file.Paths;
 import java.util.Enumeration;
 
+import abc.DriverShim;
+
 // https://github.com/adejanovski/cassandra-jdbc-wrapper
 // http://www.ne.jp/asahi/hishidama/home/tech/java/DriverManager.html#h_connect
 // http://www.ne.jp/asahi/hishidama/home/tech/java/DriverManager.html

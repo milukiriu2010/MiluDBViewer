@@ -30,7 +30,10 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.google.gson.GsonBuilder;
 
-import file.json.my.TeamBaseBall.LEAGUE;
+import abc.TeamBaseBall.LEAGUE;
+import abc.Team;
+import abc.TeamBaseBall;
+import abc.TeamSoccer;
 
 public class GsonExample extends Application
 {
@@ -42,6 +45,7 @@ public class GsonExample extends Application
 	private Button    btnJson2JsonElement = new Button("json2jsonelement");
 	private Button    btnJson2ListTeam = new Button("Json2List<Team>");
 	private Button    btnJson2ListTeamBaseBall = new Button("Json2List<TeamBaseBall>");
+	private Button    btnClone  = new Button("clone");
 
 	@Override
 	public void start(Stage stage) throws Exception 
@@ -79,6 +83,7 @@ public class GsonExample extends Application
 		btnJson2JsonElement.setOnAction( e->json2jsonelement() );
 		btnJson2ListTeam.setOnAction( e->json2ListTeam() );
 		btnJson2ListTeamBaseBall.setOnAction( e->json2ListTeamBaseBall() );
+		btnClone.setOnAction( e->cloneTest() );
 		
 		HBox hBoxParse = new HBox(2);
 		hBoxParse.getChildren().addAll
@@ -88,7 +93,8 @@ public class GsonExample extends Application
 			btnObj2Json, 
 			btnJson2JsonElement,
 			btnJson2ListTeam,
-			btnJson2ListTeamBaseBall
+			btnJson2ListTeamBaseBall,
+			btnClone
 		);
 		
 		ToggleGroup tglGroup = new ToggleGroup();
@@ -272,6 +278,7 @@ public class GsonExample extends Application
 		
 		Scene scene = new Scene( sp, 640, 480 );
 		stage.setScene(scene);
+		stage.setResizable(true);
 		stage.show();
 	}
 	
@@ -466,6 +473,128 @@ public class GsonExample extends Application
 			}
 		);
 		taResult.setText(sb.toString());
+	}
+	
+	private void cloneTest()
+	{
+		List<Team>  teamList = new ArrayList<Team>();
+		
+		TeamBaseBall  tigers = new TeamBaseBall();
+		tigers.setType("baseball");
+		tigers.setName("tigers");
+		tigers.setLeague( LEAGUE.CENTRAL );
+		tigers.addPlayer("nomi");
+		tigers.addPlayer("fujinami");
+		tigers.putYearPosMap( 2016, 4 );
+		tigers.putYearPosMap( 2017, 2 );
+		teamList.add(tigers);
+
+		TeamSoccer  urawa = new TeamSoccer();
+		urawa.setType("soccer");
+		urawa.setName("urawa");
+		urawa.setLevel( 1 );
+		urawa.addPlayer("makino");
+		urawa.addPlayer("kouroki");
+		urawa.putYearPosMap( 2016, 1 );
+		urawa.putYearPosMap( 2017, 7 );
+		teamList.add(urawa);
+		
+		List<Team> teamListClone = (List<Team>)((ArrayList<Team>)teamList).clone();
+		Team tigersClone = null;
+		try
+		{
+			tigersClone = tigers.clone();
+		}
+		catch ( CloneNotSupportedException cloneEx )
+		{
+			cloneEx.printStackTrace();
+		}
+		
+		StringBuffer sb = new StringBuffer();
+		
+		sb.append("<<original:list>>\n");
+		teamList.forEach
+		(
+			(team)->
+			{
+				sb.append( team.hashCode() + "\n" );
+				sb.append( team.getClass() + "\n" );
+				sb.append( team.getName().hashCode() + "/" + team.getName() + "\n" );
+				if ( team instanceof TeamBaseBall)
+				{
+					sb.append( "  " + ((TeamBaseBall)team).getLeague().toString() + "\n" );
+				}
+				team.getPlayerLst().forEach
+				( 
+					(player)->
+					{
+						sb.append( "  " + player.hashCode() + "/" + player + "\n" ); 
+					}
+				);
+				//team.getPlayerLst().forEach( (player)->sb.append( "  " + player + "\n" ) );
+				//team.getYearPosMap().forEach( (year,pos)->sb.append( "  " + year + ":" + pos + "\n" ));
+			}
+		);
+		
+		sb.append("<<clone:list>>\n");
+		teamListClone.forEach
+		(
+			(team)->
+			{
+				sb.append( team.hashCode() + "\n" );
+				sb.append( team.getClass() + "\n" );
+				sb.append( team.getName().hashCode() + "/" + team.getName() + "\n" );
+				if ( team instanceof TeamBaseBall)
+				{
+					sb.append( "  " + ((TeamBaseBall)team).getLeague().toString() + "\n" );
+				}
+				team.getPlayerLst().forEach
+				( 
+					(player)->
+					{
+						sb.append( "  " + player.hashCode() + "/" + player + "\n" ); 
+					}
+				);
+				//team.getPlayerLst().forEach( (player)->sb.append( "  " + player + "\n" ) );
+				//team.getYearPosMap().forEach( (year,pos)->sb.append( "  " + year + ":" + pos + "\n" ));
+			}
+		);
+		
+		
+		sb.append("<<original:each>>\n");
+		sb.append( tigers.hashCode() + "\n" );
+		sb.append( tigers.getClass() + "\n" );
+		sb.append( tigers.getName().hashCode() + "/" + tigers.getName() + "\n" );
+		tigers.getPlayerLst().forEach
+		( 
+			(player)->
+			{
+				sb.append( "  " + player.hashCode() + "/" + player + "\n" ); 
+			}
+		);
+		sb.append("<<clone:each>>\n");
+		sb.append( tigersClone.hashCode() + "\n" );
+		sb.append( tigersClone.getClass() + "\n" );
+		sb.append( tigersClone.getName().hashCode() + "/" + tigersClone.getName() + "\n" );
+		tigersClone.getPlayerLst().forEach
+		( 
+			(player)->
+			{
+				sb.append( "  " + player.hashCode() + "/" + player + "\n" );
+			}
+		);
+		
+		taResult.setText(sb.toString());
+		
+		String xxx1 = "xxx";
+		String xxx2 = new String( xxx1 );
+		System.out.println( "xxx1:"+xxx1.hashCode() );
+		System.out.println( "xxx2:"+xxx2.hashCode() );
+		
+		Integer int1 = Integer.valueOf(111);
+		Integer int2 = Integer.valueOf(111);
+		System.out.println( "int1:"+int1.hashCode() );
+		System.out.println( "int2:"+int2.hashCode() );
 	}
 
 	public static void main(String[] args) {

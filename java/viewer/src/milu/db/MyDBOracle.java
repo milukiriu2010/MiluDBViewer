@@ -26,7 +26,7 @@ public class MyDBOracle extends MyDBAbstract
 	@Override
 	void init()
 	{
-		this.driverClassName = "com.github.cassandra.jdbc.CassandraDriver"; 
+		this.driverClassName = "oracle.jdbc.driver.OracleDriver"; 
 	}
 	
 	/**

@@ -1,4 +1,4 @@
-package db.cassandra;
+package milu.db.driver;
 
 import java.sql.Connection;
 import java.sql.Driver;
@@ -13,7 +13,7 @@ public class DriverShim implements Driver
 {
 	private Driver driver = null;
 	
-	DriverShim(Driver d)
+	public DriverShim(Driver d)
 	{
 		this.driver = d;
 	}
@@ -60,4 +60,9 @@ public class DriverShim implements Driver
 		return this.driver.jdbcCompliant();
 	}
 
+	@Override
+	public String toString()
+	{
+		return this.driver.toString();
+	}
 }

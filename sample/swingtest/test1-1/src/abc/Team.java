@@ -1,11 +1,11 @@
-package file.json.my;
+package abc;
 
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.HashMap;
 
-public abstract class Team
+public abstract class Team implements Cloneable
 {
 	protected String type = null;
 	
@@ -59,5 +59,14 @@ public abstract class Team
 	public void putYearPosMap( Integer year, Integer pos )
 	{
 		this.yearPosMap.put( year, pos );
+	}
+	
+	@Override
+	public Team clone() throws CloneNotSupportedException
+	{
+		Object clone = super.clone();
+		Team team = (Team)clone;
+		//team.name = new String( this.name );
+		return team;
 	}
 }

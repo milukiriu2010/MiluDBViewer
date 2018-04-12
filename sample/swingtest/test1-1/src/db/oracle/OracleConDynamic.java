@@ -1,27 +1,28 @@
-package db.sqlite;
+package db.oracle;
 
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.nio.file.Paths;
 import java.sql.*; 
-
+import java.util.*;
 
 import abc.DriverShim;
 
-public class SQLiteConDynamic {
+public class OracleConDynamic {
 	public static void main(String args[]){  
 		try{  
 			//step1 load the driver class
 			System.out.println( "step1" );
+			System.setProperty( "oracle.net.tns_admin", "C:\\oracle\\instantclient_12_2\\network\\admin" );
 			URL url = null;
 			if ( args.length == 0 || args[0].equals("1") )
 			{
-				String driverPath = "C:\\myjava\\MiluDBViewer.git\\sample\\swingtest\\test1-1\\loader\\sqlite\\sqlite-jdbc-3.21.0.jar";
+				String driverPath = "C:\\myjava\\MiluDBViewer.git\\java\\viewer\\lib\\oracle\\ojdbc8.jar";
 				url = Paths.get(driverPath).toUri().toURL();
 			}
 			else if ( args[0].equals("2") )
 			{
-				url = new URL("file:loader/sqlite/sqlite-jdbc-3.21.0.jar");
+				url = new URL("file:loader/oracle/ojdbc6.jar");
 			}
 			System.out.println( url );
 			URL[] urls = { url };
@@ -29,20 +30,26 @@ public class SQLiteConDynamic {
 			Driver d = 
 					(Driver)Class.forName
 					(
-						"org.sqlite.JDBC", 
+						"oracle.jdbc.driver.OracleDriver", 
 						true, 
 						loader
 					).getDeclaredConstructor().newInstance();
 			DriverManager.registerDriver( new DriverShim(d) );
 			
+			
+	        Enumeration<Driver> drivers = DriverManager.getDrivers();
+	        while(drivers.hasMoreElements()){
+	            Driver driver = drivers.nextElement();
+	            System.out.println("driver:"+driver.toString()+":major["+driver.getMajorVersion()+"]minnor["+driver.getMinorVersion()+"]");
+	        }			
 			  
 			//step2 create  the connection object
 			System.out.println( "step2" );
 			Connection con = null;
 			String urljdbc = 
-				"jdbc:sqlite:C:\\myjava\\MiluDBViewer.git\\sample\\swingtest\\test1-1\\sql\\sqlite\\ex1.db";
+					"jdbc:oracle:thin:@ORCL";
 			System.out.println( urljdbc );
-			con = DriverManager.getConnection( urljdbc );
+			con = DriverManager.getConnection( urljdbc, "milu", "milu" );
 			
 			//step3 create the statement object
 			System.out.println( "step3" );
@@ -50,7 +57,7 @@ public class SQLiteConDynamic {
 			  
 			//step4 execute query
 			System.out.println( "step4" );
-			ResultSet rs=stmt.executeQuery("select * from sqlite_master");
+			ResultSet rs=stmt.executeQuery("select * from user_tables where rownum <= 1");
 			//ResultSet rs=stmt.executeQuery("select * from information_schema.schemata");
 			while(rs.next())  
 			{

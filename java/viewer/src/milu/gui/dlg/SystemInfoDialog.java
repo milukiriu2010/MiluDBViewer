@@ -4,16 +4,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import java.util.TreeMap;
 import java.util.Properties;
 import java.util.ResourceBundle;
 import java.util.Set;
-import java.util.Enumeration;
-
-import java.sql.Driver;
-import java.sql.DriverManager;
-import java.sql.DriverPropertyInfo;
-import java.sql.SQLException;
 
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
@@ -22,8 +15,6 @@ import javafx.scene.control.TabPane;
 import javafx.scene.control.TabPane.TabClosingPolicy;
 import javafx.scene.control.Label;
 import javafx.scene.control.Button;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.ListView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -37,7 +28,6 @@ import javafx.animation.Timeline;
 import javafx.animation.KeyFrame;
 import javafx.event.EventHandler;
 import javafx.event.ActionEvent;
-import javafx.geometry.Insets;
 import javafx.geometry.Rectangle2D;
 
 import milu.gui.ctrl.query.SqlTableView;
@@ -65,9 +55,6 @@ public class SystemInfoDialog extends Dialog<Boolean>
 	// Interval to get Memory Information
 	private Timeline  memTimeLine = new Timeline();
 	
-	// Tab for JDBC Driver Information
-	private Tab      jdbcDriverTab = new Tab();
-
 	public SystemInfoDialog( DBView dbView )
 	{
 		super();
@@ -89,10 +76,7 @@ public class SystemInfoDialog extends Dialog<Boolean>
 		// Set Content on Memory Information Tab
 		this.setContentOnMemTab();
 		
-		// Set Content on JDBC Driver Information Tab
-		this.setContentOnJDBCDriverTab();
-		
-		this.tabPane.getTabs().addAll( this.sysInfoTab, this.envTab, this.jdbcDriverTab, this.memTab );
+		this.tabPane.getTabs().addAll( this.sysInfoTab, this.envTab, this.memTab );
 		this.tabPane.setTabClosingPolicy( TabClosingPolicy.UNAVAILABLE );
 		
 		BorderPane pane = new BorderPane();
@@ -367,100 +351,5 @@ public class SystemInfoDialog extends Dialog<Boolean>
         }
         
         dispTableView.setTableViewSQL( this.headLst, dataLst );
-	}
-	
-	private void setContentOnJDBCDriverTab()
-	{
-		
-		List<Driver> driverLst = new ArrayList<>();
-		Enumeration<Driver> drivers = DriverManager.getDrivers();
-		while (drivers.hasMoreElements())
-		{
-			driverLst.add(drivers.nextElement());
-		}
-		
-		//ChoiceBox<Driver>  cbDriver = new ChoiceBox<>();
-		ListView<Driver>   cbDriver = new ListView<>();
-		SqlTableView       tvDriver = new SqlTableView(this.dbView);
-		
-		cbDriver.getItems().addAll(driverLst);
-		cbDriver.getSelectionModel().selectFirst();
-		this.changeSelectedDriver( cbDriver.getSelectionModel().getSelectedItem(), tvDriver);
-		//cbDriver.valueProperty().addListener( (obs,oldVal,driver)->this.changeSelectedDriver(driver, tvDriver) );
-		cbDriver.getSelectionModel().selectedItemProperty().addListener( (obs,oldVal,driver)->this.changeSelectedDriver(driver, tvDriver) );
-		
-		Button btnAdd = new Button( "Add" );
-		Button btnDel = new Button( "Delete" );
-		btnDel.setOnAction
-		(
-			(event)->
-			{
-				Driver selectedDriver = cbDriver.getSelectionModel().getSelectedItem();
-				if ( selectedDriver == null )
-				{
-					return;
-				}
-				try
-				{
-					DriverManager.deregisterDriver(selectedDriver);
-				}
-				catch ( SQLException sqlEx )
-				{
-					sqlEx.printStackTrace();
-				}
-				cbDriver.getItems().remove(selectedDriver);
-			}
-		);
-		
-		
-		HBox   hBoxBtn = new HBox(2);
-		hBoxBtn.getChildren().addAll( btnAdd, btnDel );
-		
-		VBox  vBoxMainte = new VBox(2);
-		vBoxMainte.getChildren().addAll( cbDriver, hBoxBtn );
-
-		
-		BorderPane  brdPane = new BorderPane();
-		brdPane.setPadding( new Insets( 10, 10, 10, 10 ) );
-		BorderPane.setMargin( vBoxMainte, new Insets( 2, 2, 2, 2 ) );
-		BorderPane.setMargin( tvDriver, new Insets( 2, 2, 2, 2 ) );
-		brdPane.setLeft( vBoxMainte );
-		brdPane.setCenter( tvDriver );
-		
-		this.jdbcDriverTab.setContent( brdPane );
-		
-		ResourceBundle langRB = this.dbView.getMainController().getLangResource("conf.lang.gui.dlg.SystemInfoDialog");
-		this.jdbcDriverTab.setText( langRB.getString( "TITLE_JDBCINFO" ) );
-	}
-	
-	private void changeSelectedDriver( Driver driver, SqlTableView tvDriver )
-	{
-		try
-		{
-			DriverPropertyInfo[] driverPropInfoLst = driver.getPropertyInfo( "", null );
-			Map<String,String> driverMap = new TreeMap<>(); 
-			for ( DriverPropertyInfo  driverPropInfo : driverPropInfoLst )
-			{
-				driverMap.put( driverPropInfo.name, driverPropInfo.value );
-			}
-			System.out.println( "driverMap.size:" + driverMap.size() );
-			List<List<String>> dataLst = new ArrayList<>();
-			driverMap.forEach
-			(
-				(k,v)->
-				{
-					List<String> data = new ArrayList<>();
-					data.add(k);
-					data.add(v);
-					dataLst.add(data);
-				}
-			);
-			System.out.println( "dataLst.size:" + dataLst.size() );
-			tvDriver.setTableViewSQL( this.headLst, dataLst );
-		}
-		catch ( SQLException sqlEx )
-		{
-			sqlEx.printStackTrace();
-		}		
 	}
 }

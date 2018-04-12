@@ -1,12 +1,12 @@
 package milu.gui.ctrl.jdbc;
 
+import java.io.File;
 import java.sql.Driver;
 import java.sql.DriverManager;
 import java.sql.DriverPropertyInfo;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.Map;
@@ -14,7 +14,7 @@ import java.util.ResourceBundle;
 import java.util.TreeMap;
 import java.util.stream.Collectors;
 
-import javafx.application.Platform;
+import javafx.collections.ObservableList;
 import javafx.geometry.Orientation;
 import javafx.scene.control.ListView;
 import javafx.scene.control.SplitPane;
@@ -26,6 +26,8 @@ import javafx.scene.control.Tab;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.stage.FileChooser;
+import milu.db.driver.LoadDriver;
 import milu.gui.ctrl.common.ChangeLangInterface;
 import milu.gui.ctrl.common.CopyInterface;
 import milu.gui.ctrl.common.FocusInterface;
@@ -42,25 +44,54 @@ public class DBJdbcTab extends Tab
 		ChangeLangInterface
 {
 	private DBView          dbView = null;
-
-	// Left  => Driver List
-	// Right => Driver Info
-	private SplitPane splitPane = new SplitPane();
 	
     // Head List
     private List<String> headLst = new ArrayList<>(Arrays.asList("KEY","VALUE"));
 	
+	// Top Pane
+	BorderPane topPane = new BorderPane();
+
+    // -----------------------------------------------------
+	// [Center]
+    // -----------------------------------------------------
+	// Left  => Driver List
+	// Right => Driver Info
+	private SplitPane  showPane = new SplitPane();
+	
+	private BorderPane editPane = new BorderPane();
+	
+    // -----------------------------------------------------
+	// [Center]-[Left]
+    // -----------------------------------------------------
 	private ListView<Driver>   driverListView = new ListView<>();
 	
 	private Button  btnAdd = new Button();
 	
 	private Button  btnDel = new Button();
 	
+	// -----------------------------------------------------
+	// [Center]-[Right]
+	// -----------------------------------------------------
 	private TextField  majorVerTxt = new TextField();
 	
 	private TextField  minorVerTxt = new TextField();
 	
 	private SqlTableView driverTableView = null;
+
+	// -----------------------------------------------------
+	// [Bottom]
+	// -----------------------------------------------------
+	private ListView<String>  driverPathListView = new ListView<>();
+	
+	private Button  btnAddJar = new Button("Add Jars");
+	
+	private Button  btnDelJar = new Button("Remove Jar");
+	
+	private TextField driverClassNameTxt = new TextField();
+	
+	private Button  btnLoad   = new Button("Load");
+	
+	private Button  btnCancel = new Button("Cancel");
 	
 	public DBJdbcTab( DBView dbView )
 	{
@@ -68,6 +99,36 @@ public class DBJdbcTab extends Tab
 		
 		this.dbView = dbView;
 		
+		// ------------------------------------------------
+		// Show Pane
+		// ------------------------------------------------
+		this.setShowPane();
+		
+		// ------------------------------------------------
+		// Edit Pane
+		// ------------------------------------------------
+		this.setEditPane();
+		
+		this.setContent( this.topPane );
+		
+		MainController mainCtrl = this.dbView.getMainController();
+		
+		// set icon on Tab
+		this.setGraphic( MyTool.createImageView( 16, 16, mainCtrl.getImage("file:resources/images/jdbc.png") ) );
+		
+		// set Title on Tab
+		this.setText("JDBC");
+		
+		// set data
+		this.setData();
+		
+		this.setAction();
+		
+		this.changeLang();
+	}
+	
+	private void setShowPane()
+	{
 		HBox hBoxBtn = new HBox(2);
 		hBoxBtn.setSpacing(2);
 		hBoxBtn.getChildren().addAll( this.btnAdd, this.btnDel );
@@ -88,31 +149,41 @@ public class DBJdbcTab extends Tab
 		VBox vBoxDriverInfo = new VBox(2);
 		vBoxDriverInfo.getChildren().addAll( hBoxVer, this.driverTableView );
 		
-		// SplitPane
-		this.splitPane.setOrientation(Orientation.HORIZONTAL);
-		this.splitPane.getItems().addAll( vBoxDriverCtrl, vBoxDriverInfo );
-		this.splitPane.setDividerPositions( 0.5f, 0.5f );
+		// Show Pane
+		this.showPane.setOrientation(Orientation.HORIZONTAL);
+		this.showPane.getItems().addAll( vBoxDriverCtrl, vBoxDriverInfo );
+		this.showPane.setDividerPositions( 0.5f, 0.5f );
 		
-		BorderPane brdPane = new BorderPane();
-		brdPane.setCenter( this.splitPane );
-		
-		this.setContent( brdPane );
-		
-		MainController mainCtrl = this.dbView.getMainController();
-		
-		// set icon on Tab
-		this.setGraphic( MyTool.createImageView( 16, 16, mainCtrl.getImage("file:resources/images/jdbc.png") ) );
-		
-		// set Title on Tab
-		this.setText("JDBC");
-		
-		// set data
-		this.setData();
-		
-		this.setAction();
-		
-		this.changeLang();
+		this.topPane.setCenter( this.showPane );
 	}
+	
+	private void setEditPane()
+	{
+		Label lblDriverPath = new Label("JDBC Driver Path");
+		VBox vBoxDriverPathBtn = new VBox(2);
+		vBoxDriverPathBtn.getChildren().addAll( this.btnAddJar, this.btnDelJar );
+		
+		HBox  hBoxDriverPath = new HBox(2);
+		hBoxDriverPath.getChildren().addAll( this.driverPathListView, vBoxDriverPathBtn );
+		
+		Label lblDriverClassName = new Label("JDBC Driver Class Name");
+		
+		HBox  hBoxNextBtn = new HBox(2);
+		hBoxNextBtn.getChildren().addAll( this.btnLoad, this.btnCancel );
+		
+		VBox vBox = new VBox(2);
+		vBox.getChildren().addAll
+		( 
+			lblDriverPath,
+			hBoxDriverPath,
+			lblDriverClassName,
+			this.driverClassNameTxt,
+			hBoxNextBtn
+		);
+		this.editPane.setCenter( vBox );
+	}
+	
+	
 	
 	private void setData()
 	{
@@ -135,6 +206,88 @@ public class DBJdbcTab extends Tab
 	private void setAction()
 	{
 		this.driverListView.getSelectionModel().selectedItemProperty().addListener( (obs,oldVal,driver)->this.changeSelectedDriver(driver) );
+		
+		this.btnDel.setOnAction
+		(
+			(event)->
+			{
+				Driver selectedDriver = this.driverListView.getSelectionModel().getSelectedItem();
+				if ( selectedDriver == null )
+				{
+					return;
+				}
+				try
+				{
+					DriverManager.deregisterDriver(selectedDriver);
+				}
+				catch ( SQLException sqlEx )
+				{
+					this.showException( sqlEx );
+				}
+				finally
+				{
+					this.driverListView.getItems().remove(selectedDriver);
+				}
+			}
+		);
+
+		this.btnAdd.setOnAction
+		( 
+			(event)->
+			{
+				
+				this.topPane.setCenter( this.editPane );
+			}
+		);
+		
+		this.btnAddJar.setOnAction
+		(
+			(event)->
+			{
+				FileChooser fc = new FileChooser();
+				List<File> fileLst = fc.showOpenMultipleDialog(this.dbView);
+				if ( fileLst == null )
+				{
+					return;
+				}
+				fileLst.forEach( (file)->this.driverPathListView.getItems().add(file.getAbsolutePath()) );
+			}
+		);
+		
+		this.btnDelJar.setOnAction
+		(
+			(event)->
+			{
+				ObservableList<String>  selectedItems = this.driverPathListView.getSelectionModel().getSelectedItems();
+				this.driverPathListView.getItems().removeAll( selectedItems );
+			}
+		);
+		
+		this.btnLoad.setOnAction
+		(
+			(event)->
+			{
+				try
+				{
+					Driver driver =
+							LoadDriver.loadDriver( this.driverClassNameTxt.getText(), this.driverPathListView.getItems() );
+					this.driverListView.getItems().add(driver);
+					this.driverListView.getSelectionModel().select(driver);
+				}
+				catch ( Exception ex )
+				{
+					this.showException(ex);
+				}
+				finally
+				{
+					this.driverPathListView.getItems().removeAll( this.driverPathListView.getItems() );
+					this.driverClassNameTxt.setText("");
+					this.topPane.setCenter(this.showPane);
+				}
+			}
+		);
+		
+		this.btnCancel.setOnAction( (event)->this.topPane.setCenter( this.showPane ) );
 	}
 	
 	private void changeSelectedDriver( Driver driver )
@@ -167,16 +320,20 @@ public class DBJdbcTab extends Tab
 		}
 		catch ( SQLException sqlEx )
 		{
-			MainController mainCtrl = this.dbView.getMainController();
-    		MyAlertDialog alertDlg = new MyAlertDialog( AlertType.WARNING, mainCtrl );
-    		ResourceBundle langRB = mainCtrl.getLangResource("conf.lang.gui.common.MyAlert");
-			alertDlg.setHeaderText( langRB.getString("TITLE_MISC_ERROR") );
-    		alertDlg.setTxtExp( sqlEx );
-    		alertDlg.showAndWait();
-    		alertDlg = null;
-		}		
+			this.showException( sqlEx );
+		}
 	}
 	
+	private void showException( Exception ex )
+	{
+		MainController mainCtrl = this.dbView.getMainController();
+		MyAlertDialog alertDlg = new MyAlertDialog( AlertType.WARNING, mainCtrl );
+		ResourceBundle langRB = mainCtrl.getLangResource("conf.lang.gui.common.MyAlert");
+		alertDlg.setHeaderText( langRB.getString("TITLE_MISC_ERROR") );
+		alertDlg.setTxtExp( ex );
+		alertDlg.showAndWait();
+		alertDlg = null;
+	}
 	
 	/**
 	 * set Focus on TextArea

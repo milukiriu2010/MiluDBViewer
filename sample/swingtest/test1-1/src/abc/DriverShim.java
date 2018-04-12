@@ -1,4 +1,4 @@
-package milu.db;
+package abc;
 
 import java.sql.Connection;
 import java.sql.Driver;
@@ -13,7 +13,7 @@ public class DriverShim implements Driver
 {
 	private Driver driver = null;
 	
-	DriverShim(Driver d)
+	public DriverShim(Driver d)
 	{
 		this.driver = d;
 	}

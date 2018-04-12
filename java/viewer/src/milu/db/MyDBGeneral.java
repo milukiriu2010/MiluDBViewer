@@ -14,6 +14,8 @@ import java.net.URLClassLoader;
 import java.net.MalformedURLException;
 import java.lang.reflect.InvocationTargetException;
 
+import milu.db.driver.DriverShim;
+
 public class MyDBGeneral extends MyDBAbstract 
 {
 	@Override
