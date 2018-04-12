@@ -7,10 +7,9 @@ import javafx.scene.control.Tab;
 import javafx.scene.control.TreeItem;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-
-import milu.db.abs.AbsDBFactory;
-import milu.db.abs.ObjDBFactory;
-import milu.db.abs.ObjDBInterface;
+import milu.db.obj.abs.AbsDBFactory;
+import milu.db.obj.abs.ObjDBFactory;
+import milu.db.obj.abs.ObjDBInterface;
 import milu.entity.schema.SchemaEntity;
 import milu.gui.ctrl.schema.SchemaProcViewTab;
 

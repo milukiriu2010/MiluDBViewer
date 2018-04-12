@@ -8,11 +8,9 @@ import java.sql.SQLException;
 import javafx.concurrent.Task;
 
 import milu.db.MyDBAbstract;
-
-import milu.db.abs.AbsDBFactory;
-import milu.db.abs.ObjDBFactory;
-import milu.db.abs.ObjDBInterface;
-
+import milu.db.obj.abs.AbsDBFactory;
+import milu.db.obj.abs.ObjDBFactory;
+import milu.db.obj.abs.ObjDBInterface;
 import milu.entity.schema.SchemaEntity;
 
 import milu.main.MainController;

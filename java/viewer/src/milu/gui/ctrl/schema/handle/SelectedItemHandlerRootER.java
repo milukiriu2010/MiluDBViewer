@@ -10,10 +10,10 @@ import javafx.collections.ObservableList;
 
 import milu.entity.schema.SchemaEntity;
 import milu.entity.schema.SchemaEntityEachFK;
-import milu.db.abs.AbsDBFactory;
-import milu.db.abs.ObjDBFactory;
-import milu.db.abs.ObjDBInterface;
-import milu.db.fk.FKDBAbstract;
+import milu.db.obj.abs.AbsDBFactory;
+import milu.db.obj.abs.ObjDBFactory;
+import milu.db.obj.abs.ObjDBInterface;
+import milu.db.obj.fk.FKDBAbstract;
 import milu.gui.ctrl.schema.SchemaERViewTab;
 import milu.main.MainController;
 import milu.tool.MyTool;

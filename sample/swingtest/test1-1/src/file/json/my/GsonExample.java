@@ -499,6 +499,7 @@ public class GsonExample extends Application
 		urawa.putYearPosMap( 2017, 7 );
 		teamList.add(urawa);
 		
+		@SuppressWarnings("unchecked")
 		List<Team> teamListClone = (List<Team>)((ArrayList<Team>)teamList).clone();
 		Team tigersClone = null;
 		try

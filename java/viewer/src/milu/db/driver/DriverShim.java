@@ -59,6 +59,12 @@ public class DriverShim implements Driver
 	{
 		return this.driver.jdbcCompliant();
 	}
+	
+	public String getDriverClazzName()
+	{
+		String driverClazzName = this.driver.toString();
+		return driverClazzName.substring(0,driverClazzName.lastIndexOf("@"));
+	}
 
 	@Override
 	public String toString()

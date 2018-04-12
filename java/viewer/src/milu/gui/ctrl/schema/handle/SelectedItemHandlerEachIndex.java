@@ -2,12 +2,10 @@ package milu.gui.ctrl.schema.handle;
 
 import javafx.collections.ObservableList;
 import javafx.scene.control.TreeItem;
-
-import milu.db.abs.AbsDBFactory;
-import milu.db.abs.ObjDBFactory;
-import milu.db.abs.ObjDBInterface;
-import milu.db.indexcolumn.IndexColumnDBAbstract;
-
+import milu.db.obj.abs.AbsDBFactory;
+import milu.db.obj.abs.ObjDBFactory;
+import milu.db.obj.abs.ObjDBInterface;
+import milu.db.obj.indexcolumn.IndexColumnDBAbstract;
 import milu.entity.schema.SchemaEntity;
 
 import java.sql.SQLException;

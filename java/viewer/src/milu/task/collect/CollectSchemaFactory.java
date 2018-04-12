@@ -1,7 +1,7 @@
 package milu.task.collect;
 
-import milu.db.abs.AbsDBFactory;
 import milu.db.MyDBAbstract;
+import milu.db.obj.abs.AbsDBFactory;
 import milu.entity.schema.SchemaEntity;
 import milu.main.MainController;
 import milu.task.ProgressInterface;

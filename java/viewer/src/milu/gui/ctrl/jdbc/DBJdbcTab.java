@@ -17,6 +17,7 @@ import java.util.stream.Collectors;
 import javafx.collections.ObservableList;
 import javafx.geometry.Orientation;
 import javafx.scene.control.ListView;
+import javafx.scene.control.ListCell;
 import javafx.scene.control.SplitPane;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -49,7 +50,7 @@ public class DBJdbcTab extends Tab
     private List<String> headLst = new ArrayList<>(Arrays.asList("KEY","VALUE"));
 	
 	// Top Pane
-	BorderPane topPane = new BorderPane();
+	private BorderPane topPane = new BorderPane();
 
     // -----------------------------------------------------
 	// [Center]
@@ -163,6 +164,8 @@ public class DBJdbcTab extends Tab
 		VBox vBoxDriverPathBtn = new VBox(2);
 		vBoxDriverPathBtn.getChildren().addAll( this.btnAddJar, this.btnDelJar );
 		
+		this.driverPathListView.setEditable(true);
+		
 		HBox  hBoxDriverPath = new HBox(2);
 		hBoxDriverPath.getChildren().addAll( this.driverPathListView, vBoxDriverPathBtn );
 		
@@ -182,8 +185,6 @@ public class DBJdbcTab extends Tab
 		);
 		this.editPane.setCenter( vBox );
 	}
-	
-	
 	
 	private void setData()
 	{
@@ -206,6 +207,26 @@ public class DBJdbcTab extends Tab
 	private void setAction()
 	{
 		this.driverListView.getSelectionModel().selectedItemProperty().addListener( (obs,oldVal,driver)->this.changeSelectedDriver(driver) );
+		this.driverListView.setCellFactory
+		(
+			value -> new ListCell<Driver>()
+			{
+				@Override
+				protected void updateItem( Driver driver, boolean empty )
+				{
+					super.updateItem( driver, empty );
+					if ( empty || driver == null || driver.toString() == null )
+					{
+						setText(null);
+					}
+					else
+					{
+						String driverClazzName = driver.toString();
+						setText( driverClazzName.substring(0,driverClazzName.lastIndexOf("@")) );
+					}
+				}
+			}
+		);
 		
 		this.btnDel.setOnAction
 		(
@@ -239,6 +260,10 @@ public class DBJdbcTab extends Tab
 				this.topPane.setCenter( this.editPane );
 			}
 		);
+		
+		
+		this.driverPathListView.setCellFactory(	(callback)->new EditListCell() );
+		
 		
 		this.btnAddJar.setOnAction
 		(
@@ -379,4 +404,68 @@ public class DBJdbcTab extends Tab
 		this.btnDel.setText(langRB.getString("BTN_DEL"));
 	}
 	
+	// https://gist.github.com/skrb/6389257
+	class EditListCell extends ListCell<String>
+	{
+		private TextField textField;
+		
+		@Override
+		public void startEdit()
+		{
+			if (!isEditable() || !getListView().isEditable() )
+			{
+				return;
+			}
+			super.startEdit();
+			
+			if (isEditing())
+			{
+				if (textField == null)
+				{
+					textField = new TextField(getItem());
+					textField.setOnAction(event->commitEdit(textField.getText()));
+				}
+			}
+			// no else?
+			//else
+			//{
+				textField.setText(getItem());
+				setText(null);
+				
+				setGraphic(textField);
+				textField.selectAll();
+			//}
+		}
+		
+		@Override
+		public void updateItem( String item, boolean empty )
+		{
+			super.updateItem(item, empty);
+			
+			if (isEmpty())
+			{
+				setText(null);
+				setGraphic(null);
+			}
+			else
+			{
+				if(!isEditing())
+				{
+					if ( textField != null )
+					{
+						setText(textField.getText());
+					}
+					else
+					{
+						setText( item );
+					}
+				}
+				else
+				{
+					setText(item);
+				}
+				setGraphic(null);
+			}
+		}
+	}
 }
