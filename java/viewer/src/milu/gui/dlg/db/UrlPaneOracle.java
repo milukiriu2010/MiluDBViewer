@@ -388,6 +388,7 @@ public class UrlPaneOracle extends UrlPaneAbstract
 			}
 		);
 		
+		/*
 		this.tnsAdminTextField.focusedProperty().addListener
 		(
 			(event)->
@@ -398,6 +399,7 @@ public class UrlPaneOracle extends UrlPaneAbstract
 				this.loadTnsNamesOra( dir );
 			}
 		);
+		*/
 		
 		this.tmplBtn.setOnAction
 		(
@@ -559,11 +561,12 @@ public class UrlPaneOracle extends UrlPaneAbstract
 	
 	private List<String> loadTnsNamesOra( File dir )
 	{
-		ObservableList<String>  obsLst = this.tnsNamesCombo.getItems();
-		if ( obsLst != null && obsLst.size() > 0 )
-		{
-			this.tnsNamesCombo.getItems().removeAll( obsLst );
-		}
+		// "UnsupportedOperationException"
+		//ObservableList<String>  obsLst = this.tnsNamesCombo.getItems();
+		//if ( obsLst != null && obsLst.size() > 0 )
+		//{
+		//	this.tnsNamesCombo.getItems().removeAll( obsLst );
+		//}
 		
 		List<String> tnsNameLst = new ArrayList<>();
 		
