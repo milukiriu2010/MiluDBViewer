@@ -7,19 +7,28 @@ import java.util.Map;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.ResourceBundle;
-
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.sql.SQLException;
 
 import javafx.scene.control.TabPane;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 import javafx.application.Application;
 import javafx.application.Platform;
 
+import milu.file.json.MyJsonHandleAbstract;
+import milu.file.json.MyJsonHandleFactory;
+import milu.gui.dlg.MyAlertDialog;
 import milu.gui.dlg.db.DBSettingDialog;
 import milu.gui.view.DBView;
 import milu.gui.ctrl.common.DraggingTabPaneSupport;
+
+import milu.file.MyFileAbstract;
+import milu.file.MyFileFactory;
 
 import milu.db.MyDBAbstract;
 import milu.entity.schema.SchemaEntity;
@@ -46,7 +55,16 @@ public class MainController
 	// Language Resource Map
 	private Map<String,ResourceBundle> langMap = new HashMap<>();
 	
-	void setApplication( Application application )
+	void init( Application application )
+	{
+		this.setApplication(application);
+		this.loadLangResources();
+		this.loadImages();
+		this.loadAppConf();
+		this.createNewDBConnectionAndOpenNewWindow();
+	}
+	
+	private void setApplication( Application application )
 	{
 		this.application = application;
 	}
@@ -61,7 +79,7 @@ public class MainController
 		return this.appConf;
 	}
 	
-	void loadImages()
+	private void loadImages()
 	{
 		String[] images =
 			{
@@ -140,7 +158,7 @@ public class MainController
 		return this.imageMap.get( resourceName );
 	}
 	
-	void loadLangResources()
+	private void loadLangResources()
 	{
 		String[] languagess =
 		{
@@ -169,6 +187,57 @@ public class MainController
 	public ResourceBundle getLangResource( String name )
 	{
 		return this.langMap.get(name);
+	}
+	
+	private void loadAppConf()
+	{
+		/*
+		MyJsonHandleAbstract<AppConf> myJsonAbs =
+				new MyJsonHandleFactory<AppConf>().createInstance(AppConf.class);
+		try
+		{
+			myJsonAbs.open(AppConst.APP_CONF.val());
+			this.appConf = myJsonAbs.load(AppConf.class);
+		}
+		catch ( FileNotFoundException nfEx )
+		{
+			// When this app starts at the first time,
+			// "app_conf" doesn't exists,
+			// so it always enters this logic.
+			System.out.println( "Not Found:" + AppConst.APP_CONF.val() );
+		}
+		catch ( Exception ex )
+		{
+			// "app_conf.json" exists
+			// but, cannot read.
+			this.showException(ex);
+		}
+		*/
+		MyJsonHandleAbstract myJsonAbs =
+			new MyJsonHandleFactory().createInstance(AppConf.class);
+		try
+		{
+			myJsonAbs.open(AppConst.APP_CONF.val());
+			Object obj = myJsonAbs.load();
+			if ( obj instanceof AppConf )
+			{
+				this.appConf = (AppConf)obj;
+				System.out.println( "AppConf:" + this.appConf );
+			}
+		}
+		catch ( FileNotFoundException nfEx )
+		{
+			// When this app starts at the first time,
+			// "app_conf" doesn't exists,
+			// so it always enters this logic.
+			System.out.println( "Not Found:" + AppConst.APP_CONF.val() );
+		}
+		catch ( Exception ex )
+		{
+			// "app_conf.json" exists
+			// but, cannot read.
+			this.showException(ex);
+		}
 	}
 	
 	private void closeAllDB()
@@ -360,5 +429,15 @@ public class MainController
 		
 		System.out.println( "changeLang done." );
 	}
+	
+	private void showException( Exception ex )
+	{
+		MyAlertDialog alertDlg = new MyAlertDialog( AlertType.WARNING, this );
+		ResourceBundle langRB = this.getLangResource("conf.lang.gui.common.MyAlert");
+		alertDlg.setHeaderText( langRB.getString("TITLE_MISC_ERROR") );
+		alertDlg.setTxtExp( ex );
+		alertDlg.showAndWait();
+		alertDlg = null;
+	}	
 	
 }

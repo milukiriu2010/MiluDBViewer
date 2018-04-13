@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!-- https://github.com/oracle/oracle-db-examples/blob/master/java/jdbc/ConnectionManagementSamples/build.xml -->
 <!-- https://ant.apache.org/manual/tutorial-HelloWorldWithAnt.html -->
-<project name="MiluDBViewer0.1.1.jre9" default="compile">
+<project name="MiluDBViewer0.1.2.jre9" default="compile">
     <property name="build.dir"     value="../build" />
 	<property name="src.dir"       location="../src" />
 	<property name="lib.dir"       location="../lib" />
@@ -24,6 +24,7 @@
 		<pathelement path="../lib/excel/poi-ooxml-3.17.jar" />
 		<pathelement path="../lib/excel/poi-ooxml-schemas-3.17.jar" />
 		<pathelement path="../lib/excel/xmlbeans-2.6.0.jar" />
+		<pathelement path="../lib/excel/gson-2.8.3-SNAPSHOT.jar" />
 	</path>
 	
 	<target name="compile">
@@ -69,6 +70,7 @@
 							lib/excel/poi-ooxml-3.17.jar
 							lib/excel/poi-ooxml-schemas-3.17.jar
 							lib/excel/xmlbeans-2.6.0.jar
+							lib/gson/gson-2.8.3-SNAPSHOT.jar
 				"/>
             </manifest>
 		</jar>

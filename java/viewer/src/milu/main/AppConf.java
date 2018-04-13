@@ -15,7 +15,7 @@ final public class AppConf
 	private Boolean mysqlExplainExtended   = false;
 	
 	// MySQL - Explain Partitions
-	private Boolean mysqlExplainOartitions = false;
+	private Boolean mysqlExplainPartitions = false;
 	
 	// MySQL - Explain Format
 	private String  mysqlExplainFormat     = "TRADITIONAL";
@@ -75,12 +75,12 @@ final public class AppConf
 	// MySQL - Explain Partitions
 	public Boolean getMySQLExplainPartitions()
 	{
-		return this.mysqlExplainOartitions;
+		return this.mysqlExplainPartitions;
 	}
 	
-	public void setMySQLExplainPartitions( Boolean mysqlExplainOartitions )
+	public void setMySQLExplainPartitions( Boolean mysqlExplainPartitions )
 	{
-		this.mysqlExplainOartitions = mysqlExplainOartitions;
+		this.mysqlExplainPartitions = mysqlExplainPartitions;
 	}
 	
 	// MySQL - Explain Format

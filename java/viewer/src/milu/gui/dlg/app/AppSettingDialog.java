@@ -6,6 +6,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.TreeView;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.geometry.Insets;
@@ -15,6 +16,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.event.ActionEvent;
 import javafx.application.Platform;
 import milu.gui.ctrl.common.ButtonOrderNoneDialogPane;
+import milu.gui.dlg.MyAlertDialog;
 import milu.main.MainController;
 
 public class AppSettingDialog extends Dialog<Boolean>
@@ -131,6 +133,14 @@ public class AppSettingDialog extends Dialog<Boolean>
 		    	Node paneOnDlg = getDialogPane().getContent();
 		    	Node node = ((BorderPane)paneOnDlg).getCenter();
 		    	boolean ret = ((ApplyInterface)node).apply();
+		    	try
+		    	{
+		    		((AppPaneAbstract)node).save();
+		    	}
+		    	catch ( Exception ex )
+		    	{
+		    		this.showException(ex);
+		    	}
 		    	// if false, do not close this dialog.
 		    	if ( ret == false )
 		    	{
@@ -150,6 +160,14 @@ public class AppSettingDialog extends Dialog<Boolean>
 		    	Node paneOnDlg = getDialogPane().getContent();
 		    	Node node = ((BorderPane)paneOnDlg).getCenter();
 		    	((ApplyInterface)node).apply();
+		    	try
+		    	{
+		    		((AppPaneAbstract)node).save();
+		    	}
+		    	catch ( Exception ex )
+		    	{
+		    		this.showException(ex);
+		    	}
 		    	// always consume
 	    		event.consume();
 		    }
@@ -185,4 +203,14 @@ public class AppSettingDialog extends Dialog<Boolean>
 			}
 		);
 	}
+	
+	private void showException( Exception ex )
+	{
+		MyAlertDialog alertDlg = new MyAlertDialog( AlertType.WARNING, this.mainCtrl );
+		ResourceBundle langRB = this.mainCtrl.getLangResource("conf.lang.gui.common.MyAlert");
+		alertDlg.setHeaderText( langRB.getString("TITLE_MISC_ERROR") );
+		alertDlg.setTxtExp( ex );
+		alertDlg.showAndWait();
+		alertDlg = null;
+	}	
 }

@@ -23,8 +23,10 @@ public class MyFileTnsNamesOra extends MyFileAbstract
 	@Override
 	public void close() 
 	{
-		// TODO Auto-generated method stub
-
+		if ( this.file == null )
+		{
+			return;
+		}
 	}
 
 	@Override
@@ -34,24 +36,6 @@ public class MyFileTnsNamesOra extends MyFileAbstract
 		{
 			return null;
 		}
-		/*
-		try
-		(
-			FileReader fr = new FileReader(this.file.getAbsolutePath());
-			BufferedReader br = new BufferedReader(fr);
-		)
-		{
-			StringBuffer sb = new StringBuffer();
-			
-			String line;
-			while ( (line=br.readLine()) != null )
-			{
-				sb.append( line );
-			}
-			
-			return sb.toString();
-		}
-		*/
 		
 		// https://stackoverflow.com/questions/14169661/read-complete-file-without-using-loop-in-java
 		try

@@ -559,7 +559,11 @@ public class UrlPaneOracle extends UrlPaneAbstract
 	
 	private List<String> loadTnsNamesOra( File dir )
 	{
-		this.tnsNamesCombo.getItems().removeAll( this.tnsNamesCombo.getItems() );
+		ObservableList<String>  obsLst = this.tnsNamesCombo.getItems();
+		if ( obsLst != null && obsLst.size() > 0 )
+		{
+			this.tnsNamesCombo.getItems().removeAll( obsLst );
+		}
 		
 		List<String> tnsNameLst = new ArrayList<>();
 		

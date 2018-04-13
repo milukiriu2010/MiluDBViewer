@@ -35,10 +35,6 @@ public class MyFileExcel extends MyFileAbstract
 	// CellStyle for Body
 	private CellStyle styleBody   = null;
 	
-	public MyFileExcel()
-	{
-	}
-	
 	@Override
 	public void open( File file )
 		throws FileNotFoundException
