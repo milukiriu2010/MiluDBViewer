@@ -28,10 +28,11 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
+import milu.db.driver.DriverShim;
 import milu.db.driver.LoadDriver;
-import milu.gui.ctrl.common.ChangeLangInterface;
-import milu.gui.ctrl.common.CopyInterface;
-import milu.gui.ctrl.common.FocusInterface;
+import milu.gui.ctrl.common.inf.ChangeLangInterface;
+import milu.gui.ctrl.common.inf.CopyInterface;
+import milu.gui.ctrl.common.inf.FocusInterface;
 import milu.gui.ctrl.query.SqlTableView;
 import milu.gui.dlg.MyAlertDialog;
 import milu.gui.view.DBView;
@@ -80,7 +81,7 @@ public class DBJdbcTab extends Tab
 	private SqlTableView driverTableView = null;
 
 	// -----------------------------------------------------
-	// [Bottom]
+	// [Another Pane]
 	// -----------------------------------------------------
 	private ListView<String>  driverPathListView = new ListView<>();
 	
@@ -221,8 +222,17 @@ public class DBJdbcTab extends Tab
 					}
 					else
 					{
-						String driverClazzName = driver.toString();
-						setText( driverClazzName.substring(0,driverClazzName.lastIndexOf("@")) );
+						String driverClazzName = null;
+						if ( driver instanceof DriverShim )
+						{
+							driverClazzName = ((DriverShim)driver).getDriverClazzName();
+						}
+						else
+						{
+							driverClazzName = driver.toString();
+							driverClazzName = driverClazzName.substring(0,driverClazzName.lastIndexOf("@"));
+						}
+						setText( driverClazzName );
 					}
 				}
 			}

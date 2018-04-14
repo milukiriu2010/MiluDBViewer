@@ -1,20 +1,9 @@
 package milu.db;
-
-import java.sql.Driver;
-import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Map;
-
-import java.util.List;
-import java.util.ArrayList;
-
-import java.nio.file.Paths;
-import java.net.URL;
-import java.net.URLClassLoader;
-import java.net.MalformedURLException;
 import java.lang.reflect.InvocationTargetException;
 
-import milu.db.driver.DriverShim;
+import milu.db.driver.LoadDriver;
 
 public class MyDBGeneral extends MyDBAbstract 
 {
@@ -32,6 +21,7 @@ public class MyDBGeneral extends MyDBAbstract
 					InvocationTargetException,
 					NoSuchMethodException
 	{
+		/*
 		List<URL> urlLst = new ArrayList<>();
 		this.driverPathLst.forEach
 		(
@@ -59,6 +49,8 @@ public class MyDBGeneral extends MyDBAbstract
 				loader
 			).getDeclaredConstructor().newInstance();
 		DriverManager.registerDriver( new DriverShim(d) );
+		*/
+		LoadDriver.loadDriver( this.driverClassName, this.driverPathLst );
 	}
 
 	@Override

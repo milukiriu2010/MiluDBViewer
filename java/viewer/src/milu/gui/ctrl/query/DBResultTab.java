@@ -22,10 +22,10 @@ import javafx.scene.layout.BorderPane;
 
 import java.sql.SQLException;
 
-import milu.gui.ctrl.common.ChangeLangInterface;
-import milu.gui.ctrl.common.CopyInterface;
-import milu.gui.ctrl.common.CounterInterface;
-import milu.gui.ctrl.common.ToggleHorizontalVerticalInterface;
+import milu.gui.ctrl.common.inf.ChangeLangInterface;
+import milu.gui.ctrl.common.inf.CopyInterface;
+import milu.gui.ctrl.common.inf.CounterInterface;
+import milu.gui.ctrl.common.inf.ToggleHorizontalVerticalInterface;
 import milu.gui.ctrl.query.SqlTableView;
 import milu.gui.view.DBView;
 import milu.main.MainController;

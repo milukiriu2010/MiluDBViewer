@@ -4,7 +4,7 @@ import java.util.List;
 
 import javafx.scene.control.Tab;
 import javafx.scene.layout.BorderPane;
-import milu.gui.ctrl.common.ToggleHorizontalVerticalInterface;
+import milu.gui.ctrl.common.inf.ToggleHorizontalVerticalInterface;
 import milu.gui.ctrl.query.SqlTableView;
 import milu.gui.view.DBView;
 

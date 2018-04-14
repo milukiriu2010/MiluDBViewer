@@ -7,8 +7,7 @@ import java.util.ResourceBundle;
 import java.util.ArrayList;
 
 import milu.entity.schema.search.VisitorInterface;
-import milu.gui.ctrl.common.ChangeLangInterface;
-
+import milu.gui.ctrl.common.inf.ChangeLangInterface;
 import milu.main.MainController;
 
 // This class will be abstract

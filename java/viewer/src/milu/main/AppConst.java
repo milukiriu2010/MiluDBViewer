@@ -10,7 +10,7 @@ public enum AppConst
 	
 	private String val = null;
 	
-	AppConst( String val )
+	private AppConst( String val )
 	{
 		this.val = val;
 	}

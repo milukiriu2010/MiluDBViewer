@@ -35,9 +35,9 @@ import javafx.beans.value.ObservableValue;
 import milu.tool.MyTool;
 import milu.file.MyFileAbstract;
 import milu.file.MyFileFactory;
-import milu.gui.ctrl.common.ChangeLangInterface;
-import milu.gui.ctrl.common.CopyInterface;
-import milu.gui.ctrl.common.ToggleHorizontalVerticalInterface;
+import milu.gui.ctrl.common.inf.ChangeLangInterface;
+import milu.gui.ctrl.common.inf.CopyInterface;
+import milu.gui.ctrl.common.inf.ToggleHorizontalVerticalInterface;
 import milu.gui.dlg.MyAlertDialog;
 import milu.gui.view.DBView;
 

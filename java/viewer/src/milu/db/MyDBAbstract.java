@@ -11,6 +11,8 @@ import java.sql.Statement;
 
 import java.sql.SQLException;
 
+import milu.db.driver.DriverShim;
+
 import milu.entity.schema.SchemaEntity;
 import milu.entity.schema.SchemaEntityFactory;
 import java.lang.reflect.InvocationTargetException;
@@ -34,6 +36,8 @@ abstract public class MyDBAbstract
 	// Driver Path
 	protected List<String> driverPathLst = null;
 	
+	protected DriverShim   driverShim = null;
+	
 	// DB URL
 	protected String  url = null;
 	
@@ -46,13 +50,30 @@ abstract public class MyDBAbstract
 	// SchemaEntity Root
 	protected SchemaEntity schemaRoot = null;
 	
+	abstract void init();
+	
 	@Override
 	public int compareTo( MyDBAbstract obj )
 	{
-		return this.toString().compareTo( obj.toString() );
+		if ( this.driverShim != null )
+		{
+			return this.driverShim.getDBName().compareTo( obj.driverShim.getDBName() );
+		}
+		else
+		{
+			return this.toString().compareTo( obj.toString() );
+		}
 	}
 	
-	abstract void init();
+	public DriverShim getDriveShim()
+	{
+		return this.driverShim;
+	}
+	
+	void setDriverShim( DriverShim driverShim )
+	{
+		this.driverShim = driverShim;
+	}
 	
 	/**
 	 * Load JDBC Driver
@@ -240,7 +261,7 @@ abstract public class MyDBAbstract
 		}
 		
 		// Load Driver
-	    this.loadDriver();
+	    //this.loadDriver();
 	    
 	    // Load special environment
 	    this.loadSpecial();

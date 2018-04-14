@@ -7,7 +7,9 @@ import java.util.Map;
 import java.util.HashMap;
 import java.util.ResourceBundle;
 import java.util.Collections;
-
+import java.util.Enumeration;
+import java.sql.Driver;
+import java.sql.DriverManager;
 import java.sql.SQLException;
 
 import javafx.scene.control.Button;
@@ -26,6 +28,7 @@ import javafx.geometry.Insets;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.layout.Pane;
 
 import javafx.stage.Stage;
 
@@ -33,16 +36,22 @@ import javafx.event.ActionEvent;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.util.StringConverter;
 
+import milu.db.driver.DriverShim;
 import milu.db.MyDBAbstract;
 import milu.db.MyDBFactory;
 import milu.gui.ctrl.common.ButtonOrderNoneDialogPane;
+import milu.gui.ctrl.common.DriverControlPane;
+import milu.gui.ctrl.common.inf.PaneSwitchDriverInterface;
 import milu.gui.dlg.MyAlertDialog;
 import milu.main.MainController;
 
 // Dialog sample
 // http://code.makery.ch/blog/javafx-dialogs-official/
 public class DBSettingDialog extends Dialog<MyDBAbstract>
+	implements
+		PaneSwitchDriverInterface
 {
 	private MainController mainCtrl = null; 
 	
@@ -51,6 +60,9 @@ public class DBSettingDialog extends Dialog<MyDBAbstract>
 	
 	// ComboBox for DB type(Oracle/MySQL/Postgresql...)
 	private ComboBox<MyDBAbstract>  comboBoxDBType = new ComboBox<MyDBAbstract>();
+	
+	// Button to add "New Driver"
+	private Button    btnAddDriver = new Button();
 	
 	// field for user
 	private TextField usernameTextField = new TextField();
@@ -63,6 +75,9 @@ public class DBSettingDialog extends Dialog<MyDBAbstract>
 	
 	// VBox
 	VBox       vBox    = new VBox(2);
+	
+	// Pane for add Driver
+	Pane  driverCtrlPane = null; 
 	
 	// UrlPaneAbstract Map
 	Map<MyDBAbstract,UrlPaneAbstract>  urlPaneAbsMap = new HashMap<>();
@@ -83,26 +98,68 @@ public class DBSettingDialog extends Dialog<MyDBAbstract>
 		
 		// ComboBox for DB type(Oracle/MySQL/Postgresql...)
 		this.dbTypeList = new ArrayList<MyDBAbstract>();
+		/*
 		this.dbTypeList.add( MyDBFactory.getInstance( "Oracle" ) );
 		this.dbTypeList.add( MyDBFactory.getInstance( "PostgreSQL" ) );
 		this.dbTypeList.add( MyDBFactory.getInstance( "MySQL" ) );
 		this.dbTypeList.add( MyDBFactory.getInstance( "Cassandra" ) );
 		this.dbTypeList.add( MyDBFactory.getInstance( "[<<Any>>]" ) );
+		*/
+		Enumeration<Driver> drivers = DriverManager.getDrivers();
+		while (drivers.hasMoreElements())
+		{
+			this.dbTypeList.add( MyDBFactory.getInstance( drivers.nextElement() ) );
+		}
 		Collections.sort( this.dbTypeList );
 		ObservableList<MyDBAbstract>  obsList = FXCollections.observableArrayList( this.dbTypeList );
 		this.comboBoxDBType.setItems( obsList );
+		this.comboBoxDBType.setConverter
+		(
+			new StringConverter<MyDBAbstract>()
+			{
+				@Override
+				public String toString(MyDBAbstract myDBAbs)
+				{
+					if ( myDBAbs == null )
+					{
+						return "";
+					}
+					else
+					{
+						DriverShim driverShim = myDBAbs.getDriveShim();
+						if ( driverShim == null )
+						{
+							return "";
+						}
+						else
+						{
+							return driverShim.getDBName();
+						}
+					}
+				}
+				
+				@Override
+				public MyDBAbstract fromString( String str )
+				{
+					return null;
+				}
+			}
+		);
+		
+		this.btnAddDriver.setText( langRB.getString("BTN_ADD_DRIVER") );
 		
 		// set all objects on pane.
 		GridPane paneDBOpt = new GridPane();
 		paneDBOpt.setHgap( 5 );
 		paneDBOpt.setVgap( 2 );
 		paneDBOpt.setPadding( new Insets( 10, 10, 10, 10 ) );
-		paneDBOpt.add( new Label( langRB.getString( "LABEL_DB_TYPE" )) , 0, 0 );
-		paneDBOpt.add( this.comboBoxDBType   , 1, 0 );
-		paneDBOpt.add( new Label( langRB.getString( "LABEL_USERNAME" )), 0, 1 );
-		paneDBOpt.add( this.usernameTextField, 1, 1 );
-		paneDBOpt.add( new Label( langRB.getString( "LABEL_PASSWORD" )), 0, 2 );
-		paneDBOpt.add( this.passwordTextField, 1, 2 );
+		paneDBOpt.add( this.btnAddDriver, 1, 0 );
+		paneDBOpt.add( new Label( langRB.getString( "LABEL_DB_TYPE" )) , 0, 1 );
+		paneDBOpt.add( this.comboBoxDBType   , 1, 1 );
+		paneDBOpt.add( new Label( langRB.getString( "LABEL_USERNAME" )), 0, 2 );
+		paneDBOpt.add( this.usernameTextField, 1, 2 );
+		paneDBOpt.add( new Label( langRB.getString( "LABEL_PASSWORD" )), 0, 3 );
+		paneDBOpt.add( this.passwordTextField, 1, 3 );
 		
 		// pane for Dialog
 		this.vBox.getChildren().add( paneDBOpt );
@@ -124,6 +181,9 @@ public class DBSettingDialog extends Dialog<MyDBAbstract>
 		UrlPaneAbstract urlPaneAbs = paneFactory.createPane( this, this.mainCtrl, selectedMyDBAbs, new HashMap<String,String>() );
 		this.urlPaneAbsMap.put( selectedMyDBAbs, urlPaneAbs );
 		this.vBox.getChildren().add( urlPaneAbs );
+		
+		// Create Pane for DriverControl
+		this.driverCtrlPane = new DriverControlPane( this.mainCtrl, this );
 		
 		// Window Icon
 		Stage stage = (Stage)this.getDialogPane().getScene().getWindow();
@@ -242,6 +302,19 @@ public class DBSettingDialog extends Dialog<MyDBAbstract>
 				return null;
 			}
 		);
+		
+		// ------------------------------
+		// Add JDBC Driver 
+		// ------------------------------
+		this.btnAddDriver.setOnAction
+		( 
+			(event)->
+			{ 
+				// set pane on dialog
+				this.getDialogPane().setContent( this.driverCtrlPane );
+				this.setDisableAllButton(true);
+			} 
+		);
 	}
 	
 	// "OK" Button Event
@@ -300,5 +373,34 @@ public class DBSettingDialog extends Dialog<MyDBAbstract>
 			// to prevent the dialog to close
 			event.consume();
 		}
+	}
+	
+	private void setDisableAllButton( boolean disable )
+	{
+		ObservableList<ButtonType>  btnTypeLst = this.getDialogPane().getButtonTypes();
+		btnTypeLst.forEach
+		(
+			(btnType)->
+			{
+				Button btn = (Button)this.getDialogPane().lookupButton(btnType);
+				btn.setDisable(disable);
+			}
+		);
+	}
+	
+	@Override
+	public void driverAdd( DriverShim driver )
+	{
+		// set pane on dialog
+		this.getDialogPane().setContent( this.brdPane );
+		this.setDisableAllButton(false);
+	}
+	
+	@Override
+	public void driverCancel()
+	{
+		// set pane on dialog
+		this.getDialogPane().setContent( this.brdPane );
+		this.setDisableAllButton(false);
 	}
 }

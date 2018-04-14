@@ -17,8 +17,7 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.binding.Bindings;
 import javafx.scene.Node;
 import javafx.scene.control.skin.VirtualFlow;
-
-import milu.gui.ctrl.common.ChangeLangInterface;
+import milu.gui.ctrl.common.inf.ChangeLangInterface;
 import milu.gui.view.DBView;
 import milu.main.MainController;
 import milu.tool.MyTool;

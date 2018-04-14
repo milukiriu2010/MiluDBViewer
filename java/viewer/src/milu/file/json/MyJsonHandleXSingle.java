@@ -6,20 +6,11 @@ import java.io.FileWriter;
 import java.io.BufferedWriter;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.Collections;
 import java.lang.reflect.Type;
-
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.google.gson.GsonBuilder;
-
-import milu.main.AppConf;
-
 
 public class MyJsonHandleXSingle<T> extends MyJsonHandleXAbstract<T> 
 {

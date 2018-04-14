@@ -1,4 +1,4 @@
-package milu.gui.ctrl.common;
+package milu.gui.ctrl.common.inf;
 
 public interface ExecExplainDBInterface
 {

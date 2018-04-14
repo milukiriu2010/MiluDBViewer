@@ -13,7 +13,7 @@ import java.util.List;
 
 public class LoadDriver 
 {
-	public static Driver loadDriver( String driverClassName, List<String> driverPathLst ) 
+	public static DriverShim loadDriver( String driverClassName, List<String> driverPathLst ) 
 			throws ClassNotFoundException, 
 			SQLException,
 			InstantiationException,
@@ -28,7 +28,15 @@ public class LoadDriver
 			{
 				try
 				{
-					URL url = Paths.get(driverPath).toUri().toURL();
+					URL url = null;
+					if ( driverPath.startsWith("file:") )
+					{
+						url = new URL(driverPath);
+					}
+					else
+					{
+						url = Paths.get(driverPath).toUri().toURL();
+					}
 					urlLst.add( url );
 				}
 				catch ( MalformedURLException malEx )
@@ -47,9 +55,13 @@ public class LoadDriver
 				true, 
 				loader
 			).getDeclaredConstructor().newInstance();
-		DriverManager.registerDriver( new DriverShim(driver) );
+		DriverShim driverShim = new DriverShim();
+		driverShim.setDriver(driver);
+		driverShim.setDriverClassName(driverClassName);
+		driverShim.setDriverPathLst(driverPathLst);
+		DriverManager.registerDriver( driverShim );
 		
-		return driver;
+		return driverShim;
 	}
 
 }

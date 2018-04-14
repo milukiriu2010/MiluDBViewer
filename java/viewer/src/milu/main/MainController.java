@@ -7,9 +7,7 @@ import java.util.Map;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.ResourceBundle;
-import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.sql.SQLException;
 
 import javafx.scene.control.TabPane;
@@ -27,10 +25,10 @@ import milu.gui.dlg.db.DBSettingDialog;
 import milu.gui.view.DBView;
 import milu.gui.ctrl.common.DraggingTabPaneSupport;
 
-import milu.file.MyFileAbstract;
-import milu.file.MyFileFactory;
-
 import milu.db.MyDBAbstract;
+import milu.db.driver.DriverConst;
+import milu.db.driver.DriverShim;
+import milu.db.driver.LoadDriver;
 import milu.entity.schema.SchemaEntity;
 import milu.entity.schema.search.ChangeLangSchemaEntityVisitor;
 
@@ -61,6 +59,7 @@ public class MainController
 		this.loadLangResources();
 		this.loadImages();
 		this.loadAppConf();
+		this.loadDriver();
 		this.createNewDBConnectionAndOpenNewWindow();
 	}
 	
@@ -238,6 +237,58 @@ public class MainController
 			// but, cannot read.
 			this.showException(ex);
 		}
+	}
+	
+	private void loadDriver()
+	{
+		Map<DriverConst,List<String>>  driverMap = new HashMap<>();
+		
+		// Oracle
+		List<String>  driverPathLstOracle = new ArrayList<>();
+		driverPathLstOracle.add( "file:lib/oracle/ojdbc8.jar" );
+		driverPathLstOracle.add( "file:lib/oracle/orai18n.jar" );
+		driverPathLstOracle.add( "file:lib/oracle/xdb6.jar" );
+		driverPathLstOracle.add( "file:lib/oracle/xmlparserv2.jar" );
+		
+		driverMap.put( DriverConst.CLASS_NAME_ORACLE, driverPathLstOracle );
+		
+		// PostgreSQL
+		List<String>  driverPathLstPostgres = new ArrayList<>();
+		driverPathLstPostgres.add( "file:lib/postgresql/postgresql-42.1.4.jar" );
+		
+		driverMap.put( DriverConst.CLASS_NAME_POSTGRESQL, driverPathLstPostgres );
+		
+		// MySQL
+		List<String>  driverPathLstMySQL = new ArrayList<>();
+		driverPathLstMySQL.add( "file:lib/mysql/mysql-connector-java-5.1.45-bin.jar" );
+		
+		driverMap.put( DriverConst.CLASS_NAME_MYSQL, driverPathLstMySQL );
+		
+		// Cassandra
+		List<String>  driverPathLstCassandra = new ArrayList<>();
+		driverPathLstCassandra.add( "file:lib/cassandra/cassandra-jdbc-driver-0.6.4-shaded.jar" );
+		
+		driverMap.put( DriverConst.CLASS_NAME_CASSANDRA1, driverPathLstCassandra );
+		
+		// --------------------------------------------------
+		// Load Driver
+		// --------------------------------------------------
+		driverMap.forEach
+		(
+			(driverClassType,driverPathLst)->
+			{
+				try
+				{
+					LoadDriver.loadDriver(driverClassType.val(), driverPathLst );
+					System.out.println( DriverShim.driverDBMap.get(driverClassType).val() + " Driver Load done." );
+				}
+				catch ( Exception ex )
+				{
+					ex.printStackTrace();
+					System.out.println( DriverShim.driverDBMap.get(driverClassType).val() + " Driver Load failed." );
+				}
+			}
+		);
 	}
 	
 	private void closeAllDB()
