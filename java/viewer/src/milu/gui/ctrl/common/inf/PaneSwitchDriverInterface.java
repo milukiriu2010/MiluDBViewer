@@ -5,5 +5,6 @@ import milu.db.driver.DriverShim;
 public interface PaneSwitchDriverInterface 
 {
 	public void driverAdd( DriverShim driver );
+	public void driverEdit( DriverShim driver );
 	public void driverCancel();
 }

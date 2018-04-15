@@ -26,7 +26,7 @@ public class MyDBOracle extends MyDBAbstract
 	@Override
 	void init()
 	{
-		this.driverClassName = "oracle.jdbc.driver.OracleDriver"; 
+		//this.driverClassName = "oracle.jdbc.driver.OracleDriver"; 
 	}
 	
 	/**
@@ -37,7 +37,7 @@ public class MyDBOracle extends MyDBAbstract
 	@Override
 	protected void loadDriver() throws ClassNotFoundException 
 	{
-		Class.forName( this.driverClassName );
+		//Class.forName( this.driverClassName );
 	}
 
 	@Override

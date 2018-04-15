@@ -26,13 +26,18 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Tab;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
+import milu.db.MyDBAbstract;
+import milu.db.MyDBFactory;
 import milu.db.driver.DriverShim;
 import milu.db.driver.LoadDriver;
+import milu.gui.ctrl.common.DriverControlPane;
 import milu.gui.ctrl.common.inf.ChangeLangInterface;
 import milu.gui.ctrl.common.inf.CopyInterface;
 import milu.gui.ctrl.common.inf.FocusInterface;
+import milu.gui.ctrl.common.inf.PaneSwitchDriverInterface;
 import milu.gui.ctrl.query.SqlTableView;
 import milu.gui.dlg.MyAlertDialog;
 import milu.gui.view.DBView;
@@ -41,6 +46,7 @@ import milu.tool.MyTool;
 
 public class DBJdbcTab extends Tab 
 	implements
+		PaneSwitchDriverInterface,
 		CopyInterface,
 		FocusInterface,
 		ChangeLangInterface
@@ -50,29 +56,40 @@ public class DBJdbcTab extends Tab
     // Head List
     private List<String> headLst = new ArrayList<>(Arrays.asList("KEY","VALUE"));
 	
+	// ----------------------------------------
+	// [Pane on Dialog(1)]
+	// ----------------------------------------
 	// Top Pane
 	private BorderPane topPane = new BorderPane();
-
+	
+	// ----------------------------------------
+	// [Pane on Dialog(2)]
+	// ----------------------------------------
+	// Pane for Driver
+	private Pane  driverCtrlPane = null; 
+	
     // -----------------------------------------------------
-	// [Center]
+	// [Pane on Dialog(1)]-[Center]
     // -----------------------------------------------------
 	// Left  => Driver List
 	// Right => Driver Info
 	private SplitPane  showPane = new SplitPane();
 	
-	private BorderPane editPane = new BorderPane();
+	//private BorderPane editPane = new BorderPane();
 	
     // -----------------------------------------------------
-	// [Center]-[Left]
+	// [Pane on Dialog(1)]-[Center]-[Left]
     // -----------------------------------------------------
-	private ListView<Driver>   driverListView = new ListView<>();
+	private ListView<DriverShim>   driverListView = new ListView<>();
 	
-	private Button  btnAdd = new Button();
+	private Button  btnAdd  = new Button();
 	
-	private Button  btnDel = new Button();
+	private Button  btnEdit = new Button();
+	
+	private Button  btnDel  = new Button();
 	
 	// -----------------------------------------------------
-	// [Center]-[Right]
+	// [Pane on Dialog(1)]-[Center]-[Right]
 	// -----------------------------------------------------
 	private TextField  majorVerTxt = new TextField();
 	
@@ -80,6 +97,7 @@ public class DBJdbcTab extends Tab
 	
 	private SqlTableView driverTableView = null;
 
+	/*
 	// -----------------------------------------------------
 	// [Another Pane]
 	// -----------------------------------------------------
@@ -94,6 +112,7 @@ public class DBJdbcTab extends Tab
 	private Button  btnLoad   = new Button("Load");
 	
 	private Button  btnCancel = new Button("Cancel");
+	*/
 	
 	public DBJdbcTab( DBView dbView )
 	{
@@ -109,11 +128,14 @@ public class DBJdbcTab extends Tab
 		// ------------------------------------------------
 		// Edit Pane
 		// ------------------------------------------------
-		this.setEditPane();
+		//this.setEditPane();
 		
 		this.setContent( this.topPane );
 		
 		MainController mainCtrl = this.dbView.getMainController();
+		
+		// Create Pane for DriverControl
+		this.driverCtrlPane = new DriverControlPane( mainCtrl, this );
 		
 		// set icon on Tab
 		this.setGraphic( MyTool.createImageView( 16, 16, mainCtrl.getImage("file:resources/images/jdbc.png") ) );
@@ -133,7 +155,7 @@ public class DBJdbcTab extends Tab
 	{
 		HBox hBoxBtn = new HBox(2);
 		hBoxBtn.setSpacing(2);
-		hBoxBtn.getChildren().addAll( this.btnAdd, this.btnDel );
+		hBoxBtn.getChildren().addAll( this.btnAdd, this.btnEdit, this.btnDel );
 		
 		VBox vBoxDriverCtrl = new VBox(2);
 		vBoxDriverCtrl.getChildren().addAll( this.driverListView, hBoxBtn );
@@ -159,6 +181,7 @@ public class DBJdbcTab extends Tab
 		this.topPane.setCenter( this.showPane );
 	}
 	
+	/*
 	private void setEditPane()
 	{
 		Label lblDriverPath = new Label("JDBC Driver Path");
@@ -186,18 +209,23 @@ public class DBJdbcTab extends Tab
 		);
 		this.editPane.setCenter( vBox );
 	}
+	*/
 	
 	private void setData()
 	{
-		List<Driver> driverLst = new ArrayList<>();
+		List<DriverShim> driverLst = new ArrayList<>();
 		Enumeration<Driver> drivers = DriverManager.getDrivers();
 		while (drivers.hasMoreElements())
 		{
-			driverLst.add(drivers.nextElement());
+			Driver driver = drivers.nextElement();
+			if ( driver instanceof DriverShim )
+			{
+				driverLst.add((DriverShim)driver);
+			}
 		}
 		
-		final List<Driver> sortedDriverLst = driverLst.stream()
-			.sorted( (o1,o2) -> o1.toString().compareTo(o2.toString()) )
+		final List<DriverShim> sortedDriverLst = driverLst.stream()
+			.sorted( (o1,o2) -> o1.getDriverClazzName().compareTo(o2.getDriverClazzName()) )
 			.collect(Collectors.toList());
 		this.driverListView.getItems().addAll(sortedDriverLst);
 		
@@ -210,10 +238,10 @@ public class DBJdbcTab extends Tab
 		this.driverListView.getSelectionModel().selectedItemProperty().addListener( (obs,oldVal,driver)->this.changeSelectedDriver(driver) );
 		this.driverListView.setCellFactory
 		(
-			value -> new ListCell<Driver>()
+			value -> new ListCell<DriverShim>()
 			{
 				@Override
-				protected void updateItem( Driver driver, boolean empty )
+				protected void updateItem( DriverShim driver, boolean empty )
 				{
 					super.updateItem( driver, empty );
 					if ( empty || driver == null || driver.toString() == null )
@@ -222,6 +250,7 @@ public class DBJdbcTab extends Tab
 					}
 					else
 					{
+						/*
 						String driverClazzName = null;
 						if ( driver instanceof DriverShim )
 						{
@@ -233,11 +262,16 @@ public class DBJdbcTab extends Tab
 							driverClazzName = driverClazzName.substring(0,driverClazzName.lastIndexOf("@"));
 						}
 						setText( driverClazzName );
+						*/
+						setText( driver.getDBName() ); 
 					}
 				}
 			}
 		);
 		
+		// ------------------------------
+		// Delete JDBC Driver 
+		// ------------------------------
 		this.btnDel.setOnAction
 		(
 			(event)->
@@ -261,17 +295,37 @@ public class DBJdbcTab extends Tab
 				}
 			}
 		);
-
+		
+		// ------------------------------
+		// Add JDBC Driver 
+		// ------------------------------
 		this.btnAdd.setOnAction
 		( 
 			(event)->
 			{
 				
-				this.topPane.setCenter( this.editPane );
+				//this.topPane.setCenter( this.editPane );
+				this.setContent( this.driverCtrlPane );
+				((DriverControlPane)this.driverCtrlPane).setAddDriver();
 			}
 		);
 		
+		// ------------------------------
+		// Edit JDBC Driver 
+		// ------------------------------
+		this.btnEdit.setOnAction
+		( 
+			(event)->
+			{ 
+				// set pane on dialog
+				this.setContent( this.driverCtrlPane );
+				DriverShim driverEdit = this.driverListView.getSelectionModel().getSelectedItem();
+				((DriverControlPane)this.driverCtrlPane).setEditDriver( driverEdit );
+			} 
+		);
 		
+		
+		/*
 		this.driverPathListView.setCellFactory(	(callback)->new EditListCell() );
 		
 		
@@ -323,6 +377,7 @@ public class DBJdbcTab extends Tab
 		);
 		
 		this.btnCancel.setOnAction( (event)->this.topPane.setCenter( this.showPane ) );
+		*/
 	}
 	
 	private void changeSelectedDriver( Driver driver )
@@ -370,6 +425,37 @@ public class DBJdbcTab extends Tab
 		alertDlg = null;
 	}
 	
+	@Override
+	public void driverAdd( DriverShim driver )
+	{
+		// set pane on tab
+		this.setContent( this.topPane );
+		this.driverListView.getItems().add(driver);
+		this.driverListView.getSelectionModel().select(driver);
+	}
+	
+	@Override
+	public void driverEdit( DriverShim driver )
+	{
+		// set pane on tab
+		this.setContent( this.topPane );
+		DriverShim driverEdit = this.driverListView.getSelectionModel().getSelectedItem();
+		this.driverListView.getItems().remove(driverEdit);
+		this.driverListView.getItems().add(driver);
+		this.driverListView.getSelectionModel().select(driver);
+		
+		MainController mainCtrl = this.dbView.getMainController();
+		mainCtrl.switchDriver( driverEdit, driver );
+	}
+	
+	@Override
+	public void driverCancel()
+	{
+		// set pane on tab
+		this.setContent( this.topPane );
+	}
+	
+	
 	/**
 	 * set Focus on TextArea
 	 */
@@ -411,6 +497,7 @@ public class DBJdbcTab extends Tab
 		ResourceBundle langRB = mainCtrl.getLangResource("conf.lang.gui.common.NodeName");
 		
 		this.btnAdd.setText(langRB.getString("BTN_ADD"));
+		this.btnEdit.setText(langRB.getString("BTN_EDIT"));
 		this.btnDel.setText(langRB.getString("BTN_DEL"));
 	}
 	

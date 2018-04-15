@@ -55,14 +55,27 @@ public class DBSettingDialog extends Dialog<MyDBAbstract>
 {
 	private MainController mainCtrl = null; 
 	
+	// ----------------------------------------
+	// [Pane on Dialog(1)]
+	// ----------------------------------------
+	// pane for Dialog
+	private BorderPane brdPane = new BorderPane();
+	
+	// ----------------------------------------
+	// [Pane on Dialog(2)]
+	// ----------------------------------------
+	// Pane for Driver
+	private Pane  driverCtrlPane = null; 
+	
+	// ----------------------------------------
+	// [Pane on Dialog(1)]-[Center]
+	// ----------------------------------------
+	
 	// DB Type List
-	List<MyDBAbstract> dbTypeList = null;
+	private ObservableList<MyDBAbstract>  dbTypeLst = null;
 	
 	// ComboBox for DB type(Oracle/MySQL/Postgresql...)
 	private ComboBox<MyDBAbstract>  comboBoxDBType = new ComboBox<MyDBAbstract>();
-	
-	// Button to add "New Driver"
-	private Button    btnAddDriver = new Button();
 	
 	// field for user
 	private TextField usernameTextField = new TextField();
@@ -70,17 +83,25 @@ public class DBSettingDialog extends Dialog<MyDBAbstract>
 	// field for password
 	private PasswordField passwordTextField = new PasswordField();
 	
-	// pane for Dialog
-	BorderPane brdPane = new BorderPane();
-	
-	// VBox
-	VBox       vBox    = new VBox(2);
-	
-	// Pane for add Driver
-	Pane  driverCtrlPane = null; 
+	// VBox on "Center" of BorderPane
+	VBox       vBoxCenter    = new VBox(2);
 	
 	// UrlPaneAbstract Map
 	Map<MyDBAbstract,UrlPaneAbstract>  urlPaneAbsMap = new HashMap<>();
+	
+	// ----------------------------------------
+	// [Pane on Dialog(1)]-[Right]
+	// ----------------------------------------
+	
+	// Button to add "New Driver"
+	private Button    btnAddDriver  = new Button();
+	
+	// Button to add "Edit Driver"
+	private Button    btnEditDriver = new Button();
+	
+	// ----------------------------------------
+	// [Button on Dialog]
+	// ----------------------------------------
 	
 	// Button "OK"
 	ButtonType okButtonType = null;
@@ -96,23 +117,16 @@ public class DBSettingDialog extends Dialog<MyDBAbstract>
 		ResourceBundle langRB = this.mainCtrl.getLangResource("conf.lang.gui.dlg.db.DBSettingDialog");
 		this.setTitle( langRB.getString( "TITLE_DB_SETTING" ) );
 		
-		// ComboBox for DB type(Oracle/MySQL/Postgresql...)
-		this.dbTypeList = new ArrayList<MyDBAbstract>();
-		/*
-		this.dbTypeList.add( MyDBFactory.getInstance( "Oracle" ) );
-		this.dbTypeList.add( MyDBFactory.getInstance( "PostgreSQL" ) );
-		this.dbTypeList.add( MyDBFactory.getInstance( "MySQL" ) );
-		this.dbTypeList.add( MyDBFactory.getInstance( "Cassandra" ) );
-		this.dbTypeList.add( MyDBFactory.getInstance( "[<<Any>>]" ) );
-		*/
+		// ComboBox for DB type(Oracle/MySQL/PostgreSQL...)
+		List<MyDBAbstract> myDBAbsLst = new ArrayList<MyDBAbstract>();
 		Enumeration<Driver> drivers = DriverManager.getDrivers();
 		while (drivers.hasMoreElements())
 		{
-			this.dbTypeList.add( MyDBFactory.getInstance( drivers.nextElement() ) );
+			myDBAbsLst.add( MyDBFactory.getInstance( drivers.nextElement() ) );
 		}
-		Collections.sort( this.dbTypeList );
-		ObservableList<MyDBAbstract>  obsList = FXCollections.observableArrayList( this.dbTypeList );
-		this.comboBoxDBType.setItems( obsList );
+		Collections.sort( myDBAbsLst );
+		this.dbTypeLst = FXCollections.observableArrayList( myDBAbsLst );
+		this.comboBoxDBType.setItems( this.dbTypeLst );
 		this.comboBoxDBType.setConverter
 		(
 			new StringConverter<MyDBAbstract>()
@@ -146,24 +160,31 @@ public class DBSettingDialog extends Dialog<MyDBAbstract>
 			}
 		);
 		
-		this.btnAddDriver.setText( langRB.getString("BTN_ADD_DRIVER") );
-		
 		// set all objects on pane.
 		GridPane paneDBOpt = new GridPane();
 		paneDBOpt.setHgap( 5 );
 		paneDBOpt.setVgap( 2 );
 		paneDBOpt.setPadding( new Insets( 10, 10, 10, 10 ) );
-		paneDBOpt.add( this.btnAddDriver, 1, 0 );
 		paneDBOpt.add( new Label( langRB.getString( "LABEL_DB_TYPE" )) , 0, 1 );
 		paneDBOpt.add( this.comboBoxDBType   , 1, 1 );
 		paneDBOpt.add( new Label( langRB.getString( "LABEL_USERNAME" )), 0, 2 );
 		paneDBOpt.add( this.usernameTextField, 1, 2 );
 		paneDBOpt.add( new Label( langRB.getString( "LABEL_PASSWORD" )), 0, 3 );
 		paneDBOpt.add( this.passwordTextField, 1, 3 );
+
+		// -------------------------------------
+		// Right on BorderPane
+		// -------------------------------------
+		this.btnAddDriver.setText( langRB.getString("BTN_ADD_DRIVER") );
+		this.btnEditDriver.setText( langRB.getString("BTN_EDIT_DRIVER") );
+		VBox vBoxRight = new VBox(2);
+		vBoxRight.getChildren().addAll( this.btnAddDriver, this.btnEditDriver );
+		
 		
 		// pane for Dialog
-		this.vBox.getChildren().add( paneDBOpt );
-		this.brdPane.setCenter( this.vBox );
+		this.vBoxCenter.getChildren().add( paneDBOpt );
+		this.brdPane.setCenter( this.vBoxCenter );
+		this.brdPane.setRight( vBoxRight );
 		
 		// set pane on dialog
 		this.getDialogPane().setContent( this.brdPane );
@@ -180,7 +201,7 @@ public class DBSettingDialog extends Dialog<MyDBAbstract>
 		PaneFactory paneFactory = new UrlPaneFactory();
 		UrlPaneAbstract urlPaneAbs = paneFactory.createPane( this, this.mainCtrl, selectedMyDBAbs, new HashMap<String,String>() );
 		this.urlPaneAbsMap.put( selectedMyDBAbs, urlPaneAbs );
-		this.vBox.getChildren().add( urlPaneAbs );
+		this.vBoxCenter.getChildren().add( urlPaneAbs );
 		
 		// Create Pane for DriverControl
 		this.driverCtrlPane = new DriverControlPane( this.mainCtrl, this );
@@ -222,7 +243,7 @@ public class DBSettingDialog extends Dialog<MyDBAbstract>
 			// -------------------------------------------------------------------------------------------
 			( ov, oldVal, newVal )->
 			{
-				ListIterator<Node> nodeLstIterator = this.vBox.getChildren().listIterator();
+				ListIterator<Node> nodeLstIterator = this.vBoxCenter.getChildren().listIterator();
 				while ( nodeLstIterator.hasNext() )
 				{
 					Node node = nodeLstIterator.next();
@@ -230,7 +251,7 @@ public class DBSettingDialog extends Dialog<MyDBAbstract>
 					{
 						UrlPaneAbstract urlPaneAbs1 = (UrlPaneAbstract)node;
 						Map<String, String> mapProp = urlPaneAbs1.getProp();
-						this.vBox.getChildren().remove( node );
+						this.vBoxCenter.getChildren().remove( node );
 						
 						UrlPaneAbstract urlPaneAbs2 = null;
 						// ReUse object, if selected before.
@@ -245,7 +266,7 @@ public class DBSettingDialog extends Dialog<MyDBAbstract>
 							urlPaneAbs2 = paneFactory.createPane( this, this.mainCtrl, newVal, mapProp );
 							this.urlPaneAbsMap.put( newVal, urlPaneAbs2 );
 						}
-						this.vBox.getChildren().add( urlPaneAbs2 );
+						this.vBoxCenter.getChildren().add( urlPaneAbs2 );
 						break;
 					}
 				}
@@ -312,15 +333,33 @@ public class DBSettingDialog extends Dialog<MyDBAbstract>
 			{ 
 				// set pane on dialog
 				this.getDialogPane().setContent( this.driverCtrlPane );
+				((DriverControlPane)this.driverCtrlPane).setAddDriver();
 				this.setDisableAllButton(true);
 			} 
 		);
+		
+		// ------------------------------
+		// Edit JDBC Driver 
+		// ------------------------------
+		this.btnEditDriver.setOnAction
+		( 
+			(event)->
+			{ 
+				// set pane on dialog
+				this.getDialogPane().setContent( this.driverCtrlPane );
+				MyDBAbstract selectedMyDBAbs = this.comboBoxDBType.getSelectionModel().getSelectedItem();
+				DriverShim driverEdit = selectedMyDBAbs.getDriveShim();
+				((DriverControlPane)this.driverCtrlPane).setEditDriver( driverEdit );
+				this.setDisableAllButton(true);
+			} 
+		);
+		
 	}
 	
 	// "OK" Button Event
 	private void setActionBtnOK( ActionEvent event )
 	{
-		ListIterator<Node> nodeLstIterator = this.vBox.getChildren().listIterator();
+		ListIterator<Node> nodeLstIterator = this.vBoxCenter.getChildren().listIterator();
 		while ( nodeLstIterator.hasNext() )
 		{
 			Node node = nodeLstIterator.next();
@@ -394,6 +433,21 @@ public class DBSettingDialog extends Dialog<MyDBAbstract>
 		// set pane on dialog
 		this.getDialogPane().setContent( this.brdPane );
 		this.setDisableAllButton(false);
+		
+		MyDBAbstract myDBAbs = MyDBFactory.getInstance( driver );
+		this.dbTypeLst.add( myDBAbs );
+		this.comboBoxDBType.getSelectionModel().select(myDBAbs);
+	}
+	
+	@Override
+	public void driverEdit( DriverShim driver )
+	{
+		// set pane on dialog
+		this.getDialogPane().setContent( this.brdPane );
+		this.setDisableAllButton(false);
+		
+		MyDBAbstract myDBAbs = this.comboBoxDBType.getSelectionModel().getSelectedItem();
+		myDBAbs.setDriverShim(driver);
 	}
 	
 	@Override

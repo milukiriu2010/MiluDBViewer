@@ -12,14 +12,16 @@ import java.util.HashMap;
 import java.util.Properties;
 import java.util.logging.Logger;
 
-import milu.db.DBConst;
+import com.google.gson.annotations.Expose;
 
+import milu.db.DBConst;
 
 // http://www.kfu.com/~nsayer/Java/dyn-jdbc.html
 public class DriverShim implements Driver 
 {
 	final public static Map<DriverConst, DBConst> driverDBMap = new HashMap<>();
 	
+	@Expose(serialize = false, deserialize = false)
 	private Driver       driver = null;
 	
 	private String       driverClassName = null;
@@ -57,9 +59,9 @@ public class DriverShim implements Driver
 		return driverClazzName.substring(0,driverClazzName.lastIndexOf("@"));
 	}
 	
-	public String getDriverPathLst()
+	public List<String> getDriverPathLst()
 	{
-		return this.driverClassName;
+		return this.driverPathLst;
 	}
 	
 	public void setDriverPathLst( List<String> driverPathLst )

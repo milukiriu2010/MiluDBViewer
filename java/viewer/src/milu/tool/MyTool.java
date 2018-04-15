@@ -58,7 +58,15 @@ public class MyTool
 	public static String getFileExtension( File file )
 	{
 		String name = file.getName();
-		return name.substring( name.lastIndexOf(".")+1 );
+		int pos = name.lastIndexOf(".");
+		if ( pos == -1 )
+		{
+			return "";
+		}
+		else
+		{
+			return name.substring( pos+1 );
+		}
 	}
 	
 	public static String getExceptionString( Exception exp )

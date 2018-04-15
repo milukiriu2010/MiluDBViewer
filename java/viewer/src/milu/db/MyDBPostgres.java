@@ -23,7 +23,7 @@ public class MyDBPostgres extends MyDBAbstract
 	@Override
 	void init()
 	{
-		this.driverClassName = "org.postgresql.Driver"; 
+		//this.driverClassName = "org.postgresql.Driver"; 
 	}
 	
 	/**
@@ -34,7 +34,7 @@ public class MyDBPostgres extends MyDBAbstract
 	@Override
 	protected void loadDriver() throws ClassNotFoundException
 	{
-		Class.forName( this.driverClassName );
+		//Class.forName( this.driverClassName );
 	}
 
 	@Override

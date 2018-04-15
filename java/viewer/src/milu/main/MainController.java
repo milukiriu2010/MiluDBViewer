@@ -3,10 +3,13 @@ package milu.main;
 import java.util.Optional;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.ResourceBundle;
+import java.util.stream.Collectors;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.sql.SQLException;
 
@@ -23,6 +26,7 @@ import milu.file.json.MyJsonHandleFactory;
 import milu.gui.dlg.MyAlertDialog;
 import milu.gui.dlg.db.DBSettingDialog;
 import milu.gui.view.DBView;
+import milu.tool.MyTool;
 import milu.gui.ctrl.common.DraggingTabPaneSupport;
 
 import milu.db.MyDBAbstract;
@@ -238,8 +242,36 @@ public class MainController
 			this.showException(ex);
 		}
 	}
-	
+
 	private void loadDriver()
+	{
+		this.loadDriverUser();
+		this.loadDriverDefault();
+	}
+	
+	private void loadDriverUser()
+	{
+		File folder = new File(AppConst.DRIVER_DIR.val());
+		File[] fileArray = folder.listFiles();
+		if ( fileArray == null )
+		{
+			return;
+		}
+		
+		List<File> fileLst = new ArrayList<File>( Arrays.asList(fileArray) );
+		
+		List<File> jsonLst =
+				fileLst.stream()
+					.filter( file -> file.isFile() )
+					.filter( file -> MyTool.getFileExtension(file).equals("json") )
+					.collect(Collectors.toList());
+		
+		MyJsonHandleAbstract myJsonAbs =
+				new MyJsonHandleFactory().createInstance(DriverShim.class);
+		
+	}
+	
+	private void loadDriverDefault()
 	{
 		Map<DriverConst,List<String>>  driverMap = new HashMap<>();
 		
@@ -286,6 +318,20 @@ public class MainController
 				{
 					ex.printStackTrace();
 					System.out.println( DriverShim.driverDBMap.get(driverClassType).val() + " Driver Load failed." );
+				}
+			}
+		);
+	}
+	
+	public void switchDriver( DriverShim driverA, DriverShim driverB )
+	{
+		this.myDBViewMap.forEach
+		(
+			(myDBAbs,dbViewLst)->
+			{
+				if ( myDBAbs.getDriveShim() == driverA )
+				{
+					myDBAbs.setDriverShim(driverB);
 				}
 			}
 		);

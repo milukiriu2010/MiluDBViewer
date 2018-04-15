@@ -1,32 +1,31 @@
 package milu.file.json;
 
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileWriter;
-import java.io.BufferedWriter;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.lang.reflect.Type;
 
 import com.google.gson.Gson;
-
 import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 
-import milu.main.AppConf;
+import milu.db.driver.DriverShim;
 
-
-public class MyJsonHandleAppConf extends MyJsonHandleAbstract 
+public class MyJsonHandleDriverShim extends MyJsonHandleAbstract 
 {
 	private File file = null;
-	
+
 	@Override
-	public void open( String filePath )
+	public void open(String filePath) 
 	{
-		//System.out.println("MyJsonHandleSingle:" + filePath );
 		this.file = new File(filePath);
 	}
-	
+
 	@Override
-	public Object load() throws FileNotFoundException, IOException
+	public Object load() throws FileNotFoundException, IOException 
 	{
 		if ( this.file == null )
 		{
@@ -47,21 +46,19 @@ public class MyJsonHandleAppConf extends MyJsonHandleAbstract
 		}
 		
 		Gson gson = new Gson();
-		//Type type = new TypeToken<AppConf>() {}.getType();
-		//Object obj = gson.fromJson( json, type );
-		AppConf obj = gson.fromJson( json, AppConf.class );
+		Type type = new TypeToken<DriverShim>() {}.getType();
+		DriverShim obj = gson.fromJson( json, type );
 		
 		return obj;
 	}
-	
+
 	@Override
-	public void save( Object obj ) throws IOException
+	public void save(Object obj) throws IOException 
 	{
-		//Type type = new TypeToken<AppConf>() {}.getType();
+		Type type = new TypeToken<DriverShim>() {}.getType();
 		GsonBuilder gsonBuilder = new GsonBuilder();
-		//gsonBuilder.registerTypeAdapter( type, new JsonElementAdapter() );
 		Gson gson = gsonBuilder.setPrettyPrinting().create();
-		String json = gson.toJson( (AppConf)obj, AppConf.class );
+		String json = gson.toJson( (DriverShim)obj, DriverShim.class );
 		
 		System.out.println( "====== save(" + this.file.getAbsolutePath() + ") ======" );
 		System.out.println( json );
@@ -77,4 +74,5 @@ public class MyJsonHandleAppConf extends MyJsonHandleAbstract
 			writer.write(json);
 		}
 	}
+
 }

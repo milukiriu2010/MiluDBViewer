@@ -22,7 +22,7 @@ public class MyDBMySQL extends MyDBAbstract
 	@Override
 	void init()
 	{
-		this.driverClassName = "com.mysql.jdbc.Driver"; 
+		//this.driverClassName = "com.mysql.jdbc.Driver"; 
 	}
 	
 	/**
@@ -33,7 +33,7 @@ public class MyDBMySQL extends MyDBAbstract
 	@Override
 	protected void loadDriver() throws ClassNotFoundException 
 	{
-		Class.forName( this.driverClassName );
+		//Class.forName( this.driverClassName );
 	}
 
 	@Override

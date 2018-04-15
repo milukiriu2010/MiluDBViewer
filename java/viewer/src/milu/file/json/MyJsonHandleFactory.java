@@ -1,5 +1,6 @@
 package milu.file.json;
 
+import milu.db.driver.DriverShim;
 import milu.main.AppConf;
 
 public class MyJsonHandleFactory
@@ -10,6 +11,10 @@ public class MyJsonHandleFactory
 		if ( clazz.equals(AppConf.class) )
 		{
 			myJsonAbs = new MyJsonHandleAppConf();
+		}
+		else if ( clazz.equals(DriverShim.class))
+		{
+			myJsonAbs = new MyJsonHandleDriverShim();
 		}
 		else
 		{

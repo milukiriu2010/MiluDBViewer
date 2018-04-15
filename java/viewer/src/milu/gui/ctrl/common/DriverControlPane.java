@@ -1,7 +1,8 @@
 package milu.gui.ctrl.common;
 
 import java.io.File;
-import java.sql.Driver;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -15,30 +16,37 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.geometry.Insets;
 import javafx.stage.FileChooser;
 import milu.db.driver.DriverShim;
 import milu.db.driver.LoadDriver;
+import milu.file.json.MyJsonHandleAbstract;
+import milu.file.json.MyJsonHandleFactory;
 import milu.gui.ctrl.common.inf.PaneSwitchDriverInterface;
 import milu.gui.dlg.MyAlertDialog;
+import milu.main.AppConf;
+import milu.main.AppConst;
 import milu.main.MainController;
 
 public class DriverControlPane extends Pane 
 {
 	private MainController    mainCtrl = null;
 	
+	private DriverShim        driverEdit = null;
+	
 	private PaneSwitchDriverInterface  psdInf = null;
 	
 	private ListView<String>  driverPathListView = new ListView<>();
 	
-	private Button  btnAddJar = new Button("Add Jars");
+	private Button  btnAddJar = new Button();
 	
-	private Button  btnDelJar = new Button("Remove Jar");
+	private Button  btnDelJar = new Button();
 	
 	private TextField driverClassNameTxt = new TextField();
 	
-	private Button  btnLoad   = new Button("Load");
+	private Button  btnLoad   = new Button();
 	
-	private Button  btnCancel = new Button("Cancel");
+	private Button  btnCancel = new Button();
 
 	public DriverControlPane( MainController mainCtrl, PaneSwitchDriverInterface psdInf )
 	{
@@ -47,25 +55,33 @@ public class DriverControlPane extends Pane
 		this.mainCtrl = mainCtrl;
 		this.psdInf   = psdInf;
 		
-		Label lblDriverPath = new Label("JDBC Driver Path");
-		VBox vBoxDriverPathBtn = new VBox(2);
-		vBoxDriverPathBtn.getChildren().addAll( this.btnAddJar, this.btnDelJar );
+		ResourceBundle  langRB = this.mainCtrl.getLangResource("conf.lang.gui.common.NodeName");
+		
+		Label lblDriverPath = new Label("JDBC Driver Path(.jar)");
+		this.driverPathListView.setPrefWidth(500);
+		this.driverPathListView.setPrefHeight(200);
+		this.btnAddJar.setText(langRB.getString("BTN_ADD"));
+		this.btnDelJar.setText(langRB.getString("BTN_DEL"));
+		HBox hBoxDriverPathBtn = new HBox(2);
+		hBoxDriverPathBtn.getChildren().addAll( this.btnAddJar, this.btnDelJar );
 		
 		this.driverPathListView.setEditable(true);
 		
-		HBox  hBoxDriverPath = new HBox(2);
-		hBoxDriverPath.getChildren().addAll( this.driverPathListView, vBoxDriverPathBtn );
-		
 		Label lblDriverClassName = new Label("JDBC Driver Class Name");
+		this.driverClassNameTxt.setPromptText("Class.forName");
 		
+		this.btnLoad.setText(langRB.getString("BTN_LOAD"));
+		this.btnCancel.setText(langRB.getString("BTN_CANCEL"));
 		HBox  hBoxNextBtn = new HBox(2);
 		hBoxNextBtn.getChildren().addAll( this.btnLoad, this.btnCancel );
 		
 		VBox vBox = new VBox(2);
+		vBox.setPadding( new Insets(10,10,10,10) );
 		vBox.getChildren().addAll
 		( 
 			lblDriverPath,
-			hBoxDriverPath,
+			this.driverPathListView,
+			hBoxDriverPathBtn,
 			lblDriverClassName,
 			this.driverClassNameTxt,
 			hBoxNextBtn
@@ -76,9 +92,23 @@ public class DriverControlPane extends Pane
 		this.setAction();
 	}
 	
-	private void setAction()
+	public void setAddDriver()
 	{
+		this.driverClassNameTxt.setText("");
+		this.driverClassNameTxt.setDisable(false);
+	}
+	
+	public void setEditDriver( DriverShim driverEdit )
+	{
+		this.driverEdit = driverEdit;
+		this.driverClassNameTxt.setText( this.driverEdit.getDriverClazzName() );
+		this.driverClassNameTxt.setDisable(true);
 		
+		this.driverPathListView.getItems().addAll( this.driverEdit.getDriverPathLst() );
+	}
+	
+	private void setAction()
+	{		
 		this.driverPathListView.setCellFactory(	(callback)->new EditListCell() );
 		
 		
@@ -109,10 +139,27 @@ public class DriverControlPane extends Pane
 		(
 			(event)->
 			{
+				try
+				{
+					if ( this.driverEdit != null )
+					{
+						DriverManager.deregisterDriver(this.driverEdit);
+					}
+				}
+				catch ( SQLException sqlEx )
+				{
+					this.showException( sqlEx );
+				}
+				
+				
 				DriverShim driver = null;
 				try
 				{
 					driver = LoadDriver.loadDriver( this.driverClassNameTxt.getText(), this.driverPathListView.getItems() );
+					MyJsonHandleAbstract myJsonAbs =
+						new MyJsonHandleFactory().createInstance(DriverShim.class);
+					myJsonAbs.open(AppConst.DRIVER_DIR.val()+driver.getDriverClazzName()+".json");
+					myJsonAbs.save(driver);
 				}
 				catch ( Exception ex )
 				{
@@ -122,7 +169,14 @@ public class DriverControlPane extends Pane
 				{
 					this.driverPathListView.getItems().removeAll( this.driverPathListView.getItems() );
 					this.driverClassNameTxt.setText("");
-					this.psdInf.driverAdd(driver);
+					if ( this.driverEdit != null )
+					{
+						this.psdInf.driverEdit(driver);
+					}
+					else
+					{
+						this.psdInf.driverAdd(driver);
+					}
 				}
 			}
 		);
