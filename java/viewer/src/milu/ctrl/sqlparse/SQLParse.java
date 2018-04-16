@@ -122,6 +122,7 @@ public class SQLParse
 			
 			// add SQLBag
 			SQLBag sqlBag = new SQLBag();
+			// error => "exec sp_databases;"
 			sqlBag.setSQL(stmt.toString());
 			sqlBag.setCommand(analyzeStatementVisitor.getCommand());
 			sqlBag.setType(analyzeStatementVisitor.getType());

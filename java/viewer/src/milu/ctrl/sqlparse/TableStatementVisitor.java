@@ -132,7 +132,7 @@ public class TableStatementVisitor implements AnalyzeStatementVisitor
 	public void visit(Execute execute) 
 	{
 		this.sqlCommand = SQLBag.COMMAND.TRANSACTION;
-		this.sqlType    = SQLBag.TYPE.ALTER;
+		this.sqlType    = SQLBag.TYPE.EXECUTE;
 	}
 
 	@Override

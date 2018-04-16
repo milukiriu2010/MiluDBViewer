@@ -105,7 +105,11 @@ public class DriverControlPane extends Pane
 	{
 		this.driverEdit = driverEdit;
 		
-		this.driverClassNameTxt.setText( this.driverEdit.getDriverClazzName() );
+		System.out.println( "setEditDriver.clazz[" + this.driverEdit.getDriverClazzName() + "]" );
+		System.out.println( "setEditDriver.class[" + this.driverEdit.getDriverClassName() + "]" );
+		
+		//this.driverClassNameTxt.setText( this.driverEdit.getDriverClazzName() );
+		this.driverClassNameTxt.setText( this.driverEdit.getDriverClassName() );
 		this.driverClassNameTxt.setDisable(true);
 		
 		this.driverPathListView.getItems().removeAll(this.driverPathListView.getItems());
