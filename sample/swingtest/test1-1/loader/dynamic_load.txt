@@ -1,4 +1,5 @@
 C:\myjava\MiluDBViewer.git\sample\swingtest\test1-1\loader\sqlserver\mssql-jdbc-6.4.0.jre9.jar
+/opt/myjava/MiluDBViewer.git/sample/swingtest/test1-1/loader/sqlserver/mssql-jdbc-6.4.0.jre9.jar
 
 com.microsoft.sqlserver.jdbc.SQLServerDriver
 
@@ -7,15 +8,18 @@ jdbc:sqlserver://localhost:1433;databaseName=miludb;
 =================================================================
 
 C:\myjava\MiluDBViewer.git\sample\swingtest\test1-1\loader\sqlite\sqlite-jdbc-3.21.0.jar
+/opt/myjava/MiluDBViewer.git/sample/swingtest/test1-1/loader/sqlite/sqlite-jdbc-3.21.0.jar
 file:loader/sqlite/sqlite-jdbc-3.21.0.jar
 
 org.sqlite.JDBC
 
 jdbc:sqlite:C:\\myjava\\MiluDBViewer.git\\sample\\swingtest\\test1-1\\sql\\sqlite\\ex1.db
+jdbc:sqlite:/opt/myjava/MiluDBViewer.git/sample/swingtest/test1-1/sql/sqlite/ex1.db
 
 =================================================================
 
 C:\myjava\MiluDBViewer.git\sample\swingtest\test1-1\loader\cassandra\cassandra-jdbc-wrapper-3.1.0.jar
+/opt/myjava/MiluDBViewer.git/sample/swingtest/test1-1/loader/cassandra/cassandra-jdbc-wrapper-3.1.0.jar
 
 com.github.adejanovski.cassandra.jdbc.CassandraDriver
 
