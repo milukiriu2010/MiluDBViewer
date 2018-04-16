@@ -12,9 +12,14 @@ import java.util.stream.Collectors;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.sql.SQLException;
+import java.text.MessageFormat;
 
 import javafx.scene.control.TabPane;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.Button;
+import javafx.scene.control.ButtonBar;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.DialogPane;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import javafx.stage.Window;
@@ -194,28 +199,6 @@ public class MainController
 	
 	private void loadAppConf()
 	{
-		/*
-		MyJsonHandleAbstract<AppConf> myJsonAbs =
-				new MyJsonHandleFactory<AppConf>().createInstance(AppConf.class);
-		try
-		{
-			myJsonAbs.open(AppConst.APP_CONF.val());
-			this.appConf = myJsonAbs.load(AppConf.class);
-		}
-		catch ( FileNotFoundException nfEx )
-		{
-			// When this app starts at the first time,
-			// "app_conf" doesn't exists,
-			// so it always enters this logic.
-			System.out.println( "Not Found:" + AppConst.APP_CONF.val() );
-		}
-		catch ( Exception ex )
-		{
-			// "app_conf.json" exists
-			// but, cannot read.
-			this.showException(ex);
-		}
-		*/
 		MyJsonHandleAbstract myJsonAbs =
 			new MyJsonHandleFactory().createInstance(AppConf.class);
 		try
@@ -230,9 +213,9 @@ public class MainController
 		}
 		catch ( FileNotFoundException nfEx )
 		{
-			// When this app starts at the first time,
-			// "app_conf" doesn't exists,
-			// so it always enters this logic.
+			// When this application starts at the first time,
+			// "app_conf.json" doesn't exists yet.
+			// So it always enters this logic.
 			System.out.println( "Not Found:" + AppConst.APP_CONF.val() );
 		}
 		catch ( Exception ex )
@@ -266,8 +249,59 @@ public class MainController
 					.filter( file -> MyTool.getFileExtension(file).equals("json") )
 					.collect(Collectors.toList());
 		
-		MyJsonHandleAbstract myJsonAbs =
-				new MyJsonHandleFactory().createInstance(DriverShim.class);
+		jsonLst.forEach
+		(
+			(json)->
+			{
+				MyJsonHandleAbstract myJsonAbs =
+					new MyJsonHandleFactory().createInstance(DriverShim.class);
+				try
+				{
+					myJsonAbs.open(json.getAbsolutePath());
+					Object obj = myJsonAbs.load();
+					if ( obj instanceof DriverShim )
+					{
+						DriverShim driverShim = (DriverShim)obj;
+						if ( LoadDriver.isAlreadyLoadCheck( driverShim.getDriverClassName() ) == false )
+						{
+							LoadDriver.loadDriver( driverShim.getDriverClassName(), driverShim.getDriverPathLst() );
+							System.out.println( driverShim.getDriverClassName() + " Driver(User) Load done." );
+						}
+						else
+						{
+							System.out.println( driverShim.getDriverClassName() + " Driver(User) Load skip." );
+						}
+					}
+				}
+				catch ( Exception ex )
+				{
+					// "driver/'driver class name'.json" exists
+					// but, cannot read.
+					//this.showException(ex, "Cannot load(" + json.getAbsolutePath() + ")");
+					
+					// https://stackoverflow.com/questions/36309385/how-to-change-the-text-of-yes-no-buttons-in-javafx-8-alert-dialogs?utm_medium=organic&utm_source=google_rich_qa&utm_campaign=google_rich_qa
+					// https://stackoverflow.com/questions/29535395/javafx-default-focused-button-in-alert-dialog?utm_medium=organic&utm_source=google_rich_qa&utm_campaign=google_rich_qa
+					ButtonType btnYes = ButtonType.YES; //new ButtonType( "Yes", ButtonBar.ButtonData.YES );
+					ButtonType btnNo  = ButtonType.NO; //new ButtonType( "No" , ButtonBar.ButtonData.NO );
+					
+					MyAlertDialog alertDlg = new MyAlertDialog( AlertType.WARNING, this, btnYes, btnNo );
+					((Button)alertDlg.getDialogPane().lookupButton(btnYes)).setDefaultButton(false);
+					((Button)alertDlg.getDialogPane().lookupButton(btnNo)).setDefaultButton(true);
+					ResourceBundle langRB = this.getLangResource("conf.lang.gui.common.MyAlert");
+					String msgExtra =
+						MessageFormat.format( langRB.getString("MSG_DB_DRIVER_ERROR"), json.getAbsolutePath() );
+					alertDlg.setHeaderText( langRB.getString("TITLE_DB_DRIVER_ERROR") );
+					alertDlg.setTxtExp( ex, msgExtra );
+					final Optional<ButtonType> result = alertDlg.showAndWait();
+					if ( result.get() == btnYes )
+					{
+						System.out.println( "delete:"+json.getAbsolutePath() );
+						new File(json.getAbsolutePath()).delete();
+					}
+					alertDlg = null;					
+				}
+			}
+		);
 		
 	}
 	
@@ -311,13 +345,20 @@ public class MainController
 			{
 				try
 				{
-					LoadDriver.loadDriver(driverClassType.val(), driverPathLst );
-					System.out.println( DriverShim.driverDBMap.get(driverClassType).val() + " Driver Load done." );
+					if ( LoadDriver.isAlreadyLoadCheck( driverClassType.val() ) == false )
+					{
+						LoadDriver.loadDriver(driverClassType.val(), driverPathLst );
+						System.out.println( DriverShim.driverDBMap.get(driverClassType).val() + " Driver(Default) Load done." );
+					}
+					else
+					{
+						System.out.println( DriverShim.driverDBMap.get(driverClassType).val() + " Driver(Default) Load skip." );
+					}
 				}
 				catch ( Exception ex )
 				{
 					ex.printStackTrace();
-					System.out.println( DriverShim.driverDBMap.get(driverClassType).val() + " Driver Load failed." );
+					System.out.println( DriverShim.driverDBMap.get(driverClassType).val() + " Driver(Default) Load failed." );
 				}
 			}
 		);
@@ -399,8 +440,6 @@ public class MainController
 			System.out.println( "Cancel!!" );
 			this.close(null);
 		}
-		
-		
 	}
 
 	public void createNewWindow( MyDBAbstract myDBAbs, DBView dbViewPrev )
@@ -532,6 +571,15 @@ public class MainController
 		MyAlertDialog alertDlg = new MyAlertDialog( AlertType.WARNING, this );
 		ResourceBundle langRB = this.getLangResource("conf.lang.gui.common.MyAlert");
 		alertDlg.setHeaderText( langRB.getString("TITLE_MISC_ERROR") );
+		alertDlg.setTxtExp( ex );
+		alertDlg.showAndWait();
+		alertDlg = null;
+	}	
+
+	private void showException( Exception ex, String msg )
+	{
+		MyAlertDialog alertDlg = new MyAlertDialog( AlertType.WARNING, this );
+		alertDlg.setHeaderText( msg );
 		alertDlg.setTxtExp( ex );
 		alertDlg.showAndWait();
 		alertDlg = null;

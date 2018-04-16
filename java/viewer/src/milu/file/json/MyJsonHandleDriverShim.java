@@ -46,6 +46,7 @@ public class MyJsonHandleDriverShim extends MyJsonHandleAbstract
 		}
 		
 		Gson gson = new Gson();
+		//DriverShim obj = gson.fromJson( json, DriverShim.class );
 		Type type = new TypeToken<DriverShim>() {}.getType();
 		DriverShim obj = gson.fromJson( json, type );
 		
@@ -55,10 +56,11 @@ public class MyJsonHandleDriverShim extends MyJsonHandleAbstract
 	@Override
 	public void save(Object obj) throws IOException 
 	{
-		Type type = new TypeToken<DriverShim>() {}.getType();
 		GsonBuilder gsonBuilder = new GsonBuilder();
-		Gson gson = gsonBuilder.setPrettyPrinting().create();
-		String json = gson.toJson( (DriverShim)obj, DriverShim.class );
+		Gson gson = gsonBuilder.setPrettyPrinting().excludeFieldsWithoutExposeAnnotation().create();
+		//String json = gson.toJson( (DriverShim)obj, DriverShim.class );
+		Type type = new TypeToken<DriverShim>() {}.getType();
+		String json = gson.toJson( (DriverShim)obj, type );
 		
 		System.out.println( "====== save(" + this.file.getAbsolutePath() + ") ======" );
 		System.out.println( json );

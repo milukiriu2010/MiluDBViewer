@@ -56,7 +56,11 @@ public class MyDBFactory
 			{
 				myDBAbs = new MyDBMySQL();
 			}
-			else if ( DriverConst.CLASS_NAME_CASSANDRA1.val().equals(driverShim.getDriverClassName()) )
+			else if 
+			( 
+				DriverConst.CLASS_NAME_CASSANDRA1.val().equals(driverShim.getDriverClassName()) ||
+				DriverConst.CLASS_NAME_CASSANDRA2.val().equals(driverShim.getDriverClassName())
+			)
 			{
 				myDBAbs = new MyDBCassandra();
 			}

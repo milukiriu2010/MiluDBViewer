@@ -25,7 +25,17 @@ public class SQLServerConDynamic {
 					).getDeclaredConstructor().newInstance();
 			DriverManager.registerDriver( new DriverShim(d) );
 			
-			  
+			// OK
+			//DriverPropertyInfo[] driverPropInfoLst = d.getPropertyInfo( "jdbc:sqlserver://localhost:1433;", null );
+			DriverPropertyInfo[] driverPropInfoLst = d.getPropertyInfo( "jdbc:sqlserver://", null );
+			// NG
+			//DriverPropertyInfo[] driverPropInfoLst = d.getPropertyInfo( "jdbc:sqlserver:", null );
+			for ( DriverPropertyInfo  driverPropInfo : driverPropInfoLst )
+			{
+				System.out.println( "driverPropInfo:key[" + driverPropInfo.name + "]val[" + driverPropInfo.value );
+				break;
+			}
+			
 			//step2 create  the connection object
 			System.out.println( "step2" );
 			Connection con = null;

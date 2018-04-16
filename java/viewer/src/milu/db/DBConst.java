@@ -5,7 +5,9 @@ public enum DBConst
 	DB_ORACLE("Oracle"),
 	DB_POSTGRESQL("PostgreSQL"),
 	DB_MYSQL("MySQL"),
-	DB_CASSANDRA1("Cassandra");
+	DB_CASSANDRA1("Cassandra(zhicwu)"),
+	DB_CASSANDRA2("Cassandra(adejanovski)")
+	;
 	
 	private String val = null;
 	

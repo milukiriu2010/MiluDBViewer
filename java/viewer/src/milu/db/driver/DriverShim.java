@@ -24,10 +24,13 @@ public class DriverShim implements Driver
 	@Expose(serialize = false, deserialize = false)
 	private Driver       driver = null;
 	
+	@Expose(serialize = true, deserialize = true)
 	private String       driverClassName = null;
 	
+	@Expose(serialize = true, deserialize = true)
 	private List<String> driverPathLst   = new ArrayList<>();
 	
+	@Expose(serialize = false, deserialize = false)
 	private String       dbName = null;
 	
 	static
@@ -36,6 +39,7 @@ public class DriverShim implements Driver
 		driverDBMap.put( DriverConst.CLASS_NAME_POSTGRESQL, DBConst.DB_POSTGRESQL );
 		driverDBMap.put( DriverConst.CLASS_NAME_MYSQL     , DBConst.DB_MYSQL );
 		driverDBMap.put( DriverConst.CLASS_NAME_CASSANDRA1, DBConst.DB_CASSANDRA1 );
+		driverDBMap.put( DriverConst.CLASS_NAME_CASSANDRA2, DBConst.DB_CASSANDRA2 );
 	}
 	
 	public void setDriver(Driver driver)
@@ -55,8 +59,20 @@ public class DriverShim implements Driver
 	
 	public String getDriverClazzName()
 	{
+		if ( this.driver == null )
+		{
+			return "";
+		}
 		String driverClazzName = this.driver.toString();
-		return driverClazzName.substring(0,driverClazzName.lastIndexOf("@"));
+		int pos = driverClazzName.lastIndexOf("@");
+		if ( pos < 0 )
+		{
+			return driverClazzName;
+		}
+		else
+		{
+			return driverClazzName.substring(0,pos);
+		}
 	}
 	
 	public List<String> getDriverPathLst()

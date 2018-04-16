@@ -3,6 +3,8 @@ package milu.db;
 import java.sql.SQLException;
 import java.util.Map;
 
+import milu.db.driver.DriverConst;
+
 /**
  * 
  * [SUPPORT OBJECT]
@@ -22,12 +24,6 @@ public class MyDBCassandra extends MyDBAbstract
 	{
 		//this.driverClassName = "com.github.cassandra.jdbc.CassandraDriver"; 
 	}
-	
-	@Override
-	protected void loadDriver() throws ClassNotFoundException
-	{
-		//Class.forName( this.driverClassName );
-	}
 
 	@Override
 	protected void loadSpecial()
@@ -37,10 +33,20 @@ public class MyDBCassandra extends MyDBAbstract
 	@Override
 	public String getDriverUrl(Map<String, String> dbOptMap)
 	{
-		this.url =
-				"jdbc:c*:datastax://"+
-				dbOptMap.get( "Host" )+":"+dbOptMap.get( "Port" )+"/"+
-				dbOptMap.get( "DBName" );
+		if ( DriverConst.CLASS_NAME_CASSANDRA1.val().equals(this.driverShim.getDriverClazzName()) )
+		{
+			this.url =
+					"jdbc:c*:datastax://"+
+					dbOptMap.get( "Host" )+":"+dbOptMap.get( "Port" )+"/"+
+					dbOptMap.get( "DBName" );
+		}
+		else if ( DriverConst.CLASS_NAME_CASSANDRA2.val().equals(this.driverShim.getDriverClazzName()) )
+		{
+			this.url =
+					"jdbc:cassandra://"+
+					dbOptMap.get( "Host" )+":"+dbOptMap.get( "Port" )+"/"+
+					dbOptMap.get( "DBName" );
+		}
 		return this.url;
 	}
 

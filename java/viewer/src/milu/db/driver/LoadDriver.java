@@ -13,6 +13,25 @@ import java.util.List;
 
 public class LoadDriver 
 {
+	public static boolean isAlreadyLoadCheck( String driverClassName )
+	{
+		Driver driver = 
+				DriverManager.drivers()
+					.filter( DriverShim.class::isInstance )
+					.map( DriverShim.class::cast )
+					.filter( d -> d.getDriverClazzName().contains(driverClassName) )
+					.findAny()
+					.orElse(null);
+		if ( driver == null )
+		{
+			return false;
+		}
+		else
+		{
+			return true;
+		}
+	}
+	
 	public static DriverShim loadDriver( String driverClassName, List<String> driverPathLst ) 
 			throws ClassNotFoundException, 
 			SQLException,

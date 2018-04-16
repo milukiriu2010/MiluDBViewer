@@ -24,6 +24,10 @@ public class OracleConDynamic {
 			{
 				url = new URL("file:loader/oracle/ojdbc6.jar");
 			}
+			else if ( args[0].equals("3") )
+			{
+				url = new URL("file:loader/oracle/ojdbc7.jar");
+			}
 			System.out.println( url );
 			URL[] urls = { url };
 			URLClassLoader loader =	new URLClassLoader( urls );
@@ -36,6 +40,19 @@ public class OracleConDynamic {
 					).getDeclaredConstructor().newInstance();
 			DriverManager.registerDriver( new DriverShim(d) );
 			
+			try
+			{
+				DriverPropertyInfo[] driverPropInfoLst = d.getPropertyInfo( "", null );
+				for ( DriverPropertyInfo  driverPropInfo : driverPropInfoLst )
+				{
+					System.out.println( "driverPropInfo:key[" + driverPropInfo.name + "]val[" + driverPropInfo.value + "]" );
+					break;
+				}
+			}
+			catch ( SQLException sqlEx )
+			{
+				sqlEx.printStackTrace();
+			}
 			
 	        Enumeration<Driver> drivers = DriverManager.getDrivers();
 	        while(drivers.hasMoreElements()){

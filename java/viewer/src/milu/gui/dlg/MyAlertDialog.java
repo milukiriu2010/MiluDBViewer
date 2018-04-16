@@ -28,12 +28,30 @@ public class MyAlertDialog extends Alert
 	private TextArea  txtExp = new TextArea();
 	
 	
+	// 
+	private TextArea  txtMsgExtra = new TextArea();
+	
 	public MyAlertDialog( Alert.AlertType alertType, MainController mainCtrl )
 	{
 		super( alertType );
 		
 		this.mainCtrl = mainCtrl;
 		
+		this.setPane();
+	}
+	
+	// https://stackoverflow.com/questions/36309385/how-to-change-the-text-of-yes-no-buttons-in-javafx-8-alert-dialogs?utm_medium=organic&utm_source=google_rich_qa&utm_campaign=google_rich_qa
+	public MyAlertDialog( Alert.AlertType alertType, MainController mainCtrl, ButtonType...buttonTypes )
+	{
+		super( alertType, "", buttonTypes );
+		
+		this.mainCtrl = mainCtrl;
+		
+		this.setPane();
+	}
+	
+	private void setPane()
+	{
 		this.txtMsg.setEditable( false );
 		this.txtExp.setEditable( false );
 		this.txtExp.setWrapText( true );
@@ -77,6 +95,33 @@ public class MyAlertDialog extends Alert
 		BorderPane  paneTxt = new BorderPane();
 		paneTxt.setTop( this.txtMsg );
 		paneTxt.setCenter( this.txtExp );
+		
+		this.getDialogPane().setExpandableContent( paneTxt );
+		this.getDialogPane().setExpanded( true );
+	}
+	
+	public void setTxtExp( Exception exp, String msgExtra )
+	{
+		StringWriter sw = new StringWriter();
+		PrintWriter  pw = new PrintWriter( sw );
+		exp.printStackTrace( pw );
+		
+		String msg = exp.getMessage();
+		this.txtMsg.setText( msg );
+		// count "\n"
+		int lfCnt = MyTool.getCharCount( msg, "\n" ); 
+		this.txtMsg.setPrefRowCount( lfCnt+1 );
+
+		this.txtExp.setText( sw.toString() );
+		this.txtExp.setMaxWidth( Double.MAX_VALUE );
+		
+		this.txtMsgExtra.setText( msgExtra );
+		this.txtMsgExtra.setPrefColumnCount( MyTool.getCharCount( msgExtra, "\n" ) ); 
+		
+		BorderPane  paneTxt = new BorderPane();
+		paneTxt.setTop( this.txtMsgExtra );
+		paneTxt.setCenter( this.txtMsg );
+		paneTxt.setBottom( this.txtExp );
 		
 		this.getDialogPane().setExpandableContent( paneTxt );
 		this.getDialogPane().setExpanded( true );

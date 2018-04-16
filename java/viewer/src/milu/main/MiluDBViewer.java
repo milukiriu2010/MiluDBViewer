@@ -11,6 +11,8 @@ public class MiluDBViewer extends Application
     public static void main(String[] args)
     {
     	launch(args);
+    	// https://stackoverflow.com/questions/46053974/using-platform-exit-and-system-exitint-together?utm_medium=organic&utm_source=google_rich_qa&utm_campaign=google_rich_qa
+    	System.exit(0);
     }
     
     @Override

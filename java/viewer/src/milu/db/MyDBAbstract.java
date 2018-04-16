@@ -13,7 +13,6 @@ import milu.db.driver.DriverShim;
 
 import milu.entity.schema.SchemaEntity;
 import milu.entity.schema.SchemaEntityFactory;
-import java.lang.reflect.InvocationTargetException;
 
 abstract public class MyDBAbstract
 	implements
@@ -67,19 +66,6 @@ abstract public class MyDBAbstract
 	{
 		this.driverShim = driverShim;
 	}
-	
-	/**
-	 * Load JDBC Driver
-	 ***********************************************
-	 * @throws ClassNotFoundException
-	 */
-	abstract protected void loadDriver() 
-			throws ClassNotFoundException, 
-					SQLException, 
-					InstantiationException,
-					InvocationTargetException, 
-					IllegalAccessException,
-					NoSuchMethodException;
 	
 	abstract protected void loadSpecial();
 	
@@ -218,16 +204,9 @@ abstract public class MyDBAbstract
 	 *    Host
 	 *    Port
 	 ***********************************************
-	 * @throws ClassNotFoundException
 	 * @throws SQLException 
 	 */
-	public synchronized void connect() 
-		 throws ClassNotFoundException, 
-			 	SQLException,
-				InstantiationException,
-				InvocationTargetException, 
-				IllegalAccessException,
-				NoSuchMethodException
+	public synchronized void connect() throws SQLException
 	{
 		// close connection, if already connected.
 		try
@@ -238,9 +217,6 @@ abstract public class MyDBAbstract
 		{
 			// suppress error
 		}
-		
-		// Load Driver
-	    //this.loadDriver();
 	    
 	    // Load special environment
 	    this.loadSpecial();

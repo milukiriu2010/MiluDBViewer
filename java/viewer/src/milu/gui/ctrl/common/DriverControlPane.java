@@ -24,7 +24,6 @@ import milu.file.json.MyJsonHandleAbstract;
 import milu.file.json.MyJsonHandleFactory;
 import milu.gui.ctrl.common.inf.PaneSwitchDriverInterface;
 import milu.gui.dlg.MyAlertDialog;
-import milu.main.AppConf;
 import milu.main.AppConst;
 import milu.main.MainController;
 
@@ -94,23 +93,28 @@ public class DriverControlPane extends Pane
 	
 	public void setAddDriver()
 	{
+		this.driverEdit = null;
+		
 		this.driverClassNameTxt.setText("");
 		this.driverClassNameTxt.setDisable(false);
+		
+		this.driverPathListView.getItems().removeAll(this.driverPathListView.getItems());
 	}
 	
 	public void setEditDriver( DriverShim driverEdit )
 	{
 		this.driverEdit = driverEdit;
+		
 		this.driverClassNameTxt.setText( this.driverEdit.getDriverClazzName() );
 		this.driverClassNameTxt.setDisable(true);
 		
+		this.driverPathListView.getItems().removeAll(this.driverPathListView.getItems());
 		this.driverPathListView.getItems().addAll( this.driverEdit.getDriverPathLst() );
 	}
 	
 	private void setAction()
 	{		
 		this.driverPathListView.setCellFactory(	(callback)->new EditListCell() );
-		
 		
 		this.btnAddJar.setOnAction
 		(
@@ -139,26 +143,59 @@ public class DriverControlPane extends Pane
 		(
 			(event)->
 			{
-				try
+				// -------------------------------------------------
+				// At first, check already registered to add driver
+				// -------------------------------------------------
+				if ( this.driverEdit == null )
 				{
-					if ( this.driverEdit != null )
+					/*
+					Driver driver = 
+						DriverManager.drivers()
+							.filter( DriverShim.class::isInstance )
+							.map( DriverShim.class::cast )
+							.filter( d -> d.getDriverClazzName().contains(this.driverClassNameTxt.getText()) )
+							.findAny()
+							.orElse(null);
+					*/
+					
+					// show alert, if already driver is loaded.
+					//if ( driver != null )
+					if (LoadDriver.isAlreadyLoadCheck(this.driverClassNameTxt.getText()))
+					{
+						MyAlertDialog alertDlg = new MyAlertDialog( AlertType.WARNING, this.mainCtrl );
+						ResourceBundle langRB = this.mainCtrl.getLangResource("conf.lang.gui.common.MyAlert");
+						alertDlg.setHeaderText( langRB.getString("TITLE_NOT_ALLOWED_DUPLICATE") );
+						alertDlg.showAndWait();
+						alertDlg = null;
+						return;
+					}
+				}
+				
+				// -------------------------------------------------
+				// At fist, delete driver to edit driver
+				// -------------------------------------------------
+				if ( this.driverEdit != null )
+				{
+					try
 					{
 						DriverManager.deregisterDriver(this.driverEdit);
 					}
-				}
-				catch ( SQLException sqlEx )
-				{
-					this.showException( sqlEx );
+					catch ( SQLException sqlEx )
+					{
+						this.showException( sqlEx );
+					}
 				}
 				
-				
+				// -----------------------------------------------
+				// add driver
+				// -----------------------------------------------
 				DriverShim driver = null;
 				try
 				{
 					driver = LoadDriver.loadDriver( this.driverClassNameTxt.getText(), this.driverPathListView.getItems() );
 					MyJsonHandleAbstract myJsonAbs =
 						new MyJsonHandleFactory().createInstance(DriverShim.class);
-					myJsonAbs.open(AppConst.DRIVER_DIR.val()+driver.getDriverClazzName()+".json");
+					myJsonAbs.open(AppConst.DRIVER_DIR.val()+driver.getDriverClassName()+".json");
 					myJsonAbs.save(driver);
 				}
 				catch ( Exception ex )
@@ -167,8 +204,6 @@ public class DriverControlPane extends Pane
 				}
 				finally
 				{
-					this.driverPathListView.getItems().removeAll( this.driverPathListView.getItems() );
-					this.driverClassNameTxt.setText("");
 					if ( this.driverEdit != null )
 					{
 						this.psdInf.driverEdit(driver);

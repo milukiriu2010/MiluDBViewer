@@ -1,25 +1,12 @@
 package milu.db;
 import java.sql.SQLException;
 import java.util.Map;
-import java.lang.reflect.InvocationTargetException;
 
 public class MyDBGeneral extends MyDBAbstract 
 {
 	@Override
 	void init()
 	{
-	}
-	
-	@Override
-	protected void loadDriver() 
-			throws ClassNotFoundException, 
-					SQLException,
-					InstantiationException,
-					IllegalAccessException,
-					InvocationTargetException,
-					NoSuchMethodException
-	{
-		//LoadDriver.loadDriver( this.driverClassName, this.driverPathLst );
 	}
 
 	@Override

@@ -74,7 +74,7 @@ public class DBSettingDialog extends Dialog<MyDBAbstract>
 	// DB Type List
 	private ObservableList<MyDBAbstract>  dbTypeLst = null;
 	
-	// ComboBox for DB type(Oracle/MySQL/Postgresql...)
+	// ComboBox for DB type(Oracle/MySQL/PostgreSQL...)
 	private ComboBox<MyDBAbstract>  comboBoxDBType = new ComboBox<MyDBAbstract>();
 	
 	// field for user
@@ -380,6 +380,7 @@ public class DBSettingDialog extends Dialog<MyDBAbstract>
 			// Connect to DB
 			myDBAbs.connect();
 		}
+		/*
 		catch ( ClassNotFoundException cnfEx )
 		{
     		MyAlertDialog alertDlg = new MyAlertDialog( AlertType.WARNING, this.mainCtrl );
@@ -388,6 +389,7 @@ public class DBSettingDialog extends Dialog<MyDBAbstract>
     		alertDlg.setTxtExp( cnfEx );
     		alertDlg.showAndWait();
 		}
+		*/
 		catch ( SQLException sqlEx )
 		{
     		MyAlertDialog alertDlg = new MyAlertDialog( AlertType.WARNING, this.mainCtrl );

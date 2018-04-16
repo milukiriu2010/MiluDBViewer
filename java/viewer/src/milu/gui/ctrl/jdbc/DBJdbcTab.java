@@ -1,6 +1,5 @@
 package milu.gui.ctrl.jdbc;
 
-import java.io.File;
 import java.sql.Driver;
 import java.sql.DriverManager;
 import java.sql.DriverPropertyInfo;
@@ -13,8 +12,8 @@ import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.TreeMap;
 import java.util.stream.Collectors;
+import java.io.File;
 
-import javafx.collections.ObservableList;
 import javafx.geometry.Orientation;
 import javafx.scene.control.ListView;
 import javafx.scene.control.ListCell;
@@ -28,11 +27,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
-import javafx.stage.FileChooser;
-import milu.db.MyDBAbstract;
-import milu.db.MyDBFactory;
 import milu.db.driver.DriverShim;
-import milu.db.driver.LoadDriver;
 import milu.gui.ctrl.common.DriverControlPane;
 import milu.gui.ctrl.common.inf.ChangeLangInterface;
 import milu.gui.ctrl.common.inf.CopyInterface;
@@ -41,6 +36,7 @@ import milu.gui.ctrl.common.inf.PaneSwitchDriverInterface;
 import milu.gui.ctrl.query.SqlTableView;
 import milu.gui.dlg.MyAlertDialog;
 import milu.gui.view.DBView;
+import milu.main.AppConst;
 import milu.main.MainController;
 import milu.tool.MyTool;
 
@@ -75,8 +71,6 @@ public class DBJdbcTab extends Tab
 	// Right => Driver Info
 	private SplitPane  showPane = new SplitPane();
 	
-	//private BorderPane editPane = new BorderPane();
-	
     // -----------------------------------------------------
 	// [Pane on Dialog(1)]-[Center]-[Left]
     // -----------------------------------------------------
@@ -96,23 +90,6 @@ public class DBJdbcTab extends Tab
 	private TextField  minorVerTxt = new TextField();
 	
 	private SqlTableView driverTableView = null;
-
-	/*
-	// -----------------------------------------------------
-	// [Another Pane]
-	// -----------------------------------------------------
-	private ListView<String>  driverPathListView = new ListView<>();
-	
-	private Button  btnAddJar = new Button("Add Jars");
-	
-	private Button  btnDelJar = new Button("Remove Jar");
-	
-	private TextField driverClassNameTxt = new TextField();
-	
-	private Button  btnLoad   = new Button("Load");
-	
-	private Button  btnCancel = new Button("Cancel");
-	*/
 	
 	public DBJdbcTab( DBView dbView )
 	{
@@ -124,16 +101,13 @@ public class DBJdbcTab extends Tab
 		// Show Pane
 		// ------------------------------------------------
 		this.setShowPane();
-		
-		// ------------------------------------------------
-		// Edit Pane
-		// ------------------------------------------------
-		//this.setEditPane();
-		
 		this.setContent( this.topPane );
 		
 		MainController mainCtrl = this.dbView.getMainController();
 		
+		// ------------------------------------------------
+		// Edit Pane
+		// ------------------------------------------------
 		// Create Pane for DriverControl
 		this.driverCtrlPane = new DriverControlPane( mainCtrl, this );
 		
@@ -181,36 +155,6 @@ public class DBJdbcTab extends Tab
 		this.topPane.setCenter( this.showPane );
 	}
 	
-	/*
-	private void setEditPane()
-	{
-		Label lblDriverPath = new Label("JDBC Driver Path");
-		VBox vBoxDriverPathBtn = new VBox(2);
-		vBoxDriverPathBtn.getChildren().addAll( this.btnAddJar, this.btnDelJar );
-		
-		this.driverPathListView.setEditable(true);
-		
-		HBox  hBoxDriverPath = new HBox(2);
-		hBoxDriverPath.getChildren().addAll( this.driverPathListView, vBoxDriverPathBtn );
-		
-		Label lblDriverClassName = new Label("JDBC Driver Class Name");
-		
-		HBox  hBoxNextBtn = new HBox(2);
-		hBoxNextBtn.getChildren().addAll( this.btnLoad, this.btnCancel );
-		
-		VBox vBox = new VBox(2);
-		vBox.getChildren().addAll
-		( 
-			lblDriverPath,
-			hBoxDriverPath,
-			lblDriverClassName,
-			this.driverClassNameTxt,
-			hBoxNextBtn
-		);
-		this.editPane.setCenter( vBox );
-	}
-	*/
-	
 	private void setData()
 	{
 		List<DriverShim> driverLst = new ArrayList<>();
@@ -250,19 +194,6 @@ public class DBJdbcTab extends Tab
 					}
 					else
 					{
-						/*
-						String driverClazzName = null;
-						if ( driver instanceof DriverShim )
-						{
-							driverClazzName = ((DriverShim)driver).getDriverClazzName();
-						}
-						else
-						{
-							driverClazzName = driver.toString();
-							driverClazzName = driverClazzName.substring(0,driverClazzName.lastIndexOf("@"));
-						}
-						setText( driverClazzName );
-						*/
 						setText( driver.getDBName() ); 
 					}
 				}
@@ -276,7 +207,7 @@ public class DBJdbcTab extends Tab
 		(
 			(event)->
 			{
-				Driver selectedDriver = this.driverListView.getSelectionModel().getSelectedItem();
+				DriverShim selectedDriver = this.driverListView.getSelectionModel().getSelectedItem();
 				if ( selectedDriver == null )
 				{
 					return;
@@ -293,6 +224,12 @@ public class DBJdbcTab extends Tab
 				{
 					this.driverListView.getItems().remove(selectedDriver);
 				}
+				String className = selectedDriver.getDriverClassName();
+				File file = new File(AppConst.DRIVER_DIR.val()+className+".json");
+				if ( file.exists() )
+				{
+					file.delete();
+				}
 			}
 		);
 		
@@ -303,8 +240,6 @@ public class DBJdbcTab extends Tab
 		( 
 			(event)->
 			{
-				
-				//this.topPane.setCenter( this.editPane );
 				this.setContent( this.driverCtrlPane );
 				((DriverControlPane)this.driverCtrlPane).setAddDriver();
 			}
@@ -323,76 +258,63 @@ public class DBJdbcTab extends Tab
 				((DriverControlPane)this.driverCtrlPane).setEditDriver( driverEdit );
 			} 
 		);
-		
-		
-		/*
-		this.driverPathListView.setCellFactory(	(callback)->new EditListCell() );
-		
-		
-		this.btnAddJar.setOnAction
-		(
-			(event)->
-			{
-				FileChooser fc = new FileChooser();
-				List<File> fileLst = fc.showOpenMultipleDialog(this.dbView);
-				if ( fileLst == null )
-				{
-					return;
-				}
-				fileLst.forEach( (file)->this.driverPathListView.getItems().add(file.getAbsolutePath()) );
-			}
-		);
-		
-		this.btnDelJar.setOnAction
-		(
-			(event)->
-			{
-				ObservableList<String>  selectedItems = this.driverPathListView.getSelectionModel().getSelectedItems();
-				this.driverPathListView.getItems().removeAll( selectedItems );
-			}
-		);
-		
-		this.btnLoad.setOnAction
-		(
-			(event)->
-			{
-				try
-				{
-					Driver driver =
-							LoadDriver.loadDriver( this.driverClassNameTxt.getText(), this.driverPathListView.getItems() );
-					this.driverListView.getItems().add(driver);
-					this.driverListView.getSelectionModel().select(driver);
-				}
-				catch ( Exception ex )
-				{
-					this.showException(ex);
-				}
-				finally
-				{
-					this.driverPathListView.getItems().removeAll( this.driverPathListView.getItems() );
-					this.driverClassNameTxt.setText("");
-					this.topPane.setCenter(this.showPane);
-				}
-			}
-		);
-		
-		this.btnCancel.setOnAction( (event)->this.topPane.setCenter( this.showPane ) );
-		*/
 	}
 	
-	private void changeSelectedDriver( Driver driver )
+	private void changeSelectedDriver( DriverShim driver )
 	{
 		try
 		{
 			this.majorVerTxt.setText( String.valueOf(driver.getMajorVersion()) );
 			this.minorVerTxt.setText( String.valueOf(driver.getMinorVersion()) );
 			
+			String driverClassName = driver.getDriverClassName();
+			String[] classDomainArray = driverClassName.split("\\.");
+			//System.out.println( "classDomainArray:size[" + classDomainArray.length + "]" );
+			
+			List<String> classDomainLst = new ArrayList<>();
+			classDomainLst.add("");
+			classDomainLst.addAll(Arrays.asList(classDomainArray));
+			
+			/*
 			DriverPropertyInfo[] driverPropInfoLst = driver.getPropertyInfo( "", null );
 			Map<String,String> driverMap = new TreeMap<>(); 
 			for ( DriverPropertyInfo  driverPropInfo : driverPropInfoLst )
 			{
 				driverMap.put( driverPropInfo.name, driverPropInfo.value );
 			}
+			*/
+			
+			Map<String,String> driverMap = new TreeMap<>(); 
+			int classDomainLstSize = classDomainLst.size();
+			//System.out.println( "driverClassName[" + driverClassName + "]size[" + classDomainLstSize + "]" );
+			for ( int i = 0; i < classDomainLstSize; i++ )
+			{
+				String url = "";
+				try
+				{
+					String className = classDomainLst.get(i);
+					if ( "".equals(className) == false )
+					{
+						url = "jdbc:" + className + "://";
+					}
+					DriverPropertyInfo[] driverPropInfoLst = driver.getPropertyInfo( url, null );
+					for ( DriverPropertyInfo  driverPropInfo : driverPropInfoLst )
+					{
+						driverMap.put( driverPropInfo.name, driverPropInfo.value );
+					}
+					// exit loop, if success.
+					break;
+				}
+				catch ( SQLException sqlEx2 )
+				{
+					System.out.println( "Error:driverClassName:url[" + url + "]" );
+					if ( i == (classDomainLstSize-1) )
+					{
+						throw sqlEx2;
+					}
+				}
+			}
+			
 			//System.out.println( "driverMap.size:" + driverMap.size() );
 			List<List<String>> dataLst = new ArrayList<>();
 			driverMap.forEach

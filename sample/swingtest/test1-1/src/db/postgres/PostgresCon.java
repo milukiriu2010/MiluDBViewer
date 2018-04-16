@@ -12,7 +12,7 @@ public class PostgresCon {
 			System.out.println( "step1" );
 		    Class.forName("org.postgresql.Driver");
 		    
-			//step2 create  theconnection object
+			//step2 create  the connection object
 			System.out.println( "step2" );
 			
 		    Connection con = null;

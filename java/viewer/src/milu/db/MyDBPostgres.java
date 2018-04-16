@@ -25,17 +25,6 @@ public class MyDBPostgres extends MyDBAbstract
 	{
 		//this.driverClassName = "org.postgresql.Driver"; 
 	}
-	
-	/**
-	 * Load JDBC Driver
-	 ***********************************************
-	 * @throws ClassNotFoundException
-	 */
-	@Override
-	protected void loadDriver() throws ClassNotFoundException
-	{
-		//Class.forName( this.driverClassName );
-	}
 
 	@Override
 	protected void loadSpecial()

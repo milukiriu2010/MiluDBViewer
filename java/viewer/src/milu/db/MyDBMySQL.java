@@ -24,17 +24,6 @@ public class MyDBMySQL extends MyDBAbstract
 	{
 		//this.driverClassName = "com.mysql.jdbc.Driver"; 
 	}
-	
-	/**
-	 * Load JDBC Driver
-	 ***********************************************
-	 * @throws ClassNotFoundException
-	 */
-	@Override
-	protected void loadDriver() throws ClassNotFoundException 
-	{
-		//Class.forName( this.driverClassName );
-	}
 
 	@Override
 	protected void loadSpecial()
