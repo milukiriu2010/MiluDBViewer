@@ -8,6 +8,8 @@ import java.util.HashMap;
 import java.util.ResourceBundle;
 import java.util.Collections;
 import java.util.Enumeration;
+import java.io.File;
+import java.io.IOException;
 import java.sql.Driver;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -43,8 +45,11 @@ import milu.db.MyDBAbstract;
 import milu.db.MyDBFactory;
 import milu.gui.ctrl.common.ButtonOrderNoneDialogPane;
 import milu.gui.ctrl.common.DriverControlPane;
+import milu.gui.ctrl.common.PathTreeView;
 import milu.gui.ctrl.common.inf.PaneSwitchDriverInterface;
 import milu.gui.dlg.MyAlertDialog;
+import milu.main.AppConf;
+import milu.main.AppConst;
 import milu.main.MainController;
 
 // Dialog sample
@@ -68,9 +73,13 @@ public class DBSettingDialog extends Dialog<MyDBAbstract>
 	private Pane  driverCtrlPane = null; 
 	
 	// ----------------------------------------
+	// [Pane on Dialog(1)]-[Left]
+	// ----------------------------------------
+	private PathTreeView  pathTreeView = new PathTreeView();
+	
+	// ----------------------------------------
 	// [Pane on Dialog(1)]-[Center]
 	// ----------------------------------------
-	
 	// DB Type List
 	private ObservableList<MyDBAbstract>  dbTypeLst = null;
 	
@@ -117,6 +126,29 @@ public class DBSettingDialog extends Dialog<MyDBAbstract>
 		ResourceBundle langRB = this.mainCtrl.getLangResource("conf.lang.gui.dlg.db.DBSettingDialog");
 		this.setTitle( langRB.getString( "TITLE_DB_SETTING" ) );
 		
+		// ----------------------------------------
+		// [Pane on Dialog(1)]-[Left]
+		// ----------------------------------------
+		// create DB setting folder, if not exist.
+		File rootDir = new File( AppConst.DB_DIR.val() );
+		if ( rootDir.exists() == false )
+		{
+			rootDir.mkdirs();
+		}
+		this.pathTreeView.setMainController(mainCtrl);
+		this.pathTreeView.setRootDir(AppConst.USER_DIR.val());
+		try
+		{
+			this.pathTreeView.init();
+		}
+		catch( IOException ioEx )
+		{
+			ioEx.printStackTrace();
+		}
+		
+		// ----------------------------------------
+		// [Pane on Dialog(1)]-[Center]
+		// ----------------------------------------
 		// ComboBox for DB type(Oracle/MySQL/PostgreSQL...)
 		List<MyDBAbstract> myDBAbsLst = new ArrayList<MyDBAbstract>();
 		Enumeration<Driver> drivers = DriverManager.getDrivers();
@@ -171,7 +203,7 @@ public class DBSettingDialog extends Dialog<MyDBAbstract>
 		paneDBOpt.add( this.usernameTextField, 1, 2 );
 		paneDBOpt.add( new Label( langRB.getString( "LABEL_PASSWORD" )), 0, 3 );
 		paneDBOpt.add( this.passwordTextField, 1, 3 );
-
+		
 		// -------------------------------------
 		// Right on BorderPane
 		// -------------------------------------
@@ -183,6 +215,8 @@ public class DBSettingDialog extends Dialog<MyDBAbstract>
 		
 		// pane for Dialog
 		this.vBoxCenter.getChildren().add( paneDBOpt );
+		this.brdPane.setPadding(new Insets(10,10,10,10));
+		this.brdPane.setLeft(this.pathTreeView);
 		this.brdPane.setCenter( this.vBoxCenter );
 		this.brdPane.setRight( vBoxRight );
 		
