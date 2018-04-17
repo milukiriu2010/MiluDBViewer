@@ -35,6 +35,7 @@ import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
 
 import milu.db.MyDBAbstract;
+import milu.db.driver.DriverShim;
 import milu.file.MyFileAbstract;
 import milu.file.MyFileFactory;
 import milu.gui.ctrl.common.PersistentButtonToggleGroup;
@@ -209,11 +210,17 @@ public class UrlPaneOracle extends UrlPaneAbstract
 		
 		// "select folder" button
 		this.folderBtn.setGraphic( MyTool.createImageView( 16, 16, this.mainCtrl.getImage("file:resources/images/folder.png") ));
+
+		// ----------------------------------------------------
+		// get URL by Driver Info
+		// ----------------------------------------------------
+		DriverShim driverShim = myDBAbs.getDriveShim();
 		
 		// ----------------------------------------------------
-		// Items for "Freehand"
+		// Items for "Free hand"
 		// ----------------------------------------------------
-		this.tmplTextField.setText("jdbc:oracle:thin:@//<host>[:1521]/<service_name>[?internal_logon=sysdba|sysoper]");
+		//this.tmplTextField.setText("jdbc:oracle:thin:@//<host>[:1521]/<service_name>[?internal_logon=sysdba|sysoper]");
+		this.tmplTextField.setText( driverShim.getTemplateUrl() );
 		this.tmplTextField.setEditable(false);
 
 		this.tmplBtn.setGraphic( MyTool.createImageView( 16, 16, this.mainCtrl.getImage("file:resources/images/copy.png") ));
@@ -221,7 +228,7 @@ public class UrlPaneOracle extends UrlPaneAbstract
 		// ----------------------------------------------------
 		// Items for "All"
 		// ----------------------------------------------------
-		this.lblUrl.setText( "https://docs.oracle.com/cd/B28359_01/java.111/b31224/urls.htm" );
+		this.lblUrl.setText( driverShim.getReferenceUrl() );
 		this.lblUrl.setCursor( Cursor.HAND );
 		this.lblUrl.getStyleClass().add("DBSettingDialog_URL");
 		

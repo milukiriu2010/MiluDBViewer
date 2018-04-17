@@ -14,12 +14,10 @@ import java.util.logging.Logger;
 
 import com.google.gson.annotations.Expose;
 
-import milu.db.DBConst;
-
 // http://www.kfu.com/~nsayer/Java/dyn-jdbc.html
 public class DriverShim implements Driver 
 {
-	final public static Map<DriverConst, DBConst> driverDBMap = new HashMap<>();
+	final public static Map<DriverClassConst, DriverNameConst> driverDBMap = new HashMap<>();
 	
 	@Expose(serialize = false, deserialize = false)
 	private Driver       driver = null;
@@ -33,20 +31,26 @@ public class DriverShim implements Driver
 	@Expose(serialize = false, deserialize = false)
 	private String       dbName = null;
 	
+	@Expose(serialize = true, deserialize = true)
+	private String       tmplateUrl = null;
+	
+	@Expose(serialize = true, deserialize = true)
+	private String       referenceUrl = null;
+	
 	static
 	{
-		driverDBMap.put( DriverConst.CLASS_NAME_ORACLE    , DBConst.DB_ORACLE );
-		driverDBMap.put( DriverConst.CLASS_NAME_POSTGRESQL, DBConst.DB_POSTGRESQL );
-		driverDBMap.put( DriverConst.CLASS_NAME_MYSQL     , DBConst.DB_MYSQL );
-		driverDBMap.put( DriverConst.CLASS_NAME_CASSANDRA1, DBConst.DB_CASSANDRA1 );
-		driverDBMap.put( DriverConst.CLASS_NAME_CASSANDRA2, DBConst.DB_CASSANDRA2 );
+		driverDBMap.put( DriverClassConst.CLASS_NAME_ORACLE    , DriverNameConst.DB_ORACLE );
+		driverDBMap.put( DriverClassConst.CLASS_NAME_POSTGRESQL, DriverNameConst.DB_POSTGRESQL );
+		driverDBMap.put( DriverClassConst.CLASS_NAME_MYSQL     , DriverNameConst.DB_MYSQL );
+		driverDBMap.put( DriverClassConst.CLASS_NAME_CASSANDRA1, DriverNameConst.DB_CASSANDRA1 );
+		driverDBMap.put( DriverClassConst.CLASS_NAME_CASSANDRA2, DriverNameConst.DB_CASSANDRA2 );
 	}
 	
 	public void setDriver(Driver driver)
 	{
 		this.driver = driver;
 	}
-	
+	// get ClassName by TextField
 	public String getDriverClassName()
 	{
 		return this.driverClassName;
@@ -56,7 +60,8 @@ public class DriverShim implements Driver
 	{
 		this.driverClassName = driverClassName;
 	}
-	
+
+	// get ClassName by Class
 	public String getDriverClazzName()
 	{
 		if ( this.driver == null )
@@ -93,7 +98,7 @@ public class DriverShim implements Driver
 		}
 		else
 		{
-			Map.Entry<DriverConst, DBConst> selectedDriverMapEntry =
+			Map.Entry<DriverClassConst, DriverNameConst> selectedDriverMapEntry =
 					driverDBMap.entrySet().stream()
 						.filter( x -> x.getKey().val().equals(this.driverClassName) )
 						.findAny()
@@ -106,22 +111,32 @@ public class DriverShim implements Driver
 			{
 				return this.driverClassName;
 			}
-			/*
-			if ( driverDBMap.containsKey(this.driverClassName) )
-			{
-				return driverDBMap.get(this.driverClassName);
-			}
-			else
-			{
-				return this.driverClassName;
-			}
-			*/
 		}
 	}
 	
 	public void setDBName( String dbName )
 	{
 		this.dbName = dbName;
+	}
+	
+	public String getTemplateUrl()
+	{
+		return this.tmplateUrl;
+	}
+	
+	public void setTemplateUrl( String templateUrl )
+	{
+		this.tmplateUrl = templateUrl;
+	}
+	
+	public String getReferenceUrl()
+	{
+		return this.referenceUrl;
+	}
+	
+	public void setReferenceUrl( String referenceUrl )
+	{
+		this.referenceUrl = referenceUrl;
 	}
 	
 	@Override

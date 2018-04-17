@@ -3,7 +3,7 @@ package milu.db;
 import java.sql.SQLException;
 import java.util.Map;
 
-import milu.db.driver.DriverConst;
+import milu.db.driver.DriverClassConst;
 
 /**
  * 
@@ -33,14 +33,14 @@ public class MyDBCassandra extends MyDBAbstract
 	@Override
 	public String getDriverUrl(Map<String, String> dbOptMap)
 	{
-		if ( DriverConst.CLASS_NAME_CASSANDRA1.val().equals(this.driverShim.getDriverClazzName()) )
+		if ( DriverClassConst.CLASS_NAME_CASSANDRA1.val().equals(this.driverShim.getDriverClazzName()) )
 		{
 			this.url =
 					"jdbc:c*:datastax://"+
 					dbOptMap.get( "Host" )+":"+dbOptMap.get( "Port" )+"/"+
 					dbOptMap.get( "DBName" );
 		}
-		else if ( DriverConst.CLASS_NAME_CASSANDRA2.val().equals(this.driverShim.getDriverClazzName()) )
+		else if ( DriverClassConst.CLASS_NAME_CASSANDRA2.val().equals(this.driverShim.getDriverClazzName()) )
 		{
 			this.url =
 					"jdbc:cassandra://"+

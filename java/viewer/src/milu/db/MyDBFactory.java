@@ -2,7 +2,7 @@ package milu.db;
 
 import java.sql.Driver;
 
-import milu.db.driver.DriverConst;
+import milu.db.driver.DriverClassConst;
 import milu.db.driver.DriverShim;
 
 public class MyDBFactory 
@@ -44,22 +44,22 @@ public class MyDBFactory
 		else if ( driver instanceof DriverShim )
 		{
 			DriverShim driverShim = (DriverShim)driver;
-			if ( DriverConst.CLASS_NAME_ORACLE.val().equals(driverShim.getDriverClazzName()) )
+			if ( DriverClassConst.CLASS_NAME_ORACLE.val().equals(driverShim.getDriverClazzName()) )
 			{
 				myDBAbs = new MyDBOracle();
 			}
-			else if ( DriverConst.CLASS_NAME_POSTGRESQL.val().equals(driverShim.getDriverClassName()) )
+			else if ( DriverClassConst.CLASS_NAME_POSTGRESQL.val().equals(driverShim.getDriverClassName()) )
 			{
 				myDBAbs = new MyDBPostgres();
 			}
-			else if ( DriverConst.CLASS_NAME_MYSQL.val().equals(driverShim.getDriverClassName()) )
+			else if ( DriverClassConst.CLASS_NAME_MYSQL.val().equals(driverShim.getDriverClassName()) )
 			{
 				myDBAbs = new MyDBMySQL();
 			}
 			else if 
 			( 
-				DriverConst.CLASS_NAME_CASSANDRA1.val().equals(driverShim.getDriverClassName()) ||
-				DriverConst.CLASS_NAME_CASSANDRA2.val().equals(driverShim.getDriverClassName())
+				DriverClassConst.CLASS_NAME_CASSANDRA1.val().equals(driverShim.getDriverClassName()) ||
+				DriverClassConst.CLASS_NAME_CASSANDRA2.val().equals(driverShim.getDriverClassName())
 			)
 			{
 				myDBAbs = new MyDBCassandra();

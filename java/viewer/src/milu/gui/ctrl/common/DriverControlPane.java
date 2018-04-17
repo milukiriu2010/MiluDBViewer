@@ -35,14 +35,33 @@ public class DriverControlPane extends Pane
 	
 	private PaneSwitchDriverInterface  psdInf = null;
 	
+	// ---------------------------------------------------------
+	// Add & Delete "Driver Path"
+	// ---------------------------------------------------------
 	private ListView<String>  driverPathListView = new ListView<>();
 	
 	private Button  btnAddJar = new Button();
 	
 	private Button  btnDelJar = new Button();
 	
+	// ---------------------------------------------------------
+	// Edit "Driver Class Name"
+	// ---------------------------------------------------------
 	private TextField driverClassNameTxt = new TextField();
 	
+	// ---------------------------------------------------------
+	// Edit "Driver Template URL"
+	// ---------------------------------------------------------
+	private TextField driverTemplateUrlTxt = new TextField();
+	
+	// ---------------------------------------------------------
+	// Edit "Driver Reference URL"
+	// ---------------------------------------------------------
+	private TextField driverReferenceUrlTxt = new TextField();
+	
+	// ---------------------------------------------------------
+	// Load & Cancel
+	// ---------------------------------------------------------
 	private Button  btnLoad   = new Button();
 	
 	private Button  btnCancel = new Button();
@@ -54,8 +73,12 @@ public class DriverControlPane extends Pane
 		this.mainCtrl = mainCtrl;
 		this.psdInf   = psdInf;
 		
-		ResourceBundle  langRB = this.mainCtrl.getLangResource("conf.lang.gui.common.NodeName");
+		ResourceBundle  langRB  = this.mainCtrl.getLangResource("conf.lang.gui.common.NodeName");
+		ResourceBundle  langRBa = this.mainCtrl.getLangResource("conf.lang.gui.ctrl.common.DriverControlPane");
 		
+		// ---------------------------------------------------------
+		// Add & Delete "Driver Path"
+		// ---------------------------------------------------------
 		Label lblDriverPath = new Label("JDBC Driver Path(.jar)");
 		this.driverPathListView.setPrefWidth(500);
 		this.driverPathListView.setPrefHeight(200);
@@ -66,14 +89,36 @@ public class DriverControlPane extends Pane
 		
 		this.driverPathListView.setEditable(true);
 		
+		// ---------------------------------------------------------
+		// Edit "Driver Class Name"
+		// ---------------------------------------------------------
 		Label lblDriverClassName = new Label("JDBC Driver Class Name");
 		this.driverClassNameTxt.setPromptText("Class.forName");
+
 		
+		// ---------------------------------------------------------
+		// Edit "Driver Template URL"
+		// ---------------------------------------------------------
+		Label lblDriverTemplateUrl = new Label(langRBa.getString("LABEL_JDBC_URL_TEMPLATE"));
+		this.driverTemplateUrlTxt.setPromptText("jdbc:driver://host:port/dbname");
+		
+		// ---------------------------------------------------------
+		// Edit "Driver Reference URL"
+		// ---------------------------------------------------------
+		Label lblDriverReferenceUrl = new Label(langRBa.getString("LABEL_JDBC_URL_REFERENCE"));
+		this.driverReferenceUrlTxt.setPromptText("Home Page for JDBC");
+		
+		// ---------------------------------------------------------
+		// Load & Cancel
+		// ---------------------------------------------------------
 		this.btnLoad.setText(langRB.getString("BTN_LOAD"));
 		this.btnCancel.setText(langRB.getString("BTN_CANCEL"));
 		HBox  hBoxNextBtn = new HBox(2);
 		hBoxNextBtn.getChildren().addAll( this.btnLoad, this.btnCancel );
 		
+		// ---------------------------------------------------------
+		// Put all nodes on Pane
+		// ---------------------------------------------------------
 		VBox vBox = new VBox(2);
 		vBox.setPadding( new Insets(10,10,10,10) );
 		vBox.getChildren().addAll
@@ -83,6 +128,10 @@ public class DriverControlPane extends Pane
 			hBoxDriverPathBtn,
 			lblDriverClassName,
 			this.driverClassNameTxt,
+			lblDriverTemplateUrl,
+			this.driverTemplateUrlTxt,
+			lblDriverReferenceUrl,
+			this.driverReferenceUrlTxt,
 			hBoxNextBtn
 		);
 
@@ -98,6 +147,9 @@ public class DriverControlPane extends Pane
 		this.driverClassNameTxt.setText("");
 		this.driverClassNameTxt.setDisable(false);
 		
+		this.driverTemplateUrlTxt.setText("");
+		this.driverReferenceUrlTxt.setText("");
+		
 		this.driverPathListView.getItems().removeAll(this.driverPathListView.getItems());
 	}
 	
@@ -105,12 +157,15 @@ public class DriverControlPane extends Pane
 	{
 		this.driverEdit = driverEdit;
 		
-		System.out.println( "setEditDriver.clazz[" + this.driverEdit.getDriverClazzName() + "]" );
-		System.out.println( "setEditDriver.class[" + this.driverEdit.getDriverClassName() + "]" );
+		//System.out.println( "setEditDriver.clazz[" + this.driverEdit.getDriverClazzName() + "]" );
+		//System.out.println( "setEditDriver.class[" + this.driverEdit.getDriverClassName() + "]" );
 		
 		//this.driverClassNameTxt.setText( this.driverEdit.getDriverClazzName() );
 		this.driverClassNameTxt.setText( this.driverEdit.getDriverClassName() );
 		this.driverClassNameTxt.setDisable(true);
+
+		this.driverTemplateUrlTxt.setText( this.driverEdit.getTemplateUrl() );
+		this.driverReferenceUrlTxt.setText( this.driverEdit.getReferenceUrl() );
 		
 		this.driverPathListView.getItems().removeAll(this.driverPathListView.getItems());
 		this.driverPathListView.getItems().addAll( this.driverEdit.getDriverPathLst() );
@@ -197,6 +252,8 @@ public class DriverControlPane extends Pane
 				try
 				{
 					driver = LoadDriver.loadDriver( this.driverClassNameTxt.getText(), this.driverPathListView.getItems() );
+					driver.setTemplateUrl(this.driverTemplateUrlTxt.getText());
+					driver.setReferenceUrl(this.driverReferenceUrlTxt.getText());
 					MyJsonHandleAbstract myJsonAbs =
 						new MyJsonHandleFactory().createInstance(DriverShim.class);
 					myJsonAbs.open(AppConst.DRIVER_DIR.val()+driver.getDriverClassName()+".json");

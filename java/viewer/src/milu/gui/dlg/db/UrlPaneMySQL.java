@@ -22,6 +22,7 @@ import javafx.application.Application;
 import javafx.stage.Stage;
 
 import milu.db.MyDBAbstract;
+import milu.db.driver.DriverShim;
 import milu.gui.ctrl.common.PersistentButtonToggleGroup;
 import milu.main.MainController;
 
@@ -61,7 +62,6 @@ public class UrlPaneMySQL extends UrlPaneAbstract
 	private TextField tmplTextField     = new TextField();
 	
 	private Button    tmplBtn           = new Button();
-	
 	
 	// ----------------------------------------------------
 	// Items for "All"
@@ -106,11 +106,17 @@ public class UrlPaneMySQL extends UrlPaneAbstract
 			this.hostTextField.setText( host );
 		}
 		this.portTextField.setText( String.valueOf(myDBAbs.getDefaultPort()) );
-				
+
 		// ----------------------------------------------------
-		// Items for "Freehand"
+		// get URL by Driver Info
 		// ----------------------------------------------------
-		this.tmplTextField.setText("jdbc:mysql://[host1][:3306][,[host2][:port2]]...[/[database]][?autoReconnect=true][&autoClosePStmtStreams=true]");
+		DriverShim driverShim = myDBAbs.getDriveShim();
+		
+		// ----------------------------------------------------
+		// Items for "Free hand"
+		// ----------------------------------------------------
+		//this.tmplTextField.setText("jdbc:mysql://[host1][:3306][,[host2][:port2]]...[/[database]][?autoReconnect=true][&autoClosePStmtStreams=true]");
+		this.tmplTextField.setText( driverShim.getTemplateUrl() );
 		this.tmplTextField.setEditable(false);
 
 		ImageView   ivCopy = new ImageView( this.mainCtrl.getImage("file:resources/images/copy.png") );
@@ -121,7 +127,8 @@ public class UrlPaneMySQL extends UrlPaneAbstract
 		// ----------------------------------------------------
 		// Items for "All"
 		// ----------------------------------------------------
-		this.lblUrl.setText( "https://dev.mysql.com/doc/connector-j/5.1/en/connector-j-reference-configuration-properties.html" );
+		//this.lblUrl.setText( "https://dev.mysql.com/doc/connector-j/5.1/en/connector-j-reference-configuration-properties.html" );
+		this.lblUrl.setText( driverShim.getReferenceUrl() );
 		this.lblUrl.setCursor( Cursor.HAND );
 		this.lblUrl.getStyleClass().add("DBSettingDialog_URL");
 		

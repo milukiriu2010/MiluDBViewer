@@ -1,6 +1,6 @@
 package milu.db.driver;
 
-public enum DriverConst 
+public enum DriverClassConst 
 {
 	CLASS_NAME_ORACLE("oracle.jdbc.driver.OracleDriver"),
 	CLASS_NAME_POSTGRESQL("org.postgresql.Driver"),
@@ -11,7 +11,7 @@ public enum DriverConst
 	
 	private String val = null;
 	
-	private DriverConst( String val )
+	private DriverClassConst( String val )
 	{
 		this.val = val;
 	}

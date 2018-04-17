@@ -23,6 +23,7 @@ import javafx.stage.Stage;
 
 import milu.gui.ctrl.common.PersistentButtonToggleGroup;
 import milu.db.MyDBAbstract;
+import milu.db.driver.DriverShim;
 import milu.main.MainController;
 
 public class UrlPanePostgres extends UrlPaneAbstract
@@ -105,11 +106,17 @@ public class UrlPanePostgres extends UrlPaneAbstract
 			this.hostTextField.setText( host );
 		}
 		this.portTextField.setText( String.valueOf(myDBAbs.getDefaultPort()) );
-				
+
 		// ----------------------------------------------------
-		// Items for "Freehand"
+		// get URL by Driver Info
 		// ----------------------------------------------------
-		this.tmplTextField.setText("jdbc:postgresql://host1:5432,host2:port2/database[?targetServerType=master]");
+		DriverShim driverShim = myDBAbs.getDriveShim();
+		
+		// ----------------------------------------------------
+		// Items for "Free hand"
+		// ----------------------------------------------------
+		//this.tmplTextField.setText("jdbc:postgresql://host1:5432,host2:port2/database[?targetServerType=master]");
+		this.tmplTextField.setText( driverShim.getTemplateUrl() );
 		this.tmplTextField.setEditable(false);
 
 		ImageView   ivCopy = new ImageView( this.mainCtrl.getImage("file:resources/images/copy.png") );
@@ -120,7 +127,8 @@ public class UrlPanePostgres extends UrlPaneAbstract
 		// ----------------------------------------------------
 		// Items for "All"
 		// ----------------------------------------------------
-		this.lblUrl.setText( "https://jdbc.postgresql.org/documentation/head/connect.html" );
+		//this.lblUrl.setText( "https://jdbc.postgresql.org/documentation/head/connect.html" );
+		this.lblUrl.setText( driverShim.getReferenceUrl() );
 		this.lblUrl.setCursor( Cursor.HAND );
 		this.lblUrl.getStyleClass().add("DBSettingDialog_URL");
 		

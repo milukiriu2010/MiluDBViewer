@@ -22,7 +22,7 @@ import javafx.stage.Stage;
 
 import milu.db.driver.DriverShim;
 import milu.db.MyDBAbstract;
-import milu.db.driver.DriverConst;
+import milu.db.driver.DriverClassConst;
 import milu.gui.ctrl.common.PersistentButtonToggleGroup;
 import milu.main.MainController;
 import milu.tool.MyTool;
@@ -110,26 +110,28 @@ public class UrlPaneCassandra extends UrlPaneAbstract
 		this.portTextField.setText( String.valueOf(myDBAbs.getDefaultPort()) );
 
 		// ----------------------------------------------------
-		// URL
+		// get URL by Driver Info
 		// ----------------------------------------------------
 		DriverShim driverShim = myDBAbs.getDriveShim();
+		/*
 		String tmplUrl = "";
 		String homeUrl = "";
-		if (DriverConst.CLASS_NAME_CASSANDRA1.val().equals(driverShim.getDriverClassName()))
+		if (DriverClassConst.CLASS_NAME_CASSANDRA1.val().equals(driverShim.getDriverClassName()))
 		{
 			tmplUrl = "jdbc:c*://[host][:9042]/[keyspace][?consistencyLevel=ONE|ANY|...][&compression=LZ4|SNAPPY]";
 			homeUrl = "https://github.com/zhicwu/cassandra-jdbc-driver";
 		}
-		else if (DriverConst.CLASS_NAME_CASSANDRA2.val().equals(driverShim.getDriverClassName()))
+		else if (DriverClassConst.CLASS_NAME_CASSANDRA2.val().equals(driverShim.getDriverClassName()))
 		{
 			tmplUrl = "jdbc:cassandra://[host1--host2--host3][:9042]/[keyspace1][?loadbalancing=TokenAwarePolicy(DCAwareRoundRobinPolicy(\"DC1\"))]";
 			homeUrl = "https://github.com/adejanovski/cassandra-jdbc-wrapper";
 		}
+		*/
 
 		// ----------------------------------------------------
-		// Items for "Freehand"
+		// Items for "Free hand"
 		// ----------------------------------------------------
-		this.tmplTextField.setText(tmplUrl);
+		this.tmplTextField.setText( driverShim.getTemplateUrl() );
 		this.tmplTextField.setEditable(false);
 
 		this.tmplBtn.setGraphic( MyTool.createImageView( 16, 16, this.mainCtrl.getImage("file:resources/images/copy.png") ) );
@@ -137,7 +139,7 @@ public class UrlPaneCassandra extends UrlPaneAbstract
 		// ----------------------------------------------------
 		// Items for "All"
 		// ----------------------------------------------------
-		this.lblUrl.setText( homeUrl );
+		this.lblUrl.setText( driverShim.getReferenceUrl() );
 		this.lblUrl.setCursor( Cursor.HAND );
 		this.lblUrl.getStyleClass().add("DBSettingDialog_URL");
 		

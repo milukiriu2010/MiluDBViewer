@@ -210,7 +210,7 @@ public class DBSettingDialog extends Dialog<MyDBAbstract>
 		Stage stage = (Stage)this.getDialogPane().getScene().getWindow();
 		stage.getIcons().add( this.mainCtrl.getImage( "file:resources/images/winicon.gif" ) );
 		
-		// set css for this dialog
+		// set CSS for this dialog
 		Scene scene = this.getDialogPane().getScene();
 		scene.getStylesheets().add
 		(
@@ -335,6 +335,9 @@ public class DBSettingDialog extends Dialog<MyDBAbstract>
 				this.getDialogPane().setContent( this.driverCtrlPane );
 				((DriverControlPane)this.driverCtrlPane).setAddDriver();
 				this.setDisableAllButton(true);
+				// https://stackoverflow.com/questions/44675375/failure-to-get-the-stage-of-a-dialog
+				Stage stage = (Stage)this.getDialogPane().getScene().getWindow();
+				stage.sizeToScene();
 			} 
 		);
 		
@@ -351,6 +354,9 @@ public class DBSettingDialog extends Dialog<MyDBAbstract>
 				DriverShim driverEdit = selectedMyDBAbs.getDriveShim();
 				((DriverControlPane)this.driverCtrlPane).setEditDriver( driverEdit );
 				this.setDisableAllButton(true);
+				// https://stackoverflow.com/questions/44675375/failure-to-get-the-stage-of-a-dialog
+				Stage stage = (Stage)this.getDialogPane().getScene().getWindow();
+				stage.sizeToScene();
 			} 
 		);
 		

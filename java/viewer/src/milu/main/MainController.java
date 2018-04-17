@@ -35,7 +35,7 @@ import milu.tool.MyTool;
 import milu.gui.ctrl.common.DraggingTabPaneSupport;
 
 import milu.db.MyDBAbstract;
-import milu.db.driver.DriverConst;
+import milu.db.driver.DriverClassConst;
 import milu.db.driver.DriverShim;
 import milu.db.driver.LoadDriver;
 import milu.entity.schema.SchemaEntity;
@@ -173,6 +173,7 @@ public class MainController
 			"conf.lang.entity.schema.SchemaEntity",
 			"conf.lang.gui.common.MyAlert",
 			"conf.lang.gui.common.NodeName",
+			"conf.lang.gui.ctrl.common.DriverControlPane",
 			"conf.lang.gui.ctrl.menu.MainMenuBar",
 			"conf.lang.gui.ctrl.menu.MainToolBar",
 			"conf.lang.gui.ctrl.query.DBSqlTab",
@@ -264,7 +265,9 @@ public class MainController
 						DriverShim driverShim = (DriverShim)obj;
 						if ( LoadDriver.isAlreadyLoadCheck( driverShim.getDriverClassName() ) == false )
 						{
-							LoadDriver.loadDriver( driverShim.getDriverClassName(), driverShim.getDriverPathLst() );
+							DriverShim loadedDriver = LoadDriver.loadDriver( driverShim.getDriverClassName(), driverShim.getDriverPathLst() );
+							loadedDriver.setTemplateUrl( driverShim.getTemplateUrl() );
+							loadedDriver.setReferenceUrl( driverShim.getReferenceUrl() );
 							System.out.println( driverShim.getDriverClassName() + " Driver(User) Load done." );
 						}
 						else
@@ -307,7 +310,12 @@ public class MainController
 	
 	private void loadDriverDefault()
 	{
-		Map<DriverConst,List<String>>  driverMap = new HashMap<>();
+		// DriverClassConst <=> Driver Path List
+		Map<DriverClassConst,List<String>>  driverMap = new HashMap<>();
+		// DriverClassConst <=> Template URL
+		Map<DriverClassConst,String>  driverTemplateUrlMap = new HashMap<>();
+		// DriverClassConst <=> Reference URL
+		Map<DriverClassConst,String>  driverReferenceUrlMap = new HashMap<>();
 		
 		// Oracle
 		List<String>  driverPathLstOracle = new ArrayList<>();
@@ -316,25 +324,33 @@ public class MainController
 		driverPathLstOracle.add( "file:lib/oracle/xdb6.jar" );
 		driverPathLstOracle.add( "file:lib/oracle/xmlparserv2.jar" );
 		
-		driverMap.put( DriverConst.CLASS_NAME_ORACLE, driverPathLstOracle );
+		driverMap.put( DriverClassConst.CLASS_NAME_ORACLE, driverPathLstOracle );
+		driverTemplateUrlMap.put( DriverClassConst.CLASS_NAME_ORACLE, "jdbc:oracle:thin:@//<host>[:1521]/<service_name>[?internal_logon=sysdba|sysoper]" );
+		driverReferenceUrlMap.put( DriverClassConst.CLASS_NAME_ORACLE, "https://docs.oracle.com/cd/B28359_01/java.111/b31224/urls.htm" );
 		
 		// PostgreSQL
 		List<String>  driverPathLstPostgres = new ArrayList<>();
 		driverPathLstPostgres.add( "file:lib/postgresql/postgresql-42.1.4.jar" );
 		
-		driverMap.put( DriverConst.CLASS_NAME_POSTGRESQL, driverPathLstPostgres );
+		driverMap.put( DriverClassConst.CLASS_NAME_POSTGRESQL, driverPathLstPostgres );
+		driverTemplateUrlMap.put( DriverClassConst.CLASS_NAME_POSTGRESQL, "jdbc:postgresql://host1:5432,host2:port2/database[?targetServerType=master]" );
+		driverReferenceUrlMap.put( DriverClassConst.CLASS_NAME_POSTGRESQL, "https://jdbc.postgresql.org/documentation/head/connect.html" );
 		
 		// MySQL
 		List<String>  driverPathLstMySQL = new ArrayList<>();
 		driverPathLstMySQL.add( "file:lib/mysql/mysql-connector-java-5.1.45-bin.jar" );
 		
-		driverMap.put( DriverConst.CLASS_NAME_MYSQL, driverPathLstMySQL );
+		driverMap.put( DriverClassConst.CLASS_NAME_MYSQL, driverPathLstMySQL );
+		driverTemplateUrlMap.put( DriverClassConst.CLASS_NAME_MYSQL, "jdbc:mysql://[host1][:3306][,[host2][:port2]]...[/[database]][?autoReconnect=true][&autoClosePStmtStreams=true]" );
+		driverReferenceUrlMap.put( DriverClassConst.CLASS_NAME_MYSQL, "https://dev.mysql.com/doc/connector-j/5.1/en/connector-j-reference-configuration-properties.html" );
 		
 		// Cassandra
 		List<String>  driverPathLstCassandra = new ArrayList<>();
 		driverPathLstCassandra.add( "file:lib/cassandra/cassandra-jdbc-driver-0.6.4-shaded.jar" );
 		
-		driverMap.put( DriverConst.CLASS_NAME_CASSANDRA1, driverPathLstCassandra );
+		driverMap.put( DriverClassConst.CLASS_NAME_CASSANDRA1, driverPathLstCassandra );
+		driverTemplateUrlMap.put( DriverClassConst.CLASS_NAME_CASSANDRA1, "jdbc:c*://[host][:9042]/[keyspace][?consistencyLevel=ONE|ANY|...][&compression=LZ4|SNAPPY]" );
+		driverReferenceUrlMap.put( DriverClassConst.CLASS_NAME_CASSANDRA1, "https://github.com/zhicwu/cassandra-jdbc-driver" );
 		
 		// --------------------------------------------------
 		// Load Driver
@@ -345,11 +361,15 @@ public class MainController
 			{
 				try
 				{
+					// Driver is not yet loaded
 					if ( LoadDriver.isAlreadyLoadCheck( driverClassType.val() ) == false )
 					{
-						LoadDriver.loadDriver(driverClassType.val(), driverPathLst );
+						DriverShim driver = LoadDriver.loadDriver( driverClassType.val(), driverPathLst );
+						driver.setTemplateUrl( driverTemplateUrlMap.get(driverClassType) );
+						driver.setReferenceUrl( driverReferenceUrlMap.get(driverClassType) );
 						System.out.println( DriverShim.driverDBMap.get(driverClassType).val() + " Driver(Default) Load done." );
 					}
+					// Driver is already loaded
 					else
 					{
 						System.out.println( DriverShim.driverDBMap.get(driverClassType).val() + " Driver(Default) Load skip." );

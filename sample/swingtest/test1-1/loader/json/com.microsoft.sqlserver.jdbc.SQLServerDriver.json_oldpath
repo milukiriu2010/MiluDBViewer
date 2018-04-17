@@ -1,0 +1,6 @@
+{
+  "driverClassName": "com.microsoft.sqlserver.jdbc.SQLServerDriver",
+  "driverPathLst": [
+    "C:\\myjava\\MiluDBViewer.git\\sample\\swingtest\\test1-1\\lib\\sqlserver\\mssql-jdbc-6.4.0.jre9.jar"
+  ]
+}

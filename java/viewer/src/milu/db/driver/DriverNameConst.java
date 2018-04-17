@@ -1,6 +1,6 @@
-package milu.db;
+package milu.db.driver;
 
-public enum DBConst 
+public enum DriverNameConst 
 {
 	DB_ORACLE("Oracle"),
 	DB_POSTGRESQL("PostgreSQL"),
@@ -11,7 +11,7 @@ public enum DBConst
 	
 	private String val = null;
 	
-	private DBConst( String val )
+	private DriverNameConst( String val )
 	{
 		this.val = val;
 	}
