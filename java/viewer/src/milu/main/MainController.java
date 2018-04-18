@@ -152,6 +152,9 @@ public class MainController
 				//"file:resources/images/script.png",
 				// DBSettingDialog
 				"file:resources/images/folder.png",
+				"file:resources/images/folder_new.png",
+				"file:resources/images/file.png",
+				"file:resources/images/file_new.png"
 			};
 		
 		for ( String image : images )

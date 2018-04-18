@@ -386,7 +386,7 @@ public class UrlPaneOracle extends UrlPaneAbstract
 			(event)->
 			{
 				DirectoryChooser dc = new DirectoryChooser();
-				File dir = dc.showDialog(null);
+				File dir = dc.showDialog(this.dlg.getDialogPane().getScene().getWindow());
 				if ( dir != null )
 				{
 					this.tnsAdminTextField.setText( dir.getAbsolutePath() );

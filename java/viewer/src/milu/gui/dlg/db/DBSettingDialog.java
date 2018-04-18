@@ -30,6 +30,7 @@ import javafx.geometry.Insets;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 
 import javafx.stage.Stage;
@@ -51,6 +52,7 @@ import milu.gui.dlg.MyAlertDialog;
 import milu.main.AppConf;
 import milu.main.AppConst;
 import milu.main.MainController;
+import milu.tool.MyTool;
 
 // Dialog sample
 // http://code.makery.ch/blog/javafx-dialogs-official/
@@ -77,6 +79,10 @@ public class DBSettingDialog extends Dialog<MyDBAbstract>
 	// ----------------------------------------
 	private PathTreeView  pathTreeView = new PathTreeView();
 	
+	private Button  btnNewFolder = new Button();
+	
+	private Button  btnNewConnection = new Button();
+	
 	// ----------------------------------------
 	// [Pane on Dialog(1)]-[Center]
 	// ----------------------------------------
@@ -93,10 +99,10 @@ public class DBSettingDialog extends Dialog<MyDBAbstract>
 	private PasswordField passwordTextField = new PasswordField();
 	
 	// VBox on "Center" of BorderPane
-	VBox       vBoxCenter    = new VBox(2);
+	private VBox       vBoxCenter    = new VBox(2);
 	
 	// UrlPaneAbstract Map
-	Map<MyDBAbstract,UrlPaneAbstract>  urlPaneAbsMap = new HashMap<>();
+	private Map<MyDBAbstract,UrlPaneAbstract>  urlPaneAbsMap = new HashMap<>();
 	
 	// ----------------------------------------
 	// [Pane on Dialog(1)]-[Right]
@@ -136,7 +142,8 @@ public class DBSettingDialog extends Dialog<MyDBAbstract>
 			rootDir.mkdirs();
 		}
 		this.pathTreeView.setMainController(mainCtrl);
-		this.pathTreeView.setRootDir(AppConst.USER_DIR.val());
+		this.pathTreeView.setRootDir(AppConst.DB_DIR.val());
+		this.pathTreeView.setFileExt("json");
 		try
 		{
 			this.pathTreeView.init();
@@ -145,6 +152,16 @@ public class DBSettingDialog extends Dialog<MyDBAbstract>
 		{
 			ioEx.printStackTrace();
 		}
+		
+		this.btnNewFolder.setGraphic( MyTool.createImageView( 16, 16, this.mainCtrl.getImage( "file:resources/images/folder_new.png" ) ) );
+		
+		this.btnNewConnection.setGraphic( MyTool.createImageView( 16, 16, this.mainCtrl.getImage( "file:resources/images/file_new.png" ) ) );
+		
+		HBox hBoxBtn = new HBox(2);
+		hBoxBtn.getChildren().addAll( this.btnNewFolder, this.btnNewConnection );
+		
+		VBox vBoxPathTreeView = new VBox(2);
+		vBoxPathTreeView.getChildren().addAll( this.pathTreeView, hBoxBtn );
 		
 		// ----------------------------------------
 		// [Pane on Dialog(1)]-[Center]
@@ -215,8 +232,8 @@ public class DBSettingDialog extends Dialog<MyDBAbstract>
 		
 		// pane for Dialog
 		this.vBoxCenter.getChildren().add( paneDBOpt );
-		this.brdPane.setPadding(new Insets(10,10,10,10));
-		this.brdPane.setLeft(this.pathTreeView);
+		BorderPane.setMargin(vBoxPathTreeView,new Insets(10,10,10,10));
+		this.brdPane.setLeft(vBoxPathTreeView);
 		this.brdPane.setCenter( this.vBoxCenter );
 		this.brdPane.setRight( vBoxRight );
 		
@@ -260,11 +277,47 @@ public class DBSettingDialog extends Dialog<MyDBAbstract>
 		Platform.runLater( ()->{ this.comboBoxDBType.requestFocus(); } );
 		
 		// set size
-		//this.setResizable( true );
+		this.setResizable( true );
 	}
 	
 	private void setAction()
 	{
+		// ----------------------------------------
+		// [Pane on Dialog(1)]-[Left]
+		// ----------------------------------------
+		this.btnNewFolder.setOnAction
+		( 
+			(event)->
+			{
+				try
+				{
+					this.pathTreeView.addNewFolder();
+				}
+				catch ( IOException ioEx )
+				{
+					this.showException(ioEx);
+				}
+			}
+		);
+		
+		this.btnNewConnection.setOnAction
+		( 
+			(event)->
+			{
+				try
+				{
+					this.pathTreeView.addNewFile();
+				}
+				catch ( IOException ioEx )
+				{
+					this.showException(ioEx);
+				}
+			}
+		);
+		
+		// ----------------------------------------
+		// [Pane on Dialog(1)]-[Center]
+		// ----------------------------------------
 		// Change default port when DB Type is changed.
 		// http://www.java2s.com/Code/Java/JavaFX/AddchangelistenertoComboBoxvalueProperty.htm
 		this.comboBoxDBType.valueProperty().addListener
@@ -440,11 +493,7 @@ public class DBSettingDialog extends Dialog<MyDBAbstract>
 		}
 		catch ( Exception ex )
 		{
-    		MyAlertDialog alertDlg = new MyAlertDialog( AlertType.WARNING, this.mainCtrl );
-    		ResourceBundle langRB = this.mainCtrl.getLangResource("conf.lang.gui.common.MyAlert");
-    		alertDlg.setHeaderText( langRB.getString( "TITLE_MISC_ERROR" ) );
-    		alertDlg.setTxtExp( ex );
-    		alertDlg.showAndWait();
+			this.showException(ex);
 		}
 		
 		// If DB connection is failed, this dialog keeps to open.
@@ -454,6 +503,15 @@ public class DBSettingDialog extends Dialog<MyDBAbstract>
 			// to prevent the dialog to close
 			event.consume();
 		}
+	}
+	
+	private void showException( Exception ex )
+	{
+		MyAlertDialog alertDlg = new MyAlertDialog( AlertType.WARNING, this.mainCtrl );
+		ResourceBundle langRB = this.mainCtrl.getLangResource("conf.lang.gui.common.MyAlert");
+		alertDlg.setHeaderText( langRB.getString( "TITLE_MISC_ERROR" ) );
+		alertDlg.setTxtExp( ex );
+		alertDlg.showAndWait();
 	}
 	
 	private void setDisableAllButton( boolean disable )
@@ -479,6 +537,10 @@ public class DBSettingDialog extends Dialog<MyDBAbstract>
 		MyDBAbstract myDBAbs = MyDBFactory.getInstance( driver );
 		this.dbTypeLst.add( myDBAbs );
 		this.comboBoxDBType.getSelectionModel().select(myDBAbs);
+		
+		// https://stackoverflow.com/questions/44675375/failure-to-get-the-stage-of-a-dialog
+		Stage stage = (Stage)this.getDialogPane().getScene().getWindow();
+		stage.sizeToScene();
 	}
 	
 	@Override
@@ -490,6 +552,10 @@ public class DBSettingDialog extends Dialog<MyDBAbstract>
 		
 		MyDBAbstract myDBAbs = this.comboBoxDBType.getSelectionModel().getSelectedItem();
 		myDBAbs.setDriverShim(driver);
+		
+		// https://stackoverflow.com/questions/44675375/failure-to-get-the-stage-of-a-dialog
+		Stage stage = (Stage)this.getDialogPane().getScene().getWindow();
+		stage.sizeToScene();
 	}
 	
 	@Override
@@ -498,5 +564,9 @@ public class DBSettingDialog extends Dialog<MyDBAbstract>
 		// set pane on dialog
 		this.getDialogPane().setContent( this.brdPane );
 		this.setDisableAllButton(false);
+		
+		// https://stackoverflow.com/questions/44675375/failure-to-get-the-stage-of-a-dialog
+		Stage stage = (Stage)this.getDialogPane().getScene().getWindow();
+		stage.sizeToScene();
 	}
 }
