@@ -14,6 +14,7 @@ import java.nio.file.Files;
 import java.io.File;
 import java.io.IOException;
 
+import milu.gui.ctrl.common.inf.ChangePathInterface;
 import milu.gui.dlg.MyAlertDialog;
 import milu.main.MainController;
 import milu.tool.MyTool;
@@ -23,6 +24,8 @@ public class PathTreeView extends TreeView<Path>
 {
 	private MainController mainCtrl = null;
 	
+	private ChangePathInterface chgPathInf = null;
+	
 	private String  rootDir = null;
 	
 	// File Extension
@@ -31,6 +34,11 @@ public class PathTreeView extends TreeView<Path>
 	public void setMainController( MainController mainCtrl )
 	{
 		this.mainCtrl = mainCtrl;
+	}
+	
+	public void setChangePathInterface( ChangePathInterface chgPathInf )
+	{
+		this.chgPathInf = chgPathInf;
 	}
 	
 	public void setRootDir( String rootDir )
@@ -50,7 +58,8 @@ public class PathTreeView extends TreeView<Path>
 		itemRoot.setExpanded(true);
 		itemRoot.setGraphic( MyTool.createImageView( 16, 16, this.mainCtrl.getImage("file:resources/images/folder.png") ) );
 		this.setRoot(itemRoot);
-		this.setShowRoot(false);
+		this.getSelectionModel().select(itemRoot);
+		//this.setShowRoot(false);
 		
 		// create tree structure
 		this.createTree(itemRoot);
@@ -120,7 +129,6 @@ public class PathTreeView extends TreeView<Path>
 		(
 			(event)->
 			{
-				
 			}
 		);
 		
@@ -211,6 +219,7 @@ public class PathTreeView extends TreeView<Path>
         
         selectedItem.getChildren().add(newItem);
         this.getSelectionModel().select(newItem);
+        this.edit(newItem);
 	}
 	
 	public void addNewFile() throws IOException
@@ -230,6 +239,7 @@ public class PathTreeView extends TreeView<Path>
         
         selectedItem.getChildren().add(newItem);
         this.getSelectionModel().select(newItem);
+        this.edit(newItem);
 	}
 	
 	private Path getPathFolder( TreeItem<Path> item )

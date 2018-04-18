@@ -3,6 +3,9 @@ package milu.db;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.Properties;
+
+import com.google.gson.annotations.Expose;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.Statement;
@@ -19,27 +22,35 @@ abstract public class MyDBAbstract
 		Comparable<MyDBAbstract>
 {
 	// DB Connection
+	@Expose(serialize = false, deserialize = false)
 	protected Connection conn = null;
 	
-	// DB Username
+	// DB User Name
+	@Expose(serialize = true, deserialize = true)
 	protected String  username = null;
 	
 	// DB Password
+	@Expose(serialize = true, deserialize = true)
 	protected String  password = null;
 	
 	// JDBC Driver
+	@Expose(serialize = true, deserialize = true)
 	protected DriverShim   driverShim = null;
 	
 	// DB URL
+	@Expose(serialize = true, deserialize = true)
 	protected String  url = null;
 	
 	// DB properties
+	@Expose(serialize = true, deserialize = true)
 	protected Map<String,String>  dbOpts = new HashMap<>();
 	
 	// DB properties(special)
+	@Expose(serialize = true, deserialize = true)
 	protected Map<String,String>  dbOptsSpecial = new HashMap<>();
 	
 	// SchemaEntity Root
+	@Expose(serialize = false, deserialize = false)
 	protected SchemaEntity schemaRoot = null;
 	
 	abstract void init();

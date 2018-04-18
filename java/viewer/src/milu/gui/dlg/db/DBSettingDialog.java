@@ -10,6 +10,8 @@ import java.util.Collections;
 import java.util.Enumeration;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.sql.Driver;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -21,6 +23,8 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TreeView;
+import javafx.scene.control.TreeItem;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.Node;
@@ -42,12 +46,15 @@ import javafx.collections.ObservableList;
 import javafx.util.StringConverter;
 
 import milu.db.driver.DriverShim;
+import milu.file.json.MyJsonHandleAbstract;
+import milu.file.json.MyJsonHandleFactory;
 import milu.db.MyDBAbstract;
 import milu.db.MyDBFactory;
 import milu.gui.ctrl.common.ButtonOrderNoneDialogPane;
 import milu.gui.ctrl.common.DriverControlPane;
 import milu.gui.ctrl.common.PathTreeView;
 import milu.gui.ctrl.common.inf.PaneSwitchDriverInterface;
+import milu.gui.ctrl.common.inf.ChangePathInterface;
 import milu.gui.dlg.MyAlertDialog;
 import milu.main.AppConf;
 import milu.main.AppConst;
@@ -58,7 +65,8 @@ import milu.tool.MyTool;
 // http://code.makery.ch/blog/javafx-dialogs-official/
 public class DBSettingDialog extends Dialog<MyDBAbstract>
 	implements
-		PaneSwitchDriverInterface
+		PaneSwitchDriverInterface,
+		ChangePathInterface
 {
 	private MainController mainCtrl = null; 
 	
@@ -142,6 +150,7 @@ public class DBSettingDialog extends Dialog<MyDBAbstract>
 			rootDir.mkdirs();
 		}
 		this.pathTreeView.setMainController(mainCtrl);
+		this.pathTreeView.setChangePathInterface(this);
 		this.pathTreeView.setRootDir(AppConst.DB_DIR.val());
 		this.pathTreeView.setFileExt("json");
 		try
@@ -274,7 +283,8 @@ public class DBSettingDialog extends Dialog<MyDBAbstract>
 		// set focus on ComboBox for DBType
 		// http://krr.blog.shinobi.jp/javafx/javafx%20ui%E3%82%B3%E3%83%B3%E3%83%88%E3%83%AD%E3%83%BC%E3%83%AB%E3%81%AE%E9%81%B8%E6%8A%9E%E3%83%BB%E3%83%95%E3%82%A9%E3%83%BC%E3%82%AB%E3%82%B9
 		// https://sites.google.com/site/63rabbits3/javafx2/jfx2coding/dialogbox
-		Platform.runLater( ()->{ this.comboBoxDBType.requestFocus(); } );
+		//Platform.runLater( ()->{ this.comboBoxDBType.requestFocus(); } );
+		Platform.runLater( this.pathTreeView::requestFocus );
 		
 		// set size
 		this.setResizable( true );
@@ -404,6 +414,28 @@ public class DBSettingDialog extends Dialog<MyDBAbstract>
 							// suppress error
 						}
 					}
+					
+					// get selected item on PathTreeView
+					TreeItem<Path>  treeItem = this.pathTreeView.getSelectionModel().getSelectedItem();
+					if ( treeItem != null )
+					{
+						Path path = treeItem.getValue();
+						if ( Files.isRegularFile(path) )
+						{
+							MyJsonHandleAbstract myJsonAbs =
+									new MyJsonHandleFactory().createInstance(MyDBAbstract.class);
+							myJsonAbs.open(path.toString());
+							try
+							{
+								myJsonAbs.save(myDBAbs);
+							}
+							catch ( IOException ioEx )
+							{
+								this.showException(ioEx);
+							}
+						}
+					}
+					
 					
 					return myDBAbs;
 				}
@@ -568,5 +600,10 @@ public class DBSettingDialog extends Dialog<MyDBAbstract>
 		// https://stackoverflow.com/questions/44675375/failure-to-get-the-stage-of-a-dialog
 		Stage stage = (Stage)this.getDialogPane().getScene().getWindow();
 		stage.sizeToScene();
+	}
+	
+	public void changePath( Path path )
+	{
+		
 	}
 }
