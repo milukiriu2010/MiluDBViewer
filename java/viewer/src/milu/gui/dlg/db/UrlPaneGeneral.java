@@ -103,7 +103,25 @@ public class UrlPaneGeneral extends UrlPaneAbstract
 	
 	void init()
 	{
+		System.out.println( "UrlPaneGeneral.init:" + this.myDBAbs );
 		
+		Map<String,String> dbOpts = this.myDBAbs.getDBOpts();
+		String urlOpt = "";
+		for ( String key : dbOpts.keySet() )
+		{
+			if ( urlOpt.equals("") )
+			{
+				urlOpt = "?";
+			}
+			else
+			{
+				urlOpt = urlOpt + "&";
+			}
+			urlOpt = urlOpt + key + "=" + dbOpts.get(key);
+		}
+		System.out.println( "url:" + this.myDBAbs.getUrl() + "|" );
+		this.urlTextArea.setText( this.myDBAbs.getUrl() + urlOpt );
+		this.tglBtnFreeHand.setSelected(true);
 	}
 	
 	private void setAction()
@@ -159,9 +177,11 @@ public class UrlPaneGeneral extends UrlPaneAbstract
 		// ------------------------------------------
 		// |  TextField                    | Button |
 		// ------------------------------------------
-		this.tmplTextField.prefWidthProperty().bind( this.urlTextArea.widthProperty() );
+		// sticky when resize dialog
+		//this.tmplTextField.prefWidthProperty().bind( this.urlTextArea.widthProperty() );
 		// it doesn't work.
 		//this.tmplTextField.setPrefWidth( this.urlTextArea.getWidth() - this.tmplBtn.getWidth() );
+		this.tmplTextField.setPrefWidth( 500 );
 		
 		HBox hBox = new HBox(2);
 		hBox.getChildren().addAll( this.tmplTextField, this.tmplBtn );		
@@ -171,8 +191,8 @@ public class UrlPaneGeneral extends UrlPaneAbstract
 		( 
 			this.hBoxToggle,
 			this.urlTextArea,
-			this.lblUrl,
-			hBox
+			hBox,
+			this.lblUrl
 		);
 		
 		this.getChildren().addAll( vBox );
@@ -197,7 +217,7 @@ public class UrlPaneGeneral extends UrlPaneAbstract
 	
 	private void setUrlTextArea()
 	{
-		this.setUrl();
+		//this.setUrl();
 		this.urlTextArea.setText( this.myDBAbs.getUrl() );
 	}
 	

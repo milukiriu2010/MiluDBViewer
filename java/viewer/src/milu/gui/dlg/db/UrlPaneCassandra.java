@@ -22,7 +22,6 @@ import javafx.stage.Stage;
 
 import milu.db.driver.DriverShim;
 import milu.db.MyDBAbstract;
-import milu.db.driver.DriverClassConst;
 import milu.gui.ctrl.common.PersistentButtonToggleGroup;
 import milu.main.MainController;
 import milu.tool.MyTool;

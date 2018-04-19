@@ -6,7 +6,6 @@ import java.util.ListIterator;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.ResourceBundle;
-import java.util.stream.Collectors;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.io.File;
@@ -24,7 +23,6 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.control.TreeView;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.Alert.AlertType;
@@ -45,6 +43,7 @@ import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.util.StringConverter;
+import javafx.beans.value.ChangeListener;
 
 import milu.db.driver.DriverShim;
 import milu.file.json.MyJsonHandleAbstract;
@@ -57,7 +56,6 @@ import milu.gui.ctrl.common.PathTreeView;
 import milu.gui.ctrl.common.inf.PaneSwitchDriverInterface;
 import milu.gui.ctrl.common.inf.ChangePathInterface;
 import milu.gui.dlg.MyAlertDialog;
-import milu.main.AppConf;
 import milu.main.AppConst;
 import milu.main.MainController;
 import milu.tool.MyTool;
@@ -69,7 +67,9 @@ public class DBSettingDialog extends Dialog<MyDBAbstract>
 		PaneSwitchDriverInterface,
 		ChangePathInterface
 {
-	private MainController mainCtrl = null; 
+	private MainController mainCtrl = null;
+	
+	private ChangeListener<? super MyDBAbstract>  changeListener = null;
 	
 	// ----------------------------------------
 	// [Pane on Dialog(1)]
@@ -270,6 +270,19 @@ public class DBSettingDialog extends Dialog<MyDBAbstract>
 		
 		// Create Pane for DriverControl
 		this.driverCtrlPane = new DriverControlPane( this.mainCtrl, this );
+
+		// -------------------------------------------------------------------------------------------
+		//	new ChangeListener<String>()
+		//	
+		//	@Override 
+		//	public void changed( ObservableValue<? extends MyDBAbstract> ov, MyDBAbstract oldVal, MyDBAbstract newVal )
+		// -------------------------------------------------------------------------------------------
+		this.changeListener =
+			( ov, oldVal, newVal )->
+			{
+				this.setUrlPane(newVal);
+			};
+		
 		
 		// Window Icon
 		Stage stage = (Stage)this.getDialogPane().getScene().getWindow();
@@ -350,6 +363,7 @@ public class DBSettingDialog extends Dialog<MyDBAbstract>
 		// ----------------------------------------
 		// Change pane when DB Type is changed.
 		// http://www.java2s.com/Code/Java/JavaFX/AddchangelistenertoComboBoxvalueProperty.htm
+		/*
 		this.comboBoxDBType.valueProperty().addListener
 		(
 			// -------------------------------------------------------------------------------------------
@@ -361,41 +375,11 @@ public class DBSettingDialog extends Dialog<MyDBAbstract>
 			( ov, oldVal, newVal )->
 			{
 				this.setUrlPane(newVal);
-				/*
-				ListIterator<Node> nodeLstIterator = this.vBoxCenter.getChildren().listIterator();
-				while ( nodeLstIterator.hasNext() )
-				{
-					Node node = nodeLstIterator.next();
-					if ( node instanceof UrlPaneAbstract )
-					{
-						UrlPaneAbstract urlPaneAbs1 = (UrlPaneAbstract)node;
-						Map<String, String> mapProp = urlPaneAbs1.getProp();
-						this.vBoxCenter.getChildren().remove( node );
-						
-						UrlPaneAbstract urlPaneAbs2 = null;
-						// ReUse object, if selected before.
-						if ( this.urlPaneAbsMap.containsKey(newVal) )
-						{
-							urlPaneAbs2 = this.urlPaneAbsMap.get(newVal); 
-						}
-						// Create object, if never selected before.
-						else
-						{
-							PaneFactory paneFactory = new UrlPaneFactory();
-							urlPaneAbs2 = paneFactory.createPane( this, this.mainCtrl, newVal, mapProp );
-							this.urlPaneAbsMap.put( newVal, urlPaneAbs2 );
-						}
-						this.vBoxCenter.getChildren().add( urlPaneAbs2 );
-						break;
-					}
-				}
-				
-				// https://stackoverflow.com/questions/44675375/failure-to-get-the-stage-of-a-dialog
-				Stage stage = (Stage)this.getDialogPane().getScene().getWindow();
-				stage.sizeToScene();
-				*/
 			}
 		);
+		*/
+		this.comboBoxDBType.valueProperty().addListener( this.changeListener );
+		
 		
 		// --------------------------------------------
 		// "OK" Button Event
@@ -506,6 +490,8 @@ public class DBSettingDialog extends Dialog<MyDBAbstract>
 	
 	private void setUrlPane( MyDBAbstract newVal )
 	{
+		System.out.println( "newVal1:" + newVal );
+		System.out.println( "url1:" + newVal.getUrl() + "|" );
 		ListIterator<Node> nodeLstIterator = this.vBoxCenter.getChildren().listIterator();
 		while ( nodeLstIterator.hasNext() )
 		{
@@ -529,6 +515,8 @@ public class DBSettingDialog extends Dialog<MyDBAbstract>
 					urlPaneAbs2 = paneFactory.createPane( this, this.mainCtrl, newVal, mapProp );
 					this.urlPaneAbsMap.put( newVal, urlPaneAbs2 );
 				}
+				System.out.println( "newVal2:" + newVal );
+				System.out.println( "url2:" + newVal.getUrl() + "|" );
 				urlPaneAbs2.init();
 				this.vBoxCenter.getChildren().add( urlPaneAbs2 );
 				break;
@@ -694,6 +682,7 @@ public class DBSettingDialog extends Dialog<MyDBAbstract>
 				
 				if ( myDBAbsCandidate != null )
 				{
+					this.comboBoxDBType.valueProperty().removeListener( this.changeListener );
 					// select DBType
 					this.comboBoxDBType.getSelectionModel().select(myDBAbsCandidate);
 					// set "User Name"
@@ -708,8 +697,11 @@ public class DBSettingDialog extends Dialog<MyDBAbstract>
 					myDBAbsCandidate.setDBOptsSpecial(myDBAbsTmp.getDBOptsSpecial());
 					// set "dbOptsAux"
 					myDBAbsCandidate.setDBOptsAux(myDBAbsTmp.getDBOptsAux());
+					System.out.println( "myDBAbsCandidate:" + myDBAbsCandidate );
+					System.out.println( "url:" + myDBAbsCandidate.getUrl() + "|" );
 					
 					this.setUrlPane(myDBAbsCandidate);
+					this.comboBoxDBType.valueProperty().addListener( this.changeListener );
 				}
 			}
 		}

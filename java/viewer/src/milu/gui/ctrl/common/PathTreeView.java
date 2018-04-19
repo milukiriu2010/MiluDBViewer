@@ -263,8 +263,39 @@ public class PathTreeView extends TreeView<Path>
 			return;
 		}
 		
-		Files.delete(selectedItem.getValue());
+		Path path = selectedItem.getValue();
+		if ( Files.isDirectory(path) )
+		{
+			this.deleteFolder(path);
+		}
+		else
+		{
+			Files.delete(path);
+		}
 		selectedItem.getParent().getChildren().remove(selectedItem);
+	}
+	
+	private void deleteFolder( Path pathParent ) throws IOException
+	{
+	    try 
+	    ( 
+    		DirectoryStream<Path> directoryStream = 
+    			Files.newDirectoryStream(pathParent);
+	    ) 
+	    {
+	        for ( Path path : directoryStream ) 
+	        {
+	        	if (Files.isDirectory(path)) 
+	            {
+	            	this.deleteFolder(path);
+	            }
+	        	else
+	        	{
+	        		Files.delete(path);
+	        	}
+	        }
+	    }
+	    Files.delete( pathParent );
 	}
 	
 	private Path getPathFolder( TreeItem<Path> item )
