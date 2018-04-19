@@ -32,14 +32,4 @@ public class MyDBGeneral extends MyDBAbstract
 	{
 		return 0;
 	}
-	
-	/**
-	 * Name on GUI Items
-	 */
-	@Override
-	public String toString()
-	{
-		return "[<<Any>>]";
-	}
-
 }

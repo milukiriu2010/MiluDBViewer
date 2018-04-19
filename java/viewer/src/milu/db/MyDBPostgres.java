@@ -41,6 +41,7 @@ public class MyDBPostgres extends MyDBAbstract
 				"jdbc:postgresql://"+
 				dbOptMap.get( "Host" )+":"+dbOptMap.get( "Port" )+"/"+
 				dbOptMap.get( "DBName" );
+		dbOptMap.forEach( (k,v)->this.dbOptsAux.put(k,v) );
 		return this.url;
 	}
 	
@@ -53,15 +54,6 @@ public class MyDBPostgres extends MyDBAbstract
 	public int getDefaultPort()
 	{
 		return 5432;
-	}
-	
-	/**
-	 * Name on GUI Items
-	 */
-	@Override
-	public String toString()
-	{
-		return "PostgreSQL";
 	}
 	
 	@Override

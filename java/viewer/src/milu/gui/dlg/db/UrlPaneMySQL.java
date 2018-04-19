@@ -137,6 +137,11 @@ public class UrlPaneMySQL extends UrlPaneAbstract
 		this.setUrlTextArea();
 	}
 	
+	void init()
+	{
+		System.out.println( "UrlPaneMySQL.init." );
+	}
+	
 	private void setAction()
 	{
 		// --------------------------------------------

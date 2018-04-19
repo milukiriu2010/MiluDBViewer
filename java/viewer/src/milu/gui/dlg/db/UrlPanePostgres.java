@@ -137,6 +137,11 @@ public class UrlPanePostgres extends UrlPaneAbstract
 		this.setUrlTextArea();
 	}
 	
+	void init()
+	{
+		System.out.println( "UrlPanePostgres.init." );
+	}
+	
 	private void setAction()
 	{
 		// --------------------------------------------

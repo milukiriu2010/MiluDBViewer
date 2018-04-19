@@ -46,9 +46,13 @@ public class MyJsonHandleMyDBAbs extends MyJsonHandleAbstract
 			json = new String( data );
 		}
 		
+		System.out.println( "====== load(" + this.file.getAbsolutePath() + ") ======" );
+		System.out.println( json );
+		System.out.println( "=======================================================" );
+		
 		GsonBuilder gsonBuilder = new GsonBuilder();
 		gsonBuilder.registerTypeAdapter( MyDBAbstract.class, new JsonElementAdapter() );
-		Gson gson = gsonBuilder.create();
+		Gson gson = gsonBuilder.excludeFieldsWithoutExposeAnnotation().create();
 		
 		Type type = new TypeToken<MyDBAbstract>() {}.getType();
 		MyDBAbstract myDBAbs = gson.fromJson( json, type );

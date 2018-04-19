@@ -47,6 +47,7 @@ public class MyDBCassandra extends MyDBAbstract
 					dbOptMap.get( "Host" )+":"+dbOptMap.get( "Port" )+"/"+
 					dbOptMap.get( "DBName" );
 		}
+		dbOptMap.forEach( (k,v)->this.dbOptsAux.put(k,v) );
 		return this.url;
 	}
 
@@ -54,15 +55,6 @@ public class MyDBCassandra extends MyDBAbstract
 	public int getDefaultPort()
 	{
 		return 9042;
-	}
-	
-	/**
-	 * Name on GUI Items
-	 */
-	@Override
-	public String toString()
-	{
-		return "Cassandra";
 	}
 
 	@Override

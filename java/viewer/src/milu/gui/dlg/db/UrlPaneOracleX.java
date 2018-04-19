@@ -44,7 +44,7 @@ import milu.main.AppConf;
 import milu.main.MainController;
 import milu.tool.MyTool;
 
-public class UrlPaneOracle extends UrlPaneAbstract
+public class UrlPaneOracleX extends UrlPaneAbstract
 {
 	private Dialog<?>      dlg            = null;
 	
@@ -134,7 +134,7 @@ public class UrlPaneOracle extends UrlPaneAbstract
 		// ----------------------------------------------------
 		// Items for "Basic"
 		// ----------------------------------------------------
-		/**/
+		/*
 		String dbName = mapProp.get("DBName");
 		if ( dbName != null )
 		{
@@ -146,21 +146,28 @@ public class UrlPaneOracle extends UrlPaneAbstract
 			this.hostTextField.setText( host );
 		}
 		this.portTextField.setText( String.valueOf(myDBAbs.getDefaultPort()) );
-		/**/
-		/*
+		*/
 		Map<String,String> dbOptsAux = this.myDBAbs.getDBOptsAux();
-		this.dbnameTextField.setText( dbOptsAux.get("DBName") );
-		this.hostTextField.setText( dbOptsAux.get("Host") );
-		if ( dbOptsAux.containsKey("Port") )
+		String dbName = dbOptsAux.get("DBName");
+		if ( dbName != null )
 		{
-			this.portTextField.setText( dbOptsAux.get("Port") );
+			this.dbnameTextField.setText( dbName );
+		}
+		String host = dbOptsAux.get("Host");
+		if ( host != null )
+		{
+			this.hostTextField.setText( host );
+		}
+		String port = dbOptsAux.get("Port");
+		if ( port != null )
+		{
+			this.portTextField.setText( port );
 		}
 		else
 		{
 			this.portTextField.setText( String.valueOf(myDBAbs.getDefaultPort()) );
 		}
-		*/
- 		
+		
 		// ----------------------------------------------------
 		// Items for "TNS"
 		// ----------------------------------------------------
@@ -200,6 +207,10 @@ public class UrlPaneOracle extends UrlPaneAbstract
 				this.tnsAdminTextField.setText( tns_admin2 );
 			}
 		}
+		else if ( dbOptsAux.containsKey("TNSAdmin") )
+		{
+			this.tnsAdminTextField.setText( dbOptsAux.get("TNSAdmin") );
+		}
 		
 		// TNS_ADMIN(Default Prompt)
 		if ( System.getProperty("os.name").contains("Windows") )
@@ -215,6 +226,10 @@ public class UrlPaneOracle extends UrlPaneAbstract
 		this.tnsNamesCombo.setEditable(true);
 		this.filteredItems = new FilteredList<String>( this.hints, pre->true );
 		this.tnsNamesCombo.setItems( this.filteredItems );
+		if ( dbOptsAux.containsKey("TNSName") )
+		{
+			this.tnsAdminTextField.setText( dbOptsAux.get("TNSName") );
+		}
 		
 		String dirPath = this.tnsAdminTextField.getText();
 		if ( dirPath.length() > 0 )
@@ -247,6 +262,25 @@ public class UrlPaneOracle extends UrlPaneAbstract
 		this.lblUrl.setCursor( Cursor.HAND );
 		this.lblUrl.getStyleClass().add("DBSettingDialog_URL");
 		
+		String urlOpt = null;
+		Map<String,String> dbOpts = this.myDBAbs.getDBOpts();
+		for ( String key : dbOpts.keySet() )
+		{
+			if ( urlOpt == null )
+			{
+				urlOpt = "?";
+			}
+			else
+			{
+				urlOpt = urlOpt + "&";
+			}
+			urlOpt = urlOpt + key + "=" + dbOpts.get(key);
+		}
+		if ( urlOpt != null )
+		{
+			this.urlTextArea.setText(urlOpt);
+		}
+		
 		this.setAction();
 		
 		this.setUrlTextArea();
@@ -254,42 +288,7 @@ public class UrlPaneOracle extends UrlPaneAbstract
 	
 	void init()
 	{
-		System.out.println( "UrlPaneOracle.init." );
-		Map<String,String> dbOptsAux = this.myDBAbs.getDBOptsAux();
-		if ( dbOptsAux.containsKey("DBName") )
-		{
-			this.dbnameTextField.setText( dbOptsAux.get("DBName") );
-			this.hostTextField.setText( dbOptsAux.get("Host") );
-			this.portTextField.setText( dbOptsAux.get("Port") );
-			this.tglBtnBasic.setSelected(true);
-			this.setUrlTextArea();
-		}
-		else if ( dbOptsAux.containsKey("TNSAdmin") )
-		{
-			this.tnsAdminTextField.setText( dbOptsAux.get("TNSAdmin") );
-			this.tnsNamesCombo.setValue( dbOptsAux.get("TNSName") );
-			this.tglBtnTNS.setSelected(true);
-			this.setUrlTextArea();
-		}
-		else
-		{
-			Map<String,String> dbOpts = this.myDBAbs.getDBOpts();
-			String urlOpt = "";
-			for ( String key : dbOpts.keySet() )
-			{
-				if ( urlOpt.equals("") )
-				{
-					urlOpt = "?";
-				}
-				else
-				{
-					urlOpt = urlOpt + "&";
-				}
-				urlOpt = urlOpt + key + "=" + dbOpts.get(key);
-			}
-			this.urlTextArea.setText( this.myDBAbs.getUrl() + urlOpt );
-			this.tglBtnFreeHand.setSelected(true);
-		}
+		
 	}
 	
 	private void setAction()
@@ -586,7 +585,7 @@ public class UrlPaneOracle extends UrlPaneAbstract
 		{
 			dbOptMap.put( "TNSName"  , this.tnsNamesCombo.getValue() );
 			dbOptMap.put( "TNSAdmin" , this.tnsAdminTextField.getText() );
-		}		
+		}
 		
 		return dbOptMap;
 	}

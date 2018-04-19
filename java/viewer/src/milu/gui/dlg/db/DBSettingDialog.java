@@ -6,6 +6,7 @@ import java.util.ListIterator;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.ResourceBundle;
+import java.util.stream.Collectors;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.io.File;
@@ -91,6 +92,8 @@ public class DBSettingDialog extends Dialog<MyDBAbstract>
 	
 	private Button  btnNewConnection = new Button();
 	
+	private Button  btnDelFolder = new Button();
+	
 	// ----------------------------------------
 	// [Pane on Dialog(1)]-[Center]
 	// ----------------------------------------
@@ -166,8 +169,10 @@ public class DBSettingDialog extends Dialog<MyDBAbstract>
 		
 		this.btnNewConnection.setGraphic( MyTool.createImageView( 16, 16, this.mainCtrl.getImage( "file:resources/images/file_new.png" ) ) );
 		
+		this.btnDelFolder.setGraphic( MyTool.createImageView( 16, 16, this.mainCtrl.getImage( "file:resources/images/delete.png" ) ) );
+		
 		HBox hBoxBtn = new HBox(2);
-		hBoxBtn.getChildren().addAll( this.btnNewFolder, this.btnNewConnection );
+		hBoxBtn.getChildren().addAll( this.btnNewFolder, this.btnNewConnection, this.btnDelFolder );
 		
 		VBox vBoxPathTreeView = new VBox(2);
 		vBoxPathTreeView.getChildren().addAll( this.pathTreeView, hBoxBtn );
@@ -324,11 +329,26 @@ public class DBSettingDialog extends Dialog<MyDBAbstract>
 				}
 			}
 		);
+
+		this.btnDelFolder.setOnAction
+		( 
+			(event)->
+			{
+				try
+				{
+					this.pathTreeView.delFolder();
+				}
+				catch ( IOException ioEx )
+				{
+					this.showException(ioEx);
+				}
+			}
+		);
 		
 		// ----------------------------------------
 		// [Pane on Dialog(1)]-[Center]
 		// ----------------------------------------
-		// Change default port when DB Type is changed.
+		// Change pane when DB Type is changed.
 		// http://www.java2s.com/Code/Java/JavaFX/AddchangelistenertoComboBoxvalueProperty.htm
 		this.comboBoxDBType.valueProperty().addListener
 		(
@@ -340,6 +360,8 @@ public class DBSettingDialog extends Dialog<MyDBAbstract>
 			// -------------------------------------------------------------------------------------------
 			( ov, oldVal, newVal )->
 			{
+				this.setUrlPane(newVal);
+				/*
 				ListIterator<Node> nodeLstIterator = this.vBoxCenter.getChildren().listIterator();
 				while ( nodeLstIterator.hasNext() )
 				{
@@ -371,6 +393,7 @@ public class DBSettingDialog extends Dialog<MyDBAbstract>
 				// https://stackoverflow.com/questions/44675375/failure-to-get-the-stage-of-a-dialog
 				Stage stage = (Stage)this.getDialogPane().getScene().getWindow();
 				stage.sizeToScene();
+				*/
 			}
 		);
 		
@@ -479,6 +502,42 @@ public class DBSettingDialog extends Dialog<MyDBAbstract>
 			} 
 		);
 		
+	}
+	
+	private void setUrlPane( MyDBAbstract newVal )
+	{
+		ListIterator<Node> nodeLstIterator = this.vBoxCenter.getChildren().listIterator();
+		while ( nodeLstIterator.hasNext() )
+		{
+			Node node = nodeLstIterator.next();
+			if ( node instanceof UrlPaneAbstract )
+			{
+				UrlPaneAbstract urlPaneAbs1 = (UrlPaneAbstract)node;
+				Map<String, String> mapProp = urlPaneAbs1.getProp();
+				this.vBoxCenter.getChildren().remove( node );
+				
+				UrlPaneAbstract urlPaneAbs2 = null;
+				// ReUse object, if selected before.
+				if ( this.urlPaneAbsMap.containsKey(newVal) )
+				{
+					urlPaneAbs2 = this.urlPaneAbsMap.get(newVal); 
+				}
+				// Create object, if never selected before.
+				else
+				{
+					PaneFactory paneFactory = new UrlPaneFactory();
+					urlPaneAbs2 = paneFactory.createPane( this, this.mainCtrl, newVal, mapProp );
+					this.urlPaneAbsMap.put( newVal, urlPaneAbs2 );
+				}
+				urlPaneAbs2.init();
+				this.vBoxCenter.getChildren().add( urlPaneAbs2 );
+				break;
+			}
+		}
+		
+		// https://stackoverflow.com/questions/44675375/failure-to-get-the-stage-of-a-dialog
+		Stage stage = (Stage)this.getDialogPane().getScene().getWindow();
+		stage.sizeToScene();
 	}
 	
 	// "OK" Button Event
@@ -604,6 +663,59 @@ public class DBSettingDialog extends Dialog<MyDBAbstract>
 	
 	public void changePath( Path path )
 	{
-		
+		System.out.println( "changePath[" + path.toString() + "]" );
+		if ( Files.isRegularFile(path) == false )
+		{
+			return;
+		}
+		MyJsonHandleAbstract myJsonAbs =
+			new MyJsonHandleFactory().createInstance(MyDBAbstract.class);
+		try
+		{
+			myJsonAbs.open(path.toString());
+			Object obj = myJsonAbs.load();
+			if ( obj instanceof MyDBAbstract )
+			{
+				MyDBAbstract myDBAbsTmp = (MyDBAbstract)obj;
+				System.out.println( "Class[" + myDBAbsTmp.getClass().toString() + "]" );
+				System.out.println( "User [" + myDBAbsTmp.getUsername() + "]" );
+				System.out.println( "URL  [" + myDBAbsTmp.getUrl() + "]" );
+				System.out.println( "JDBC [" + myDBAbsTmp.getDriveShim().getDriverClassName() + "]" );
+				myDBAbsTmp.getDBOpts().forEach( (k,v)->System.out.println("DBOpts:k["+k+"]v["+v+"]") );
+				myDBAbsTmp.getDBOptsSpecial().forEach( (k,v)->System.out.println("DBOptsSpeicial:k["+k+"]v["+v+"]") );
+				myDBAbsTmp.getDBOptsAux().forEach( (k,v)->System.out.println("DBOptsAux:k["+k+"]v["+v+"]") );
+				
+				// select "MyDBAbstract" of the same "DriverShim" in the "DBType 'ComboBox'"
+				MyDBAbstract myDBAbsCandidate =
+					this.comboBoxDBType.getItems().stream()
+						.filter( item -> item.getDriveShim().getDriverClassName().equals(myDBAbsTmp.getDriveShim().getDriverClassName()) )
+						.findAny()
+						.orElse(null);
+				
+				if ( myDBAbsCandidate != null )
+				{
+					// select DBType
+					this.comboBoxDBType.getSelectionModel().select(myDBAbsCandidate);
+					// set "User Name"
+					this.usernameTextField.setText(myDBAbsTmp.getUsername());
+					// set "Password"
+					this.passwordTextField.setText(myDBAbsTmp.getPassword());
+					// set "URL"
+					myDBAbsCandidate.setUrl(myDBAbsTmp.getUrl());
+					// set "dbOpts"
+					myDBAbsCandidate.setDBOpts(myDBAbsTmp.getDBOpts());
+					// set "dbOptsSpecial"
+					myDBAbsCandidate.setDBOptsSpecial(myDBAbsTmp.getDBOptsSpecial());
+					// set "dbOptsAux"
+					myDBAbsCandidate.setDBOptsAux(myDBAbsTmp.getDBOptsAux());
+					
+					this.setUrlPane(myDBAbsCandidate);
+				}
+			}
+		}
+		catch ( Exception ex )
+		{
+			this.showException(ex);
+		}
 	}
 }

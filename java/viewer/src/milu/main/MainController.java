@@ -154,7 +154,8 @@ public class MainController
 				"file:resources/images/folder.png",
 				"file:resources/images/folder_new.png",
 				"file:resources/images/file.png",
-				"file:resources/images/file_new.png"
+				"file:resources/images/file_new.png",
+				"file:resources/images/delete.png"
 			};
 		
 		for ( String image : images )
@@ -352,7 +353,7 @@ public class MainController
 		driverPathLstCassandra.add( "file:lib/cassandra/cassandra-jdbc-driver-0.6.4-shaded.jar" );
 		
 		driverMap.put( DriverClassConst.CLASS_NAME_CASSANDRA1, driverPathLstCassandra );
-		driverTemplateUrlMap.put( DriverClassConst.CLASS_NAME_CASSANDRA1, "jdbc:c*://[host][:9042]/[keyspace][?consistencyLevel=ONE|ANY|...][&compression=LZ4|SNAPPY]" );
+		driverTemplateUrlMap.put( DriverClassConst.CLASS_NAME_CASSANDRA1, "jdbc:c*:datastax//[host][:9042]/[keyspace][?consistencyLevel=ONE|ANY|...][&compression=LZ4|SNAPPY]" );
 		driverReferenceUrlMap.put( DriverClassConst.CLASS_NAME_CASSANDRA1, "https://github.com/zhicwu/cassandra-jdbc-driver" );
 		
 		// --------------------------------------------------

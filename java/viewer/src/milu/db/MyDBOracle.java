@@ -56,6 +56,7 @@ public class MyDBOracle extends MyDBAbstract
 	 */
 	public String getDriverUrl( Map<String, String> dbOptMap )
 	{
+		this.dbOptsAux.clear();
 		// URL Example
 		// ---------------------------------------------------
 		// (1) jdbc:oracle:thin:@localhost:1521:xe
@@ -85,6 +86,7 @@ public class MyDBOracle extends MyDBAbstract
 			//System.setProperty( "oracle.net.tns_admin", dbOptMap.get( "TNSAdmin" ) );
 			this.dbOptsSpecial.put( "oracle.net.tns_admin", dbOptMap.get( "TNSAdmin" ) );
 		}
+		dbOptMap.forEach( (k,v)->this.dbOptsAux.put(k,v) );
 		return this.url;
 	}
 	
@@ -97,15 +99,6 @@ public class MyDBOracle extends MyDBAbstract
 	public int getDefaultPort()
 	{
 		return 1521;
-	}
-	
-	/**
-	 * Name on GUI Items
-	 */
-	@Override
-	public String toString()
-	{
-		return "Oracle";
 	}
 
 	@Override

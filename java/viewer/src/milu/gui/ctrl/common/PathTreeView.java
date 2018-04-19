@@ -1,6 +1,7 @@
 package milu.gui.ctrl.common;
 
 import javafx.scene.control.TreeView;
+import javafx.application.Platform;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.cell.TextFieldTreeCell;
 import javafx.util.StringConverter;
@@ -30,6 +31,8 @@ public class PathTreeView extends TreeView<Path>
 	
 	// File Extension
 	private String  fileExt = "";
+	
+	private TextFieldTreeCell<Path> treeCell = null;
 	
 	public void setMainController( MainController mainCtrl )
 	{
@@ -70,58 +73,60 @@ public class PathTreeView extends TreeView<Path>
 		(
 			(treeView)->
 			{
-				return new TextFieldTreeCell<Path>
-				(
-					new StringConverter<Path>()
-					{
-						@Override
-						public String toString(Path path)
+				this.treeCell = 
+					new TextFieldTreeCell<Path>
+					(
+						new StringConverter<Path>()
 						{
-							if ( Files.isDirectory(path) )
+							@Override
+							public String toString(Path path)
 							{
-								return path.getFileName().toString();
-							}
-							else if ( Files.isRegularFile(path) )
-							{
-								String fileName = path.getFileName().toString();
-								int pos = fileName.lastIndexOf(".");
-								// No file extension 
-								if ( pos <= 0 )
+								if ( Files.isDirectory(path) )
 								{
-									return fileName;
+									return path.getFileName().toString();
+								}
+								else if ( Files.isRegularFile(path) )
+								{
+									String fileName = path.getFileName().toString();
+									int pos = fileName.lastIndexOf(".");
+									// No file extension 
+									if ( pos <= 0 )
+									{
+										return fileName;
+									}
+									else
+									{
+										return fileName.substring( 0, pos );
+									}
 								}
 								else
 								{
-									return fileName.substring( 0, pos );
+									return "";
 								}
 							}
-							else
-							{
-								return "";
-							}
-						}
-						
-						@Override
-						public Path fromString(String strPath)
-						{
-							Path selectedPath = treeView.getSelectionModel().getSelectedItem().getValue();
-							Path parentPath = selectedPath.getParent();
 							
-							if ( Files.isDirectory(selectedPath) )
+							@Override
+							public Path fromString(String strPath)
 							{
-								return Paths.get( parentPath.toString() + File.separator + strPath );
-							}
-							else if ( Files.isRegularFile(selectedPath) )
-							{
-								return Paths.get( parentPath.toString() + File.separator + strPath + "." + fileExt );
-							}
-							else
-							{
-								return null;
+								Path selectedPath = treeView.getSelectionModel().getSelectedItem().getValue();
+								Path parentPath = selectedPath.getParent();
+								
+								if ( Files.isDirectory(selectedPath) )
+								{
+									return Paths.get( parentPath.toString() + File.separator + strPath );
+								}
+								else if ( Files.isRegularFile(selectedPath) )
+								{
+									return Paths.get( parentPath.toString() + File.separator + strPath + "." + fileExt );
+								}
+								else
+								{
+									return null;
+								}
 							}
 						}
-					}
-				);
+					);
+				return this.treeCell;
 			}
 		);
 		
@@ -129,6 +134,7 @@ public class PathTreeView extends TreeView<Path>
 		(
 			(event)->
 			{
+				//this.treeCell.focusTraversableProperty().
 			}
 		);
 		
@@ -159,6 +165,13 @@ public class PathTreeView extends TreeView<Path>
 			}
 		);
 		
+		this.getSelectionModel().selectedItemProperty().addListener
+		(
+			(obs,oldVal,newVal)->
+			{
+				this.chgPathInf.changePath( newVal.getValue() );
+			}
+		);
 	}
 	
 	public void createTree( TreeItem<Path> itemParent ) throws IOException
@@ -219,7 +232,7 @@ public class PathTreeView extends TreeView<Path>
         
         selectedItem.getChildren().add(newItem);
         this.getSelectionModel().select(newItem);
-        this.edit(newItem);
+        Platform.runLater( ()->{ this.edit(newItem); this.treeCell.updateSelected(true); this.treeCell.requestFocus(); } );
 	}
 	
 	public void addNewFile() throws IOException
@@ -239,7 +252,19 @@ public class PathTreeView extends TreeView<Path>
         
         selectedItem.getChildren().add(newItem);
         this.getSelectionModel().select(newItem);
-        this.edit(newItem);
+        Platform.runLater( ()->{ this.edit(newItem); this.treeCell.updateSelected(true); this.treeCell.requestFocus(); } );
+	}
+	
+	public void delFolder() throws IOException
+	{
+		TreeItem<Path> selectedItem = this.getSelectionModel().getSelectedItem();
+		if ( selectedItem == null || selectedItem == this.getRoot() )
+		{
+			return;
+		}
+		
+		Files.delete(selectedItem.getValue());
+		selectedItem.getParent().getChildren().remove(selectedItem);
 	}
 	
 	private Path getPathFolder( TreeItem<Path> item )

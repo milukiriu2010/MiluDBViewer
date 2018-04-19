@@ -148,6 +148,11 @@ public class UrlPaneCassandra extends UrlPaneAbstract
 		this.setUrlTextArea();
 	}
 	
+	void init()
+	{
+		System.out.println( "UrlPaneCassandra.init." );
+	}
+	
 	private void setAction()
 	{
 		// --------------------------------------------

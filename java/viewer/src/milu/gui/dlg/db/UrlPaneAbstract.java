@@ -18,4 +18,6 @@ abstract class UrlPaneAbstract extends Pane
 	 * @param mapProp
 	 */
 	abstract void createPane( Dialog<?> dlg, MainController mainCtrl, MyDBAbstract myDBAbs, Map<String,String> mapProp );
+	
+	abstract void init();
 }

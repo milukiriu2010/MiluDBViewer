@@ -45,6 +45,7 @@ public class MyDBMySQL extends MyDBAbstract
 			"jdbc:mysql://"+
 			dbOptMap.get( "Host" )+":"+dbOptMap.get( "Port" )+"/"+
 			dbOptMap.get( "DBName" );
+		dbOptMap.forEach( (k,v)->this.dbOptsAux.put(k,v) );
 		return this.url;
 	}
 	
@@ -57,15 +58,6 @@ public class MyDBMySQL extends MyDBAbstract
 	public int getDefaultPort()
 	{
 		return 3306;
-	}
-	
-	/**
-	 * Name on GUI Items
-	 */
-	@Override
-	public String toString()
-	{
-		return "MySQL";
 	}
 	
 	@Override

@@ -101,6 +101,11 @@ public class UrlPaneGeneral extends UrlPaneAbstract
 		this.setUrlTextArea();
 	}
 	
+	void init()
+	{
+		
+	}
+	
 	private void setAction()
 	{
 		// --------------------------------------------
