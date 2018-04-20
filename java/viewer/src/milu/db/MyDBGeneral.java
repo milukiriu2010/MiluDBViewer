@@ -22,7 +22,7 @@ public class MyDBGeneral extends MyDBAbstract
 	}
 
 	@Override
-	public String getDriverUrl(Map<String, String> dbOptMap) 
+	public String getDriverUrl(Map<String, String> dbOptMap, MyDBAbstract.UPDATE update ) 
 	{
 		return null;
 	}

@@ -221,6 +221,12 @@ public class PathTreeView extends TreeView<Path>
 		{
 			selectedItem = this.getRoot();
 		}
+		Path selectedPath = selectedItem.getValue();
+		// skip, if file is selected.
+		if ( Files.isDirectory(selectedPath) == false )
+		{
+			return;
+		}
 		
         TreeItem<Path> newItem = new TreeItem<Path>();
         Path parentPath = this.getPathFolder(selectedItem);
@@ -242,6 +248,12 @@ public class PathTreeView extends TreeView<Path>
 		{
 			selectedItem = this.getRoot();
 		}
+		Path selectedPath = selectedItem.getValue();
+		// skip, if file is selected.
+		if ( Files.isDirectory(selectedPath) == false )
+		{
+			return;
+		}
 		
         TreeItem<Path> newItem = new TreeItem<Path>();
         Path parentPath = this.getPathFolder(selectedItem);
@@ -258,6 +270,7 @@ public class PathTreeView extends TreeView<Path>
 	public void delFolder() throws IOException
 	{
 		TreeItem<Path> selectedItem = this.getSelectionModel().getSelectedItem();
+		// skip, if "root" is selected.
 		if ( selectedItem == null || selectedItem == this.getRoot() )
 		{
 			return;

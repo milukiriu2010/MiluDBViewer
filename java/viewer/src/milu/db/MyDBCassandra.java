@@ -31,24 +31,30 @@ public class MyDBCassandra extends MyDBAbstract
 	}
 
 	@Override
-	public String getDriverUrl(Map<String, String> dbOptMap)
+	public String getDriverUrl(Map<String, String> dbOptMap, MyDBAbstract.UPDATE update )
 	{
+		String urlTmp = "";
 		if ( DriverClassConst.CLASS_NAME_CASSANDRA1.val().equals(this.driverShim.getDriverClazzName()) )
 		{
-			this.url =
+			urlTmp =
 					"jdbc:c*:datastax://"+
 					dbOptMap.get( "Host" )+":"+dbOptMap.get( "Port" )+"/"+
 					dbOptMap.get( "DBName" );
 		}
 		else if ( DriverClassConst.CLASS_NAME_CASSANDRA2.val().equals(this.driverShim.getDriverClazzName()) )
 		{
-			this.url =
+			urlTmp =
 					"jdbc:cassandra://"+
 					dbOptMap.get( "Host" )+":"+dbOptMap.get( "Port" )+"/"+
 					dbOptMap.get( "DBName" );
 		}
-		dbOptMap.forEach( (k,v)->this.dbOptsAux.put(k,v) );
-		return this.url;
+		if ( update.equals(MyDBAbstract.UPDATE.WITH) )
+		{
+			this.dbOptsAux.clear();
+			dbOptMap.forEach( (k,v)->this.dbOptsAux.put(k,v) );
+			this.url = urlTmp;
+		}
+		return urlTmp;
 	}
 
 	@Override

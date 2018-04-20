@@ -96,6 +96,7 @@ public class UrlPaneCassandra extends UrlPaneAbstract
 		// ----------------------------------------------------
 		// Items for "Basic"
 		// ----------------------------------------------------
+		/*
 		String dbName = mapProp.get("DBName");
 		if ( dbName != null )
 		{
@@ -107,6 +108,18 @@ public class UrlPaneCassandra extends UrlPaneAbstract
 			this.hostTextField.setText( host );
 		}
 		this.portTextField.setText( String.valueOf(myDBAbs.getDefaultPort()) );
+		*/
+		Map<String,String> dbOptsAux = this.myDBAbs.getDBOptsAux();
+		this.dbnameTextField.setText( dbOptsAux.get("DBName") );
+		this.hostTextField.setText( dbOptsAux.get("Host") );
+		if ( dbOptsAux.containsKey("Port") )
+		{
+			this.portTextField.setText( dbOptsAux.get("Port") );
+		}
+		else
+		{
+			this.portTextField.setText( String.valueOf(myDBAbs.getDefaultPort()) );
+		}
 
 		// ----------------------------------------------------
 		// get URL by Driver Info
@@ -150,6 +163,43 @@ public class UrlPaneCassandra extends UrlPaneAbstract
 	void init()
 	{
 		System.out.println( "UrlPaneCassandra.init." );
+		Map<String,String> dbOptsAux = this.myDBAbs.getDBOptsAux();
+		if ( this.myDBAbs.getUrl() == null )
+		{
+			this.tglBtnBasic.setSelected(true);
+			this.setUrlTextArea();
+		}		
+		else if ( dbOptsAux.containsKey("DBName") )
+		{
+			this.dbnameTextField.setText( dbOptsAux.get("DBName") );
+			this.hostTextField.setText( dbOptsAux.get("Host") );
+			this.portTextField.setText( dbOptsAux.get("Port") );
+			this.tglBtnBasic.setSelected(true);
+			this.setUrlTextArea();
+		}
+		else
+		{
+			/*
+			Map<String,String> dbOpts = this.myDBAbs.getDBOpts();
+			String urlOpt = "";
+			for ( String key : dbOpts.keySet() )
+			{
+				if ( urlOpt.equals("") )
+				{
+					urlOpt = "?";
+				}
+				else
+				{
+					urlOpt = urlOpt + "&";
+				}
+				urlOpt = urlOpt + key + "=" + dbOpts.get(key);
+			}
+			this.urlTextArea.setText( this.myDBAbs.getUrl() + urlOpt );
+			*/
+			this.urlTextArea.setText( this.myDBAbs.getUrl() );
+			this.tglBtnFreeHand.setSelected(true);
+		}
+		
 	}
 	
 	private void setAction()
@@ -308,8 +358,9 @@ public class UrlPaneCassandra extends UrlPaneAbstract
 	}
 
 	@Override
-	public void setUrl() 
+	public String setUrl( MyDBAbstract.UPDATE update ) 
 	{
+		String url = null;
 		Map<String,String> dbOptMap = new HashMap<String,String>();
 		
 		if ( this.tglBtnBasic.isSelected() )
@@ -317,17 +368,22 @@ public class UrlPaneCassandra extends UrlPaneAbstract
 			dbOptMap.put( "DBName"  , this.dbnameTextField.getText() );
 			dbOptMap.put( "Host"    , this.hostTextField.getText() );
 			dbOptMap.put( "Port"    , this.portTextField.getText() );
-			this.myDBAbs.getDriverUrl(dbOptMap);
+			url = this.myDBAbs.getDriverUrl(dbOptMap,update);
 		}
 		else if ( this.tglBtnFreeHand.isSelected() )
 		{
-			this.myDBAbs.setUrl( this.urlTextArea.getText() );
+			url = this.urlTextArea.getText();
+			if ( MyDBAbstract.UPDATE.WITH.equals(update) )
+			{
+				this.myDBAbs.setUrl( url );
+			}
 		}
+		return url;
 	}
 
 	private void setUrlTextArea()
 	{
-		this.setUrl();
-		this.urlTextArea.setText( this.myDBAbs.getUrl() );
+		String url = this.setUrl(MyDBAbstract.UPDATE.WITHOUT);
+		this.urlTextArea.setText( url );
 	}
 }

@@ -54,9 +54,9 @@ public class MyDBOracle extends MyDBAbstract
 	 *   TNSAdmin => /opt/oracle/12.2/product/network/admin
 	 * 
 	 */
-	public String getDriverUrl( Map<String, String> dbOptMap )
+	public String getDriverUrl( Map<String, String> dbOptMap, MyDBAbstract.UPDATE update )
 	{
-		this.dbOptsAux.clear();
+		String urlTmp = "";
 		// URL Example
 		// ---------------------------------------------------
 		// (1) jdbc:oracle:thin:@localhost:1521:xe
@@ -68,7 +68,7 @@ public class MyDBOracle extends MyDBAbstract
 		// https://stackoverflow.com/questions/30861061/ora-12505-tns-listener-does-not-currently-know-of-sid-given-in-connect-descript
 		if ( dbOptMap.size() == 0 || dbOptMap.containsKey("Port") )
 		{
-			this.url = "jdbc:oracle:thin:@" +
+			urlTmp = "jdbc:oracle:thin:@" +
 				dbOptMap.get( "Host" ) + ":" +
 				dbOptMap.get( "Port" ) + "/" +
 				dbOptMap.get( "DBName" );
@@ -82,12 +82,21 @@ public class MyDBOracle extends MyDBAbstract
 			( dbOptMap.get( "TNSAdmin" ).length() > 0 )
 		)
 		{
-			this.url = "jdbc:oracle:thin:@"+ dbOptMap.get( "TNSName" );
+			urlTmp = "jdbc:oracle:thin:@"+ dbOptMap.get( "TNSName" );
 			//System.setProperty( "oracle.net.tns_admin", dbOptMap.get( "TNSAdmin" ) );
-			this.dbOptsSpecial.put( "oracle.net.tns_admin", dbOptMap.get( "TNSAdmin" ) );
 		}
-		dbOptMap.forEach( (k,v)->this.dbOptsAux.put(k,v) );
-		return this.url;
+		if ( update.equals(MyDBAbstract.UPDATE.WITH) )
+		{
+			this.dbOptsAux.clear();
+			dbOptMap.forEach( (k,v)->this.dbOptsAux.put(k,v) );
+			this.dbOptsSpecial.clear();
+			if ( dbOptMap.containsKey( "TNSAdmin" ) )
+			{
+				this.dbOptsSpecial.put( "oracle.net.tns_admin", dbOptMap.get( "TNSAdmin" ) );
+			}
+			this.url = urlTmp;
+		}
+		return urlTmp;
 	}
 	
 	/**

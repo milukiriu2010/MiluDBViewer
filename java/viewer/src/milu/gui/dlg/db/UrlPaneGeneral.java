@@ -207,18 +207,25 @@ public class UrlPaneGeneral extends UrlPaneAbstract
 	}
 
 	@Override
-	public void setUrl() 
+	public String setUrl( MyDBAbstract.UPDATE update ) 
 	{
+		String url = null;
 		if ( this.tglBtnFreeHand.isSelected() )
 		{
-			this.myDBAbs.setUrl( this.urlTextArea.getText() );
+			url = this.urlTextArea.getText();
+			if ( MyDBAbstract.UPDATE.WITH.equals(update) )
+			{
+				this.myDBAbs.setUrl( url );
+			}
 		}
+		return url;
 	}
 	
 	private void setUrlTextArea()
 	{
 		//this.setUrl();
-		this.urlTextArea.setText( this.myDBAbs.getUrl() );
+		String url = this.setUrl(MyDBAbstract.UPDATE.WITHOUT);
+		this.urlTextArea.setText( url );
 	}
 	
 }

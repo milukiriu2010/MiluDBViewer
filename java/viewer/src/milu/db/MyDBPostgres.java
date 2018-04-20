@@ -35,13 +35,19 @@ public class MyDBPostgres extends MyDBAbstract
 	 * Get Driver URL
 	 ***********************************************
 	 */
-	public String getDriverUrl( Map<String, String> dbOptMap )
+	public String getDriverUrl( Map<String, String> dbOptMap, MyDBAbstract.UPDATE update )
 	{
-		this.url = 
+		String urlTmp = "";
+		urlTmp = 
 				"jdbc:postgresql://"+
 				dbOptMap.get( "Host" )+":"+dbOptMap.get( "Port" )+"/"+
 				dbOptMap.get( "DBName" );
-		dbOptMap.forEach( (k,v)->this.dbOptsAux.put(k,v) );
+		if ( update.equals(MyDBAbstract.UPDATE.WITH) )
+		{
+			this.dbOptsAux.clear();
+			dbOptMap.forEach( (k,v)->this.dbOptsAux.put(k,v) );
+			this.url = urlTmp;
+		}
 		return this.url;
 	}
 	

@@ -134,7 +134,7 @@ public class UrlPaneOracle extends UrlPaneAbstract
 		// ----------------------------------------------------
 		// Items for "Basic"
 		// ----------------------------------------------------
-		/**/
+		/*
 		String dbName = mapProp.get("DBName");
 		if ( dbName != null )
 		{
@@ -146,8 +146,8 @@ public class UrlPaneOracle extends UrlPaneAbstract
 			this.hostTextField.setText( host );
 		}
 		this.portTextField.setText( String.valueOf(myDBAbs.getDefaultPort()) );
+		*/
 		/**/
-		/*
 		Map<String,String> dbOptsAux = this.myDBAbs.getDBOptsAux();
 		this.dbnameTextField.setText( dbOptsAux.get("DBName") );
 		this.hostTextField.setText( dbOptsAux.get("Host") );
@@ -159,7 +159,10 @@ public class UrlPaneOracle extends UrlPaneAbstract
 		{
 			this.portTextField.setText( String.valueOf(myDBAbs.getDefaultPort()) );
 		}
-		*/
+		System.out.println( "###### constructor  ######" );
+		System.out.println( "const url:" + this.myDBAbs.getUrl() );
+		dbOptsAux.forEach( (k,v)->System.out.println("const DBOptsAux:k["+k+"]v["+v+"]") );
+		/**/
  		
 		// ----------------------------------------------------
 		// Items for "TNS"
@@ -200,6 +203,10 @@ public class UrlPaneOracle extends UrlPaneAbstract
 				this.tnsAdminTextField.setText( tns_admin2 );
 			}
 		}
+		else if ( dbOptsAux.containsKey("DBAdmin") )
+		{
+			this.tnsAdminTextField.setText( dbOptsAux.get("DBAdmin") );
+		}
 		
 		// TNS_ADMIN(Default Prompt)
 		if ( System.getProperty("os.name").contains("Windows") )
@@ -215,6 +222,7 @@ public class UrlPaneOracle extends UrlPaneAbstract
 		this.tnsNamesCombo.setEditable(true);
 		this.filteredItems = new FilteredList<String>( this.hints, pre->true );
 		this.tnsNamesCombo.setItems( this.filteredItems );
+		this.tnsNamesCombo.setValue( dbOptsAux.get("TNSName") );
 		
 		String dirPath = this.tnsAdminTextField.getText();
 		if ( dirPath.length() > 0 )
@@ -256,7 +264,15 @@ public class UrlPaneOracle extends UrlPaneAbstract
 	{
 		System.out.println( "UrlPaneOracle.init." );
 		Map<String,String> dbOptsAux = this.myDBAbs.getDBOptsAux();
-		if ( dbOptsAux.containsKey("DBName") )
+		System.out.println( "###### init  ######" );
+		System.out.println( "init url:" + this.myDBAbs.getUrl() );
+		dbOptsAux.forEach( (k,v)->System.out.println("init DBOptsAux:k["+k+"]v["+v+"]") );
+		if ( this.myDBAbs.getUrl() == null )
+		{
+			this.tglBtnBasic.setSelected(true);
+			this.setUrlTextArea();
+		}
+		else if ( dbOptsAux.containsKey("DBName") )
 		{
 			this.dbnameTextField.setText( dbOptsAux.get("DBName") );
 			this.hostTextField.setText( dbOptsAux.get("Host") );
@@ -273,6 +289,7 @@ public class UrlPaneOracle extends UrlPaneAbstract
 		}
 		else
 		{
+			/*
 			Map<String,String> dbOpts = this.myDBAbs.getDBOpts();
 			String urlOpt = "";
 			for ( String key : dbOpts.keySet() )
@@ -288,6 +305,8 @@ public class UrlPaneOracle extends UrlPaneAbstract
 				urlOpt = urlOpt + key + "=" + dbOpts.get(key);
 			}
 			this.urlTextArea.setText( this.myDBAbs.getUrl() + urlOpt );
+			*/
+			this.urlTextArea.setText( this.myDBAbs.getUrl() );
 			this.tglBtnFreeHand.setSelected(true);
 		}
 	}
@@ -500,7 +519,7 @@ public class UrlPaneOracle extends UrlPaneAbstract
 		gridPane.add( this.portTextField    , 1, 2 );
 		
 		// Set default value on field for URL
-		this.setUrlTextArea();
+		//this.setUrlTextArea();
 		this.urlTextArea.setEditable( false );
 		this.urlTextArea.setWrapText(true);		
 		
@@ -529,7 +548,7 @@ public class UrlPaneOracle extends UrlPaneAbstract
 		gridPane.add( this.tnsNamesCombo    , 1, 1 );
 		
 		// Set default value on field for URL
-		this.setUrlTextArea();
+		//this.setUrlTextArea();
 		this.urlTextArea.setEditable( false );
 		this.urlTextArea.setWrapText(true);
 		
@@ -592,8 +611,9 @@ public class UrlPaneOracle extends UrlPaneAbstract
 	}
 
 	@Override
-	public void setUrl() 
+	public String setUrl( MyDBAbstract.UPDATE update ) 
 	{
+		String url = null;
 		Map<String,String> dbOptMap = new HashMap<String,String>();
 		
 		if ( this.tglBtnBasic.isSelected() )
@@ -601,24 +621,38 @@ public class UrlPaneOracle extends UrlPaneAbstract
 			dbOptMap.put( "DBName"  , this.dbnameTextField.getText() );
 			dbOptMap.put( "Host"    , this.hostTextField.getText() );
 			dbOptMap.put( "Port"    , this.portTextField.getText() );
-			this.myDBAbs.getDriverUrl(dbOptMap);
+			url = this.myDBAbs.getDriverUrl(dbOptMap,update);
 		}
 		else if ( this.tglBtnTNS.isSelected() )
 		{
 			dbOptMap.put( "TNSName"  , this.tnsNamesCombo.getValue() );
 			dbOptMap.put( "TNSAdmin" , this.tnsAdminTextField.getText() );
-			this.myDBAbs.getDriverUrl(dbOptMap);
+			url = this.myDBAbs.getDriverUrl(dbOptMap,update);
 		}
 		else if ( this.tglBtnFreeHand.isSelected() )
 		{
-			this.myDBAbs.setUrl( this.urlTextArea.getText() );
+			url = this.urlTextArea.getText();
+			if ( MyDBAbstract.UPDATE.WITH.equals(update) )
+			{
+				this.myDBAbs.setUrl( url );
+			}
 		}
+		return url;
 	}
 
 	private void setUrlTextArea()
 	{
-		this.setUrl();
-		this.urlTextArea.setText( this.myDBAbs.getUrl() );
+		Map<String,String> dbOptsAux = this.myDBAbs.getDBOptsAux();
+		System.out.println( "###### setUrlTextArea1  ######" );
+		System.out.println( "setUrl1 url:" + this.myDBAbs.getUrl() );
+		dbOptsAux.forEach( (k,v)->System.out.println("setUrl1 DBOptsAux:k["+k+"]v["+v+"]") );
+		String url = this.setUrl(MyDBAbstract.UPDATE.WITHOUT);
+		dbOptsAux = this.myDBAbs.getDBOptsAux();
+		System.out.println( "###### setUrlTextArea2  ######" );
+		System.out.println( "setUrl2 url:" + this.myDBAbs.getUrl() );
+		dbOptsAux.forEach( (k,v)->System.out.println("setUrl2 DBOptsAux:k["+k+"]v["+v+"]") );
+		//this.urlTextArea.setText( this.myDBAbs.getUrl() );
+		this.urlTextArea.setText( url );
 	}
 	
 	private List<String> loadTnsNamesOra( File dir )

@@ -66,6 +66,12 @@ abstract public class MyDBAbstract
 	@Expose(serialize = false, deserialize = true)
 	protected SchemaEntity schemaRoot = null;
 	
+	public enum UPDATE
+	{
+		WITH,
+		WITHOUT
+	}
+	
 	abstract void init();
 	
 	@Override
@@ -100,7 +106,7 @@ abstract public class MyDBAbstract
 	 ***********************************************
 	 * @return URL
 	 */
-	abstract public String getDriverUrl( Map<String, String> dbOptMap );
+	abstract public String getDriverUrl( Map<String, String> dbOptMap, MyDBAbstract.UPDATE update );
 	
 	/**
 	 * Get Default Port Number

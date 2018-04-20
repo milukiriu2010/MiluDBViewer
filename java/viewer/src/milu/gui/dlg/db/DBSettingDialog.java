@@ -175,7 +175,7 @@ public class DBSettingDialog extends Dialog<MyDBAbstract>
 		hBoxBtn.getChildren().addAll( this.btnNewFolder, this.btnNewConnection, this.btnDelFolder );
 		
 		VBox vBoxPathTreeView = new VBox(2);
-		vBoxPathTreeView.getChildren().addAll( this.pathTreeView, hBoxBtn );
+		vBoxPathTreeView.getChildren().addAll( hBoxBtn, this.pathTreeView );
 		
 		// ----------------------------------------
 		// [Pane on Dialog(1)]-[Center]
@@ -271,6 +271,8 @@ public class DBSettingDialog extends Dialog<MyDBAbstract>
 		// Create Pane for DriverControl
 		this.driverCtrlPane = new DriverControlPane( this.mainCtrl, this );
 
+		// -------------------------------------------------------------------------------------------
+		// call this listener when selected "JDBC" is changed.
 		// -------------------------------------------------------------------------------------------
 		//	new ChangeListener<String>()
 		//	
@@ -490,6 +492,7 @@ public class DBSettingDialog extends Dialog<MyDBAbstract>
 	
 	private void setUrlPane( MyDBAbstract newVal )
 	{
+		System.out.println( "@@@@@@@@@@ setUrlPane @@@@@@@@@" );
 		System.out.println( "newVal1:" + newVal );
 		System.out.println( "url1:" + newVal.getUrl() + "|" );
 		ListIterator<Node> nodeLstIterator = this.vBoxCenter.getChildren().listIterator();
@@ -538,7 +541,7 @@ public class DBSettingDialog extends Dialog<MyDBAbstract>
 			if ( node instanceof UrlPaneAbstract )
 			{
 				UrlPaneAbstract urlPaneAbs1 = (UrlPaneAbstract)node;
-				urlPaneAbs1.setUrl();
+				urlPaneAbs1.setUrl(MyDBAbstract.UPDATE.WITH);
 			}
 		}
 		

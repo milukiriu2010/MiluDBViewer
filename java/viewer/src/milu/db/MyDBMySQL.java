@@ -34,19 +34,25 @@ public class MyDBMySQL extends MyDBAbstract
 	 * Get Driver URL
 	 ***********************************************
 	 */
-	public String getDriverUrl( Map<String, String> dbOptMap )
+	public String getDriverUrl( Map<String, String> dbOptMap, MyDBAbstract.UPDATE update )
 	{
+		String urlTmp = "";
 		// URL Example
 		// ---------------------------------------------------
 		// jdbc:mysql://localhost:3306/sakila
 		// ---------------------------------------------------
 		// https://www.javatpoint.com/example-to-connect-to-the-mysql-database
-		this.url = 
+		urlTmp = 
 			"jdbc:mysql://"+
 			dbOptMap.get( "Host" )+":"+dbOptMap.get( "Port" )+"/"+
 			dbOptMap.get( "DBName" );
-		dbOptMap.forEach( (k,v)->this.dbOptsAux.put(k,v) );
-		return this.url;
+		if ( update.equals(MyDBAbstract.UPDATE.WITH) )
+		{
+			this.dbOptsAux.clear();
+			dbOptMap.forEach( (k,v)->this.dbOptsAux.put(k,v) );
+			this.url = urlTmp;
+		}
+		return urlTmp;
 	}
 	
 	/**

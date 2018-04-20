@@ -298,8 +298,9 @@ public class UrlPaneMySQL extends UrlPaneAbstract
 	}
 
 	@Override
-	public void setUrl() 
+	public String setUrl( MyDBAbstract.UPDATE update ) 
 	{
+		String url = null;
 		Map<String,String> dbOptMap = new HashMap<String,String>();
 		
 		if ( this.tglBtnBasic.isSelected() )
@@ -307,17 +308,22 @@ public class UrlPaneMySQL extends UrlPaneAbstract
 			dbOptMap.put( "DBName"  , this.dbnameTextField.getText() );
 			dbOptMap.put( "Host"    , this.hostTextField.getText() );
 			dbOptMap.put( "Port"    , this.portTextField.getText() );
-			this.myDBAbs.getDriverUrl(dbOptMap);
+			this.myDBAbs.getDriverUrl(dbOptMap,update);
 		}
 		else if ( this.tglBtnFreeHand.isSelected() )
 		{
-			this.myDBAbs.setUrl( this.urlTextArea.getText() );
+			url = this.urlTextArea.getText();
+			if ( MyDBAbstract.UPDATE.WITH.equals(update) )
+			{
+				this.myDBAbs.setUrl( url );
+			}
 		}
+		return url;
 	}
 
 	private void setUrlTextArea()
 	{
-		this.setUrl();
-		this.urlTextArea.setText( this.myDBAbs.getUrl() );
+		String url = this.setUrl(MyDBAbstract.UPDATE.WITHOUT);
+		this.urlTextArea.setText( url );
 	}
 }
