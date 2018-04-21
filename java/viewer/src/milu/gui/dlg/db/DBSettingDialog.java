@@ -315,13 +315,16 @@ public class DBSettingDialog extends Dialog<MyDBAbstract>
 		// ----------------------------------------
 		// [Pane on Dialog(1)]-[Left]
 		// ----------------------------------------
-		this.btnNewFolder.setOnAction
+		//this.btnNewFolder.setOnAction
+		this.btnNewFolder.addEventHandler
 		( 
+			ActionEvent.ACTION,
 			(event)->
 			{
 				try
 				{
 					this.pathTreeView.addNewFolder();
+					//event.consume();
 				}
 				catch ( IOException ioEx )
 				{
@@ -330,13 +333,16 @@ public class DBSettingDialog extends Dialog<MyDBAbstract>
 			}
 		);
 		
-		this.btnNewConnection.setOnAction
+		//this.btnNewConnection.setOnAction
+		this.btnNewConnection.addEventHandler
 		( 
+			ActionEvent.ACTION,
 			(event)->
 			{
 				try
 				{
 					this.pathTreeView.addNewFile();
+					//event.consume();
 				}
 				catch ( IOException ioEx )
 				{

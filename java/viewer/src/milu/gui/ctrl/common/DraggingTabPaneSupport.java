@@ -20,7 +20,7 @@ import javafx.util.Duration;
 // https://stackoverflow.com/questions/41473987/how-to-drag-and-drop-tabs-of-the-same-tabpane?rq=1
 public class DraggingTabPaneSupport 
 {
-    private Tab currentDraggingTab ;
+    private Tab currentDraggingTab = null;
 
     private static final AtomicLong idGenerator = new AtomicLong();
 
@@ -28,35 +28,64 @@ public class DraggingTabPaneSupport
 
     public void addSupport(TabPane tabPane) {
         tabPane.getTabs().forEach(this::addDragHandlers);
-        tabPane.getTabs().addListener((Change<? extends Tab> c) -> {
-            while (c.next()) {
-                if (c.wasAdded()) {
-                    c.getAddedSubList().forEach(this::addDragHandlers);
-                }
-                if (c.wasRemoved()) {
-                    c.getRemoved().forEach(this::removeDragHandlers);
-                }
-            }
-        });
+        tabPane.getTabs().addListener
+        (
+        	(Change<? extends Tab> c) -> 
+        	{
+	            while (c.next()) 
+	            {
+	                if (c.wasAdded()) 
+	                {
+	                    c.getAddedSubList().forEach(this::addDragHandlers);
+	                }
+	                if (c.wasRemoved()) 
+	                {
+	                    c.getRemoved().forEach(this::removeDragHandlers);
+	                }
+	            }
+        	}
+        );
 
-        // if we drag onto a tab pane (but not onto the tab graphic), add the tab to the end of the list of tabs:
-        tabPane.setOnDragOver(e -> {
-            if (draggingID.equals(e.getDragboard().getString()) && 
+        // if we drag onto a tab pane (but not onto the tab graphic), 
+        // add the tab to the end of the list of tabs:
+        tabPane.setOnDragOver
+        (
+        	e -> 
+        	{
+        		
+	            if ( draggingID.equals(e.getDragboard().getString()) && 
+	                 currentDraggingTab != null &&
+	                 currentDraggingTab.getTabPane() != tabPane ) 
+	            //if 
+	            //( 
+	            //	draggingID.equals(e.getDragboard().getString()) && 
+		        //    currentDraggingTab != null
+		        //)
+	            {
+	                e.acceptTransferModes(TransferMode.MOVE);
+	            }
+        	}
+        );
+        
+        tabPane.setOnDragDropped
+        (
+        	e -> 
+        	{
+        		if (draggingID.equals(e.getDragboard().getString()) && 
                     currentDraggingTab != null &&
-                    currentDraggingTab.getTabPane() != tabPane) {
-                e.acceptTransferModes(TransferMode.MOVE);
-            }
-        });
-        tabPane.setOnDragDropped(e -> {
-            if (draggingID.equals(e.getDragboard().getString()) && 
-                    currentDraggingTab != null &&
-                    currentDraggingTab.getTabPane() != tabPane) {
-
-                currentDraggingTab.getTabPane().getTabs().remove(currentDraggingTab);
-                tabPane.getTabs().add(currentDraggingTab);
-                currentDraggingTab.getTabPane().getSelectionModel().select(currentDraggingTab);
-            }
-        });
+                    currentDraggingTab.getTabPane() != tabPane) 
+        		//if 
+        		//(
+        		//	draggingID.equals(e.getDragboard().getString()) && 
+                //    currentDraggingTab != null
+                //) 
+	            {
+	                currentDraggingTab.getTabPane().getTabs().remove(currentDraggingTab);
+	                tabPane.getTabs().add(currentDraggingTab);
+	                currentDraggingTab.getTabPane().getSelectionModel().select(currentDraggingTab);
+	            }
+        	}
+        );
     }
 
     private void addDragHandlers( Tab tab ) 
@@ -129,7 +158,7 @@ public class DraggingTabPaneSupport
 	            content.putString(draggingID);
 	            dragboard.setContent(content);
 	            dragboard.setDragView(graphic.snapshot(null, null));
-	            currentDraggingTab = tab ;
+	            currentDraggingTab = tab;
         	}
         );
         

@@ -125,20 +125,6 @@ public class UrlPaneCassandra extends UrlPaneAbstract
 		// get URL by Driver Info
 		// ----------------------------------------------------
 		DriverShim driverShim = myDBAbs.getDriveShim();
-		/*
-		String tmplUrl = "";
-		String homeUrl = "";
-		if (DriverClassConst.CLASS_NAME_CASSANDRA1.val().equals(driverShim.getDriverClassName()))
-		{
-			tmplUrl = "jdbc:c*://[host][:9042]/[keyspace][?consistencyLevel=ONE|ANY|...][&compression=LZ4|SNAPPY]";
-			homeUrl = "https://github.com/zhicwu/cassandra-jdbc-driver";
-		}
-		else if (DriverClassConst.CLASS_NAME_CASSANDRA2.val().equals(driverShim.getDriverClassName()))
-		{
-			tmplUrl = "jdbc:cassandra://[host1--host2--host3][:9042]/[keyspace1][?loadbalancing=TokenAwarePolicy(DCAwareRoundRobinPolicy(\"DC1\"))]";
-			homeUrl = "https://github.com/adejanovski/cassandra-jdbc-wrapper";
-		}
-		*/
 
 		// ----------------------------------------------------
 		// Items for "Free hand"
@@ -179,24 +165,8 @@ public class UrlPaneCassandra extends UrlPaneAbstract
 		}
 		else
 		{
-			/*
-			Map<String,String> dbOpts = this.myDBAbs.getDBOpts();
-			String urlOpt = "";
-			for ( String key : dbOpts.keySet() )
-			{
-				if ( urlOpt.equals("") )
-				{
-					urlOpt = "?";
-				}
-				else
-				{
-					urlOpt = urlOpt + "&";
-				}
-				urlOpt = urlOpt + key + "=" + dbOpts.get(key);
-			}
-			this.urlTextArea.setText( this.myDBAbs.getUrl() + urlOpt );
-			*/
-			this.urlTextArea.setText( this.myDBAbs.getUrl() );
+			//this.urlTextArea.setText( this.myDBAbs.getUrl() );
+			this.setUrlTextArea();
 			this.tglBtnFreeHand.setSelected(true);
 		}
 		

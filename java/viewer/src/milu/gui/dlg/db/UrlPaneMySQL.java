@@ -95,6 +95,7 @@ public class UrlPaneMySQL extends UrlPaneAbstract
 		// ----------------------------------------------------
 		// Items for "Basic"
 		// ----------------------------------------------------
+		/*
 		String dbName = mapProp.get("DBName");
 		if ( dbName != null )
 		{
@@ -106,6 +107,18 @@ public class UrlPaneMySQL extends UrlPaneAbstract
 			this.hostTextField.setText( host );
 		}
 		this.portTextField.setText( String.valueOf(myDBAbs.getDefaultPort()) );
+		*/
+		Map<String,String> dbOptsAux = this.myDBAbs.getDBOptsAux();
+		this.dbnameTextField.setText( dbOptsAux.get("DBName") );
+		this.hostTextField.setText( dbOptsAux.get("Host") );
+		if ( dbOptsAux.containsKey("Port") )
+		{
+			this.portTextField.setText( dbOptsAux.get("Port") );
+		}
+		else
+		{
+			this.portTextField.setText( String.valueOf(myDBAbs.getDefaultPort()) );
+		}
 
 		// ----------------------------------------------------
 		// get URL by Driver Info
@@ -140,6 +153,26 @@ public class UrlPaneMySQL extends UrlPaneAbstract
 	void init()
 	{
 		System.out.println( "UrlPaneMySQL.init." );
+		Map<String,String> dbOptsAux = this.myDBAbs.getDBOptsAux();
+		if ( this.myDBAbs.getUrl() == null )
+		{
+			this.tglBtnBasic.setSelected(true);
+			this.setUrlTextArea();
+		}		
+		else if ( dbOptsAux.containsKey("DBName") )
+		{
+			this.dbnameTextField.setText( dbOptsAux.get("DBName") );
+			this.hostTextField.setText( dbOptsAux.get("Host") );
+			this.portTextField.setText( dbOptsAux.get("Port") );
+			this.tglBtnBasic.setSelected(true);
+			this.setUrlTextArea();
+		}
+		else
+		{
+			//this.urlTextArea.setText( this.myDBAbs.getUrl() );
+			this.setUrlTextArea();
+			this.tglBtnFreeHand.setSelected(true);
+		}
 	}
 	
 	private void setAction()
@@ -308,7 +341,7 @@ public class UrlPaneMySQL extends UrlPaneAbstract
 			dbOptMap.put( "DBName"  , this.dbnameTextField.getText() );
 			dbOptMap.put( "Host"    , this.hostTextField.getText() );
 			dbOptMap.put( "Port"    , this.portTextField.getText() );
-			this.myDBAbs.getDriverUrl(dbOptMap,update);
+			url = this.myDBAbs.getDriverUrl(dbOptMap,update);
 		}
 		else if ( this.tglBtnFreeHand.isSelected() )
 		{

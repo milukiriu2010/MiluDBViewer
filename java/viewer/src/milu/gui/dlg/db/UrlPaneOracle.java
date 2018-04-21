@@ -289,24 +289,8 @@ public class UrlPaneOracle extends UrlPaneAbstract
 		}
 		else
 		{
-			/*
-			Map<String,String> dbOpts = this.myDBAbs.getDBOpts();
-			String urlOpt = "";
-			for ( String key : dbOpts.keySet() )
-			{
-				if ( urlOpt.equals("") )
-				{
-					urlOpt = "?";
-				}
-				else
-				{
-					urlOpt = urlOpt + "&";
-				}
-				urlOpt = urlOpt + key + "=" + dbOpts.get(key);
-			}
-			this.urlTextArea.setText( this.myDBAbs.getUrl() + urlOpt );
-			*/
-			this.urlTextArea.setText( this.myDBAbs.getUrl() );
+			//this.urlTextArea.setText( this.myDBAbs.getUrl() );
+			this.setUrlTextArea();
 			this.tglBtnFreeHand.setSelected(true);
 		}
 	}

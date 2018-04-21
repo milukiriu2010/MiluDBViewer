@@ -6,6 +6,11 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.cell.TextFieldTreeCell;
 import javafx.util.StringConverter;
 import javafx.scene.control.TreeItem;
+import javafx.scene.input.Clipboard;
+import javafx.scene.input.ClipboardContent;
+import javafx.scene.input.Dragboard;
+import javafx.scene.input.TransferMode;
+import javafx.scene.input.DragEvent;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -32,7 +37,9 @@ public class PathTreeView extends TreeView<Path>
 	// File Extension
 	private String  fileExt = "";
 	
-	private TextFieldTreeCell<Path> treeCell = null;
+	//private TextFieldTreeCell<Path> treeCell = null;
+	
+	private TreeItem<Path>  itemDrag = null;
 	
 	public void setMainController( MainController mainCtrl )
 	{
@@ -73,7 +80,8 @@ public class PathTreeView extends TreeView<Path>
 		(
 			(treeView)->
 			{
-				this.treeCell = 
+				System.out.println( "PathTreeView:setCellFactrory" );
+				TextFieldTreeCell<Path> treeCell =
 					new TextFieldTreeCell<Path>
 					(
 						new StringConverter<Path>()
@@ -126,7 +134,9 @@ public class PathTreeView extends TreeView<Path>
 							}
 						}
 					);
-				return this.treeCell;
+				System.out.println("TreeCell:"+treeCell);
+				this.setDragDropEvent(treeCell);
+				return treeCell;
 			}
 		);
 		
@@ -148,7 +158,18 @@ public class PathTreeView extends TreeView<Path>
 				Path pathNew = event.getNewValue();
 				try
 				{
-					Files.move( pathOld, pathNew );
+					if ( Files.exists(pathNew) == false )
+					{
+						Files.move( pathOld, pathNew );
+					}
+					else
+					{
+						System.out.println( "PathTreeView:setOnEditCommit:already exists." );
+						System.out.println( "pathOld:" + pathOld );
+						System.out.println( "pathNew:" + pathNew );
+						this.getSelectionModel().getSelectedItem().setValue(pathOld);
+						event.consume();
+					}
 				}
 				catch ( IOException ioEx )
 				{
@@ -172,6 +193,114 @@ public class PathTreeView extends TreeView<Path>
 				this.chgPathInf.changePath( newVal.getValue() );
 			}
 		);
+		
+	}
+	
+	public void setDragDropEvent( TextFieldTreeCell<Path> treeCell )
+	{
+		treeCell.setOnDragDetected
+		(
+			(event)->
+			{
+				System.out.println( "TreeCell:DragDetected." );
+				TreeItem<Path> selectedItem = this.getSelectionModel().getSelectedItem();
+				this.itemDrag = selectedItem;
+				Dragboard dragBoard = treeCell.startDragAndDrop(TransferMode.MOVE);
+				ClipboardContent content = new ClipboardContent();
+				content.putString(selectedItem.getValue().toString());
+				dragBoard.setContent(content);
+				event.consume();
+			}
+		);
+		
+		treeCell.setOnDragOver
+		(
+			(event)->
+			{
+				/*
+				TreeItem<Path> itemCur = treeCell.getTreeItem();
+				if ( 
+					( event.getGestureSource() != treeCell ) &&
+					// target should be a folder.
+					( Files.isDirectory(itemCur.getValue()) ) &&
+					// "parent(itemDrag) => children(itemCur)" is not allowed.
+					( itemCur.getValue().toString().startsWith(this.itemDrag.getValue().toString()) == false ) &&
+					//( this.itemDrag.getValue().toFile().getName().equals(itemCur.getValue().toFile().getName()) == false ) &&
+					( event.getDragboard().getString().equals(this.itemDrag.getValue().toString()))
+				)
+				{
+					//System.out.println( "TreeCell:DragOver:" + itemCur.getValue().toString() );
+					//System.out.println( itemCur.getValue().toFile().getName() );
+					// ------------------------------------------------------
+					// The same file/folder name is not allowed,
+					//   to put in the same folder.
+					// ------------------------------------------------------
+					TreeItem<Path> itemMatch = 
+						itemCur.getChildren().stream()
+							.filter( item -> item.getValue().toFile().getName().equals(this.itemDrag.getValue().toFile().getName()) )
+							.findAny()
+							.orElse(null);
+					if ( itemMatch == null )
+					{
+						event.acceptTransferModes(TransferMode.MOVE);
+					}
+				}
+				*/
+				if (this.check(event, treeCell.getTreeItem(), treeCell) == true )
+				{
+					event.acceptTransferModes(TransferMode.MOVE);
+				}
+			}
+		);
+		
+		
+		treeCell.setOnDragDropped
+		(
+			(event)->
+			{
+				System.out.println( "TreeCell:DragDropped." );
+				
+			}
+		);
+		
+		treeCell.setOnDragDone
+		(
+			(event)->
+			{
+				System.out.println( "TreeCell:DragDone." );
+				this.itemDrag = null;
+			}
+		);
+	}
+	
+	private boolean check( DragEvent event, TreeItem<Path> itemCur, TextFieldTreeCell<Path> treeCell )
+	{
+		if ( 
+			( event.getGestureSource() != treeCell ) &&
+			// target should be a folder.
+			( Files.isDirectory(itemCur.getValue()) ) &&
+			// "parent(itemDrag) => children(itemCur)" is not allowed.
+			( itemCur.getValue().toString().startsWith(this.itemDrag.getValue().toString()) == false ) &&
+			//( this.itemDrag.getValue().toFile().getName().equals(itemCur.getValue().toFile().getName()) == false ) &&
+			( event.getDragboard().getString().equals(this.itemDrag.getValue().toString()))
+		)
+		{
+			// ------------------------------------------------------
+			// The same file/folder name is not allowed,
+			//   to put in the same folder.
+			// ------------------------------------------------------
+			TreeItem<Path> itemMatch = 
+				itemCur.getChildren().stream()
+					.filter( item -> item.getValue().toFile().getName().equals(this.itemDrag.getValue().toFile().getName()) )
+					.findAny()
+					.orElse(null);
+			if ( itemMatch == null )
+			{
+				return true;
+			}
+		}
+		
+		return false;
 	}
 	
 	public void createTree( TreeItem<Path> itemParent ) throws IOException
@@ -230,7 +359,8 @@ public class PathTreeView extends TreeView<Path>
 		
         TreeItem<Path> newItem = new TreeItem<Path>();
         Path parentPath = this.getPathFolder(selectedItem);
-        Path newPath = Paths.get( parentPath.toString() + File.separator + "New" );
+        //Path newPath = Paths.get( parentPath.toString() + File.separator + "New" );
+        Path newPath = this.getNewFolderPath( parentPath.toString() + File.separator, "New", 0, "" );
         Files.createDirectory( newPath );
         newItem.setValue( newPath );
         newItem.setGraphic( MyTool.createImageView( 16, 16, this.mainCtrl.getImage("file:resources/images/folder.png") ) );
@@ -238,7 +368,16 @@ public class PathTreeView extends TreeView<Path>
         
         selectedItem.getChildren().add(newItem);
         this.getSelectionModel().select(newItem);
-        Platform.runLater( ()->{ this.edit(newItem); this.treeCell.updateSelected(true); this.treeCell.requestFocus(); } );
+        Platform.runLater
+        ( 
+        	()->
+        	{
+	        	this.requestFocus();
+	        	this.edit(newItem); 
+	        	//this.treeCell.updateSelected(true); 
+	        	//this.treeCell.requestFocus(); 
+        	} 
+        );
 	}
 	
 	public void addNewFile() throws IOException
@@ -257,14 +396,45 @@ public class PathTreeView extends TreeView<Path>
 		
         TreeItem<Path> newItem = new TreeItem<Path>();
         Path parentPath = this.getPathFolder(selectedItem);
-        Path newPath = Paths.get( parentPath.toString() + File.separator + "New" + "." + this.fileExt );
+        //Path newPath = Paths.get( parentPath.toString() + File.separator + "New" + "." + this.fileExt );
+        Path newPath = this.getNewFolderPath( parentPath.toString() + File.separator, "New", 0, "." + this.fileExt );
         Files.createFile( newPath );
         newItem.setValue( newPath );
         newItem.setGraphic( MyTool.createImageView( 16, 16, this.mainCtrl.getImage("file:resources/images/file.png") ) );
         
         selectedItem.getChildren().add(newItem);
         this.getSelectionModel().select(newItem);
-        Platform.runLater( ()->{ this.edit(newItem); this.treeCell.updateSelected(true); this.treeCell.requestFocus(); } );
+        Platform.runLater
+        ( 
+        	()->
+        	{ 
+        		this.requestFocus(); 
+        		this.edit(newItem); 
+        		//this.treeCell.updateSelected(true); 
+        		//this.treeCell.requestFocus(); 
+        	} 
+        );
+	}
+	
+	private Path getNewFolderPath( String strRoot, String strSelf, int cnt, String ext )
+	{
+		Path newPath = null;
+		if ( cnt == 0 )
+		{
+			newPath = Paths.get( strRoot + strSelf + ext );
+		}
+		else
+		{
+			newPath = Paths.get( strRoot + strSelf + cnt + ext );
+		}
+		if ( Files.exists(newPath) )
+		{
+			return getNewFolderPath( strRoot, strSelf, cnt+1, ext );
+		}
+		else
+		{
+			return newPath;
+		}
 	}
 	
 	public void delFolder() throws IOException

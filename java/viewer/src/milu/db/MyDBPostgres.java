@@ -48,7 +48,7 @@ public class MyDBPostgres extends MyDBAbstract
 			dbOptMap.forEach( (k,v)->this.dbOptsAux.put(k,v) );
 			this.url = urlTmp;
 		}
-		return this.url;
+		return urlTmp;
 	}
 	
 	/**
