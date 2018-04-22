@@ -80,7 +80,6 @@ public class PathTreeView extends TreeView<Path>
 		(
 			(treeView)->
 			{
-				System.out.println( "PathTreeView:setCellFactrory" );
 				TextFieldTreeCell<Path> treeCell =
 					new TextFieldTreeCell<Path>
 					(
@@ -134,7 +133,6 @@ public class PathTreeView extends TreeView<Path>
 							}
 						}
 					);
-				System.out.println("TreeCell:"+treeCell);
 				this.setDragDropEvent(treeCell);
 				return treeCell;
 			}
@@ -153,7 +151,7 @@ public class PathTreeView extends TreeView<Path>
 		(
 			(event)->
 			{
-				//TreeItem<Path> itemTarget = event.getTreeItem();
+				TreeItem<Path> itemTarget = event.getTreeItem();
 				Path pathOld = event.getOldValue();
 				Path pathNew = event.getNewValue();
 				try
@@ -161,6 +159,28 @@ public class PathTreeView extends TreeView<Path>
 					if ( Files.exists(pathNew) == false )
 					{
 						Files.move( pathOld, pathNew );
+						event.consume();
+						//this.renamePath( event.getTreeItem(), pathOld, pathNew );
+						
+						// -------------------------------------------------
+						// itemTarget is still "pathOld",
+						// so call re-create tree in Platform.runLater
+						// -------------------------------------------------
+						Platform.runLater
+						(
+							()->
+							{
+								itemTarget.getChildren().removeAll(itemTarget.getChildren());
+								try
+								{
+									createTree(itemTarget);
+								}
+								catch ( IOException ioEx )
+								{
+									throw new RuntimeException(ioEx);
+								}
+							}
+						);
 					}
 					else
 					{
@@ -171,9 +191,9 @@ public class PathTreeView extends TreeView<Path>
 						event.consume();
 					}
 				}
-				catch ( IOException ioEx )
+				catch ( Exception ex )
 				{
-					this.showException(ioEx);
+					this.showException(ex);
 				}
 			}
 		);
@@ -194,6 +214,23 @@ public class PathTreeView extends TreeView<Path>
 			}
 		);
 		
+	}
+	
+	public void renamePath( TreeItem<Path> itemParent, Path pathOld, Path pathNew )
+	{
+		for ( TreeItem<Path> itemChild : itemParent.getChildren() )
+		{
+			String childNameOld = itemChild.toString();
+			String childNameNew = childNameOld.replace( pathOld.toString(), pathNew.toString() );
+			System.out.println( "childNameOld:" + childNameOld );
+			System.out.println( "childNameNew:" + childNameNew );
+			itemChild.setValue( Paths.get(childNameNew) );
+			
+			if ( itemChild.isLeaf() == false )
+			{
+				this.renamePath( itemChild, pathOld, pathNew );
+			}
+		}
 	}
 	
 	public void setDragDropEvent( TextFieldTreeCell<Path> treeCell )
@@ -217,35 +254,6 @@ public class PathTreeView extends TreeView<Path>
 		(
 			(event)->
 			{
-				/*
-				TreeItem<Path> itemCur = treeCell.getTreeItem();
-				if ( 
-					( event.getGestureSource() != treeCell ) &&
-					// target should be a folder.
-					( Files.isDirectory(itemCur.getValue()) ) &&
-					// "parent(itemDrag) => children(itemCur)" is not allowed.
-					( itemCur.getValue().toString().startsWith(this.itemDrag.getValue().toString()) == false ) &&
-					//( this.itemDrag.getValue().toFile().getName().equals(itemCur.getValue().toFile().getName()) == false ) &&
-					( event.getDragboard().getString().equals(this.itemDrag.getValue().toString()))
-				)
-				{
-					//System.out.println( "TreeCell:DragOver:" + itemCur.getValue().toString() );
-					//System.out.println( itemCur.getValue().toFile().getName() );
-					// ------------------------------------------------------
-					// The same file/folder name is not allowed,
-					//   to put in the same folder.
-					// ------------------------------------------------------
-					TreeItem<Path> itemMatch = 
-						itemCur.getChildren().stream()
-							.filter( item -> item.getValue().toFile().getName().equals(this.itemDrag.getValue().toFile().getName()) )
-							.findAny()
-							.orElse(null);
-					if ( itemMatch == null )
-					{
-						event.acceptTransferModes(TransferMode.MOVE);
-					}
-				}
-				*/
 				if (this.check(event, treeCell.getTreeItem(), treeCell) == true )
 				{
 					event.acceptTransferModes(TransferMode.MOVE);
@@ -258,8 +266,47 @@ public class PathTreeView extends TreeView<Path>
 		(
 			(event)->
 			{
-				System.out.println( "TreeCell:DragDropped." );
-				
+				TreeItem<Path> itemCurr = treeCell.getTreeItem();
+				if (this.check( event, itemCurr, treeCell) == true )
+				{
+					System.out.println( "TreeCell:DragDropped." );
+					String itemDragName = this.itemDrag.getValue().toFile().getName();
+					String itemCurrAbsolutePathName = itemCurr.getValue().toString();
+					Path pathNew = Paths.get( itemCurrAbsolutePathName + File.separator + itemDragName );
+					System.out.println( pathNew.toString() );
+
+					try
+					{
+						Files.move( this.itemDrag.getValue(), pathNew );
+						//this.itemDrag.getChildren().removeAll(this.itemDrag.getChildren());
+						TreeItem<Path> itemParent = this.itemDrag.getParent();
+						itemParent.getChildren().removeAll(itemParent.getChildren());
+						createTree(itemParent);
+						event.consume();
+						
+						Platform.runLater
+						(
+							()->
+							{
+								try
+								{
+									itemCurr.getChildren().removeAll(itemCurr.getChildren());
+									createTree(itemCurr);
+								}
+								catch ( IOException ioEx )
+								{
+									throw new RuntimeException(ioEx);
+								}
+							}
+						);
+						
+					}
+					catch ( Exception ex )
+					{
+						this.showException(ex);
+					}
+					
+				}
 			}
 		);
 		

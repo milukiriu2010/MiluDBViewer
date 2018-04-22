@@ -5,6 +5,12 @@ com.microsoft.sqlserver.jdbc.SQLServerDriver
 
 jdbc:sqlserver://localhost:1433;databaseName=miludb;
 
+
+jdbc:sqlserver://[serverName[\instanceName][:portNumber]][;property=value[;property=value]]
+
+https://docs.microsoft.com/en-us/sql/connect/jdbc/building-the-connection-url?view=sql-server-2017
+
+
 =================================================================
 
 C:\myjava\MiluDBViewer.git\sample\swingtest\test1-1\loader\sqlite\sqlite-jdbc-3.21.0.jar

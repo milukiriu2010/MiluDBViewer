@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!-- https://github.com/oracle/oracle-db-examples/blob/master/java/jdbc/ConnectionManagementSamples/build.xml -->
 <!-- https://ant.apache.org/manual/tutorial-HelloWorldWithAnt.html -->
-<project name="MiluDBViewer0.1.2.jre9" default="compile">
+<project name="MiluDBViewer0.1.3.jre9" default="compile">
     <property name="build.dir"     value="../build" />
 	<property name="src.dir"       location="../src" />
 	<property name="lib.dir"       location="../lib" />
@@ -44,7 +44,7 @@
 		<copy todir="${build.dir}/conf">
 			<fileset dir="${src.dir}/conf" />
 		</copy>
-		<!-- by this jar, css works, but language doesn't work.  -->
+		<!-- by this jar, css works, but language doesn't work.
 		<jar destfile="${build.dir}/${ant.project.name}.jar" basedir="${build.dir}">
             <manifest>
                 <attribute name="Main-Class" value="milu.main.MiluDBViewer"/>
@@ -60,7 +60,7 @@
 				"/>
             </manifest>
 		</jar>
-		<!-- -->
+		-->
 		<copy todir="${build.dir}/lib">
 			<fileset dir="${lib.dir}" />
 		</copy>
