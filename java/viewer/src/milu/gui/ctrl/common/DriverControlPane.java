@@ -75,6 +75,7 @@ public class DriverControlPane extends Pane
 		
 		ResourceBundle  langRB  = this.mainCtrl.getLangResource("conf.lang.gui.common.NodeName");
 		ResourceBundle  langRBa = this.mainCtrl.getLangResource("conf.lang.gui.ctrl.common.DriverControlPane");
+		//langRBa.keySet().forEach( (k)->System.out.println("langRBa:k:"+k+":"+langRBa.getString(k)) );
 		
 		// ---------------------------------------------------------
 		// Add & Delete "Driver Path"

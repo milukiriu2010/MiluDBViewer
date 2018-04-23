@@ -165,8 +165,8 @@ public class UrlPaneCassandra extends UrlPaneAbstract
 		}
 		else
 		{
-			//this.urlTextArea.setText( this.myDBAbs.getUrl() );
-			this.setUrlTextArea();
+			this.urlTextArea.setText( this.myDBAbs.getUrl() );
+			//this.setUrlTextArea();
 			this.tglBtnFreeHand.setSelected(true);
 		}
 		
@@ -301,7 +301,8 @@ public class UrlPaneCassandra extends UrlPaneAbstract
 		// ------------------------------------------
 		// |  TextField                    | Button |
 		// ------------------------------------------
-		this.tmplTextField.setPrefWidth( this.urlTextArea.getWidth() - this.tmplBtn.getWidth() );
+		//this.tmplTextField.setPrefWidth( this.urlTextArea.getWidth() - this.tmplBtn.getWidth() );
+		this.tmplTextField.setPrefWidth( 500 );
 		
 		HBox hBox = new HBox(2);
 		hBox.getChildren().addAll( this.tmplTextField, this.tmplBtn );

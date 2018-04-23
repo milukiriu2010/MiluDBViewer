@@ -104,23 +104,7 @@ public class UrlPaneGeneral extends UrlPaneAbstract
 	void init()
 	{
 		System.out.println( "UrlPaneGeneral.init:" + this.myDBAbs );
-		
-		Map<String,String> dbOpts = this.myDBAbs.getDBOpts();
-		String urlOpt = "";
-		for ( String key : dbOpts.keySet() )
-		{
-			if ( urlOpt.equals("") )
-			{
-				urlOpt = "?";
-			}
-			else
-			{
-				urlOpt = urlOpt + "&";
-			}
-			urlOpt = urlOpt + key + "=" + dbOpts.get(key);
-		}
-		System.out.println( "url:" + this.myDBAbs.getUrl() + "|" );
-		this.urlTextArea.setText( this.myDBAbs.getUrl() + urlOpt );
+		this.urlTextArea.setText( this.myDBAbs.getUrl() );
 		this.tglBtnFreeHand.setSelected(true);
 	}
 	

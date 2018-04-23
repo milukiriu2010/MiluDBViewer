@@ -640,6 +640,7 @@ public class DBSettingDialog extends Dialog<MyDBAbstract>
 		
 		MyDBAbstract myDBAbs = this.comboBoxDBType.getSelectionModel().getSelectedItem();
 		myDBAbs.setDriverShim(driver);
+		this.comboBoxDBType.getSelectionModel().select(myDBAbs);
 		
 		// https://stackoverflow.com/questions/44675375/failure-to-get-the-stage-of-a-dialog
 		Stage stage = (Stage)this.getDialogPane().getScene().getWindow();

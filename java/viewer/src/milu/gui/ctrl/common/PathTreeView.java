@@ -19,6 +19,7 @@ import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.InvalidPathException;
 
 import milu.gui.ctrl.common.inf.ChangePathInterface;
 import milu.gui.dlg.MyAlertDialog;
@@ -115,19 +116,31 @@ public class PathTreeView extends TreeView<Path>
 							@Override
 							public Path fromString(String strPath)
 							{
-								Path selectedPath = treeView.getSelectionModel().getSelectedItem().getValue();
-								Path parentPath = selectedPath.getParent();
-								
-								if ( Files.isDirectory(selectedPath) )
+								try
 								{
-									return Paths.get( parentPath.toString() + File.separator + strPath );
+									Path selectedPath = treeView.getSelectionModel().getSelectedItem().getValue();
+									Path parentPath = selectedPath.getParent();
+									
+									if ( Files.isDirectory(selectedPath) )
+									{
+										return Paths.get( parentPath.toString() + File.separator + strPath );
+									}
+									else if ( Files.isRegularFile(selectedPath) )
+									{
+										return Paths.get( parentPath.toString() + File.separator + strPath + "." + fileExt );
+									}
+									else
+									{
+										return null;
+									}
 								}
-								else if ( Files.isRegularFile(selectedPath) )
+								catch ( InvalidPathException ipEx )
 								{
-									return Paths.get( parentPath.toString() + File.separator + strPath + "." + fileExt );
-								}
-								else
-								{
+									showException(ipEx);
+									
+									
+									
+									
 									return null;
 								}
 							}
@@ -187,8 +200,28 @@ public class PathTreeView extends TreeView<Path>
 						System.out.println( "PathTreeView:setOnEditCommit:already exists." );
 						System.out.println( "pathOld:" + pathOld );
 						System.out.println( "pathNew:" + pathNew );
-						this.getSelectionModel().getSelectedItem().setValue(pathOld);
+						//this.getSelectionModel().getSelectedItem().setValue(pathOld);
 						event.consume();
+						// -------------------------------------------------
+						// itemTarget set wrong value
+						// so call re-create tree in Platform.runLater
+						// -------------------------------------------------
+						Platform.runLater
+						(
+							()->
+							{
+								TreeItem<Path> itemParent = itemTarget.getParent();
+								itemParent.getChildren().removeAll(itemParent.getChildren());
+								try
+								{
+									createTree(itemParent);
+								}
+								catch ( IOException ioEx )
+								{
+									throw new RuntimeException(ioEx);
+								}
+							}
+						);
 					}
 				}
 				catch ( Exception ex )

@@ -159,7 +159,8 @@ abstract public class MyDBAbstract
 		else
 		{
 			StringBuffer sb = new StringBuffer("?");
-			this.dbOpts.forEach( (k,v)->sb.append(k+"="+v) );
+			this.dbOpts.forEach( (k,v)->sb.append(k+"="+v+"&") );
+			sb.deleteCharAt(sb.length()-1);
 			return this.url + sb.toString();
 		}
 	}
@@ -167,6 +168,8 @@ abstract public class MyDBAbstract
 	public void setUrl( String url )
 	{
 		this.dbOpts.clear();
+		this.dbOptsAux.clear();
+		this.dbOptsSpecial.clear();
 		if ( url == null )
 		{
 			this.url = url;
