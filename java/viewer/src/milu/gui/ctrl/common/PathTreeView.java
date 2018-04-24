@@ -6,7 +6,6 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.cell.TextFieldTreeCell;
 import javafx.util.StringConverter;
 import javafx.scene.control.TreeItem;
-import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
@@ -116,9 +115,10 @@ public class PathTreeView extends TreeView<Path>
 							@Override
 							public Path fromString(String strPath)
 							{
+								Path selectedPath = null;
 								try
 								{
-									Path selectedPath = treeView.getSelectionModel().getSelectedItem().getValue();
+									selectedPath = treeView.getSelectionModel().getSelectedItem().getValue();
 									Path parentPath = selectedPath.getParent();
 									
 									if ( Files.isDirectory(selectedPath) )
@@ -131,17 +131,14 @@ public class PathTreeView extends TreeView<Path>
 									}
 									else
 									{
-										return null;
+										return selectedPath;
 									}
 								}
 								catch ( InvalidPathException ipEx )
 								{
-									showException(ipEx);
-									
-									
-									
-									
-									return null;
+									showException(ipEx,"TITLE_NOT_ALLOWED_CHARACTER");
+									Platform.runLater( ()->requestFocus() );
+									return selectedPath;
 								}
 							}
 						}
@@ -201,6 +198,7 @@ public class PathTreeView extends TreeView<Path>
 						System.out.println( "pathOld:" + pathOld );
 						System.out.println( "pathNew:" + pathNew );
 						//this.getSelectionModel().getSelectedItem().setValue(pathOld);
+						this.showMsg("TITLE_ALREADY_EXIST");
 						event.consume();
 						// -------------------------------------------------
 						// itemTarget set wrong value
@@ -219,6 +217,10 @@ public class PathTreeView extends TreeView<Path>
 								catch ( IOException ioEx )
 								{
 									throw new RuntimeException(ioEx);
+								}
+								finally
+								{
+									Platform.runLater( ()->requestFocus() );
 								}
 							}
 						);
@@ -248,7 +250,7 @@ public class PathTreeView extends TreeView<Path>
 		);
 		
 	}
-	
+	/*
 	public void renamePath( TreeItem<Path> itemParent, Path pathOld, Path pathNew )
 	{
 		for ( TreeItem<Path> itemChild : itemParent.getChildren() )
@@ -265,7 +267,7 @@ public class PathTreeView extends TreeView<Path>
 			}
 		}
 	}
-	
+	*/
 	public void setDragDropEvent( TextFieldTreeCell<Path> treeCell )
 	{
 		treeCell.setOnDragDetected
@@ -585,5 +587,24 @@ public class PathTreeView extends TreeView<Path>
 		alertDlg.setHeaderText( langRB.getString( "TITLE_MISC_ERROR" ) );
 		alertDlg.setTxtExp( ex );
 		alertDlg.showAndWait();
+	}
+	
+	private void showException( Exception ex, String msgID )
+	{
+		MyAlertDialog alertDlg = new MyAlertDialog( AlertType.WARNING, this.mainCtrl );
+		ResourceBundle langRB = this.mainCtrl.getLangResource("conf.lang.gui.common.MyAlert");
+		alertDlg.setHeaderText( langRB.getString( "TITLE_MISC_ERROR" ) );
+		alertDlg.setTxtExp( ex, langRB.getString( msgID ) );
+		alertDlg.showAndWait();
 	}	
+	
+	private void showMsg( String msgID )
+	{
+		MyAlertDialog alertDlg = new MyAlertDialog( AlertType.WARNING, this.mainCtrl );
+		ResourceBundle langRB = this.mainCtrl.getLangResource("conf.lang.gui.common.MyAlert");
+		alertDlg.setHeaderText( langRB.getString( "TITLE_MISC_ERROR" ) );
+		alertDlg.setTxtMsg( langRB.getString( msgID ) );
+		alertDlg.showAndWait();
+	}	
+	
 }

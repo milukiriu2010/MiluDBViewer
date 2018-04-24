@@ -106,7 +106,7 @@ public class UrlPaneOracle extends UrlPaneAbstract
 	private TextArea  urlTextArea       = new TextArea();
 	
 	@Override
-	void createPane( Dialog<?> dlg, MainController mainCtrl, MyDBAbstract myDBAbs, Map<String,String> mapProp )
+	void createPane( Dialog<?> dlg, MainController mainCtrl, MyDBAbstract myDBAbs )
 	{
 		this.dlg       = dlg;
 		this.mainCtrl  = mainCtrl;
@@ -134,20 +134,6 @@ public class UrlPaneOracle extends UrlPaneAbstract
 		// ----------------------------------------------------
 		// Items for "Basic"
 		// ----------------------------------------------------
-		/*
-		String dbName = mapProp.get("DBName");
-		if ( dbName != null )
-		{
-			this.dbnameTextField.setText( dbName );
-		}
-		String host = mapProp.get("Host");
-		if ( host != null )
-		{
-			this.hostTextField.setText( host );
-		}
-		this.portTextField.setText( String.valueOf(myDBAbs.getDefaultPort()) );
-		*/
-		/**/
 		Map<String,String> dbOptsAux = this.myDBAbs.getDBOptsAux();
 		this.dbnameTextField.setText( dbOptsAux.get("DBName") );
 		this.hostTextField.setText( dbOptsAux.get("Host") );
@@ -162,7 +148,6 @@ public class UrlPaneOracle extends UrlPaneAbstract
 		System.out.println( "###### constructor  ######" );
 		System.out.println( "const url:" + this.myDBAbs.getUrl() );
 		dbOptsAux.forEach( (k,v)->System.out.println("const DBOptsAux:k["+k+"]v["+v+"]") );
-		/**/
  		
 		// ----------------------------------------------------
 		// Items for "TNS"
@@ -573,26 +558,6 @@ public class UrlPaneOracle extends UrlPaneAbstract
 		vBox.getChildren().addAll( this.hBoxToggle, this.urlTextArea, this.lblUrl, hBox );
 		
 		this.getChildren().addAll( vBox );
-	}
-	
-	@Override
-	public Map<String,String> getProp()
-	{
-		Map<String,String> dbOptMap = new HashMap<String,String>();
-		
-		if ( this.tglBtnBasic.isSelected() )
-		{
-			dbOptMap.put( "DBName"  , this.dbnameTextField.getText() );
-			dbOptMap.put( "Host"    , this.hostTextField.getText() );
-			dbOptMap.put( "Port"    , this.portTextField.getText() );
-		}
-		else if ( this.tglBtnTNS.isSelected() )
-		{
-			dbOptMap.put( "TNSName"  , this.tnsNamesCombo.getValue() );
-			dbOptMap.put( "TNSAdmin" , this.tnsAdminTextField.getText() );
-		}		
-		
-		return dbOptMap;
 	}
 
 	@Override

@@ -78,11 +78,11 @@ public class SelectedItemHandlerRootPackageDef extends SelectedItemHandlerAbstra
 				String schemaName = itemParent.getValue().toString();
 				List<SchemaEntity> packageDefEntityLst = packageDefDBAbs.selectEntityLst(schemaName);
 				selectedEntity.addEntityAll(packageDefEntityLst);
-				this.schemaTreeView.addEntityLst( itemSelected, packageDefEntityLst );
+				this.schemaTreeView.addEntityLst( itemSelected, packageDefEntityLst, true );
 			}
 			else
 			{
-				this.schemaTreeView.addEntityLst( itemSelected, selectedEntity.getEntityLst() );
+				this.schemaTreeView.addEntityLst( itemSelected, selectedEntity.getEntityLst(), true );
 			}
 		}
 		

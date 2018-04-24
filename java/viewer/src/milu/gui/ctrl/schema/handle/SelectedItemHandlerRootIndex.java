@@ -84,11 +84,11 @@ public class SelectedItemHandlerRootIndex extends SelectedItemHandlerAbstract
 				String tableName  = itemParent.getValue().toString();
 				List<SchemaEntity> entityLst = ((IndexDBAbstract)objDBInf).selectEntityLst(schemaName,tableName);
 				selectedEntity.addEntityAll(entityLst);
-				this.schemaTreeView.addEntityLst( itemSelected, entityLst );
+				this.schemaTreeView.addEntityLst( itemSelected, entityLst, true );
 			}
 			else
 			{
-				this.schemaTreeView.addEntityLst( itemSelected, selectedEntity.getEntityLst() );
+				this.schemaTreeView.addEntityLst( itemSelected, selectedEntity.getEntityLst(), true );
 			}
 		}		
 	}

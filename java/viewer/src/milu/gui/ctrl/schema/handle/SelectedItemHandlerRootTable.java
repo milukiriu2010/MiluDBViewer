@@ -69,7 +69,8 @@ public class SelectedItemHandlerRootTable extends SelectedItemHandlerAbstract
 			
 			if ( rootTableEntity != null )
 			{
-				this.schemaTreeView.setTableData( itemSelected, rootTableEntity.getEntityLst() );
+				//this.schemaTreeView.setTableData( itemSelected, rootTableEntity.getEntityLst() );
+				this.schemaTreeView.addEntityLst( itemSelected, rootTableEntity.getEntityLst(), true );
 			}
 		}
 		

@@ -31,7 +31,7 @@ public class SchemaTreeView extends TreeView<SchemaEntity>
 	private DBView  dbView = null;
 	
 	// Root Item of this Tree
-	private TreeItem<SchemaEntity> item0Root = null;
+	//private TreeItem<SchemaEntity> item0Root = null;
 	
 	// Parent pane of this class
 	private AnchorPane    parentPane = null;
@@ -398,9 +398,14 @@ public class SchemaTreeView extends TreeView<SchemaEntity>
 	public void setInitialData( SchemaEntity rootEntity )
 	{
 		// create Root Item
+		/*
 		this.item0Root = this.addItem( null, rootEntity );
 		this.item0Root.setExpanded( true );
 		this.setRoot( this.item0Root );
+		*/
+		TreeItem<SchemaEntity> itemRoot = this.addItem( null, rootEntity );
+		itemRoot.setExpanded(true);
+		this.setRoot(itemRoot);
 		
 		if ( rootEntity == null )
 		{
@@ -414,7 +419,7 @@ public class SchemaTreeView extends TreeView<SchemaEntity>
 		for ( SchemaEntity schemaEntity: rootEntity.getEntityLst() )
 		{
 			TreeItem<SchemaEntity> item1Schema =
-				this.addItem( this.item0Root, schemaEntity );
+				this.addItem( itemRoot, schemaEntity );
 			
 			//System.out.println( "schemaEntity.getName():" + schemaEntity.getName() );
 			//System.out.println( "schemaEntity.getEntityLst().size():" + schemaEntity.getEntityLst().size() );
@@ -431,7 +436,7 @@ public class SchemaTreeView extends TreeView<SchemaEntity>
 			}
 		}
 	}
-	
+	/*
 	public void setTableData( TreeItem<SchemaEntity> itemTarget, List<SchemaEntity> tableEntityLst )
 	{
 		for ( SchemaEntity tableEntity : tableEntityLst )
@@ -464,8 +469,8 @@ public class SchemaTreeView extends TreeView<SchemaEntity>
 		itemTarget.setExpanded(true);
 		this.scrollBack(itemTarget);
 	}
-	
-	public void addEntityLst( TreeItem<SchemaEntity> itemTarget, List<SchemaEntity> schemaEntityLst )
+	*/
+	public void addEntityLst( TreeItem<SchemaEntity> itemTarget, List<SchemaEntity> schemaEntityLst, boolean isExpanded )
 	{
 		for ( SchemaEntity schemaEntity : schemaEntityLst )
 		{
@@ -477,10 +482,14 @@ public class SchemaTreeView extends TreeView<SchemaEntity>
 			//     -[ROOT_PACKAGE_DEF]
 			//       -[PACKAGE_DEF]    => add
 			// ---------------------------------------
-			this.addItem( itemTarget, schemaEntity ); 
+			TreeItem<SchemaEntity> itemNew = this.addItem( itemTarget, schemaEntity );
+			if ( schemaEntity.getEntityLst().size() > 0 )
+			{
+				this.addEntityLst( itemNew, schemaEntity.getEntityLst(), false );
+			}
 		}
 		
-		itemTarget.setExpanded(true);
+		itemTarget.setExpanded(isExpanded);
 		this.scrollBack(itemTarget);
 	}
 	

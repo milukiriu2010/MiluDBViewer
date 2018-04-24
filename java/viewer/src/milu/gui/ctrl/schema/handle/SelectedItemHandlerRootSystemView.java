@@ -76,11 +76,11 @@ public class SelectedItemHandlerRootSystemView extends SelectedItemHandlerAbstra
 				String schemaName = itemParent.getValue().toString();
 				List<SchemaEntity> systemViewEntityLst = systemViewDBAbs.selectEntityLst(schemaName);
 				selectedEntity.addEntityAll(systemViewEntityLst);
-				this.schemaTreeView.addEntityLst( itemSelected, systemViewEntityLst );
+				this.schemaTreeView.addEntityLst( itemSelected, systemViewEntityLst, true );
 			}
 			else
 			{
-				this.schemaTreeView.addEntityLst( itemSelected, selectedEntity.getEntityLst() );
+				this.schemaTreeView.addEntityLst( itemSelected, selectedEntity.getEntityLst(), true );
 			}
 		}
 		

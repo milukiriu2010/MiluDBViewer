@@ -3,12 +3,12 @@ package fx.tree;
 import javafx.application.Application;
 import javafx.scene.control.TreeView;
 import javafx.scene.control.TreeItem;
-import javafx.scene.control.TreeCell;
-import javafx.scene.control.TextField;
+//import javafx.scene.control.TreeCell;
+//import javafx.scene.control.TextField;
 import javafx.scene.control.cell.TextFieldTreeCell;
-import javafx.scene.input.KeyEvent;
-import javafx.scene.input.KeyCode;
-import javafx.event.EventHandler;
+//import javafx.scene.input.KeyEvent;
+//import javafx.scene.input.KeyCode;
+//import javafx.event.EventHandler;
 import javafx.util.StringConverter;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
@@ -101,7 +101,7 @@ public class TreeViewTeam extends Application
     {
         launch(args);
     }
-    
+    /*
     private final class TeamTreeCell extends TreeCell<Team>
     {
     	private TextField textField;
@@ -168,29 +168,27 @@ public class TreeViewTeam extends Application
                 {
                     if (t.getCode() == KeyCode.ENTER) 
                     {
-                    	/*
                     	//commitEdit(textField.getText());
-                        commitEdit
-                        (
-                        	new StringConverter<Team>()
-                        	{
-        						@Override
-        						public String toString(Team obj)
-        						{
-        							return obj.getName();
-        						}
-        						
-        						@Override
-        						public Team fromString(String str)
-        						{
-        							Team team = new TeamBaseBall();
-        							team.setName(str);
-        							return team;
-        						}
-
-                        	}
-                        );
-                        */
+                        //commitEdit
+                        //(
+                        //	new StringConverter<Team>()
+                        //	{
+        				//		@Override
+        				//		public String toString(Team obj)
+        				//		{
+        				//			return obj.getName();
+        				//		}
+        				//		
+        				//		@Override
+        				//		public Team fromString(String str)
+        				//		{
+        				//			Team team = new TeamBaseBall();
+        				//			team.setName(str);
+        				//			return team;
+        				//		}
+						//
+                        //	}
+                        //);
                     } 
                     else if (t.getCode() == KeyCode.ESCAPE) 
                     {
@@ -206,4 +204,5 @@ public class TreeViewTeam extends Application
             return getItem() == null ? "" : getItem().getName();
         }        
     }
+    */
 }

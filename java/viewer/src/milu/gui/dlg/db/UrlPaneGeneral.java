@@ -1,7 +1,5 @@
 package milu.gui.dlg.db;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.ResourceBundle;
 
 import javafx.scene.control.Label;
@@ -54,7 +52,7 @@ public class UrlPaneGeneral extends UrlPaneAbstract
 	private TextArea   urlTextArea = new TextArea();
 	
 	@Override
-	public void createPane( Dialog<?> dlg, MainController mainCtrl, MyDBAbstract myDBAbs, Map<String,String> mapProp )
+	public void createPane( Dialog<?> dlg, MainController mainCtrl, MyDBAbstract myDBAbs )
 	{
 		this.dlg       = dlg;
 		this.mainCtrl  = mainCtrl;
@@ -180,14 +178,6 @@ public class UrlPaneGeneral extends UrlPaneAbstract
 		);
 		
 		this.getChildren().addAll( vBox );
-	}
-	
-	@Override
-	public Map<String,String> getProp()
-	{
-		Map<String,String> dbOptMap = new HashMap<String,String>();
-		
-		return dbOptMap;
 	}
 
 	@Override

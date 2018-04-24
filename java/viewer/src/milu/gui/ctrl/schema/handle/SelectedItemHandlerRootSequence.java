@@ -78,11 +78,11 @@ public class SelectedItemHandlerRootSequence extends SelectedItemHandlerAbstract
 				String schemaName = itemParent.getValue().toString();
 				List<SchemaEntity> sequenceEntityLst = objDBInf.selectEntityLst(schemaName);
 				selectedEntity.addEntityAll(sequenceEntityLst);
-				this.schemaTreeView.addEntityLst( itemSelected, sequenceEntityLst );
+				this.schemaTreeView.addEntityLst( itemSelected, sequenceEntityLst, true );
 			}
 			else
 			{
-				this.schemaTreeView.addEntityLst( itemSelected, selectedEntity.getEntityLst() );
+				this.schemaTreeView.addEntityLst( itemSelected, selectedEntity.getEntityLst(), true );
 			}
 		}
 	}

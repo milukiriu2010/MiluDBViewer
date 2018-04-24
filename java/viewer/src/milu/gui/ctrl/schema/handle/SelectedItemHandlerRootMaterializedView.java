@@ -76,11 +76,11 @@ public class SelectedItemHandlerRootMaterializedView extends SelectedItemHandler
 				String schemaName = itemParent.getValue().toString();
 				List<SchemaEntity> materializedViewEntityLst = materializedViewDBAbs.selectEntityLst(schemaName);
 				selectedEntity.addEntityAll(materializedViewEntityLst);
-				this.schemaTreeView.addEntityLst( itemSelected, materializedViewEntityLst );
+				this.schemaTreeView.addEntityLst( itemSelected, materializedViewEntityLst, true );
 			}
 			else
 			{
-				this.schemaTreeView.addEntityLst( itemSelected, selectedEntity.getEntityLst() );
+				this.schemaTreeView.addEntityLst( itemSelected, selectedEntity.getEntityLst(), true );
 			}
 		}
 		

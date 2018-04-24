@@ -597,7 +597,7 @@ public class MainController
 		alertDlg.showAndWait();
 		alertDlg = null;
 	}	
-
+	/*
 	private void showException( Exception ex, String msg )
 	{
 		MyAlertDialog alertDlg = new MyAlertDialog( AlertType.WARNING, this );
@@ -606,5 +606,5 @@ public class MainController
 		alertDlg.showAndWait();
 		alertDlg = null;
 	}	
-	
+	*/
 }

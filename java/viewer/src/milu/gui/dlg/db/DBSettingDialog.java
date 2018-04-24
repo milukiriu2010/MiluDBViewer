@@ -264,7 +264,7 @@ public class DBSettingDialog extends Dialog<MyDBAbstract>
 		this.comboBoxDBType.getSelectionModel().selectFirst();
 		MyDBAbstract selectedMyDBAbs = this.comboBoxDBType.getSelectionModel().getSelectedItem();
 		PaneFactory paneFactory = new UrlPaneFactory();
-		UrlPaneAbstract urlPaneAbs = paneFactory.createPane( this, this.mainCtrl, selectedMyDBAbs, new HashMap<String,String>() );
+		UrlPaneAbstract urlPaneAbs = paneFactory.createPane( this, this.mainCtrl, selectedMyDBAbs );
 		this.urlPaneAbsMap.put( selectedMyDBAbs, urlPaneAbs );
 		this.vBoxCenter.getChildren().add( urlPaneAbs );
 		
@@ -507,8 +507,7 @@ public class DBSettingDialog extends Dialog<MyDBAbstract>
 			Node node = nodeLstIterator.next();
 			if ( node instanceof UrlPaneAbstract )
 			{
-				UrlPaneAbstract urlPaneAbs1 = (UrlPaneAbstract)node;
-				Map<String, String> mapProp = urlPaneAbs1.getProp();
+				//UrlPaneAbstract urlPaneAbs1 = (UrlPaneAbstract)node;
 				this.vBoxCenter.getChildren().remove( node );
 				
 				UrlPaneAbstract urlPaneAbs2 = null;
@@ -521,7 +520,7 @@ public class DBSettingDialog extends Dialog<MyDBAbstract>
 				else
 				{
 					PaneFactory paneFactory = new UrlPaneFactory();
-					urlPaneAbs2 = paneFactory.createPane( this, this.mainCtrl, newVal, mapProp );
+					urlPaneAbs2 = paneFactory.createPane( this, this.mainCtrl, newVal );
 					this.urlPaneAbsMap.put( newVal, urlPaneAbs2 );
 				}
 				System.out.println( "newVal2:" + newVal );

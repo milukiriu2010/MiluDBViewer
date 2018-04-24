@@ -72,11 +72,11 @@ public class SelectedItemHandlerRootView extends SelectedItemHandlerAbstract
 				String schemaName = itemParent.getValue().toString();
 				List<SchemaEntity> entityLst = objDBInf.selectEntityLst(schemaName);
 				selectedEntity.addEntityAll(entityLst);
-				this.schemaTreeView.addEntityLst( itemSelected, entityLst );
+				this.schemaTreeView.addEntityLst( itemSelected, entityLst, true );
 			}
 			else
 			{
-				this.schemaTreeView.addEntityLst( itemSelected, selectedEntity.getEntityLst() );
+				this.schemaTreeView.addEntityLst( itemSelected, selectedEntity.getEntityLst(), true );
 			}
 		}
 		

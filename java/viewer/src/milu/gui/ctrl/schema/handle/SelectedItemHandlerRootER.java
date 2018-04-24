@@ -104,7 +104,7 @@ public class SelectedItemHandlerRootER extends SelectedItemHandlerAbstract
 			if ( objDBInf != null )
 			{
 				List<SchemaEntity> fkEntityLst = objDBInf.selectEntityLst(schemaName);
-				this.schemaTreeView.addEntityLst( itemSelected, fkEntityLst );
+				this.schemaTreeView.addEntityLst( itemSelected, fkEntityLst, true );
 				FKDBAbstract fkDBAbs = (FKDBAbstract)objDBInf;
 				for ( SchemaEntity seEntity : fkEntityLst )
 				{

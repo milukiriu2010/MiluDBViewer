@@ -70,11 +70,11 @@ public class SelectedItemHandlerEachIndex extends SelectedItemHandlerAbstract
 				}
 				List<SchemaEntity> entityLst = ((IndexColumnDBAbstract)objDBInf).selectEntityLst(schemaName,tableName,indexName);
 				selectedEntity.addEntityAll(entityLst);
-				this.schemaTreeView.addEntityLst( itemSelected, entityLst );
+				this.schemaTreeView.addEntityLst( itemSelected, entityLst, true );
 			}
 			else
 			{
-				this.schemaTreeView.addEntityLst( itemSelected, selectedEntity.getEntityLst() );
+				this.schemaTreeView.addEntityLst( itemSelected, selectedEntity.getEntityLst(), true );
 			}
 		}		
 		

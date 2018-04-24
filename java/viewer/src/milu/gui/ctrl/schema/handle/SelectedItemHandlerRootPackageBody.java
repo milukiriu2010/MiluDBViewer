@@ -80,11 +80,11 @@ public class SelectedItemHandlerRootPackageBody extends SelectedItemHandlerAbstr
 				String schemaName = itemParent.getValue().toString();
 				List<SchemaEntity> packageBodyEntityLst = packageBodyDBAbs.selectEntityLst(schemaName);
 				selectedEntity.addEntityAll(packageBodyEntityLst);
-				this.schemaTreeView.addEntityLst( itemSelected, packageBodyEntityLst );
+				this.schemaTreeView.addEntityLst( itemSelected, packageBodyEntityLst, true );
 			}
 			else
 			{
-				this.schemaTreeView.addEntityLst( itemSelected, selectedEntity.getEntityLst() );
+				this.schemaTreeView.addEntityLst( itemSelected, selectedEntity.getEntityLst(), true );
 			}
 		}
 		
