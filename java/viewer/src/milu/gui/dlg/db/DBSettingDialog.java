@@ -263,7 +263,7 @@ public class DBSettingDialog extends Dialog<MyDBAbstract>
 		// Set default selection on ComboBox(DB Type)
 		this.comboBoxDBType.getSelectionModel().selectFirst();
 		MyDBAbstract selectedMyDBAbs = this.comboBoxDBType.getSelectionModel().getSelectedItem();
-		PaneFactory paneFactory = new UrlPaneFactory();
+		AbsPaneFactory paneFactory = new UrlPaneFactory();
 		UrlPaneAbstract urlPaneAbs = paneFactory.createPane( this, this.mainCtrl, selectedMyDBAbs );
 		this.urlPaneAbsMap.put( selectedMyDBAbs, urlPaneAbs );
 		this.vBoxCenter.getChildren().add( urlPaneAbs );
@@ -519,7 +519,7 @@ public class DBSettingDialog extends Dialog<MyDBAbstract>
 				// Create object, if never selected before.
 				else
 				{
-					PaneFactory paneFactory = new UrlPaneFactory();
+					AbsPaneFactory paneFactory = new UrlPaneFactory();
 					urlPaneAbs2 = paneFactory.createPane( this, this.mainCtrl, newVal );
 					this.urlPaneAbsMap.put( newVal, urlPaneAbs2 );
 				}

@@ -30,9 +30,6 @@ public class SchemaTreeView extends TreeView<SchemaEntity>
 	// Control View
 	private DBView  dbView = null;
 	
-	// Root Item of this Tree
-	//private TreeItem<SchemaEntity> item0Root = null;
-	
 	// Parent pane of this class
 	private AnchorPane    parentPane = null;
 	
@@ -398,11 +395,6 @@ public class SchemaTreeView extends TreeView<SchemaEntity>
 	public void setInitialData( SchemaEntity rootEntity )
 	{
 		// create Root Item
-		/*
-		this.item0Root = this.addItem( null, rootEntity );
-		this.item0Root.setExpanded( true );
-		this.setRoot( this.item0Root );
-		*/
 		TreeItem<SchemaEntity> itemRoot = this.addItem( null, rootEntity );
 		itemRoot.setExpanded(true);
 		this.setRoot(itemRoot);

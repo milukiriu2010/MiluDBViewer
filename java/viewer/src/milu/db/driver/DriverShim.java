@@ -44,6 +44,7 @@ public class DriverShim implements Driver
 		driverDBMap.put( DriverClassConst.CLASS_NAME_MYSQL     , DriverNameConst.DB_MYSQL );
 		driverDBMap.put( DriverClassConst.CLASS_NAME_CASSANDRA1, DriverNameConst.DB_CASSANDRA1 );
 		driverDBMap.put( DriverClassConst.CLASS_NAME_CASSANDRA2, DriverNameConst.DB_CASSANDRA2 );
+		driverDBMap.put( DriverClassConst.CLASS_NAME_SQLSERVER , DriverNameConst.DB_SQLSERVER );
 	}
 	
 	public void setDriver(Driver driver)

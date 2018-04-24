@@ -387,6 +387,10 @@ public class PathTreeView extends TreeView<Path>
 	
 	public void createTree( TreeItem<Path> itemParent ) throws IOException
 	{
+		if ( Files.isDirectory(itemParent.getValue()) == false )
+		{
+			return;
+		}
 	    try 
 	    ( 
     		DirectoryStream<Path> directoryStream = 

@@ -7,8 +7,9 @@ import milu.main.MainController;
 import milu.db.MyDBMySQL;
 import milu.db.MyDBOracle;
 import milu.db.MyDBCassandra;
+import milu.db.MyDBSQLServer;
 
-class UrlPaneFactory implements PaneFactory 
+class UrlPaneFactory implements AbsPaneFactory 
 {
 	@Override
 	public UrlPaneAbstract createPane( Dialog<?> dlg, MainController mainCtrl, MyDBAbstract myDBAbs )
@@ -30,6 +31,10 @@ class UrlPaneFactory implements PaneFactory
 		else if ( myDBAbs instanceof MyDBCassandra )
 		{
 			urlPaneAbs = new UrlPaneCassandra();
+		}
+		else if ( myDBAbs instanceof MyDBSQLServer )
+		{
+			urlPaneAbs = new UrlPaneBasic();
 		}
 		else
 		{

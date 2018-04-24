@@ -4,7 +4,7 @@ import javafx.scene.control.Dialog;
 import milu.db.MyDBAbstract;
 import milu.main.MainController;
 
-interface PaneFactory
+interface AbsPaneFactory
 {
 	/**
 	 * 

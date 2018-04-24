@@ -6,7 +6,8 @@ public enum DriverNameConst
 	DB_POSTGRESQL("PostgreSQL"),
 	DB_MYSQL("MySQL"),
 	DB_CASSANDRA1("Cassandra(zhicwu)"),
-	DB_CASSANDRA2("Cassandra(adejanovski)")
+	DB_CASSANDRA2("Cassandra(adejanovski)"),
+	DB_SQLSERVER("SQLServer")
 	;
 	
 	private String val = null;
