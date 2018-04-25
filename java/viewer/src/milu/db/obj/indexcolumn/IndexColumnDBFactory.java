@@ -1,12 +1,13 @@
 package milu.db.obj.indexcolumn;
 
-import milu.db.MyDBAbstract;
-import milu.db.MyDBPostgres;
 import milu.db.obj.abs.ObjDBFactory;
 import milu.db.obj.abs.ObjDBInterface;
+import milu.db.MyDBAbstract;
+import milu.db.MyDBPostgres;
 import milu.db.MyDBMySQL;
 import milu.db.MyDBOracle;
 import milu.db.MyDBCassandra;
+import milu.db.MyDBSQLServer;
 
 public class IndexColumnDBFactory implements ObjDBFactory
 {
@@ -29,6 +30,10 @@ public class IndexColumnDBFactory implements ObjDBFactory
 		else if ( myDBAbs instanceof MyDBCassandra )
 		{
 			indexColumnDBAbs = new IndexColumnDBCassandra();
+		}
+		else if ( myDBAbs instanceof MyDBSQLServer )
+		{
+			indexColumnDBAbs = new IndexColumnDBSQLServer();
 		}
 		else
 		{
