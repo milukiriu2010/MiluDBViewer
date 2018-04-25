@@ -39,6 +39,12 @@ public class MyDBSQLServer extends MyDBAbstract
 			dbOptMap.get( "Host" ) + ":" + dbOptMap.get( "Port" ) + ";" +
 			"databaseName=" + dbOptMap.get( "DBName" ) + ";"
 			;
+		if ( update.equals(MyDBAbstract.UPDATE.WITH) )
+		{
+			this.dbOptsAux.clear();
+			dbOptMap.forEach( (k,v)->this.dbOptsAux.put(k,v) );
+			this.url = urlTmp;
+		}
 		return urlTmp;
 	}
 
@@ -66,17 +72,20 @@ public class MyDBSQLServer extends MyDBAbstract
 			( 
 				(k,v)->
 				{
-					if ( v != null )
+					if ( this.url.contains(k) == false )
 					{
-						sb.append(k+"="+v+";");
-					}
-					else
-					{
-						sb.append(k+";");
+						if ( v != null )
+						{
+							sb.append(k+"="+v+";");
+						}
+						else
+						{
+							sb.append(k+";");
+						}
 					}
 				}
 			);
-			return this.url + sb.toString();
+			return this.url + ";" + sb.toString();
 		}
 	}
 	

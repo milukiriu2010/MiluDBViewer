@@ -12,7 +12,7 @@ create table t_npb_player_list
 )
 /
 
-
+alter table t_npb_player_list add constraint fk_t_npb_player_list_ctry_id foreign key( country_id ) references m_country( id );
 
 insert into t_npb_player_list
 values

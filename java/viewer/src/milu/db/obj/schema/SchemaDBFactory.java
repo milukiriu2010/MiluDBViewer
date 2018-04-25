@@ -7,6 +7,7 @@ import milu.db.obj.abs.ObjDBInterface;
 import milu.db.MyDBMySQL;
 import milu.db.MyDBOracle;
 import milu.db.MyDBCassandra;
+import milu.db.MyDBSQLServer;
 
 public class SchemaDBFactory implements ObjDBFactory 
 {
@@ -28,6 +29,10 @@ public class SchemaDBFactory implements ObjDBFactory
 		else if ( myDBAbs instanceof MyDBCassandra )
 		{
 			schemaDBAbs = new SchemaDBCassandra();
+		}
+		else if ( myDBAbs instanceof MyDBSQLServer )
+		{
+			schemaDBAbs = new SchemaDBSQLServer();
 		}
 		else
 		{

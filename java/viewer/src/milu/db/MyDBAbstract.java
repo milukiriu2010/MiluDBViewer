@@ -158,9 +158,27 @@ abstract public class MyDBAbstract
 		}
 		else
 		{
-			StringBuffer sb = new StringBuffer("?");
-			this.dbOpts.forEach( (k,v)->sb.append(k+"="+v+"&") );
-			sb.deleteCharAt(sb.length()-1);
+			/*
+				StringBuffer sb = new StringBuffer("?");
+				this.dbOpts.forEach( (k,v)->sb.append(k+"="+v+"&") );
+				sb.deleteCharAt(sb.length()-1);
+				return this.url + sb.toString();
+			 */
+			StringBuffer sb = ( this.url != null && this.url.contains("?") == false ) ? new StringBuffer("?"):new StringBuffer("");
+			this.dbOpts.forEach
+			( 
+				(k,v)->
+				{
+					if ( this.url.contains(k) == false )
+					{
+						sb.append(k+"="+v+"&");
+					}
+				}
+			);
+			if ( sb.length() >= 1 )
+			{
+				sb.deleteCharAt(sb.length()-1);
+			}
 			return this.url + sb.toString();
 		}
 	}
@@ -210,6 +228,18 @@ abstract public class MyDBAbstract
 					this.dbOpts.put( strKV, null );
 				}
 			}
+		}
+	}
+	
+	public void setUrl( String url, boolean analyze )
+	{
+		if ( analyze == false )
+		{
+			this.url = url;
+		}
+		else
+		{
+			this.setUrl(url);
 		}
 	}
 	

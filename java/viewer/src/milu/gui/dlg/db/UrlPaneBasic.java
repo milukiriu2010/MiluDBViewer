@@ -139,7 +139,7 @@ public class UrlPaneBasic extends UrlPaneAbstract
 	
 	void init()
 	{
-		System.out.println( "UrlPaneMySQL.init." );
+		System.out.println( "UrlPaneBasic.init." );
 		Map<String,String> dbOptsAux = this.myDBAbs.getDBOptsAux();
 		if ( this.myDBAbs.getUrl() == null )
 		{
@@ -156,6 +156,7 @@ public class UrlPaneBasic extends UrlPaneAbstract
 		}
 		else
 		{
+			System.out.println( "url:" + this.myDBAbs.getUrl() );
 			this.urlTextArea.setText( this.myDBAbs.getUrl() );
 			//this.setUrlTextArea();
 			this.tglBtnFreeHand.setSelected(true);

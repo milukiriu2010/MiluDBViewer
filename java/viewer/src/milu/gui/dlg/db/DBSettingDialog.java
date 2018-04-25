@@ -699,7 +699,7 @@ public class DBSettingDialog extends Dialog<MyDBAbstract>
 					// set "Password"
 					this.passwordTextField.setText(myDBAbsTmp.getPassword());
 					// set "URL"
-					myDBAbsCandidate.setUrl(myDBAbsTmp.getUrl());
+					myDBAbsCandidate.setUrl(myDBAbsTmp.getUrl(),false);
 					// set "dbOpts"
 					myDBAbsCandidate.setDBOpts(myDBAbsTmp.getDBOpts());
 					// set "dbOptsSpecial"
@@ -707,7 +707,8 @@ public class DBSettingDialog extends Dialog<MyDBAbstract>
 					// set "dbOptsAux"
 					myDBAbsCandidate.setDBOptsAux(myDBAbsTmp.getDBOptsAux());
 					System.out.println( "myDBAbsCandidate:" + myDBAbsCandidate );
-					System.out.println( "url:" + myDBAbsCandidate.getUrl() + "|" );
+					System.out.println( "myDBAbsCandidate:url:" + myDBAbsCandidate.getUrl() + "|" );
+					myDBAbsCandidate.getDBOpts().forEach( (k,v)->System.out.println("myDBAbsCandidate:DBOpts:k["+k+"]v["+v+"]") );
 					
 					this.setUrlPane(myDBAbsCandidate);
 					this.comboBoxDBType.valueProperty().addListener( this.changeListener );
