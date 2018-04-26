@@ -8,6 +8,7 @@ import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Tooltip;
 import javafx.scene.layout.VBox;
 import javafx.stage.DirectoryChooser;
 import javafx.scene.layout.HBox;
@@ -102,6 +103,7 @@ public class AppPaneDBConfOracle extends AppPaneAbstract
 		ivFolder.setFitWidth(16);
 		ivFolder.setFitHeight(16);
 		this.folderBtn.setGraphic( ivFolder );
+		//this.folderBtn.setTooltip( new Tooltip(this.extLangRB.getString( "TOOLTIP_OPEN_FOLDER" )) );
 		
 		HBox hBoxTnsAdmin = new HBox(2);
 		hBoxTnsAdmin.getChildren().addAll( lblTnsAdmin, this.tnsAdminTextField, this.folderBtn );

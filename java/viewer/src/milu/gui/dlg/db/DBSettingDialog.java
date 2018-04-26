@@ -26,6 +26,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.Tooltip;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 
@@ -166,10 +167,13 @@ public class DBSettingDialog extends Dialog<MyDBAbstract>
 		}
 		
 		this.btnNewFolder.setGraphic( MyTool.createImageView( 16, 16, this.mainCtrl.getImage( "file:resources/images/folder_new.png" ) ) );
+		this.btnNewFolder.setTooltip( new Tooltip(langRB.getString( "TOOLTIP_NEW_FOLDER" )) );
 		
 		this.btnNewConnection.setGraphic( MyTool.createImageView( 16, 16, this.mainCtrl.getImage( "file:resources/images/file_new.png" ) ) );
+		this.btnNewConnection.setTooltip( new Tooltip(langRB.getString( "TOOLTIP_NEW_CONNECTION" )) );
 		
 		this.btnDelFolder.setGraphic( MyTool.createImageView( 16, 16, this.mainCtrl.getImage( "file:resources/images/delete.png" ) ) );
+		this.btnDelFolder.setTooltip( new Tooltip(langRB.getString( "TOOLTIP_DEL" )) );
 		
 		HBox hBoxBtn = new HBox(2);
 		hBoxBtn.getChildren().addAll( this.btnNewFolder, this.btnNewConnection, this.btnDelFolder );

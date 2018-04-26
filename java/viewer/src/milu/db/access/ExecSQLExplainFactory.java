@@ -3,9 +3,10 @@ package milu.db.access;
 import milu.ctrl.sqlparse.SQLBag;
 import milu.db.MyDBAbstract;
 import milu.db.MyDBPostgres;
-import milu.main.AppConf;
 import milu.db.MyDBMySQL;
 import milu.db.MyDBOracle;
+import milu.db.MyDBSQLServer;
+import milu.main.AppConf;
 
 public class ExecSQLExplainFactory extends ExecSQLFactoryAbstract 
 {
@@ -25,6 +26,10 @@ public class ExecSQLExplainFactory extends ExecSQLFactoryAbstract
 		else if ( myDBAbs instanceof MyDBOracle )
 		{
 			execSQLAbs = new ExecSQLExplainOracle();
+		}
+		else if ( myDBAbs instanceof MyDBSQLServer )
+		{
+			execSQLAbs = new ExecSQLExplainSQLServer();
 		}
 		else
 		{

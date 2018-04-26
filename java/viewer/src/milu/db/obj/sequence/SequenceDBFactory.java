@@ -1,10 +1,11 @@
 package milu.db.obj.sequence;
 
-import milu.db.MyDBAbstract;
-import milu.db.MyDBPostgres;
 import milu.db.obj.abs.ObjDBFactory;
 import milu.db.obj.abs.ObjDBInterface;
+import milu.db.MyDBAbstract;
+import milu.db.MyDBPostgres;
 import milu.db.MyDBOracle;
+import milu.db.MyDBSQLServer;
 
 public class SequenceDBFactory implements ObjDBFactory
 {
@@ -18,6 +19,10 @@ public class SequenceDBFactory implements ObjDBFactory
 		else if ( myDBAbs instanceof MyDBOracle )
 		{
 			sequenceDBAbs = new SequenceDBOracle();
+		}
+		else if ( myDBAbs instanceof MyDBSQLServer )
+		{
+			sequenceDBAbs = new SequenceDBSQLServer();
 		}
 		else
 		{

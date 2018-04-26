@@ -1,11 +1,12 @@
 package milu.db.obj.type;
 
-import milu.db.MyDBAbstract;
-import milu.db.MyDBPostgres;
 import milu.db.obj.abs.ObjDBFactory;
 import milu.db.obj.abs.ObjDBInterface;
+import milu.db.MyDBAbstract;
+import milu.db.MyDBPostgres;
 import milu.db.MyDBOracle;
 import milu.db.MyDBCassandra;
+import milu.db.MyDBSQLServer;
 
 public class TypeDBFactory implements ObjDBFactory
 {
@@ -24,6 +25,10 @@ public class TypeDBFactory implements ObjDBFactory
 		else if ( myDBAbs instanceof MyDBCassandra )
 		{
 			typeDBAbs = new TypeDBCassandra();
+		}
+		else if ( myDBAbs instanceof MyDBSQLServer )
+		{
+			typeDBAbs = new TypeDBSQLServer();
 		}
 		else
 		{

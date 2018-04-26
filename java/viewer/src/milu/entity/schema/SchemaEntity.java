@@ -154,13 +154,6 @@ abstract public class SchemaEntity
 	protected List<SchemaEntity>  entityLst = new ArrayList<>();
 	
 	protected MainController      mainCtrl = null;
-	/*
-	// Property File for this class 
-	protected static final String PROPERTY_FILENAME = 
-		 	"conf.lang.entity.schema.SchemaEntity";
-
-	protected static ResourceBundle langRB = ResourceBundle.getBundle( PROPERTY_FILENAME );
-	*/	
 
 	abstract void init();
 	

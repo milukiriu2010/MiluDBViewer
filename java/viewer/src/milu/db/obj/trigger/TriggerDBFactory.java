@@ -1,11 +1,12 @@
 package milu.db.obj.trigger;
 
-import milu.db.MyDBAbstract;
-import milu.db.MyDBPostgres;
 import milu.db.obj.abs.ObjDBFactory;
 import milu.db.obj.abs.ObjDBInterface;
+import milu.db.MyDBAbstract;
+import milu.db.MyDBPostgres;
 import milu.db.MyDBMySQL;
 import milu.db.MyDBOracle;
+import milu.db.MyDBSQLServer;
 
 public class TriggerDBFactory implements ObjDBFactory
 {
@@ -23,6 +24,10 @@ public class TriggerDBFactory implements ObjDBFactory
 		else if ( myDBAbs instanceof MyDBOracle )
 		{
 			triggerDBAbs = new TriggerDBOracle();
+		}
+		else if ( myDBAbs instanceof MyDBSQLServer )
+		{
+			triggerDBAbs = new TriggerDBSQLServer();
 		}
 		else
 		{

@@ -22,6 +22,7 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.Tooltip;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ComboBox;
@@ -113,6 +114,7 @@ public class UrlPaneOracle extends UrlPaneAbstract
 		this.myDBAbs   = myDBAbs;
 		
 		ResourceBundle extLangRB = this.mainCtrl.getLangResource("conf.lang.gui.dlg.db.DBSettingDialog");
+		ResourceBundle langRB = this.mainCtrl.getLangResource("conf.lang.gui.common.NodeName");
 		
 		AppConf  appConf   = this.mainCtrl.getAppConf();
 		
@@ -218,6 +220,7 @@ public class UrlPaneOracle extends UrlPaneAbstract
 		
 		// "select folder" button
 		this.folderBtn.setGraphic( MyTool.createImageView( 16, 16, this.mainCtrl.getImage("file:resources/images/folder.png") ));
+		this.folderBtn.setTooltip( new Tooltip(langRB.getString( "TOOLTIP_OPEN_FOLDER" )) );
 
 		// ----------------------------------------------------
 		// get URL by Driver Info
@@ -232,6 +235,7 @@ public class UrlPaneOracle extends UrlPaneAbstract
 		this.tmplTextField.setEditable(false);
 
 		this.tmplBtn.setGraphic( MyTool.createImageView( 16, 16, this.mainCtrl.getImage("file:resources/images/copy.png") ));
+		this.tmplBtn.setTooltip( new Tooltip(langRB.getString( "TOOLTIP_COPY" )) );
 		
 		// ----------------------------------------------------
 		// Items for "All"
