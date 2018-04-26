@@ -7,6 +7,7 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.Tooltip;
 import javafx.scene.image.ImageView;
 import javafx.application.Application;
 import javafx.scene.Cursor;
@@ -59,6 +60,7 @@ public class UrlPaneGeneral extends UrlPaneAbstract
 		this.myDBAbs   = myDBAbs;
 		
 		ResourceBundle extLangRB = this.mainCtrl.getLangResource("conf.lang.gui.dlg.db.DBSettingDialog");
+		ResourceBundle langRB = this.mainCtrl.getLangResource("conf.lang.gui.common.NodeName");
 		
 		// ToggleButton for Free Hand
 		this.tglBtnFreeHand.setText(extLangRB.getString("TOGGLE_FREE"));
@@ -85,6 +87,7 @@ public class UrlPaneGeneral extends UrlPaneAbstract
 		ivCopy.setFitWidth(16);
 		ivCopy.setFitHeight(16);
 		this.tmplBtn.setGraphic(ivCopy);
+		this.tmplBtn.setTooltip( new Tooltip(langRB.getString( "TOOLTIP_COPY" )) );
 		
 		// ----------------------------------------------------
 		// Items for "All"

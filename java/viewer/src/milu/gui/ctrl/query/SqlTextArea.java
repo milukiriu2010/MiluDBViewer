@@ -10,6 +10,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.SimpleIntegerProperty;
@@ -541,8 +542,16 @@ public class SqlTextArea extends TextArea
 		if ( hitEntity == null )
 		{
 			System.out.println( "No hit." );
-			this.hints.removeAll( this.hints );
-			return false;
+			// search by schema
+			if ( this.searchSchema(tableName) == false )
+			{
+				this.hints.removeAll( this.hints );
+				return false;
+			}
+			else
+			{
+				return true;
+			}
 		}
 		
 		List<String> columnLst = hitEntity.getDefinitionLst("column_name");
@@ -551,6 +560,41 @@ public class SqlTextArea extends TextArea
 		this.hints.addAll( columnLst );
 		
 		return true;
+	}
+	
+	private boolean searchSchema( String schemaName )
+	{
+		System.out.println( "searchSchema." );
+		MyDBAbstract myDBAbs = this.dbView.getMyDBAbstract();
+		SearchSchemaEntityInterface sseVisitorTN1 = new SearchSchemaEntityVisitorFactory().createInstance( SchemaEntity.SCHEMA_TYPE.SCHEMA, schemaName );
+		myDBAbs.getSchemaRoot().accept(sseVisitorTN1);
+		SchemaEntity schemaEntity = sseVisitorTN1.getHitSchemaEntity();
+		if ( schemaEntity == null )
+		{
+			return false;
+		}
+		
+		SearchSchemaEntityInterface sseVisitorTN2 = new SearchSchemaEntityVisitorFactory().createInstance( SchemaEntity.SCHEMA_TYPE.ROOT_TABLE );
+		schemaEntity.accept(sseVisitorTN2);
+		SchemaEntity rootTableEntity = sseVisitorTN2.getHitSchemaEntity();
+		if ( rootTableEntity == null )
+		{
+			return false;
+		}
+		
+		List<String> tableLst = 
+			rootTableEntity.getEntityLst().stream()
+				.map( x -> x.getName() )
+				.collect(Collectors.toList());
+		if ( tableLst.size() == 0 )
+		{
+			return false;
+		}
+		this.hints.removeAll( this.hints );
+		this.hints.addAll( tableLst );
+		
+		return true;
+		
 	}
 	
 	public List<SQLBag> getSQLBagLst()

@@ -22,7 +22,8 @@ class UrlPaneFactory implements AbsPaneFactory
 		}
 		else if ( myDBAbs instanceof MyDBMySQL )
 		{
-			urlPaneAbs = new UrlPaneMySQL();
+			//urlPaneAbs = new UrlPaneMySQL();
+			urlPaneAbs = new UrlPaneBasic();
 		}
 		else if ( myDBAbs instanceof MyDBOracle )
 		{

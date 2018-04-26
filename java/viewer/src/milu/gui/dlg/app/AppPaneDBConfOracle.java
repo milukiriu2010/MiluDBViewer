@@ -103,7 +103,7 @@ public class AppPaneDBConfOracle extends AppPaneAbstract
 		ivFolder.setFitWidth(16);
 		ivFolder.setFitHeight(16);
 		this.folderBtn.setGraphic( ivFolder );
-		//this.folderBtn.setTooltip( new Tooltip(this.extLangRB.getString( "TOOLTIP_OPEN_FOLDER" )) );
+		this.folderBtn.setTooltip( new Tooltip(this.extLangRB.getString( "TOOLTIP_NEW_FOLDER" )) );
 		
 		HBox hBoxTnsAdmin = new HBox(2);
 		hBoxTnsAdmin.getChildren().addAll( lblTnsAdmin, this.tnsAdminTextField, this.folderBtn );
