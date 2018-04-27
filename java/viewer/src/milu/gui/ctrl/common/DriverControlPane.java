@@ -75,12 +75,11 @@ public class DriverControlPane extends Pane
 		
 		ResourceBundle  langRB  = this.mainCtrl.getLangResource("conf.lang.gui.common.NodeName");
 		ResourceBundle  langRBa = this.mainCtrl.getLangResource("conf.lang.gui.ctrl.common.DriverControlPane");
-		//langRBa.keySet().forEach( (k)->System.out.println("langRBa:k:"+k+":"+langRBa.getString(k)) );
 		
 		// ---------------------------------------------------------
 		// Add & Delete "Driver Path"
 		// ---------------------------------------------------------
-		Label lblDriverPath = new Label("JDBC Driver Path(.jar)");
+		Label lblDriverPath = new Label(langRBa.getString("LABEL_JDBC_DRIVER_PATH"));
 		this.driverPathListView.setPrefWidth(500);
 		this.driverPathListView.setPrefHeight(200);
 		this.btnAddJar.setText(langRB.getString("BTN_ADD"));
@@ -93,8 +92,8 @@ public class DriverControlPane extends Pane
 		// ---------------------------------------------------------
 		// Edit "Driver Class Name"
 		// ---------------------------------------------------------
-		Label lblDriverClassName = new Label("JDBC Driver Class Name");
-		this.driverClassNameTxt.setPromptText("Class.forName");
+		Label lblDriverClassName = new Label(langRBa.getString("LABEL_JDBC_DRIVER_CLASS_NAME"));
+		this.driverClassNameTxt.setPromptText("Loaded by Class.forName");
 
 		
 		// ---------------------------------------------------------

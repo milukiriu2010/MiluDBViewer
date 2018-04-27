@@ -137,7 +137,9 @@ public class DBJdbcTab extends Tab
 		Label      majorVerLbl = new Label("Major Version:");
 		Label      minorVerLbl = new Label("Minor Version:");
 		this.majorVerTxt.setEditable(false);
+		this.majorVerTxt.setPrefWidth(20);
 		this.minorVerTxt.setEditable(false);
+		this.minorVerTxt.setPrefWidth(20);
 		this.driverTableView = new SqlTableView(this.dbView);
 
 		HBox hBoxVer = new HBox(2);
@@ -269,24 +271,13 @@ public class DBJdbcTab extends Tab
 			
 			String driverClassName = driver.getDriverClassName();
 			String[] classDomainArray = driverClassName.split("\\.");
-			//System.out.println( "classDomainArray:size[" + classDomainArray.length + "]" );
 			
 			List<String> classDomainLst = new ArrayList<>();
 			classDomainLst.add("");
 			classDomainLst.addAll(Arrays.asList(classDomainArray));
 			
-			/*
-			DriverPropertyInfo[] driverPropInfoLst = driver.getPropertyInfo( "", null );
-			Map<String,String> driverMap = new TreeMap<>(); 
-			for ( DriverPropertyInfo  driverPropInfo : driverPropInfoLst )
-			{
-				driverMap.put( driverPropInfo.name, driverPropInfo.value );
-			}
-			*/
-			
 			Map<String,String> driverMap = new TreeMap<>(); 
 			int classDomainLstSize = classDomainLst.size();
-			//System.out.println( "driverClassName[" + driverClassName + "]size[" + classDomainLstSize + "]" );
 			for ( int i = 0; i < classDomainLstSize; i++ )
 			{
 				String url = "";
@@ -315,7 +306,6 @@ public class DBJdbcTab extends Tab
 				}
 			}
 			
-			//System.out.println( "driverMap.size:" + driverMap.size() );
 			List<List<String>> dataLst = new ArrayList<>();
 			driverMap.forEach
 			(
@@ -327,7 +317,6 @@ public class DBJdbcTab extends Tab
 					dataLst.add(data);
 				}
 			);
-			//System.out.println( "dataLst.size:" + dataLst.size() );
 			this.driverTableView.setTableViewSQL( this.headLst, dataLst );
 		}
 		catch ( SQLException sqlEx )
@@ -445,15 +434,11 @@ public class DBJdbcTab extends Tab
 					textField.setOnAction(event->commitEdit(textField.getText()));
 				}
 			}
-			// no else?
-			//else
-			//{
-				textField.setText(getItem());
-				setText(null);
+			textField.setText(getItem());
+			setText(null);
 				
-				setGraphic(textField);
-				textField.selectAll();
-			//}
+			setGraphic(textField);
+			textField.selectAll();
 		}
 		
 		@Override

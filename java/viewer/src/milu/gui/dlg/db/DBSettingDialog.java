@@ -27,10 +27,12 @@ import javafx.scene.control.TreeItem;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Tooltip;
+import javafx.scene.control.SplitPane;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 
 import javafx.geometry.Insets;
+import javafx.geometry.Orientation;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
@@ -247,12 +249,20 @@ public class DBSettingDialog extends Dialog<MyDBAbstract>
 		VBox vBoxRight = new VBox(2);
 		vBoxRight.getChildren().addAll( this.btnAddDriver, this.btnEditDriver );
 		
+		// -------------------------------------
+		// SplitPane
+		// -------------------------------------
+		SplitPane centerPane = new SplitPane();
+		centerPane.setOrientation(Orientation.HORIZONTAL);
+		centerPane.getItems().addAll( vBoxPathTreeView, this.vBoxCenter );
+		centerPane.setDividerPositions( 0.4f, 0.6f );
 		
 		// pane for Dialog
 		this.vBoxCenter.getChildren().add( paneDBOpt );
-		BorderPane.setMargin(vBoxPathTreeView,new Insets(10,10,10,10));
-		this.brdPane.setLeft(vBoxPathTreeView);
-		this.brdPane.setCenter( this.vBoxCenter );
+		//BorderPane.setMargin(vBoxPathTreeView,new Insets(10,10,10,10));
+		//this.brdPane.setLeft(vBoxPathTreeView);
+		//this.brdPane.setCenter( this.vBoxCenter );
+		this.brdPane.setCenter( centerPane );
 		this.brdPane.setRight( vBoxRight );
 		
 		// set pane on dialog
