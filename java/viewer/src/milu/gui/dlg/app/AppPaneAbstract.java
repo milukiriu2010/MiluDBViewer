@@ -36,13 +36,6 @@ abstract class AppPaneAbstract extends Pane
 	
 	protected void save() throws FileNotFoundException, IOException
 	{
-		/*
-		MyJsonHandleAbstract<AppConf> myJsonAbs =
-			new MyJsonHandleFactory<AppConf>().createInstance(AppConf.class);
-		
-		myJsonAbs.open(AppConst.APP_CONF.val());
-		myJsonAbs.save( this.mainCtrl.getAppConf() );
-		*/
 		MyJsonHandleAbstract myJsonAbs =
 			new MyJsonHandleFactory().createInstance(AppConf.class);
 			

@@ -137,9 +137,9 @@ public class DBJdbcTab extends Tab
 		Label      majorVerLbl = new Label("Major Version:");
 		Label      minorVerLbl = new Label("Minor Version:");
 		this.majorVerTxt.setEditable(false);
-		this.majorVerTxt.setPrefWidth(20);
+		this.majorVerTxt.setPrefWidth(30);
 		this.minorVerTxt.setEditable(false);
-		this.minorVerTxt.setPrefWidth(20);
+		this.minorVerTxt.setPrefWidth(30);
 		this.driverTableView = new SqlTableView(this.dbView);
 
 		HBox hBoxVer = new HBox(2);

@@ -13,6 +13,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.sql.SQLException;
 import java.text.MessageFormat;
+import javax.crypto.SecretKey;
 
 import javafx.scene.control.TabPane;
 import javafx.scene.control.Alert.AlertType;
@@ -24,13 +25,14 @@ import javafx.stage.Window;
 import javafx.application.Application;
 import javafx.application.Platform;
 
+import milu.file.ext.MyFileExtAbstract;
+import milu.file.ext.MyFileExtFactory;
 import milu.file.json.MyJsonHandleAbstract;
 import milu.file.json.MyJsonHandleFactory;
+import milu.gui.ctrl.common.DraggingTabPaneSupport;
 import milu.gui.dlg.MyAlertDialog;
 import milu.gui.dlg.db.DBSettingDialog;
 import milu.gui.view.DBView;
-import milu.tool.MyTool;
-import milu.gui.ctrl.common.DraggingTabPaneSupport;
 
 import milu.db.MyDBAbstract;
 import milu.db.driver.DriverClassConst;
@@ -38,6 +40,8 @@ import milu.db.driver.DriverShim;
 import milu.db.driver.LoadDriver;
 import milu.entity.schema.SchemaEntity;
 import milu.entity.schema.search.ChangeLangSchemaEntityVisitor;
+import milu.security.MySecurityKey;
+import milu.tool.MyTool;
 
 public class MainController
 {
@@ -46,6 +50,9 @@ public class MainController
 	
 	// Application Configuration
 	private AppConf  appConf = new AppConf();
+	
+	// Key for encryption
+	private SecretKey secretKey = null;
 	
 	// DB Connection <=> DBView List Map
 	//             1 <=> N
@@ -67,6 +74,7 @@ public class MainController
 		this.loadImages();
 		this.loadAppConf();
 		this.loadDriver();
+		this.loadKey();
 		this.createNewDBConnectionAndOpenNewWindow();
 	}
 	
@@ -400,6 +408,34 @@ public class MainController
 		);
 	}
 	
+	private void loadKey()
+	{
+		File keyFile = new File(AppConst.KEY_FILE.val());
+		MyFileExtAbstract<SecretKey> myFileExtAbs = 
+			MyFileExtFactory.getInstance(MyFileExtFactory.TYPE.SERIALIZE);
+		try
+		{
+			this.secretKey = myFileExtAbs.load(keyFile, SecretKey.class );
+			if ( this.secretKey != null )
+			{
+				return;
+			}
+			
+			SecretKey keyTmp = new MySecurityKey().createKey();
+			myFileExtAbs.save( keyFile, keyTmp );
+			this.secretKey = keyTmp;
+		}
+		catch ( Exception ex )
+		{
+			this.showException(ex);
+		}
+	}
+	
+	public SecretKey getSecretKey()
+	{
+		return this.secretKey;
+	}
+	
 	private void closeAllDB()
 	{
 		// close DB connection
@@ -563,8 +599,8 @@ public class MainController
 	 * http://www.oracle.com/technetwork/java/javase/java8locales-2095355.html
 	 * 
 	 * @langCode
-	 *    ex. en_US
-	 *        ja_JP
+	 *    ex. ja => Japanese
+	 *        en => English
 	 *********************************
 	 */
 	public void changeLang( String langCode )
