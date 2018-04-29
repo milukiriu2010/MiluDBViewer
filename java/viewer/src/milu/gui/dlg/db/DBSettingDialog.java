@@ -27,12 +27,10 @@ import javafx.scene.control.TreeItem;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Tooltip;
-import javafx.scene.control.SplitPane;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 
 import javafx.geometry.Insets;
-import javafx.geometry.Orientation;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
@@ -87,7 +85,7 @@ public class DBSettingDialog extends Dialog<MyDBAbstract>
 	private Pane  driverCtrlPane = null; 
 	
 	// ----------------------------------------
-	// [Pane on Dialog(1)]-[Left]
+	// [Pane on Dialog(1)]-[Center]
 	// ----------------------------------------
 	private PathTreeView  pathTreeView = new PathTreeView();
 	
@@ -98,7 +96,7 @@ public class DBSettingDialog extends Dialog<MyDBAbstract>
 	private Button  btnDelFolder = new Button();
 	
 	// ----------------------------------------
-	// [Pane on Dialog(1)]-[Center]
+	// [Pane on Dialog(1)]-[Right]
 	// ----------------------------------------
 	// DB Type List
 	private ObservableList<MyDBAbstract>  dbTypeLst = null;
@@ -112,14 +110,14 @@ public class DBSettingDialog extends Dialog<MyDBAbstract>
 	// field for password
 	private PasswordField passwordTextField = new PasswordField();
 	
-	// VBox on "Center" of BorderPane
-	private VBox       vBoxCenter    = new VBox(2);
+	// VBox for DB Connection Nodes
+	private VBox       vBoxConnection    = new VBox(2);
 	
 	// UrlPaneAbstract Map
 	private Map<MyDBAbstract,UrlPaneAbstract>  urlPaneAbsMap = new HashMap<>();
 	
 	// ----------------------------------------
-	// [Pane on Dialog(1)]-[Right]
+	// [Pane on Dialog(1)]-[Top]
 	// ----------------------------------------
 	
 	// Button to add "New Driver"
@@ -147,7 +145,7 @@ public class DBSettingDialog extends Dialog<MyDBAbstract>
 		this.setTitle( langRB.getString( "TITLE_DB_SETTING" ) );
 		
 		// ----------------------------------------
-		// [Pane on Dialog(1)]-[Left]
+		// [Pane on Dialog(1)]-[Center]
 		// ----------------------------------------
 		// create DB setting folder, if not exist.
 		File rootDir = new File( AppConst.DB_DIR.val() );
@@ -184,7 +182,7 @@ public class DBSettingDialog extends Dialog<MyDBAbstract>
 		vBoxPathTreeView.getChildren().addAll( hBoxBtn, this.pathTreeView );
 		
 		// ----------------------------------------
-		// [Pane on Dialog(1)]-[Center]
+		// [Pane on Dialog(1)]-[Right]
 		// ----------------------------------------
 		// ComboBox for DB type(Oracle/MySQL/PostgreSQL...)
 		List<MyDBAbstract> myDBAbsLst = new ArrayList<MyDBAbstract>();
@@ -240,30 +238,23 @@ public class DBSettingDialog extends Dialog<MyDBAbstract>
 		paneDBOpt.add( this.usernameTextField, 1, 2 );
 		paneDBOpt.add( new Label( langRB.getString( "LABEL_PASSWORD" )), 0, 3 );
 		paneDBOpt.add( this.passwordTextField, 1, 3 );
+
+		this.vBoxConnection.getChildren().add( paneDBOpt );
 		
 		// -------------------------------------
-		// Right on BorderPane
+		// Top on BorderPane
 		// -------------------------------------
 		this.btnAddDriver.setText( langRB.getString("BTN_ADD_DRIVER") );
 		this.btnEditDriver.setText( langRB.getString("BTN_EDIT_DRIVER") );
-		VBox vBoxRight = new VBox(2);
-		vBoxRight.getChildren().addAll( this.btnAddDriver, this.btnEditDriver );
-		
-		// -------------------------------------
-		// SplitPane
-		// -------------------------------------
-		SplitPane centerPane = new SplitPane();
-		centerPane.setOrientation(Orientation.HORIZONTAL);
-		centerPane.getItems().addAll( vBoxPathTreeView, this.vBoxCenter );
-		centerPane.setDividerPositions( 0.4f, 0.6f );
+		HBox hBoxTop = new HBox(2);
+		hBoxTop.setSpacing(10);
+		hBoxTop.getChildren().addAll( this.btnAddDriver, this.btnEditDriver );
 		
 		// pane for Dialog
-		this.vBoxCenter.getChildren().add( paneDBOpt );
-		//BorderPane.setMargin(vBoxPathTreeView,new Insets(10,10,10,10));
-		//this.brdPane.setLeft(vBoxPathTreeView);
-		//this.brdPane.setCenter( this.vBoxCenter );
-		this.brdPane.setCenter( centerPane );
-		this.brdPane.setRight( vBoxRight );
+		BorderPane.setMargin(vBoxPathTreeView,new Insets(10,10,10,10));
+		this.brdPane.setCenter(vBoxPathTreeView);
+		this.brdPane.setRight( this.vBoxConnection );
+		this.brdPane.setTop( hBoxTop );
 		
 		// set pane on dialog
 		this.getDialogPane().setContent( this.brdPane );
@@ -280,7 +271,7 @@ public class DBSettingDialog extends Dialog<MyDBAbstract>
 		AbsPaneFactory paneFactory = new UrlPaneFactory();
 		UrlPaneAbstract urlPaneAbs = paneFactory.createPane( this, this.mainCtrl, selectedMyDBAbs );
 		this.urlPaneAbsMap.put( selectedMyDBAbs, urlPaneAbs );
-		this.vBoxCenter.getChildren().add( urlPaneAbs );
+		this.vBoxConnection.getChildren().add( urlPaneAbs );
 		
 		// Create Pane for DriverControl
 		this.driverCtrlPane = new DriverControlPane( this.mainCtrl, this );
@@ -456,11 +447,16 @@ public class DBSettingDialog extends Dialog<MyDBAbstract>
 							myJsonAbs.open(path.toString());
 							try
 							{
+								myDBAbs.setPasswordEnc(this.mainCtrl.getSecretKey());
 								myJsonAbs.save(myDBAbs);
 							}
 							catch ( IOException ioEx )
 							{
 								this.showException(ioEx);
+							}
+							catch ( Exception ex )
+							{
+								this.showException(ex);
 							}
 						}
 					}
@@ -515,14 +511,14 @@ public class DBSettingDialog extends Dialog<MyDBAbstract>
 		System.out.println( "@@@@@@@@@@ setUrlPane @@@@@@@@@" );
 		System.out.println( "newVal1:" + newVal );
 		System.out.println( "url1:" + newVal.getUrl() + "|" );
-		ListIterator<Node> nodeLstIterator = this.vBoxCenter.getChildren().listIterator();
+		ListIterator<Node> nodeLstIterator = this.vBoxConnection.getChildren().listIterator();
 		while ( nodeLstIterator.hasNext() )
 		{
 			Node node = nodeLstIterator.next();
 			if ( node instanceof UrlPaneAbstract )
 			{
 				//UrlPaneAbstract urlPaneAbs1 = (UrlPaneAbstract)node;
-				this.vBoxCenter.getChildren().remove( node );
+				this.vBoxConnection.getChildren().remove( node );
 				
 				UrlPaneAbstract urlPaneAbs2 = null;
 				// ReUse object, if selected before.
@@ -540,7 +536,7 @@ public class DBSettingDialog extends Dialog<MyDBAbstract>
 				System.out.println( "newVal2:" + newVal );
 				System.out.println( "url2:" + newVal.getUrl() + "|" );
 				urlPaneAbs2.init();
-				this.vBoxCenter.getChildren().add( urlPaneAbs2 );
+				this.vBoxConnection.getChildren().add( urlPaneAbs2 );
 				break;
 			}
 		}
@@ -553,7 +549,7 @@ public class DBSettingDialog extends Dialog<MyDBAbstract>
 	// "OK" Button Event
 	private void setActionBtnOK( ActionEvent event )
 	{
-		ListIterator<Node> nodeLstIterator = this.vBoxCenter.getChildren().listIterator();
+		ListIterator<Node> nodeLstIterator = this.vBoxConnection.getChildren().listIterator();
 		while ( nodeLstIterator.hasNext() )
 		{
 			Node node = nodeLstIterator.next();
@@ -688,6 +684,7 @@ public class DBSettingDialog extends Dialog<MyDBAbstract>
 			if ( obj instanceof MyDBAbstract )
 			{
 				MyDBAbstract myDBAbsTmp = (MyDBAbstract)obj;
+				myDBAbsTmp.setPassword(this.mainCtrl.getSecretKey());
 				System.out.println( "Class[" + myDBAbsTmp.getClass().toString() + "]" );
 				System.out.println( "User [" + myDBAbsTmp.getUsername() + "]" );
 				System.out.println( "URL  [" + myDBAbsTmp.getUrl() + "]" );

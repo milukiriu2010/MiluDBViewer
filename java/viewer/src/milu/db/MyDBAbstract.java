@@ -4,8 +4,17 @@ import java.util.Map;
 import java.util.HashMap;
 import java.util.Properties;
 
+import javax.crypto.SecretKey;
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
+
 import com.google.gson.annotations.Expose;
 
+import java.io.UnsupportedEncodingException;
+import java.security.InvalidAlgorithmParameterException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.Statement;
@@ -16,6 +25,8 @@ import milu.db.driver.DriverShim;
 
 import milu.entity.schema.SchemaEntity;
 import milu.entity.schema.SchemaEntityFactory;
+
+import milu.security.MySecurityKey;
 
 abstract public class MyDBAbstract
 	implements
@@ -30,8 +41,16 @@ abstract public class MyDBAbstract
 	protected String  username = null;
 	
 	// DB Password
-	@Expose(serialize = true, deserialize = true)
+	@Expose(serialize = false, deserialize = true)
 	protected String  password = null;
+
+	// DB Password(Encrypted)
+	@Expose(serialize = true, deserialize = true)
+	protected String  passwordEnc = null;
+	
+	// Initial Vector
+	@Expose(serialize = true, deserialize = true)
+	protected byte[]  iv = null;
 	
 	// JDBC Driver
 	@Expose(serialize = true, deserialize = true)
@@ -145,6 +164,70 @@ abstract public class MyDBAbstract
 		this.password = password;
 	}
 	
+	public void setPassword( SecretKey secretKey )
+		throws 
+			NoSuchAlgorithmException, 
+			NoSuchPaddingException,
+			InvalidKeyException,
+			InvalidAlgorithmParameterException,
+			BadPaddingException,
+			IllegalBlockSizeException,
+			UnsupportedEncodingException
+	{
+		if ( secretKey == null )
+		{
+			return;
+		}
+		if ( this.passwordEnc == null )
+		{
+			return;
+		}
+		if ( this.iv == null )
+		{
+			return;
+		}
+		
+		MySecurityKey mySecKey = new MySecurityKey();
+		this.password = mySecKey.decrypt(secretKey, this.iv, this.passwordEnc );
+		//System.out.println( "Decode:before:" + this.passwordEnc );
+		//System.out.println( "Decode:after :" + this.password );
+	}
+	
+	public String getPasswordEnc()
+	{
+		return this.passwordEnc;
+	}
+	
+	public void setPasswordEnc( SecretKey secretKey )
+		throws 
+			NoSuchAlgorithmException, 
+			NoSuchPaddingException,
+			InvalidKeyException,
+			InvalidAlgorithmParameterException,
+			BadPaddingException,
+			IllegalBlockSizeException
+	{
+		if ( secretKey == null )
+		{
+			return;
+		}
+		if ( this.password == null )
+		{
+			return;
+		}
+		
+		MySecurityKey mySecKey = new MySecurityKey();
+		this.iv = mySecKey.createIV();
+		this.passwordEnc = mySecKey.encrypt( secretKey, this.iv, password );
+		//System.out.println( "Encode:before:" + this.password );
+		//System.out.println( "Encode:after :" + this.passwordEnc );
+	}
+	
+	public byte[] getIV()
+	{
+		return this.iv;
+	}
+	
 	/***********************************************
 	 * Get DB URL
 	 ***********************************************
@@ -158,12 +241,6 @@ abstract public class MyDBAbstract
 		}
 		else
 		{
-			/*
-				StringBuffer sb = new StringBuffer("?");
-				this.dbOpts.forEach( (k,v)->sb.append(k+"="+v+"&") );
-				sb.deleteCharAt(sb.length()-1);
-				return this.url + sb.toString();
-			 */
 			StringBuffer sb = ( this.url != null && this.url.contains("?") == false ) ? new StringBuffer("?"):new StringBuffer("");
 			this.dbOpts.forEach
 			( 

@@ -72,7 +72,7 @@
 @rem === Start App ================================
 @rem ==============================================
 :exec
-  "%MYJAVA%" -classpath %MYCLASSPATH% milu.main.MiluDBViewer
+  "%MYJAVA%" -classpath %MYCLASSPATH% -jar MiluDBViewer.jre9.jar milu.main.MiluDBViewer
   @goto end_batch
 
 :end_batch

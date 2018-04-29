@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!-- https://github.com/oracle/oracle-db-examples/blob/master/java/jdbc/ConnectionManagementSamples/build.xml -->
 <!-- https://ant.apache.org/manual/tutorial-HelloWorldWithAnt.html -->
-<project name="MiluDBViewer0.1.4.jre9" default="compile">
+<project name="MiluDBViewer.jre9" default="compile">
     <property name="build.dir"     value="../build" />
 	<property name="src.dir"       location="../src" />
 	<property name="lib.dir"       location="../lib" />
@@ -35,7 +35,7 @@
 		<delete dir="${build.dir}" />
 	</target>
 	
-	<target name="jar" depends="compile">
+	<target name="jar" depends="clean,compile">
 		<!--
 		<copy todir="${build.dir}/milu/conf">
 			<fileset dir="${src.dir}/conf" />
@@ -77,5 +77,6 @@
 		<chmod file="${build.dir}/*.sh" perm="755" />
 		<!-- chmod file="${build.dir}/*.bat" perm="755" / -->
 		
+		<delete dir="${build.dir}/milu" />
 	</target>
 </project>

@@ -1,19 +1,18 @@
 package milu.security;
 
+import java.util.Base64;
+import java.io.UnsupportedEncodingException;
+
 import javax.crypto.Cipher;
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
-
-import java.io.UnsupportedEncodingException;
-
 import javax.crypto.NoSuchPaddingException;
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 
 import java.security.SecureRandom;
-import java.util.Base64;
 import java.security.NoSuchAlgorithmException;
 import java.security.InvalidKeyException;
 import java.security.InvalidAlgorithmParameterException;
@@ -51,7 +50,7 @@ public class MySecurityKey
 	}
 	
 	public String encrypt( SecretKey secretKey, byte[] iv, String plainText )
-			throws 
+		throws 
 			NoSuchAlgorithmException, 
 			NoSuchPaddingException,
 			InvalidKeyException,
@@ -86,7 +85,7 @@ public class MySecurityKey
         return b64;
 	}
 	
-	public String decrypt(String text64)
+	public String decrypt( SecretKey secretKey, byte[] iv, String text64 )
 		throws 
 			NoSuchAlgorithmException, 
 			NoSuchPaddingException,
@@ -96,7 +95,10 @@ public class MySecurityKey
 			IllegalBlockSizeException,
 			UnsupportedEncodingException
 	{
-        byte[] cipher_byte = Base64.getDecoder().decode(text64.getBytes() );
+		this.secretKey = secretKey;
+		this.iv        = iv;
+		
+        byte[] cipher_byte = Base64.getDecoder().decode(text64.getBytes());
         byte[] plain_byte = this.crypt( cipher_byte, MODE.DECRYPT );
         
         // Get last byte for PKCS5Padding

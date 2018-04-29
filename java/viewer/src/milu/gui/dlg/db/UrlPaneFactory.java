@@ -18,7 +18,8 @@ class UrlPaneFactory implements AbsPaneFactory
 		
 		if ( myDBAbs instanceof MyDBPostgres )
 		{
-			urlPaneAbs = new UrlPanePostgres();
+			//urlPaneAbs = new UrlPanePostgres();
+			urlPaneAbs = new UrlPaneBasic();
 		}
 		else if ( myDBAbs instanceof MyDBMySQL )
 		{
