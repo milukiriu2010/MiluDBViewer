@@ -10,6 +10,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
 import milu.gui.ctrl.common.inf.ChangeLangInterface;
+import milu.gui.ctrl.schema.DBSchemaTab;
 import milu.gui.view.DBView;
 import milu.main.MainController;
 import milu.tool.MyTool;
@@ -161,7 +162,8 @@ public class MainToolBar extends ToolBar
 		this.btnCopyTblWithHead.setOnAction( (event)->{ this.dbView.copyTableWithHead(); } );
 		
 		// "Open Schema View" button clicked
-		this.btnSchema.setOnAction( (event)->{ this.dbView.openSchemaView(); } );
+		//this.btnSchema.setOnAction( (event)->{ this.dbView.openSchemaView(); } );
+		this.btnSchema.setOnAction( (event)->{ this.dbView.openView(DBSchemaTab.class); } );
 		// disable until finishing to get schema list.
 		this.btnSchema.setDisable(true);
 	}

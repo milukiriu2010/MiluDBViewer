@@ -178,7 +178,7 @@ abstract public class MyDBAbstract
 		{
 			return;
 		}
-		if ( this.passwordEnc == null )
+		if ( this.passwordEnc == null || this.passwordEnc.length() == 0 )
 		{
 			return;
 		}
@@ -211,7 +211,7 @@ abstract public class MyDBAbstract
 		{
 			return;
 		}
-		if ( this.password == null )
+		if ( this.password == null || this.password.length() == 0 )
 		{
 			return;
 		}

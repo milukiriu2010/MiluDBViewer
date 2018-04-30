@@ -20,6 +20,7 @@ import javafx.scene.input.KeyCombination;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 import milu.gui.ctrl.common.inf.ChangeLangInterface;
+import milu.gui.ctrl.jdbc.DBJdbcTab;
 import milu.gui.dlg.SystemInfoDialog;
 import milu.gui.dlg.VersionDialog;
 import milu.gui.dlg.app.AppSettingDialog;
@@ -303,7 +304,8 @@ public class MainMenuBar extends MenuBar
 		// [Help]
 		//   - [JDBC Info] menu clicked
 		// ----------------------------------------------
-		this.menuItemJDBC.setOnAction( (event)->this.dbView.openJdbcView() );
+		//this.menuItemJDBC.setOnAction( (event)->this.dbView.openJdbcView() );
+		this.menuItemJDBC.setOnAction( (event)->this.dbView.openView( DBJdbcTab.class ) );
 		
 		// ----------------------------------------------
 		// [Help]

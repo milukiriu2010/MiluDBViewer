@@ -386,7 +386,7 @@ public class DBJdbcTab extends Tab
 	@Override
 	public void copyTableNoHead()
 	{
-		
+		this.driverTableView.copyTableNoHead();
 	}
 	
 	/**
@@ -395,6 +395,7 @@ public class DBJdbcTab extends Tab
 	@Override
 	public void copyTableWithHead()
 	{
+		this.driverTableView.copyTableWithHead();
 	}
 	
 	/**************************************************

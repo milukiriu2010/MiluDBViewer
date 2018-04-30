@@ -24,9 +24,7 @@ import milu.gui.ctrl.common.inf.RefreshInterface;
 import milu.gui.ctrl.common.inf.ToggleHorizontalVerticalInterface;
 import milu.gui.ctrl.menu.MainMenuBar;
 import milu.gui.ctrl.menu.MainToolBar;
-import milu.gui.ctrl.jdbc.DBJdbcTab;
 import milu.gui.ctrl.query.DBSqlScriptTab;
-import milu.gui.ctrl.schema.DBSchemaTab;
 import milu.gui.dlg.MyAlertDialog;
 import milu.main.MainController;
 import milu.db.MyDBAbstract;
@@ -457,6 +455,7 @@ public class DBView extends Stage
 	 * Open Schema View 
 	 ********************************
 	 */
+	/*
 	public void openSchemaView()
 	{
 		// https://www.mkyong.com/java8/java-8-streams-filter-examples/
@@ -475,7 +474,7 @@ public class DBView extends Stage
 		}
 		else
 		{
-			// Create DBSchemaTab, if it doesn't exist.
+			// Create DBchemaTab, if it doesn't exist.
 			final Tab newTab = new DBSchemaTab( this );
 			this.tabPane.getTabs().add( newTab );
 			this.tabPane.getSelectionModel().select( newTab );
@@ -488,12 +487,13 @@ public class DBView extends Stage
 			((FocusInterface)tab).setFocus();
 		}
 	}
-
+	*/
 	
 	/********************************
 	 * Open JDBC View 
 	 ********************************
 	 */
+	/*
 	public void openJdbcView()
 	{
 		// https://www.mkyong.com/java8/java-8-streams-filter-examples/
@@ -524,8 +524,8 @@ public class DBView extends Stage
 			((FocusInterface)tab).setFocus();
 		}
 	}
+	*/
 	
-	/*
 	public void openView( Class<?> castClazz )
 	{
 		// https://www.mkyong.com/java8/java-8-streams-filter-examples/
@@ -545,19 +545,19 @@ public class DBView extends Stage
 		{
 			// Create "castClazz" Tab, if it doesn't exist.
 			//final Tab newTab = new DBJdbcTab( this );
-			final Tab newTab = castClazz.getDeclaredConstructor().newInstance();
+			//final Tab newTab = castClazz.getDeclaredConstructor().newInstance();
+			final Tab newTab = TabFactory.getInstance( this, castClazz );
 			this.tabPane.getTabs().add( newTab );
 			this.tabPane.getSelectionModel().select( newTab );
 			this.Go();
 			tab = newTab;
 		}
 		
-		if ( tab instanceof FocusInterface)
+		if ( tab instanceof FocusInterface )
 		{
 			((FocusInterface)tab).setFocus();
 		}
 	}
-	*/
 	
 	public void commit()
 	{
