@@ -41,6 +41,10 @@ public class MyDBFactory
 			{
 				myDBAbs = new MyDBSQLServer();
 			}
+			else if ( DriverClassConst.CLASS_NAME_SQLITE.val().equals(driverShim.getDriverClassName()) )
+			{
+				myDBAbs = new MyDBSQLite();
+			}
 			else
 			{
 				myDBAbs = new MyDBGeneral();

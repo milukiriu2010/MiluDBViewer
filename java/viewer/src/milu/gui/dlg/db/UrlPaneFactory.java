@@ -8,6 +8,7 @@ import milu.db.MyDBMySQL;
 import milu.db.MyDBOracle;
 import milu.db.MyDBCassandra;
 import milu.db.MyDBSQLServer;
+import milu.db.MyDBSQLite;
 
 class UrlPaneFactory implements AbsPaneFactory 
 {
@@ -18,12 +19,10 @@ class UrlPaneFactory implements AbsPaneFactory
 		
 		if ( myDBAbs instanceof MyDBPostgres )
 		{
-			//urlPaneAbs = new UrlPanePostgres();
 			urlPaneAbs = new UrlPaneBasic();
 		}
 		else if ( myDBAbs instanceof MyDBMySQL )
 		{
-			//urlPaneAbs = new UrlPaneMySQL();
 			urlPaneAbs = new UrlPaneBasic();
 		}
 		else if ( myDBAbs instanceof MyDBOracle )
@@ -37,6 +36,10 @@ class UrlPaneFactory implements AbsPaneFactory
 		else if ( myDBAbs instanceof MyDBSQLServer )
 		{
 			urlPaneAbs = new UrlPaneBasic();
+		}
+		else if ( myDBAbs instanceof MyDBSQLite )
+		{
+			urlPaneAbs = new UrlPaneBasicFile();
 		}
 		else
 		{

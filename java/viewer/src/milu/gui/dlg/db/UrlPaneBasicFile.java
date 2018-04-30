@@ -1,5 +1,6 @@
 package milu.gui.dlg.db;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.ResourceBundle;
@@ -12,6 +13,7 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.Tooltip;
 import javafx.scene.control.Dialog;
 import javafx.scene.image.ImageView;
 import javafx.scene.control.Button;
@@ -19,14 +21,16 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.application.Application;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
-import milu.gui.ctrl.common.PersistentButtonToggleGroup;
 import milu.db.MyDBAbstract;
 import milu.db.driver.DriverShim;
+import milu.gui.ctrl.common.PersistentButtonToggleGroup;
 import milu.main.MainController;
+import milu.tool.MyTool;
 
-public class UrlPanePostgres extends UrlPaneAbstract
+public class UrlPaneBasicFile extends UrlPaneAbstract
 {
 	private Dialog<?>      dlg            = null;
 	
@@ -50,11 +54,7 @@ public class UrlPanePostgres extends UrlPaneAbstract
 	// field for DB Name
 	private TextField dbnameTextField   = new TextField();
 	
-	// field for Host/IPAddress
-	private TextField hostTextField     = new TextField();
-	
-	// field for Port
-	private TextField portTextField     = new TextField();
+	private Button  btnOpen  = new Button();
 	
 	// ----------------------------------------------------
 	// Items for "FreeHand"
@@ -72,13 +72,14 @@ public class UrlPanePostgres extends UrlPaneAbstract
 	private TextArea  urlTextArea       = new TextArea();
 	
 	@Override
-	public void createPane( Dialog<?> dlg, MainController mainCtrl, MyDBAbstract myDBAbs )
+	void createPane( Dialog<?> dlg, MainController mainCtrl, MyDBAbstract myDBAbs )
 	{
 		this.dlg       = dlg;
 		this.mainCtrl  = mainCtrl;
 		this.myDBAbs   = myDBAbs;
 		
 		ResourceBundle extLangRB = this.mainCtrl.getLangResource("conf.lang.gui.dlg.db.DBSettingDialog");
+		ResourceBundle langRB = this.mainCtrl.getLangResource("conf.lang.gui.common.NodeName");
 		
 		// ToggleButton for Basic
 		this.tglBtnBasic.setText(extLangRB.getString("TOGGLE_BASIC"));
@@ -97,15 +98,9 @@ public class UrlPanePostgres extends UrlPaneAbstract
 		// ----------------------------------------------------
 		Map<String,String> dbOptsAux = this.myDBAbs.getDBOptsAux();
 		this.dbnameTextField.setText( dbOptsAux.get("DBName") );
-		this.hostTextField.setText( dbOptsAux.get("Host") );
-		if ( dbOptsAux.containsKey("Port") )
-		{
-			this.portTextField.setText( dbOptsAux.get("Port") );
-		}
-		else
-		{
-			this.portTextField.setText( String.valueOf(myDBAbs.getDefaultPort()) );
-		}
+		
+		this.btnOpen.setGraphic( MyTool.createImageView( 16, 16, this.mainCtrl.getImage("file:resources/images/folder.png")) );
+		this.btnOpen.setTooltip( new Tooltip(langRB.getString( "TOOLTIP_OPEN_FILE" )) );
 
 		// ----------------------------------------------------
 		// get URL by Driver Info
@@ -115,7 +110,6 @@ public class UrlPanePostgres extends UrlPaneAbstract
 		// ----------------------------------------------------
 		// Items for "Free hand"
 		// ----------------------------------------------------
-		//this.tmplTextField.setText("jdbc:postgresql://host1:5432,host2:port2/database[?targetServerType=master]");
 		this.tmplTextField.setText( driverShim.getTemplateUrl() );
 		this.tmplTextField.setEditable(false);
 
@@ -123,11 +117,11 @@ public class UrlPanePostgres extends UrlPaneAbstract
 		ivCopy.setFitWidth(16);
 		ivCopy.setFitHeight(16);
 		this.tmplBtn.setGraphic(ivCopy);
+		this.tmplBtn.setTooltip( new Tooltip(langRB.getString( "TOOLTIP_COPY" )) );
 		
 		// ----------------------------------------------------
 		// Items for "All"
 		// ----------------------------------------------------
-		//this.lblUrl.setText( "https://jdbc.postgresql.org/documentation/head/connect.html" );
 		this.lblUrl.setText( driverShim.getReferenceUrl() );
 		this.lblUrl.setCursor( Cursor.HAND );
 		this.lblUrl.getStyleClass().add("DBSettingDialog_URL");
@@ -139,25 +133,23 @@ public class UrlPanePostgres extends UrlPaneAbstract
 	
 	void init()
 	{
-		System.out.println( "UrlPanePostgres.init." );
+		System.out.println( "UrlPaneBasicFile.init." );
 		Map<String,String> dbOptsAux = this.myDBAbs.getDBOptsAux();
 		if ( this.myDBAbs.getUrl() == null )
 		{
 			this.tglBtnBasic.setSelected(true);
 			this.setUrlTextArea();
-		}
+		}		
 		else if ( dbOptsAux.containsKey("DBName") )
 		{
 			this.dbnameTextField.setText( dbOptsAux.get("DBName") );
-			this.hostTextField.setText( dbOptsAux.get("Host") );
-			this.portTextField.setText( dbOptsAux.get("Port") );
 			this.tglBtnBasic.setSelected(true);
 			this.setUrlTextArea();
 		}
 		else
 		{
+			System.out.println( "url:" + this.myDBAbs.getUrl() );
 			this.urlTextArea.setText( this.myDBAbs.getUrl() );
-			//this.setUrlTextArea();
 			this.tglBtnFreeHand.setSelected(true);
 		}
 	}
@@ -195,39 +187,17 @@ public class UrlPanePostgres extends UrlPaneAbstract
 			}
 		);
 		
-		// --------------------------------------------
-		// Update urlTextField, when Host is changed
-		// --------------------------------------------
-		this.hostTextField.textProperty().addListener
+		this.btnOpen.setOnAction
 		(
-			(obs, oldVal, newVal) ->
+			(event)->
 			{
-				this.setUrlTextArea();
-			}
-		);
-		
-		// --------------------------------------------
-		// restriction for TextField "Port"
-		// https://stackoverflow.com/questions/15615890/recommended-way-to-restrict-input-in-javafx-textfield
-		// --------------------------------------------
-		this.portTextField.textProperty().addListener
-		(
-			(obs, oldVal, newVal) ->
-			{
-				if ( newVal == null )
+				FileChooser fc = new FileChooser();
+				File file = fc.showOpenDialog(this.getScene().getWindow());
+				if ( file == null )
 				{
+					return;
 				}
-				// "Numeric" or "No Input" are allowed.
-				else if ( newVal.length() == 0 )
-				{
-				}
-				// if alphabets or marks are input, back to previous input.
-				else if ( newVal.matches( "^[0-9]+$" ) == false )
-				{
-					((StringProperty)obs).setValue( oldVal );
-				}
-				
-				this.setUrlTextArea();
+				this.dbnameTextField.setText(file.getAbsolutePath());
 			}
 		);
 		
@@ -260,12 +230,10 @@ public class UrlPanePostgres extends UrlPaneAbstract
 		gridPane.setHgap( 5 );
 		gridPane.setVgap( 2 );
 		gridPane.setPadding( new Insets( 10, 10, 10, 10 ) );
-		gridPane.add( new Label( extLangRB.getString( "LABEL_DB_NAME" )) , 0, 0 );
+		gridPane.add( new Label( extLangRB.getString( "LABEL_FILE_NAME" )) , 0, 0 );
 		gridPane.add( this.dbnameTextField  , 1, 0 );
-		gridPane.add( new Label( extLangRB.getString( "LABEL_HOST_OR_IPADDRESS" )), 0, 1 );
-		gridPane.add( this.hostTextField    , 1, 1 );
-		gridPane.add( new Label( extLangRB.getString( "LABEL_PORT" )), 0, 2 );
-		gridPane.add( this.portTextField    , 1, 2 );
+		this.dbnameTextField.setPrefWidth(400);
+		gridPane.add( this.btnOpen          , 2, 0 );
 		
 		// Set default value on field for URL
 		this.setUrlTextArea();
@@ -312,8 +280,6 @@ public class UrlPanePostgres extends UrlPaneAbstract
 		if ( this.tglBtnBasic.isSelected() )
 		{
 			dbOptMap.put( "DBName"  , this.dbnameTextField.getText() );
-			dbOptMap.put( "Host"    , this.hostTextField.getText() );
-			dbOptMap.put( "Port"    , this.portTextField.getText() );
 			url = this.myDBAbs.getDriverUrl(dbOptMap,update);
 		}
 		else if ( this.tglBtnFreeHand.isSelected() )

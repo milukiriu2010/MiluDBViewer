@@ -134,6 +134,8 @@ abstract public class MyDBAbstract
 	 */
 	abstract public int getDefaultPort();
 	
+	abstract protected void setSchemaRoot();
+	
 	/***********************************************
 	 * Get DB User name
 	 ***********************************************
@@ -420,7 +422,7 @@ abstract public class MyDBAbstract
 		
 		this.conn.setAutoCommit( false );
 		
-		this.schemaRoot = SchemaEntityFactory.createInstance( this.url, SchemaEntity.SCHEMA_TYPE.ROOT );
+		this.setSchemaRoot();
 	}
 	
 	/**

@@ -4,6 +4,8 @@ import java.sql.SQLException;
 import java.util.Map;
 
 import milu.db.driver.DriverClassConst;
+import milu.entity.schema.SchemaEntity;
+import milu.entity.schema.SchemaEntityFactory;
 
 /**
  * 
@@ -66,5 +68,11 @@ public class MyDBCassandra extends MyDBAbstract
 	@Override
 	public void processAfterException() throws SQLException
 	{
+	}
+	
+	@Override
+	public void setSchemaRoot()
+	{
+		this.schemaRoot = SchemaEntityFactory.createInstance( this.url, SchemaEntity.SCHEMA_TYPE.ROOT );
 	}
 }

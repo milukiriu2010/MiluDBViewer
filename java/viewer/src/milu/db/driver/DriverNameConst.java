@@ -7,7 +7,8 @@ public enum DriverNameConst
 	DB_MYSQL("MySQL"),
 	DB_CASSANDRA1("Cassandra(zhicwu)"),
 	DB_CASSANDRA2("Cassandra(adejanovski)"),
-	DB_SQLSERVER("SQLServer")
+	DB_SQLSERVER("SQLServer"),
+	DB_SQLITE("SQLite")
 	;
 	
 	private String val = null;

@@ -1,0 +1,5 @@
+pragma table_info(m_country);
+
+pragma index_list(m_country);
+
+pragma index_info(sqlite_autoindex_m_country_1);

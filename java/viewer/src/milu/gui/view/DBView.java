@@ -8,6 +8,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import javafx.concurrent.Task;
 
 import java.sql.SQLException;
 import java.util.ResourceBundle;
@@ -28,7 +29,7 @@ import milu.gui.ctrl.query.DBSqlScriptTab;
 import milu.gui.dlg.MyAlertDialog;
 import milu.main.MainController;
 import milu.db.MyDBAbstract;
-import milu.task.collect.CollectAllTask;
+import milu.task.collect.CollectTaskFactory;
 
 public class DBView extends Stage
 	implements 
@@ -187,10 +188,17 @@ public class DBView extends Stage
 			(event)->
 			{
 				System.out.println( "dbView Shown." );
-				//final CollectTask collectTask = new CollectTask();
-				final CollectAllTask collectTask = new CollectAllTask();
+				/*
+				final CollectTaskBasic collectTask = new CollectTaskBasic();
 				collectTask.setMainController(this.mainCtrl);
 				collectTask.setMyDBAbstract(this.myDBAbs);
+				*/
+				
+				final Task<Exception> collectTask = CollectTaskFactory.getInstance( mainCtrl, myDBAbs );
+				if ( collectTask == null )
+				{
+					return;
+				}
 				// execute task
 				this.service.submit( collectTask );
 				
