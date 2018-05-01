@@ -49,7 +49,7 @@ public class SelectedItemHandlerRootMaterializedView extends SelectedItemHandler
 	}
 
 	@Override
-	protected void exec() 
+	public void exec() 
 		throws 
 			UnsupportedOperationException, 
 			SQLException

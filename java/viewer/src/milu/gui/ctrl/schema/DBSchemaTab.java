@@ -25,6 +25,7 @@ import milu.gui.ctrl.common.inf.ToggleHorizontalVerticalInterface;
 import milu.gui.ctrl.schema.SchemaTreeView;
 import milu.gui.ctrl.schema.handle.SelectedItemHandlerAbstract;
 import milu.gui.ctrl.schema.handle.SelectedItemHandlerChooser;
+import milu.gui.ctrl.schema.handle.SelectedItemHandlerFactory;
 import milu.gui.dlg.MyAlertDialog;
 
 public class DBSchemaTab extends Tab
@@ -66,7 +67,6 @@ public class DBSchemaTab extends Tab
 		
 		SplitPane splitPane = new SplitPane();
 		splitPane.setOrientation(Orientation.VERTICAL);
-		//splitPane.getItems().addAll( this.schemaTreeView, this.tabPane );
 		splitPane.getItems().addAll( this.upperPane, this.tabPane );
 		splitPane.setDividerPositions( 0.5f, 0.5f );
 		
@@ -74,7 +74,6 @@ public class DBSchemaTab extends Tab
 		brdPane.setCenter( splitPane );
 		
 		this.setContent( brdPane );
-		
 		
 		this.changeLang();
 	}
@@ -101,6 +100,7 @@ public class DBSchemaTab extends Tab
 		MyDBAbstract myDBAbs = this.dbView.getMyDBAbstract();
 		try
 		{
+			/*
 			SelectedItemHandlerChooser.exec
 			( 
 				this.schemaTreeView, 
@@ -109,6 +109,20 @@ public class DBSchemaTab extends Tab
 				myDBAbs, 
 				SelectedItemHandlerAbstract.REFRESH_TYPE.NO_REFRESH 
 			);
+			*/
+			SelectedItemHandlerAbstract handleAbs = 
+				SelectedItemHandlerFactory.getInstance
+				( 
+					this.schemaTreeView, 
+					this.tabPane, 
+					this.dbView,
+					myDBAbs, 
+					SelectedItemHandlerAbstract.REFRESH_TYPE.NO_REFRESH 
+				);
+			if ( handleAbs != null )
+			{
+				handleAbs.exec();
+			}
 		}
 		catch ( UnsupportedOperationException uoEx )
 		{

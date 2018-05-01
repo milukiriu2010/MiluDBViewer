@@ -52,7 +52,7 @@ public class SelectedItemHandlerEachPackageBody extends SelectedItemHandlerAbstr
 	}
 	
 	@Override
-	protected void exec()
+	public void exec()
 		throws
 			UnsupportedOperationException,
 			SQLException

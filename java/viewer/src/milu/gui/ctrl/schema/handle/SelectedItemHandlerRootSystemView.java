@@ -49,7 +49,7 @@ public class SelectedItemHandlerRootSystemView extends SelectedItemHandlerAbstra
 	}
 
 	@Override
-	protected void exec() 
+	public void exec() 
 		throws 
 			UnsupportedOperationException, 
 			SQLException

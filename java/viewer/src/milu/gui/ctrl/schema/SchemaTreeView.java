@@ -391,7 +391,7 @@ public class SchemaTreeView extends TreeView<SchemaEntity>
 			this.scrollTo(itemTargetId);
 		}
 	}
-	
+	/*
 	public void setInitialData( SchemaEntity rootEntity )
 	{
 		// create Root Item
@@ -428,6 +428,7 @@ public class SchemaTreeView extends TreeView<SchemaEntity>
 			}
 		}
 	}
+	*/
 	/*
 	public void setTableData( TreeItem<SchemaEntity> itemTarget, List<SchemaEntity> tableEntityLst )
 	{
@@ -464,6 +465,20 @@ public class SchemaTreeView extends TreeView<SchemaEntity>
 	*/
 	public void addEntityLst( TreeItem<SchemaEntity> itemTarget, List<SchemaEntity> schemaEntityLst, boolean isExpanded )
 	{
+		// create Root
+		if ( itemTarget == null && schemaEntityLst.size() == 1 )
+		{
+			SchemaEntity rootEntity = schemaEntityLst.get(0);
+			TreeItem<SchemaEntity> itemRoot = this.addItem( null, rootEntity );
+			itemRoot.setExpanded(isExpanded);
+			this.setRoot(itemRoot);
+			if ( rootEntity.getEntityLst().size() > 0 )
+			{
+				this.addEntityLst( itemRoot, rootEntity.getEntityLst(), false );
+			}
+			return;
+		}
+		
 		for ( SchemaEntity schemaEntity : schemaEntityLst )
 		{
 			// ---------------------------------------

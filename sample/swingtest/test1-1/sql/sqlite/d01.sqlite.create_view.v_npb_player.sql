@@ -3,7 +3,7 @@ as
 select
 	p.id		player_id,
 	p.team_id	team_id,
-	concat( t.head_waname, t.tail_waname )	team_name,
+	t.head_waname||t.tail_waname	team_name,
 	p.sei		sei,
 	p.mei		mei,
 	p.pos_id	pos_id,

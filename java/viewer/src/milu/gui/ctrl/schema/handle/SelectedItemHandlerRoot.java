@@ -1,6 +1,8 @@
 package milu.gui.ctrl.schema.handle;
 
 import java.sql.SQLException;
+import java.util.List;
+import java.util.ArrayList;
 
 import milu.entity.schema.SchemaEntity;
 
@@ -25,7 +27,7 @@ public class SelectedItemHandlerRoot extends SelectedItemHandlerAbstract
 	}
 	
 	@Override
-	protected void exec()
+	public void exec()
 		throws
 			UnsupportedOperationException,
 			SQLException
@@ -33,7 +35,10 @@ public class SelectedItemHandlerRoot extends SelectedItemHandlerAbstract
 		SchemaEntity rootEntity = this.myDBAbs.getSchemaRoot();
 		if ( rootEntity != null )
 		{
-			this.schemaTreeView.setInitialData( rootEntity );
+			//this.schemaTreeView.setInitialData( rootEntity );
+			List<SchemaEntity> schemaEntityLst = new ArrayList<>();
+			schemaEntityLst.add(rootEntity);
+			schemaTreeView.addEntityLst( null, schemaEntityLst, false );
 		}
 		
 	}

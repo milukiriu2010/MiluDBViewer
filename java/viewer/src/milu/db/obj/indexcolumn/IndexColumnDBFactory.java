@@ -8,6 +8,7 @@ import milu.db.MyDBMySQL;
 import milu.db.MyDBOracle;
 import milu.db.MyDBCassandra;
 import milu.db.MyDBSQLServer;
+import milu.db.MyDBSQLite;
 
 public class IndexColumnDBFactory implements ObjDBFactory
 {
@@ -34,6 +35,10 @@ public class IndexColumnDBFactory implements ObjDBFactory
 		else if ( myDBAbs instanceof MyDBSQLServer )
 		{
 			indexColumnDBAbs = new IndexColumnDBSQLServer();
+		}
+		else if ( myDBAbs instanceof MyDBSQLite )
+		{
+			indexColumnDBAbs = new IndexColumnDBSQLite();
 		}
 		else
 		{

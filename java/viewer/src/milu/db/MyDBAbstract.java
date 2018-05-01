@@ -24,7 +24,6 @@ import java.sql.SQLException;
 import milu.db.driver.DriverShim;
 
 import milu.entity.schema.SchemaEntity;
-import milu.entity.schema.SchemaEntityFactory;
 
 import milu.security.MySecurityKey;
 

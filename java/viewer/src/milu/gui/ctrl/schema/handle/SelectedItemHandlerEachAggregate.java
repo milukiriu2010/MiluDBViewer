@@ -48,7 +48,7 @@ public class SelectedItemHandlerEachAggregate extends SelectedItemHandlerAbstrac
 	}
 	
 	@Override
-	protected void exec()
+	public void exec()
 		throws
 			UnsupportedOperationException,
 			SQLException

@@ -108,7 +108,7 @@ abstract public class SelectedItemHandlerAbstract
 	
 	protected abstract boolean isMyResponsible();
 	
-	protected abstract void exec()
+	public abstract void exec()
 		throws
 			UnsupportedOperationException,
 			SQLException;

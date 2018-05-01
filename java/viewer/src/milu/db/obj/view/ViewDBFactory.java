@@ -7,6 +7,7 @@ import milu.db.MyDBPostgres;
 import milu.db.MyDBMySQL;
 import milu.db.MyDBOracle;
 import milu.db.MyDBSQLServer;
+import milu.db.MyDBSQLite;
 
 public class ViewDBFactory implements ObjDBFactory
 {
@@ -29,6 +30,10 @@ public class ViewDBFactory implements ObjDBFactory
 		else if ( myDBAbs instanceof MyDBSQLServer )
 		{
 			viewDBAbs = new ViewDBSQLServer();
+		}
+		else if ( myDBAbs instanceof MyDBSQLite )
+		{
+			viewDBAbs = new ViewDBSQLite();
 		}
 		else
 		{

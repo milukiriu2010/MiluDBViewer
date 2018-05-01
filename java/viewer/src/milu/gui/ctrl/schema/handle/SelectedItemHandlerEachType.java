@@ -54,7 +54,7 @@ public class SelectedItemHandlerEachType extends SelectedItemHandlerAbstract
 	}
 	
 	@Override
-	protected void exec()
+	public void exec()
 		throws
 			UnsupportedOperationException,
 			SQLException

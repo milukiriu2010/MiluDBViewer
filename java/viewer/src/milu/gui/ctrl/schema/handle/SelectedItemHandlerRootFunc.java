@@ -47,7 +47,7 @@ public class SelectedItemHandlerRootFunc extends SelectedItemHandlerAbstract
 	}
 
 	@Override
-	protected void exec() 
+	public void exec() 
 		throws 
 			UnsupportedOperationException, 
 			SQLException
