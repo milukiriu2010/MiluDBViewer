@@ -7,6 +7,7 @@ import milu.db.MyDBPostgres;
 import milu.db.MyDBMySQL;
 import milu.db.MyDBOracle;
 import milu.db.MyDBSQLServer;
+import milu.db.MyDBSQLite;
 
 public class FKDBFactory implements ObjDBFactory 
 {
@@ -29,6 +30,10 @@ public class FKDBFactory implements ObjDBFactory
 		else if ( myDBAbs instanceof MyDBSQLServer )
 		{
 			fkDBAbs = new FKDBSQLServer();
+		}
+		else if ( myDBAbs instanceof MyDBSQLite )
+		{
+			fkDBAbs = new FKDBSQLite();
 		}
 		else
 		{

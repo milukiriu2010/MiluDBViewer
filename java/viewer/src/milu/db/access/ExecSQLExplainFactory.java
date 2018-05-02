@@ -6,6 +6,7 @@ import milu.db.MyDBPostgres;
 import milu.db.MyDBMySQL;
 import milu.db.MyDBOracle;
 import milu.db.MyDBSQLServer;
+import milu.db.MyDBSQLite;
 import milu.main.AppConf;
 
 public class ExecSQLExplainFactory extends ExecSQLFactoryAbstract 
@@ -30,6 +31,10 @@ public class ExecSQLExplainFactory extends ExecSQLFactoryAbstract
 		else if ( myDBAbs instanceof MyDBSQLServer )
 		{
 			execSQLAbs = new ExecSQLExplainSQLServer();
+		}
+		else if ( myDBAbs instanceof MyDBSQLite )
+		{
+			execSQLAbs = new ExecSQLExplainSQLite();
 		}
 		else
 		{

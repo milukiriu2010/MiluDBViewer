@@ -38,7 +38,7 @@ public class SelectedItemHandlerRoot extends SelectedItemHandlerAbstract
 			//this.schemaTreeView.setInitialData( rootEntity );
 			List<SchemaEntity> schemaEntityLst = new ArrayList<>();
 			schemaEntityLst.add(rootEntity);
-			schemaTreeView.addEntityLst( null, schemaEntityLst, false );
+			schemaTreeView.addEntityLst( null, schemaEntityLst, true );
 		}
 		
 	}

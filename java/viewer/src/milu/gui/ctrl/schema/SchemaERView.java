@@ -85,6 +85,10 @@ public class SchemaERView extends ScrollPane
 			SearchSchemaEntityInterface searchSrcSchemaVisitor = new SearchSchemaEntityVisitorFactory().createInstance(SchemaEntity.SCHEMA_TYPE.SCHEMA, srcTableSchema );
 			rootEntity.accept(searchSrcSchemaVisitor);
 			SchemaEntity srcSchemaEntity = searchSrcSchemaVisitor.getHitSchemaEntity();
+			if ( srcSchemaEntity == null )
+			{
+				srcSchemaEntity = rootEntity;
+			}
 			
 			// Search SRC [TABLE]
 			SearchSchemaEntityInterface searchSrcTableVisitor = new SearchSchemaEntityVisitorFactory().createInstance(SchemaEntity.SCHEMA_TYPE.TABLE, srcTableName );
@@ -126,6 +130,10 @@ public class SchemaERView extends ScrollPane
 			SearchSchemaEntityInterface searchDstSchemaVisitor = new SearchSchemaEntityVisitorFactory().createInstance(SchemaEntity.SCHEMA_TYPE.SCHEMA, dstTableSchema );
 			rootEntity.accept(searchDstSchemaVisitor);
 			SchemaEntity dstSchemaEntity = searchDstSchemaVisitor.getHitSchemaEntity();
+			if ( dstSchemaEntity == null )
+			{
+				dstSchemaEntity = rootEntity;
+			}
 			
 			// Search DST [TABLE]
 			SearchSchemaEntityInterface searchDstTableVisitor = new SearchSchemaEntityVisitorFactory().createInstance(SchemaEntity.SCHEMA_TYPE.TABLE, dstTableName );

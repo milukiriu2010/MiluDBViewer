@@ -67,7 +67,7 @@ public class TriggerDBPostgres extends TriggerDBAbstract
 	{
 		String src = "";
 		
-		String sql = "select pg_get_functiondef('" + triggerName + "'::regproc) src";
+		String sql = "select pg_get_triggerdef('" + triggerName + "'::regproc) src";
 		
 		System.out.println( " -- getSRC(Trigger) -----------" );
 		System.out.println( sql );

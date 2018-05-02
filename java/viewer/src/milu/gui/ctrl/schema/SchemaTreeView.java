@@ -474,7 +474,7 @@ public class SchemaTreeView extends TreeView<SchemaEntity>
 			this.setRoot(itemRoot);
 			if ( rootEntity.getEntityLst().size() > 0 )
 			{
-				this.addEntityLst( itemRoot, rootEntity.getEntityLst(), false );
+				this.addEntityLst( itemRoot, rootEntity.getEntityLst(), true );
 			}
 			return;
 		}

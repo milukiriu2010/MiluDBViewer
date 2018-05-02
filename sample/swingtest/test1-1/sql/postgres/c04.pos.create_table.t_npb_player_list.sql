@@ -10,6 +10,7 @@ create table t_npb_player_list
     foreign key( pos_id )  references m_npb_position( id )   on update cascade on delete no action
 );
 
+alter table t_npb_player_list add foreign key( country_id ) references m_country( id )   on update cascade on delete no action;
 
 insert into t_npb_player_list
 values

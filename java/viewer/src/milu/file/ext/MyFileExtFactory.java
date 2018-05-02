@@ -4,7 +4,8 @@ public class MyFileExtFactory
 {
 	public enum TYPE
 	{
-		SERIALIZE
+		SERIALIZE,
+		TNSNAMES_ORACLE
 	}
 	
 	public static <T> MyFileExtAbstract<T> getInstance( MyFileExtFactory.TYPE type )
@@ -13,6 +14,10 @@ public class MyFileExtFactory
 		if ( MyFileExtFactory.TYPE.SERIALIZE.equals(type) )
 		{
 			myFileExtAbs = new MyFileExtSerialize<T>();
+		}
+		else if ( MyFileExtFactory.TYPE.TNSNAMES_ORACLE.equals(type) )
+		{
+			myFileExtAbs = new MyFileExtTnsNamesOra<T>();
 		}
 		
 		return myFileExtAbs;

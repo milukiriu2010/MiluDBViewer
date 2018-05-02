@@ -8,6 +8,7 @@ import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.RadioButton;
 import javafx.scene.layout.VBox;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.scene.Node;
 import milu.main.AppConf;
 import milu.main.MainController;
@@ -51,7 +52,7 @@ public class AppPaneDBConfMySQL extends AppPaneAbstract
 		this.lblTitle.setText( this.extLangRB.getString( "TITLE_DB_CONF_PANE_MYSQL" ) );
 		this.lblTitle.getStyleClass().add("AppPane_Label_Title");
 		
-		Label lblExplain = new Label("EXPLAIN");
+		//Label lblExplain = new Label("EXPLAIN");
 		
 		// Explain Extended
 		Label lblExtended  = new Label("EXTENDED");
@@ -133,6 +134,7 @@ public class AppPaneDBConfMySQL extends AppPaneAbstract
 		}
 		
 		// set objects
+		/*
 		VBox vBox = new VBox(2);
 		vBox.getChildren().addAll
 		( 
@@ -145,7 +147,24 @@ public class AppPaneDBConfMySQL extends AppPaneAbstract
 			lblFormat, 
 			hBoxFormat 
 		);
-		
+		*/
+		VBox vBoxExplain = new VBox(2);
+		vBoxExplain.getChildren().addAll
+		(
+			lblExtended,
+			hBoxExtended,
+			lblPartitions,
+			hBoxPartitions,
+			lblFormat, 
+			hBoxFormat 
+		);
+		Pane explainContent = new BorderedTitledPane( "EXPLAIN", vBoxExplain );
+		VBox vBox = new VBox(2);
+		vBox.getChildren().addAll
+		( 
+			this.lblTitle, 
+			explainContent
+		);
 		// put controls on pane
 		this.getChildren().addAll( vBox );
 	}

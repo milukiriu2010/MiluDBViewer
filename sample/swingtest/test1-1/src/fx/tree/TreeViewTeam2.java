@@ -35,6 +35,7 @@ public class TreeViewTeam2 extends Application
 		teamRoot.setName("プロ野球");
 		TreeItem<Team>  itemRoot = new TreeItem<>();
 		itemRoot.setValue(teamRoot);
+		itemRoot.setExpanded(true);
 		
 		Team teamCentral = new TeamBaseBall();
 		teamCentral.setName("セントラル・リーグ");

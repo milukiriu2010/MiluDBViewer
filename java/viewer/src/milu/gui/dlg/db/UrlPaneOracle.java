@@ -37,8 +37,8 @@ import javafx.stage.Stage;
 
 import milu.db.MyDBAbstract;
 import milu.db.driver.DriverShim;
-import milu.file.MyFileAbstract;
-import milu.file.MyFileFactory;
+import milu.file.ext.MyFileExtAbstract;
+import milu.file.ext.MyFileExtFactory;
 import milu.gui.ctrl.common.PersistentButtonToggleGroup;
 import milu.gui.dlg.MyAlertDialog;
 import milu.main.AppConf;
@@ -626,12 +626,14 @@ public class UrlPaneOracle extends UrlPaneAbstract
 			return tnsNameLst;
 		}
 		
-		MyFileAbstract myFileAbs = MyFileFactory.getInstance(file);
+		//MyFileAbstract myFileAbs = MyFileFactory.getInstance(file);
+		MyFileExtAbstract<String> myFileAbs = MyFileExtFactory.getInstance(MyFileExtFactory.TYPE.TNSNAMES_ORACLE);
 		
 		try
 		{
-			myFileAbs.open( file );
-			String strTNSFile = myFileAbs.load();
+			//myFileAbs.open( file );
+			//String strTNSFile = myFileAbs.load();
+			String strTNSFile = myFileAbs.load( file, String.class );
 			//System.out.println( "=== tnsnames.ora ===" );
 			//System.out.println( strTNSFile );
 			
@@ -660,6 +662,15 @@ public class UrlPaneOracle extends UrlPaneAbstract
     		MyAlertDialog alertDlg = new MyAlertDialog( AlertType.WARNING, this.mainCtrl );
     		alertDlg.setHeaderText( extLangRB.getString( "TITLE_FILE_NOT_FOUND" ) );
     		alertDlg.setTxtExp( ioEx );
+    		alertDlg.showAndWait();
+    	}
+		catch ( Exception ex )
+		{
+			ResourceBundle extLangRB = this.mainCtrl.getLangResource("conf.lang.gui.common.MyAlert");
+			
+    		MyAlertDialog alertDlg = new MyAlertDialog( AlertType.WARNING, this.mainCtrl );
+    		alertDlg.setHeaderText( extLangRB.getString( "TITLE_FILE_NOT_FOUND" ) );
+    		alertDlg.setTxtExp( ex );
     		alertDlg.showAndWait();
     	}
 		
