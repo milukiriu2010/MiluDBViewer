@@ -1,8 +1,10 @@
-## Welcome to GitHub Pages
+## Overview
 
-You can use the [editor on GitHub](https://github.com/milukiriu2010/MiluDBViewer/edit/master/README.md) to maintain and preview the content for your website in Markdown files.
-
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
+* GUI Tool to browse data, issue SQL commands on DB.
+* Supported DB: Oracle, PostgreSQL, MySQL, Cassandra, SQLite. Add more JDBC compliant DB in the future.
+* Multi Platform: Windows, Linux, MacOS.
+* Multi Language: English, French, Spanish, Chinese, Japanse.
+* Free and Open-Source.
 
 ### Markdown
 
