@@ -12,6 +12,7 @@ import javafx.scene.input.KeyCombination;
 import milu.gui.ctrl.common.inf.ChangeLangInterface;
 import milu.gui.ctrl.schema.DBSchemaTab;
 import milu.gui.view.DBView;
+import milu.gui.view.FadeView;
 import milu.main.MainController;
 import milu.tool.MyTool;
 import milu.db.access.ExecSQLAbstract;
@@ -138,10 +139,24 @@ public class MainToolBar extends ToolBar
 		this.btnExplain.setOnAction( event->this.dbView.execExplain() );
 		
 		// Commit button clicked
-		this.btnCommit.setOnAction(	(event)->this.dbView.commit() );
+		this.btnCommit.setOnAction
+		(	
+			(event)->
+			{
+				this.dbView.commit();
+				new FadeView( "Commit" );
+			}
+		);
 		
 		// Rollback button clicked
-		this.btnRollback.setOnAction(	(event)->this.dbView.rollback()	);
+		this.btnRollback.setOnAction
+		(	
+			(event)->
+			{
+				this.dbView.rollback();
+				new FadeView( "Rollback" );
+			}
+		);
 		
 		// "Toggle H/V" button clicked
 		this.btnToggleHV.setOnAction( (event)->{ this.dbView.switchDirection();	} );

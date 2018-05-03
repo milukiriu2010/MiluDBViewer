@@ -6,9 +6,11 @@ import java.sql.SQLException;
 import javafx.scene.control.SplitPane;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
+import javafx.scene.control.Label;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.Node;
 import javafx.application.Platform;
 import javafx.geometry.Orientation;
 
@@ -74,8 +76,29 @@ public class DBSchemaTab extends Tab
 		brdPane.setCenter( splitPane );
 		
 		this.setContent( brdPane );
+
+		// set icon on Tab
+		this.setGraphic( MyTool.createImageView( 16, 16, this.dbView.getMainController().getImage("file:resources/images/schema.png") ) );
+		
+		this.setAction();
 		
 		this.changeLang();
+	}
+	
+	private void setAction()
+	{
+		this.selectedProperty().addListener
+		(
+			(obs,oldval,newVal)->
+			{
+				if ( newVal == false )
+				{
+					return;
+				}
+				
+				this.setFocus();
+			}
+		);
 	}
 	
 	/**
@@ -226,12 +249,19 @@ public class DBSchemaTab extends Tab
 		MainController mainCtrl = this.dbView.getMainController();
 		ResourceBundle langRB = mainCtrl.getLangResource("conf.lang.gui.ctrl.schema.DBSchemaTab");
 		
-		// set icon on Tab
-		this.setGraphic( MyTool.createImageView( 16, 16, mainCtrl.getImage("file:resources/images/schema.png") ) );
 		
 		// Tab Title
-		this.setText( langRB.getString("TITLE_TAB") );
+		Node tabGraphic = this.getGraphic();
+		if ( tabGraphic instanceof Label )
+		{
+			((Label)tabGraphic).setText( langRB.getString("TITLE_TAB") );
+		}
+		else
+		{
+			this.setText( langRB.getString("TITLE_TAB") );
+		}
 		
 		this.schemaTreeView.changeLang();
+		this.schemaTreeView.refresh();
 	}
 }

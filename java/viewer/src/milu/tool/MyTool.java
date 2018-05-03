@@ -319,5 +319,15 @@ public class MyTool
 	    return new String(hexChars);
 	}
 
-	
+	public static <T> T cast( Object obj, Class<T> clazz )
+	{
+		try
+		{
+			return clazz.cast(obj);
+		}
+		catch ( ClassCastException ccEx )
+		{
+			return null;
+		}
+	}
 }

@@ -5,6 +5,8 @@ import java.util.ResourceBundle;
 
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
+import javafx.scene.control.cell.TextFieldTreeCell;
+import javafx.util.StringConverter;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.Label;
@@ -36,6 +38,8 @@ public class SchemaTreeView extends TreeView<SchemaEntity>
 	// children count of selected item
 	private Label lblChildrenCnt = new Label("*");
 	
+	private boolean isLoading = false;
+	
 	public SchemaTreeView( DBView dbView )
 	{
 		super();
@@ -61,6 +65,7 @@ public class SchemaTreeView extends TreeView<SchemaEntity>
 					// scroll, when "<=(arrow)" key is clicked. 
 					this.scrollToSelectedItem(newVal);
 					// set "children count" of selected item
+					this.lblChildrenCnt.textProperty().unbind();
 					this.lblChildrenCnt.textProperty().bind
 					(
 						Bindings.convert
@@ -275,6 +280,55 @@ public class SchemaTreeView extends TreeView<SchemaEntity>
 				}
 			}
 		);
+		
+		this.setCellFactory
+		(
+			(treeView)->
+			{
+				TextFieldTreeCell<SchemaEntity> treeCell = new TextFieldTreeCell<>();
+				treeCell.setConverter
+				(
+					new StringConverter<SchemaEntity>()
+					{
+						@Override
+						public String toString(SchemaEntity schemaEntity)
+						{
+							if ( isLoading == false )
+							{
+								return schemaEntity.toString();
+							}
+							else
+							{
+								return schemaEntity.toString() + "...Loading...";
+							}
+						}
+						
+						@Override
+						public SchemaEntity fromString( String str )
+						{
+							return null;
+						}
+					}
+				);
+				
+				
+				return treeCell;
+			}
+		);
+		/*
+		this.focusedProperty().addListener
+		(
+			(obs,oldVal,newVal)->
+			{
+				if ( newVal == false )
+				{
+					return;
+				}
+				
+				this.refresh();
+			}
+		);
+		*/
 	}
 	
 	// shift label position
@@ -339,6 +393,7 @@ public class SchemaTreeView extends TreeView<SchemaEntity>
 		        if ( obj instanceof TreeItem )
 		        {
 		        	TreeItem<SchemaEntity> itemTarget = (TreeItem<SchemaEntity>)obj;
+		        	//TreeItem<?> itemTarget = MyTool.cast(obj, TreeItem.class );
 		        	// itemTarget is set to the top of TreeView
 		        	scrollBack( itemTarget );
 		        }

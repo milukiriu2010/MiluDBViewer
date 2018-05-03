@@ -33,12 +33,18 @@ public class SelectedItemHandlerRoot extends SelectedItemHandlerAbstract
 			SQLException
 	{
 		SchemaEntity rootEntity = this.myDBAbs.getSchemaRoot();
-		if ( rootEntity != null )
+		if ( rootEntity.getEntityLst().size() > 0 )
 		{
-			//this.schemaTreeView.setInitialData( rootEntity );
-			List<SchemaEntity> schemaEntityLst = new ArrayList<>();
-			schemaEntityLst.add(rootEntity);
-			schemaTreeView.addEntityLst( null, schemaEntityLst, true );
+			if ( this.itemRoot == null )
+			{
+				List<SchemaEntity> schemaEntityLst = new ArrayList<>();
+				schemaEntityLst.add(rootEntity);
+				schemaTreeView.addEntityLst( null, schemaEntityLst, true );
+			}
+			else if ( this.itemSelected.getChildren().size() == 0 )
+			{
+				schemaTreeView.addEntityLst( this.itemSelected, rootEntity.getEntityLst(), true );
+			}
 		}
 		
 	}
