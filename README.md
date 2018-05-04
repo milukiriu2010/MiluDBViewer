@@ -13,10 +13,10 @@
 #### Run Script
 
 1. All SQL Results on "Result" Tab.
-![alt tag](java/viewer/snapshot/s01.result.png)
+![alt tag](java/viewer/screenshot/s01.result.png)
 
 2. Each SQL Result on "Script#" Tab.
-![alt tag](java/viewer/snapshot/s01.script7.png)
+![alt tag](java/viewer/screenshot/s01.script7.png)
 
 
 ```markdown
