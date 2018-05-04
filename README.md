@@ -1,22 +1,34 @@
 ## Overview
 
 * GUI Tool to browse data, issue SQL commands on DB.
-* Supported DB: Oracle, PostgreSQL, MySQL, Cassandra, SQLite. Add more JDBC compliant DB in the future.
+* Supported DB: Oracle, PostgreSQL, MySQL, Cassandra, SQLite. Going to add more JDBC compliant DB in the future.
 * Multi Platform: Windows, Linux, MacOS.
 * Multi Language: English, French, Spanish, Chinese, Japanse.
 * Free and Open-Source.
 
-![alt tag](java/viewer/resources/images/folder.png)
-
 ### Features
+
+#### Copy data vertically
+This is the feature that I want and use the most.
+Enable to check data transition by your app.
+Especially for tables having many columns.
+
+1. Copy data vertically
+![alt tag](java/viewer/screenshot/c01.copy_01.png)
+
+2. Paste it to a spreadsheet app like Excel, Open Office, Google spreadsheet.
+![alt tag](java/viewer/screenshot/c01.copy_02_excel.png)
 
 #### Run Script
 
 1. All SQL Results on "Result" Tab.
-![alt tag](java/viewer/screenshot/s01.result.png)
+![alt tag](java/viewer/screenshot/s01.01result.png)
 
 2. Each SQL Result on "Script#" Tab.
-![alt tag](java/viewer/screenshot/s01.script7.png)
+![alt tag](java/viewer/screenshot/s01.02script7.png)
+
+3. Execute selected SQL.
+![alt tag](java/viewer/screenshot/s01.03result_single.png)
 
 
 ```markdown
