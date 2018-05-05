@@ -1,14 +1,18 @@
-## Overview
+# Overview
 
-* GUI Tool to browse data, issue SQL commands on DB.
-* Supported DB: Oracle, PostgreSQL, MySQL, Cassandra, SQLite. Going to add more JDBC compliant DB in the future.
-* Multi Platform: Windows, Linux, MacOS.
-* Multi Language: English, French, Spanish, Chinese, Japanse.
-* Free and Open-Source.
+- GUI Tool to browse data, issue SQL commands on DB.
+- **Supported DB: Oracle, PostgreSQL, MySQL, Cassandra, SQLite**. Going to add more JDBC compliant DB in the future.
+- Multi Platform: Windows, Linux, MacOS.
+- Multi Language: English, French, Spanish, Chinese, Japanse.
+- Free and Open-Source.
 
-### Features
+## Download
 
-#### Copy data vertically
+[https://sourceforge.net/projects/miludbviewer/files/?source=navbar](https://sourceforge.net/projects/miludbviewer/files/?source=navbar)
+
+## Features
+
+### Copy data vertically
 This is the feature that I want and use the most.
 Enable to check data transition by your app.
 Especially for tables having many columns.
@@ -19,16 +23,39 @@ Especially for tables having many columns.
 2. Paste it to a spreadsheet app like Excel, Open Office, Google spreadsheet.
 ![alt tag](java/viewer/screenshot/c01.copy_02_excel.png)
 
-#### Run Script
+### Run Script
 
 1. All SQL Results on "Result" Tab.
-![alt tag](java/viewer/screenshot/s01.01result.png)
+![alt tag](doc/en/s01.01result.png)
 
 2. Each SQL Result on "Script#" Tab.
-![alt tag](java/viewer/screenshot/s01.02script7.png)
+![alt tag](doc/en/s01.02script7.png)
 
 3. Execute selected SQL.
-![alt tag](java/viewer/screenshot/s01.03result_single.png)
+![alt tag](doc/en/s01.03result_single.png)
+
+### Completion
+
+1. List popup for competion after "."
+![alt tag](doc/en/c02.completion.png)
+
+### Schema Browse
+
+1. Browse schema objects. Table and View => definition. Procedure => Source.
+![alt tag](doc/en/c03.schema_browse.png)
+
+### ER Diagram
+
+1. Draw ER diagram through traversing foreign keys.
+![alt tag](doc/en/c04.er_diagram.png)
+
+## Start
+
+- Cassandra
+- MySQL
+- Oracle
+- PostgreSQL
+- SQLite
 
 
 ```markdown
