@@ -1,0 +1,27 @@
+[0]
+Width=320
+Height=200
+FramesCount=10
+Delay=30
+Direction=0
+Style=0
+GradStyle=0
+BGColor=16777215
+Color1=65535
+PicFileName=
+PictureSize=0
+Picture=78DA030000000001
+Stretch=0
+Animation=0
+
+[1]
+IsText=1
+Text=MiluDBViewer
+PicFileName=
+FontColor=33023
+FontName=Comic Sans MS
+FontSize=36
+FontStyle=0100
+ShadeColor=8421504
+ShadeDepth=2
+
