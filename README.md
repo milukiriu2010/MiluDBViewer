@@ -6,24 +6,24 @@
 - Multi Language: English, French, Spanish, Chinese, Japanse.
 - Free and Open-Source.
 
-## Download
+# Download
 
 [https://sourceforge.net/projects/miludbviewer/files/?source=navbar](https://sourceforge.net/projects/miludbviewer/files/?source=navbar)
 
-## Features
+# Features
 
-### Copy data vertically
+## Copy data vertically
 This is the feature that I want and use the most.
 Enable to check data transition by your app.
 Especially for tables having many columns.
 
 1. Copy data vertically
-![alt tag](java/viewer/screenshot/c01.copy_01.png)
+![alt tag](doc/en/c01.copy_01.png)
 
 2. Paste it to a spreadsheet app like Excel, Open Office, Google spreadsheet.
-![alt tag](java/viewer/screenshot/c01.copy_02_excel.png)
+![alt tag](doc/en/c01.copy_02_excel.png)
 
-### Run Script
+## Run Script
 
 1. All SQL Results on "Result" Tab.
 ![alt tag](doc/en/s01.01result.png)
@@ -34,54 +34,38 @@ Especially for tables having many columns.
 3. Execute selected SQL.
 ![alt tag](doc/en/s01.03result_single.png)
 
-### Completion
+## Completion
 
 1. List popup for competion after "."
 ![alt tag](doc/en/c02.completion.png)
 
-### Schema Browse
+## Schema Browse
 
 1. Browse schema objects. Table and View => definition. Procedure => Source.
 ![alt tag](doc/en/c03.schema_browse.png)
 
-### ER Diagram
+Supported Objects
+x|Table|View|Materialized View|Function|Aggregate|Procedure|Package|Type|Trigger|Sequence
+Cassandra|ÅZ|Å~|ÅZ|ÅZ|ÅZ|Å~|Å~|ÅZ|Å~|Å~
+MySQL|ÅZ|ÅZ|Å~|ÅZ|Å~|ÅZ|Å~|ÅZ|Å~
+Oracle|ÅZ|ÅZ|ÅZ|ÅZ|Å~|ÅZ|ÅZ|ÅZ|ÅZ|ÅZ
+PostgreSQL|ÅZ|ÅZ|ÅZ|ÅZ|Å~|Å~|Å~|ÅZ|ÅZ|ÅZ
+SQLite|ÅZ|ÅZ|Å~|Å~|Å~|Å~|Å~|Å~|Å~|Å~
+
+## ER Diagram
 
 1. Draw ER diagram through traversing foreign keys.
 ![alt tag](doc/en/c04.er_diagram.png)
 
-## Start
+# Start
 
 - Cassandra
 - MySQL
-- Oracle
-- PostgreSQL
-- SQLite
+- [Oracle](doc/en/START_Oracle.md)
+- [PostgreSQL](doc/en/START_PostgreSQL.md)
+- [SQLite](doc/en/START_SQLite.md)
 
+<hr>
 
-```markdown
-Syntax highlighted code block
+[GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
 
-# Header 1
-## Header 2
-### Header 3
-
-- Bulleted
-- List
-
-1. Numbered
-2. List
-
-**Bold** and _Italic_ and `Code` text
-
-[Link](url) and ![Image](src)
-```
-
-For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
-
-### Jekyll Themes
-
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/milukiriu2010/MiluDBViewer/settings). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
-
-### Support or Contact
-
-Having trouble with Pages? Check out our [documentation](https://help.github.com/categories/github-pages-basics/) or [contact support](https://github.com/contact) and we‚Äôll help you sort it out.
