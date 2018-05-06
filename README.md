@@ -1,7 +1,7 @@
 # Overview
 
 - GUI Tool to browse data, issue SQL commands on DB.
-- **Supported DB: Oracle, PostgreSQL, MySQL, Cassandra, SQLite**. Going to add more JDBC compliant DB in the future.
+- **Supported DB: Oracle, PostgreSQL, MySQL, Cassandra, SQLite, SQLServer**. Going to add more JDBC compliant DB in the future.
 - Multi Platform: Windows, Linux, MacOS.
 - Multi Language: English, French, Spanish, Chinese, Japanse.
 - Free and Open-Source.
@@ -46,24 +46,25 @@ Especially for tables having many columns.
 
 Supported Objects
 x|Table|View|Materialized View|Function|Aggregate|Procedure|Package|Type|Trigger|Sequence
-Cassandra|Z|~|Z|Z|Z|~|~|Z|~|~
-MySQL|Z|Z|~|Z|~|Z|~|Z|~
-Oracle|Z|Z|Z|Z|~|Z|Z|Z|Z|Z
-PostgreSQL|Z|Z|Z|Z|~|~|~|Z|Z|Z
-SQLite|Z|Z|~|~|~|~|~|~|~|~
+Cassandra|ã€‡|Ã—|ã€‡|ã€‡|ã€‡|Ã—|Ã—|ã€‡|Ã—|Ã—
+MySQL|ã€‡|ã€‡|Ã—|ã€‡|Ã—|ã€‡|Ã—|ã€‡|Ã—
+Oracle|ã€‡|ã€‡|ã€‡|ã€‡|Ã—|ã€‡|ã€‡|ã€‡|ã€‡|ã€‡
+PostgreSQL|ã€‡|ã€‡|ã€‡|ã€‡|Ã—|Ã—|Ã—|ã€‡|ã€‡|ã€‡
+SQLite|ã€‡|ã€‡|Ã—|Ã—|Ã—|Ã—|Ã—|Ã—|Ã—|Ã—
 
 ## ER Diagram
 
 1. Draw ER diagram through traversing foreign keys.
 ![alt tag](doc/en/c04.er_diagram.png)
 
-# Start
+# Configuration to connect to DB
 
-- Cassandra
-- MySQL
+- [Cassandra](doc/en/START_Cassandra.md)
+- [MySQL](doc/en/START_MySQL.md)
 - [Oracle](doc/en/START_Oracle.md)
 - [PostgreSQL](doc/en/START_PostgreSQL.md)
 - [SQLite](doc/en/START_SQLite.md)
+- [SQLServer](doc/en/START_SQLServer.md)
 
 <hr>
 

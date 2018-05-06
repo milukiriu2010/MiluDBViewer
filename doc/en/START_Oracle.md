@@ -1,10 +1,10 @@
-# Start to Connect "Oracle"
+# Configuration to Connect to "Oracle"
 
 1. Start MiluDBViewer.
 
 ![alt tag](a01.start.png)
 
-2. Create an icon for connection on bookmark. Select "Oracle". Choose "File Name". At last, Click "Connect".
+2. Create an icon for connection on bookmark. Select "Oracle". Choose "File Name". Click "Connect".
 
 ![alt tag](a03.connect_Oracle.png)
 
