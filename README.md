@@ -45,6 +45,7 @@ Especially for tables having many columns.
 ![alt tag](doc/en/c03.schema_browse.png)
 
 Supported Objects
+
 x|Table|View|Materialized View|Function|Aggregate|Procedure|Package|Type|Trigger|Sequence
 -|-----|----|-----------------|--------|---------|---------|-------|----|-------|--------
 Cassandra|〇|×|〇|〇|〇|×|×|〇|×|×
@@ -52,6 +53,7 @@ MySQL|〇|〇|×|〇|×|〇|×|〇|×
 Oracle|〇|〇|〇|〇|×|〇|〇|〇|〇|〇
 PostgreSQL|〇|〇|〇|〇|×|×|×|〇|〇|〇
 SQLite|〇|〇|×|×|×|×|×|×|×|×
+SQLServer|〇|〇|×|〇|×|〇|×|〇|〇|〇
 
 ## ER Diagram
 
