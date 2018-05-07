@@ -46,6 +46,7 @@ Especially for tables having many columns.
 
 Supported Objects
 x|Table|View|Materialized View|Function|Aggregate|Procedure|Package|Type|Trigger|Sequence
+-|-----|----|-----------------|--------|---------|---------|-------|----|-------|--------
 Cassandra|〇|×|〇|〇|〇|×|×|〇|×|×
 MySQL|〇|〇|×|〇|×|〇|×|〇|×
 Oracle|〇|〇|〇|〇|×|〇|〇|〇|〇|〇
