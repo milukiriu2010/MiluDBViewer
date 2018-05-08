@@ -30,6 +30,10 @@ public class SelectedItemHandlerFactory
 		{
 			handleAbs = new SelectedItemHandlerRoot();
 		}
+		else if ( itemSelected == null )
+		{
+			return null;
+		}
 		else if ( SchemaEntity.SCHEMA_TYPE.ROOT.equals(itemSelected.getValue().getType()) )
 		{
 			handleAbs = new SelectedItemHandlerRoot();

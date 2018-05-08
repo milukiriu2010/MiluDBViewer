@@ -27,6 +27,8 @@ public class CollectTaskNoSchema extends Task<Exception>
 	
 	private double         progress = 0.0;
 	
+	private SchemaEntity   parentSchemaEntity = null;
+	
 	@Override
 	public void setMainController( MainController mainCtrl )
 	{
@@ -37,6 +39,12 @@ public class CollectTaskNoSchema extends Task<Exception>
 	public void setMyDBAbstract( MyDBAbstract myDBAbs )
 	{
 		this.myDBAbs = myDBAbs;
+	}
+	
+	@Override
+	public void setParentSchemaEntity( SchemaEntity parentSchemaEntity )
+	{
+		this.parentSchemaEntity = parentSchemaEntity;
 	}
 	
 	@Override
@@ -54,9 +62,12 @@ public class CollectTaskNoSchema extends Task<Exception>
 		{
 			this.setProgress(0.0);
 			
-			SchemaEntity schemaRoot = this.myDBAbs.getSchemaRoot();
+			if ( this.parentSchemaEntity == null )
+			{
+				this.parentSchemaEntity = this.myDBAbs.getSchemaRoot();
+			}
 			// Start to retrieve, if no child objects, 
-			if ( schemaRoot.getEntityLst().size() != 0 )
+			if ( this.parentSchemaEntity.getEntityLst().size() != 0 )
 			{
 				return null;
 			}
@@ -68,7 +79,7 @@ public class CollectTaskNoSchema extends Task<Exception>
 				(factoryType,schemaType)->
 				{
 					CollectSchemaAbstract csAbs = 
-						CollectSchemaFactory.createInstance( factoryType, schemaType, this.mainCtrl, this.myDBAbs, schemaRoot, this, assignedSize );
+						CollectSchemaFactory.createInstance( factoryType, schemaType, this.mainCtrl, this.myDBAbs, this.parentSchemaEntity, this, assignedSize );
 					try
 					{
 						csAbs.retrieveChildren();

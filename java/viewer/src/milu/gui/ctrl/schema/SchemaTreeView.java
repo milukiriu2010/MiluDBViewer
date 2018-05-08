@@ -40,6 +40,8 @@ public class SchemaTreeView extends TreeView<SchemaEntity>
 	
 	private boolean isLoading = false;
 	
+	private MenuItem  menuItemRefresh = new MenuItem();
+	
 	public SchemaTreeView( DBView dbView )
 	{
 		super();
@@ -57,8 +59,6 @@ public class SchemaTreeView extends TreeView<SchemaEntity>
 			// public void changed( ObservableValue obs, Object oldVal, Object newVal )
 			( obs, oldVal, newVal )->
 			{
-				//TreeItem<SchemaEntity> itemChanged = (TreeItem<SchemaEntity>)newVal;
-				//System.out.println( "SchemaTreeView itemChanged:" + itemChanged.getValue() );
 				dbView.Go();
 				if ( newVal != null )
 				{
@@ -80,6 +80,27 @@ public class SchemaTreeView extends TreeView<SchemaEntity>
 				// vertical scrollbar visible   => margin scrollbar width
 				this.shiftLabelChildrenCountPosition();
 				
+				// Disable/Enable MenuItem(Refresh)
+				// -------------------------------------------------------
+				SchemaEntity scEnt = newVal.getValue();
+				SchemaEntity.SCHEMA_TYPE schemaType = scEnt.getType();
+				switch ( schemaType )
+				{
+					// Disable "Refresh" menu when these items are selected.
+					//case ROOT:
+					case SCHEMA:
+					case ROOT_TABLE:
+					//case INDEX:
+					case INDEX_COLUMN:
+					case ROOT_SYSTEM_VIEW:
+					case SYSTEM_VIEW:
+						this.menuItemRefresh.setDisable(true);
+						break;
+					// Enable "Refresh" menu when these items are selected.
+					default:
+						this.menuItemRefresh.setDisable(false);
+						break;
+				}
 			}
 		);
 		
@@ -110,8 +131,9 @@ public class SchemaTreeView extends TreeView<SchemaEntity>
 		ResourceBundle langRB = this.dbView.getMainController().getLangResource("conf.lang.gui.ctrl.schema.SchemaTreeView");
 		ContextMenu  contextMenu = new ContextMenu();
 		
-		MenuItem  menuItemRefresh = new MenuItem( langRB.getString("MENU_REFRESH") );
-		menuItemRefresh.setOnAction
+		//MenuItem  menuItemRefresh = new MenuItem( langRB.getString("MENU_REFRESH") );
+		this.menuItemRefresh.setText( langRB.getString("MENU_REFRESH") );
+		this.menuItemRefresh.setOnAction
 		( 
 			(event)->
 			{ 
@@ -143,7 +165,8 @@ public class SchemaTreeView extends TreeView<SchemaEntity>
 			} 
 		);
 		
-		contextMenu.getItems().addAll( menuItemRefresh );
+		contextMenu.getItems().addAll( this.menuItemRefresh );
+		/*
 		this.setOnContextMenuRequested
 		( 
 			(event)->
@@ -169,7 +192,8 @@ public class SchemaTreeView extends TreeView<SchemaEntity>
 				}
 			} 
 		);
-		//this.setContextMenu(contextMenu);
+		*/
+		this.setContextMenu(contextMenu);
 	}
 	
 	private void setAction()

@@ -4,6 +4,9 @@ import javafx.scene.control.TreeItem;
 import javafx.scene.control.TabPane;
 
 import java.sql.SQLException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 import milu.gui.ctrl.schema.SchemaTreeView;
 import milu.db.MyDBAbstract;
@@ -31,6 +34,9 @@ abstract public class SelectedItemHandlerAbstract
 	}
 	
 	protected REFRESH_TYPE  refreshType = REFRESH_TYPE.NO_REFRESH;
+	
+	// Thread Pool
+	protected ExecutorService service = Executors.newSingleThreadExecutor();
 	
 	public void setSchemaTreeView( SchemaTreeView schemaTreeView )
 	{
@@ -61,6 +67,29 @@ abstract public class SelectedItemHandlerAbstract
 	{
 		this.refreshType = refreshType;
 	}
+	
+    protected void serviceShutdown()
+    {
+		try
+		{
+			System.out.println( "shutdown executor start(" + this.getClass().toString() + ")." );
+			this.service.shutdown();
+			this.service.awaitTermination( 3, TimeUnit.SECONDS );
+		}
+		catch ( InterruptedException intEx )
+		{
+			System.out.println( "tasks interrupted(" + this.getClass().toString() + ")." );
+		}
+		finally
+		{
+			if ( !this.service.isTerminated() )
+			{
+				System.out.println( "executor still working...(" + this.getClass().toString() + ")." );
+			}
+			this.service.shutdownNow();
+			System.out.println( "executor finished(" + this.getClass().toString() + ")." );
+		}
+    }
 	
 	public abstract void exec()
 		throws

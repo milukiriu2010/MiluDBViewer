@@ -2,9 +2,6 @@ package milu.gui.ctrl.schema.handle;
 
 import java.sql.SQLException;
 import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
 
 import javafx.concurrent.Task;
 
@@ -40,26 +37,29 @@ public class SelectedItemHandlerRoot extends SelectedItemHandlerAbstract
 			{
 				return;
 			}
-			// Thread Pool
-			ExecutorService service = Executors.newSingleThreadExecutor();
 			// execute task
-			service.submit( collectTask );
-			
-			this.schemaTreeView.setIsLoading(true);
+			this.service.submit( collectTask );
 			
 			collectTask.progressProperty().addListener
 			(
 				(obs,oldVal,newVal)->
 				{
 					System.out.println( "CollectTask:Progress[" + obs.getClass() + "]oldVal[" + oldVal + "]newVal[" + newVal + "]" );
+					if ( newVal.doubleValue() == 0.0 )
+					{
+						this.schemaTreeView.setIsLoading(true);
+						this.dbView.taskProcessing();
+					}
 					// Task Done.
-					if ( newVal.doubleValue() == 1.0 )
+					else if ( newVal.doubleValue() == 1.0 )
 					{
 						System.out.println( "CollectTask:Done[" + newVal + "]" );
 						this.addChildren(rootEntity);
+						this.tabPane.getTabs().removeAll(this.tabPane.getTabs());
 						this.schemaTreeView.setIsLoading(false);
+						this.dbView.taskDone();
 						this.dbView.setBottomMsg(null);
-						this.serviceShutdown(service);
+						this.serviceShutdown();
 					}
 				}
 			);
@@ -89,28 +89,5 @@ public class SelectedItemHandlerRoot extends SelectedItemHandlerAbstract
 			schemaTreeView.addEntityLst( this.itemSelected, rootEntity.getEntityLst(), true );
 		}
 	}
-	
-    private void serviceShutdown( ExecutorService service )
-    {
-		try
-		{
-			System.out.println( "shutdown executor start(" + this.getClass().toString() + ")." );
-			service.shutdown();
-			service.awaitTermination( 3, TimeUnit.SECONDS );
-		}
-		catch ( InterruptedException intEx )
-		{
-			System.out.println( "tasks interrupted(" + this.getClass().toString() + ")." );
-		}
-		finally
-		{
-			if ( !service.isTerminated() )
-			{
-				System.out.println( "executor still working...(" + this.getClass().toString() + ")." );
-			}
-			service.shutdownNow();
-			System.out.println( "executor finished(" + this.getClass().toString() + ")." );
-		}
-    }
 	
 }
