@@ -38,19 +38,6 @@ import milu.tool.MyTool;
 public class SelectedItemHandlerEachMaterializedView extends SelectedItemHandlerAbstract
 {
 	@Override
-	protected boolean isMyResponsible()
-	{
-		if ( this.itemSelected.getValue().getType() == SchemaEntity.SCHEMA_TYPE.MATERIALIZED_VIEW )
-		{
-			return true;
-		}
-		else
-		{
-			return false;
-		}
-	}
-
-	@Override
 	public void exec() 
 		throws 
 			UnsupportedOperationException, 
@@ -68,7 +55,8 @@ public class SelectedItemHandlerEachMaterializedView extends SelectedItemHandler
 		{
 			if (
 				( tab instanceof SchemaTableViewTab ) &&
-				id.equals(tab.getId())
+				//id.equals(tab.getId())
+				id.equals(tab.getUserData())
 			)
 			{
 				// Activate DBSchemaTableViewTab, if already exists.
@@ -88,7 +76,8 @@ public class SelectedItemHandlerEachMaterializedView extends SelectedItemHandler
 		
 		// Create DBSchemaTableViewTab, if it doesn't exist.
 		SchemaTableViewTab newTab = new SchemaTableViewTab(this.dbView);
-		newTab.setId( id );
+		//newTab.setId( id );
+		newTab.setUserData( id );
 		newTab.setText( materializedViewName );
 		this.tabPane.getTabs().add( newTab );
 		this.tabPane.getSelectionModel().select( newTab );

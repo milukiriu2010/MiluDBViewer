@@ -29,19 +29,6 @@ import java.util.List;
 public class SelectedItemHandlerEachIndex extends SelectedItemHandlerAbstract
 {
 	@Override
-	protected boolean isMyResponsible()
-	{
-		if ( this.itemSelected.getValue().getType() == SchemaEntity.SCHEMA_TYPE.INDEX )
-		{
-			return true;
-		}
-		else
-		{
-			return false;
-		}
-	}
-	
-	@Override
 	public void exec()
 		throws
 			UnsupportedOperationException,

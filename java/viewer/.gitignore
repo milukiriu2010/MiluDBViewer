@@ -1,7 +1,8 @@
 /bin/
 /build/
+/exe/
+/MiluDBViewer*/
 *.log
 *.zip
+*.tgz
 *.bak
-/MiluDBViewer*/
-/exe/

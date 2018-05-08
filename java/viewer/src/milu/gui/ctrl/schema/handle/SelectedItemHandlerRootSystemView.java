@@ -36,19 +36,6 @@ import milu.gui.ctrl.schema.SchemaTableViewTab;
 public class SelectedItemHandlerRootSystemView extends SelectedItemHandlerAbstract
 {
 	@Override
-	protected boolean isMyResponsible()
-	{
-		if ( this.itemSelected.getValue().getType() == SchemaEntity.SCHEMA_TYPE.ROOT_SYSTEM_VIEW )
-		{
-			return true;
-		}
-		else
-		{
-			return false;
-		}
-	}
-
-	@Override
 	public void exec() 
 		throws 
 			UnsupportedOperationException, 
@@ -93,7 +80,8 @@ public class SelectedItemHandlerRootSystemView extends SelectedItemHandlerAbstra
 			{
 				if (
 					( tab instanceof SchemaTableViewTab ) &&
-					( tab.getId().contains("@system_view@") == true )
+					//( tab.getId().contains("@system_view@") == true )
+					( ((String)tab.getUserData()).contains("@system_view@") == true )
 				)
 				{
 					relatedTabLst.add( tab );

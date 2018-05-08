@@ -3,45 +3,30 @@ package milu.main;
 import java.util.Optional;
 import java.util.List;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.ResourceBundle;
-import java.util.stream.Collectors;
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.sql.SQLException;
-import java.text.MessageFormat;
 import javax.crypto.SecretKey;
 
 import javafx.scene.control.TabPane;
-import javafx.scene.control.Alert.AlertType;
-import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 import javafx.application.Application;
 import javafx.application.Platform;
 
-import milu.file.ext.MyFileExtAbstract;
-import milu.file.ext.MyFileExtFactory;
-import milu.file.json.MyJsonHandleAbstract;
-import milu.file.json.MyJsonHandleFactory;
 import milu.gui.ctrl.common.DraggingTabPaneSupport;
-import milu.gui.dlg.MyAlertDialog;
 import milu.gui.dlg.db.DBSettingDialog;
 import milu.gui.view.DBView;
 
 import milu.db.MyDBAbstract;
-import milu.db.driver.DriverClassConst;
 import milu.db.driver.DriverShim;
-import milu.db.driver.LoadDriver;
 import milu.entity.schema.SchemaEntity;
 import milu.entity.schema.search.ChangeLangSchemaEntityVisitor;
-import milu.security.MySecurityKey;
-import milu.tool.MyTool;
+import milu.task.main.InitialLoadAbstract;
+import milu.task.main.InitialLoadFactory;
 
 public class MainController
 {
@@ -70,11 +55,11 @@ public class MainController
 	void init( Application application )
 	{
 		this.setApplication(application);
-		this.loadLangResources();
-		this.loadImages();
-		this.loadAppConf();
-		this.loadDriver();
-		this.loadKey();
+		//this.loadLangResources();
+		//this.loadImages();
+		//this.loadAppConf();
+		//this.loadDriver();
+		//this.loadKey();
 		this.createNewDBConnectionAndOpenNewWindow();
 	}
 	
@@ -88,11 +73,17 @@ public class MainController
 		return this.application;
 	}
 	
+	public void setAppConf( AppConf appConf )
+	{
+		this.appConf = appConf;
+	}
+	
 	public AppConf getAppConf()
 	{
 		return this.appConf;
 	}
 	
+	/*
 	private void loadImages()
 	{
 		String[] images =
@@ -170,12 +161,19 @@ public class MainController
 			this.imageMap.put( image, new Image( image ) );
 		}
 	}
+	*/
+	
+	public void addImage( String resourceName, Image image )
+	{
+		this.imageMap.put( resourceName, image );
+	}
 	
 	public Image getImage( String resourceName ) 
 	{
 		return this.imageMap.get( resourceName );
 	}
 	
+	/*
 	private void loadLangResources()
 	{
 		String[] languagess =
@@ -202,12 +200,19 @@ public class MainController
 			this.langMap.put( lang , ResourceBundle.getBundle( lang ) );
 		}
 	}
+	*/
+	
+	public void addLangResource( String name, ResourceBundle langRB )
+	{
+		this.langMap.put(name,langRB);
+	}
 	
 	public ResourceBundle getLangResource( String name )
 	{
 		return this.langMap.get(name);
 	}
 	
+	/*
 	private void loadAppConf()
 	{
 		MyJsonHandleAbstract myJsonAbs =
@@ -236,7 +241,9 @@ public class MainController
 			this.showException(ex);
 		}
 	}
-
+	*/
+	
+	/*
 	private void loadDriver()
 	{
 		this.loadDriverUser();
@@ -393,6 +400,7 @@ public class MainController
 			}
 		);
 	}
+	*/
 	
 	public void switchDriver( DriverShim driverA, DriverShim driverB )
 	{
@@ -407,7 +415,7 @@ public class MainController
 			}
 		);
 	}
-	
+	/*
 	private void loadKey()
 	{
 		File keyFile = new File(AppConst.KEY_FILE.val());
@@ -429,6 +437,12 @@ public class MainController
 		{
 			this.showException(ex);
 		}
+	}
+	*/
+	
+	public void setSecretKey( SecretKey secretKey )
+	{
+		this.secretKey = secretKey;
 	}
 	
 	public SecretKey getSecretKey()
@@ -609,7 +623,10 @@ public class MainController
 		Locale nextLocale = new Locale( langCode );
 		Locale.setDefault( nextLocale );
 		
-		this.loadLangResources();
+		//this.loadLangResources();
+		this.langMap.clear();
+		InitialLoadAbstract ilAbs = InitialLoadFactory.getInstance( InitialLoadFactory.FACTORY_TYPE.LANG, this, null, 0.0 );
+		ilAbs.load();
 		
 		this.myDBViewMap.forEach
 		( 
@@ -623,24 +640,4 @@ public class MainController
 		
 		System.out.println( "changeLang done." );
 	}
-	
-	private void showException( Exception ex )
-	{
-		MyAlertDialog alertDlg = new MyAlertDialog( AlertType.WARNING, this );
-		ResourceBundle langRB = this.getLangResource("conf.lang.gui.common.MyAlert");
-		alertDlg.setHeaderText( langRB.getString("TITLE_MISC_ERROR") );
-		alertDlg.setTxtExp( ex );
-		alertDlg.showAndWait();
-		alertDlg = null;
-	}	
-	/*
-	private void showException( Exception ex, String msg )
-	{
-		MyAlertDialog alertDlg = new MyAlertDialog( AlertType.WARNING, this );
-		alertDlg.setHeaderText( msg );
-		alertDlg.setTxtExp( ex );
-		alertDlg.showAndWait();
-		alertDlg = null;
-	}	
-	*/
 }

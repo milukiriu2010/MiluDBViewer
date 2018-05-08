@@ -38,19 +38,6 @@ import milu.entity.schema.SchemaEntity;
 public class SelectedItemHandlerRootSequence extends SelectedItemHandlerAbstract
 {
 	@Override
-	protected boolean isMyResponsible()
-	{
-		if ( this.itemSelected.getValue().getType() == SchemaEntity.SCHEMA_TYPE.ROOT_SEQUENCE )
-		{
-			return true;
-		}
-		else
-		{
-			return false;
-		}
-	}
-
-	@Override
 	public void exec() 
 		throws 
 			UnsupportedOperationException, 

@@ -26,7 +26,6 @@ import milu.gui.ctrl.common.inf.RefreshInterface;
 import milu.gui.ctrl.common.inf.ToggleHorizontalVerticalInterface;
 import milu.gui.ctrl.schema.SchemaTreeView;
 import milu.gui.ctrl.schema.handle.SelectedItemHandlerAbstract;
-import milu.gui.ctrl.schema.handle.SelectedItemHandlerChooser;
 import milu.gui.ctrl.schema.handle.SelectedItemHandlerFactory;
 import milu.gui.dlg.MyAlertDialog;
 
@@ -123,16 +122,6 @@ public class DBSchemaTab extends Tab
 		MyDBAbstract myDBAbs = this.dbView.getMyDBAbstract();
 		try
 		{
-			/*
-			SelectedItemHandlerChooser.exec
-			( 
-				this.schemaTreeView, 
-				this.tabPane, 
-				this.dbView,
-				myDBAbs, 
-				SelectedItemHandlerAbstract.REFRESH_TYPE.NO_REFRESH 
-			);
-			*/
 			SelectedItemHandlerAbstract handleAbs = 
 				SelectedItemHandlerFactory.getInstance
 				( 
@@ -185,14 +174,19 @@ public class DBSchemaTab extends Tab
 		MyDBAbstract myDBAbs = this.dbView.getMyDBAbstract();
 		try
 		{
-			SelectedItemHandlerChooser.exec
-			( 
-				this.schemaTreeView, 
-				this.tabPane,
-				this.dbView,
-				myDBAbs, 
-				SelectedItemHandlerAbstract.REFRESH_TYPE.WITH_REFRESH 
-			);
+			SelectedItemHandlerAbstract handleAbs = 
+				SelectedItemHandlerFactory.getInstance
+				( 
+					this.schemaTreeView, 
+					this.tabPane, 
+					this.dbView,
+					myDBAbs, 
+					SelectedItemHandlerAbstract.REFRESH_TYPE.WITH_REFRESH 
+				);
+			if ( handleAbs != null )
+			{
+				handleAbs.exec();
+			}			
 		}
 		catch ( UnsupportedOperationException uoEx )
 		{

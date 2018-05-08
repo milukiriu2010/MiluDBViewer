@@ -41,19 +41,6 @@ import java.sql.SQLException;
 public class SelectedItemHandlerEachType extends SelectedItemHandlerAbstract
 {
 	@Override
-	protected boolean isMyResponsible()
-	{
-		if ( this.itemSelected.getValue().getType() == SchemaEntity.SCHEMA_TYPE.TYPE )
-		{
-			return true;
-		}
-		else
-		{
-			return false;
-		}
-	}
-	
-	@Override
 	public void exec()
 		throws
 			UnsupportedOperationException,
@@ -71,7 +58,8 @@ public class SelectedItemHandlerEachType extends SelectedItemHandlerAbstract
 		{
 			if (
 				( tab instanceof SchemaProcViewTab ) &&
-				id.equals(tab.getId())
+				//id.equals(tab.getId())
+				id.equals(tab.getUserData())
 			)
 			{
 				// Activate DBSchemaTableViewTab, if already exists.
@@ -92,7 +80,8 @@ public class SelectedItemHandlerEachType extends SelectedItemHandlerAbstract
 		
 		// Create DBSchemaProcViewTab, if it doesn't exist.
 		SchemaProcViewTab newTab = new SchemaProcViewTab( this.dbView );
-		newTab.setId( id );
+		//newTab.setId( id );
+		newTab.setUserData(id);
 		newTab.setText( typeName );
 		this.tabPane.getTabs().add( newTab );
 		this.tabPane.getSelectionModel().select( newTab );

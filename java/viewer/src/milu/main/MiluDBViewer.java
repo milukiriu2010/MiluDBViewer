@@ -1,5 +1,10 @@
 package milu.main;
 
+import java.util.ResourceBundle;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
+
 import javafx.application.Application;
 import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
@@ -16,6 +21,7 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.effect.DropShadow;
 import milu.gui.dlg.MyAlertDialog;
 import milu.tool.MyTool;
+import milu.task.main.InitialLoadTask;
 
 public class MiluDBViewer extends Application
 {
@@ -25,6 +31,9 @@ public class MiluDBViewer extends Application
 	private VBox         splashLayout = new VBox();
 	private ProgressBar  loadProgress = new ProgressBar();
 	private Label        progressText = new Label("Loading...");
+	
+	// Thread Pool
+	private ExecutorService service = Executors.newSingleThreadExecutor();	
 	
     public static void main(String[] args)
     {
@@ -52,8 +61,46 @@ public class MiluDBViewer extends Application
     	    initStage.setX(bounds.getMinX() + bounds.getWidth() / 2 - SPLASH_WIDTH / 2);
     	    initStage.setY(bounds.getMinY() + bounds.getHeight() / 2 - SPLASH_HEIGHT / 2);
     	    initStage.show();
-    		mainCtrl.init(this);
-    		initStage.hide();
+    	    
+    	    final InitialLoadTask  ilTask = new InitialLoadTask();
+    	    ilTask.setMainController(mainCtrl);
+			// execute task
+			this.service.submit( ilTask );
+    	    
+			ilTask.progressProperty().addListener
+			(
+				(obs,oldVal,newVal)->
+				{
+					this.loadProgress.setProgress(newVal.doubleValue());
+					if ( newVal.doubleValue() == 1.0 )
+					{
+			    		this.serviceShutdown();
+						initStage.hide();
+			    		mainCtrl.init(this);
+					}
+				}
+			);
+			
+			ilTask.messageProperty().addListener
+			(
+				(obs,oldVal,newVal)->
+				{
+					this.progressText.setText(newVal);
+				}
+			);
+			
+			ilTask.valueProperty().addListener
+			(
+				(obs,oldVal,ex)->
+				{
+					MyAlertDialog alertDlg = new MyAlertDialog( AlertType.WARNING, mainCtrl );
+		    		ResourceBundle langRB = mainCtrl.getLangResource("conf.lang.gui.common.MyAlert");
+					alertDlg.setHeaderText( langRB.getString("TITLE_MISC_ERROR") );
+		    		alertDlg.setTxtExp( ex );
+		    		alertDlg.showAndWait();
+		    		alertDlg = null;
+				}
+			);
     	}
     	catch ( Exception ex )
     	{
@@ -62,5 +109,34 @@ public class MiluDBViewer extends Application
     		alertDlg.setTxtExp( ex );
     		alertDlg.showAndWait();
     	}
+    }
+    
+    @Override
+    public void stop()
+    {
+    	this.serviceShutdown();
+    }
+    
+    private void serviceShutdown()
+    {
+		try
+		{
+			System.out.println( "shutdown executor start(MiluDBViewer)." );
+			this.service.shutdown();
+			this.service.awaitTermination( 3, TimeUnit.SECONDS );
+		}
+		catch ( InterruptedException intEx )
+		{
+			System.out.println( "tasks interrupted(MiluDBViewer)" );
+		}
+		finally
+		{
+			if ( !this.service.isTerminated() )
+			{
+				System.out.println( "executor still working...(MiluDBViewer)" );
+			}
+			this.service.shutdownNow();
+			System.out.println( "executor finished(MiluDBViewer)." );
+		}
     }
 }

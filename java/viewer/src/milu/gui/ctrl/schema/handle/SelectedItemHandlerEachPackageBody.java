@@ -39,19 +39,6 @@ import java.sql.SQLException;
 public class SelectedItemHandlerEachPackageBody extends SelectedItemHandlerAbstract
 {
 	@Override
-	protected boolean isMyResponsible()
-	{
-		if ( this.itemSelected.getValue().getType() == SchemaEntity.SCHEMA_TYPE.PACKAGE_BODY )
-		{
-			return true;
-		}
-		else
-		{
-			return false;
-		}
-	}
-	
-	@Override
 	public void exec()
 		throws
 			UnsupportedOperationException,
@@ -69,7 +56,8 @@ public class SelectedItemHandlerEachPackageBody extends SelectedItemHandlerAbstr
 		{
 			if (
 				( tab instanceof SchemaProcViewTab ) &&
-				id.equals(tab.getId())
+				//id.equals(tab.getId())
+				id.equals(tab.getUserData())
 			)
 			{
 				// Activate DBSchemaTableViewTab, if already exists.
@@ -90,19 +78,13 @@ public class SelectedItemHandlerEachPackageBody extends SelectedItemHandlerAbstr
 		
 		// Create DBSchemaProcViewTab, if it doesn't exist.
 		SchemaProcViewTab newTab = new SchemaProcViewTab( this.dbView );
-		newTab.setId( id );
+		//newTab.setId( id );
+		newTab.setUserData( id );
 		newTab.setText( packageBodyName );
 		this.tabPane.getTabs().add( newTab );
 		this.tabPane.getSelectionModel().select( newTab );
 		
 		// set icon on Tab
-		/*
-		MainController mainController = this.dbView.getMainController();
-		ImageView iv = new ImageView( mainController.getImage("file:resources/images/package_body.png") );
-		iv.setFitHeight( 16 );
-		iv.setFitWidth( 16 );
-		newTab.setGraphic( iv );
-		*/
 		MainController mainCtrl = this.dbView.getMainController();
 		Node imageGroup = MyTool.createImageView( 16, 16, mainCtrl, selectedEntity );
 		newTab.setGraphic( imageGroup );

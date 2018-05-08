@@ -92,8 +92,6 @@ public class CollectTaskBasic extends Task<Exception>
 			for ( int i = 0; i < schemaEntityLstSize; i++ )
 			{
 				SchemaEntity schemaEntity = schemaEntityLst.get(i);
-				// select Table list
-				//this.selectTableLst( schemaEntity, i, schemaEntityLstSize );
 				
 				double assignedSize = MAX/schemaEntityLstSize/factorySchemaMap.size();
 				factorySchemaMap.forEach

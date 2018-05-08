@@ -30,19 +30,6 @@ import milu.entity.schema.SchemaEntity;
 public class SelectedItemHandlerRootIndex extends SelectedItemHandlerAbstract
 {
 	@Override
-	protected boolean isMyResponsible()
-	{
-		if ( this.itemSelected.getValue().getType() == SchemaEntity.SCHEMA_TYPE.ROOT_INDEX )
-		{
-			return true;
-		}
-		else
-		{
-			return false;
-		}
-	}
-
-	@Override
 	public void exec() 
 		throws 
 			UnsupportedOperationException, 
@@ -53,19 +40,6 @@ public class SelectedItemHandlerRootIndex extends SelectedItemHandlerAbstract
 		ObservableList<TreeItem<SchemaEntity>> itemChildren = this.itemSelected.getChildren();
 		
 		// get function List & add list as children
-		/*
-		if ( itemChildren.size() == 0 )
-		{
-			String schemaName = itemParent.getParent().getParent().getValue().toString();
-			String tableName  = itemParent.getValue().toString();
-			IndexDBAbstract indexDBAbs = IndexDBFactory.getInstance( this.myDBAbs );
-			if ( indexDBAbs != null )
-			{
-				indexDBAbs.selectEntityLst(schemaName, tableName);
-				this.schemaTreeView.addEntityLst( this.itemSelected, indexDBAbs.getEntityLst() );
-			}
-		}
-		*/
 		if ( itemChildren.size() == 0 )
 		{
 			if ( selectedEntity.getEntityLst().size() == 0 )

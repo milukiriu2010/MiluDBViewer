@@ -38,19 +38,6 @@ import milu.tool.MyTool;
 public class SelectedItemHandlerEachSystemView extends SelectedItemHandlerAbstract
 {
 	@Override
-	protected boolean isMyResponsible()
-	{
-		if ( this.itemSelected.getValue().getType() == SchemaEntity.SCHEMA_TYPE.SYSTEM_VIEW )
-		{
-			return true;
-		}
-		else
-		{
-			return false;
-		}
-	}
-
-	@Override
 	public void exec() 
 		throws 
 			UnsupportedOperationException, 
@@ -68,7 +55,8 @@ public class SelectedItemHandlerEachSystemView extends SelectedItemHandlerAbstra
 		{
 			if (
 				( tab instanceof SchemaTableViewTab ) &&
-				id.equals(tab.getId())
+				//id.equals(tab.getId())
+				id.equals(tab.getUserData())
 			)
 			{
 				// Activate DBSchemaTableViewTab, if already exists.
@@ -88,19 +76,13 @@ public class SelectedItemHandlerEachSystemView extends SelectedItemHandlerAbstra
 		
 		// Create DBSchemaTableViewTab, if it doesn't exist.
 		SchemaTableViewTab newTab = new SchemaTableViewTab(this.dbView);
-		newTab.setId( id );
+		//newTab.setId( id );
+		newTab.setUserData( id );
 		newTab.setText( systemViewName );
 		this.tabPane.getTabs().add( newTab );
 		this.tabPane.getSelectionModel().select( newTab );
 		
 		// set icon on Tab
-		/*
-		MainController mainController = this.dbView.getMainController();
-		ImageView iv = new ImageView( mainController.getImage("file:resources/images/systemview.png") );
-		iv.setFitHeight( 16 );
-		iv.setFitWidth( 16 );
-		newTab.setGraphic( iv );
-		*/
 		MainController mainCtrl = this.dbView.getMainController();
 		Node imageGroup = MyTool.createImageView( 16, 16, mainCtrl, selectedEntity );
 		newTab.setGraphic( imageGroup );		

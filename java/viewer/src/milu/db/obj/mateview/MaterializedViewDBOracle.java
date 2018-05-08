@@ -30,7 +30,7 @@ public class MaterializedViewDBOracle extends MaterializedViewDBAbstract
 		{
 			while ( rs.next() )
 			{
-				SchemaEntity viewEntity = SchemaEntityFactory.createInstance( rs.getString("object_name"), SchemaEntity.SCHEMA_TYPE.VIEW );
+				SchemaEntity viewEntity = SchemaEntityFactory.createInstance( rs.getString("object_name"), SchemaEntity.SCHEMA_TYPE.MATERIALIZED_VIEW );
 				String strStatus = rs.getString("status");
 				if ( strStatus != null && "INVALID".equals(strStatus) )
 				{

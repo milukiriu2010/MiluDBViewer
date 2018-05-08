@@ -188,11 +188,6 @@ public class DBView extends Stage
 			(event)->
 			{
 				System.out.println( "dbView Shown." );
-				/*
-				final CollectTaskBasic collectTask = new CollectTaskBasic();
-				collectTask.setMainController(this.mainCtrl);
-				collectTask.setMyDBAbstract(this.myDBAbs);
-				*/
 				
 				final Task<Exception> collectTask = CollectTaskFactory.getInstance( mainCtrl, myDBAbs );
 				if ( collectTask == null )
@@ -210,21 +205,23 @@ public class DBView extends Stage
 						// Task Done.
 						if ( newVal.doubleValue() == 1.0 )
 						{
-							//this.mainToolBar.taskDone();
 							System.out.println( "CollectTask:Done[" + newVal + "]" );
 							this.taskDone();
-							this.brdPane.setBottom(null);
+							//this.brdPane.setBottom(null);
+							this.setBottomMsg(null);
 						}
 					}
 				);
 				
 				// "progressProperty <=> messageProperty" is not synchronized.
-				// It shouldn't to call this after "progress = 1.0".
+				// It shouldn't call this after "progress = 1.0".
 				collectTask.messageProperty().addListener
 				(
 					(obs,oldVal,newVal)->
 					{
 						System.out.println( "CollectTask:Message[" + newVal + "]" );
+						this.setBottomMsg(newVal);
+						/*
 						if ( "".equals(newVal) == false )
 						{
 							this.lblMsg.setText(newVal);
@@ -234,6 +231,7 @@ public class DBView extends Stage
 						{
 							this.brdPane.setBottom(null);
 						}
+						*/
 					}
 				);
 				
@@ -250,7 +248,8 @@ public class DBView extends Stage
 						alertDlg.setHeaderText( langRB.getString("TITLE_MISC_ERROR") );
 			    		alertDlg.setTxtExp( ex );
 			    		alertDlg.showAndWait();
-			    		alertDlg = null;					}
+			    		alertDlg = null;					
+			    	}
 				);
 			}
 		);
@@ -459,81 +458,6 @@ public class DBView extends Stage
 		}		
 	}
 	
-	/********************************
-	 * Open Schema View 
-	 ********************************
-	 */
-	/*
-	public void openSchemaView()
-	{
-		// https://www.mkyong.com/java8/java-8-streams-filter-examples/
-		// https://stackoverflow.com/questions/35740543/java-8-stream-check-if-instanceof?utm_medium=organic&utm_source=google_rich_qa&utm_campaign=google_rich_qa
-		Tab tab = this.tabPane.getTabs().stream()
-				.filter( DBSchemaTab.class::isInstance )
-				.map( DBSchemaTab.class::cast )
-				.findAny()									// If 'findAny' then return found
-				.orElse(null);								// If not found, return null
-		
-		// found "DBSchemaTab"
-		if ( tab != null )
-		{
-			// Activate DBSchemaTab, if already exists.
-			this.tabPane.getSelectionModel().select( tab );
-		}
-		else
-		{
-			// Create DBchemaTab, if it doesn't exist.
-			final Tab newTab = new DBSchemaTab( this );
-			this.tabPane.getTabs().add( newTab );
-			this.tabPane.getSelectionModel().select( newTab );
-			this.Go();
-			tab = newTab;
-		}
-		
-		if ( tab instanceof FocusInterface)
-		{
-			((FocusInterface)tab).setFocus();
-		}
-	}
-	*/
-	
-	/********************************
-	 * Open JDBC View 
-	 ********************************
-	 */
-	/*
-	public void openJdbcView()
-	{
-		// https://www.mkyong.com/java8/java-8-streams-filter-examples/
-		// https://stackoverflow.com/questions/35740543/java-8-stream-check-if-instanceof?utm_medium=organic&utm_source=google_rich_qa&utm_campaign=google_rich_qa
-		Tab tab = this.tabPane.getTabs().stream()
-				.filter( DBJdbcTab.class::isInstance )
-				.map( DBJdbcTab.class::cast )
-				.findAny()									// If 'findAny' then return found
-				.orElse(null);								// If not found, return null
-		
-		// found "DBJdbcTab"
-		if ( tab != null )
-		{
-			// Activate DBJdbcTab, if already exists.
-			this.tabPane.getSelectionModel().select( tab );
-		}
-		else
-		{
-			// Create DBJdbcTab, if it doesn't exist.
-			final Tab newTab = new DBJdbcTab( this );
-			this.tabPane.getTabs().add( newTab );
-			this.tabPane.getSelectionModel().select( newTab );
-			tab = newTab;
-		}
-		
-		if ( tab instanceof FocusInterface)
-		{
-			((FocusInterface)tab).setFocus();
-		}
-	}
-	*/
-	
 	public void openView( Class<?> castClazz )
 	{
 		// https://www.mkyong.com/java8/java-8-streams-filter-examples/
@@ -564,6 +488,26 @@ public class DBView extends Stage
 		if ( tab instanceof FocusInterface )
 		{
 			((FocusInterface)tab).setFocus();
+		}
+	}
+	
+	public void setBottomMsg( String msg )
+	{
+		if ( msg == null )
+		{
+			this.brdPane.setBottom(null);
+		}
+		else
+		{
+			if ( "".equals(msg) == false )
+			{
+				this.lblMsg.setText(msg);
+				this.brdPane.setBottom(lblMsg);
+			}
+			else
+			{
+				this.brdPane.setBottom(null);
+			}
 		}
 	}
 	

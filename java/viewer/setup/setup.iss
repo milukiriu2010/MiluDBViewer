@@ -27,6 +27,7 @@ OutputBaseFilename=MiluDBViewer_Setup
 SetupIconFile=C:\myjava\MiluDBViewer.git\java\viewer\resources\images\winicon.ico
 Compression=lzma
 SolidCompression=yes
+UninstallDisplayIcon={app}\MiluDBViewer.exe
 
 [Languages]
 Name: "english"; MessagesFile: "compiler:Default.isl"
@@ -55,4 +56,34 @@ Name: "{userappdata}\Microsoft\Internet Explorer\Quick Launch\{#MyAppName}"; Fil
 
 [Run]
 Filename: "{app}\{#MyAppExeName}"; Description: "{cm:LaunchProgram,{#StringChange(MyAppName, '&', '&&')}}"; Flags: nowait postinstall skipifsilent
+
+[Code]
+//function InitializeUninstall(): Boolean;
+//begin
+//  Result := MsgBox('InitializeUninstall:' #13#13 'Uninstall is initializing. Do you really want to start Uninstall?', mbConfirmation, MB_YESNO) = idYes;
+//  if Result = False then
+//    MsgBox('InitializeUninstall:' #13#13 'Uninstall is canceled.', mbInformation, MB_OK);
+//end;
+
+
+procedure CurUninstallStepChanged(CurUninstallStep: TUninstallStep);
+var
+  UserDir: Variant;
+  DeleteAccept: Boolean;
+  DeleteOK: Boolean;
+begin
+  case CurUninstallStep of
+    usUninstall:
+      begin
+        UserDir := ExpandConstant('{%USERPROFILE}') + '\.MiluDBViewer'
+        if ( DirExists(UserDir) ) = True then
+          DeleteAccept := MsgBox('Delete user data folder:' #13#13 'Do you want to remove the user data(' + UserDir + ')?', mbConfirmation, MB_YESNO) = idYes;
+          if DeleteAccept = True then
+            DelTree( UserDir, True, True, True )
+            if DeleteOK = False then
+              MsgBox('Delete user data folder Failed(' + UserDir + ').', mbInformation, MB_OK);
+      end;
+  end;
+end;
+
 

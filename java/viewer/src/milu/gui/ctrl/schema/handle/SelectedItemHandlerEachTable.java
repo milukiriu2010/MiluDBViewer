@@ -35,19 +35,6 @@ import java.sql.SQLException;
 public class SelectedItemHandlerEachTable extends SelectedItemHandlerAbstract
 {
 	@Override
-	protected boolean isMyResponsible()
-	{
-		if ( this.itemSelected.getValue().getType() == SchemaEntity.SCHEMA_TYPE.TABLE )
-		{
-			return true;
-		}
-		else
-		{
-			return false;
-		}
-	}
-	
-	@Override
 	public void exec()
 		throws
 			UnsupportedOperationException,
@@ -65,7 +52,8 @@ public class SelectedItemHandlerEachTable extends SelectedItemHandlerAbstract
 		{
 			if (
 				( tab instanceof SchemaTableViewTab ) &&
-				id.equals(tab.getId())
+				//id.equals(tab.getId())
+				id.equals(tab.getUserData())
 			)
 			{
 				// NO Refresh
@@ -87,7 +75,8 @@ public class SelectedItemHandlerEachTable extends SelectedItemHandlerAbstract
 		
 		// Create SchemaTableViewTab, if it doesn't exist.
 		SchemaTableViewTab newTab = new SchemaTableViewTab(this.dbView);
-		newTab.setId( id );
+		//newTab.setId( id );
+		newTab.setUserData( id );
 		newTab.setText( tableName );
 		this.tabPane.getTabs().add( newTab );
 		this.tabPane.getSelectionModel().select( newTab );
@@ -101,7 +90,6 @@ public class SelectedItemHandlerEachTable extends SelectedItemHandlerAbstract
 		List<Map<String,String>>  dataLst = selectedEntity.getDefinitionLst();
 		if ( dataLst.size() == 0 )
 		{
-			//TableDBAbstract tableDBAbs = TableDBFactory.getInstance(this.myDBAbs);
 			ObjDBFactory tableDBFactory = AbsDBFactory.getFactory( AbsDBFactory.FACTORY_TYPE.TABLE );
 			if ( tableDBFactory == null )
 			{

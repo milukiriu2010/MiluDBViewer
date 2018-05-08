@@ -154,7 +154,7 @@ public class SchemaTreeView extends TreeView<SchemaEntity>
 				switch ( schemaType )
 				{
 					// do not show ContextMenu when these items are selected.
-					case ROOT:
+					//case ROOT:
 					case SCHEMA:
 					case ROOT_TABLE:
 					//case INDEX:
@@ -241,13 +241,6 @@ public class SchemaTreeView extends TreeView<SchemaEntity>
 					if ( val.toUpperCase().startsWith(strKey) )
 					{
 						this.getSelectionModel().select(nextItem);
-						/*
-						int nextItemId = this.getRow(nextItem);
-						if ( ( nextItemId < visibleIdFirst) || ( visibleIdLast < nextItemId ) )
-						{
-							this.scrollTo(nextItemId);
-						}
-						*/
 						this.scrollToSelectedItem(nextItem);
 						return;
 					}
@@ -266,13 +259,6 @@ public class SchemaTreeView extends TreeView<SchemaEntity>
 					if ( val.toUpperCase().startsWith(strKey) )
 					{
 						this.getSelectionModel().select(nextItem);
-						/*
-						int nextItemId = this.getRow(nextItem);
-						if ( ( nextItemId < visibleIdFirst) || ( visibleIdLast < nextItemId ) )
-						{
-							this.scrollTo(nextItemId);
-						}
-						*/
 						this.scrollToSelectedItem(nextItem);
 						return;
 					}
@@ -315,20 +301,12 @@ public class SchemaTreeView extends TreeView<SchemaEntity>
 				return treeCell;
 			}
 		);
-		/*
-		this.focusedProperty().addListener
-		(
-			(obs,oldVal,newVal)->
-			{
-				if ( newVal == false )
-				{
-					return;
-				}
-				
-				this.refresh();
-			}
-		);
-		*/
+	}
+	
+	public void setIsLoading( boolean isLoading )
+	{
+		this.isLoading = isLoading;
+		this.refresh();
 	}
 	
 	// shift label position
@@ -343,6 +321,7 @@ public class SchemaTreeView extends TreeView<SchemaEntity>
 			System.out.println( "SchemaTreeView:ScrollBar Found." );
 			AnchorPane.setRightAnchor( this.lblChildrenCnt, scrollBarVertical.getWidth() );
 			// "visibleProperty" doesn't work on some PC.
+			// office win => OK
 			scrollBarVertical.visibleProperty().addListener
 			(
 				(obs2,oldVal2,newVal2)->
@@ -364,7 +343,6 @@ public class SchemaTreeView extends TreeView<SchemaEntity>
 		{
 			System.out.println( "SchemaTreeView:ScrollBar not Found." );
 		}
-		
 	}
 	
 	@SuppressWarnings("unchecked")

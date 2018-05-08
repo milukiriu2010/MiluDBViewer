@@ -36,19 +36,6 @@ import milu.gui.ctrl.schema.SchemaProcViewTab;
 public class SelectedItemHandlerRootType extends SelectedItemHandlerAbstract
 {
 	@Override
-	protected boolean isMyResponsible()
-	{
-		if ( this.itemSelected.getValue().getType() == SchemaEntity.SCHEMA_TYPE.ROOT_TYPE )
-		{
-			return true;
-		}
-		else
-		{
-			return false;
-		}
-	}
-
-	@Override
 	public void exec() 
 		throws 
 			UnsupportedOperationException, 
@@ -59,18 +46,6 @@ public class SelectedItemHandlerRootType extends SelectedItemHandlerAbstract
 		ObservableList<TreeItem<SchemaEntity>> itemChildren = this.itemSelected.getChildren();
 		
 		// get type List & add list as children
-		/*
-		if ( itemChildren.size() == 0 )
-		{
-			TypeDBAbstract typeDBAbs = TypeDBFactory.getInstance(myDBAbs);
-			if ( typeDBAbs != null )
-			{
-				String schemaName = itemParent.getValue().toString();
-				List<SchemaEntity> typeEntityLst = typeDBAbs.selectEntityLst(schemaName);
-				this.schemaTreeView.addEntityLst( itemSelected, typeEntityLst );
-			}
-		}
-		*/
 		if ( itemChildren.size() == 0 )
 		{
 			if ( selectedEntity.getEntityLst().size() == 0 )
@@ -106,7 +81,8 @@ public class SelectedItemHandlerRootType extends SelectedItemHandlerAbstract
 			{
 				if (
 					( tab instanceof SchemaProcViewTab ) &&
-					( tab.getId().contains("@type@") == true )
+					//( tab.getId().contains("@type@") == true )
+					( ((String)tab.getUserData()).contains("@type@") == true )
 				)
 				{
 					relatedTabLst.add( tab );

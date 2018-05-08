@@ -35,19 +35,6 @@ import java.sql.SQLException;
 public class SelectedItemHandlerEachProc extends SelectedItemHandlerAbstract
 {
 	@Override
-	protected boolean isMyResponsible()
-	{
-		if ( this.itemSelected.getValue().getType() == SchemaEntity.SCHEMA_TYPE.PROC )
-		{
-			return true;
-		}
-		else
-		{
-			return false;
-		}
-	}
-	
-	@Override
 	public void exec()
 		throws
 			UnsupportedOperationException,
@@ -66,7 +53,8 @@ public class SelectedItemHandlerEachProc extends SelectedItemHandlerAbstract
 		{
 			if (
 				( tab instanceof SchemaProcViewTab ) &&
-				id.equals(tab.getId())
+				//id.equals(tab.getId())
+				id.equals(tab.getUserData())
 			)
 			{
 				// Activate DBSchemaTableViewTab, if already exists.
@@ -87,32 +75,18 @@ public class SelectedItemHandlerEachProc extends SelectedItemHandlerAbstract
 		
 		// Create DBSchemaProcViewTab, if it doesn't exist.
 		SchemaProcViewTab newTab = new SchemaProcViewTab( this.dbView );
-		newTab.setId( id );
+		//newTab.setId( id );
+		newTab.setUserData( id );
 		newTab.setText( procName );
 		this.tabPane.getTabs().add( newTab );
 		this.tabPane.getSelectionModel().select( newTab );
 		
 		// set icon on Tab
-		/*
-		MainController mainController = this.dbView.getMainController();
-		ImageView iv = new ImageView( mainController.getImage("file:resources/images/proc.png") );
-		iv.setFitHeight( 16 );
-		iv.setFitWidth( 16 );
-		newTab.setGraphic( iv );
-		*/
 		MainController mainCtrl = this.dbView.getMainController();
 		Node imageGroup = MyTool.createImageView( 16, 16, mainCtrl, selectedEntity );
 		newTab.setGraphic( imageGroup );		
 		
 		// get procedure ddl
-		/*
-		ProcDBAbstract procDBAbs = ProcDBFactory.getInstance(myDBAbs);
-		if ( procDBAbs == null )
-		{
-			return;
-		}
-		String strSrc = procDBAbs.getSRC(schemaName, procName);
-		*/
 		String strSrc = selectedEntity.getSrcSQL();
 		if ( strSrc == null )
 		{

@@ -36,19 +36,6 @@ import milu.gui.ctrl.schema.SchemaTableViewTab;
 public class SelectedItemHandlerRootMaterializedView extends SelectedItemHandlerAbstract
 {
 	@Override
-	protected boolean isMyResponsible()
-	{
-		if ( this.itemSelected.getValue().getType() == SchemaEntity.SCHEMA_TYPE.ROOT_MATERIALIZED_VIEW )
-		{
-			return true;
-		}
-		else
-		{
-			return false;
-		}
-	}
-
-	@Override
 	public void exec() 
 		throws 
 			UnsupportedOperationException, 
@@ -91,9 +78,11 @@ public class SelectedItemHandlerRootMaterializedView extends SelectedItemHandler
 			ObservableList<Tab> relatedTabLst = FXCollections.observableArrayList();
 			for ( Tab tab : tabLst )
 			{
+				System.out.println( "SelectedItemHandlerRootMaterializedView.UserData[" + tab.getUserData() + "]" );
 				if (
 					( tab instanceof SchemaTableViewTab ) &&
-					( tab.getId().contains("@materialized_view@") == true )
+					//( tab.getId().contains("@materialized_view@") == true )
+					( ((String)tab.getUserData()).contains("@materialized_view@") == true )
 				)
 				{
 					relatedTabLst.add( tab );

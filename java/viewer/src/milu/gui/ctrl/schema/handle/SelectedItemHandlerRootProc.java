@@ -36,19 +36,6 @@ import milu.gui.ctrl.schema.SchemaProcViewTab;
 public class SelectedItemHandlerRootProc extends SelectedItemHandlerAbstract
 {
 	@Override
-	protected boolean isMyResponsible()
-	{
-		if ( this.itemSelected.getValue().getType() == SchemaEntity.SCHEMA_TYPE.ROOT_PROC )
-		{
-			return true;
-		}
-		else
-		{
-			return false;
-		}
-	}
-
-	@Override
 	public void exec() 
 		throws 
 			UnsupportedOperationException, 
@@ -61,15 +48,6 @@ public class SelectedItemHandlerRootProc extends SelectedItemHandlerAbstract
 		// get procedure List & add list as children
 		if ( itemChildren.size() == 0 )
 		{
-			/*
-			ProcDBAbstract procDBAbs = ProcDBFactory.getInstance(myDBAbs);
-			if ( procDBAbs != null )
-			{
-				String schemaName = itemParent.getValue().toString();
-				List<SchemaEntity> procEntityLst = procDBAbs.selectEntityLst(schemaName);
-				this.schemaTreeView.addEntityLst( itemSelected, procEntityLst );
-			}
-			*/
 			if ( selectedEntity.getEntityLst().size() == 0 )
 			{
 				ObjDBFactory objDBFactory = AbsDBFactory.getFactory( AbsDBFactory.FACTORY_TYPE.PROC );
@@ -102,7 +80,8 @@ public class SelectedItemHandlerRootProc extends SelectedItemHandlerAbstract
 			{
 				if (
 					( tab instanceof SchemaProcViewTab ) &&
-					( tab.getId().contains("@proc@") == true )
+					//( tab.getId().contains("@proc@") == true )
+					( ((String)tab.getUserData()).contains("@proc@") == true )
 				)
 				{
 					relatedTabLst.add( tab );

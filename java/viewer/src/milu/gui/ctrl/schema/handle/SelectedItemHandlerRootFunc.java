@@ -34,19 +34,6 @@ import milu.gui.ctrl.schema.SchemaProcViewTab;
 public class SelectedItemHandlerRootFunc extends SelectedItemHandlerAbstract
 {
 	@Override
-	protected boolean isMyResponsible()
-	{
-		if ( this.itemSelected.getValue().getType() == SchemaEntity.SCHEMA_TYPE.ROOT_FUNC )
-		{
-			return true;
-		}
-		else
-		{
-			return false;
-		}
-	}
-
-	@Override
 	public void exec() 
 		throws 
 			UnsupportedOperationException, 
@@ -91,7 +78,8 @@ public class SelectedItemHandlerRootFunc extends SelectedItemHandlerAbstract
 			{
 				if (
 					( tab instanceof SchemaProcViewTab ) &&
-					( tab.getId().contains("@func@") == true )
+					//( tab.getId().contains("@func@") == true )
+					( ((String)tab.getUserData()).contains("@func@") == true )
 				)
 				{
 					relatedTabLst.add( tab );

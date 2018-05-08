@@ -12,8 +12,6 @@ import milu.gui.view.DBView;
 
 abstract public class SelectedItemHandlerAbstract 
 {
-	protected SelectedItemHandlerAbstract     nextHandler    = null;
-	
 	protected SchemaTreeView          schemaTreeView = null;
 	// Root Item    on SchemaTreeView
 	protected TreeItem<SchemaEntity>  itemRoot     = null;
@@ -63,50 +61,6 @@ abstract public class SelectedItemHandlerAbstract
 	{
 		this.refreshType = refreshType;
 	}
-	
-	public void addNextHandler( SelectedItemHandlerAbstract nextHandler )
-	{
-		if ( this.nextHandler != null )
-		{
-			this.nextHandler.addNextHandler(nextHandler);
-		}
-		else
-		{
-			this.nextHandler = nextHandler;
-		}
-	}
-	
-	public SelectedItemHandlerAbstract getNextHandler()
-	{
-		return this.nextHandler;
-	}
-	
-	public boolean execChain()
-		throws
-			UnsupportedOperationException,
-			SQLException
-	{
-		if ( this.itemRoot != null && this.itemSelected == null )
-		{
-			return false;
-		}
-		
-		if ( this.isMyResponsible() )
-		{
-			this.exec();
-			return true;
-		}
-		else if ( this.nextHandler != null )
-		{
-			return this.nextHandler.execChain();
-		}
-		else
-		{
-			return false;
-		}
-	}
-	
-	protected abstract boolean isMyResponsible();
 	
 	public abstract void exec()
 		throws

@@ -40,19 +40,6 @@ import milu.gui.ctrl.schema.SchemaProcViewTab;
 public class SelectedItemHandlerRootPackageBody extends SelectedItemHandlerAbstract
 {
 	@Override
-	protected boolean isMyResponsible()
-	{
-		if ( this.itemSelected.getValue().getType() == SchemaEntity.SCHEMA_TYPE.ROOT_PACKAGE_BODY )
-		{
-			return true;
-		}
-		else
-		{
-			return false;
-		}
-	}
-
-	@Override
 	public void exec() 
 		throws 
 			UnsupportedOperationException, 
@@ -97,7 +84,8 @@ public class SelectedItemHandlerRootPackageBody extends SelectedItemHandlerAbstr
 			{
 				if (
 					( tab instanceof SchemaProcViewTab ) &&
-					( tab.getId().contains("@package_body@") == true )
+					//( tab.getId().contains("@package_body@") == true )
+					( ((String)tab.getUserData()).contains("@package_body@") == true )
 				)
 				{
 					relatedTabLst.add( tab );

@@ -47,19 +47,6 @@ import milu.tool.MyTool;
 public class SelectedItemHandlerRootER extends SelectedItemHandlerAbstract
 {
 	@Override
-	protected boolean isMyResponsible()
-	{
-		if ( this.itemSelected.getValue().getType() == SchemaEntity.SCHEMA_TYPE.ROOT_ER )
-		{
-			return true;
-		}
-		else
-		{
-			return false;
-		}
-	}
-
-	@Override
 	public void exec() 
 		throws 
 			UnsupportedOperationException, 
@@ -76,7 +63,8 @@ public class SelectedItemHandlerRootER extends SelectedItemHandlerAbstract
 		{
 			if (
 				( tab instanceof SchemaERViewTab ) &&
-				id.equals( tab.getId() )
+				//id.equals( tab.getId() )
+				id.equals( tab.getUserData() )
 			)
 			{
 				// NO Refresh
@@ -124,18 +112,12 @@ public class SelectedItemHandlerRootER extends SelectedItemHandlerAbstract
 		
 		// Create SchemaERViewTab, if it doesn't exist.
 		SchemaERViewTab newTab = new SchemaERViewTab( schemaName );
-		newTab.setId( id );
+		//newTab.setId( id );
+		newTab.setUserData( id );
 		newTab.setMyDBAbstract(myDBAbs);
 		newTab.setSchemaEntityRootER(selectedEntity);
 		
 		// set icon on Tab
-		/*
-		MainController mainController = this.dbView.getMainController();
-		ImageView iv = new ImageView( mainController.getImage("file:resources/images/ER_root.png") );
-		iv.setFitHeight( 16 );
-		iv.setFitWidth( 16 );
-		newTab.setGraphic( iv );
-		*/
 		MainController mainCtrl = this.dbView.getMainController();
 		Node imageGroup = MyTool.createImageView( 16, 16, mainCtrl, selectedEntity );
 		newTab.setGraphic( imageGroup );		
