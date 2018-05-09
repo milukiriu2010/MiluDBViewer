@@ -1,6 +1,9 @@
 package milu.gui.ctrl.schema.handle;
 
 import javafx.scene.control.TreeItem;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 
 import java.sql.SQLException;
@@ -20,6 +23,10 @@ abstract public class SelectedItemHandlerAbstract
 	protected TreeItem<SchemaEntity>  itemRoot     = null;
 	// SelectedItem on SchemaTreeView
 	protected TreeItem<SchemaEntity>  itemSelected = null;
+	// Part of UserData on Tab
+	//   "@table@"
+	//   "@func@"
+	protected String        strPartUserData = null;
 	
 	protected TabPane       tabPane = null;
 	
@@ -31,6 +38,13 @@ abstract public class SelectedItemHandlerAbstract
 	{
 		NO_REFRESH,
 		WITH_REFRESH
+	}
+	
+	public enum MANIPULATE_TYPE
+	{
+		NONE,
+		SELECT,
+		REMOVE
 	}
 	
 	protected REFRESH_TYPE  refreshType = REFRESH_TYPE.NO_REFRESH;
@@ -46,6 +60,11 @@ abstract public class SelectedItemHandlerAbstract
 		{
 			this.itemSelected = this.schemaTreeView.getSelectionModel().getSelectedItem();
 		}
+	}
+	
+	public void setStrPartUserData( String strPartUserData )
+	{
+		this.strPartUserData = strPartUserData;
 	}
 	
 	public void setTabPane( TabPane tabPane )
@@ -95,4 +114,55 @@ abstract public class SelectedItemHandlerAbstract
 		throws
 			UnsupportedOperationException,
 			SQLException;
+	
+	protected void removeRelatedTab( Class<?> castClazz )
+	{
+		if ( this.refreshType == SelectedItemHandlerAbstract.REFRESH_TYPE.WITH_REFRESH )
+		{
+			final ObservableList<Tab> tabLst =  this.tabPane.getTabs();
+			ObservableList<Tab> relatedTabLst = FXCollections.observableArrayList();
+			for ( Tab tab : tabLst )
+			{
+				if (
+					( castClazz.isInstance(tab) ) &&
+					//( tab instanceof SchemaProcViewTab ) &&
+					( ((String)tab.getUserData()).contains(this.strPartUserData) == true )
+				)
+				{
+					relatedTabLst.add( tab );
+				}
+			}
+			this.tabPane.getTabs().removeAll( relatedTabLst );
+		}
+	}
+	
+	protected MANIPULATE_TYPE manipulateSpecifiedTab( Class<?> castClazz, String id )
+	{
+		final ObservableList<Tab> tabLst =  this.tabPane.getTabs();
+		for ( Tab tab : tabLst )
+		{
+			if (
+				( castClazz.isInstance(tab) ) &&
+				//( tab instanceof SchemaProcViewTab ) &&
+				//id.equals(tab.getId())
+				id.equals(tab.getUserData())
+			)
+			{
+				// Activate DBSchemaTableViewTab, if already exists.
+				if ( this.refreshType ==  SelectedItemHandlerAbstract.REFRESH_TYPE.NO_REFRESH )
+				{
+					this.tabPane.getSelectionModel().select( tab );
+					return MANIPULATE_TYPE.SELECT;
+				}
+				// Delete DBSchemaTableViewTab, if already exists. 
+				else
+				{
+					this.tabPane.getTabs().remove( tab );
+					return MANIPULATE_TYPE.REMOVE;
+				}
+			}
+		}
+		
+		return MANIPULATE_TYPE.NONE;
+	}
 }

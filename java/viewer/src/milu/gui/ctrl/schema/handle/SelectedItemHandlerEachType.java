@@ -1,8 +1,6 @@
 package milu.gui.ctrl.schema.handle;
 
-import javafx.collections.ObservableList;
 import javafx.scene.Node;
-import javafx.scene.control.Tab;
 import javafx.scene.control.TreeItem;
 import milu.db.obj.abs.AbsDBFactory;
 import milu.db.obj.abs.ObjDBFactory;
@@ -50,9 +48,11 @@ public class SelectedItemHandlerEachType extends SelectedItemHandlerAbstract
 		TreeItem<SchemaEntity> itemParent = itemSelected.getParent();
 		String schemaName = itemParent.getParent().getValue().toString();
 		String typeName   = itemSelected.getValue().getName();
-		String id         = schemaName + "@type@" + typeName;
+		//String id         = schemaName + "@type@" + typeName;
+		String id         = schemaName + this.strPartUserData + typeName;
 		System.out.println( "setType:" + typeName );
 		
+		/*
 		final ObservableList<Tab> tabLst =  this.tabPane.getTabs();
 		for ( Tab tab : tabLst )
 		{
@@ -76,7 +76,13 @@ public class SelectedItemHandlerEachType extends SelectedItemHandlerAbstract
 				}
 			}
 		}		
-		
+		*/
+		// Activate DBSchemaTableViewTab, if already exists.
+		// Delete DBSchemaTableViewTab, if already exists.
+		if ( MANIPULATE_TYPE.SELECT.equals(this.manipulateSpecifiedTab( SchemaProcViewTab.class , id )) )
+		{
+			return;
+		}
 		
 		// Create DBSchemaProcViewTab, if it doesn't exist.
 		SchemaProcViewTab newTab = new SchemaProcViewTab( this.dbView );
@@ -87,13 +93,6 @@ public class SelectedItemHandlerEachType extends SelectedItemHandlerAbstract
 		this.tabPane.getSelectionModel().select( newTab );
 		
 		// set icon on Tab
-		/*
-		MainController mainController = this.dbView.getMainController();
-		ImageView iv = new ImageView( mainController.getImage("file:resources/images/type.png") );
-		iv.setFitHeight( 16 );
-		iv.setFitWidth( 16 );
-		newTab.setGraphic( iv );
-		*/
 		MainController mainCtrl = this.dbView.getMainController();
 		Node imageGroup = MyTool.createImageView( 16, 16, mainCtrl, selectedEntity );
 		newTab.setGraphic( imageGroup );		

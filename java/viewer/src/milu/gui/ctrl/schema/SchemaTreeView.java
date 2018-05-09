@@ -15,8 +15,6 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.collections.ObservableList;
 import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.binding.Bindings;
 import javafx.scene.Node;
 import javafx.scene.control.skin.VirtualFlow;
 import milu.gui.ctrl.common.inf.ChangeLangInterface;
@@ -65,6 +63,8 @@ public class SchemaTreeView extends TreeView<SchemaEntity>
 					// scroll, when "<=(arrow)" key is clicked. 
 					this.scrollToSelectedItem(newVal);
 					// set "children count" of selected item
+					this.setChildrenCnt();
+					/*
 					this.lblChildrenCnt.textProperty().unbind();
 					this.lblChildrenCnt.textProperty().bind
 					(
@@ -73,6 +73,7 @@ public class SchemaTreeView extends TreeView<SchemaEntity>
 							new SimpleIntegerProperty( newVal.getChildren().size() )
 						)
 					);
+					*/
 				}
 				// shift label position
 				// -------------------------------------------------------
@@ -124,6 +125,21 @@ public class SchemaTreeView extends TreeView<SchemaEntity>
 			AnchorPane.setRightAnchor( this.lblChildrenCnt, 0.0 );
 			
 		}
+	}
+	
+	public void setChildrenCnt()
+	{
+		TreeItem<SchemaEntity> selectedItem = this.getSelectionModel().getSelectedItem();
+		String cnt = null;
+		if ( selectedItem == null )
+		{
+			cnt = "*";
+		}
+		else
+		{
+			cnt = Integer.toString( selectedItem.getChildren().size() );
+		}
+		this.lblChildrenCnt.setText(cnt);
 	}
 	
 	private void setContextMenu()
@@ -309,7 +325,15 @@ public class SchemaTreeView extends TreeView<SchemaEntity>
 							}
 							else
 							{
-								return schemaEntity.toString() + "...Loading...";
+								TreeItem<SchemaEntity> selectedEntity = treeCell.getTreeItem();
+								if ( treeCell.getTreeView().getSelectionModel().getSelectedItem() == selectedEntity )
+								{
+									return schemaEntity.toString() + "...Loading...";
+								}
+								else
+								{
+									return schemaEntity.toString();
+								}
 							}
 						}
 						

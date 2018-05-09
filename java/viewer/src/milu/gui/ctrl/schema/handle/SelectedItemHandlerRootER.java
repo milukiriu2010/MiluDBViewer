@@ -1,21 +1,17 @@
 package milu.gui.ctrl.schema.handle;
 
 import java.sql.SQLException;
-import java.util.List;
 
 import javafx.scene.Node;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TreeItem;
 import javafx.collections.ObservableList;
-
-import milu.entity.schema.SchemaEntity;
-import milu.entity.schema.SchemaEntityEachFK;
+import javafx.concurrent.Task;
 import milu.db.obj.abs.AbsDBFactory;
-import milu.db.obj.abs.ObjDBFactory;
-import milu.db.obj.abs.ObjDBInterface;
-import milu.db.obj.fk.FKDBAbstract;
+import milu.entity.schema.SchemaEntity;
 import milu.gui.ctrl.schema.SchemaERViewTab;
 import milu.main.MainController;
+import milu.task.collect.CollectTaskFactory;
 import milu.tool.MyTool;
 
 /**
@@ -85,6 +81,7 @@ public class SelectedItemHandlerRootER extends SelectedItemHandlerAbstract
 		}		
 		
 		// get View List & add list as children
+		/*
 		if ( itemChildren.size() == 0 )
 		{
 			ObjDBFactory objDBFactory = AbsDBFactory.getFactory( AbsDBFactory.FACTORY_TYPE.FOREIGN_KEY );
@@ -104,6 +101,58 @@ public class SelectedItemHandlerRootER extends SelectedItemHandlerAbstract
 			}
 		}
 		
+		this.drawER( selectedEntity, schemaName, id );
+		*/
+		if ( itemChildren.size() > 0 )
+		{
+			return;
+		}
+		
+		MainController mainCtrl = this.dbView.getMainController();
+		final Task<Exception> collectTask = CollectTaskFactory.getInstance( AbsDBFactory.FACTORY_TYPE.FOREIGN_KEY, mainCtrl, this.myDBAbs, selectedEntity );
+		if ( collectTask == null )
+		{
+			return;
+		}
+		// execute task
+		this.service.submit( collectTask );
+		
+		collectTask.progressProperty().addListener
+		(
+			(obs,oldVal,newVal)->
+			{
+				System.out.println( "CollectTask:Progress[" + obs.getClass() + "]oldVal[" + oldVal + "]newVal[" + newVal + "]" );
+				if ( newVal.doubleValue() == 0.0 )
+				{
+					this.schemaTreeView.setIsLoading(true);
+				}
+				// Task Done.
+				else if ( newVal.doubleValue() == 1.0 )
+				{
+					System.out.println( "CollectTask:Done[" + newVal + "]" );
+					this.schemaTreeView.addEntityLst( itemSelected, selectedEntity.getEntityLst(), true );
+					this.schemaTreeView.setChildrenCnt();
+					this.drawER( selectedEntity, schemaName, id );
+					this.schemaTreeView.setIsLoading(false);
+					this.dbView.setBottomMsg(null);
+					this.serviceShutdown();
+				}
+			}
+		);
+		
+		collectTask.messageProperty().addListener
+		(
+			(obs,oldVal,newVal)->
+			{
+				System.out.println( "CollectTask:Message[" + newVal + "]" );
+				this.dbView.setBottomMsg(newVal);
+			}
+		);
+		
+	}
+	
+	private void drawER( SchemaEntity selectedEntity, String schemaName, String id )
+	{
 		// no fk
 		if ( selectedEntity.getEntityLst().size() == 0 )
 		{
@@ -129,7 +178,6 @@ public class SelectedItemHandlerRootER extends SelectedItemHandlerAbstract
 		// call after added to TabPane
 		// set Label(lblTable) width to the longest Label(lblColumn) width
 		newTab.calculate();
-		
 	}
 
 }

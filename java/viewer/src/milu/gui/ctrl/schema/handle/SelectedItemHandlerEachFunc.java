@@ -1,8 +1,6 @@
 package milu.gui.ctrl.schema.handle;
 
-import javafx.collections.ObservableList;
 import javafx.scene.Node;
-import javafx.scene.control.Tab;
 import javafx.scene.control.TreeItem;
 import milu.db.obj.abs.AbsDBFactory;
 import milu.db.obj.abs.ObjDBFactory;
@@ -42,9 +40,11 @@ public class SelectedItemHandlerEachFunc extends SelectedItemHandlerAbstract
 		TreeItem<SchemaEntity> itemParent = itemSelected.getParent();
 		String schemaName = itemParent.getParent().getValue().toString();
 		String funcName   = itemSelected.getValue().getName();
-		String id         = schemaName + "@func@" + funcName;
+		//String id         = schemaName + "@func@" + funcName;
+		String id         = schemaName + this.strPartUserData + funcName;
 		System.out.println( "setFuncDef:" + funcName );
 		
+		/*
 		final ObservableList<Tab> tabLst =  this.tabPane.getTabs();
 		for ( Tab tab : tabLst )
 		{
@@ -68,7 +68,13 @@ public class SelectedItemHandlerEachFunc extends SelectedItemHandlerAbstract
 				}
 			}
 		}		
-		
+		*/
+		// Activate DBSchemaTableViewTab, if already exists.
+		// Delete DBSchemaTableViewTab, if already exists.
+		if ( MANIPULATE_TYPE.SELECT.equals(this.manipulateSpecifiedTab( SchemaProcViewTab.class , id )) )
+		{
+			return;
+		}
 		
 		// Create DBSchemaProcViewTab, if it doesn't exist.
 		SchemaProcViewTab newTab = new SchemaProcViewTab( this.dbView );
@@ -79,13 +85,6 @@ public class SelectedItemHandlerEachFunc extends SelectedItemHandlerAbstract
 		this.tabPane.getSelectionModel().select( newTab );
 		
 		// set icon on Tab
-		/*
-		MainController mainController = this.dbView.getMainController();
-		ImageView iv = new ImageView( mainController.getImage("file:resources/images/func.png") );
-		iv.setFitHeight( 16 );
-		iv.setFitWidth( 16 );
-		newTab.setGraphic( iv );
-		*/
 		MainController mainCtrl = this.dbView.getMainController();
 		Node imageGroup = MyTool.createImageView( 16, 16, mainCtrl, selectedEntity );
 		newTab.setGraphic( imageGroup );

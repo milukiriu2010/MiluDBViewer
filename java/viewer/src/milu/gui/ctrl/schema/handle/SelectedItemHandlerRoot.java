@@ -48,7 +48,7 @@ public class SelectedItemHandlerRoot extends SelectedItemHandlerAbstract
 					if ( newVal.doubleValue() == 0.0 )
 					{
 						this.schemaTreeView.setIsLoading(true);
-						this.dbView.taskProcessing();
+						//this.dbView.taskProcessing();
 					}
 					// Task Done.
 					else if ( newVal.doubleValue() == 1.0 )
@@ -57,7 +57,7 @@ public class SelectedItemHandlerRoot extends SelectedItemHandlerAbstract
 						this.addChildren(rootEntity);
 						this.tabPane.getTabs().removeAll(this.tabPane.getTabs());
 						this.schemaTreeView.setIsLoading(false);
-						this.dbView.taskDone();
+						//this.dbView.taskDone();
 						this.dbView.setBottomMsg(null);
 						this.serviceShutdown();
 					}

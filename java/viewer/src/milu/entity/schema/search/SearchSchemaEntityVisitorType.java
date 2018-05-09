@@ -46,4 +46,25 @@ public class SearchSchemaEntityVisitorType
 		}
 	}
 
+	@Override
+	public void visitParent( SchemaEntity schemaEntity )
+	{
+		if ( schemaEntity == null )
+		{
+			return;
+		}
+		
+		SchemaEntity.SCHEMA_TYPE schemaType = schemaEntity.getType();
+		if ( schemaType == this.searchSchemaType )
+		{
+			this.hitSchemaEntity = schemaEntity;
+			return;
+		}
+		
+		SchemaEntity parentEntity = schemaEntity.getParentEntity();
+		if ( parentEntity != null )
+		{
+			this.visitParent( parentEntity );
+		}
+	}
 }

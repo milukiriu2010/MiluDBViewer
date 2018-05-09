@@ -3,9 +3,7 @@ package milu.gui.ctrl.schema.handle;
 import java.sql.SQLException;
 import java.util.List;
 
-import javafx.scene.control.Tab;
 import javafx.scene.control.TreeItem;
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import milu.db.obj.abs.AbsDBFactory;
 import milu.db.obj.abs.ObjDBFactory;
@@ -72,6 +70,8 @@ public class SelectedItemHandlerRootMaterializedView extends SelectedItemHandler
 		}
 		
 		// Delete DBSchemaTableViewTab, if already exists. 
+		this.removeRelatedTab( SchemaTableViewTab.class );
+		/*
 		if ( this.refreshType == SelectedItemHandlerAbstract.REFRESH_TYPE.WITH_REFRESH )
 		{
 			final ObservableList<Tab> tabLst =  this.tabPane.getTabs();
@@ -90,7 +90,7 @@ public class SelectedItemHandlerRootMaterializedView extends SelectedItemHandler
 			}
 			this.tabPane.getTabs().removeAll( relatedTabLst );
 		}
-		
+		*/
 	}
 
 }

@@ -4,9 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import javafx.collections.ObservableList;
 import javafx.scene.Node;
-import javafx.scene.control.Tab;
 import javafx.scene.control.TreeItem;
 import milu.db.obj.abs.AbsDBFactory;
 import milu.db.obj.abs.ObjDBFactory;
@@ -44,9 +42,11 @@ public class SelectedItemHandlerEachTable extends SelectedItemHandlerAbstract
 		String schemaName = itemParent.getParent().getValue().toString();
 		SchemaEntity selectedEntity = itemSelected.getValue();
 		String tableName  = itemSelected.getValue().getName();
-		String id         = schemaName + "@table@" + tableName;
+		//String id         = schemaName + "@table@" + tableName;
+		String id         = schemaName + this.strPartUserData + tableName;
 		System.out.println( "setTableDef:" + tableName );
 		
+		/*
 		final ObservableList<Tab> tabLst =  this.tabPane.getTabs();
 		for ( Tab tab : tabLst )
 		{
@@ -71,7 +71,12 @@ public class SelectedItemHandlerEachTable extends SelectedItemHandlerAbstract
 					break;
 				}
 			}
-		}		
+		}
+		*/
+		if ( MANIPULATE_TYPE.SELECT.equals(this.manipulateSpecifiedTab( SchemaTableViewTab.class , id )) )
+		{
+			return;
+		}
 		
 		// Create SchemaTableViewTab, if it doesn't exist.
 		SchemaTableViewTab newTab = new SchemaTableViewTab(this.dbView);
@@ -126,7 +131,15 @@ public class SelectedItemHandlerEachTable extends SelectedItemHandlerAbstract
 			}
 			else
 			{
-				dataType2 = dataType + "(" + dataSize + ")";
+				// Oracle => TIMESTAMP(*)
+				if ( dataType.contains("(") )
+				{
+					dataType2 = dataType;
+				}
+				else
+				{
+					dataType2 = dataType + "(" + dataSize + ")";
+				}
 			}
 			dataRow2.add( dataType2 );
 			dataRow2.add( dataRow1.get("nullable") );

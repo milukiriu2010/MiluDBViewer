@@ -310,6 +310,11 @@ abstract public class SchemaEntity
 		visitor.visit(this);
 	}
 	
+	public void acceptParent( VisitorInterface visitor )
+	{
+		visitor.visitParent(this);
+	}
+	
 	@Override
 	public void changeLang()
 	{

@@ -30,7 +30,13 @@ public class CollectTaskBasic extends Task<Exception>
 	
 	private double         progress = 0.0;
 	
-	private SchemaEntity   parentSchemaEntity = null;
+	private SchemaEntity   selectedSchemaEntity = null;
+	
+	@Override
+	public void setAbsDBFactory( AbsDBFactory.FACTORY_TYPE factoryType )
+	{
+		
+	}
 	
 	@Override
 	public void setMainController( MainController mainCtrl )
@@ -45,9 +51,9 @@ public class CollectTaskBasic extends Task<Exception>
 	}
 	
 	@Override
-	public void setParentSchemaEntity( SchemaEntity parentSchemaEntity )
+	public void setSelectedSchemaEntity( SchemaEntity selectedSchemaEntity )
 	{
-		this.parentSchemaEntity = parentSchemaEntity;
+		this.selectedSchemaEntity = selectedSchemaEntity;
 	}
 	
 	@Override
@@ -75,12 +81,12 @@ public class CollectTaskBasic extends Task<Exception>
 		{
 			this.setProgress(0.0);
 			
-			if ( this.parentSchemaEntity == null )
+			if ( this.selectedSchemaEntity == null )
 			{
-				this.parentSchemaEntity = this.myDBAbs.getSchemaRoot();
+				this.selectedSchemaEntity = this.myDBAbs.getSchemaRoot();
 			}
 			// Start to retrieve, if no child objects, 
-			if ( this.parentSchemaEntity.getEntityLst().size() != 0 )
+			if ( this.selectedSchemaEntity.getEntityLst().size() != 0 )
 			{
 				return null;
 			}
@@ -98,7 +104,7 @@ public class CollectTaskBasic extends Task<Exception>
 			}
 			// start retrieving each schema 
 			List<SchemaEntity> schemaEntityLst = objDBAbs.selectEntityLst( null );
-			this.parentSchemaEntity.addEntityAll(schemaEntityLst);
+			this.selectedSchemaEntity.addEntityAll(schemaEntityLst);
 			int schemaEntityLstSize = schemaEntityLst.size();
 			for ( int i = 0; i < schemaEntityLstSize; i++ )
 			{

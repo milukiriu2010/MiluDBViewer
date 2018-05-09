@@ -6,9 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import javafx.scene.Node;
-import javafx.scene.control.Tab;
 import javafx.scene.control.TreeItem;
-import javafx.collections.ObservableList;
 import milu.db.obj.abs.AbsDBFactory;
 import milu.db.obj.abs.ObjDBFactory;
 import milu.db.obj.abs.ObjDBInterface;
@@ -45,9 +43,11 @@ public class SelectedItemHandlerEachView extends SelectedItemHandlerAbstract
 		TreeItem<SchemaEntity> itemParent   = this.itemSelected.getParent();
 		String schemaName = itemParent.getParent().getValue().toString();
 		String viewName   = itemSelected.getValue().getName();
-		String id         = schemaName + "@view@" + viewName;
+		//String id         = schemaName + "@view@" + viewName;
+		String id         = schemaName + this.strPartUserData + viewName;
 		System.out.println( "setViewDef:" + viewName );
 		
+		/*
 		final ObservableList<Tab> tabLst =  this.tabPane.getTabs();
 		for ( Tab tab : tabLst )
 		{
@@ -71,6 +71,13 @@ public class SelectedItemHandlerEachView extends SelectedItemHandlerAbstract
 				}
 			}
 		}
+		*/
+		// Activate DBSchemaTableViewTab, if already exists.
+		// Delete DBSchemaTableViewTab, if already exists.
+		if ( MANIPULATE_TYPE.SELECT.equals(this.manipulateSpecifiedTab( SchemaTableViewTab.class , id )) )
+		{
+			return;
+		}
 		
 		// Create DBSchemaTableViewTab, if it doesn't exist.
 		SchemaTableViewTab newTab = new SchemaTableViewTab(this.dbView);
@@ -81,13 +88,6 @@ public class SelectedItemHandlerEachView extends SelectedItemHandlerAbstract
 		this.tabPane.getSelectionModel().select( newTab );
 		
 		// set icon on Tab
-		/*
-		MainController mainController = this.dbView.getMainController();
-		ImageView iv = new ImageView( mainController.getImage("file:resources/images/view.png") );
-		iv.setFitHeight( 16 );
-		iv.setFitWidth( 16 );
-		newTab.setGraphic( iv );
-		*/
 		MainController mainCtrl = this.dbView.getMainController();
 		Node imageGroup = MyTool.createImageView( 16, 16, mainCtrl, selectedEntity );
 		newTab.setGraphic( imageGroup );
@@ -132,7 +132,15 @@ public class SelectedItemHandlerEachView extends SelectedItemHandlerAbstract
 			}
 			else
 			{
-				dataType2 = dataType + "(" + dataSize + ")";
+				// Oracle => TIMESTAMP(*)
+				if ( dataType.contains("(") )
+				{
+					dataType2 = dataType;
+				}
+				else
+				{
+					dataType2 = dataType + "(" + dataSize + ")";
+				}
 			}
 			dataRow2.add( dataType2 );
 			dataRow2.add( dataRow1.get("nullable") );

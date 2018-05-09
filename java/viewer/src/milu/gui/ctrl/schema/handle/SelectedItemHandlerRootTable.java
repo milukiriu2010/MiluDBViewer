@@ -3,10 +3,8 @@ package milu.gui.ctrl.schema.handle;
 import java.sql.SQLException;
 import java.util.List;
 
-import javafx.scene.control.Tab;
 import javafx.scene.control.TreeItem;
 import javafx.collections.ObservableList;
-import javafx.collections.FXCollections;
 import milu.db.obj.abs.AbsDBFactory;
 import milu.db.obj.abs.ObjDBFactory;
 import milu.db.obj.abs.ObjDBInterface;
@@ -85,6 +83,8 @@ public class SelectedItemHandlerRootTable extends SelectedItemHandlerAbstract
 		}
 		
 		// Delete DBSchemaTableViewTab, if already exists. 
+		this.removeRelatedTab( SchemaTableViewTab.class );
+		/*
 		if ( this.refreshType == SelectedItemHandlerAbstract.REFRESH_TYPE.WITH_REFRESH )
 		{
 			final ObservableList<Tab> tabLst =  this.tabPane.getTabs();
@@ -102,6 +102,7 @@ public class SelectedItemHandlerRootTable extends SelectedItemHandlerAbstract
 			}
 			this.tabPane.getTabs().removeAll( relatedTabLst );
 		}
+		*/
 	}
 
 }

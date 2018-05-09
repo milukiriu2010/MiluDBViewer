@@ -1,8 +1,6 @@
 package milu.gui.ctrl.schema.handle;
 
-import javafx.collections.ObservableList;
 import javafx.scene.Node;
-import javafx.scene.control.Tab;
 import javafx.scene.control.TreeItem;
 import milu.db.obj.abs.AbsDBFactory;
 import milu.db.obj.abs.ObjDBFactory;
@@ -52,9 +50,11 @@ public class SelectedItemHandlerEachTrigger extends SelectedItemHandlerAbstract
 		TreeItem<SchemaEntity> itemParent = itemSelected.getParent();
 		String schemaName   = itemParent.getParent().getValue().toString();
 		String triggerName  = itemSelected.getValue().getName();
-		String id           = schemaName + "@trigger@" + triggerName;
+		//String id           = schemaName + "@trigger@" + triggerName;
+		String id         = schemaName + this.strPartUserData + triggerName;
 		System.out.println( "setTrigger:" + triggerName );
 		
+		/*
 		final ObservableList<Tab> tabLst =  this.tabPane.getTabs();
 		for ( Tab tab : tabLst )
 		{
@@ -78,7 +78,13 @@ public class SelectedItemHandlerEachTrigger extends SelectedItemHandlerAbstract
 				}
 			}
 		}		
-		
+		*/
+		// Activate DBSchemaTableViewTab, if already exists.
+		// Delete DBSchemaTableViewTab, if already exists.
+		if ( MANIPULATE_TYPE.SELECT.equals(this.manipulateSpecifiedTab( SchemaProcViewTab.class , id )) )
+		{
+			return;
+		}
 		
 		// Create DBSchemaProcViewTab, if it doesn't exist.
 		SchemaProcViewTab newTab = new SchemaProcViewTab( this.dbView );

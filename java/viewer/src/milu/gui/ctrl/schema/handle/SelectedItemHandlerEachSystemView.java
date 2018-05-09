@@ -6,9 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import javafx.scene.Node;
-import javafx.scene.control.Tab;
 import javafx.scene.control.TreeItem;
-import javafx.collections.ObservableList;
 import milu.db.obj.abs.AbsDBFactory;
 import milu.db.obj.abs.ObjDBFactory;
 import milu.db.obj.abs.ObjDBInterface;
@@ -47,9 +45,11 @@ public class SelectedItemHandlerEachSystemView extends SelectedItemHandlerAbstra
 		TreeItem<SchemaEntity> itemParent   = this.itemSelected.getParent();
 		String schemaName     = itemParent.getParent().getValue().toString();
 		String systemViewName = itemSelected.getValue().getName();
-		String id             = schemaName + "@system_view@" + systemViewName;
+		//String id             = schemaName + "@system_view@" + systemViewName;
+		String id         = schemaName + this.strPartUserData + systemViewName;
 		System.out.println( "setSystemViewDef:" + systemViewName );
 		
+		/*
 		final ObservableList<Tab> tabLst =  this.tabPane.getTabs();
 		for ( Tab tab : tabLst )
 		{
@@ -72,6 +72,13 @@ public class SelectedItemHandlerEachSystemView extends SelectedItemHandlerAbstra
 					break;
 				}
 			}
+		}
+		*/
+		// Activate DBSchemaTableViewTab, if already exists.
+		// Delete DBSchemaTableViewTab, if already exists.
+		if ( MANIPULATE_TYPE.SELECT.equals(this.manipulateSpecifiedTab( SchemaTableViewTab.class , id )) )
+		{
+			return;
 		}
 		
 		// Create DBSchemaTableViewTab, if it doesn't exist.
@@ -127,7 +134,15 @@ public class SelectedItemHandlerEachSystemView extends SelectedItemHandlerAbstra
 			}
 			else
 			{
-				dataType2 = dataType + "(" + dataSize + ")";
+				// Oracle => TIMESTAMP(*)
+				if ( dataType.contains("(") )
+				{
+					dataType2 = dataType;
+				}
+				else
+				{
+					dataType2 = dataType + "(" + dataSize + ")";
+				}
 			}
 			dataRow2.add( dataType2 );
 			dataRow2.add( dataRow1.get("nullable") );

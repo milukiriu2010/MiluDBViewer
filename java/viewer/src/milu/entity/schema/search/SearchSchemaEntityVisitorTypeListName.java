@@ -63,4 +63,10 @@ public class SearchSchemaEntityVisitorTypeListName
 		}
 	}
 
+	@Override
+	public void visitParent( SchemaEntity schemaEntity )
+	{
+		throw new UnsupportedOperationException();
+	}
+
 }

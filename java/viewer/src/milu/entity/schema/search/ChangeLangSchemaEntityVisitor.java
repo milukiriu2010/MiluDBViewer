@@ -20,4 +20,10 @@ public class ChangeLangSchemaEntityVisitor implements VisitorInterface {
 		}
 	}
 
+	@Override
+	public void visitParent( SchemaEntity schemaEntity )
+	{
+		throw new UnsupportedOperationException();
+	}
+
 }
