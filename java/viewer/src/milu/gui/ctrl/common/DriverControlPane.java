@@ -145,7 +145,8 @@ public class DriverControlPane extends Pane
 		this.driverEdit = null;
 		
 		this.driverClassNameTxt.setText("");
-		this.driverClassNameTxt.setDisable(false);
+		//this.driverClassNameTxt.setDisable(false);
+		this.driverClassNameTxt.setEditable(true);
 		
 		this.driverTemplateUrlTxt.setText("");
 		this.driverReferenceUrlTxt.setText("");
@@ -157,12 +158,9 @@ public class DriverControlPane extends Pane
 	{
 		this.driverEdit = driverEdit;
 		
-		//System.out.println( "setEditDriver.clazz[" + this.driverEdit.getDriverClazzName() + "]" );
-		//System.out.println( "setEditDriver.class[" + this.driverEdit.getDriverClassName() + "]" );
-		
-		//this.driverClassNameTxt.setText( this.driverEdit.getDriverClazzName() );
 		this.driverClassNameTxt.setText( this.driverEdit.getDriverClassName() );
-		this.driverClassNameTxt.setDisable(true);
+		//this.driverClassNameTxt.setDisable(true);
+		this.driverClassNameTxt.setEditable(false);
 
 		this.driverTemplateUrlTxt.setText( this.driverEdit.getTemplateUrl() );
 		this.driverReferenceUrlTxt.setText( this.driverEdit.getReferenceUrl() );

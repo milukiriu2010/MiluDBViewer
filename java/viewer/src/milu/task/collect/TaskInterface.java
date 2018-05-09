@@ -8,6 +8,7 @@ import milu.entity.schema.SchemaEntity;
 public interface TaskInterface 
 {
 	public void setAbsDBFactory( AbsDBFactory.FACTORY_TYPE factoryType );
+	public void setCollectDataType( CollectDataType dataType );
 	public void setMainController( MainController mainCtrl );
 	public void setMyDBAbstract( MyDBAbstract myDBAbs );
 	public void setSelectedSchemaEntity( SchemaEntity selectedSchemaEntity );

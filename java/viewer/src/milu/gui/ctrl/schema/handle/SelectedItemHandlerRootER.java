@@ -11,6 +11,7 @@ import milu.db.obj.abs.AbsDBFactory;
 import milu.entity.schema.SchemaEntity;
 import milu.gui.ctrl.schema.SchemaERViewTab;
 import milu.main.MainController;
+import milu.task.collect.CollectDataType;
 import milu.task.collect.CollectTaskFactory;
 import milu.tool.MyTool;
 
@@ -109,7 +110,7 @@ public class SelectedItemHandlerRootER extends SelectedItemHandlerAbstract
 		}
 		
 		MainController mainCtrl = this.dbView.getMainController();
-		final Task<Exception> collectTask = CollectTaskFactory.getInstance( AbsDBFactory.FACTORY_TYPE.FOREIGN_KEY, mainCtrl, this.myDBAbs, selectedEntity );
+		final Task<Exception> collectTask = CollectTaskFactory.getInstance( AbsDBFactory.FACTORY_TYPE.FOREIGN_KEY,  CollectDataType.LIST,mainCtrl, this.myDBAbs, selectedEntity );
 		if ( collectTask == null )
 		{
 			return;

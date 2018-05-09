@@ -9,7 +9,7 @@ import milu.db.MyDBAbstract;
 import milu.db.obj.abs.AbsDBFactory;
 import milu.db.obj.abs.ObjDBFactory;
 import milu.db.obj.abs.ObjDBInterface;
-import milu.db.obj.indexcolumn.IndexColumnDBAbstract;
+import milu.db.obj.index.IndexDBAbstract;
 import milu.entity.schema.SchemaEntity;
 import milu.entity.schema.search.SearchSchemaEntityInterface;
 import milu.entity.schema.search.SearchSchemaEntityVisitorFactory;
@@ -17,7 +17,7 @@ import milu.main.MainController;
 
 import milu.task.ProgressInterface;
 
-public class CollectTaskObjLstByIndex extends Task<Exception> 
+public class CollectTaskObj2Level extends Task<Exception> 
 	implements 
 		ProgressInterface,
 		TaskInterface
@@ -34,9 +34,16 @@ public class CollectTaskObjLstByIndex extends Task<Exception>
 	
 	private SchemaEntity   selectedSchemaEntity = null;
 	
+	@Override
 	public void setAbsDBFactory( AbsDBFactory.FACTORY_TYPE factoryType )
 	{
 		this.factoryType = factoryType;
+	}
+	
+	@Override
+	public void setCollectDataType( CollectDataType dataType )
+	{
+		
 	}
 	
 	@Override
@@ -90,15 +97,6 @@ public class CollectTaskObjLstByIndex extends Task<Exception>
 				return null;
 			}
 			
-			// Search [INDEX]
-			SearchSchemaEntityInterface searchIndexVisitor = new SearchSchemaEntityVisitorFactory().createInstance(SchemaEntity.SCHEMA_TYPE.INDEX);
-			this.selectedSchemaEntity.acceptParent(searchIndexVisitor);
-			SchemaEntity hitIndexEntity = searchIndexVisitor.getHitSchemaEntity();
-			if ( hitIndexEntity == null )
-			{
-				return null;
-			}
-			
 			// Search [TABLE]
 			SearchSchemaEntityInterface searchTableVisitor = new SearchSchemaEntityVisitorFactory().createInstance(SchemaEntity.SCHEMA_TYPE.TABLE);
 			this.selectedSchemaEntity.acceptParent(searchTableVisitor);
@@ -117,11 +115,10 @@ public class CollectTaskObjLstByIndex extends Task<Exception>
 				return null;
 			}
 			
-			String indexName  = hitIndexEntity.getName();
 			String schemaName = hitSchemaEntity.getName();
 			String tableName  = hitTableEntity.getName();
 			// start retrieving each schema 
-			List<SchemaEntity> schemaEntityLst = ((IndexColumnDBAbstract)objDBInf).selectEntityLst( schemaName, tableName, indexName );
+			List<SchemaEntity> schemaEntityLst = ((IndexDBAbstract)objDBInf).selectEntityLst( schemaName, tableName );
 			this.selectedSchemaEntity.addEntityAll(schemaEntityLst);
 			
 			return null;

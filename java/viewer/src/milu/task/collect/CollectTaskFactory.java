@@ -20,27 +20,27 @@ public class CollectTaskFactory
 		Task<Exception> task = null;
 		if ( myDBAbs instanceof MyDBPostgres )
 		{
-			task = new CollectTaskBasic();
+			task = new CollectTaskRootBasic();
 		}
 		else if ( myDBAbs instanceof MyDBMySQL )
 		{
-			task = new CollectTaskBasic();
+			task = new CollectTaskRootBasic();
 		}
 		else if ( myDBAbs instanceof MyDBOracle )
 		{
-			task = new CollectTaskBasic();
+			task = new CollectTaskRootBasic();
 		}
 		else if ( myDBAbs instanceof MyDBCassandra )
 		{
-			task = new CollectTaskBasic();
+			task = new CollectTaskRootBasic();
 		}
 		else if ( myDBAbs instanceof MyDBSQLServer )
 		{
-			task = new CollectTaskBasic();
+			task = new CollectTaskRootBasic();
 		}
 		else if ( myDBAbs instanceof MyDBSQLite )
 		{
-			task = new CollectTaskNoSchema();
+			task = new CollectTaskRootNoSchema();
 		}
 		else
 		{
@@ -56,25 +56,37 @@ public class CollectTaskFactory
 		return task;
 	}
 	
-	public static Task<Exception> getInstance( AbsDBFactory.FACTORY_TYPE factoryType, MainController mainCtrl, MyDBAbstract myDBAbs, SchemaEntity selectedSchemaEntity )
+	public static Task<Exception> getInstance( AbsDBFactory.FACTORY_TYPE factoryType, CollectDataType dataType, MainController mainCtrl, MyDBAbstract myDBAbs, SchemaEntity selectedSchemaEntity )
 	{
 		Task<Exception> task = null;
 		
 		if ( AbsDBFactory.FACTORY_TYPE.FOREIGN_KEY.equals(factoryType) )
 		{
-			task = new CollectTaskForeignKey();
+			task = new CollectTaskObjForeignKey();
 		}
 		else if ( AbsDBFactory.FACTORY_TYPE.INDEX.equals(factoryType) )
 		{
-			task = new CollectTaskObjLstByTable();
+			task = new CollectTaskObj2Level();
 		}
 		else if ( AbsDBFactory.FACTORY_TYPE.INDEX_COLUMN.equals(factoryType) )
 		{
-			task = new CollectTaskObjLstByIndex();
+			task = new CollectTaskObj3Level();
+		}
+		else if ( AbsDBFactory.FACTORY_TYPE.FUNC.equals(factoryType) )
+		{
+			task = new CollectTaskObj1Level();
+		}
+		else if ( AbsDBFactory.FACTORY_TYPE.AGGREGATE.equals(factoryType) )
+		{
+			task = new CollectTaskObj1Level();
+		}
+		else if ( AbsDBFactory.FACTORY_TYPE.TYPE.equals(factoryType) )
+		{
+			task = new CollectTaskObj1Level();
 		}
 		else if ( AbsDBFactory.FACTORY_TYPE.SEQUENCE.equals(factoryType) )
 		{
-			task = new CollectTaskObjLstBySchema();
+			task = new CollectTaskObj1Level();
 		}
 		else
 		{
@@ -84,6 +96,7 @@ public class CollectTaskFactory
 		if ( task instanceof TaskInterface )
 		{
 			((TaskInterface)task).setAbsDBFactory(factoryType);
+			((TaskInterface)task).setCollectDataType(dataType);
 			((TaskInterface)task).setMainController(mainCtrl);
 			((TaskInterface)task).setMyDBAbstract(myDBAbs);
 			((TaskInterface)task).setSelectedSchemaEntity(selectedSchemaEntity);

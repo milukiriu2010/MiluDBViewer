@@ -3,9 +3,12 @@ package milu.gui.ctrl.schema.handle;
 import java.sql.SQLException;
 
 import javafx.concurrent.Task;
+import javafx.collections.ObservableList;
+import javafx.scene.control.TreeItem;
 import milu.db.obj.abs.AbsDBFactory;
 import milu.entity.schema.SchemaEntity;
 import milu.main.MainController;
+import milu.task.collect.CollectDataType;
 import milu.task.collect.CollectTaskFactory;
 
 /**
@@ -34,7 +37,7 @@ public class SelectedItemHandlerRootIndex extends SelectedItemHandlerAbstract
 	{
 		SchemaEntity selectedEntity = this.itemSelected.getValue();
 		//TreeItem<SchemaEntity> itemParent   = this.itemSelected.getParent();
-		//ObservableList<TreeItem<SchemaEntity>> itemChildren = this.itemSelected.getChildren();
+		ObservableList<TreeItem<SchemaEntity>> itemChildren = this.itemSelected.getChildren();
 		
 		// get function List & add list as children
 		/*
@@ -64,8 +67,13 @@ public class SelectedItemHandlerRootIndex extends SelectedItemHandlerAbstract
 			}
 		}
 		*/
+		if ( itemChildren.size() > 0 )
+		{
+			return;
+		}
+		
 		MainController mainCtrl = this.dbView.getMainController();
-		final Task<Exception> collectTask = CollectTaskFactory.getInstance( AbsDBFactory.FACTORY_TYPE.INDEX, mainCtrl, this.myDBAbs, selectedEntity );
+		final Task<Exception> collectTask = CollectTaskFactory.getInstance( AbsDBFactory.FACTORY_TYPE.INDEX,  CollectDataType.LIST,mainCtrl, this.myDBAbs, selectedEntity );
 		if ( collectTask == null )
 		{
 			return;

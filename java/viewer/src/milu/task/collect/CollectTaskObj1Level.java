@@ -16,7 +16,7 @@ import milu.main.MainController;
 
 import milu.task.ProgressInterface;
 
-public class CollectTaskObjLstBySchema extends Task<Exception> 
+public class CollectTaskObj1Level extends Task<Exception> 
 	implements 
 		ProgressInterface,
 		TaskInterface
@@ -25,6 +25,8 @@ public class CollectTaskObjLstBySchema extends Task<Exception>
 	
 	private AbsDBFactory.FACTORY_TYPE factoryType = null;
 	
+	private CollectDataType  dataType = null;
+	
 	//private MainController mainCtrl = null;
 	
 	private MyDBAbstract   myDBAbs  = null;
@@ -32,10 +34,17 @@ public class CollectTaskObjLstBySchema extends Task<Exception>
 	private double         progress = 0.0;
 	
 	private SchemaEntity   selectedSchemaEntity = null;
-	
+
+	@Override
 	public void setAbsDBFactory( AbsDBFactory.FACTORY_TYPE factoryType )
 	{
 		this.factoryType = factoryType;
+	}
+	
+	@Override
+	public void setCollectDataType( CollectDataType dataType )
+	{
+		this.dataType = dataType;
 	}
 	
 	@Override
@@ -99,9 +108,18 @@ public class CollectTaskObjLstBySchema extends Task<Exception>
 			}
 			
 			String schemaName = hitEntity.getName();
-			// start retrieving each schema 
-			List<SchemaEntity> schemaEntityLst = objDBInf.selectEntityLst( schemaName );
-			this.selectedSchemaEntity.addEntityAll(schemaEntityLst);
+			// Retrieve List
+			if ( CollectDataType.LIST.equals(dataType) )
+			{
+				List<SchemaEntity> schemaEntityLst = objDBInf.selectEntityLst( schemaName );
+				this.selectedSchemaEntity.addEntityAll(schemaEntityLst);
+			}
+			// Retrieve Source
+			else if ( CollectDataType.SOURCE.equals(dataType) )
+			{
+				String strSrc = objDBInf.getSRC( schemaName, this.selectedSchemaEntity.getName() );
+				this.selectedSchemaEntity.setSrcSQL(strSrc);
+			}
 			
 			return null;
 		}

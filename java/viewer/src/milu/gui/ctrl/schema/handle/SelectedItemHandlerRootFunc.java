@@ -1,15 +1,16 @@
 package milu.gui.ctrl.schema.handle;
 
 import java.sql.SQLException;
-import java.util.List;
 
 import javafx.scene.control.TreeItem;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
 import milu.db.obj.abs.AbsDBFactory;
-import milu.db.obj.abs.ObjDBFactory;
-import milu.db.obj.abs.ObjDBInterface;
 import milu.entity.schema.SchemaEntity;
 import milu.gui.ctrl.schema.SchemaProcViewTab;
+import milu.main.MainController;
+import milu.task.collect.CollectDataType;
+import milu.task.collect.CollectTaskFactory;
 
 /**
  * This class is invoked, when "root func" item is clicked on SchemaTreeView.
@@ -38,9 +39,10 @@ public class SelectedItemHandlerRootFunc extends SelectedItemHandlerAbstract
 			SQLException
 	{
 		SchemaEntity selectedEntity = this.itemSelected.getValue();
-		TreeItem<SchemaEntity> itemParent   = this.itemSelected.getParent();
+		//TreeItem<SchemaEntity> itemParent   = this.itemSelected.getParent();
 		ObservableList<TreeItem<SchemaEntity>> itemChildren = this.itemSelected.getChildren();
 		
+		/*
 		// get function List & add list as children
 		if ( itemChildren.size() == 0 )
 		{
@@ -69,25 +71,46 @@ public class SelectedItemHandlerRootFunc extends SelectedItemHandlerAbstract
 		
 		// Delete DBSchemaTableViewTab, if already exists. 
 		this.removeRelatedTab( SchemaProcViewTab.class );
-		/*
-		if ( this.refreshType == SelectedItemHandlerAbstract.REFRESH_TYPE.WITH_REFRESH )
+		*/
+		if ( itemChildren.size() > 0 )
 		{
-			final ObservableList<Tab> tabLst =  this.tabPane.getTabs();
-			ObservableList<Tab> relatedTabLst = FXCollections.observableArrayList();
-			for ( Tab tab : tabLst )
+			return;
+		}
+		
+		MainController mainCtrl = this.dbView.getMainController();
+		final Task<Exception> collectTask = CollectTaskFactory.getInstance( AbsDBFactory.FACTORY_TYPE.FUNC,  CollectDataType.LIST, mainCtrl, this.myDBAbs, selectedEntity );
+		if ( collectTask == null )
+		{
+			return;
+		}
+		
+		// execute task
+		this.service.submit( collectTask );
+		
+		collectTask.progressProperty().addListener
+		(
+			(obs,oldVal,newVal)->
 			{
-				if (
-					( tab instanceof SchemaProcViewTab ) &&
-					//( ((String)tab.getUserData()).contains("@func@") == true )
-					( ((String)tab.getUserData()).contains(this.strPartUserData) == true )
-				)
+				System.out.println( "CollectTask:Progress[" + obs.getClass() + "]oldVal[" + oldVal + "]newVal[" + newVal + "]" );
+				if ( newVal.doubleValue() == 0.0 )
 				{
-					relatedTabLst.add( tab );
+					this.schemaTreeView.setIsLoading(true);
+				}
+				// Task Done.
+				else if ( newVal.doubleValue() == 1.0 )
+				{
+					System.out.println( "CollectTask:Done[" + newVal + "]" );
+					this.schemaTreeView.addEntityLst( itemSelected, selectedEntity.getEntityLst(), true );
+					this.schemaTreeView.setChildrenCnt();
+					this.schemaTreeView.setIsLoading(false);
+					this.dbView.setBottomMsg(null);
+					// Delete Related Tab, if already exists. 
+					this.removeRelatedTab( SchemaProcViewTab.class );
+					this.serviceShutdown();
 				}
 			}
-			this.tabPane.getTabs().removeAll( relatedTabLst );
-		}
-		*/
+		);
+		
 	}
 
 }

@@ -17,7 +17,7 @@ import milu.main.MainController;
 
 import milu.task.ProgressInterface;
 
-public class CollectTaskBasic extends Task<Exception> 
+public class CollectTaskRootBasic extends Task<Exception> 
 	implements 
 		ProgressInterface,
 		TaskInterface
@@ -34,6 +34,12 @@ public class CollectTaskBasic extends Task<Exception>
 	
 	@Override
 	public void setAbsDBFactory( AbsDBFactory.FACTORY_TYPE factoryType )
+	{
+		
+	}
+	
+	@Override
+	public void setCollectDataType( CollectDataType dataType )
 	{
 		
 	}

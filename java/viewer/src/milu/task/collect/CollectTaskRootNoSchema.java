@@ -14,7 +14,7 @@ import milu.main.MainController;
 
 import milu.task.ProgressInterface;
 
-public class CollectTaskNoSchema extends Task<Exception> 
+public class CollectTaskRootNoSchema extends Task<Exception> 
 	implements 
 		ProgressInterface,
 		TaskInterface
@@ -34,6 +34,12 @@ public class CollectTaskNoSchema extends Task<Exception>
 	{
 		
 	}	
+	
+	@Override
+	public void setCollectDataType( CollectDataType dataType )
+	{
+		
+	}
 	
 	@Override
 	public void setMainController( MainController mainCtrl )

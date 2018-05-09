@@ -2,9 +2,11 @@ package milu.gui.ctrl.schema.handle;
 
 import javafx.concurrent.Task;
 import javafx.scene.control.TreeItem;
+import javafx.collections.ObservableList;
 import milu.db.obj.abs.AbsDBFactory;
 import milu.entity.schema.SchemaEntity;
 import milu.main.MainController;
+import milu.task.collect.CollectDataType;
 import milu.task.collect.CollectTaskFactory;
 
 import java.sql.SQLException;
@@ -33,11 +35,11 @@ public class SelectedItemHandlerEachIndex extends SelectedItemHandlerAbstract
 			SQLException
 	{
 		SchemaEntity selectedEntity = this.itemSelected.getValue();
-		TreeItem<SchemaEntity> itemParent = itemSelected.getParent();
+		//TreeItem<SchemaEntity> itemParent = itemSelected.getParent();
 		//String schemaName = itemParent.getParent().getParent().getParent().getValue().toString();
 		//String tableName  = this.itemSelected.getParent().getParent().getValue().getName();
 		//String indexName  = this.itemSelected.getValue().getName();
-		//ObservableList<TreeItem<SchemaEntity>> itemChildren = this.itemSelected.getChildren();
+		ObservableList<TreeItem<SchemaEntity>> itemChildren = this.itemSelected.getChildren();
 		
 		/*
 		if ( itemChildren.size() == 0 )
@@ -64,8 +66,13 @@ public class SelectedItemHandlerEachIndex extends SelectedItemHandlerAbstract
 			}
 		}
 		*/
+		if ( itemChildren.size() > 0 )
+		{
+			return;
+		}
+		
 		MainController mainCtrl = this.dbView.getMainController();
-		final Task<Exception> collectTask = CollectTaskFactory.getInstance( AbsDBFactory.FACTORY_TYPE.INDEX_COLUMN, mainCtrl, this.myDBAbs, selectedEntity );
+		final Task<Exception> collectTask = CollectTaskFactory.getInstance( AbsDBFactory.FACTORY_TYPE.INDEX_COLUMN, CollectDataType.LIST, mainCtrl, this.myDBAbs, selectedEntity );
 		if ( collectTask == null )
 		{
 			return;

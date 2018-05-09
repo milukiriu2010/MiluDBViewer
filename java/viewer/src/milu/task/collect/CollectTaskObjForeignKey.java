@@ -9,15 +9,16 @@ import milu.db.MyDBAbstract;
 import milu.db.obj.abs.AbsDBFactory;
 import milu.db.obj.abs.ObjDBFactory;
 import milu.db.obj.abs.ObjDBInterface;
-import milu.db.obj.index.IndexDBAbstract;
+import milu.db.obj.fk.FKDBAbstract;
 import milu.entity.schema.SchemaEntity;
+import milu.entity.schema.SchemaEntityEachFK;
 import milu.entity.schema.search.SearchSchemaEntityInterface;
 import milu.entity.schema.search.SearchSchemaEntityVisitorFactory;
 import milu.main.MainController;
 
 import milu.task.ProgressInterface;
 
-public class CollectTaskObjLstByTable extends Task<Exception> 
+public class CollectTaskObjForeignKey extends Task<Exception> 
 	implements 
 		ProgressInterface,
 		TaskInterface
@@ -34,9 +35,16 @@ public class CollectTaskObjLstByTable extends Task<Exception>
 	
 	private SchemaEntity   selectedSchemaEntity = null;
 	
+	@Override
 	public void setAbsDBFactory( AbsDBFactory.FACTORY_TYPE factoryType )
 	{
 		this.factoryType = factoryType;
+	}
+	
+	@Override
+	public void setCollectDataType( CollectDataType dataType )
+	{
+		
 	}
 	
 	@Override
@@ -90,29 +98,29 @@ public class CollectTaskObjLstByTable extends Task<Exception>
 				return null;
 			}
 			
-			// Search [TABLE]
-			SearchSchemaEntityInterface searchTableVisitor = new SearchSchemaEntityVisitorFactory().createInstance(SchemaEntity.SCHEMA_TYPE.TABLE);
-			this.selectedSchemaEntity.acceptParent(searchTableVisitor);
-			SchemaEntity hitTableEntity = searchTableVisitor.getHitSchemaEntity();
-			if ( hitTableEntity == null )
-			{
-				return null;
-			}
-			
 			// Search [SCHEMA]
 			SearchSchemaEntityInterface searchSchemaVisitor = new SearchSchemaEntityVisitorFactory().createInstance(SchemaEntity.SCHEMA_TYPE.SCHEMA);
 			this.selectedSchemaEntity.acceptParent(searchSchemaVisitor);
-			SchemaEntity hitSchemaEntity = searchSchemaVisitor.getHitSchemaEntity();
-			if ( hitSchemaEntity == null )
+			SchemaEntity hitEntity = searchSchemaVisitor.getHitSchemaEntity();
+			// SQLite => schemaName = null
+			String schemaName = null;
+			if ( hitEntity != null )
 			{
-				return null;
+				schemaName = hitEntity.getName();
 			}
 			
-			String schemaName = hitSchemaEntity.getName();
-			String tableName  = hitTableEntity.getName();
 			// start retrieving each schema 
-			List<SchemaEntity> schemaEntityLst = ((IndexDBAbstract)objDBInf).selectEntityLst( schemaName, tableName );
-			this.selectedSchemaEntity.addEntityAll(schemaEntityLst);
+			List<SchemaEntity> fkEntityLst = objDBInf.selectEntityLst( schemaName );
+			FKDBAbstract fkDBAbs = (FKDBAbstract)objDBInf;
+			for ( SchemaEntity seEntity : fkEntityLst )
+			{
+				this.setMsg(fkEntityLst.toString());
+				this.selectedSchemaEntity.addEntity( seEntity );
+				SchemaEntityEachFK fkEntity = (SchemaEntityEachFK) seEntity;
+				fkDBAbs.selectSrcColumnMap(fkEntity);
+				fkDBAbs.selectDstColumnMap(fkEntity);
+				this.addProgress( MAX/fkEntityLst.size() );
+			}
 			
 			return null;
 		}
