@@ -1,16 +1,7 @@
 package milu.gui.ctrl.schema.handle;
 
 import java.sql.SQLException;
-import java.util.List;
-
-import javafx.scene.control.TreeItem;
-import javafx.collections.ObservableList;
 import milu.db.obj.abs.AbsDBFactory;
-import milu.db.obj.abs.ObjDBFactory;
-import milu.db.obj.abs.ObjDBInterface;
-import milu.entity.schema.SchemaEntity;
-import milu.entity.schema.search.SearchSchemaEntityInterface;
-import milu.entity.schema.search.SearchSchemaEntityVisitorFactory;
 import milu.gui.ctrl.schema.SchemaTableViewTab;
 
 /**
@@ -37,6 +28,7 @@ public class SelectedItemHandlerRootTable extends SelectedItemHandlerAbstract
 			UnsupportedOperationException, 
 			SQLException
 	{
+		/*
 		SchemaEntity selectedEntity = this.itemSelected.getValue();
 		TreeItem<SchemaEntity> itemParent   = this.itemSelected.getParent();
 		ObservableList<TreeItem<SchemaEntity>> itemChildren = this.itemSelected.getChildren();
@@ -84,25 +76,8 @@ public class SelectedItemHandlerRootTable extends SelectedItemHandlerAbstract
 		
 		// Delete DBSchemaTableViewTab, if already exists. 
 		this.removeRelatedTab( SchemaTableViewTab.class );
-		/*
-		if ( this.refreshType == SelectedItemHandlerAbstract.REFRESH_TYPE.WITH_REFRESH )
-		{
-			final ObservableList<Tab> tabLst =  this.tabPane.getTabs();
-			ObservableList<Tab> relatedTabLst = FXCollections.observableArrayList();
-			for ( Tab tab : tabLst )
-			{
-				if (
-					( tab instanceof SchemaTableViewTab ) &&
-					//( tab.getId().contains("@table@") == true )
-					( ((String)tab.getUserData()).contains("@table@") == true )
-				)
-				{
-					relatedTabLst.add( tab );
-				}
-			}
-			this.tabPane.getTabs().removeAll( relatedTabLst );
-		}
 		*/
+		this.loadChildLst( AbsDBFactory.FACTORY_TYPE.TABLE, SchemaTableViewTab.class );
 	}
 
 }

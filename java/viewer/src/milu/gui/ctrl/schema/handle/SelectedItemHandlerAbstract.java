@@ -3,18 +3,34 @@ package milu.gui.ctrl.schema.handle;
 import javafx.scene.control.TreeItem;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
+import javafx.scene.Node;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 
+import java.lang.reflect.Constructor;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
+import milu.gui.ctrl.common.inf.SetTableViewSQLInterface;
+import milu.gui.ctrl.schema.SchemaTableViewTab;
 import milu.gui.ctrl.schema.SchemaTreeView;
+import milu.gui.ctrl.schema.SetSrcTextInterface;
+import milu.gui.ctrl.schema.handle.SelectedItemHandlerAbstract.DEFINITION_TYPE;
+import milu.gui.ctrl.schema.handle.SelectedItemHandlerAbstract.MANIPULATE_TYPE;
 import milu.db.MyDBAbstract;
+import milu.db.obj.abs.AbsDBFactory;
 import milu.entity.schema.SchemaEntity;
 import milu.gui.view.DBView;
+import milu.main.MainController;
+import milu.task.collect.CollectDataType;
+import milu.task.collect.CollectTaskFactory;
+import milu.tool.MyTool;
 
 abstract public class SelectedItemHandlerAbstract 
 {
@@ -40,11 +56,17 @@ abstract public class SelectedItemHandlerAbstract
 		WITH_REFRESH
 	}
 	
-	public enum MANIPULATE_TYPE
+	enum MANIPULATE_TYPE
 	{
 		NONE,
 		SELECT,
 		REMOVE
+	}
+	
+	enum DEFINITION_TYPE
+	{
+		WITH_DEFAULT,
+		NO_DEFAULT
 	}
 	
 	protected REFRESH_TYPE  refreshType = REFRESH_TYPE.NO_REFRESH;
@@ -115,7 +137,7 @@ abstract public class SelectedItemHandlerAbstract
 			UnsupportedOperationException,
 			SQLException;
 	
-	protected void removeRelatedTab( Class<?> castClazz )
+	private void removeRelatedTab( Class<?> castClazz )
 	{
 		if ( this.refreshType == SelectedItemHandlerAbstract.REFRESH_TYPE.WITH_REFRESH )
 		{
@@ -164,5 +186,307 @@ abstract public class SelectedItemHandlerAbstract
 		}
 		
 		return MANIPULATE_TYPE.NONE;
+	}
+	
+	// Call by SelectedItemHandlerRootXX
+	protected void loadChildLst( AbsDBFactory.FACTORY_TYPE factoryType, Class<?> castClazz )
+	{
+		SchemaEntity selectedEntity = this.itemSelected.getValue();
+		ObservableList<TreeItem<SchemaEntity>> itemChildren = this.itemSelected.getChildren();
+		if ( itemChildren.size() > 0 )
+		{
+			return;
+		}
+		
+		MainController mainCtrl = this.dbView.getMainController();
+		final Task<Exception> collectTask = CollectTaskFactory.getInstance( factoryType,  CollectDataType.LIST , mainCtrl, this.myDBAbs, selectedEntity );
+		if ( collectTask == null )
+		{
+			return;
+		}
+		
+		// execute task
+		this.service.submit( collectTask );
+		
+		collectTask.progressProperty().addListener
+		(
+			(obs,oldVal,newVal)->
+			{
+				System.out.println( "CollectTask:Progress[" + obs.getClass() + "]oldVal[" + oldVal + "]newVal[" + newVal + "]" );
+				if ( newVal.doubleValue() == 0.0 )
+				{
+					this.schemaTreeView.setIsLoading(true);
+				}
+				// Task Done.
+				else if ( newVal.doubleValue() == 1.0 )
+				{
+					System.out.println( "CollectTask:Done[" + newVal + "]" );
+					this.schemaTreeView.addEntityLst( itemSelected, selectedEntity.getEntityLst(), true );
+					this.schemaTreeView.setChildrenCnt();
+					this.schemaTreeView.setIsLoading(false);
+					this.dbView.setBottomMsg(null);
+					// Delete Related Tab, if already exists. 
+					if ( castClazz != null )
+					{
+						this.removeRelatedTab( castClazz );
+					}
+					this.serviceShutdown();
+				}
+			}
+		);
+	}
+	
+	// Call by SelectedItemHandlerEachXX
+	protected void loadSource( AbsDBFactory.FACTORY_TYPE factoryType, Class<?> castClazz )
+	{
+		SchemaEntity selectedEntity = this.itemSelected.getValue();
+		TreeItem<SchemaEntity> itemParent = itemSelected.getParent();
+		String schemaName = itemParent.getParent().getValue().toString();
+		String objName   = itemSelected.getValue().getName();
+		String id         = schemaName + this.strPartUserData + objName;
+		
+		// Activate Tab, if already exists.
+		// Delete Tab, if already exists.
+		if ( MANIPULATE_TYPE.SELECT.equals(this.manipulateSpecifiedTab( castClazz , id )) )
+		{
+			return;
+		}
+		
+		Object obj = null;
+		Constructor<?>[] constructors = castClazz.getDeclaredConstructors();
+		for ( int i = 0; i < constructors.length; i++ )
+		{
+			try
+			{
+				// exit loop 
+				// when match "new XXViewTab( DBView dbView )"
+				obj = castClazz.cast(constructors[i].newInstance(this.dbView));
+				break;
+			}
+			catch ( Exception ex )
+			{
+			}
+		}
+		if ( obj == null )
+		{
+			return;
+		}
+		
+		Tab newTab = null;
+		if ( obj instanceof Tab )
+		{
+			newTab = (Tab)obj;
+		}
+		
+		newTab.setUserData( id );
+		newTab.setText( objName );
+		this.tabPane.getTabs().add( newTab );
+		this.tabPane.getSelectionModel().select( newTab );
+		
+		// set icon on Tab
+		MainController mainCtrl = this.dbView.getMainController();
+		Node imageGroup = MyTool.createImageView( 16, 16, mainCtrl, selectedEntity );
+		newTab.setGraphic( imageGroup );
+		
+		// get function ddl
+		String strSrc = selectedEntity.getSrcSQL();
+		
+		if ( ( strSrc != null ) && 
+				( this.refreshType ==  SelectedItemHandlerAbstract.REFRESH_TYPE.NO_REFRESH )
+		)
+		{
+			// set source in SqlTextArea
+			((SetSrcTextInterface)newTab).setSrcText( strSrc );
+			return;
+		}
+
+		final Task<Exception> collectTask = CollectTaskFactory.getInstance( factoryType,  CollectDataType.SOURCE, mainCtrl, this.myDBAbs, selectedEntity );
+		if ( collectTask == null )
+		{
+			return;
+		}
+		
+		// execute task
+		this.service.submit( collectTask );
+		
+		final SetSrcTextInterface sstInf = (SetSrcTextInterface)newTab;
+		collectTask.progressProperty().addListener
+		(
+			(obs,oldVal,newVal)->
+			{
+				System.out.println( "CollectTask:Progress[" + obs.getClass() + "]oldVal[" + oldVal + "]newVal[" + newVal + "]" );
+				if ( newVal.doubleValue() == 0.0 )
+				{
+					this.schemaTreeView.setIsLoading(true);
+				}
+				// Task Done.
+				else if ( newVal.doubleValue() == 1.0 )
+				{
+					System.out.println( "CollectTask:Done[" + newVal + "]" );
+					this.schemaTreeView.setIsLoading(false);
+					this.dbView.setBottomMsg(null);
+					// set source in SqlTextArea
+					sstInf.setSrcText( selectedEntity.getSrcSQL() );
+					this.serviceShutdown();
+				}
+			}
+		);
+	}
+	
+	// Call by SelectedItemHandlerEachXX
+	protected void loadDefinition( AbsDBFactory.FACTORY_TYPE factoryType, Class<?> castClazz, DEFINITION_TYPE defType )
+	{
+		SchemaEntity selectedEntity = this.itemSelected.getValue();
+		TreeItem<SchemaEntity> itemParent   = this.itemSelected.getParent();
+		String schemaName = itemParent.getParent().getValue().toString();
+		String objName    = itemSelected.getValue().getName();
+		String id         = schemaName + this.strPartUserData + objName;
+		
+		// Activate Tab, if already exists.
+		// Delete Tab, if already exists.
+		if ( MANIPULATE_TYPE.SELECT.equals(this.manipulateSpecifiedTab( castClazz , id )) )
+		{
+			return;
+		}		
+		Object obj = null;
+		Constructor<?>[] constructors = castClazz.getDeclaredConstructors();
+		for ( int i = 0; i < constructors.length; i++ )
+		{
+			try
+			{
+				// exit loop 
+				// when match "new XXViewTab( DBView dbView )"
+				obj = castClazz.cast(constructors[i].newInstance(this.dbView));
+				break;
+			}
+			catch ( Exception ex )
+			{
+			}
+		}
+		if ( obj == null )
+		{
+			return;
+		}
+		
+		Tab newTab = null;
+		if ( obj instanceof Tab )
+		{
+			newTab = (Tab)obj;
+		}
+		
+		newTab.setUserData( id );
+		newTab.setText( objName );
+		this.tabPane.getTabs().add( newTab );
+		this.tabPane.getSelectionModel().select( newTab );
+		
+		// set icon on Tab
+		MainController mainCtrl = this.dbView.getMainController();
+		Node imageGroup = MyTool.createImageView( 16, 16, mainCtrl, selectedEntity );
+		newTab.setGraphic( imageGroup );
+		
+		// get view definition
+		List<Map<String,String>>  dataLst = selectedEntity.getDefinitionLst();
+		if ( ( dataLst.size() != 0 ) &&
+				( this.refreshType ==  SelectedItemHandlerAbstract.REFRESH_TYPE.NO_REFRESH )
+		)
+		{
+			((SetTableViewSQLInterface)newTab).setTableViewSQL
+			(
+				this.createHeadLst(defType), 
+				this.createDataLst(defType, dataLst)
+			);
+			return;
+		}
+		
+		final Task<Exception> collectTask = CollectTaskFactory.getInstance( factoryType,  CollectDataType.DEFINITION, mainCtrl, this.myDBAbs, selectedEntity );
+		if ( collectTask == null )
+		{
+			return;
+		}
+		
+		// execute task
+		this.service.submit( collectTask );
+		
+		final SetTableViewSQLInterface stvInf = (SetTableViewSQLInterface)newTab;
+		collectTask.progressProperty().addListener
+		(
+			(obs,oldVal,newVal)->
+			{
+				System.out.println( "CollectTask:Progress[" + obs.getClass() + "]oldVal[" + oldVal + "]newVal[" + newVal + "]" );
+				if ( newVal.doubleValue() == 0.0 )
+				{
+					this.schemaTreeView.setIsLoading(true);
+				}
+				// Task Done.
+				else if ( newVal.doubleValue() == 1.0 )
+				{
+					System.out.println( "CollectTask:Done[" + newVal + "]" );
+					this.schemaTreeView.setIsLoading(false);
+					this.dbView.setBottomMsg(null);
+					// set source in SqlTextArea
+					stvInf.setTableViewSQL
+					(
+						this.createHeadLst(defType), 
+						this.createDataLst(defType, selectedEntity.getDefinitionLst() )
+					);
+
+					this.serviceShutdown();
+				}
+			}
+		);
+		
+	}
+	
+	protected List<String> createHeadLst( DEFINITION_TYPE defType )
+	{
+		List<String> headLst = new ArrayList<String>();
+		headLst.add( "COLUMN" );
+		headLst.add( "TYPE" );
+		headLst.add( "NULL?" );
+		if ( DEFINITION_TYPE.WITH_DEFAULT.equals(defType) )
+		{
+			headLst.add( "DEFAULT" );
+		}
+		return headLst;
+	}
+	
+	protected List<List<String>> createDataLst( DEFINITION_TYPE defType, List<Map<String,String>>  dataLst )
+	{
+		List<List<String>>  data2Lst = new ArrayList<List<String>>();
+		
+		for ( Map<String,String> dataRow1 : dataLst )
+		{
+			List<String> dataRow2 = new ArrayList<String>();
+			dataRow2.add( dataRow1.get("column_name") );
+			String dataType = dataRow1.get("data_type");
+			String dataSize = dataRow1.get("data_size");
+			String dataType2 = "";
+			if ( dataSize == null )
+			{
+				dataType2 = dataType;
+			}
+			else
+			{
+				// Oracle => TIMESTAMP(*)
+				if ( dataType.contains("(") )
+				{
+					dataType2 = dataType;
+				}
+				else
+				{
+					dataType2 = dataType + "(" + dataSize + ")";
+				}
+			}
+			dataRow2.add( dataType2 );
+			dataRow2.add( dataRow1.get("nullable") );
+			if ( DEFINITION_TYPE.WITH_DEFAULT.equals(defType) )
+			{
+				dataRow2.add( dataRow1.get("data_default") );
+			}
+			
+			data2Lst.add( dataRow2 );
+		}
+		
+		return data2Lst;
 	}
 }

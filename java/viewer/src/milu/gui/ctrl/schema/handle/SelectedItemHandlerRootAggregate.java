@@ -2,15 +2,8 @@ package milu.gui.ctrl.schema.handle;
 
 import java.sql.SQLException;
 
-import javafx.scene.control.TreeItem;
-import javafx.collections.ObservableList;
-import javafx.concurrent.Task;
 import milu.db.obj.abs.AbsDBFactory;
-import milu.entity.schema.SchemaEntity;
 import milu.gui.ctrl.schema.SchemaProcViewTab;
-import milu.main.MainController;
-import milu.task.collect.CollectDataType;
-import milu.task.collect.CollectTaskFactory;
 
 /**
  * This class is invoked, when "root aggregate" item is clicked on SchemaTreeView.
@@ -38,40 +31,12 @@ public class SelectedItemHandlerRootAggregate extends SelectedItemHandlerAbstrac
 			UnsupportedOperationException, 
 			SQLException
 	{
+		/*
 		SchemaEntity selectedEntity = this.itemSelected.getValue();
 		//TreeItem<SchemaEntity> itemParent   = this.itemSelected.getParent();
 		ObservableList<TreeItem<SchemaEntity>> itemChildren = this.itemSelected.getChildren();
 		
 		// get aggregate List & add list as children
-		/*
-		if ( itemChildren.size() == 0 )
-		{
-			if ( selectedEntity.getEntityLst().size() == 0 )
-			{
-				ObjDBFactory objDBFactory = AbsDBFactory.getFactory( AbsDBFactory.FACTORY_TYPE.AGGREGATE );
-				if ( objDBFactory == null )
-				{
-					return;
-				}
-				ObjDBInterface objDBInf = objDBFactory.getInstance(myDBAbs);
-				if ( objDBInf == null )
-				{
-					return;
-				}
-				String schemaName = itemParent.getValue().toString();
-				List<SchemaEntity> entityLst = objDBInf.selectEntityLst(schemaName);
-				selectedEntity.addEntityAll(entityLst);
-				this.schemaTreeView.addEntityLst( itemSelected, entityLst, true );
-			}
-			else
-			{
-				this.schemaTreeView.addEntityLst( itemSelected, selectedEntity.getEntityLst(), true );
-			}
-		}
-		
-		// Delete DBSchemaTableViewTab, if already exists. 
-		this.removeRelatedTab( SchemaProcViewTab.class );
-		*/
 		if ( itemChildren.size() > 0 )
 		{
 			return;
@@ -110,7 +75,8 @@ public class SelectedItemHandlerRootAggregate extends SelectedItemHandlerAbstrac
 				}
 			}
 		);
-		
+		*/
+		this.loadChildLst( AbsDBFactory.FACTORY_TYPE.AGGREGATE, SchemaProcViewTab.class );
 	}
 
 }

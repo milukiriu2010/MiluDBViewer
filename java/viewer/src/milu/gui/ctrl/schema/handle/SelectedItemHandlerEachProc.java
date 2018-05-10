@@ -1,14 +1,7 @@
 package milu.gui.ctrl.schema.handle;
 
-import javafx.scene.Node;
-import javafx.scene.control.TreeItem;
 import milu.db.obj.abs.AbsDBFactory;
-import milu.db.obj.abs.ObjDBFactory;
-import milu.db.obj.abs.ObjDBInterface;
-import milu.entity.schema.SchemaEntity;
 import milu.gui.ctrl.schema.SchemaProcViewTab;
-import milu.main.MainController;
-import milu.tool.MyTool;
 
 import java.sql.SQLException;
 
@@ -38,6 +31,7 @@ public class SelectedItemHandlerEachProc extends SelectedItemHandlerAbstract
 			UnsupportedOperationException,
 			SQLException
 	{
+		/*
 		SchemaEntity selectedEntity = this.itemSelected.getValue();
 		TreeItem<SchemaEntity> itemParent = itemSelected.getParent();
 		String schemaName = itemParent.getParent().getValue().toString();
@@ -47,31 +41,6 @@ public class SelectedItemHandlerEachProc extends SelectedItemHandlerAbstract
 		System.out.println( "setProcDef:" + procName );
 		
 		// Activate DBSchemaProcViewTab, if already exists.
-		/*
-		final ObservableList<Tab> tabLst =  this.tabPane.getTabs();
-		for ( Tab tab : tabLst )
-		{
-			if (
-				( tab instanceof SchemaProcViewTab ) &&
-				//id.equals(tab.getId())
-				id.equals(tab.getUserData())
-			)
-			{
-				// Activate DBSchemaTableViewTab, if already exists.
-				if ( this.refreshType ==  SelectedItemHandlerAbstract.REFRESH_TYPE.NO_REFRESH )
-				{
-					this.tabPane.getSelectionModel().select( tab );
-					return;
-				}
-				// Delete DBSchemaTableViewTab, if already exists. 
-				else
-				{
-					this.tabPane.getTabs().remove( tab );
-					break;
-				}
-			}
-		}
-		*/		
 		// Activate DBSchemaTableViewTab, if already exists.
 		// Delete DBSchemaTableViewTab, if already exists.
 		if ( MANIPULATE_TYPE.SELECT.equals(this.manipulateSpecifiedTab( SchemaProcViewTab.class , id )) )
@@ -112,6 +81,9 @@ public class SelectedItemHandlerEachProc extends SelectedItemHandlerAbstract
 		
 		// set procedure source in SqlTextArea
 		newTab.setSrcText( strSrc );
+		*/
+		
+		this.loadSource( AbsDBFactory.FACTORY_TYPE.PROC, SchemaProcViewTab.class );
 	}
 	
 }

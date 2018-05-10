@@ -12,6 +12,7 @@ import milu.db.obj.abs.ObjDBFactory;
 import milu.db.obj.abs.ObjDBInterface;
 import milu.entity.schema.SchemaEntity;
 import milu.gui.ctrl.schema.SchemaTableViewTab;
+import milu.gui.ctrl.schema.handle.SelectedItemHandlerAbstract.DEFINITION_TYPE;
 import milu.main.MainController;
 import milu.tool.MyTool;
 
@@ -41,6 +42,7 @@ public class SelectedItemHandlerEachSystemView extends SelectedItemHandlerAbstra
 			UnsupportedOperationException, 
 			SQLException
 	{
+		/*
 		SchemaEntity selectedEntity = this.itemSelected.getValue();
 		TreeItem<SchemaEntity> itemParent   = this.itemSelected.getParent();
 		String schemaName     = itemParent.getParent().getValue().toString();
@@ -49,31 +51,6 @@ public class SelectedItemHandlerEachSystemView extends SelectedItemHandlerAbstra
 		String id         = schemaName + this.strPartUserData + systemViewName;
 		System.out.println( "setSystemViewDef:" + systemViewName );
 		
-		/*
-		final ObservableList<Tab> tabLst =  this.tabPane.getTabs();
-		for ( Tab tab : tabLst )
-		{
-			if (
-				( tab instanceof SchemaTableViewTab ) &&
-				//id.equals(tab.getId())
-				id.equals(tab.getUserData())
-			)
-			{
-				// Activate DBSchemaTableViewTab, if already exists.
-				if ( this.refreshType ==  SelectedItemHandlerAbstract.REFRESH_TYPE.NO_REFRESH )
-				{
-					this.tabPane.getSelectionModel().select( tab );
-					return;
-				}
-				// Delete DBSchemaTableViewTab, if already exists. 
-				else
-				{
-					this.tabPane.getTabs().remove( tab );
-					break;
-				}
-			}
-		}
-		*/
 		// Activate DBSchemaTableViewTab, if already exists.
 		// Delete DBSchemaTableViewTab, if already exists.
 		if ( MANIPULATE_TYPE.SELECT.equals(this.manipulateSpecifiedTab( SchemaTableViewTab.class , id )) )
@@ -111,7 +88,8 @@ public class SelectedItemHandlerEachSystemView extends SelectedItemHandlerAbstra
 			dataLst = objDBInf.selectDefinition(schemaName, systemViewName);
 			selectedEntity.setDefinitionlst(dataLst);
 		}
-		
+		*/
+		/*
 		// table header
 		List<String> headLst = new ArrayList<String>();
 		headLst.add( "COLUMN" );
@@ -153,6 +131,15 @@ public class SelectedItemHandlerEachSystemView extends SelectedItemHandlerAbstra
 		
 		// set header&data in SqlTableView
 		newTab.setTableViewSQL( headLst, data2Lst );
+		*/
+		/*
+		newTab.setTableViewSQL
+		( 
+			this.createHeadLst(DEFINITION_TYPE.NO_DEFAULT), 
+			this.createDataLst(DEFINITION_TYPE.NO_DEFAULT, dataLst) 
+		);
+		*/
+		this.loadDefinition( AbsDBFactory.FACTORY_TYPE.SYSTEM_VIEW, SchemaTableViewTab.class, SelectedItemHandlerAbstract.DEFINITION_TYPE.NO_DEFAULT );
 	}
 
 }

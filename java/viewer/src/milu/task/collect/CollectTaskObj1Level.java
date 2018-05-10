@@ -1,6 +1,7 @@
 package milu.task.collect;
 
 import java.util.List;
+import java.util.Map;
 import java.sql.SQLException;
 
 import javafx.concurrent.Task;
@@ -102,12 +103,15 @@ public class CollectTaskObj1Level extends Task<Exception>
 			SearchSchemaEntityInterface searchSchemaVisitor = new SearchSchemaEntityVisitorFactory().createInstance(SchemaEntity.SCHEMA_TYPE.SCHEMA);
 			this.selectedSchemaEntity.acceptParent(searchSchemaVisitor);
 			SchemaEntity hitEntity = searchSchemaVisitor.getHitSchemaEntity();
-			if ( hitEntity == null )
+			String schemaName = null;
+			// SQLite => [SCHEMA]=null
+			if ( hitEntity != null )
 			{
-				return null;
+				schemaName = hitEntity.getName();
 			}
 			
-			String schemaName = hitEntity.getName();
+			System.out.println( this.dataType );
+			
 			// Retrieve List
 			if ( CollectDataType.LIST.equals(dataType) )
 			{
@@ -119,6 +123,13 @@ public class CollectTaskObj1Level extends Task<Exception>
 			{
 				String strSrc = objDBInf.getSRC( schemaName, this.selectedSchemaEntity.getName() );
 				this.selectedSchemaEntity.setSrcSQL(strSrc);
+			}
+			// Retrieve Definition
+			else if ( CollectDataType.DEFINITION.equals(dataType) )
+			{
+				List<Map<String,String>>  dataLst = objDBInf.selectDefinition( schemaName, this.selectedSchemaEntity.getName() );
+				this.selectedSchemaEntity.setDefinitionlst(dataLst);
+				System.out.println( "definition:dataLst.size:" + dataLst.size() );
 			}
 			
 			return null;

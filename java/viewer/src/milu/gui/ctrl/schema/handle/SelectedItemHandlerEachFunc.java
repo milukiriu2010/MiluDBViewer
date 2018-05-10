@@ -1,14 +1,7 @@
 package milu.gui.ctrl.schema.handle;
 
-import javafx.scene.Node;
-import javafx.scene.control.TreeItem;
 import milu.db.obj.abs.AbsDBFactory;
-import milu.db.obj.abs.ObjDBFactory;
-import milu.db.obj.abs.ObjDBInterface;
-import milu.entity.schema.SchemaEntity;
 import milu.gui.ctrl.schema.SchemaProcViewTab;
-import milu.main.MainController;
-import milu.tool.MyTool;
 
 import java.sql.SQLException;
 
@@ -36,41 +29,16 @@ public class SelectedItemHandlerEachFunc extends SelectedItemHandlerAbstract
 			UnsupportedOperationException,
 			SQLException
 	{
+		/*
 		SchemaEntity selectedEntity = this.itemSelected.getValue();
 		TreeItem<SchemaEntity> itemParent = itemSelected.getParent();
 		String schemaName = itemParent.getParent().getValue().toString();
 		String funcName   = itemSelected.getValue().getName();
-		//String id         = schemaName + "@func@" + funcName;
 		String id         = schemaName + this.strPartUserData + funcName;
 		System.out.println( "setFuncDef:" + funcName );
 		
-		/*
-		final ObservableList<Tab> tabLst =  this.tabPane.getTabs();
-		for ( Tab tab : tabLst )
-		{
-			if (
-				( tab instanceof SchemaProcViewTab ) &&
-				//id.equals(tab.getId())
-				id.equals(tab.getUserData())
-			)
-			{
-				// Activate DBSchemaTableViewTab, if already exists.
-				if ( this.refreshType ==  SelectedItemHandlerAbstract.REFRESH_TYPE.NO_REFRESH )
-				{
-					this.tabPane.getSelectionModel().select( tab );
-					return;
-				}
-				// Delete DBSchemaTableViewTab, if already exists. 
-				else
-				{
-					this.tabPane.getTabs().remove( tab );
-					break;
-				}
-			}
-		}		
-		*/
-		// Activate DBSchemaTableViewTab, if already exists.
-		// Delete DBSchemaTableViewTab, if already exists.
+		// Activate Tab, if already exists.
+		// Delete Tab, if already exists.
 		if ( MANIPULATE_TYPE.SELECT.equals(this.manipulateSpecifiedTab( SchemaProcViewTab.class , id )) )
 		{
 			return;
@@ -109,6 +77,8 @@ public class SelectedItemHandlerEachFunc extends SelectedItemHandlerAbstract
 		
 		// set function source in SqlTextArea
 		newTab.setSrcText( strSrc );
+		*/
+		
+		this.loadSource( AbsDBFactory.FACTORY_TYPE.FUNC, SchemaProcViewTab.class );
 	}
-	
 }

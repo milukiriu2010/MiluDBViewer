@@ -4,6 +4,7 @@ import java.util.List;
 
 import javafx.scene.control.Tab;
 import javafx.scene.layout.BorderPane;
+import milu.gui.ctrl.common.inf.SetTableViewSQLInterface;
 import milu.gui.ctrl.common.inf.ToggleHorizontalVerticalInterface;
 import milu.gui.ctrl.query.SqlTableView;
 import milu.gui.view.DBView;
@@ -16,6 +17,7 @@ import milu.gui.view.DBView;
  */
 public class SchemaTableViewTab extends Tab
 	implements
+		SetTableViewSQLInterface,
 		ToggleHorizontalVerticalInterface
 {
 	private DBView        dbView       = null;
@@ -35,6 +37,7 @@ public class SchemaTableViewTab extends Tab
 		this.setContent( brdPane );
 	}
 	
+	@Override
 	public void setTableViewSQL( List<String> headLst, List<List<String>> dataLst )
 	{
 		this.sqlTableView.setTableViewSQL( headLst, dataLst );

@@ -8,6 +8,7 @@ import milu.gui.ctrl.query.SqlTextArea;
 import milu.gui.view.DBView;
 
 public class SchemaProcViewTab extends Tab
+	implements SetSrcTextInterface
 {
 	private DBView     dbView      = null;
 	
@@ -28,6 +29,7 @@ public class SchemaProcViewTab extends Tab
 		this.setContent( brdPane );
 	}
 	
+	@Override
 	public void setSrcText( String strSrc )
 	{
 		this.srcTextArea.setText( strSrc );

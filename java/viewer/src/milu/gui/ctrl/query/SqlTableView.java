@@ -37,12 +37,14 @@ import milu.file.table.MyFileAbstract;
 import milu.file.table.MyFileFactory;
 import milu.gui.ctrl.common.inf.ChangeLangInterface;
 import milu.gui.ctrl.common.inf.CopyInterface;
+import milu.gui.ctrl.common.inf.SetTableViewSQLInterface;
 import milu.gui.ctrl.common.inf.ToggleHorizontalVerticalInterface;
 import milu.gui.dlg.MyAlertDialog;
 import milu.gui.view.DBView;
 
 public class SqlTableView extends TableView<List<String>>
 	implements 
+		SetTableViewSQLInterface,
 		ToggleHorizontalVerticalInterface,
 		CopyInterface,
 		ChangeLangInterface
@@ -265,6 +267,7 @@ public class SqlTableView extends TableView<List<String>>
 		
 	
 	// Set ColumnName & Data to TableView Horizontally
+	@Override
 	public synchronized void setTableViewSQL( List<String> headLst, List<List<String>> dataLst )
 	{
 		// Clear TableView

@@ -110,12 +110,12 @@ public class CollectTaskObj2Level extends Task<Exception>
 			SearchSchemaEntityInterface searchSchemaVisitor = new SearchSchemaEntityVisitorFactory().createInstance(SchemaEntity.SCHEMA_TYPE.SCHEMA);
 			this.selectedSchemaEntity.acceptParent(searchSchemaVisitor);
 			SchemaEntity hitSchemaEntity = searchSchemaVisitor.getHitSchemaEntity();
-			if ( hitSchemaEntity == null )
+			String schemaName = null;
+			if ( hitSchemaEntity != null )
 			{
-				return null;
+				schemaName = hitSchemaEntity.getName();
 			}
 			
-			String schemaName = hitSchemaEntity.getName();
 			String tableName  = hitTableEntity.getName();
 			// start retrieving each schema 
 			List<SchemaEntity> schemaEntityLst = ((IndexDBAbstract)objDBInf).selectEntityLst( schemaName, tableName );

@@ -3,6 +3,7 @@ package milu.tool;
 import java.io.File;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.lang.reflect.Constructor;
 import java.util.Collections;
 
 import javafx.geometry.Bounds;
@@ -23,6 +24,7 @@ import javafx.scene.effect.Blend;
 import javafx.scene.effect.BlendMode;
 import milu.entity.schema.SchemaEntity;
 import milu.main.MainController;
+import milu.gui.view.DBView;
 
 public class MyTool
 {
@@ -329,5 +331,27 @@ public class MyTool
 		{
 			return null;
 		}
+	}
+	
+	public static <T> T newInstance( Class<T> castClazz, DBView dbView )
+	{
+		Constructor<?>[] constructors = castClazz.getDeclaredConstructors();
+		
+		T obj = null;
+		for ( int i = 0; i < constructors.length; i++ )
+		{
+			try
+			{
+				// exit loop 
+				// when match "new SelectdItemHandlerEachXX( DBView dbView )"
+				obj = castClazz.cast(constructors[i].newInstance(dbView));
+				break;
+			}
+			catch ( Exception ex )
+			{
+			}
+		}
+		
+		return obj;
 	}
 }

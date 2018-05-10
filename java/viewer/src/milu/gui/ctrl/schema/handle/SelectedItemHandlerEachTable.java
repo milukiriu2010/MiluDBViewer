@@ -109,6 +109,7 @@ public class SelectedItemHandlerEachTable extends SelectedItemHandlerAbstract
 			selectedEntity.setDefinitionlst(dataLst);
 		}
 		
+		/*
 		// table header
 		List<String> headLst = new ArrayList<String>();
 		headLst.add( "COLUMN" );
@@ -147,9 +148,15 @@ public class SelectedItemHandlerEachTable extends SelectedItemHandlerAbstract
 			
 			data2Lst.add( dataRow2 );
 		}
-		
 		// set header&data in SqlTableView
 		newTab.setTableViewSQL( headLst, data2Lst );
+		*/
+		newTab.setTableViewSQL
+		( 
+			this.createHeadLst(DEFINITION_TYPE.WITH_DEFAULT), 
+			this.createDataLst(DEFINITION_TYPE.WITH_DEFAULT, dataLst) 
+		);
+		
 	}
 	
 }

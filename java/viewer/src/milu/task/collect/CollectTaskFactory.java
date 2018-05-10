@@ -60,9 +60,9 @@ public class CollectTaskFactory
 	{
 		Task<Exception> task = null;
 		
-		if ( AbsDBFactory.FACTORY_TYPE.FOREIGN_KEY.equals(factoryType) )
+		if ( AbsDBFactory.FACTORY_TYPE.TABLE.equals(factoryType) )
 		{
-			task = new CollectTaskObjForeignKey();
+			task = new CollectTaskObj1Level();
 		}
 		else if ( AbsDBFactory.FACTORY_TYPE.INDEX.equals(factoryType) )
 		{
@@ -72,6 +72,18 @@ public class CollectTaskFactory
 		{
 			task = new CollectTaskObj3Level();
 		}
+		else if ( AbsDBFactory.FACTORY_TYPE.VIEW.equals(factoryType) )
+		{
+			task = new CollectTaskObj1Level();
+		}
+		else if ( AbsDBFactory.FACTORY_TYPE.MATERIALIZED_VIEW.equals(factoryType) )
+		{
+			task = new CollectTaskObj1Level();
+		}
+		else if ( AbsDBFactory.FACTORY_TYPE.SYSTEM_VIEW.equals(factoryType) )
+		{
+			task = new CollectTaskObj1Level();
+		}
 		else if ( AbsDBFactory.FACTORY_TYPE.FUNC.equals(factoryType) )
 		{
 			task = new CollectTaskObj1Level();
@@ -80,13 +92,33 @@ public class CollectTaskFactory
 		{
 			task = new CollectTaskObj1Level();
 		}
+		else if ( AbsDBFactory.FACTORY_TYPE.PROC.equals(factoryType) )
+		{
+			task = new CollectTaskObj1Level();
+		}
+		else if ( AbsDBFactory.FACTORY_TYPE.PACKAGE_DEF.equals(factoryType) )
+		{
+			task = new CollectTaskObj1Level();
+		}
+		else if ( AbsDBFactory.FACTORY_TYPE.PACKAGE_BODY.equals(factoryType) )
+		{
+			task = new CollectTaskObj1Level();
+		}
 		else if ( AbsDBFactory.FACTORY_TYPE.TYPE.equals(factoryType) )
+		{
+			task = new CollectTaskObj1Level();
+		}
+		else if ( AbsDBFactory.FACTORY_TYPE.TRIGGER.equals(factoryType) )
 		{
 			task = new CollectTaskObj1Level();
 		}
 		else if ( AbsDBFactory.FACTORY_TYPE.SEQUENCE.equals(factoryType) )
 		{
 			task = new CollectTaskObj1Level();
+		}
+		else if ( AbsDBFactory.FACTORY_TYPE.FOREIGN_KEY.equals(factoryType) )
+		{
+			task = new CollectTaskObjForeignKey();
 		}
 		else
 		{

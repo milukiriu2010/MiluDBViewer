@@ -1,15 +1,7 @@
 package milu.gui.ctrl.schema.handle;
 
-import javafx.concurrent.Task;
-import javafx.scene.control.TreeItem;
-import javafx.collections.ObservableList;
-import milu.db.obj.abs.AbsDBFactory;
-import milu.entity.schema.SchemaEntity;
-import milu.main.MainController;
-import milu.task.collect.CollectDataType;
-import milu.task.collect.CollectTaskFactory;
-
 import java.sql.SQLException;
+import milu.db.obj.abs.AbsDBFactory;
 
 /**
  * This class is invoked, when "index" item is clicked on SchemaTreeView.
@@ -34,6 +26,7 @@ public class SelectedItemHandlerEachIndex extends SelectedItemHandlerAbstract
 			UnsupportedOperationException,
 			SQLException
 	{
+		/*
 		SchemaEntity selectedEntity = this.itemSelected.getValue();
 		//TreeItem<SchemaEntity> itemParent = itemSelected.getParent();
 		//String schemaName = itemParent.getParent().getParent().getParent().getValue().toString();
@@ -41,31 +34,6 @@ public class SelectedItemHandlerEachIndex extends SelectedItemHandlerAbstract
 		//String indexName  = this.itemSelected.getValue().getName();
 		ObservableList<TreeItem<SchemaEntity>> itemChildren = this.itemSelected.getChildren();
 		
-		/*
-		if ( itemChildren.size() == 0 )
-		{
-			if ( selectedEntity.getEntityLst().size() == 0 )
-			{
-				ObjDBFactory objDBFactory = AbsDBFactory.getFactory( AbsDBFactory.FACTORY_TYPE.INDEX_COLUMN );
-				if ( objDBFactory == null )
-				{
-					return;
-				}
-				ObjDBInterface objDBInf = objDBFactory.getInstance(myDBAbs);
-				if ( objDBInf == null )
-				{
-					return;
-				}
-				List<SchemaEntity> entityLst = ((IndexColumnDBAbstract)objDBInf).selectEntityLst(schemaName,tableName,indexName);
-				selectedEntity.addEntityAll(entityLst);
-				this.schemaTreeView.addEntityLst( itemSelected, entityLst, true );
-			}
-			else
-			{
-				this.schemaTreeView.addEntityLst( itemSelected, selectedEntity.getEntityLst(), true );
-			}
-		}
-		*/
 		if ( itemChildren.size() > 0 )
 		{
 			return;
@@ -102,8 +70,8 @@ public class SelectedItemHandlerEachIndex extends SelectedItemHandlerAbstract
 				}
 			}
 		);
-		
-		
+		*/
+		this.loadChildLst( AbsDBFactory.FACTORY_TYPE.INDEX_COLUMN, null );
 	}
 	
 }
