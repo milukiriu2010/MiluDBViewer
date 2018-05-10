@@ -189,7 +189,7 @@ abstract public class SelectedItemHandlerAbstract
 	}
 	
 	// Call by SelectedItemHandlerRootXX
-	protected void loadChildLst( AbsDBFactory.FACTORY_TYPE factoryType, Class<?> castClazz )
+	protected void loadChildLst( AbsDBFactory.FACTORY_TYPE factoryType, Class<?> castClazz, CollectDataType dataType )
 	{
 		SchemaEntity selectedEntity = this.itemSelected.getValue();
 		ObservableList<TreeItem<SchemaEntity>> itemChildren = this.itemSelected.getChildren();
@@ -199,7 +199,7 @@ abstract public class SelectedItemHandlerAbstract
 		}
 		
 		MainController mainCtrl = this.dbView.getMainController();
-		final Task<Exception> collectTask = CollectTaskFactory.getInstance( factoryType,  CollectDataType.LIST , mainCtrl, this.myDBAbs, selectedEntity );
+		final Task<Exception> collectTask = CollectTaskFactory.getInstance( factoryType,  dataType , mainCtrl, this.myDBAbs, selectedEntity );
 		if ( collectTask == null )
 		{
 			return;

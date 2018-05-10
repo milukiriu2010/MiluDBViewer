@@ -3,6 +3,7 @@ package milu.gui.ctrl.schema.handle;
 import java.sql.SQLException;
 import milu.db.obj.abs.AbsDBFactory;
 import milu.gui.ctrl.schema.SchemaTableViewTab;
+import milu.task.collect.CollectDataType;
 
 /**
  * This class is invoked, when "root view" item is clicked on SchemaTreeView.
@@ -62,7 +63,7 @@ public class SelectedItemHandlerRootView extends SelectedItemHandlerAbstract
 		// Delete DBSchemaTableViewTab, if already exists.
 		this.removeRelatedTab( SchemaTableViewTab.class );
 		*/
-		this.loadChildLst( AbsDBFactory.FACTORY_TYPE.VIEW, SchemaTableViewTab.class );
+		this.loadChildLst( AbsDBFactory.FACTORY_TYPE.VIEW, SchemaTableViewTab.class, CollectDataType.LIST );
 	}
 
 }

@@ -90,11 +90,11 @@ public class SchemaTreeView extends TreeView<SchemaEntity>
 					// Disable "Refresh" menu when these items are selected.
 					//case ROOT:
 					case SCHEMA:
-					case ROOT_TABLE:
+					//case ROOT_TABLE:
 					//case INDEX:
 					case INDEX_COLUMN:
-					case ROOT_SYSTEM_VIEW:
-					case SYSTEM_VIEW:
+					//case ROOT_SYSTEM_VIEW:
+					//case SYSTEM_VIEW:
 						this.menuItemRefresh.setDisable(true);
 						break;
 					// Enable "Refresh" menu when these items are selected.

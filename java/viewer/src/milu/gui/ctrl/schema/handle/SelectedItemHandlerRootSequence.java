@@ -3,6 +3,7 @@ package milu.gui.ctrl.schema.handle;
 import java.sql.SQLException;
 
 import milu.db.obj.abs.AbsDBFactory;
+import milu.task.collect.CollectDataType;
 
 
 /**
@@ -80,7 +81,7 @@ public class SelectedItemHandlerRootSequence extends SelectedItemHandlerAbstract
 			}
 		);
 		*/
-		this.loadChildLst( AbsDBFactory.FACTORY_TYPE.SEQUENCE, null );
+		this.loadChildLst( AbsDBFactory.FACTORY_TYPE.SEQUENCE, null, CollectDataType.LIST );
 	}
 
 }

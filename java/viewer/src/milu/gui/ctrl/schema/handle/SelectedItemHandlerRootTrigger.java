@@ -3,6 +3,7 @@ package milu.gui.ctrl.schema.handle;
 import java.sql.SQLException;
 import milu.db.obj.abs.AbsDBFactory;
 import milu.gui.ctrl.schema.SchemaProcViewTab;
+import milu.task.collect.CollectDataType;
 
 /**
  * This class is invoked, when "root trigger" item is clicked on SchemaTreeView.
@@ -69,7 +70,7 @@ public class SelectedItemHandlerRootTrigger extends SelectedItemHandlerAbstract
 		this.removeRelatedTab( SchemaProcViewTab.class );
 		*/
 		
-		this.loadChildLst( AbsDBFactory.FACTORY_TYPE.TRIGGER, SchemaProcViewTab.class );
+		this.loadChildLst( AbsDBFactory.FACTORY_TYPE.TRIGGER, SchemaProcViewTab.class, CollectDataType.LIST );
 	}
 
 }

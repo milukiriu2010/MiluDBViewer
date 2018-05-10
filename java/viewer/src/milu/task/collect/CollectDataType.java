@@ -4,5 +4,6 @@ public enum CollectDataType
 {
 	LIST,
 	SOURCE,
-	DEFINITION
+	DEFINITION,
+	LIST_AND_DEFINITION
 }

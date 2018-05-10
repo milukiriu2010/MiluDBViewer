@@ -3,6 +3,7 @@ package milu.gui.ctrl.schema.handle;
 import java.sql.SQLException;
 
 import milu.db.obj.abs.AbsDBFactory;
+import milu.task.collect.CollectDataType;
 
 /**
  * This class is invoked, when "root index" item is clicked on SchemaTreeView.
@@ -72,7 +73,7 @@ public class SelectedItemHandlerRootIndex extends SelectedItemHandlerAbstract
 		);
 		*/
 		
-		this.loadChildLst( AbsDBFactory.FACTORY_TYPE.INDEX, null );
+		this.loadChildLst( AbsDBFactory.FACTORY_TYPE.INDEX, null, CollectDataType.LIST );
 	}
 
 }

@@ -62,7 +62,14 @@ public class CollectTaskFactory
 		
 		if ( AbsDBFactory.FACTORY_TYPE.TABLE.equals(factoryType) )
 		{
-			task = new CollectTaskObj1Level();
+			if ( CollectDataType.LIST_AND_DEFINITION.equals(dataType) )
+			{
+				task = new CollectTaskRootObject();
+			}
+			else
+			{
+				task = new CollectTaskObj1Level();
+			}
 		}
 		else if ( AbsDBFactory.FACTORY_TYPE.INDEX.equals(factoryType) )
 		{

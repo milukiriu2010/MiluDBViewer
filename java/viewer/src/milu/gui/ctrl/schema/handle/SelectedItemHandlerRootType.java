@@ -4,6 +4,7 @@ import java.sql.SQLException;
 
 import milu.db.obj.abs.AbsDBFactory;
 import milu.gui.ctrl.schema.SchemaProcViewTab;
+import milu.task.collect.CollectDataType;
 
 /**
  * This class is invoked, when "root type" item is clicked on SchemaTreeView.
@@ -78,7 +79,7 @@ public class SelectedItemHandlerRootType extends SelectedItemHandlerAbstract
 		);
 		*/
 		
-		this.loadChildLst( AbsDBFactory.FACTORY_TYPE.TYPE, SchemaProcViewTab.class );
+		this.loadChildLst( AbsDBFactory.FACTORY_TYPE.TYPE, SchemaProcViewTab.class, CollectDataType.LIST );
 	}
 
 }

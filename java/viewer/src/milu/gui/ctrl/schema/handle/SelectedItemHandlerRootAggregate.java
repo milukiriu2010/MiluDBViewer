@@ -4,6 +4,7 @@ import java.sql.SQLException;
 
 import milu.db.obj.abs.AbsDBFactory;
 import milu.gui.ctrl.schema.SchemaProcViewTab;
+import milu.task.collect.CollectDataType;
 
 /**
  * This class is invoked, when "root aggregate" item is clicked on SchemaTreeView.
@@ -76,7 +77,7 @@ public class SelectedItemHandlerRootAggregate extends SelectedItemHandlerAbstrac
 			}
 		);
 		*/
-		this.loadChildLst( AbsDBFactory.FACTORY_TYPE.AGGREGATE, SchemaProcViewTab.class );
+		this.loadChildLst( AbsDBFactory.FACTORY_TYPE.AGGREGATE, SchemaProcViewTab.class, CollectDataType.LIST );
 	}
 
 }
