@@ -1,18 +1,8 @@
 package milu.gui.ctrl.schema.handle;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 
-import javafx.scene.Node;
-import javafx.scene.control.TreeItem;
 import milu.db.obj.abs.AbsDBFactory;
-import milu.db.obj.abs.ObjDBFactory;
-import milu.db.obj.abs.ObjDBInterface;
-import milu.entity.schema.SchemaEntity;
 import milu.gui.ctrl.schema.SchemaTableViewTab;
-import milu.main.MainController;
-import milu.tool.MyTool;
 
 import java.sql.SQLException;
 

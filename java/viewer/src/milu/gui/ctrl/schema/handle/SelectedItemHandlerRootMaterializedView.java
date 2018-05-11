@@ -68,6 +68,8 @@ public class SelectedItemHandlerRootMaterializedView extends SelectedItemHandler
 		this.removeRelatedTab( SchemaTableViewTab.class );
 		*/
 		this.loadChildLst( AbsDBFactory.FACTORY_TYPE.MATERIALIZED_VIEW, SchemaTableViewTab.class, CollectDataType.LIST );
+		
+		//this.loadChildLst( AbsDBFactory.FACTORY_TYPE.MATERIALIZED_VIEW, SchemaTableViewTab.class, CollectDataType.LIST_AND_DEFINITION );
 	}
 
 }

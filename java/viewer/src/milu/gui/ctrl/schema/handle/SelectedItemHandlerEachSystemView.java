@@ -1,20 +1,9 @@
 package milu.gui.ctrl.schema.handle;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 
-import javafx.scene.Node;
-import javafx.scene.control.TreeItem;
 import milu.db.obj.abs.AbsDBFactory;
-import milu.db.obj.abs.ObjDBFactory;
-import milu.db.obj.abs.ObjDBInterface;
-import milu.entity.schema.SchemaEntity;
 import milu.gui.ctrl.schema.SchemaTableViewTab;
-import milu.gui.ctrl.schema.handle.SelectedItemHandlerAbstract.DEFINITION_TYPE;
-import milu.main.MainController;
-import milu.tool.MyTool;
 
 /**
  * This class is invoked, when "system view" item is clicked on SchemaTreeView.

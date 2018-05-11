@@ -78,9 +78,9 @@ public class SelectedItemHandlerRootTable extends SelectedItemHandlerAbstract
 		// Delete DBSchemaTableViewTab, if already exists. 
 		this.removeRelatedTab( SchemaTableViewTab.class );
 		*/
-		//this.loadChildLst( AbsDBFactory.FACTORY_TYPE.TABLE, SchemaTableViewTab.class, CollectDataType.LIST_AND_DEFINITION );
+		this.loadChildLst( AbsDBFactory.FACTORY_TYPE.TABLE, SchemaTableViewTab.class, CollectDataType.LIST_AND_DEFINITION );
 		
-		this.loadChildLst( AbsDBFactory.FACTORY_TYPE.TABLE, SchemaTableViewTab.class, CollectDataType.LIST );
+		//this.loadChildLst( AbsDBFactory.FACTORY_TYPE.TABLE, SchemaTableViewTab.class, CollectDataType.LIST );
 	}
 
 }

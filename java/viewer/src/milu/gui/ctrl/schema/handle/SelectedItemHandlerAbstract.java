@@ -18,11 +18,8 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 import milu.gui.ctrl.common.inf.SetTableViewSQLInterface;
-import milu.gui.ctrl.schema.SchemaTableViewTab;
 import milu.gui.ctrl.schema.SchemaTreeView;
 import milu.gui.ctrl.schema.SetSrcTextInterface;
-import milu.gui.ctrl.schema.handle.SelectedItemHandlerAbstract.DEFINITION_TYPE;
-import milu.gui.ctrl.schema.handle.SelectedItemHandlerAbstract.MANIPULATE_TYPE;
 import milu.db.MyDBAbstract;
 import milu.db.obj.abs.AbsDBFactory;
 import milu.entity.schema.SchemaEntity;
@@ -216,6 +213,7 @@ abstract public class SelectedItemHandlerAbstract
 				if ( newVal.doubleValue() == 0.0 )
 				{
 					this.schemaTreeView.setIsLoading(true);
+					this.schemaTreeView.scrollToSelectedItem(this.itemSelected);
 				}
 				// Task Done.
 				else if ( newVal.doubleValue() == 1.0 )
@@ -224,6 +222,7 @@ abstract public class SelectedItemHandlerAbstract
 					this.schemaTreeView.addEntityLst( itemSelected, selectedEntity.getEntityLst(), true );
 					this.schemaTreeView.setChildrenCnt();
 					this.schemaTreeView.setIsLoading(false);
+					this.schemaTreeView.scrollToSelectedItem(this.itemSelected);
 					this.dbView.setBottomMsg(null);
 					// Delete Related Tab, if already exists. 
 					if ( castClazz != null )
@@ -234,6 +233,16 @@ abstract public class SelectedItemHandlerAbstract
 				}
 			}
 		);
+		
+		collectTask.messageProperty().addListener
+		(
+			(obs,oldVal,newVal)->
+			{
+				System.out.println( "CollectTask:Message[" + newVal + "]" );
+				this.dbView.setBottomMsg(newVal);
+			}
+		);
+		
 	}
 	
 	// Call by SelectedItemHandlerEachXX

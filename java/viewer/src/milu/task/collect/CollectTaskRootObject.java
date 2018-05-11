@@ -1,16 +1,11 @@
 package milu.task.collect;
 
-import java.util.List;
-import java.util.Map;
-import java.util.LinkedHashMap;
 import java.sql.SQLException;
 
 import javafx.concurrent.Task;
 
 import milu.db.MyDBAbstract;
 import milu.db.obj.abs.AbsDBFactory;
-import milu.db.obj.abs.ObjDBFactory;
-import milu.db.obj.abs.ObjDBInterface;
 import milu.entity.schema.SchemaEntity;
 import milu.entity.schema.search.SearchSchemaEntityInterface;
 import milu.entity.schema.search.SearchSchemaEntityVisitorFactory;
@@ -71,25 +66,10 @@ public class CollectTaskRootObject extends Task<Exception>
 		Exception    taskEx = null;
 		System.out.println( "Task start." );
 		long startTime = System.nanoTime();
-		/*
-		Map<AbsDBFactory.FACTORY_TYPE,SchemaEntity.SCHEMA_TYPE>  factorySchemaMap = new LinkedHashMap<>();
-		factorySchemaMap.put( AbsDBFactory.FACTORY_TYPE.TABLE            , SchemaEntity.SCHEMA_TYPE.ROOT_TABLE );
-		factorySchemaMap.put( AbsDBFactory.FACTORY_TYPE.VIEW             , SchemaEntity.SCHEMA_TYPE.ROOT_VIEW );
-		factorySchemaMap.put( AbsDBFactory.FACTORY_TYPE.SYSTEM_VIEW      , SchemaEntity.SCHEMA_TYPE.ROOT_SYSTEM_VIEW );
-		factorySchemaMap.put( AbsDBFactory.FACTORY_TYPE.MATERIALIZED_VIEW, SchemaEntity.SCHEMA_TYPE.ROOT_MATERIALIZED_VIEW );
-		factorySchemaMap.put( AbsDBFactory.FACTORY_TYPE.FUNC             , SchemaEntity.SCHEMA_TYPE.ROOT_FUNC );
-		factorySchemaMap.put( AbsDBFactory.FACTORY_TYPE.AGGREGATE        , SchemaEntity.SCHEMA_TYPE.ROOT_AGGREGATE );
-		factorySchemaMap.put( AbsDBFactory.FACTORY_TYPE.PROC             , SchemaEntity.SCHEMA_TYPE.ROOT_PROC );
-		factorySchemaMap.put( AbsDBFactory.FACTORY_TYPE.PACKAGE_DEF      , SchemaEntity.SCHEMA_TYPE.ROOT_PACKAGE_DEF );
-		factorySchemaMap.put( AbsDBFactory.FACTORY_TYPE.PACKAGE_BODY     , SchemaEntity.SCHEMA_TYPE.ROOT_PACKAGE_BODY );
-		factorySchemaMap.put( AbsDBFactory.FACTORY_TYPE.TYPE             , SchemaEntity.SCHEMA_TYPE.ROOT_TYPE );
-		factorySchemaMap.put( AbsDBFactory.FACTORY_TYPE.TRIGGER          , SchemaEntity.SCHEMA_TYPE.ROOT_TRIGGER );
-		factorySchemaMap.put( AbsDBFactory.FACTORY_TYPE.SEQUENCE         , SchemaEntity.SCHEMA_TYPE.ROOT_SEQUENCE );
-		factorySchemaMap.put( AbsDBFactory.FACTORY_TYPE.FOREIGN_KEY      , SchemaEntity.SCHEMA_TYPE.ROOT_ER );
-		*/
 		
 		try
 		{
+			Thread.sleep(100);
 			this.setProgress(0.0);
 			
 			// Start to retrieve, if no child objects, 
@@ -106,8 +86,14 @@ public class CollectTaskRootObject extends Task<Exception>
 			System.out.println( "Schema retriving..." );
 			
 			double assignedSize = MAX;
+			//CollectSchemaAbstract csAbs = 
+			//	CollectSchemaFactory.createInstance( factoryType, this.selectedSchemaEntity.getType(), this.mainCtrl, this.myDBAbs, hitEntity, this, assignedSize );
+			
+			//CollectSchemaFactoryAbstract csfAbs = CollectSchemaFactoryCreator.createFactory( CollectSchemaFactoryCreator.FACTORY_TYPE.CREATE_ME );
+			CollectSchemaFactoryAbstract csfAbs = CollectSchemaFactoryCreator.createFactory( CollectSchemaFactoryCreator.FACTORY_TYPE.SET_ME );
 			CollectSchemaAbstract csAbs = 
-				CollectSchemaFactory.createInstance( factoryType, this.selectedSchemaEntity.getType(), this.mainCtrl, this.myDBAbs, hitEntity, this, assignedSize );
+				csfAbs.createInstance( factoryType, this.selectedSchemaEntity.getType(), this.mainCtrl, this.myDBAbs, hitEntity, this.selectedSchemaEntity, this, assignedSize );
+			
 			csAbs.retrieveChildren();
 			return null;
 		}

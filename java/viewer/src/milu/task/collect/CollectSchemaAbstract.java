@@ -13,8 +13,6 @@ import milu.task.ProgressInterface;
 
 abstract class CollectSchemaAbstract 
 {
-	//protected AbsDBFactory.FACTORY_TYPE  factoryType = null;
-	
 	protected SchemaEntity.SCHEMA_TYPE   schemaType  = null;
 	
 	protected MainController  mainCtrl = null;
@@ -55,6 +53,23 @@ abstract class CollectSchemaAbstract
 	void setSchemaEntity( SchemaEntity schemaEntity )
 	{
 		this.schemaEntity = schemaEntity;
+	}
+	
+	void setMeEntity( AbsDBFactory.FACTORY_TYPE factoryType, SchemaEntity meEntity )
+	{
+		ObjDBFactory objDBFactory = AbsDBFactory.getFactory(factoryType);
+		if ( objDBFactory == null )
+		{
+			//System.out.println( "createMeEntity:factory:null" );
+			return;
+		}
+		this.objDBAbs = objDBFactory.getInstance(this.myDBAbs);
+		if ( this.objDBAbs == null )
+		{
+			//System.out.println( "createMeEntity:obj:null" );
+			return;
+		}
+		this.meEntity = meEntity;
 	}
 	
 	void setMyDBAbstract( MyDBAbstract myDBAbs )

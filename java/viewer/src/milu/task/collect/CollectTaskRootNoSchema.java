@@ -90,8 +90,13 @@ public class CollectTaskRootNoSchema extends Task<Exception>
 			( 
 				(factoryType,schemaType)->
 				{
+					//CollectSchemaAbstract csAbs = 
+					//	CollectSchemaFactory.createInstance( factoryType, schemaType, this.mainCtrl, this.myDBAbs, this.selectedSchemaEntity, this, assignedSize );
+					
+					CollectSchemaFactoryAbstract csfAbs = CollectSchemaFactoryCreator.createFactory( CollectSchemaFactoryCreator.FACTORY_TYPE.CREATE_ME );
 					CollectSchemaAbstract csAbs = 
-						CollectSchemaFactory.createInstance( factoryType, schemaType, this.mainCtrl, this.myDBAbs, this.selectedSchemaEntity, this, assignedSize );
+						csfAbs.createInstance( factoryType, schemaType, this.mainCtrl, this.myDBAbs, this.selectedSchemaEntity, null, this, assignedSize );
+					
 					try
 					{
 						csAbs.retrieveChildren();

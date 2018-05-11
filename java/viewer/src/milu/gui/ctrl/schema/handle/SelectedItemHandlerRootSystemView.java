@@ -68,6 +68,8 @@ public class SelectedItemHandlerRootSystemView extends SelectedItemHandlerAbstra
 		this.removeRelatedTab( SchemaTableViewTab.class );
 		*/
 		this.loadChildLst( AbsDBFactory.FACTORY_TYPE.SYSTEM_VIEW, SchemaTableViewTab.class, CollectDataType.LIST );
+		
+		//this.loadChildLst( AbsDBFactory.FACTORY_TYPE.SYSTEM_VIEW, SchemaTableViewTab.class, CollectDataType.LIST_AND_DEFINITION );
 	}
 
 }

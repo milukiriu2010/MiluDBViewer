@@ -6,17 +6,19 @@ import milu.entity.schema.SchemaEntity;
 import milu.main.MainController;
 import milu.task.ProgressInterface;
 
-public class CollectSchemaFactory 
-{
-	static CollectSchemaAbstract createInstance
+public class CollectSchemaFactoryCreateMe extends CollectSchemaFactoryAbstract {
+
+	@Override
+	CollectSchemaAbstract createInstance
 	( 
-		AbsDBFactory.FACTORY_TYPE  factoryType,
-		SchemaEntity.SCHEMA_TYPE   schemaType,
-		MainController             mainCtrl,
-		MyDBAbstract               myDBAbs,
-		SchemaEntity               schemaEntity,
-		ProgressInterface          progressInf,
-		double                     assignedSize
+			AbsDBFactory.FACTORY_TYPE  factoryType,
+			SchemaEntity.SCHEMA_TYPE   schemaType,
+			MainController             mainCtrl,
+			MyDBAbstract               myDBAbs,
+			SchemaEntity               schemaEntity,
+			SchemaEntity               meEntity,
+			ProgressInterface          progressInf,
+			double                     assignedSize
 	)
 	{
 		CollectSchemaAbstract csAbs = null;
@@ -47,4 +49,5 @@ public class CollectSchemaFactory
 		csAbs.createMeEntity(factoryType);
 		return csAbs;
 	}
+
 }

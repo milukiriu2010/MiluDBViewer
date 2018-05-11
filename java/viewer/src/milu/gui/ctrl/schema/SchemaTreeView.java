@@ -444,7 +444,7 @@ public class SchemaTreeView extends TreeView<SchemaEntity>
 		}
 	}
 	
-	private void scrollToSelectedItem( TreeItem<SchemaEntity> itemTarget )
+	public void scrollToSelectedItem( TreeItem<SchemaEntity> itemTarget )
 	{
 		// https://stackoverflow.com/questions/10113045/javafx-2-0-get-treeitems-or-nodes-currently-visible-on-screen
 		// VirtualFlow => Java 9

@@ -121,8 +121,13 @@ public class CollectTaskRootBasic extends Task<Exception>
 				( 
 					(factoryType,schemaType)->
 					{
+						//CollectSchemaAbstract csAbs = 
+						//	CollectSchemaFactory.createInstance( factoryType, schemaType, this.mainCtrl, this.myDBAbs, schemaEntity, this, assignedSize );
+						
+						CollectSchemaFactoryAbstract csfAbs = CollectSchemaFactoryCreator.createFactory( CollectSchemaFactoryCreator.FACTORY_TYPE.CREATE_ME );
 						CollectSchemaAbstract csAbs = 
-							CollectSchemaFactory.createInstance( factoryType, schemaType, this.mainCtrl, this.myDBAbs, schemaEntity, this, assignedSize );
+							csfAbs.createInstance( factoryType, schemaType, this.mainCtrl, this.myDBAbs, schemaEntity, null, this, assignedSize );
+						
 						try
 						{
 							csAbs.retrieveChildren();

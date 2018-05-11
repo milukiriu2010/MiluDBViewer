@@ -81,15 +81,36 @@ public class CollectTaskFactory
 		}
 		else if ( AbsDBFactory.FACTORY_TYPE.VIEW.equals(factoryType) )
 		{
-			task = new CollectTaskObj1Level();
+			if ( CollectDataType.LIST_AND_DEFINITION.equals(dataType) )
+			{
+				task = new CollectTaskRootObject();
+			}
+			else
+			{
+				task = new CollectTaskObj1Level();
+			}
 		}
 		else if ( AbsDBFactory.FACTORY_TYPE.MATERIALIZED_VIEW.equals(factoryType) )
 		{
-			task = new CollectTaskObj1Level();
+			if ( CollectDataType.LIST_AND_DEFINITION.equals(dataType) )
+			{
+				task = new CollectTaskRootObject();
+			}
+			else
+			{
+				task = new CollectTaskObj1Level();
+			}
 		}
 		else if ( AbsDBFactory.FACTORY_TYPE.SYSTEM_VIEW.equals(factoryType) )
 		{
-			task = new CollectTaskObj1Level();
+			if ( CollectDataType.LIST_AND_DEFINITION.equals(dataType) )
+			{
+				task = new CollectTaskRootObject();
+			}
+			else
+			{
+				task = new CollectTaskObj1Level();
+			}
 		}
 		else if ( AbsDBFactory.FACTORY_TYPE.FUNC.equals(factoryType) )
 		{
