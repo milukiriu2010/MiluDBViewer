@@ -4,7 +4,7 @@
 
 ![alt tag](a01.start.png)
 
-2. Create an icon for connection on bookmark. Select "Cassandra". Choose "File Name". Click "Connect".
+2. Create an icon for connection on bookmark. Select "Cassandra". Input "Keyspace" & "Host/IP". Click "Connect".
 
 ![alt tag](a03.connect_Cassandra.png)
 

@@ -1,3 +1,5 @@
+[日本語](README_ja.md)
+
 # Overview
 
 - GUI Tool to browse data, issue SQL commands on DB.

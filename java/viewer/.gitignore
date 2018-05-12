@@ -4,5 +4,6 @@
 /MiluDBViewer*/
 *.log
 *.zip
+*.tar.gz
 *.tgz
 *.bak

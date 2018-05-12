@@ -4,7 +4,7 @@
 
 ![alt tag](a01.start.png)
 
-2. Create an icon for connection on bookmark. Select "MySQL". Choose "File Name". Click "Connect".
+2. Create an icon for connection on bookmark. Select "MySQL". Input "DB Name" & "Host/IP". Click "Connect".
 
 ![alt tag](a03.connect_MySQL.png)
 
