@@ -7,7 +7,7 @@ import java.util.stream.Collectors;
 import milu.db.MyDBAbstract;
 import milu.entity.schema.SchemaEntity;
 
-public class GenerateSQLInsertByName extends GenerateSQLAbstract 
+public class GenerateSQLUpdateByName extends GenerateSQLAbstract 
 {
 
 	@Override
@@ -21,50 +21,29 @@ public class GenerateSQLInsertByName extends GenerateSQLAbstract
 		String lineSeparator = System.getProperty("line.separator");
 		
 		// ===================================
-		// INSERT INTO USERS
-		// (
+		// UPDATE USERS
+		// SET
 		// -----------------------------------
-		//   ID,
-		//   NAME
+		//   ID   = :i_ID,
+		//   NAME = :i_NAME
 		// -----------------------------------
-		// )
-		// VALUES
-		// (
-		// -----------------------------------
-		//   :i_ID,
-		//   :i_NAME
-		// -----------------------------------
-		// )
 		// ===================================
-		String strSQLHead = 
+		String strSQL = 
 			definitionLst.stream()
-				.map( data->data.get("column_name") )
+				.map( data->data.get("column_name")+"\t= :i_"+data.get("column_name") )
 				.collect
 				(
 					Collectors.joining
 					(
 						","+lineSeparator+"\t",
-						"INSERT INTO "+
+						"UPDATE "+
 							((schemaName == null) ? "":schemaName+"." )+
-							name+lineSeparator+"("+lineSeparator+"\t",
-						lineSeparator+")"+lineSeparator+"VALUES"+lineSeparator+"("+lineSeparator
+							name+lineSeparator+
+							"SET"+lineSeparator+"\t",
+						""
 					)
 				);
-		String strSQLTail = 
-			definitionLst.stream()
-				.map( data->":i_"+data.get("column_name") )
-				.collect
-				(
-					Collectors.joining
-					(
-						","+lineSeparator+"\t",
-						"\t",
-						lineSeparator+")"
-					)
-				);
-		
-		
-		return strSQLHead + strSQLTail;
+		return strSQL;
 	}
 
 }

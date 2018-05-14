@@ -7,7 +7,7 @@ import java.util.stream.Collectors;
 import milu.db.MyDBAbstract;
 import milu.entity.schema.SchemaEntity;
 
-public class GenerateSQLInsertByName extends GenerateSQLAbstract 
+public class GenerateSQLInsertBySimple extends GenerateSQLAbstract 
 {
 
 	@Override
@@ -31,8 +31,8 @@ public class GenerateSQLInsertByName extends GenerateSQLAbstract
 		// VALUES
 		// (
 		// -----------------------------------
-		//   :i_ID,
-		//   :i_NAME
+		//   ?,	-- # ID
+		//   ?	-- # NAME
 		// -----------------------------------
 		// )
 		// ===================================
@@ -52,17 +52,29 @@ public class GenerateSQLInsertByName extends GenerateSQLAbstract
 				);
 		String strSQLTail = 
 			definitionLst.stream()
-				.map( data->":i_"+data.get("column_name") )
+				.map
+				( 
+					(data)->
+					{
+						if ( definitionLst.lastIndexOf(data) == (definitionLst.size()-1) )
+						{
+							return "?\t--# "+data.get("column_name");
+						}
+						else
+						{
+							return "?,\t--# "+data.get("column_name");
+						}
+					}
+				)
 				.collect
 				(
 					Collectors.joining
 					(
-						","+lineSeparator+"\t",
+						lineSeparator+"\t",
 						"\t",
 						lineSeparator+")"
 					)
 				);
-		
 		
 		return strSQLHead + strSQLTail;
 	}

@@ -23,6 +23,18 @@ public class GenerateSQLFactory
 		{
 			gsAbs = new GenerateSQLInsertByName();
 		}
+		else if ( TYPE.INSERT_BY_SIMPLE.equals(type) )
+		{
+			gsAbs = new GenerateSQLInsertBySimple();
+		}
+		else if ( TYPE.UPDATE_BY_NAME.equals(type) )
+		{
+			gsAbs = new GenerateSQLUpdateByName();
+		}
+		else if ( TYPE.UPDATE_BY_SIMPLE.equals(type) )
+		{
+			gsAbs = new GenerateSQLUpdateBySimple();
+		}
 		else if ( TYPE.DELETE.equals(type) )
 		{
 			gsAbs = new GenerateSQLDelete();
