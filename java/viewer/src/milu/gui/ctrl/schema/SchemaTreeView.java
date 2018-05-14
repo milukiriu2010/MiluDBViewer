@@ -1,22 +1,20 @@
 package milu.gui.ctrl.schema;
 
 import java.util.List;
-import java.util.ResourceBundle;
 
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.control.cell.TextFieldTreeCell;
-import javafx.util.StringConverter;
-import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollBar;
+import javafx.scene.control.skin.VirtualFlow;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
-import javafx.collections.ObservableList;
-import javafx.beans.property.BooleanProperty;
 import javafx.scene.Node;
-import javafx.scene.control.skin.VirtualFlow;
+import javafx.collections.ObservableList;
+import javafx.util.StringConverter;
+import javafx.beans.property.BooleanProperty;
 import milu.gui.ctrl.common.inf.ChangeLangInterface;
 import milu.gui.view.DBView;
 import milu.main.MainController;
@@ -38,13 +36,18 @@ public class SchemaTreeView extends TreeView<SchemaEntity>
 	
 	private boolean isLoading = false;
 	
-	private MenuItem  menuItemRefresh = new MenuItem();
+	private SchemaTreeContextMenu  schemaTreeContextMenu = null;
+	
+	//private MenuItem  menuItemRefresh = new MenuItem();
 	
 	public SchemaTreeView( DBView dbView )
 	{
 		super();
 		
 		this.dbView = dbView;
+		
+		this.schemaTreeContextMenu = new SchemaTreeContextMenu( this.dbView, this );
+		this.setContextMenu(this.schemaTreeContextMenu);
 		
 		this.lblChildrenCnt.getStyleClass().add("SchemaTreeView_LabelChildrenCount");
 		
@@ -64,16 +67,6 @@ public class SchemaTreeView extends TreeView<SchemaEntity>
 					this.scrollToSelectedItem(newVal);
 					// set "children count" of selected item
 					this.setChildrenCnt();
-					/*
-					this.lblChildrenCnt.textProperty().unbind();
-					this.lblChildrenCnt.textProperty().bind
-					(
-						Bindings.convert
-						(
-							new SimpleIntegerProperty( newVal.getChildren().size() )
-						)
-					);
-					*/
 				}
 				// shift label position
 				// -------------------------------------------------------
@@ -81,8 +74,10 @@ public class SchemaTreeView extends TreeView<SchemaEntity>
 				// vertical scrollbar visible   => margin scrollbar width
 				this.shiftLabelChildrenCountPosition();
 				
-				// Disable/Enable MenuItem(Refresh)
+				// Disable/Enable MenuItem
 				// -------------------------------------------------------
+				this.schemaTreeContextMenu.setMenuStatus(newVal);
+				/*
 				SchemaEntity scEnt = newVal.getValue();
 				SchemaEntity.SCHEMA_TYPE schemaType = scEnt.getType();
 				switch ( schemaType )
@@ -102,12 +97,13 @@ public class SchemaTreeView extends TreeView<SchemaEntity>
 						this.menuItemRefresh.setDisable(false);
 						break;
 				}
+				*/
 			}
 		);
 		
 		this.setAction();
 		
-		this.setContextMenu();
+		//this.setContextMenu();
 	}
 	
 	/**
@@ -142,6 +138,7 @@ public class SchemaTreeView extends TreeView<SchemaEntity>
 		this.lblChildrenCnt.setText(cnt);
 	}
 	
+	/*
 	private void setContextMenu()
 	{
 		ResourceBundle langRB = this.dbView.getMainController().getLangResource("conf.lang.gui.ctrl.schema.SchemaTreeView");
@@ -182,35 +179,9 @@ public class SchemaTreeView extends TreeView<SchemaEntity>
 		);
 		
 		contextMenu.getItems().addAll( this.menuItemRefresh );
-		/*
-		this.setOnContextMenuRequested
-		( 
-			(event)->
-			{ 
-				TreeItem<SchemaEntity>  itemSelected = this.getSelectionModel().getSelectedItem();
-				SchemaEntity scEnt = itemSelected.getValue();
-				SchemaEntity.SCHEMA_TYPE schemaType = scEnt.getType();
-				switch ( schemaType )
-				{
-					// do not show ContextMenu when these items are selected.
-					//case ROOT:
-					case SCHEMA:
-					case ROOT_TABLE:
-					//case INDEX:
-					case INDEX_COLUMN:
-					case ROOT_SYSTEM_VIEW:
-					case SYSTEM_VIEW:
-						break;
-					// show ContextMenu when other items are selected.
-					default:
-						contextMenu.show( this, event.getScreenX(), event.getScreenY() ); 
-						break;
-				}
-			} 
-		);
-		*/
 		this.setContextMenu(contextMenu);
 	}
+	*/
 	
 	private void setAction()
 	{
@@ -588,7 +559,7 @@ public class SchemaTreeView extends TreeView<SchemaEntity>
 	@Override	
 	public void changeLang()
 	{
-		this.setContextMenu();
+		//this.setContextMenu();
 	}
 	
 }
