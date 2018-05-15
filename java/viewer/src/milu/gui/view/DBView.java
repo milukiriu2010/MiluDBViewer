@@ -10,6 +10,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.concurrent.Task;
 
+import java.lang.reflect.Constructor;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
 import java.util.concurrent.ExecutorService;
@@ -221,17 +222,6 @@ public class DBView extends Stage
 					{
 						System.out.println( "CollectTask:Message[" + newVal + "]" );
 						this.setBottomMsg(newVal);
-						/*
-						if ( "".equals(newVal) == false )
-						{
-							this.lblMsg.setText(newVal);
-							this.brdPane.setBottom(lblMsg);
-						}
-						else
-						{
-							this.brdPane.setBottom(null);
-						}
-						*/
 					}
 				);
 				
@@ -476,9 +466,32 @@ public class DBView extends Stage
 		else
 		{
 			// Create "castClazz" Tab, if it doesn't exist.
-			//final Tab newTab = new DBJdbcTab( this );
-			//final Tab newTab = castClazz.getDeclaredConstructor().newInstance();
-			final Tab newTab = TabFactory.getInstance( this, castClazz );
+			//final Tab newTab = TabFactory.getInstance( this, castClazz );
+			Object obj = null;
+			Constructor<?>[] constructors = castClazz.getDeclaredConstructors();
+			for ( int i = 0; i < constructors.length; i++ )
+			{
+				try
+				{
+					// exit loop 
+					// when match "new XXViewTab( DBView dbView )"
+					obj = castClazz.cast(constructors[i].newInstance(this));
+					break;
+				}
+				catch ( Exception ex )
+				{
+				}
+			}
+			if ( obj == null )
+			{
+				return;
+			}
+			
+			Tab newTab = null;
+			if ( obj instanceof Tab )
+			{
+				newTab = (Tab)obj;
+			}
 			this.tabPane.getTabs().add( newTab );
 			this.tabPane.getSelectionModel().select( newTab );
 			this.Go();

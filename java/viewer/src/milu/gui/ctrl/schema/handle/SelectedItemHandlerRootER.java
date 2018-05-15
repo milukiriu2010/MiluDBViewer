@@ -3,12 +3,13 @@ package milu.gui.ctrl.schema.handle;
 import java.sql.SQLException;
 
 import javafx.scene.Node;
-import javafx.scene.control.Tab;
 import javafx.scene.control.TreeItem;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import milu.db.obj.abs.AbsDBFactory;
 import milu.entity.schema.SchemaEntity;
+import milu.entity.schema.search.SearchSchemaEntityInterface;
+import milu.entity.schema.search.SearchSchemaEntityVisitorFactory;
 import milu.gui.ctrl.schema.SchemaERViewTab;
 import milu.main.MainController;
 import milu.task.collect.CollectDataType;
@@ -49,12 +50,25 @@ public class SelectedItemHandlerRootER extends SelectedItemHandlerAbstract
 			UnsupportedOperationException, 
 			SQLException
 	{
-		TreeItem<SchemaEntity> itemParent   = this.itemSelected.getParent();
+		//TreeItem<SchemaEntity> itemParent   = this.itemSelected.getParent();
 		SchemaEntity  selectedEntity = this.itemSelected.getValue();
-		String schemaName = itemParent.getValue().toString();
-		String id         = schemaName + "@ER@";
+		//String schemaName = itemParent.getValue().toString();
+		
+		// Search [SCHEMA]
+		SearchSchemaEntityInterface searchSchemaVisitor = new SearchSchemaEntityVisitorFactory().createInstance(SchemaEntity.SCHEMA_TYPE.SCHEMA);
+		selectedEntity.acceptParent(searchSchemaVisitor);
+		SchemaEntity hitEntity = searchSchemaVisitor.getHitSchemaEntity();
+		String schemaName = null;
+		// SQLite => [SCHEMA]=null
+		if ( hitEntity != null )
+		{
+			schemaName = hitEntity.getName();
+		}
+		
+		String id         = (( schemaName == null ) ? "":schemaName) + "@ER@";
 		ObservableList<TreeItem<SchemaEntity>> itemChildren = this.itemSelected.getChildren();
 		
+		/*
 		final ObservableList<Tab> tabLst =  this.tabPane.getTabs();
 		for ( Tab tab : tabLst )
 		{
@@ -79,31 +93,16 @@ public class SelectedItemHandlerRootER extends SelectedItemHandlerAbstract
 					break;
 				}
 			}
-		}		
-		
-		// get View List & add list as children
-		/*
-		if ( itemChildren.size() == 0 )
+		}
+		*/		
+		// Activate Tab, if already exists.
+		// Delete Tab, if already exists.
+		if ( MANIPULATE_TYPE.SELECT.equals(this.manipulateSpecifiedTab( SchemaERViewTab.class , id )) )
 		{
-			ObjDBFactory objDBFactory = AbsDBFactory.getFactory( AbsDBFactory.FACTORY_TYPE.FOREIGN_KEY );
-			ObjDBInterface objDBInf = objDBFactory.getInstance(myDBAbs);
-			if ( objDBInf != null )
-			{
-				List<SchemaEntity> fkEntityLst = objDBInf.selectEntityLst(schemaName);
-				this.schemaTreeView.addEntityLst( itemSelected, fkEntityLst, true );
-				FKDBAbstract fkDBAbs = (FKDBAbstract)objDBInf;
-				for ( SchemaEntity seEntity : fkEntityLst )
-				{
-					selectedEntity.addEntity( seEntity );
-					SchemaEntityEachFK fkEntity = (SchemaEntityEachFK) seEntity;
-					fkDBAbs.selectSrcColumnMap(fkEntity);
-					fkDBAbs.selectDstColumnMap(fkEntity);
-				}
-			}
+			return;
 		}
 		
-		this.drawER( selectedEntity, schemaName, id );
-		*/
+		// get View List & add list as children
 		if ( itemChildren.size() > 0 )
 		{
 			return;
@@ -118,6 +117,7 @@ public class SelectedItemHandlerRootER extends SelectedItemHandlerAbstract
 		// execute task
 		this.service.submit( collectTask );
 		
+		final String schemaNameFinal = schemaName;
 		collectTask.progressProperty().addListener
 		(
 			(obs,oldVal,newVal)->
@@ -133,7 +133,7 @@ public class SelectedItemHandlerRootER extends SelectedItemHandlerAbstract
 					System.out.println( "CollectTask:Done[" + newVal + "]" );
 					this.schemaTreeView.addEntityLst( itemSelected, selectedEntity.getEntityLst(), true );
 					this.schemaTreeView.setChildrenCnt();
-					this.drawER( selectedEntity, schemaName, id );
+					this.drawER( selectedEntity, schemaNameFinal, id );
 					this.schemaTreeView.setIsLoading(false);
 					this.dbView.setBottomMsg(null);
 					this.serviceShutdown();
@@ -150,6 +150,7 @@ public class SelectedItemHandlerRootER extends SelectedItemHandlerAbstract
 			}
 		);
 		
+		this.setValueProperty(collectTask);
 	}
 	
 	private void drawER( SchemaEntity selectedEntity, String schemaName, String id )

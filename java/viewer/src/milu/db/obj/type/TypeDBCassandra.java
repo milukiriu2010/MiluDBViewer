@@ -29,11 +29,6 @@ public class TypeDBCassandra extends TypeDBAbstract {
 		{
 			while ( rs.next() )
 			{
-				/*
-				Map<String, String> mapView = new HashMap<String,String>();
-				mapView.put( "typeName", rs.getString("type_name") );
-				this.typeLst.add( mapView );
-				*/
 				SchemaEntity typeEntity = SchemaEntityFactory.createInstance( rs.getString("type_name"), SchemaEntity.SCHEMA_TYPE.TYPE );
 				typeEntityLst.add( typeEntity );
 			}

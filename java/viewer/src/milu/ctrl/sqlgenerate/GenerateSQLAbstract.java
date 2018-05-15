@@ -4,13 +4,8 @@ import milu.entity.schema.SchemaEntity;
 import milu.entity.schema.search.SearchSchemaEntityInterface;
 import milu.entity.schema.search.SearchSchemaEntityVisitorFactory;
 import milu.db.MyDBAbstract;
-import milu.db.MyDBCassandra;
-import milu.db.MyDBMySQL;
 import milu.db.MyDBOracle;
 import milu.db.MyDBPostgres;
-import milu.db.MyDBSQLite;
-import milu.db.MyDBSQLServer;
-
 
 public abstract class GenerateSQLAbstract 
 {
