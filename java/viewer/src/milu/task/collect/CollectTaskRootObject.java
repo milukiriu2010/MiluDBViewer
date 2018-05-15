@@ -86,10 +86,6 @@ public class CollectTaskRootObject extends Task<Exception>
 			System.out.println( "Schema retriving..." );
 			
 			double assignedSize = MAX;
-			//CollectSchemaAbstract csAbs = 
-			//	CollectSchemaFactory.createInstance( factoryType, this.selectedSchemaEntity.getType(), this.mainCtrl, this.myDBAbs, hitEntity, this, assignedSize );
-			
-			//CollectSchemaFactoryAbstract csfAbs = CollectSchemaFactoryCreator.createFactory( CollectSchemaFactoryCreator.FACTORY_TYPE.CREATE_ME );
 			CollectSchemaFactoryAbstract csfAbs = CollectSchemaFactoryCreator.createFactory( CollectSchemaFactoryCreator.FACTORY_TYPE.SET_ME );
 			CollectSchemaAbstract csAbs = 
 				csfAbs.createInstance( factoryType, this.selectedSchemaEntity.getType(), this.mainCtrl, this.myDBAbs, hitEntity, this.selectedSchemaEntity, this, assignedSize );

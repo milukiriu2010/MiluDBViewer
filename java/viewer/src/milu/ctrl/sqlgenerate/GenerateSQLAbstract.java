@@ -44,7 +44,7 @@ public abstract class GenerateSQLAbstract
 			// -------------------------------------
 			// PostgreSQL
 			// -------------------------------------
-			if ( myDBAbs instanceof MyDBPostgres )
+			else if ( myDBAbs instanceof MyDBPostgres )
 			{
 				if ( "public".equals(schemaName) )
 				{

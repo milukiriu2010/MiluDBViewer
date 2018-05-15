@@ -5,7 +5,6 @@ import java.util.List;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.control.cell.TextFieldTreeCell;
-import javafx.scene.control.MenuItem;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollBar;
 import javafx.scene.control.skin.VirtualFlow;
@@ -37,8 +36,6 @@ public class SchemaTreeView extends TreeView<SchemaEntity>
 	private boolean isLoading = false;
 	
 	private SchemaTreeContextMenu  schemaTreeContextMenu = null;
-	
-	//private MenuItem  menuItemRefresh = new MenuItem();
 	
 	public SchemaTreeView( DBView dbView )
 	{
@@ -77,27 +74,6 @@ public class SchemaTreeView extends TreeView<SchemaEntity>
 				// Disable/Enable MenuItem
 				// -------------------------------------------------------
 				this.schemaTreeContextMenu.setMenuStatus(newVal);
-				/*
-				SchemaEntity scEnt = newVal.getValue();
-				SchemaEntity.SCHEMA_TYPE schemaType = scEnt.getType();
-				switch ( schemaType )
-				{
-					// Disable "Refresh" menu when these items are selected.
-					//case ROOT:
-					case SCHEMA:
-					//case ROOT_TABLE:
-					//case INDEX:
-					case INDEX_COLUMN:
-					//case ROOT_SYSTEM_VIEW:
-					//case SYSTEM_VIEW:
-						this.menuItemRefresh.setDisable(true);
-						break;
-					// Enable "Refresh" menu when these items are selected.
-					default:
-						this.menuItemRefresh.setDisable(false);
-						break;
-				}
-				*/
 			}
 		);
 		
