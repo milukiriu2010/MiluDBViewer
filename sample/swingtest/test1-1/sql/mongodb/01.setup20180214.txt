@@ -10,6 +10,8 @@ https://docs.mongodb.com/manual/tutorial/enable-authentication/
 
 mongod  --auth --port 27017 --dbpath c:\my\mongodb\data
 
+mongo --host 127.0.0.1:27017
+
 mongo --port 27017 -u "milu" -p "milu" --authenticationDatabase "admin"
 
 mongo --port 27017 -u "mongo" -p "mongo" --authenticationDatabase "admin"
@@ -21,3 +23,6 @@ mongo --port 27017 -u "milurw" -p "milurw" --authenticationDatabase "admin"
 https://docs.mongodb.com/getting-started/shell/import-data/
 
 mongoimport --db test --collection restaurants --drop --file primer-dataset.json
+
+mongoimport --db test --collection restaurants --drop --file zips.json
+
