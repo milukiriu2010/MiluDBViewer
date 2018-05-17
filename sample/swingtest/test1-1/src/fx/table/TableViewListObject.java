@@ -3,6 +3,8 @@ package fx.table;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
 
 import javafx.scene.Group;
 import javafx.scene.Scene;
@@ -13,9 +15,6 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextInputControl;
-//import javafx.scene.image.Image;
-//import javafx.scene.image.ImageView;
-//import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.SelectionMode;
@@ -25,7 +24,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.application.Application;
-import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
@@ -33,12 +32,12 @@ import javafx.collections.FXCollections;
 import javafx.geometry.Insets;
 import javafx.stage.Stage;
 
-public class TableViewListString extends Application 
+public class TableViewListObject extends Application 
 {
-	private TableView<List<String>>  tableView = new TableView<>();
-	private List<String>       headLst = Arrays.asList( "-", "First Name", "Last Name", "Email" );
-	private List<List<String>> dataLst = new ArrayList<>();
-	private ObservableList<List<String>> obsDataLst = null;
+	private TableView<List<Object>>  tableView = new TableView<>();
+	private List<Object>       headLst = Arrays.asList( "No", "First Name", "Last Name", "Age", "HireDay" );
+	private List<List<Object>> dataLst = new ArrayList<>();
+	private ObservableList<List<Object>> obsDataLst = null;
 	
 	private List<Integer>  selectedRowLst = new ArrayList<>();
 	
@@ -56,17 +55,17 @@ public class TableViewListString extends Application
 		
         Scene scene = new Scene(new Group());
         stage.setTitle("Table View Sample");
-        stage.setWidth(450);
+        stage.setWidth(600);
         stage.setHeight(500);
  
         final Label label = new Label("Address Book");
         label.setFont(new Font("Arial", 20));
         
-        this.tableView.setPrefWidth(300);
-        this.tableView.setPrefHeight(200);
+        this.tableView.setPrefWidth(500);
+        this.tableView.setPrefHeight(300);
         this.tableView.getSelectionModel().setSelectionMode( SelectionMode.MULTIPLE );
         this.tableView.getSelectionModel().setCellSelectionEnabled( true );
-        this.tableView.setRowFactory(null);
+        //this.tableView.setRowFactory(null);
         
         this.setTableColumnWithData();
         this.setContextMenu();
@@ -77,30 +76,31 @@ public class TableViewListString extends Application
         final TextField addLastName = new TextField();
         addLastName.setMaxWidth(100);
         addLastName.setPromptText("Last Name");
-        final TextField addEmail = new TextField();
-        addEmail.setMaxWidth(100);
-        addEmail.setPromptText("Email");        
+        final TextField addAge = new TextField();
+        addAge.setMaxWidth(100);
+        addAge.setPromptText("Age");        
         
         final Button addButton = new Button("Add");
         addButton.setOnAction
         (
         	(event)->
         	{
-        		List<String> dataRow = new ArrayList<>();
-        		dataRow.add( String.valueOf(this.dataLst.size()+1) );
+        		List<Object> dataRow = new ArrayList<>();
+        		dataRow.add( Integer.valueOf(this.dataLst.size()+1) );
         		dataRow.add( addFirstName.getText() );
         		dataRow.add( addLastName.getText() );
-        		dataRow.add( addEmail.getText() );
+        		dataRow.add( addAge.getText() );
+        		dataRow.add( new Date() );
         		//this.dataLst.add(dataRow);
         		this.obsDataLst.add(dataRow);
         		
                 addFirstName.clear();
                 addLastName.clear();
-                addEmail.clear();        		
+                addAge.clear();        		
         	}
         );
         
-        this.hb.getChildren().addAll(addFirstName, addLastName, addEmail, addButton);
+        this.hb.getChildren().addAll(addFirstName, addLastName, addAge, addButton);
         this.hb.setSpacing(3);        
         
         final VBox vbox = new VBox();
@@ -117,17 +117,31 @@ public class TableViewListString extends Application
 	
 	private void initData()
 	{
-		List<String> dataRow1 = Arrays.asList("1","Michael","Brown","michael.brown@example.com");
-		List<String> dataRow2 = Arrays.asList("2","Jacob","Smith","jacob.smith@example.com");
-		List<String> dataRow3 = Arrays.asList("3","Isabella","Johnson","isabella.johnson@example.com");
-		List<String> dataRow4 = Arrays.asList("4","Ethan","Williams","ethan.williams@example.com");
-		List<String> dataRow5 = Arrays.asList("5","Emma","Jones","emma.jones@example.com");
+		Calendar cal1 = Calendar.getInstance();
+		cal1.set(2000, 0, 30);
+		List<Object> dataRow1 = Arrays.asList(1,"Michael","Brown",30, cal1.getTime() );
+		Calendar cal2 = Calendar.getInstance();
+		cal2.set(2004, 1, 29);
+		List<Object> dataRow2 = Arrays.asList(2,"Jacob","Smith",30, cal2.getTime() );
+		Calendar cal3 = Calendar.getInstance();
+		cal3.set(2005, 2, 15);
+		List<Object> dataRow3 = Arrays.asList(3,"Isabella","Johnson",100, cal3.getTime() );
+		Calendar cal4 = Calendar.getInstance();
+		cal4.set(2005, 3, 1);
+		List<Object> dataRow4 = Arrays.asList(4,"Ethan","Williams",28, cal4.getTime() );
+		Calendar cal5 = Calendar.getInstance();
+		cal5.set(2006, 4, 10);
+		List<Object> dataRow5 = Arrays.asList(5,"Emma","Jones",9, cal5.getTime() );
+		Calendar cal6 = Calendar.getInstance();
+		cal6.set(2008, 6, 20);
+		List<Object> dataRow6 = Arrays.asList(6,"Patrik","Smith",30, cal6.getTime() );
 		
 		this.dataLst.add(dataRow1);
 		this.dataLst.add(dataRow2);
 		this.dataLst.add(dataRow3);
 		this.dataLst.add(dataRow4);
 		this.dataLst.add(dataRow5);
+		this.dataLst.add(dataRow6);
 		
 		this.obsDataLst = FXCollections.observableArrayList(this.dataLst);
 	}
@@ -136,8 +150,8 @@ public class TableViewListString extends Application
 	{
 		for ( int i = 0; i < this.headLst.size(); i++ )
 		{
-			String head = this.headLst.get(i);
-			TableColumn<List<String>,String> tableCol = new TableColumn<List<String>,String>(head);
+			Object head = this.headLst.get(i);
+			TableColumn<List<Object>,Object> tableCol = new TableColumn<List<Object>,Object>(head.toString());
 			/*
 			Image image = new Image("file:resources/images/madonna.png" );
 	        ImageView iv = new ImageView( image );
@@ -168,7 +182,7 @@ public class TableViewListString extends Application
 				(event)->
 				{
 					System.out.println("Label.clicked:"+head);
-					TableView.TableViewSelectionModel<List<String>>  selectionModel = this.tableView.getSelectionModel(); 
+					TableView.TableViewSelectionModel<List<Object>>  selectionModel = this.tableView.getSelectionModel(); 
 					boolean isSelectedAll = true;
 					for ( int ii = 0; ii < this.obsDataLst.size(); ii++ )
 					{
@@ -199,7 +213,7 @@ public class TableViewListString extends Application
 			);
 			tableCol.setGraphic(label);
 			
-			tableCol.setSortable(false);
+			//tableCol.setSortable(false);
 			this.setContextMenu(tableCol);
 			
 			final int index = i;
@@ -207,14 +221,20 @@ public class TableViewListString extends Application
 			(
 				(p)->
 				{
-					List<String> x = p.getValue();
+					List<Object> x = p.getValue();
 					if ( x != null )
 					{
-						return new SimpleStringProperty( x.get( index ) );
+						Object obj = x.get( index );
+						if ( obj instanceof Number )
+						{
+							//tableCol.setStyle( "-fx-text-alignment: CENTER-RIGHT;" );
+							tableCol.setStyle( "-fx-alignment: CENTER-RIGHT;" );
+						}
+						return new SimpleObjectProperty<Object>( obj );
 					}
 					else
 					{
-						return new SimpleStringProperty( "<NULL>" );
+						return new SimpleObjectProperty<Object>( "<NULL>" );
 					}					
 				}
 			);
@@ -244,7 +264,7 @@ public class TableViewListString extends Application
 		this.tableView.setContextMenu(tblContextMenu);
 	}
 	
-	private void setContextMenu( TableColumn<List<String>,String> tblColumn )
+	private void setContextMenu( TableColumn<List<Object>,Object> tblColumn )
 	{
 		ContextMenu tblColumnContextMenu = new ContextMenu();
 		
@@ -274,49 +294,11 @@ public class TableViewListString extends Application
 		this.selectedRowLst.forEach( (rowId)->{System.out.println("rowId:"+rowId);tableView.getSelectionModel().select(rowId);} );
 	}
 	
-	class EditingCell extends TableCell<List<String>, String>
+	class EditingCell extends TableCell<List<Object>, Object>
 	{
 		private TextInputControl textInputCtrl = null;
 		
-		/*
-		private List<Integer>  selectedRowLst = new ArrayList<>();
-		
-		public EditingCell()
-		{
-			this.addEventFilter
-			(
-				MouseEvent.MOUSE_CLICKED, 
-				(event)->
-				{
-					System.out.println( "Clicked." );
-					TableView<List<String>> tableView = this.getTableView();
-					int id = this.getTableRow().getIndex();
-					if ( event.isShiftDown() )
-					{
-						System.out.println( "RowId Add." + this.selectedRowLst.size() );
-						this.selectedRowLst.add(id);
-					}
-					else
-					{
-						System.out.println( "RowId Clear." + this.selectedRowLst.size() );
-						this.selectedRowLst.clear();
-						this.selectedRowLst.add(id);
-					}
-					ObservableList<TableColumn<List<String>,?>> obsColLst = tableView.getColumns();
-					//this.selectedRowLst.forEach( (rowId)->{tableView.getSelectionModel().selectRange(rowId,obsColLst.get(0),rowId,obsColLst.get(obsColLst.size()-1));} );
-					//this.selectedRowLst.forEach( (rowId)->{tableView.getSelectionModel().clearSelection(rowId,null);} );
-					
-					//this.selectedRowLst.forEach( (rowId)->{tableView.getSelectionModel().select(rowId,null);} );
-					tableView.getSelectionModel().clearSelection();
-					//tableView.getSelectionModel().selectRange(this.selectedRowLst.get(0),obsColLst.get(0),this.selectedRowLst.get(this.selectedRowLst.size()-1),obsColLst.get(obsColLst.size()-1));
-					this.selectedRowLst.forEach( (rowId)->{System.out.println("rowId:"+rowId);tableView.getSelectionModel().select(rowId);} );
-					event.consume();
-				}
-			);
-		}
-		*/
-		
-		public EditingCell( TableViewListString app )
+		public EditingCell( TableViewListObject app )
 		{
 			this.addEventFilter
 			(
@@ -366,7 +348,7 @@ public class TableViewListString extends Application
 		 * Callback for Cell
 		 */
 		@Override
-		protected void updateItem( String item, boolean empty )
+		protected void updateItem( Object item, boolean empty )
 		{
 			super.updateItem(item, empty);
 			
