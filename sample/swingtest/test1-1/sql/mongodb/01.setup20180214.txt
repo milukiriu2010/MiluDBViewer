@@ -24,5 +24,5 @@ https://docs.mongodb.com/getting-started/shell/import-data/
 
 mongoimport --db test --collection restaurants --drop --file primer-dataset.json
 
-mongoimport --db test --collection restaurants --drop --file zips.json
+mongoimport  -u "milurw" -p "milurw"  --db test --collection zips --drop --file zips.json
 

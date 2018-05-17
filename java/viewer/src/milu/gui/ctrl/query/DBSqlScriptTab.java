@@ -22,6 +22,8 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.AnchorPane;
+import javafx.concurrent.Task;
+
 import milu.ctrl.sqlparse.SQLBag;
 import milu.gui.ctrl.common.inf.ChangeLangInterface;
 import milu.gui.ctrl.common.inf.CopyInterface;
@@ -33,8 +35,7 @@ import milu.gui.ctrl.common.inf.ToggleHorizontalVerticalInterface;
 import milu.gui.view.DBView;
 import milu.main.AppConf;
 import milu.main.MainController;
-import milu.task.query.ExecExplainAllTask;
-import milu.task.query.ExecScriptAllTask;
+import milu.task.query.ExecTaskFactory;
 import milu.tool.MyTool;
 import milu.db.MyDBAbstract;
 
@@ -207,6 +208,7 @@ public class DBSqlScriptTab extends Tab
 	@Override
 	public void Go()
 	{
+		/*
 		long startTime = System.nanoTime();
 		MyDBAbstract myDBAbs = this.dbView.getMyDBAbstract();
 		MainController mainController = this.dbView.getMainController();
@@ -272,6 +274,8 @@ public class DBSqlScriptTab extends Tab
 
 		// Exception Returned by Task
 		task.valueProperty().addListener( (obs,oldVal,newVal)->this.showException(newVal,startTime) );
+		*/
+		this.execTask(ExecTaskFactory.FACTORY_TYPE.SCRIPT);
 	}
 	
 	/**
@@ -280,6 +284,7 @@ public class DBSqlScriptTab extends Tab
 	@Override
 	public void Explain()
 	{
+		/*
 		long startTime = System.nanoTime();
 		MyDBAbstract myDBAbs = this.dbView.getMyDBAbstract();
 		MainController mainController = this.dbView.getMainController();
@@ -296,6 +301,76 @@ public class DBSqlScriptTab extends Tab
 		task.setAppConf(appConf);
 		task.setSQLBagLst(sqlBagLst);
 		task.setTabPane(this.tabPane);
+		
+		// execute task
+		final Future<?> future = this.service.submit( task );
+		
+		task.progressProperty().addListener
+		(
+			(obs,oldVal,newVal)->
+			{
+				System.out.println( "ExecExplainAllTask:Progress[" + obs.getClass() + "]oldVal[" + oldVal + "]newVal[" + newVal + "]" );
+				ResourceBundle langRB = this.dbView.getMainController().getLangResource("conf.lang.gui.ctrl.query.DBSqlTab");
+				// task start.
+				if ( newVal.doubleValue() == 0.0 )
+				{
+					this.dbView.taskProcessing();
+					VBox vBox = new VBox(2);
+					Label  labelProcess = new Label( langRB.getString("LABEL_PROCESSING") );
+					Button btnCancel    = new Button( langRB.getString("BTN_CANCEL") );
+					vBox.getChildren().addAll( labelProcess, btnCancel );
+					
+					// Oracle =>
+					//   java.sql.SQLRecoverableException
+					btnCancel.setOnAction
+					(
+						(event)->
+						{
+							future.cancel(true);
+						}
+					);
+					
+					//this.lowerPane.getChildren().clear();
+					//this.lowerPane.getChildren().add( vBox );
+					Tab tab = new Tab("...");
+					tab.setContent( vBox );
+					this.tabPane.getTabs().add(tab);
+					System.out.println( "ExecExplainAllTask:clear" );
+				}
+				// task done.
+				else if ( newVal.doubleValue() == 1.0 )
+				{
+					//this.lowerPane.getChildren().clear();
+					//this.lowerPane.getChildren().add( this.tabPane );
+					// remove tab for cancel
+					this.tabPane.getTabs().remove(0);
+					this.dbView.taskDone();
+					long endTime = System.nanoTime();
+					this.setExecTime( endTime - startTime );
+					System.out.println( "ExecExplainAllTask:clear" );
+				}
+			}
+		);
+		
+		// Exception Returned by Task
+		task.valueProperty().addListener( (obs,oldVal,newVal)->this.showException(newVal,startTime) );
+		*/
+		this.execTask(ExecTaskFactory.FACTORY_TYPE.EXPLAIN);
+	}
+	
+	private void execTask( ExecTaskFactory.FACTORY_TYPE factoryType )
+	{
+		long startTime = System.nanoTime();
+		MyDBAbstract myDBAbs = this.dbView.getMyDBAbstract();
+		MainController mainController = this.dbView.getMainController();
+		AppConf appConf = mainController.getAppConf();
+		
+		this.tabPane.getTabs().removeAll(this.tabPane.getTabs());
+		
+		List<SQLBag> sqlBagLst = this.textAreaSQL.getSQLBagLst();
+		this.setCount( sqlBagLst.size() );
+		
+		Task<Exception> task = ExecTaskFactory.createFactory( factoryType, this.dbView, myDBAbs, appConf, this.tabPane, sqlBagLst ); 
 		
 		// execute task
 		final Future<?> future = this.service.submit( task );

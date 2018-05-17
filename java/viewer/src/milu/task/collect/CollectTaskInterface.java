@@ -5,7 +5,7 @@ import milu.db.obj.abs.AbsDBFactory;
 import milu.main.MainController;
 import milu.entity.schema.SchemaEntity;
 
-public interface TaskInterface 
+public interface CollectTaskInterface 
 {
 	public void setAbsDBFactory( AbsDBFactory.FACTORY_TYPE factoryType );
 	public void setCollectDataType( CollectDataType dataType );

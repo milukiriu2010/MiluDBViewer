@@ -47,10 +47,10 @@ public class CollectTaskFactory
 			return null;
 		}
 		
-		if ( task instanceof TaskInterface )
+		if ( task instanceof CollectTaskInterface )
 		{
-			((TaskInterface)task).setMainController(mainCtrl);
-			((TaskInterface)task).setMyDBAbstract(myDBAbs);
+			((CollectTaskInterface)task).setMainController(mainCtrl);
+			((CollectTaskInterface)task).setMyDBAbstract(myDBAbs);
 		}
 		
 		return task;
@@ -153,13 +153,13 @@ public class CollectTaskFactory
 			return null;
 		}
 		
-		if ( task instanceof TaskInterface )
+		if ( task instanceof CollectTaskInterface )
 		{
-			((TaskInterface)task).setAbsDBFactory(factoryType);
-			((TaskInterface)task).setCollectDataType(dataType);
-			((TaskInterface)task).setMainController(mainCtrl);
-			((TaskInterface)task).setMyDBAbstract(myDBAbs);
-			((TaskInterface)task).setSelectedSchemaEntity(selectedSchemaEntity);
+			((CollectTaskInterface)task).setAbsDBFactory(factoryType);
+			((CollectTaskInterface)task).setCollectDataType(dataType);
+			((CollectTaskInterface)task).setMainController(mainCtrl);
+			((CollectTaskInterface)task).setMyDBAbstract(myDBAbs);
+			((CollectTaskInterface)task).setSelectedSchemaEntity(selectedSchemaEntity);
 		}
 		
 		return task;

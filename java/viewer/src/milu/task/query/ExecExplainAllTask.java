@@ -14,7 +14,8 @@ import milu.gui.view.DBView;
 import milu.main.AppConf;
 import milu.ctrl.sqlparse.SQLBag;
 
-public class ExecExplainAllTask extends Task<Exception> 
+public class ExecExplainAllTask extends Task<Exception>
+	implements ExecTaskInterface
 {
 	private DBView       dbView     = null;
 	private MyDBAbstract myDBAbs    = null;
@@ -23,26 +24,31 @@ public class ExecExplainAllTask extends Task<Exception>
 	private TabPane      tabPane    = null;
 	private Exception    taskEx     = null;
 	
+	@Override
 	public void setDBView( DBView dbView )
 	{
 		this.dbView = dbView;
 	}
 	
+	@Override
 	public void setMyDBAbstract( MyDBAbstract myDBAbs )
 	{
 		this.myDBAbs = myDBAbs;
 	}
 	
+	@Override
 	public void setAppConf( AppConf appConf )
 	{
 		this.appConf = appConf;
 	}
 	
+	@Override
 	public void setTabPane( TabPane tabPane )
 	{
 		this.tabPane = tabPane;
 	}
 	
+	@Override
 	public void setSQLBagLst( List<SQLBag> sqlBagLst )
 	{
 		this.sqlBagLst = sqlBagLst;

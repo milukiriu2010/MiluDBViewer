@@ -20,7 +20,7 @@ import milu.task.ProgressInterface;
 public class CollectTaskRootBasic extends Task<Exception> 
 	implements 
 		ProgressInterface,
-		TaskInterface
+		CollectTaskInterface
 {
 	private final double MAX = 100.0;
 	
