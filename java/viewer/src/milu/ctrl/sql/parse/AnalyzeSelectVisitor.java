@@ -1,4 +1,4 @@
-package milu.ctrl.sqlparse;
+package milu.ctrl.sql.parse;
 
 import net.sf.jsqlparser.statement.select.SelectVisitor;
 

@@ -7,12 +7,11 @@ import java.util.List;
 import java.util.ArrayList;
 
 import javafx.scene.control.TabPane;
-
+import milu.ctrl.sql.parse.SQLBag;
 import milu.db.MyDBAbstract;
 import milu.gui.ctrl.query.DBResultTab;
 import milu.gui.view.DBView;
 import milu.main.AppConf;
-import milu.ctrl.sqlparse.SQLBag;
 
 public class ExecExplainAllTask extends Task<Exception>
 	implements ExecTaskInterface

@@ -25,14 +25,13 @@ import javafx.scene.shape.Path;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollBar;
 import net.sf.jsqlparser.JSQLParserException;
-
-import milu.ctrl.sqlparse.SQLBag;
-import milu.ctrl.sqlparse.SQLParse;
 import milu.tool.MyTool;
 import milu.gui.view.DBView;
 import milu.entity.schema.SchemaEntity;
 import milu.entity.schema.search.SearchSchemaEntityInterface;
 import milu.entity.schema.search.SearchSchemaEntityVisitorFactory;
+import milu.ctrl.sql.parse.SQLBag;
+import milu.ctrl.sql.parse.SQLParse;
 import milu.db.MyDBAbstract;
 
 public class SqlTextArea extends TextArea
@@ -77,7 +76,8 @@ public class SqlTextArea extends TextArea
 	 */
 	public void init()
 	{
-		this.parentPane = MyTool.findAnchorPane( this );
+		//this.parentPane = MyTool.findAnchorPane( this );
+		this.parentPane = (AnchorPane)MyTool.searchParentNode( this, AnchorPane.class );
 		if ( this.parentPane != null )
 		{
 			// add "Hint ComboBox" on TextArea

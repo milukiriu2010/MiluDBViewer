@@ -1,6 +1,6 @@
 package milu.db.access;
 
-import milu.ctrl.sqlparse.SQLBag;
+import milu.ctrl.sql.parse.SQLBag;
 import milu.db.MyDBAbstract;
 import milu.db.MyDBPostgres;
 import milu.db.MyDBMySQL;

@@ -2,7 +2,7 @@
 
 MiluDBViewer is a free database GUI Tool.
 
-2. Install
+2. Install & Run
 
 2-1. Windows
 (1) run "MiluDBViewer_Setup*.*.*.exe"

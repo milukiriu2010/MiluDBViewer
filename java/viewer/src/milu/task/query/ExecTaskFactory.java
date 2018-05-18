@@ -4,7 +4,7 @@ import java.util.List;
 import javafx.concurrent.Task;
 
 import javafx.scene.control.TabPane;
-import milu.ctrl.sqlparse.SQLBag;
+import milu.ctrl.sql.parse.SQLBag;
 import milu.db.MyDBAbstract;
 import milu.gui.view.DBView;
 import milu.main.AppConf;

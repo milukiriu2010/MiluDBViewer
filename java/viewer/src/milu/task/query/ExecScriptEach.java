@@ -5,7 +5,7 @@ import java.util.List;
 
 import javafx.application.Platform;
 import javafx.scene.control.TabPane;
-import milu.ctrl.sqlparse.SQLBag;
+import milu.ctrl.sql.parse.SQLBag;
 import milu.db.MyDBAbstract;
 import milu.db.access.MyDBOverFetchSizeException;
 import milu.gui.ctrl.query.DBResultTab;

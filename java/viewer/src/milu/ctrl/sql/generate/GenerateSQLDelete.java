@@ -1,4 +1,4 @@
-package milu.ctrl.sqlgenerate;
+package milu.ctrl.sql.generate;
 
 import milu.db.MyDBAbstract;
 import milu.entity.schema.SchemaEntity;

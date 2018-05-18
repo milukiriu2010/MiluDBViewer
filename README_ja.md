@@ -12,6 +12,20 @@
 
 [https://sourceforge.net/projects/miludbviewer/files/?source=navbar](https://sourceforge.net/projects/miludbviewer/files/?source=navbar)
 
+# インストールと起動
+
+1. このアプリは JDK 9以上を必要としています.
+   [JDK 9 ダウンロード - Oracle](http://www.oracle.com/technetwork/java/javase/downloads/jdk9-downloads-3848520.html)
+
+2-1. Windows
+(1) "MiluDBViewer_Setup*.*.*.exe"を実行してインストールしてください。
+(2) "<<your path>>\MiluDBViewer.exe" を実行してください。
+
+2-2. Linux
+(1) MiluDBViewer*.*.*.tgzを解凍してください。
+(2) $ cd <<your path>>
+(3) $ ./MiluDBViewer***.sh を実行してください。
+
 # ポイント
 
 ## 縦方向のデータコピー

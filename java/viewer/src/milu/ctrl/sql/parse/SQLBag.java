@@ -1,4 +1,4 @@
-package milu.ctrl.sqlparse;
+package milu.ctrl.sql.parse;
 
 public class SQLBag 
 {

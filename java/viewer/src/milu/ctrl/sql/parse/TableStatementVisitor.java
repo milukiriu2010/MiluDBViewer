@@ -1,9 +1,9 @@
-package milu.ctrl.sqlparse;
+package milu.ctrl.sql.parse;
 
 import java.util.List;
 
-import milu.ctrl.sqlparse.SQLBag.COMMAND;
-import milu.ctrl.sqlparse.SQLBag.TYPE;
+import milu.ctrl.sql.parse.SQLBag.COMMAND;
+import milu.ctrl.sql.parse.SQLBag.TYPE;
 
 import java.util.ArrayList;
 

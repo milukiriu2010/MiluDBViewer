@@ -4,7 +4,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import milu.ctrl.sqlparse.SQLBag;
+import milu.ctrl.sql.parse.SQLBag;
 import milu.db.MyDBAbstract;
 import milu.main.AppConf;
 

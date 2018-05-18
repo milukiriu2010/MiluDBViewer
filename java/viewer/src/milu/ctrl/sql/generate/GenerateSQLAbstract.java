@@ -1,4 +1,4 @@
-package milu.ctrl.sqlgenerate;
+package milu.ctrl.sql.generate;
 
 import milu.entity.schema.SchemaEntity;
 import milu.entity.schema.search.SearchSchemaEntityInterface;

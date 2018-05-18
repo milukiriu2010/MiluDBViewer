@@ -172,6 +172,7 @@ public class MyTool
 		return screenLoc;
 	}
 	
+	/*
 	public static AnchorPane findAnchorPane( Node node )
 	{
 		for ( Node n = node; n != null ; n=n.getParent() ) 
@@ -184,6 +185,7 @@ public class MyTool
 		}
 		return null;
 	}
+	*/
 	
 	// https://stackoverflow.com/questions/24810197/how-to-know-if-a-scroll-bar-is-visible-on-a-javafx-tableview
 	public static ScrollBar getScrollBarVertical( Node node )
@@ -204,7 +206,7 @@ public class MyTool
 		
 		return result;
 	}
-	
+	/*
 	public static String findTabText(Node node,Node checkNode) 
 	{
 		if ( node == null )
@@ -245,7 +247,20 @@ public class MyTool
 		}
 		return null;
 	}
-
+	*/
+	
+	public static Node searchParentNode( Node node, final Class<?> searchNodeClass )
+	{
+		for ( Node n = node; n != null ; n=n.getParent() ) 
+		{
+			if ( searchNodeClass.isInstance(n) )
+			{
+				return n;
+			}
+		}
+		return null;
+	}
+	
 	public static Node searchChildNode( Node node, final Class<?> searchNodeClass )
 	{
 		if ( node == null )
@@ -258,7 +273,8 @@ public class MyTool
 			for ( Node n : parent.getChildrenUnmodifiable() )
 			{
 				//System.out.println( "SearchNode[" + searchNodeClass.getName() + "]ChildNode[" + n.getClass().getName() + "]" );
-				if ( searchNodeClass.getName().equals(n.getClass().getName()) )
+				//if ( searchNodeClass.getName().equals(n.getClass().getName()) )
+				if ( searchNodeClass.isInstance(n) )
 				{
 					return n;
 				}
@@ -274,7 +290,6 @@ public class MyTool
 		}
 		return null;
 	}
-	
 
 	public static void skimThroughParent( Node node )
 	{

@@ -1,4 +1,4 @@
-package milu.ctrl.sqlgenerate;
+package milu.ctrl.sql.generate;
 
 import java.util.List;
 import java.util.Map;

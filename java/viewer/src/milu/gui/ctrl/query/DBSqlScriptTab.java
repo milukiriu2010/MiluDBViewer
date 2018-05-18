@@ -23,8 +23,6 @@ import javafx.scene.layout.VBox;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.AnchorPane;
 import javafx.concurrent.Task;
-
-import milu.ctrl.sqlparse.SQLBag;
 import milu.gui.ctrl.common.inf.ChangeLangInterface;
 import milu.gui.ctrl.common.inf.CopyInterface;
 import milu.gui.ctrl.common.inf.CounterInterface;
@@ -37,6 +35,7 @@ import milu.main.AppConf;
 import milu.main.MainController;
 import milu.task.query.ExecTaskFactory;
 import milu.tool.MyTool;
+import milu.ctrl.sql.parse.SQLBag;
 import milu.db.MyDBAbstract;
 
 public class DBSqlScriptTab extends Tab
