@@ -59,11 +59,11 @@ public class MaterializedViewDBPostgres extends MaterializedViewDBAbstract {
 
 	// select View Definition
 	@Override
-	public List<Map<String,String>> selectDefinition( String schameName, String viewName ) throws SQLException
+	public List<Map<String,String>> selectDefinition( String schemaName, String viewName ) throws SQLException
 	{
 		List<Map<String,String>> dataLst = new ArrayList<>();
 		
-		String sql = this.definitionSQL( schameName, viewName );
+		String sql = this.definitionSQL( schemaName, viewName );
 		
 		System.out.println( " -- selectDefinition(MaterializedView) -------------" );
 		System.out.println( sql );

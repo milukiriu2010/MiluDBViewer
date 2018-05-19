@@ -18,6 +18,7 @@ import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.Statement;
+import java.sql.DatabaseMetaData;
 
 import java.sql.SQLException;
 
@@ -518,5 +519,11 @@ abstract public class MyDBAbstract
 		throws SQLException
 	{
 		return this.conn.createStatement();
+	}
+	
+	public synchronized DatabaseMetaData getMetaData()
+		throws SQLException
+	{
+		return this.conn.getMetaData();
 	}
 }

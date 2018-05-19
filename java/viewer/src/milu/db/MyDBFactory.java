@@ -45,6 +45,10 @@ public class MyDBFactory
 			{
 				myDBAbs = new MyDBSQLite();
 			}
+			else if ( DriverClassConst.CLASS_NAME_MONGODB1.val().equals(driverShim.getDriverClassName()) )
+			{
+				myDBAbs = new MyDBMongo();
+			}
 			else
 			{
 				myDBAbs = new MyDBGeneral();

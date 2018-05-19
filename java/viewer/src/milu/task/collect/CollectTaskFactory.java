@@ -10,6 +10,7 @@ import milu.db.MyDBOracle;
 import milu.db.MyDBCassandra;
 import milu.db.MyDBSQLServer;
 import milu.db.MyDBSQLite;
+import milu.db.MyDBMongo;
 import milu.db.obj.abs.AbsDBFactory;
 import milu.entity.schema.SchemaEntity;
 
@@ -39,6 +40,10 @@ public class CollectTaskFactory
 			task = new CollectTaskRootBasic();
 		}
 		else if ( myDBAbs instanceof MyDBSQLite )
+		{
+			task = new CollectTaskRootNoSchema();
+		}
+		else if ( myDBAbs instanceof MyDBMongo )
 		{
 			task = new CollectTaskRootNoSchema();
 		}

@@ -9,6 +9,7 @@ import milu.db.MyDBOracle;
 import milu.db.MyDBCassandra;
 import milu.db.MyDBSQLServer;
 import milu.db.MyDBSQLite;
+import milu.db.MyDBMongo;
 
 class UrlPaneFactory implements AbsPaneFactory 
 {
@@ -40,6 +41,10 @@ class UrlPaneFactory implements AbsPaneFactory
 		else if ( myDBAbs instanceof MyDBSQLite )
 		{
 			urlPaneAbs = new UrlPaneBasicFile();
+		}
+		else if ( myDBAbs instanceof MyDBMongo )
+		{
+			urlPaneAbs = new UrlPaneBasic();
 		}
 		else
 		{

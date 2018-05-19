@@ -1,0 +1,4 @@
+JDBC Driver class name:  mongodb.jdbc.MongoDriver
+URL format:              jdbc:mongo://<serverName>:27017/<databaseName>
+
+http://www.unityjdbc.com/mongojdbc/mongo_jdbc.php

@@ -16,7 +16,11 @@ public class CollectSchemaTable extends CollectSchemaAbstract
 		{
 			return;
 		}
-		String schemaName = this.schemaEntity.getName();
+		String schemaName = null;
+		if ( this.schemaEntity != null )
+		{
+			schemaName = this.schemaEntity.getName();
+		}
 		List<SchemaEntity> entityLst = this.objDBAbs.selectEntityLst( schemaName );
 		this.meEntity.addEntityAll(entityLst);
 		int entityLstSize = entityLst.size();
