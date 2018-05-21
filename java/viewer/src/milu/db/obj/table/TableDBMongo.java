@@ -25,7 +25,7 @@ public class TableDBMongo extends TableDBAbstract
 		
 		try
 		(
-			ResultSet rs   = md.getTables( null, null, "%", null );
+			ResultSet rs   = md.getTables( null, null, "%", new String[] {"TABLE"} );
 		)
 		{
 			while ( rs.next() )
