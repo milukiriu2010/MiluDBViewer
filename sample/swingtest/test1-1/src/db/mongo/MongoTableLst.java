@@ -10,7 +10,7 @@ import java.util.ArrayList;
 
 import abc.DriverShim;
 
-public class MongoConDynamic 
+public class MongoTableLst 
 {
 	public static void main( String[] args )
 	{
@@ -81,29 +81,6 @@ public class MongoConDynamic
 					System.out.println( i + ":" + rsmd.getColumnName(i) + ":" + rs.getString(i));
 				}
 				tableLst.add( rs.getString("TABLE_NAME") );
-				/*
-				DatabaseMetaData md2 = con.getMetaData();
-				//ResultSet rs2 = md2.getColumns(null, "test", rs.getString(3), "%" );
-				ResultSet rs2 = md.getColumns(null, null, "restaurants", "%" );
-				ResultSetMetaData rsmd2 = rs2.getMetaData();
-				for ( int j = 1; j < rsmd2.getColumnCount(); j++ )
-				{
-					System.out.println( "    " + j + ":" + rsmd2.getColumnName(j) + ":" + rs2.getString(j));
-					//System.out.println( "    " + j + ":" + rsmd2.getColumnName(j) + ":" );
-				}
-				rs2.close();
-				*/
-				/*
-				DatabaseMetaData md3 = con.getMetaData();
-				ResultSet rs3 = md3.getPrimaryKeys(null, "test", rs.getString(3) );
-				ResultSetMetaData rsmd3 = rs3.getMetaData();
-				for ( int j = 1; j < rsmd3.getColumnCount(); j++ )
-				{
-					System.out.println( "    " + j + ":" + rsmd3.getColumnName(j) + ":" );
-					//System.out.println( "    " + j + ":" + rsmd3.getColumnName(j) + ":" + rs3.getString(j) );
-				}
-				rs3.close();
-				*/
 			}
 			
 			System.out.println( "=== columnName ================" );
@@ -113,16 +90,50 @@ public class MongoConDynamic
 				//ResultSet rs2 = md.getColumns(null, "test", tableName, "%" );
 				ResultSet rs2 = md.getColumns(null, null, tableName, "%" );
 				ResultSetMetaData rsmd2 = rs2.getMetaData();
-				
-				for ( int j = 1; j < rsmd2.getColumnCount(); j++ )
+				while ( rs2.next() )
 				{
-					System.out.println( "    " + j + ":" + rsmd2.getColumnName(j) + ":" + rs2.getObject(rsmd2.getColumnName(j)) );
-					//System.out.println( "    " + j + ":" + rsmd2.getColumnName(j) + ":" );
+					System.out.println( "+++++++++++++++++++++++++" );
+					for ( int j = 1; j < rsmd2.getColumnCount(); j++ )
+					{
+						System.out.println( "    " + j + ":" + rsmd2.getColumnName(j) + ":" + rs2.getObject(rsmd2.getColumnName(j)) );
+						//System.out.println( "    " + j + ":" + rsmd2.getColumnName(j) + ":" );
+					}
 				}
-				
 				rs2.close();
 			}
 			  
+			System.out.println( "=== primaryKeys ================" );
+			for ( String tableName : tableLst )
+			{
+				ResultSet rs3 = md.getPrimaryKeys(null, "test", tableName );
+				ResultSetMetaData rsmd3 = rs3.getMetaData();
+				while ( rs3.next() )
+				{
+					System.out.println( "+++++++++++++++++++++++++" );
+					for ( int j = 1; j < rsmd3.getColumnCount(); j++ )
+					{
+						System.out.println( "        " + j + ":" + rsmd3.getColumnName(j) + ":" + rs3.getString(rsmd3.getColumnName(j)) );
+					}
+				}
+				rs3.close();
+			}
+			
+			System.out.println( "=== indexInfo ================" );
+			for ( String tableName : tableLst )
+			{
+				ResultSet rs4 = md.getIndexInfo(null, "test", tableName, false, false );
+				ResultSetMetaData rsmd4 = rs4.getMetaData();
+				while ( rs4.next() )
+				{
+					System.out.println( "+++++++++++++++++++++++++" );
+					for ( int j = 1; j < rsmd4.getColumnCount(); j++ )
+					{
+						System.out.println( "        " + j + ":" + rsmd4.getColumnName(j) + ":" + rs4.getString(rsmd4.getColumnName(j)) );
+					}
+				}
+				rs4.close();
+			}
+			
 			//step5 close the connection object
 			System.out.println( "step5" );
 			con.close();  
