@@ -3,6 +3,7 @@ package milu.db.obj.indexcolumn;
 import milu.db.obj.abs.ObjDBFactory;
 import milu.db.obj.abs.ObjDBInterface;
 import milu.db.MyDBAbstract;
+//import milu.db.MyDBGeneral;
 import milu.db.MyDBPostgres;
 import milu.db.MyDBMySQL;
 import milu.db.MyDBOracle;
@@ -47,7 +48,8 @@ public class IndexColumnDBFactory implements ObjDBFactory
 		}
 		else
 		{
-			return null;
+			indexColumnDBAbs = new IndexColumnDBGeneral();
+			//return null;
 		}
 		
 		indexColumnDBAbs.setMyDBAbstract(myDBAbs);

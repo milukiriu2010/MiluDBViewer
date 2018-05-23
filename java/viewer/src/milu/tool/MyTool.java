@@ -17,8 +17,6 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Path;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.control.Label;
 import javafx.scene.control.ScrollBar;
 import javafx.scene.effect.Blend;
 import javafx.scene.effect.BlendMode;

@@ -1,12 +1,14 @@
 package milu.gui.dlg;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.ResourceBundle;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
@@ -30,6 +32,7 @@ import javafx.event.EventHandler;
 import javafx.event.ActionEvent;
 import javafx.geometry.Rectangle2D;
 
+import milu.gui.ctrl.common.table.ObjTableView;
 import milu.gui.ctrl.query.SqlTableView;
 import milu.gui.view.DBView;
 
@@ -42,6 +45,8 @@ public class SystemInfoDialog extends Dialog<Boolean>
 	
     // Head List
     private List<String> headLst = new ArrayList<String>();
+    
+    private List<Object> objHeadLst = new ArrayList<>();
 	
 	// Tab for System Information
 	private Tab      sysInfoTab  = new Tab();
@@ -66,6 +71,8 @@ public class SystemInfoDialog extends Dialog<Boolean>
         // Head List
         this.headLst.add( langRB.getString( "ITEM_KEY" ) );
         this.headLst.add( langRB.getString( "ITEM_VAL" ) );
+        this.objHeadLst.add( langRB.getString( "ITEM_KEY" ) );
+        this.objHeadLst.add( langRB.getString( "ITEM_VAL" ) );
 		
 		// Set Content on System Information Tab
 		this.setContentOnSysInfoTab();
@@ -93,10 +100,13 @@ public class SystemInfoDialog extends Dialog<Boolean>
 		
 		// set css for this dialog
 		Scene scene = this.getDialogPane().getScene();
-		scene.getStylesheets().add
-		(
-			getClass().getResource("/conf/css/dlg/SystemInfoDialog.css").toExternalForm()
-		);		
+		List<String> cssLst = 
+			Arrays.asList
+			(
+				"/conf/css/dlg/SystemInfoDialog.css",
+				"/conf/css/ctrl/common/table/ObjTableView.css"
+			);
+		cssLst.forEach( css->scene.getStylesheets().add(getClass().getResource(css).toExternalForm()) );
 		
 		// set size
 		this.setResizable( true );
@@ -163,17 +173,18 @@ public class SystemInfoDialog extends Dialog<Boolean>
 	{
     	Properties   properties  = System.getProperties();
     	Set<String>  propNameSet = properties.stringPropertyNames();
-        List<String> propNameLst = new ArrayList<String>( propNameSet );
-        Collections.sort(propNameLst);
+        List<Object> propNameLst = new ArrayList<>( propNameSet );
+        //Collections.sort(propNameLst);
+        Collections.sort(propNameLst, (o1,o2)->o1.toString().compareTo(o2.toString()) );
         
         // Data List
-        List<List<String>>  dataLst = new ArrayList<List<String>>();
-        for ( String propName : propNameLst )
+        List<List<Object>>  dataLst = new ArrayList<>();
+        for ( Object propName : propNameLst )
         {
         	//System.out.println( propName + "=" + System.getProperty(propName) );
-        	List<String>  prop = new ArrayList<String>();
+        	List<Object>  prop = new ArrayList<>();
         	prop.add( propName );
-        	String propVal = System.getProperty(propName);
+        	String propVal = System.getProperty(propName.toString());
         	if ( propName.equals( "path.separator" ) == false )
         	{
         		// Nothing Change for URL format
@@ -189,8 +200,8 @@ public class SystemInfoDialog extends Dialog<Boolean>
         	prop.add( propVal );
         	dataLst.add( prop );
         }
-        SqlTableView propTableView = new SqlTableView(this.dbView);
-        propTableView.setTableViewSQL( this.headLst, dataLst );
+        ObjTableView propTableView = new ObjTableView(this.dbView);
+        propTableView.setTableViewSQL( this.objHeadLst, dataLst );
         
         this.sysInfoTab.setContent( propTableView );
 		ResourceBundle langRB = this.dbView.getMainController().getLangResource("conf.lang.gui.dlg.SystemInfoDialog");

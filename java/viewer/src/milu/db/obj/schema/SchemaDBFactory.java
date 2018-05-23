@@ -4,6 +4,7 @@ import milu.db.MyDBAbstract;
 import milu.db.MyDBPostgres;
 import milu.db.obj.abs.ObjDBFactory;
 import milu.db.obj.abs.ObjDBInterface;
+//import milu.db.MyDBGeneral;
 import milu.db.MyDBMySQL;
 import milu.db.MyDBOracle;
 import milu.db.MyDBCassandra;
@@ -36,7 +37,8 @@ public class SchemaDBFactory implements ObjDBFactory
 		}
 		else
 		{
-			return null;
+			schemaDBAbs = new SchemaDBGeneral();
+			//return null;
 		}
 		
 		schemaDBAbs.setMyDBAbstract(myDBAbs);

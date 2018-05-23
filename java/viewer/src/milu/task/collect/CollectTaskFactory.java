@@ -49,7 +49,9 @@ public class CollectTaskFactory
 		}
 		else
 		{
-			return null;
+			task = new CollectTaskRootBasic();
+			//task = new CollectTaskRootNoSchema();
+			//return null;
 		}
 		
 		if ( task instanceof CollectTaskInterface )

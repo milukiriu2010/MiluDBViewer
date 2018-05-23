@@ -3,6 +3,7 @@ package milu.db.obj.table;
 import milu.db.obj.abs.ObjDBFactory;
 import milu.db.obj.abs.ObjDBInterface;
 import milu.db.MyDBAbstract;
+//import milu.db.MyDBGeneral;
 import milu.db.MyDBPostgres;
 import milu.db.MyDBMySQL;
 import milu.db.MyDBOracle;
@@ -46,7 +47,8 @@ public class TableDBFactory implements ObjDBFactory
 		}
 		else
 		{
-			return null;
+			tableDBAbs = new TableDBGeneral();
+			//return null;
 		}
 		
 		tableDBAbs.setMyDBAbstract( myDBAbs );

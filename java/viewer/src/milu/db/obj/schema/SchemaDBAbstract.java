@@ -42,12 +42,6 @@ public abstract class SchemaDBAbstract implements ObjDBInterface
 		{
 			while ( rs.next() )
 			{
-				/*
-				Map<String,String> dataRow = new HashMap<>();
-				dataRow.put( "schemaName", rs.getString(1) );
-				this.schemaNameLst.add( dataRow );
-				*/
-				
 				SchemaEntity eachSchemaEntity = SchemaEntityFactory.createInstance( rs.getString(1), SchemaEntity.SCHEMA_TYPE.SCHEMA );
 				schemaEntityLst.add( eachSchemaEntity );
 			}
