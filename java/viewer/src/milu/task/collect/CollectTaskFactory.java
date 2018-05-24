@@ -45,7 +45,8 @@ public class CollectTaskFactory
 		}
 		else if ( myDBAbs instanceof MyDBMongo )
 		{
-			task = new CollectTaskRootNoSchema();
+			task = new CollectTaskRootBasic();
+			//task = new CollectTaskRootNoSchema();
 		}
 		else
 		{

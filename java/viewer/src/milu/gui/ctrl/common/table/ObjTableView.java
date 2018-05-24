@@ -3,7 +3,6 @@ package milu.gui.ctrl.common.table;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
-import java.util.ArrayList;
 
 import java.io.File;
 import java.io.IOException;
@@ -20,17 +19,12 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.SeparatorMenuItem;
-import javafx.collections.ObservableList;
 import javafx.geometry.Orientation;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 
 import javafx.util.Callback;
 
-import javafx.scene.input.Clipboard;
-import javafx.scene.input.ClipboardContent;
-
-import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import milu.tool.MyTool;
@@ -38,33 +32,39 @@ import milu.file.table.MyFileAbstract;
 import milu.file.table.MyFileFactory;
 import milu.gui.ctrl.common.inf.ChangeLangInterface;
 import milu.gui.ctrl.common.inf.CopyInterface;
-//import milu.gui.ctrl.common.inf.SetTableViewSQLInterface;
+import milu.gui.ctrl.common.inf.SetTableViewDataInterface;
 import milu.gui.ctrl.common.inf.ToggleHorizontalVerticalInterface;
 import milu.gui.dlg.MyAlertDialog;
 import milu.gui.view.DBView;
 
 public class ObjTableView extends TableView<List<Object>>
 	implements 
-		//SetTableViewSQLInterface,
+		SetTableViewDataInterface,
 		ToggleHorizontalVerticalInterface,
 		CopyInterface,
 		ChangeLangInterface
 {
 	private DBView  dbView = null;
 	
-	// Listener for "this.tableViewSQLDirection = 2:vertical"
-	// This listner enables to select the whole column, when cliking a cell.
+	// Listener for "this.tableViewDirection = 2:vertical"
+	// This listener enables to select the whole column, when cliking a cell.
     @SuppressWarnings("rawtypes")
-	private ChangeListener<TablePosition> tableViewSQLChangeListner = null;
+	private ChangeListener<TablePosition> tableViewChangeListner = null;
     
     // Callback for CellEdit
     private Callback<TableColumn<List<Object>,Object>, TableCell<List<Object>,Object>> cellFactory = null;
 	
-	// tableViewSQL Direction
-	private Orientation tableViewSQLDirection = Orientation.HORIZONTAL;
+	// tableView Direction
+	private Orientation tableViewDirection = Orientation.HORIZONTAL;
+	
+	enum COPY_TYPE
+	{
+		WITH_HEAD,
+		NO_HEAD
+	}
 
 	// @SuppressWarnings({"rawtypes","unchecked"})
-	@SuppressWarnings({"unchecked"})
+	// @SuppressWarnings({"unchecked"})
 	public ObjTableView( DBView dbView )
 	{
 		super();
@@ -73,6 +73,7 @@ public class ObjTableView extends TableView<List<Object>>
 		
         // enable to select multi rows
         this.getSelectionModel().setSelectionMode( SelectionMode.MULTIPLE );
+        this.getSelectionModel().setCellSelectionEnabled( true );
         
         // -----------------------------------------------------------------
         // Listener for "this.tableViewSQLDirection = Orientation.VERTICAL"
@@ -90,7 +91,8 @@ public class ObjTableView extends TableView<List<Object>>
 		//        TablePosition newVal
 		//    )
         // ----------------------------------------------------------
-		this.tableViewSQLChangeListner = (obs,oldVal,newVal)->
+        /*
+		this.tableViewChangeListner = (obs,oldVal,newVal)->
 			{
         		if ( newVal.getTableColumn() != null )
         		{
@@ -109,7 +111,8 @@ public class ObjTableView extends TableView<List<Object>>
         			System.out.println( "V Selected old column index: " + oldVal.getColumn() );
         		}
 			};
-		
+		*/
+        
 		this.setEditable(true);
 		// Callback for CellEdit
 		this.cellFactory =
@@ -124,6 +127,24 @@ public class ObjTableView extends TableView<List<Object>>
 		this.setContextMenu();
 	}
 	
+	public void setTableViewDirection( Orientation tableViewDirection )
+	{
+		this.tableViewDirection = tableViewDirection;
+	}
+	
+    @SuppressWarnings("rawtypes")
+	ChangeListener<TablePosition> getTableViewChangeListner()
+	{
+		return this.tableViewChangeListner;
+	}
+	
+	Callback<TableColumn<List<Object>,Object>, TableCell<List<Object>,Object>> getCellFactory()
+	{
+		return this.cellFactory;
+	}
+	
+	
+	
 	private void setContextMenu()
 	{
 		ResourceBundle langRB = this.dbView.getMainController().getLangResource("conf.lang.gui.ctrl.common.table.ObjTableView");
@@ -137,13 +158,18 @@ public class ObjTableView extends TableView<List<Object>>
 
 		MenuItem menuItemSave2Excel = new MenuItem( langRB.getString("MENU_SAVE_2_EXCEL") );
 		menuItemSave2Excel.setOnAction( event->this.save2Excel() );
+
+		MenuItem menuItemToggleHV = new MenuItem( langRB.getString("MENU_TOGGLE_HV") );
+		menuItemToggleHV.setOnAction( event->this.switchDirection() );
 		
 		contextMenu.getItems().addAll
 		( 
 			menuItemCopyTblNoHead, 
 			menuItemCopyTblWithHead,
 			new SeparatorMenuItem(),
-			menuItemSave2Excel
+			menuItemSave2Excel,
+			new SeparatorMenuItem(),
+			menuItemToggleHV
 		);
 		
 		//this.setOnContextMenuRequested( (event)->{ contextMenu.show( this, event.getScreenX(), event.getScreenY() ); } );
@@ -152,6 +178,7 @@ public class ObjTableView extends TableView<List<Object>>
 	
 	public synchronized int getRowSize()
 	{
+		/*
 		// Horizontal
 		if ( this.tableViewSQLDirection == Orientation.HORIZONTAL )
 		{
@@ -162,21 +189,25 @@ public class ObjTableView extends TableView<List<Object>>
 		{
 			return this.getColumns().size();
 		}
+		*/
+		TableProcessAbstract tpAbs = TableProcessFactory.getInstance( this.tableViewDirection, this );
+		return tpAbs.getRowSize();
 	}
 	
 	/**************************************************
 	 * Override from ToggleHorizontalVerticalInterface
 	 ************************************************** 
 	 */
-	@SuppressWarnings("rawtypes")
+	//@SuppressWarnings("rawtypes")
 	@Override
 	public synchronized void switchDirection()
 	{
+		/*
 		// Horizontal => Vertical
-		if ( this.tableViewSQLDirection == Orientation.HORIZONTAL )
+		if ( this.tableViewDirection == Orientation.HORIZONTAL )
 		{
 			// Get ColumnName from TableView 
-			/**/
+			//  ** //
 			// https://stackoverflow.com/questions/41104798/javafx-simplest-way-to-get-cell-data-using-table-index
 			int colSize = this.getColumns().size();
 			List<Object> headLst = new ArrayList<>();
@@ -186,10 +217,10 @@ public class ObjTableView extends TableView<List<Object>>
 				TableColumn<List<Object>,?> tableColumn = this.getColumns().get(i);
 				headLst.add( tableColumn.getText() );
 			}
-			/**/
+			//  ** //
 			//List<String> headLst = this.getHeadList();
 			
-			/**/
+			//  ** //
 			// Get Data from TableView
 			int rowSize = this.getItems().size();
 			List<List<Object>> dataLst = new ArrayList<>();
@@ -201,13 +232,13 @@ public class ObjTableView extends TableView<List<Object>>
 				dataRow.remove( 0 );
 				dataLst.add( dataRow );
 			}
-			/**/
+			//  ** //
 			//List<List<String>> dataLst = this.getDataList();
 			
 			
 			// Switch Direction of tableVieSQL from Horizontal to Vertical
-			this.tableViewSQLDirection = Orientation.VERTICAL;
-			this.setTableViewSQL( headLst, dataLst );
+			this.tableViewDirection = Orientation.VERTICAL;
+			this.setTableViewData( headLst, dataLst );
 
 			
 	        // enable to select the whole column
@@ -215,14 +246,14 @@ public class ObjTableView extends TableView<List<Object>>
 	        this.getSelectionModel().setCellSelectionEnabled( true );
 	        this.getFocusModel().focusedCellProperty().addListener
 	        ( 
-	        	(ChangeListener<? super TablePosition>)this.tableViewSQLChangeListner 
+	        	(ChangeListener<? super TablePosition>)this.tableViewChangeListner 
 	        );
 		}
 		// Vertical => Horizontal
 		else
 		{
 			// Get ColumnName from TableView
-			/**/
+			//  ** //
 			int colSize = this.getItems().size();
 			List<Object> headLst = new ArrayList<>();
 			for ( int i = 0; i < colSize; i++ )
@@ -231,11 +262,11 @@ public class ObjTableView extends TableView<List<Object>>
 				// ColumnName
 				headLst.add( dataRow.get(0) );
 			}
-			/**/
+			//  ** //
 			//List<String> headLst = this.getHeadList();
 			
 			// Get Data from TableView 
-			/**/
+			//  ** //
 			int rowSize = this.getColumns().size();
 			List<List<Object>> dataLst = new ArrayList<>();
 			for ( int i = 1; i < rowSize; i++ )
@@ -249,32 +280,35 @@ public class ObjTableView extends TableView<List<Object>>
 				}
 				dataLst.add( dataRow );
 			}
-			/**/
+			//  ** //
 			//List<List<String>> dataLst = this.getDataList();
 			
 			// Switch Direction of tableVieSQL from Vertical to Horizontal
-			this.tableViewSQLDirection = Orientation.HORIZONTAL;
-			this.setTableViewSQL( headLst, dataLst );
+			this.tableViewDirection = Orientation.HORIZONTAL;
+			this.setTableViewData( headLst, dataLst );
 			
 	        // disable to select the whole column
 	        // https://stackoverflow.com/questions/38012247/javafx-tableview-select-the-whole-tablecolumn-and-get-the-index
 	        this.getSelectionModel().setCellSelectionEnabled( false );
 	        this.getFocusModel().focusedCellProperty().removeListener
 	        ( 
-	        	(ChangeListener<? super TablePosition>)this.tableViewSQLChangeListner 
+	        	(ChangeListener<? super TablePosition>)this.tableViewChangeListner 
 	        );
 		}
+		*/
+		TableProcessAbstract tpAbs = TableProcessFactory.getInstance( this.tableViewDirection, this );
+		tpAbs.switchDirection();
 	}
-		
 	
 	// Set ColumnName & Data to TableView Horizontally
-	//@Override
-	public synchronized void setTableViewSQL( List<Object> headLst, List<List<Object>> dataLst )
+	@Override
+	public synchronized void setTableViewData( List<Object> headLst, List<List<Object>> dataLst )
 	{
 		// Clear TableView
 		this.getItems().clear();
 		this.getColumns().clear();
 		
+		/*
 		// horizontal
 		if ( this.tableViewSQLDirection == Orientation.HORIZONTAL )
 		{
@@ -285,6 +319,9 @@ public class ObjTableView extends TableView<List<Object>>
 		{
 			this.setTableViewSQLbyVertical( headLst, dataLst );
 		}
+		*/
+		TableProcessAbstract tpAbs = TableProcessFactory.getInstance( this.tableViewDirection, this );
+		tpAbs.setData( headLst, dataLst );
 	}
 	
 	// Set ColumnName & Data to TableView Horizontally
@@ -295,6 +332,7 @@ public class ObjTableView extends TableView<List<Object>>
 	// ---------------------------------------------------
 	// data2       | data2(column1) | data2(column2) |
 	// ---------------------------------------------------
+	/*
 	private void setTableViewSQLbyHorizontal( List<Object> headLst, List<List<Object>> dataLst )
 	{
 		// +1 for "HORIZONTAL"
@@ -369,6 +407,7 @@ public class ObjTableView extends TableView<List<Object>>
 		// Add Data to TableView
 		this.getItems().addAll( dataLst );
 	}
+	*/
 	
 	// Set ColumnName & Data to TableView Vertically
 	// ---------------------------------------------------
@@ -378,6 +417,7 @@ public class ObjTableView extends TableView<List<Object>>
 	// ---------------------------------------------------
 	// column2  | data1(column2) | data2(column2) |
 	// ---------------------------------------------------
+	/*
 	private void setTableViewSQLbyVertical( List<Object> headLst, List<List<Object>> dataLst )
 	{
 		// +1 for "VERTICAL"
@@ -477,6 +517,7 @@ public class ObjTableView extends TableView<List<Object>>
 		// Add Data to TableView
 		this.getItems().addAll( dataLst2 );
 	}
+	*/
 	
 	/**************************************************
 	 * Override from CopyInterface
@@ -485,7 +526,7 @@ public class ObjTableView extends TableView<List<Object>>
 	@Override
 	public synchronized void copyTableNoHead()
 	{
-		this.copyTable( 0 );
+		this.copyTable( COPY_TYPE.NO_HEAD );
 	}
 
 	/**************************************************
@@ -495,23 +536,24 @@ public class ObjTableView extends TableView<List<Object>>
 	@Override
 	public synchronized void copyTableWithHead()
 	{
-		this.copyTable( 1 );
+		this.copyTable( COPY_TYPE.WITH_HEAD );
 	}
 
 	// @withHead
 	//   1:Copy table data with heads
 	//   0:Copy table data without heads
-	@SuppressWarnings("rawtypes")
-	private void copyTable( int withHead )
+	//@SuppressWarnings("rawtypes")
+	private void copyTable( COPY_TYPE copyType )
 	{
+		/*
 		StringBuffer sbTmp = new StringBuffer();
 		// Horizontal Mode
 		// https://stackoverflow.com/questions/25170119/allow-user-to-copy-data-from-tableview
-		if ( this.tableViewSQLDirection == Orientation.HORIZONTAL )
+		if ( this.tableViewDirection == Orientation.HORIZONTAL )
 		{
 			int colSize = this.getColumns().size();
 			// Create Head Part
-			if ( withHead == 1 )
+			if ( COPY_TYPE.WITH_HEAD.equals(copyType) )
 			{
 				// skip "No" column, so start from 1
 				for ( int i = 1; i < colSize; i++ )
@@ -589,7 +631,7 @@ public class ObjTableView extends TableView<List<Object>>
 			for ( int i = 0; i < rowSize; i++ )
 			{
 				// Create Head Part
-				if ( withHead == 1 )
+				if ( COPY_TYPE.WITH_HEAD.equals(copyType) )
 				{
 					Object val = this.getItems().get( i ).get( 0 );
 					if ( val != null )
@@ -622,6 +664,9 @@ public class ObjTableView extends TableView<List<Object>>
 		content.putString( sbTmp.toString() );
 		final Clipboard clipboard = Clipboard.getSystemClipboard();
 		clipboard.setContent( content );
+		*/
+		TableProcessAbstract tpAbs = TableProcessFactory.getInstance( this.tableViewDirection, this );
+		tpAbs.copyTable(copyType);
 	}
 	
 	private void save2Excel()
@@ -667,6 +712,7 @@ public class ObjTableView extends TableView<List<Object>>
 	// Get ColumnName from TableView 
 	private List<Object> getHeadList()
 	{
+		/*
 		List<Object> headLst = new ArrayList<>();
 		// Horizontal Mode
 		if ( this.tableViewSQLDirection == Orientation.HORIZONTAL )
@@ -693,11 +739,15 @@ public class ObjTableView extends TableView<List<Object>>
 			}			
 		}
 		return headLst;
+		*/
+		TableProcessAbstract tpAbs = TableProcessFactory.getInstance( this.tableViewDirection, this );
+		return tpAbs.getHeadList();
 	}
 	
 	// Get Data from TableView 
 	private List<List<Object>> getDataList()
 	{
+		/*
 		List<List<Object>> dataLst = new ArrayList<>();
 		// Horizontal Mode
 		if ( this.tableViewSQLDirection == Orientation.HORIZONTAL )
@@ -736,6 +786,9 @@ public class ObjTableView extends TableView<List<Object>>
 			}			
 		}
 		return dataLst;
+		*/
+		TableProcessAbstract tpAbs = TableProcessFactory.getInstance( this.tableViewDirection, this );
+		return tpAbs.getDataList();
 	}
 	
 	/**************************************************

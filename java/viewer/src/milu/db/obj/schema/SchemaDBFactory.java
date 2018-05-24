@@ -9,6 +9,7 @@ import milu.db.MyDBMySQL;
 import milu.db.MyDBOracle;
 import milu.db.MyDBCassandra;
 import milu.db.MyDBSQLServer;
+import milu.db.MyDBMongo;
 
 public class SchemaDBFactory implements ObjDBFactory 
 {
@@ -34,6 +35,10 @@ public class SchemaDBFactory implements ObjDBFactory
 		else if ( myDBAbs instanceof MyDBSQLServer )
 		{
 			schemaDBAbs = new SchemaDBSQLServer();
+		}
+		else if ( myDBAbs instanceof MyDBMongo )
+		{
+			schemaDBAbs = new SchemaDBMongo();
 		}
 		else
 		{

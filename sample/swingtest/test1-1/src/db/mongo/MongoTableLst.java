@@ -70,6 +70,15 @@ public class MongoTableLst
 				//System.out.println(rs.getString(1));
 			}
 			*/
+			
+			System.out.println( "=== Schema ================" );
+			ResultSet rs0 = md.getSchemas();
+			while ( rs0.next() )
+			{
+				System.out.println( rs0.getString("TABLE_SCHEM") );
+			}
+			
+			
 			List<String> tableLst = new ArrayList<>();
 			ResultSet rs = md.getTables(null, "test", "%", null);
 			ResultSetMetaData rsmd = rs.getMetaData();

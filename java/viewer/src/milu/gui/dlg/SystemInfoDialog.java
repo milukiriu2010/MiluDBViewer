@@ -8,7 +8,6 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.ResourceBundle;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
@@ -201,7 +200,7 @@ public class SystemInfoDialog extends Dialog<Boolean>
         	dataLst.add( prop );
         }
         ObjTableView propTableView = new ObjTableView(this.dbView);
-        propTableView.setTableViewSQL( this.objHeadLst, dataLst );
+        propTableView.setTableViewData( this.objHeadLst, dataLst );
         
         this.sysInfoTab.setContent( propTableView );
 		ResourceBundle langRB = this.dbView.getMainController().getLangResource("conf.lang.gui.dlg.SystemInfoDialog");

@@ -25,7 +25,7 @@ public class TableDBMongo extends TableDBAbstract
 		
 		try
 		(
-			ResultSet rs   = md.getTables( null, null, "%", new String[] {"TABLE"} );
+			ResultSet rs   = md.getTables( null, schemaName, "%", new String[] {"TABLE"} );
 		)
 		{
 			while ( rs.next() )
@@ -86,7 +86,7 @@ public class TableDBMongo extends TableDBAbstract
 	protected String definitionSQL(String schemaName, String tableName) 
 	{
 		String sql = 
-				" select * from " + tableName; 
+				" select * from " + schemaName + "." + tableName; 
 		return sql;
 	}
 
