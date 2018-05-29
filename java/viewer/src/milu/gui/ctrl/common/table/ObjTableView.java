@@ -1,6 +1,8 @@
 package milu.gui.ctrl.common.table;
 
 import java.util.List;
+import java.util.Set;
+import java.util.HashSet;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 
@@ -13,6 +15,7 @@ import javafx.scene.control.TableCell;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TextInputControl;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextArea;
@@ -49,7 +52,9 @@ public class ObjTableView extends TableView<List<Object>>
 	// Listener for "this.tableViewDirection = 2:vertical"
 	// This listener enables to select the whole column, when cliking a cell.
     @SuppressWarnings("rawtypes")
-	private ChangeListener<TablePosition> tableViewChangeListner = null;
+	ChangeListener<TablePosition> tableViewChangeListner = null;
+    
+    Set<TableColumn<List<Object>,Object>>  tableColSet = new HashSet<>();
     
     // Callback for CellEdit
     private Callback<TableColumn<List<Object>,Object>, TableCell<List<Object>,Object>> cellFactory = null;
@@ -73,7 +78,7 @@ public class ObjTableView extends TableView<List<Object>>
 		
         // enable to select multi rows
         this.getSelectionModel().setSelectionMode( SelectionMode.MULTIPLE );
-        this.getSelectionModel().setCellSelectionEnabled( true );
+        //this.getSelectionModel().setCellSelectionEnabled( true );
         
         // -----------------------------------------------------------------
         // Listener for "this.tableViewSQLDirection = Orientation.VERTICAL"
@@ -91,11 +96,37 @@ public class ObjTableView extends TableView<List<Object>>
 		//        TablePosition newVal
 		//    )
         // ----------------------------------------------------------
-        /*
 		this.tableViewChangeListner = (obs,oldVal,newVal)->
 			{
+				if ( oldVal.getTableColumn() != null )
+				{
+					this.tableColSet.add(oldVal.getTableColumn());
+				}
         		if ( newVal.getTableColumn() != null )
         		{
+        			/*
+        			if ( this.tableColSet.size() == 0 )
+        			{
+	        			for ( int i = 0; i < getItems().size(); i++ )
+	        			{
+	        				getSelectionModel().clearSelection(i,oldVal.getTableColumn());
+	        			}
+        			}
+        			*/
+        			this.tableColSet.forEach
+        			(
+        				(tableCol)->
+        				{
+                			getSelectionModel().selectRange
+            				( 
+            					0, 
+            					tableCol, 
+            					getItems().size(), 
+            					tableCol 
+            				);
+        				}
+        			);
+        			
         			// set the range of selection on this TableView
         			// select all rows on the same column
         			getSelectionModel().selectRange
@@ -109,18 +140,19 @@ public class ObjTableView extends TableView<List<Object>>
         			System.out.println( "V Selected new TableColumn : " + newVal.getTableColumn().getText() );
         			System.out.println( "V Selected new column index: " + newVal.getColumn() );
         			System.out.println( "V Selected old column index: " + oldVal.getColumn() );
+        			System.out.println( "tableColSet size           : " + this.tableColSet.size() );
         		}
 			};
-		*/
         
 		this.setEditable(true);
 		// Callback for CellEdit
+		final ObjTableView objTableView = this;
 		this.cellFactory =
 			new Callback<TableColumn<List<Object>,Object>, TableCell<List<Object>,Object>>()
 			{
 				public TableCell<List<Object>,Object> call(TableColumn<List<Object>,Object> p)
 				{
-					return new EditingCell();
+					return new EditingCell(objTableView);
 				}
 			};
         
@@ -132,11 +164,32 @@ public class ObjTableView extends TableView<List<Object>>
 		this.tableViewDirection = tableViewDirection;
 	}
 	
+	void selectArea()
+	{
+		getSelectionModel().clearSelection();
+		
+		this.tableColSet.forEach
+		(
+			(tableCol)->
+			{
+    			getSelectionModel().selectRange
+				( 
+					0, 
+					tableCol, 
+					getItems().size(), 
+					tableCol 
+				);
+			}
+		);
+	}
+	
+	/*
     @SuppressWarnings("rawtypes")
 	ChangeListener<TablePosition> getTableViewChangeListner()
 	{
 		return this.tableViewChangeListner;
 	}
+	*/
 	
 	Callback<TableColumn<List<Object>,Object>, TableCell<List<Object>,Object>> getCellFactory()
 	{
@@ -296,6 +349,7 @@ public class ObjTableView extends TableView<List<Object>>
 	        );
 		}
 		*/
+		this.tableColSet.clear();
 		TableProcessAbstract tpAbs = TableProcessFactory.getInstance( this.tableViewDirection, this );
 		tpAbs.switchDirection();
 	}
@@ -810,8 +864,26 @@ public class ObjTableView extends TableView<List<Object>>
 	{
 		private TextInputControl textInputCtrl = null;
 		
-		public EditingCell()
+		public EditingCell( ObjTableView objTableView )
 		{
+			this.addEventFilter
+			(
+				MouseEvent.MOUSE_CLICKED, 
+				(event)->
+				{
+					System.out.println( "Mouse Clicked." );
+					if ( event.isControlDown() || event.isShiftDown() )
+					{
+						objTableView.tableColSet.add(this.getTableColumn());
+						//objTableView.selectArea();
+					}
+					else
+					{
+						//objTableView.selectArea();
+						objTableView.tableColSet.clear();
+					}
+				}
+			);
 		}
 		
 		/*

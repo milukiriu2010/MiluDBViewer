@@ -9,7 +9,7 @@ public enum DriverNameConst
 	DB_CASSANDRA2("Cassandra(adejanovski)"),
 	DB_SQLSERVER("SQLServer"),
 	DB_SQLITE("SQLite"),
-	DB_MONGODB1("MognoDB(Unity)")
+	DB_MONGODB1("MongoDB(Unity)")
 	;
 	
 	private String val = null;

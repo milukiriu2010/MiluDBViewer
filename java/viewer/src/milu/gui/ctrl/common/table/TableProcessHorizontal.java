@@ -3,12 +3,15 @@ package milu.gui.ctrl.common.table;
 import java.util.ArrayList;
 import java.util.List;
 
+import javafx.scene.control.TablePosition;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Orientation;
 import javafx.scene.control.TableColumn;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
+import javafx.beans.value.ChangeListener;
+
 import milu.gui.ctrl.common.table.ObjTableView.COPY_TYPE;
 
 class TableProcessHorizontal extends TableProcessAbstract 
@@ -58,15 +61,13 @@ class TableProcessHorizontal extends TableProcessAbstract
 		this.objTableView.setTableViewDirection( Orientation.VERTICAL );
 		this.objTableView.setTableViewData( headLst, dataLst );
 		
-		/*
         // enable to select the whole column
         // https://stackoverflow.com/questions/38012247/javafx-tableview-select-the-whole-tablecolumn-and-get-the-index
-        //this.objTableView.getSelectionModel().setCellSelectionEnabled( true );
+        this.objTableView.getSelectionModel().setCellSelectionEnabled( true );
         this.objTableView.getFocusModel().focusedCellProperty().addListener
         ( 
-        	(ChangeListener<? super TablePosition>)this.objTableView.getTableViewChangeListner() 
+        	(ChangeListener<? super TablePosition>)this.objTableView.tableViewChangeListner 
         );
-        */
 	}
 
 	// Set ColumnName & Data to TableView Horizontally
@@ -112,33 +113,6 @@ class TableProcessHorizontal extends TableProcessAbstract
 				tableCol.setOnEditCommit( e->{} );
 			}
 			
-			/*
-			final int index = i;
-			tableCol.setCellValueFactory
-			(
-				new Callback<TableColumn.CellDataFeatures<List<Object>,Object>, ObservableValue<Object>>()
-				{
-					@Override
-					public ObservableValue<Object> call( TableColumn.CellDataFeatures<List<Object>, Object> p )
-					{
-						List<Object> x = p.getValue();
-						if ( x != null )
-						{
-							Object obj = x.get( index-1 );
-							if ( obj instanceof Number )
-							{
-								objTableView.setStyle( "-fx-alignment: CENTER-RIGHT;" );
-							}
-							return new SimpleObjectProperty<Object>( obj );
-						}
-						else
-						{
-							return new SimpleObjectProperty<Object>( "<NULL>" );
-						}
-					}
-				}
-			);
-			*/
 			this.setTableColumnCellValueFactory( i, tableCol );
 			this.objTableView.getColumns().add( tableCol );
 		}

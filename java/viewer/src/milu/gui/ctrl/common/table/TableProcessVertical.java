@@ -10,6 +10,9 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TablePosition;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
+import javafx.scene.input.MouseEvent;
+import javafx.beans.value.ChangeListener;
+
 import milu.gui.ctrl.common.table.ObjTableView.COPY_TYPE;
 
 class TableProcessVertical extends TableProcessAbstract 
@@ -60,15 +63,13 @@ class TableProcessVertical extends TableProcessAbstract
 		this.objTableView.setTableViewDirection( Orientation.HORIZONTAL );
 		this.objTableView.setTableViewData( headLst, dataLst );
 		
-		/*
         // disable to select the whole column
         // https://stackoverflow.com/questions/38012247/javafx-tableview-select-the-whole-tablecolumn-and-get-the-index
-        //this.objTableView.getSelectionModel().setCellSelectionEnabled( false );
+        this.objTableView.getSelectionModel().setCellSelectionEnabled( false );
         this.objTableView.getFocusModel().focusedCellProperty().removeListener
         ( 
-        	(ChangeListener<? super TablePosition>)this.objTableView.getTableViewChangeListner() 
+        	(ChangeListener<? super TablePosition>)this.objTableView.tableViewChangeListner 
         );
-        */
 	}
 
 	// Set ColumnName & Data to TableView Vertically
@@ -114,38 +115,30 @@ class TableProcessVertical extends TableProcessAbstract
 				// Do not change the cell data, whatever the user inputs
 				tableCol.setCellFactory( this.objTableView.getCellFactory() );
 				tableCol.setOnEditCommit( e->{} );
+				/*
+				final TableColumn<List<Object>,Object> tableCol2 = tableCol;
+				tableCol.addEventHandler
+				( 
+					MouseEvent.MOUSE_CLICKED, 
+					(event)->
+					{
+						System.out.println( "Mouse Clicked." );
+						if ( event.isControlDown() || event.isShiftDown() )
+						{
+							this.objTableView.tableColSet.add(tableCol2);
+						}
+						else
+						{
+							this.objTableView.tableColSet.clear();
+							this.objTableView.tableColSet.add(tableCol2);
+						}
+					}
+				);
+				*/
 			}
 			// disable sort by clicking "Column Header"
 			tableCol.setSortable(false);
 			
-			/*
-			final int index = i;
-			tableCol.setCellValueFactory
-			(
-				new Callback<TableColumn.CellDataFeatures<List<Object>,Object>, ObservableValue<Object>>()
-				{
-					@Override
-					public ObservableValue<Object> call( TableColumn.CellDataFeatures<List<Object>, Object> p )
-					{
-						List<Object> x = p.getValue();
-						if ( x != null )
-						{
-							Object obj = x.get( index-1 );
-							if ( obj instanceof Number )
-							{
-								//tableCol.setStyle( "-fx-text-alignment: CENTER-RIGHT;" );
-								objTableView.setStyle( "-fx-alignment: CENTER-RIGHT;" );
-							}
-							return new SimpleObjectProperty<Object>( obj );
-						}
-						else
-						{
-							return new SimpleObjectProperty<Object>( "<NULL>" );
-						}						
-					}
-				}
-			);
-			*/
 			this.setTableColumnCellValueFactory( i, tableCol );
 			this.objTableView.getColumns().add( tableCol );
 		}
