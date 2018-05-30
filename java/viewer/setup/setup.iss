@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "MiluDBViewer"
-#define MyAppVersion "0.1.8"
+#define MyAppVersion "0.1.9"
 #define MyAppPublisher "Milu"
 #define MyAppURL "https://github.com/milukiriu2010/MiluDBViewer"
 #define MyAppExeName "MiluDBViewer.exe"
@@ -41,8 +41,8 @@ Name: "quicklaunchicon"; Description: "{cm:CreateQuickLaunchIcon}"; GroupDescrip
 
 [Files]
 Source: "C:\myjava\MiluDBViewer.git\java\viewer\build\MiluDBViewer.exe"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\myjava\MiluDBViewer.git\java\viewer\build\MiluDBViewer.jre9.bat"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\myjava\MiluDBViewer.git\java\viewer\build\MiluDBViewer.jre9.jar"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\myjava\MiluDBViewer.git\java\viewer\build\MiluDBViewer.bat"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\myjava\MiluDBViewer.git\java\viewer\build\MiluDBViewer.jar"; DestDir: "{app}"; Flags: ignoreversion
 Source: "C:\myjava\MiluDBViewer.git\java\viewer\build\conf\*"; DestDir: "{app}\conf"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "C:\myjava\MiluDBViewer.git\java\viewer\build\doc\*"; DestDir: "{app}\doc"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "C:\myjava\MiluDBViewer.git\java\viewer\build\lib\*"; DestDir: "{app}\lib"; Flags: ignoreversion recursesubdirs createallsubdirs

@@ -7,8 +7,6 @@ import java.util.concurrent.TimeUnit;
 
 import javafx.application.Application;
 import javafx.geometry.Pos;
-import javafx.geometry.Rectangle2D;
-import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.scene.layout.VBox;
@@ -56,10 +54,12 @@ public class MiluDBViewer extends Application
     		this.splashLayout.setEffect(new DropShadow());
     		Scene splashScene = new Scene(this.splashLayout);
     	    initStage.initStyle(StageStyle.UNDECORATED);
-    	    final Rectangle2D bounds = Screen.getPrimary().getBounds();
+    	    //final Rectangle2D bounds = Screen.getPrimary().getBounds();
+    	    //final Rectangle2D bounds = MyTool.getActiveScreen().getBounds();
     	    initStage.setScene(splashScene);
-    	    initStage.setX(bounds.getMinX() + bounds.getWidth() / 2 - SPLASH_WIDTH / 2);
-    	    initStage.setY(bounds.getMinY() + bounds.getHeight() / 2 - SPLASH_HEIGHT / 2);
+    	    //initStage.setX(bounds.getMinX() + bounds.getWidth() / 2 - SPLASH_WIDTH / 2);
+    	    //initStage.setY(bounds.getMinY() + bounds.getHeight() / 2 - SPLASH_HEIGHT / 2);
+    	    MyTool.setWindowLocation(initStage, SPLASH_WIDTH, SPLASH_HEIGHT );
     	    initStage.show();
     	    
     	    final InitialLoadTask  ilTask = new InitialLoadTask();

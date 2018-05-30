@@ -50,7 +50,7 @@ checkJavaVersion()
 # ====================================================
 kickJava()
 {
-	$MYJAVA -classpath $MYCLASSPATH -jar MiluDBViewer.jre9.jar milu.main.MiluDBViewer
+	$MYJAVA -classpath $MYCLASSPATH -jar MiluDBViewer.jar milu.main.MiluDBViewer
 	exit
 }
 

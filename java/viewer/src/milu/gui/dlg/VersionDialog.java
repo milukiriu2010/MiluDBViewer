@@ -3,6 +3,7 @@ package milu.gui.dlg;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import javafx.application.Platform;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.TabPane;
@@ -14,6 +15,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
 import milu.main.MainController;
+import milu.tool.MyTool;
 
 public class VersionDialog extends Dialog<Boolean>
 {
@@ -59,6 +61,9 @@ public class VersionDialog extends Dialog<Boolean>
 		// set size
 		this.setResizable( true );
 		this.getDialogPane().setPrefSize( 640, 320 );
+		
+		// set location
+		Platform.runLater( ()->MyTool.setWindowLocation( stage, stage.getWidth(), stage.getHeight() ) );
 		
 		// set Dialog Title
 		ResourceBundle langRB = this.mainCtrl.getLangResource("conf.lang.gui.dlg.VersionDialog");

@@ -51,7 +51,7 @@ public class ObjTableView extends TableView<List<Object>>
 	
 	// Listener for "this.tableViewDirection = 2:vertical"
 	// This listener enables to select the whole column, when cliking a cell.
-    @SuppressWarnings("rawtypes")
+	@SuppressWarnings("rawtypes")
 	ChangeListener<TablePosition> tableViewChangeListner = null;
     
     Set<TableColumn<List<Object>,Object>>  tableColSet = new HashSet<>();
@@ -69,7 +69,7 @@ public class ObjTableView extends TableView<List<Object>>
 	}
 
 	// @SuppressWarnings({"rawtypes","unchecked"})
-	// @SuppressWarnings({"unchecked"})
+	@SuppressWarnings({"unchecked"})
 	public ObjTableView( DBView dbView )
 	{
 		super();
@@ -98,10 +98,12 @@ public class ObjTableView extends TableView<List<Object>>
         // ----------------------------------------------------------
 		this.tableViewChangeListner = (obs,oldVal,newVal)->
 			{
+				/*
 				if ( oldVal.getTableColumn() != null )
 				{
 					this.tableColSet.add(oldVal.getTableColumn());
 				}
+				*/
         		if ( newVal.getTableColumn() != null )
         		{
         			/*
@@ -113,6 +115,7 @@ public class ObjTableView extends TableView<List<Object>>
 	        			}
         			}
         			*/
+        			/*
         			this.tableColSet.forEach
         			(
         				(tableCol)->
@@ -126,6 +129,7 @@ public class ObjTableView extends TableView<List<Object>>
             				);
         				}
         			);
+        			*/
         			
         			// set the range of selection on this TableView
         			// select all rows on the same column
@@ -212,17 +216,17 @@ public class ObjTableView extends TableView<List<Object>>
 		MenuItem menuItemSave2Excel = new MenuItem( langRB.getString("MENU_SAVE_2_EXCEL") );
 		menuItemSave2Excel.setOnAction( event->this.save2Excel() );
 
-		MenuItem menuItemToggleHV = new MenuItem( langRB.getString("MENU_TOGGLE_HV") );
-		menuItemToggleHV.setOnAction( event->this.switchDirection() );
+		//MenuItem menuItemToggleHV = new MenuItem( langRB.getString("MENU_TOGGLE_HV") );
+		//menuItemToggleHV.setOnAction( event->this.switchDirection() );
 		
 		contextMenu.getItems().addAll
 		( 
 			menuItemCopyTblNoHead, 
 			menuItemCopyTblWithHead,
 			new SeparatorMenuItem(),
-			menuItemSave2Excel,
-			new SeparatorMenuItem(),
-			menuItemToggleHV
+			menuItemSave2Excel //,
+			//new SeparatorMenuItem(),
+			//menuItemToggleHV
 		);
 		
 		//this.setOnContextMenuRequested( (event)->{ contextMenu.show( this, event.getScreenX(), event.getScreenY() ); } );

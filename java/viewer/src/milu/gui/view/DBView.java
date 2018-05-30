@@ -124,6 +124,7 @@ public class DBView extends Stage
         String[] cssLst =
         	{
         		"/conf/css/ctrl/common/LabelTable.css",
+        		"/conf/css/ctrl/common/table/ObjTableView.css",
         		"/conf/css/ctrl/menu/MainToolBar.css",
         		"/conf/css/ctrl/query/DBSqlTab.css",
         		"/conf/css/ctrl/query/SqlTableView.css",

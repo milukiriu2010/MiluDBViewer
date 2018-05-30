@@ -16,7 +16,6 @@ import javafx.stage.Stage;
 import javafx.stage.Window;
 import javafx.application.Application;
 import javafx.application.Platform;
-
 import milu.gui.ctrl.common.DraggingTabPaneSupport;
 import milu.gui.dlg.db.DBSettingDialog;
 import milu.gui.view.DBView;
@@ -27,6 +26,7 @@ import milu.entity.schema.SchemaEntity;
 import milu.entity.schema.search.ChangeLangSchemaEntityVisitor;
 import milu.task.main.InitialLoadAbstract;
 import milu.task.main.InitialLoadFactory;
+import milu.tool.MyTool;
 
 public class MainController
 {
@@ -83,86 +83,6 @@ public class MainController
 		return this.appConf;
 	}
 	
-	/*
-	private void loadImages()
-	{
-		String[] images =
-			{
-				// SchemaEntity
-				"file:resources/images/index_p.png",
-				"file:resources/images/index_u.png",
-				"file:resources/images/index_f.png",
-				"file:resources/images/index_fk.png",
-				"file:resources/images/index_i.png",
-				"file:resources/images/order_a.png",
-				"file:resources/images/order_d.png",
-				"file:resources/images/column.png",
-				"file:resources/images/aggregate.png",
-				"file:resources/images/func.png",
-				"file:resources/images/materialized_view.png",
-				"file:resources/images/package_body.png",
-				"file:resources/images/package_def.png",
-				"file:resources/images/proc.png",
-				"file:resources/images/schema.png",			// MainToolBar,DBSchemaTab
-				"file:resources/images/seq.png",
-				"file:resources/images/systemview.png",
-				"file:resources/images/table.png",
-				"file:resources/images/trigger.png",
-				"file:resources/images/type.png",
-				"file:resources/images/view.png",
-				"file:resources/images/url.png",
-				"file:resources/images/aggregate_root.png",
-				"file:resources/images/func_root.png",
-				"file:resources/images/index_root.png",
-				"file:resources/images/materialized_view_root.png",
-				"file:resources/images/package_body_root.png",
-				"file:resources/images/package_def_root.png",
-				"file:resources/images/proc_root.png",
-				"file:resources/images/seq_root.png",
-				"file:resources/images/systemview_root.png",
-				"file:resources/images/table_root.png",
-				"file:resources/images/trigger_root.png",
-				"file:resources/images/type_root.png",
-				"file:resources/images/view_root.png",
-				"file:resources/images/ER_root.png",
-				// MainMenuBar
-				"file:resources/images/config.png",
-				"file:resources/images/quit.png",
-				"file:resources/images/sysinfo.png",
-				"file:resources/images/jdbc.png",
-				// MainToolBar
-				"file:resources/images/execsql.png",
-				"file:resources/images/explain.png",
-				"file:resources/images/direction.png",
-				"file:resources/images/commit.png",
-				"file:resources/images/rollback.png",
-				"file:resources/images/newtab.png",
-				"file:resources/images/newwin.png",
-				"file:resources/images/connect.png",
-				"file:resources/images/copy.png",
-				"file:resources/images/copy2.png",
-				// Dialog
-				"file:resources/images/winicon.gif",
-				// DBSqlTab
-				"file:resources/images/sql.png",
-				"file:resources/images/result.png",
-				//"file:resources/images/script.png",
-				// DBSettingDialog
-				"file:resources/images/folder.png",
-				"file:resources/images/folder_new.png",
-				"file:resources/images/file.png",
-				"file:resources/images/file_new.png",
-				"file:resources/images/delete.png"
-			};
-		
-		for ( String image : images )
-		{
-			System.out.println( "image loading..." + image );
-			this.imageMap.put( image, new Image( image ) );
-		}
-	}
-	*/
-	
 	public void addImage( String resourceName, Image image )
 	{
 		this.imageMap.put( resourceName, image );
@@ -173,35 +93,6 @@ public class MainController
 		return this.imageMap.get( resourceName );
 	}
 	
-	/*
-	private void loadLangResources()
-	{
-		String[] languagess =
-		{
-			"conf.lang.entity.schema.SchemaEntity",
-			"conf.lang.gui.common.MyAlert",
-			"conf.lang.gui.common.NodeName",
-			"conf.lang.gui.ctrl.common.DriverControlPane",
-			"conf.lang.gui.ctrl.menu.MainMenuBar",
-			"conf.lang.gui.ctrl.menu.MainToolBar",
-			"conf.lang.gui.ctrl.query.DBSqlTab",
-			"conf.lang.gui.ctrl.query.SqlTableView",
-			"conf.lang.gui.ctrl.schema.DBSchemaTab",
-			"conf.lang.gui.ctrl.schema.SchemaTreeView",
-			"conf.lang.gui.dlg.VersionDialog",
-			"conf.lang.gui.dlg.SystemInfoDialog",
-			"conf.lang.gui.dlg.app.AppSettingDialog",
-			"conf.lang.gui.dlg.db.DBSettingDialog"
-		};
-		
-		for ( String lang : languagess )
-		{
-			System.out.println( "language resource loading..." + lang );
-			this.langMap.put( lang , ResourceBundle.getBundle( lang ) );
-		}
-	}
-	*/
-	
 	public void addLangResource( String name, ResourceBundle langRB )
 	{
 		this.langMap.put(name,langRB);
@@ -211,196 +102,6 @@ public class MainController
 	{
 		return this.langMap.get(name);
 	}
-	
-	/*
-	private void loadAppConf()
-	{
-		MyJsonHandleAbstract myJsonAbs =
-			new MyJsonHandleFactory().createInstance(AppConf.class);
-		try
-		{
-			myJsonAbs.open(AppConst.APP_CONF.val());
-			Object obj = myJsonAbs.load();
-			if ( obj instanceof AppConf )
-			{
-				this.appConf = (AppConf)obj;
-				System.out.println( "AppConf:" + this.appConf );
-			}
-		}
-		catch ( FileNotFoundException nfEx )
-		{
-			// When this application starts at the first time,
-			// "app_conf.json" doesn't exists yet.
-			// So it always enters this logic.
-			System.out.println( "Not Found:" + AppConst.APP_CONF.val() );
-		}
-		catch ( Exception ex )
-		{
-			// "app_conf.json" exists
-			// but, cannot read.
-			this.showException(ex);
-		}
-	}
-	*/
-	
-	/*
-	private void loadDriver()
-	{
-		this.loadDriverUser();
-		this.loadDriverDefault();
-	}
-	
-	private void loadDriverUser()
-	{
-		File folder = new File(AppConst.DRIVER_DIR.val());
-		File[] fileArray = folder.listFiles();
-		if ( fileArray == null )
-		{
-			return;
-		}
-		
-		List<File> fileLst = new ArrayList<File>( Arrays.asList(fileArray) );
-		
-		List<File> jsonLst =
-				fileLst.stream()
-					.filter( file -> file.isFile() )
-					.filter( file -> MyTool.getFileExtension(file).equals("json") )
-					.collect(Collectors.toList());
-		
-		jsonLst.forEach
-		(
-			(json)->
-			{
-				MyJsonHandleAbstract myJsonAbs =
-					new MyJsonHandleFactory().createInstance(DriverShim.class);
-				try
-				{
-					myJsonAbs.open(json.getAbsolutePath());
-					Object obj = myJsonAbs.load();
-					if ( obj instanceof DriverShim )
-					{
-						DriverShim driverShim = (DriverShim)obj;
-						if ( LoadDriver.isAlreadyLoadCheck( driverShim.getDriverClassName() ) == false )
-						{
-							DriverShim loadedDriver = LoadDriver.loadDriver( driverShim.getDriverClassName(), driverShim.getDriverPathLst() );
-							loadedDriver.setTemplateUrl( driverShim.getTemplateUrl() );
-							loadedDriver.setReferenceUrl( driverShim.getReferenceUrl() );
-							System.out.println( driverShim.getDriverClassName() + " Driver(User) Load done." );
-						}
-						else
-						{
-							System.out.println( driverShim.getDriverClassName() + " Driver(User) Load skip." );
-						}
-					}
-				}
-				catch ( Exception ex )
-				{
-					// "driver/'driver class name'.json" exists
-					// but, cannot read.
-					//this.showException(ex, "Cannot load(" + json.getAbsolutePath() + ")");
-					
-					// https://stackoverflow.com/questions/36309385/how-to-change-the-text-of-yes-no-buttons-in-javafx-8-alert-dialogs?utm_medium=organic&utm_source=google_rich_qa&utm_campaign=google_rich_qa
-					// https://stackoverflow.com/questions/29535395/javafx-default-focused-button-in-alert-dialog?utm_medium=organic&utm_source=google_rich_qa&utm_campaign=google_rich_qa
-					ButtonType btnYes = ButtonType.YES; //new ButtonType( "Yes", ButtonBar.ButtonData.YES );
-					ButtonType btnNo  = ButtonType.NO; //new ButtonType( "No" , ButtonBar.ButtonData.NO );
-					
-					MyAlertDialog alertDlg = new MyAlertDialog( AlertType.WARNING, this, btnYes, btnNo );
-					((Button)alertDlg.getDialogPane().lookupButton(btnYes)).setDefaultButton(false);
-					((Button)alertDlg.getDialogPane().lookupButton(btnNo)).setDefaultButton(true);
-					ResourceBundle langRB = this.getLangResource("conf.lang.gui.common.MyAlert");
-					String msgExtra =
-						MessageFormat.format( langRB.getString("MSG_DB_DRIVER_ERROR"), json.getAbsolutePath() );
-					alertDlg.setHeaderText( langRB.getString("TITLE_DB_DRIVER_ERROR") );
-					alertDlg.setTxtExp( ex, msgExtra );
-					final Optional<ButtonType> result = alertDlg.showAndWait();
-					if ( result.get() == btnYes )
-					{
-						System.out.println( "delete:"+json.getAbsolutePath() );
-						new File(json.getAbsolutePath()).delete();
-					}
-					alertDlg = null;					
-				}
-			}
-		);
-		
-	}
-	
-	private void loadDriverDefault()
-	{
-		// DriverClassConst <=> Driver Path List
-		Map<DriverClassConst,List<String>>  driverMap = new HashMap<>();
-		// DriverClassConst <=> Template URL
-		Map<DriverClassConst,String>  driverTemplateUrlMap = new HashMap<>();
-		// DriverClassConst <=> Reference URL
-		Map<DriverClassConst,String>  driverReferenceUrlMap = new HashMap<>();
-		
-		// Oracle
-		List<String>  driverPathLstOracle = new ArrayList<>();
-		driverPathLstOracle.add( "file:lib/oracle/ojdbc8.jar" );
-		driverPathLstOracle.add( "file:lib/oracle/orai18n.jar" );
-		driverPathLstOracle.add( "file:lib/oracle/xdb6.jar" );
-		driverPathLstOracle.add( "file:lib/oracle/xmlparserv2.jar" );
-		
-		driverMap.put( DriverClassConst.CLASS_NAME_ORACLE, driverPathLstOracle );
-		driverTemplateUrlMap.put( DriverClassConst.CLASS_NAME_ORACLE, "jdbc:oracle:thin:@//<host>[:1521]/<service_name>[?internal_logon=sysdba|sysoper]" );
-		driverReferenceUrlMap.put( DriverClassConst.CLASS_NAME_ORACLE, "https://docs.oracle.com/cd/B28359_01/java.111/b31224/urls.htm" );
-		
-		// PostgreSQL
-		List<String>  driverPathLstPostgres = new ArrayList<>();
-		driverPathLstPostgres.add( "file:lib/postgresql/postgresql-42.1.4.jar" );
-		
-		driverMap.put( DriverClassConst.CLASS_NAME_POSTGRESQL, driverPathLstPostgres );
-		driverTemplateUrlMap.put( DriverClassConst.CLASS_NAME_POSTGRESQL, "jdbc:postgresql://host1:5432,host2:port2/database[?targetServerType=master]" );
-		driverReferenceUrlMap.put( DriverClassConst.CLASS_NAME_POSTGRESQL, "https://jdbc.postgresql.org/documentation/head/connect.html" );
-		
-		// MySQL
-		List<String>  driverPathLstMySQL = new ArrayList<>();
-		driverPathLstMySQL.add( "file:lib/mysql/mysql-connector-java-5.1.45-bin.jar" );
-		
-		driverMap.put( DriverClassConst.CLASS_NAME_MYSQL, driverPathLstMySQL );
-		driverTemplateUrlMap.put( DriverClassConst.CLASS_NAME_MYSQL, "jdbc:mysql://[host1][:3306][,[host2][:port2]]...[/[database]][?autoReconnect=true][&autoClosePStmtStreams=true]" );
-		driverReferenceUrlMap.put( DriverClassConst.CLASS_NAME_MYSQL, "https://dev.mysql.com/doc/connector-j/5.1/en/connector-j-reference-configuration-properties.html" );
-		
-		// Cassandra
-		List<String>  driverPathLstCassandra = new ArrayList<>();
-		driverPathLstCassandra.add( "file:lib/cassandra/cassandra-jdbc-driver-0.6.4-shaded.jar" );
-		
-		driverMap.put( DriverClassConst.CLASS_NAME_CASSANDRA1, driverPathLstCassandra );
-		driverTemplateUrlMap.put( DriverClassConst.CLASS_NAME_CASSANDRA1, "jdbc:c*:datastax//[host][:9042]/[keyspace][?consistencyLevel=ONE|ANY|...][&compression=LZ4|SNAPPY]" );
-		driverReferenceUrlMap.put( DriverClassConst.CLASS_NAME_CASSANDRA1, "https://github.com/zhicwu/cassandra-jdbc-driver" );
-		
-		// --------------------------------------------------
-		// Load Driver
-		// --------------------------------------------------
-		driverMap.forEach
-		(
-			(driverClassType,driverPathLst)->
-			{
-				try
-				{
-					// Driver is not yet loaded
-					if ( LoadDriver.isAlreadyLoadCheck( driverClassType.val() ) == false )
-					{
-						DriverShim driver = LoadDriver.loadDriver( driverClassType.val(), driverPathLst );
-						driver.setTemplateUrl( driverTemplateUrlMap.get(driverClassType) );
-						driver.setReferenceUrl( driverReferenceUrlMap.get(driverClassType) );
-						System.out.println( DriverShim.driverDBMap.get(driverClassType).val() + " Driver(Default) Load done." );
-					}
-					// Driver is already loaded
-					else
-					{
-						System.out.println( DriverShim.driverDBMap.get(driverClassType).val() + " Driver(Default) Load skip." );
-					}
-				}
-				catch ( Exception ex )
-				{
-					ex.printStackTrace();
-					System.out.println( DriverShim.driverDBMap.get(driverClassType).val() + " Driver(Default) Load failed." );
-				}
-			}
-		);
-	}
-	*/
 	
 	public void switchDriver( DriverShim driverA, DriverShim driverB )
 	{
@@ -415,30 +116,6 @@ public class MainController
 			}
 		);
 	}
-	/*
-	private void loadKey()
-	{
-		File keyFile = new File(AppConst.KEY_FILE.val());
-		MyFileExtAbstract<SecretKey> myFileExtAbs = 
-			MyFileExtFactory.getInstance(MyFileExtFactory.TYPE.SERIALIZE);
-		try
-		{
-			this.secretKey = myFileExtAbs.load(keyFile, SecretKey.class );
-			if ( this.secretKey != null )
-			{
-				return;
-			}
-			
-			SecretKey keyTmp = new MySecurityKey().createKey();
-			myFileExtAbs.save( keyFile, keyTmp );
-			this.secretKey = keyTmp;
-		}
-		catch ( Exception ex )
-		{
-			this.showException(ex);
-		}
-	}
-	*/
 	
 	public void setSecretKey( SecretKey secretKey )
 	{
@@ -480,6 +157,7 @@ public class MainController
 		// -----------------------------------------
 		DBSettingDialog dlg = new DBSettingDialog( this );
 		Window       window = dlg.getDialogPane().getScene().getWindow();
+		//MyTool.setWindowLocation(window, window.getWidth(), window.getHeight() );
 		window.setOnCloseRequest( event ->{ window.hide(); this.close(null); } );
 		
 		// get result when clicking something on dialog
@@ -537,6 +215,20 @@ public class MainController
 		{
 			dbView.setX( dbViewPrev.getX() + 20 );
 			dbView.setY( dbViewPrev.getY() + 20 );
+		}
+		else
+		{
+			/*
+			Point2D pd = MyTool.getMousePosOnScreen();
+			Point2D pd2 = MyTool.getRightWindowPos( pd, dbView.getWidth(), dbView.getHeight() );
+			dbView.setX( pd2.getX() );
+			dbView.setY( pd2.getY() );
+			//System.out.println( "Window width:" + dbView.getWidth() + ":height:" + dbView.getHeight() );
+			//System.out.println( "pd     x:"     + pd.getX()  + ":y:" + pd.getY() );
+			//System.out.println( "pd2    x:"     + pd2.getX() + ":y:" + pd2.getY() );
+			 * 
+			 */
+			MyTool.setWindowLocation( dbView, dbView.getWidth(), dbView.getHeight() );
 		}
 	}
 	

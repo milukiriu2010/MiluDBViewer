@@ -10,7 +10,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TablePosition;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
-import javafx.scene.input.MouseEvent;
+//import javafx.scene.input.MouseEvent;
 import javafx.beans.value.ChangeListener;
 
 import milu.gui.ctrl.common.table.ObjTableView.COPY_TYPE;
@@ -24,7 +24,7 @@ class TableProcessVertical extends TableProcessAbstract
 	}
 	
 	// Vertical => Horizontal
-	// @SuppressWarnings("rawtypes")
+	@SuppressWarnings("rawtypes")
 	@Override
 	void switchDirection()
 	{
@@ -115,26 +115,6 @@ class TableProcessVertical extends TableProcessAbstract
 				// Do not change the cell data, whatever the user inputs
 				tableCol.setCellFactory( this.objTableView.getCellFactory() );
 				tableCol.setOnEditCommit( e->{} );
-				/*
-				final TableColumn<List<Object>,Object> tableCol2 = tableCol;
-				tableCol.addEventHandler
-				( 
-					MouseEvent.MOUSE_CLICKED, 
-					(event)->
-					{
-						System.out.println( "Mouse Clicked." );
-						if ( event.isControlDown() || event.isShiftDown() )
-						{
-							this.objTableView.tableColSet.add(tableCol2);
-						}
-						else
-						{
-							this.objTableView.tableColSet.clear();
-							this.objTableView.tableColSet.add(tableCol2);
-						}
-					}
-				);
-				*/
 			}
 			// disable sort by clicking "Column Header"
 			tableCol.setSortable(false);

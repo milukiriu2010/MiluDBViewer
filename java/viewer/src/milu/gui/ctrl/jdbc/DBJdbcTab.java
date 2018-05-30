@@ -33,7 +33,8 @@ import milu.gui.ctrl.common.inf.ChangeLangInterface;
 import milu.gui.ctrl.common.inf.CopyInterface;
 import milu.gui.ctrl.common.inf.FocusInterface;
 import milu.gui.ctrl.common.inf.PaneSwitchDriverInterface;
-import milu.gui.ctrl.query.SqlTableView;
+import milu.gui.ctrl.common.table.ObjTableView;
+//import milu.gui.ctrl.query.SqlTableView;
 import milu.gui.dlg.MyAlertDialog;
 import milu.gui.view.DBView;
 import milu.main.AppConst;
@@ -50,7 +51,7 @@ public class DBJdbcTab extends Tab
 	private DBView          dbView = null;
 	
     // Head List
-    private List<String> headLst = new ArrayList<>(Arrays.asList("KEY","VALUE"));
+    private List<Object> headLst = new ArrayList<>(Arrays.asList("KEY","VALUE"));
 	
 	// ----------------------------------------
 	// [Pane on Dialog(1)]
@@ -89,7 +90,7 @@ public class DBJdbcTab extends Tab
 	
 	private TextField  minorVerTxt = new TextField();
 	
-	private SqlTableView driverTableView = null;
+	private ObjTableView driverTableView = null;
 	
 	public DBJdbcTab( DBView dbView )
 	{
@@ -140,7 +141,7 @@ public class DBJdbcTab extends Tab
 		this.majorVerTxt.setPrefWidth(30);
 		this.minorVerTxt.setEditable(false);
 		this.minorVerTxt.setPrefWidth(30);
-		this.driverTableView = new SqlTableView(this.dbView);
+		this.driverTableView = new ObjTableView(this.dbView);
 
 		HBox hBoxVer = new HBox(2);
 		hBoxVer.setSpacing(2);
@@ -306,18 +307,18 @@ public class DBJdbcTab extends Tab
 				}
 			}
 			
-			List<List<String>> dataLst = new ArrayList<>();
+			List<List<Object>> dataLst = new ArrayList<>();
 			driverMap.forEach
 			(
 				(k,v)->
 				{
-					List<String> data = new ArrayList<>();
+					List<Object> data = new ArrayList<>();
 					data.add(k);
 					data.add(v);
 					dataLst.add(data);
 				}
 			);
-			this.driverTableView.setTableViewSQL( this.headLst, dataLst );
+			this.driverTableView.setTableViewData( this.headLst, dataLst );
 		}
 		catch ( SQLException sqlEx )
 		{

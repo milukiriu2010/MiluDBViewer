@@ -5,6 +5,7 @@ import java.io.PrintWriter;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
 
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Alert;
 import javafx.scene.control.TextArea;
@@ -61,6 +62,9 @@ public class MyAlertDialog extends Alert
         // Window Icon
 		Stage stage = (Stage)this.getDialogPane().getScene().getWindow();
 		stage.getIcons().add( this.mainCtrl.getImage( "file:resources/images/winicon.gif" ) );
+		
+		// set location
+		Platform.runLater( ()->MyTool.setWindowLocation( stage, stage.getWidth(), stage.getHeight() ) );
 	}
 	
 	public void setTxtMsg( String msg )

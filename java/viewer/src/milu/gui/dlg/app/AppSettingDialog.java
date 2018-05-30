@@ -18,6 +18,7 @@ import javafx.application.Platform;
 import milu.gui.ctrl.common.ButtonOrderNoneDialogPane;
 import milu.gui.dlg.MyAlertDialog;
 import milu.main.MainController;
+import milu.tool.MyTool;
 
 public class AppSettingDialog extends Dialog<Boolean>
 {
@@ -99,6 +100,9 @@ public class AppSettingDialog extends Dialog<Boolean>
         // Window Icon
 		Stage stage = (Stage)this.getDialogPane().getScene().getWindow();
 		stage.getIcons().add( this.mainCtrl.getImage( "file:resources/images/winicon.gif" ) );
+
+		// set location
+		Platform.runLater( ()->MyTool.setWindowLocation( stage, stage.getWidth(), stage.getHeight() ) );
 		
 		// set Action
 		this.setAction();

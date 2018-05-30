@@ -23,7 +23,7 @@ class TableProcessHorizontal extends TableProcessAbstract
 	}
 	
 	// Horizontal => Vertical
-	// @SuppressWarnings("rawtypes")
+	@SuppressWarnings("rawtypes")
 	@Override
 	void switchDirection()
 	{

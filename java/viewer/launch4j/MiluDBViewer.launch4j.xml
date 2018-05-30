@@ -2,7 +2,7 @@
 <launch4jConfig>
   <dontWrapJar>false</dontWrapJar>
   <headerType>gui</headerType>
-  <jar>C:\myjava\MiluDBViewer.git\java\viewer\build\MiluDBViewer.jre9.jar</jar>
+  <jar>C:\myjava\MiluDBViewer.git\java\viewer\build\MiluDBViewer.jar</jar>
   <outfile>C:\myjava\MiluDBViewer.git\java\viewer\build\MiluDBViewer.exe</outfile>
   <errTitle></errTitle>
   <cmdLine></cmdLine>
@@ -18,7 +18,7 @@
     <path></path>
     <bundledJre64Bit>false</bundledJre64Bit>
     <bundledJreAsFallback>false</bundledJreAsFallback>
-    <minVersion>1.9.0</minVersion>
+    <minVersion>1.10.0</minVersion>
     <maxVersion></maxVersion>
     <jdkPreference>preferJdk</jdkPreference>
     <runtimeBits>64/32</runtimeBits>

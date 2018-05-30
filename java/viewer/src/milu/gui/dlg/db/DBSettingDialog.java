@@ -310,6 +310,7 @@ public class DBSettingDialog extends Dialog<MyDBAbstract>
 		// https://sites.google.com/site/63rabbits3/javafx2/jfx2coding/dialogbox
 		//Platform.runLater( ()->{ this.comboBoxDBType.requestFocus(); } );
 		Platform.runLater( this.pathTreeView::requestFocus );
+		Platform.runLater( ()->MyTool.setWindowLocation( stage, stage.getWidth(), stage.getHeight() ) );
 		
 		// set size
 		this.setResizable( true );

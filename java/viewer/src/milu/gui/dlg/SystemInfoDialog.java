@@ -26,14 +26,17 @@ import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import javafx.animation.Timeline;
+import javafx.application.Platform;
 import javafx.animation.KeyFrame;
 import javafx.event.EventHandler;
 import javafx.event.ActionEvent;
 import javafx.geometry.Rectangle2D;
 
 import milu.gui.ctrl.common.table.ObjTableView;
-import milu.gui.ctrl.query.SqlTableView;
+import milu.gui.ctrl.common.inf.SetTableViewDataInterface;
+//import milu.gui.ctrl.query.SqlTableView;
 import milu.gui.view.DBView;
+import milu.tool.MyTool;
 
 public class SystemInfoDialog extends Dialog<Boolean>
 {
@@ -43,7 +46,7 @@ public class SystemInfoDialog extends Dialog<Boolean>
 	private TabPane  tabPane = new TabPane();
 	
     // Head List
-    private List<String> headLst = new ArrayList<String>();
+    //private List<String> headLst = new ArrayList<String>();
     
     private List<Object> objHeadLst = new ArrayList<>();
 	
@@ -68,8 +71,8 @@ public class SystemInfoDialog extends Dialog<Boolean>
 		ResourceBundle langRB = this.dbView.getMainController().getLangResource("conf.lang.gui.dlg.SystemInfoDialog");
 		
         // Head List
-        this.headLst.add( langRB.getString( "ITEM_KEY" ) );
-        this.headLst.add( langRB.getString( "ITEM_VAL" ) );
+        //this.headLst.add( langRB.getString( "ITEM_KEY" ) );
+        //this.headLst.add( langRB.getString( "ITEM_VAL" ) );
         this.objHeadLst.add( langRB.getString( "ITEM_KEY" ) );
         this.objHeadLst.add( langRB.getString( "ITEM_VAL" ) );
 		
@@ -116,6 +119,9 @@ public class SystemInfoDialog extends Dialog<Boolean>
 		
 		// set Modality
 		this.initModality( Modality.NONE );
+		
+		// set location
+		Platform.runLater( ()->MyTool.setWindowLocation( stage, stage.getWidth(), stage.getHeight() ) );
 		
 		this.setAction();
 	}
@@ -211,17 +217,17 @@ public class SystemInfoDialog extends Dialog<Boolean>
 	private void setContentOnEnvTab()
 	{
         Map<String, String>  envMap     = System.getenv();
-        List<String>         envNameLst = new ArrayList<String>( envMap.keySet() );
-        Collections.sort(envNameLst);
+        List<Object>         envNameLst = new ArrayList<>( envMap.keySet() );
+        Collections.sort( envNameLst, (o1,o2)->o1.toString().compareTo(o2.toString()) );
         
         // Data List
-        List<List<String>>  dataLst = new ArrayList<List<String>>();        
-        for ( String envName : envNameLst )
+        List<List<Object>>  dataLst = new ArrayList<>();        
+        for ( Object envName : envNameLst )
         {
         	//System.out.println( envName + "=" + System.getenv(envName) );
-        	List<String>  env = new ArrayList<String>();
+        	List<Object>  env = new ArrayList<>();
         	env.add( envName );
-        	String envVal = System.getenv(envName);
+        	String envVal = System.getenv((String)envName);
     		// Nothing Change for URL format
         	if ( envVal.contains( "://") )
         	{
@@ -235,8 +241,8 @@ public class SystemInfoDialog extends Dialog<Boolean>
         	dataLst.add( env );
         }
         
-        SqlTableView envTableView = new SqlTableView(this.dbView);
-        envTableView.setTableViewSQL( this.headLst, dataLst );
+        ObjTableView envTableView = new ObjTableView(this.dbView);
+        envTableView.setTableViewData( this.objHeadLst, dataLst );
         
         this.envTab.setContent( envTableView );        
 		ResourceBundle langRB = this.dbView.getMainController().getLangResource("conf.lang.gui.dlg.SystemInfoDialog");
@@ -254,13 +260,13 @@ public class SystemInfoDialog extends Dialog<Boolean>
 		btnGC.setOnAction( event->System.gc() );
 		HBox hbox = new HBox(2);
 		hbox.getChildren().addAll( memLabel, btnGC );
-        SqlTableView memTableView = new SqlTableView(this.dbView);
+		ObjTableView memTableView = new ObjTableView(this.dbView);
         memTableView.setId("memTableView");
         
         // Nodes for Display Information
 		Label        dispLabel = new Label(langRB.getString( "LABEL_DISPINFO" ));
 		dispLabel.getStyleClass().add("SystemInfoDialog_Label_Title");
-        SqlTableView dispTableView = new SqlTableView(this.dbView);
+		ObjTableView dispTableView = new ObjTableView(this.dbView);
         this.setContentForDispInfo( dispTableView );
         
         VBox vbox = new VBox( 2 );
@@ -293,24 +299,24 @@ public class SystemInfoDialog extends Dialog<Boolean>
 		ResourceBundle langRB = this.dbView.getMainController().getLangResource("conf.lang.gui.dlg.SystemInfoDialog");
 		
         // Head List
-        List<String> headLst = new ArrayList<String>();
+        List<Object> headLst = new ArrayList<>();
         headLst.add( langRB.getString( "ITEM_KEY" ) );
         headLst.add( langRB.getString( "ITEM_VAL" ) );
         
         // Data List
-        List<List<String>>  dataLst = new ArrayList<List<String>>();
+        List<List<Object>>  dataLst = new ArrayList<>();
         // Max Memory
-        List<String> maxMemoryLst = new ArrayList<String>();
+        List<Object> maxMemoryLst = new ArrayList<>();
         maxMemoryLst.add( langRB.getString("ITEM_MEM_MAX_MEMORY") );
         maxMemoryLst.add( String.format( "%,d",maxMemory) );
         dataLst.add(maxMemoryLst);
         // Total Memory
-        List<String> totalMemoryLst = new ArrayList<String>();
+        List<Object> totalMemoryLst = new ArrayList<>();
         totalMemoryLst.add( langRB.getString("ITEM_MEM_TOTAL_MEMORY") );
         totalMemoryLst.add( String.format( "%,d",totalMemory) );
         dataLst.add(totalMemoryLst);
         // Free Memory
-        List<String> freeMemoryLst = new ArrayList<String>();
+        List<Object> freeMemoryLst = new ArrayList<>();
         freeMemoryLst.add( langRB.getString("ITEM_MEM_FREE_MEMORY") );
         freeMemoryLst.add( String.format( "%,d",freeMemory) );
         dataLst.add(freeMemoryLst);
@@ -320,39 +326,39 @@ public class SystemInfoDialog extends Dialog<Boolean>
         if ( scene != null )
         {
         	Node node  = scene.lookup("#memTableView");
-			if ( node instanceof SqlTableView )
+			if ( node instanceof SetTableViewDataInterface )
 			{
-				((SqlTableView)node).setTableViewSQL( headLst, dataLst );
+				((SetTableViewDataInterface)node).setTableViewData( headLst, dataLst );
 			}
         }
 	}
 	
-	private void setContentForDispInfo( SqlTableView dispTableView )
+	private void setContentForDispInfo( ObjTableView dispTableView )
 	{
 		// http://krr.blog.shinobi.jp/javafx/javafx%20scene%E3%83%BBscenegraph%E3%82%AF%E3%83%A9%E3%82%B9
 
 		ResourceBundle langRB = this.dbView.getMainController().getLangResource("conf.lang.gui.dlg.SystemInfoDialog");
         
         // Data List
-        List<List<String>>  dataLst = new ArrayList<List<String>>();
+        List<List<Object>>  dataLst = new ArrayList<>();
         
         int dispID = 1;
         for ( Screen  screen : Screen.getScreens() )
         {
             // Display Size
-            List<String> dispSizeLst = new ArrayList<String>();
+            List<Object> dispSizeLst = new ArrayList<>();
             dispSizeLst.add( langRB.getString("ITEM_DISP_SIZE") + "(" + dispID + ")" );
     		Rectangle2D  rec = screen.getBounds();
             dispSizeLst.add( String.format( "%d x %d",(int)rec.getWidth(),(int)rec.getHeight()) );
             dataLst.add(dispSizeLst);
             // Display Size(Visual)
-            List<String> dispSizeVisualLst = new ArrayList<String>();
+            List<Object> dispSizeVisualLst = new ArrayList<>();
             dispSizeVisualLst.add( langRB.getString("ITEM_DISP_SIZE_VISUAL") + "(" + dispID + ")" );
     		Rectangle2D  recVisual = screen.getVisualBounds();
             dispSizeVisualLst.add( String.format( "%d x %d",(int)recVisual.getWidth(),(int)recVisual.getHeight()) );
             dataLst.add(dispSizeVisualLst);
             // Display DPI
-            List<String> dispDPILst = new ArrayList<String>();
+            List<Object> dispDPILst = new ArrayList<>();
             dispDPILst.add( langRB.getString("ITEM_DISP_DPI") + "(" + dispID + ")" );
             dispDPILst.add( String.format( "%d",(int)screen.getDpi()) );
             dataLst.add(dispDPILst);
@@ -360,6 +366,6 @@ public class SystemInfoDialog extends Dialog<Boolean>
             dispID++;
         }
         
-        dispTableView.setTableViewSQL( this.headLst, dataLst );
+        dispTableView.setTableViewData( this.objHeadLst, dataLst );
 	}
 }
