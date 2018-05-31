@@ -19,7 +19,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
-import milu.gui.ctrl.common.inf.SetTableViewSQLInterface;
+import milu.gui.ctrl.common.inf.SetTableViewDataInterface;
 import milu.gui.ctrl.schema.SchemaTreeView;
 import milu.gui.ctrl.schema.SetSrcTextInterface;
 import milu.gui.dlg.MyAlertDialog;
@@ -405,7 +405,7 @@ abstract public class SelectedItemHandlerAbstract
 				( this.refreshType ==  SelectedItemHandlerAbstract.REFRESH_TYPE.NO_REFRESH )
 		)
 		{
-			((SetTableViewSQLInterface)newTab).setTableViewSQL
+			((SetTableViewDataInterface)newTab).setTableViewData
 			(
 				this.createHeadLst(defType), 
 				this.createDataLst(defType, dataLst)
@@ -422,7 +422,7 @@ abstract public class SelectedItemHandlerAbstract
 		// execute task
 		this.service.submit( collectTask );
 		
-		final SetTableViewSQLInterface stvInf = (SetTableViewSQLInterface)newTab;
+		final SetTableViewDataInterface stvInf = (SetTableViewDataInterface)newTab;
 		collectTask.progressProperty().addListener
 		(
 			(obs,oldVal,newVal)->
@@ -439,7 +439,7 @@ abstract public class SelectedItemHandlerAbstract
 					this.schemaTreeView.setIsLoading(false);
 					this.dbView.setBottomMsg(null);
 					// set source in SqlTextArea
-					stvInf.setTableViewSQL
+					stvInf.setTableViewData
 					(
 						this.createHeadLst(defType), 
 						this.createDataLst(defType, selectedEntity.getDefinitionLst() )
@@ -453,9 +453,9 @@ abstract public class SelectedItemHandlerAbstract
 		this.setValueProperty(collectTask);
 	}
 	
-	protected List<String> createHeadLst( DEFINITION_TYPE defType )
+	protected List<Object> createHeadLst( DEFINITION_TYPE defType )
 	{
-		List<String> headLst = new ArrayList<String>();
+		List<Object> headLst = new ArrayList<>();
 		headLst.add( "COLUMN" );
 		headLst.add( "TYPE" );
 		headLst.add( "NULL?" );
@@ -466,13 +466,13 @@ abstract public class SelectedItemHandlerAbstract
 		return headLst;
 	}
 	
-	protected List<List<String>> createDataLst( DEFINITION_TYPE defType, List<Map<String,String>>  dataLst )
+	protected List<List<Object>> createDataLst( DEFINITION_TYPE defType, List<Map<String,String>>  dataLst )
 	{
-		List<List<String>>  data2Lst = new ArrayList<List<String>>();
+		List<List<Object>>  data2Lst = new ArrayList<>();
 		
 		for ( Map<String,String> dataRow1 : dataLst )
 		{
-			List<String> dataRow2 = new ArrayList<String>();
+			List<Object> dataRow2 = new ArrayList<>();
 			dataRow2.add( dataRow1.get("column_name") );
 			String dataType = dataRow1.get("data_type");
 			String dataSize = dataRow1.get("data_size");

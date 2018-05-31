@@ -144,6 +144,36 @@ public class PathTreeView extends TreeView<Path>
 						}
 					);
 				this.setDragDropEvent(treeCell);
+				
+				// disable editor for root item.
+				// ----------------------------------------------------
+				//if ( treeView.getSelectionModel().getSelectedItem() == treeView.getRoot() )
+				//{
+				//	treeCell.setDisable(true);
+				//}
+				// ----------------------------------------------------
+				//if ( treeCell.getTreeItem() == treeView.getRoot() )
+				//{
+				//	treeCell.setDisable(true);
+				//}
+				// ----------------------------------------------------
+				//if ( treeCell.getTreeItem() != null && treeCell.getTreeItem().getParent() == null )
+				//{
+				//	treeCell.setDisable(true);
+				//}
+				// ----------------------------------------------------
+				TreeItem<Path> treeItem = treeCell.getTreeItem();
+				if ( treeItem != null )
+				{
+					System.out.println( "TreeCell:" + treeItem.getValue().toString() );
+				}
+				else
+				{
+					System.out.println( "TreeCell:null" );
+				}
+				System.out.println( "TreeCell.getText:" + treeCell.getText() );
+				
+				
 				return treeCell;
 			}
 		);
@@ -153,6 +183,12 @@ public class PathTreeView extends TreeView<Path>
 			(event)->
 			{
 				//this.treeCell.focusTraversableProperty().
+				
+				//if ( this.getSelectionModel().getSelectedItem() == this.getRoot() )
+				//{
+				//	this.getOnEditCancel();
+				//}
+				
 			}
 		);
 		
@@ -162,6 +198,12 @@ public class PathTreeView extends TreeView<Path>
 			(event)->
 			{
 				TreeItem<Path> itemTarget = event.getTreeItem();
+				if ( itemTarget == this.getRoot() )
+				{
+					event.consume();
+					return;
+				}
+				
 				Path pathOld = event.getOldValue();
 				Path pathNew = event.getNewValue();
 				try
@@ -500,6 +542,29 @@ public class PathTreeView extends TreeView<Path>
         		//this.treeCell.requestFocus(); 
         	} 
         );
+	}
+	
+	public void editItem()
+	{
+		TreeItem<Path> selectedItem = this.getSelectionModel().getSelectedItem();
+		if ( selectedItem == null )
+		{
+			return;
+		}
+		if ( selectedItem == this.getRoot() )
+		{
+			return;
+		}
+		
+        Platform.runLater
+        ( 
+        	()->
+        	{ 
+        		this.requestFocus(); 
+        		this.edit(selectedItem); 
+        	} 
+        );
+		
 	}
 	
 	private Path getNewFolderPath( String strRoot, String strSelf, int cnt, String ext )

@@ -89,11 +89,13 @@ public class DBSettingDialog extends Dialog<MyDBAbstract>
 	// ----------------------------------------
 	private PathTreeView  pathTreeView = new PathTreeView();
 	
-	private Button  btnNewFolder = new Button();
+	private Button  btnNewFolder     = new Button();
 	
 	private Button  btnNewConnection = new Button();
 	
-	private Button  btnDelFolder = new Button();
+	private Button  btnEditFolder    = new Button();
+	
+	private Button  btnDelFolder     = new Button();
 	
 	// ----------------------------------------
 	// [Pane on Dialog(1)]-[Right]
@@ -172,11 +174,14 @@ public class DBSettingDialog extends Dialog<MyDBAbstract>
 		this.btnNewConnection.setGraphic( MyTool.createImageView( 16, 16, this.mainCtrl.getImage( "file:resources/images/file_new.png" ) ) );
 		this.btnNewConnection.setTooltip( new Tooltip(langRB.getString( "TOOLTIP_NEW_CONNECTION" )) );
 		
+		this.btnEditFolder.setGraphic( MyTool.createImageView( 16, 16, this.mainCtrl.getImage( "file:resources/images/edit.png" ) ) );
+		this.btnEditFolder.setTooltip( new Tooltip(langRB.getString( "TOOLTIP_EDIT" )) );
+		
 		this.btnDelFolder.setGraphic( MyTool.createImageView( 16, 16, this.mainCtrl.getImage( "file:resources/images/delete.png" ) ) );
 		this.btnDelFolder.setTooltip( new Tooltip(langRB.getString( "TOOLTIP_DEL" )) );
 		
 		HBox hBoxBtn = new HBox(2);
-		hBoxBtn.getChildren().addAll( this.btnNewFolder, this.btnNewConnection, this.btnDelFolder );
+		hBoxBtn.getChildren().addAll( this.btnNewFolder, this.btnNewConnection, this.btnEditFolder, this.btnDelFolder );
 		
 		VBox vBoxPathTreeView = new VBox(2);
 		vBoxPathTreeView.getChildren().addAll( hBoxBtn, this.pathTreeView );
@@ -308,8 +313,9 @@ public class DBSettingDialog extends Dialog<MyDBAbstract>
 		// set focus on ComboBox for DBType
 		// http://krr.blog.shinobi.jp/javafx/javafx%20ui%E3%82%B3%E3%83%B3%E3%83%88%E3%83%AD%E3%83%BC%E3%83%AB%E3%81%AE%E9%81%B8%E6%8A%9E%E3%83%BB%E3%83%95%E3%82%A9%E3%83%BC%E3%82%AB%E3%82%B9
 		// https://sites.google.com/site/63rabbits3/javafx2/jfx2coding/dialogbox
-		//Platform.runLater( ()->{ this.comboBoxDBType.requestFocus(); } );
 		Platform.runLater( this.pathTreeView::requestFocus );
+		
+		// set location
 		Platform.runLater( ()->MyTool.setWindowLocation( stage, stage.getWidth(), stage.getHeight() ) );
 		
 		// set size
@@ -321,7 +327,6 @@ public class DBSettingDialog extends Dialog<MyDBAbstract>
 		// ----------------------------------------
 		// [Pane on Dialog(1)]-[Left]
 		// ----------------------------------------
-		//this.btnNewFolder.setOnAction
 		this.btnNewFolder.addEventHandler
 		( 
 			ActionEvent.ACTION,
@@ -339,7 +344,6 @@ public class DBSettingDialog extends Dialog<MyDBAbstract>
 			}
 		);
 		
-		//this.btnNewConnection.setOnAction
 		this.btnNewConnection.addEventHandler
 		( 
 			ActionEvent.ACTION,
@@ -355,6 +359,12 @@ public class DBSettingDialog extends Dialog<MyDBAbstract>
 					this.showException(ioEx);
 				}
 			}
+		);
+		
+		this.btnEditFolder.addEventHandler
+		( 
+			ActionEvent.ACTION,
+			(event)->{ this.pathTreeView.editItem(); }
 		);
 
 		this.btnDelFolder.setOnAction

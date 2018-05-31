@@ -74,7 +74,8 @@ public class InitialLoadImage extends InitialLoadAbstract
 				"file:resources/images/folder_new.png",
 				"file:resources/images/file.png",
 				"file:resources/images/file_new.png",
-				"file:resources/images/delete.png"
+				"file:resources/images/delete.png",
+				"file:resources/images/edit.png"
 			};
 	
 		for ( String image : images )

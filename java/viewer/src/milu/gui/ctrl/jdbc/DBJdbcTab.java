@@ -34,7 +34,6 @@ import milu.gui.ctrl.common.inf.CopyInterface;
 import milu.gui.ctrl.common.inf.FocusInterface;
 import milu.gui.ctrl.common.inf.PaneSwitchDriverInterface;
 import milu.gui.ctrl.common.table.ObjTableView;
-//import milu.gui.ctrl.query.SqlTableView;
 import milu.gui.dlg.MyAlertDialog;
 import milu.gui.view.DBView;
 import milu.main.AppConst;

@@ -34,7 +34,6 @@ import javafx.geometry.Rectangle2D;
 
 import milu.gui.ctrl.common.table.ObjTableView;
 import milu.gui.ctrl.common.inf.SetTableViewDataInterface;
-//import milu.gui.ctrl.query.SqlTableView;
 import milu.gui.view.DBView;
 import milu.tool.MyTool;
 

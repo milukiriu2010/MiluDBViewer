@@ -752,7 +752,7 @@ public class ObjTableView extends TableView<List<Object>>
 			}
 			catch( IOException ioEx )
 			{
-				ResourceBundle langRB = this.dbView.getMainController().getLangResource("conf.lang.gui.ctrl.query.SqlTableView");
+				ResourceBundle langRB = this.dbView.getMainController().getLangResource("conf.lang.gui.ctrl.query.ObjTableView");
 				MyAlertDialog alertDlg = new MyAlertDialog(AlertType.WARNING,this.dbView.getMainController());
 				alertDlg.setHeaderText( langRB.getString("TITLE_SAVE_ERROR") );
 	    		alertDlg.setTxtExp( ioEx );
