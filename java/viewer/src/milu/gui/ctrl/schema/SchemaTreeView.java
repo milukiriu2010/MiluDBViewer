@@ -420,78 +420,7 @@ public class SchemaTreeView extends TreeView<SchemaEntity>
 			this.scrollTo(itemTargetId);
 		}
 	}
-	/*
-	public void setInitialData( SchemaEntity rootEntity )
-	{
-		// create Root Item
-		TreeItem<SchemaEntity> itemRoot = this.addItem( null, rootEntity );
-		itemRoot.setExpanded(true);
-		this.setRoot(itemRoot);
-		
-		if ( rootEntity == null )
-		{
-			return;
-		}
-		
-		// ----------------------------------------
-		// -[ROOT]
-		//   -[SCHEMA] => set
-		// ----------------------------------------
-		for ( SchemaEntity schemaEntity: rootEntity.getEntityLst() )
-		{
-			TreeItem<SchemaEntity> item1Schema =
-				this.addItem( itemRoot, schemaEntity );
-			
-			//System.out.println( "schemaEntity.getName():" + schemaEntity.getName() );
-			//System.out.println( "schemaEntity.getEntityLst().size():" + schemaEntity.getEntityLst().size() );
-			
-			// ----------------------------------------
-			// -[ROOT]
-			//   -[SCHEMA]
-			//     -[ROOT_TABLE] => set
-			//     -[ROOT_VIEW]  => set
-			// ----------------------------------------
-			for ( SchemaEntity rootObjEntity: schemaEntity.getEntityLst() )
-			{
-				this.addItem( item1Schema, rootObjEntity );
-			}
-		}
-	}
-	*/
-	/*
-	public void setTableData( TreeItem<SchemaEntity> itemTarget, List<SchemaEntity> tableEntityLst )
-	{
-		for ( SchemaEntity tableEntity : tableEntityLst )
-		{
-			// ---------------------------------------
-			// -[ROOT]
-			//   -[SCHEMA]
-			//     -[ROOT_TABLE]
-			//       -[TABLE]    => add
-			// ---------------------------------------
-			TreeItem<SchemaEntity> item3TableName = 
-				this.addItem( 
-					itemTarget,
-					tableEntity
-				);
-			
-			// ---------------------------------------
-			// -[ROOT]
-			//   -[SCHEMA]
-			//     -[ROOT_TABLE]
-			//       -[TABLE]
-			//         -[INDEX_ROOT] => add
-			// ---------------------------------------
-			for ( SchemaEntity rootObjEntity : tableEntity.getEntityLst() )
-			{
-				this.addItem( item3TableName, rootObjEntity );
-			}
-		}
-		
-		itemTarget.setExpanded(true);
-		this.scrollBack(itemTarget);
-	}
-	*/
+	
 	public void addEntityLst( TreeItem<SchemaEntity> itemTarget, List<SchemaEntity> schemaEntityLst, boolean isExpanded )
 	{
 		// create Root

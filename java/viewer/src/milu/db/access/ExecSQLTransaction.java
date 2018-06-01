@@ -25,7 +25,7 @@ public class ExecSQLTransaction extends ExecSQLAbstract
 			this.colNameLst.add( "Row" );
 			
 			int cnt = stmt.executeUpdate(this.sqlBag.getSQL());
-			List<String> data = new ArrayList<>();
+			List<Object> data = new ArrayList<>();
 			data.add( this.sqlBag.getType().toString().replace("_", " ") );
 			data.add( String.valueOf(cnt) );
 			this.dataLst.add(data);

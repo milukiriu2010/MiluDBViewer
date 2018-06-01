@@ -88,6 +88,9 @@ public class SchemaTreeContextMenu extends ContextMenu
 							ObservableList<TreeItem<SchemaEntity>> itemGrandChildren = itemChild.getChildren();
 							itemChild.getChildren().removeAll( itemGrandChildren );
 						}
+						// clear self data
+						selectedEntity.clearSelfData();
+						// refresh
 						this.dbView.Refresh();
 						break;
 					default:
@@ -96,6 +99,8 @@ public class SchemaTreeContextMenu extends ContextMenu
 						itemSelected.getChildren().removeAll( itemChildren2 );
 						// remove children of selected SchemaEntity
 						selectedEntity.delEntityAll();
+						// clear self data
+						selectedEntity.clearSelfData();
 						// refresh
 						this.dbView.Refresh();
 						break;

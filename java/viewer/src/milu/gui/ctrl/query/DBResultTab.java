@@ -26,7 +26,8 @@ import milu.gui.ctrl.common.inf.ChangeLangInterface;
 import milu.gui.ctrl.common.inf.CopyInterface;
 import milu.gui.ctrl.common.inf.CounterInterface;
 import milu.gui.ctrl.common.inf.ToggleHorizontalVerticalInterface;
-import milu.gui.ctrl.query.SqlTableView;
+import milu.gui.ctrl.common.table.ObjTableView;
+//import milu.gui.ctrl.query.SqlTableView;
 import milu.gui.view.DBView;
 import milu.main.MainController;
 import milu.tool.MyTool;
@@ -50,7 +51,7 @@ public class DBResultTab extends Tab
 	private VBox         lowerPane = new VBox(2);
 	
 	// TableView for SQL result
-	private SqlTableView tableViewSQL = null;
+	private ObjTableView tableViewSQL = null;
 	
 	// Label for SQL result count
 	private Label labelCntSQL = new Label();
@@ -70,7 +71,7 @@ public class DBResultTab extends Tab
 		this.textFieldSQL.setEditable(false);
 		
         // https://docs.oracle.com/javafx/2/ui_controls/table-view.htm
-        this.tableViewSQL = new SqlTableView(this.dbView);
+        this.tableViewSQL = new ObjTableView(this.dbView);
         this.lowerPane.getChildren().add( this.tableViewSQL );
         
 		this.labelCntSQL.getStyleClass().add("DBSqlTab_Label_On_StatusBar");
@@ -144,9 +145,9 @@ public class DBResultTab extends Tab
 		}
 	}
 	
-	public void setDataOnTableViewSQL( List<String> headLst, List<List<String>> dataLst )
+	public void setDataOnTableViewSQL( List<Object> headLst, List<List<Object>> dataLst )
 	{
-		this.tableViewSQL.setTableViewSQL(headLst, dataLst);
+		this.tableViewSQL.setTableViewData(headLst, dataLst);
 		this.setCount( this.tableViewSQL.getRowSize() );
 	}
 	

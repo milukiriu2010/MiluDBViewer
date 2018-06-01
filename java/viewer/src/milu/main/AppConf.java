@@ -1,5 +1,7 @@
 package milu.main;
 
+import milu.net.ProxyType;
+
 /**********************************
  * Application Configuration
  ********************************** 
@@ -39,7 +41,22 @@ final public class AppConf
 	private Boolean postgresExplainTiming  = false;
 	
 	// PostgreSQL - Explain Format
-	private String postgresExplainFormat = "TEXT";
+	private String  postgresExplainFormat = "TEXT";
+	
+	// Proxy Type
+	private ProxyType proxyType = ProxyType.NO_PROXY;
+	
+	// Proxy Host/IP
+	private String  proxyHost = "";
+	
+	// Proxy Port
+	private Integer proxyPort = 8080;
+	
+	// Proxy User
+	private String  proxyUser = "";
+	
+	// Proxy Password
+	private String  proxyPassword = "";
 	
 	public AppConf()
 	{
@@ -174,4 +191,60 @@ final public class AppConf
 	{
 		this.postgresExplainFormat = postgresExplainFormat;
 	}
+	
+	// Proxy Type
+	public ProxyType getProxyType()
+	{
+		return this.proxyType;
+	}
+	
+	public void setProxyType( ProxyType proxyType )
+	{
+		this.proxyType = proxyType;
+	}
+	
+	// Proxy Host/IP
+	public String  getProxyHost()
+	{
+		return this.proxyHost;
+	}
+	
+	public void setProxyHost( String  proxyHost )
+	{
+		this.proxyHost = proxyHost;
+	}
+	
+	// Proxy Port
+	public Integer getProxyPort()
+	{
+		return this.proxyPort;
+	}
+	
+	public void setProxyPort( Integer proxyPort )
+	{
+		this.proxyPort = proxyPort;
+	}
+	
+	// Proxy User
+	public String getProxyUser()
+	{
+		return this.proxyUser;
+	}
+	
+	public void setProxyUser( String proxyUser )
+	{
+		this.proxyUser = proxyUser;
+	}
+	
+	// Proxy Password
+	public String  getProxyPassword()
+	{
+		return this.proxyPassword;
+	}
+	
+	public void setProxyPassword( String proxyPassword )
+	{
+		this.proxyPassword = proxyPassword;
+	}
+	
 }

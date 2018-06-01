@@ -58,6 +58,8 @@ public class AppSettingDialog extends Dialog<Boolean>
 			new TreeItem<>( new AppSettingMenu( langRB.getString( "ITEM_DB_ORACLE" ), AppSettingMenu.APPSET_TYPE.TYPE_DB_ORACLE ) );
 		TreeItem<AppSettingMenu>  treeItemDBPostgreSQL = 
 			new TreeItem<>( new AppSettingMenu( langRB.getString( "ITEM_DB_POSTGRESQL" ), AppSettingMenu.APPSET_TYPE.TYPE_DB_POSTGRESQL ) );
+		TreeItem<AppSettingMenu>  treeItemProxy = 
+			new TreeItem<>( new AppSettingMenu( langRB.getString( "ITEM_PROXY" ), AppSettingMenu.APPSET_TYPE.TYPE_PROXY ) );
 		TreeItem<AppSettingMenu>  treeItemGeneral = 
 			new TreeItem<>( new AppSettingMenu( langRB.getString( "ITEM_GENERAL" ), AppSettingMenu.APPSET_TYPE.TYPE_GENERAL ) );
 
@@ -65,6 +67,7 @@ public class AppSettingDialog extends Dialog<Boolean>
 		treeItemDB.getChildren().add( treeItemDBMySQL );
 		treeItemDB.getChildren().add( treeItemDBOracle );
 		treeItemDB.getChildren().add( treeItemDBPostgreSQL );
+		treeItemRoot.getChildren().add( treeItemProxy );
 		treeItemRoot.getChildren().add( treeItemGeneral );
 		treeItemRoot.setExpanded(true);
 		

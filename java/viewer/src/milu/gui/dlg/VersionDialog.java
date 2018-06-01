@@ -4,17 +4,20 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 import javafx.application.Platform;
+import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
+import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TabPane.TabClosingPolicy;
+import javafx.scene.layout.VBox;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
-import javafx.scene.control.Tab;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
 import milu.main.MainController;
+import milu.net.CheckUpdate;
 import milu.tool.MyTool;
 
 public class VersionDialog extends Dialog<Boolean>
@@ -84,9 +87,33 @@ public class VersionDialog extends Dialog<Boolean>
 		WebView   webView   = new WebView();
 		WebEngine webEngine = webView.getEngine(); 
 		webEngine.load( urlVerInfo.toExternalForm() );
-		this.verTab.setContent( webView );
+		
+		Button btnCheck = new Button("Check");
+		
+		VBox vBox = new VBox(2);
+		vBox.getChildren().addAll( webView, btnCheck );
+		
+		this.verTab.setContent( vBox );
 		ResourceBundle langRB = this.mainCtrl.getLangResource("conf.lang.gui.dlg.VersionDialog");
 		this.verTab.setText( langRB.getString( "TITLE_ABOUT" ) );
+		
+		btnCheck.setOnAction
+		(
+			(event)->
+			{
+				CheckUpdate checkUpdate = new CheckUpdate();
+				checkUpdate.setAppConf(this.mainCtrl.getAppConf());
+				try
+				{
+					String strRecv = checkUpdate.getData();
+					System.out.println( strRecv );
+				}
+				catch ( Exception ex )
+				{
+					ex.printStackTrace();
+				}
+			}
+		);
 	}
 	
 	private void setContentOnLibTab()

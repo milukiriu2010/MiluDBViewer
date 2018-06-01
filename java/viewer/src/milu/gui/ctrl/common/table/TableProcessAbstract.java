@@ -1,6 +1,8 @@
 package milu.gui.ctrl.common.table;
 
 import java.util.List;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.control.TableColumn;
@@ -39,10 +41,19 @@ abstract class TableProcessAbstract
 					Object obj = x.get( index-1 );
 					if ( obj instanceof Number )
 					{
-						//tableCol.setStyle( "-fx-text-alignment: CENTER-RIGHT;" );
-						objTableView.setStyle( "-fx-alignment: CENTER-RIGHT;" );
+						tableCol.setStyle( "-fx-alignment: CENTER-RIGHT;" );
+						return new SimpleObjectProperty<Object>( obj );
 					}
-					return new SimpleObjectProperty<Object>( obj );
+					else if ( obj instanceof Timestamp )
+					{
+						Timestamp ts = (Timestamp)obj;
+						String strTS = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(ts);
+						return new SimpleObjectProperty<Object>( strTS ); 
+					}
+					else
+					{
+						return new SimpleObjectProperty<Object>( obj );
+					}
 				}
 				else
 				{

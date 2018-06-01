@@ -93,7 +93,7 @@ public class ExecSQLExplainOracle extends ExecSQLAbstract
 					}
 					else
 					{
-						List<String> dataRow = new ArrayList<>();
+						List<Object> dataRow = new ArrayList<>();
 						for ( int i = 1; i < split.length; i++ )
 						{
 							dataRow.add( split[i] );
@@ -154,8 +154,8 @@ public class ExecSQLExplainOracle extends ExecSQLAbstract
 			( 
 				(dataRow)->
 				{
-					String strId = dataRow.get(0);
-					strId = strId.replaceAll( "\\*?\\s*(\\d+)\\s*", "$1" );
+					Object strId = dataRow.get(0);
+					strId = strId.toString().replaceAll( "\\*?\\s*(\\d+)\\s*", "$1" );
 					dataRow.add( preInfoMap.get(strId) );
 				}
 			);

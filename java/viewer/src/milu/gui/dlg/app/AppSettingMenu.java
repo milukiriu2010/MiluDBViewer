@@ -9,6 +9,7 @@ class AppSettingMenu
 		TYPE_DB_MYSQL,
 		TYPE_DB_ORACLE,
 		TYPE_DB_POSTGRESQL,
+		TYPE_PROXY,
 		TYPE_GENERAL
 	}
 	

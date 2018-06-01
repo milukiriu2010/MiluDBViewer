@@ -61,7 +61,7 @@ public class ExecExplainAllTask extends Task<Exception>
 		this.updateProgress( 0.0, MAX );
 		int size = -1;
 		long startTimeTotal = -1;
-		List<List<String>> resDataLst = new ArrayList<>();
+		List<List<Object>> resDataLst = new ArrayList<>();
 		
 		try
 		{
@@ -82,7 +82,7 @@ public class ExecExplainAllTask extends Task<Exception>
 				execExplainEach.setSQLBag(sqlBag);
 				execExplainEach.exec();
 				
-				List<String> resData = new ArrayList<>();
+				List<Object> resData = new ArrayList<>();
 				// Script
 				resData.add( "Script" + (i+1) );
 				// Result
@@ -121,7 +121,7 @@ public class ExecExplainAllTask extends Task<Exception>
 				(
 					()->
 					{
-						List<String>       resHeadLst = new ArrayList<>();
+						List<Object>       resHeadLst = new ArrayList<>();
 						resHeadLst.add("Script");
 						resHeadLst.add("Result");
 						resHeadLst.add("Type");

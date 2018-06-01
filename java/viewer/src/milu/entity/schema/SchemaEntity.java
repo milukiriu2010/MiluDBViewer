@@ -305,6 +305,12 @@ abstract public class SchemaEntity
 		this.entityLst.removeAll( this.entityLst );
 	}
 	
+	public void clearSelfData()
+	{
+		this.definitionLst.clear();
+		this.srcSQL = null;
+	}
+	
 	public void accept( VisitorInterface visitor )
 	{
 		visitor.visit(this);

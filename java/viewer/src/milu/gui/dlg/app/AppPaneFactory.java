@@ -28,6 +28,10 @@ class AppPaneFactory implements PaneFactory
 		{
 			appPaneAbs = new AppPaneDBConfPostgres();
 		}
+		else if ( AppSettingMenu.APPSET_TYPE.TYPE_PROXY.equals( key ) )
+		{
+			appPaneAbs = new AppPaneProxy();
+		}
 		else if ( AppSettingMenu.APPSET_TYPE.TYPE_GENERAL.equals( key ) )
 		{
 			appPaneAbs = new AppPaneGeneralConf();

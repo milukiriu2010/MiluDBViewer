@@ -54,11 +54,11 @@ public class ExecSQLExplainSQLite extends ExecSQLAbstract
 			
 			while ( rs.next() )
 			{
-				List<String> dataRow = new ArrayList<String>();
+				List<Object> dataRow = new ArrayList<>();
 				for ( int i = 1; i <= headCnt; i++ )
 				{
-					String colName = this.colNameLst.get( i-1 );
-					dataRow.add( rs.getString( colName ) );
+					Object colName = this.colNameLst.get( i-1 );
+					dataRow.add( rs.getString( (String)colName ) );
 				}
 				dataLst.add( dataRow );
 			}

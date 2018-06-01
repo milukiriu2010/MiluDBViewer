@@ -25,9 +25,9 @@ abstract public class ExecSQLAbstract
 	protected long          execEndTime   = -1;
 	
 	// Column Name List
-	protected List<String>  colNameLst      = new ArrayList<String>();	
+	protected List<Object>  colNameLst      = new ArrayList<>();	
 	// Data List
-	protected List<List<String>> dataLst    = new ArrayList<List<String>>();	
+	protected List<List<Object>> dataLst    = new ArrayList<>();	
 	
 	public void setMyDBAbstract( MyDBAbstract myDBAbs )
 	{
@@ -49,12 +49,12 @@ abstract public class ExecSQLAbstract
 		return ( this.execEndTime - this.execStartTime );
 	}
 	
-	public List<String> getColNameLst()
+	public List<Object> getColNameLst()
 	{
 		return this.colNameLst;
 	}
 	
-	public List<List<String>> getDataLst()
+	public List<List<Object>> getDataLst()
 	{
 		return this.dataLst;
 	}

@@ -102,9 +102,9 @@ public class ExecScriptEach
 		finally
 		{
 			// Result ColumnName
-			List<String>       headLst = execSQLAbs.getColNameLst();
+			List<Object>       headLst = execSQLAbs.getColNameLst();
 			// Result Data
-			List<List<String>> dataLst = execSQLAbs.getDataLst();
+			List<List<Object>> dataLst = execSQLAbs.getDataLst();
 			
 			this.procCnt = dataLst.size();
 			
