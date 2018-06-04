@@ -44,6 +44,7 @@ import net.sf.jsqlparser.util.cnfexpression.MultipleExpression;
 import net.sf.jsqlparser.expression.operators.arithmetic.Multiplication;
 
 import net.sf.jsqlparser.statement.insert.Insert;
+import net.sf.jsqlparser.statement.alter.Alter;
 
 import net.sf.jsqlparser.expression.Expression;
 import net.sf.jsqlparser.expression.Alias;
@@ -270,6 +271,7 @@ public class JSQLParseExample2 extends Application
 	
 	private void process( Statement stmt, StringBuffer sb )
 	{
+		System.out.println( "SQL:" + stmt );
 		if ( stmt instanceof Select )
 		{
 			Select select = (Select)stmt;
@@ -293,6 +295,13 @@ public class JSQLParseExample2 extends Application
 				processColumn( column, 0, sb );
 				sb.append( "----------------------" );
 			}
+		}
+		else if ( stmt instanceof Alter )
+		{
+			Alter alter = (Alter)stmt;
+			sb.append( "=== Alter Table ================\n" );
+			Table table = alter.getTable();
+			sb.append( table.getName() );
 		}
 	}
 	

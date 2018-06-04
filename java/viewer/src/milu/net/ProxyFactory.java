@@ -14,7 +14,7 @@ public class ProxyFactory
 		}
 		else if ( ProxyType.SYSTEM.equals(proxyType) )
 		{
-			
+			proxyAbs = new ProxySystem();
 		}
 		else if ( ProxyType.MANUAL.equals(proxyType) )
 		{

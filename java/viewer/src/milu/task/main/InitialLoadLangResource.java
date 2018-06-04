@@ -18,7 +18,6 @@ public class InitialLoadLangResource extends InitialLoadAbstract
 			"conf.lang.gui.ctrl.menu.MainMenuBar",
 			"conf.lang.gui.ctrl.menu.MainToolBar",
 			"conf.lang.gui.ctrl.query.DBSqlTab",
-			"conf.lang.gui.ctrl.query.SqlTableView",
 			"conf.lang.gui.ctrl.schema.DBSchemaTab",
 			"conf.lang.gui.ctrl.schema.SchemaTreeView",
 			"conf.lang.gui.dlg.VersionDialog",

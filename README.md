@@ -14,8 +14,8 @@
 
 # Install & Run
 
-1. This app requires JDK 9 or later.
-   [JDK 9 Download from Oracle](http://www.oracle.com/technetwork/java/javase/downloads/jdk9-downloads-3848520.html)
+1. This app requires JDK 10 or later.
+   [JDK 10 Download from Oracle](http://www.oracle.com/technetwork/java/javase/downloads/jdk10-downloads-4416644.html)
 
 2-1. Windows
 (1) run "MiluDBViewer_Setup*.*.*.exe"
@@ -65,6 +65,7 @@ Supported Objects
 x|Table|View|Materialized View|Function|Aggregate|Procedure|Package|Type|Trigger|Sequence
 -|-----|----|-----------------|--------|---------|---------|-------|----|-------|--------
 Cassandra|〇|×|〇|〇|〇|×|×|〇|×|×
+MongoDB|〇|×|×|×|×|×|×|×|×|×
 MySQL|〇|〇|×|〇|×|〇|×|〇|×
 Oracle|〇|〇|〇|〇|×|〇|〇|〇|〇|〇
 PostgreSQL|〇|〇|〇|〇|×|×|×|〇|〇|〇
@@ -79,6 +80,7 @@ SQLServer|〇|〇|×|〇|×|〇|×|〇|〇|〇
 # Configuration to connect to DB
 
 - [Cassandra](doc/en/START_Cassandra.md)
+- [MongoDB](doc/en/START_MongoDB.md)
 - [MySQL](doc/en/START_MySQL.md)
 - [Oracle](doc/en/START_Oracle.md)
 - [PostgreSQL](doc/en/START_PostgreSQL.md)

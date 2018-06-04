@@ -9,5 +9,5 @@
 3. Choose "JDBC Driver Path(.jar)" by "Add". Input "com.microsoft.sqlserver.jdbc.SQLServerDriver" as "JDBC Driver Class Name". Other items are optional. Click "Load".
 ![alt tag](a02.add_driver_SQLServer.png)
 
-4. Create an icon for connection on bookmark. Select "SQLServer". Choose "File Name". At last, Click "Connect".
+4. Create an icon for connection on bookmark. Select "SQLServer". Input "DB Name","Host/IP","Port". Click "Connect".
 ![alt tag](a03.connect_SQLServer.png)

@@ -14,8 +14,8 @@
 
 # インストールと起動
 
-1. このアプリは JDK 9以上を必要としています.
-   [JDK 9 ダウンロード - Oracle](http://www.oracle.com/technetwork/java/javase/downloads/jdk9-downloads-3848520.html)
+1. このアプリは JDK 10以上を必要としています.
+   [JDK 10 ダウンロード - Oracle](http://www.oracle.com/technetwork/java/javase/downloads/jdk10-downloads-4416644.html)
 
 2-1. Windows
 (1) "MiluDBViewer_Setup*.*.*.exe"を実行してインストールしてください。
@@ -64,6 +64,7 @@
 x|Table|View|Materialized View|Function|Aggregate|Procedure|Package|Type|Trigger|Sequence
 -|-----|----|-----------------|--------|---------|---------|-------|----|-------|--------
 Cassandra|〇|×|〇|〇|〇|×|×|〇|×|×
+MongoDB|〇|×|×|×|×|×|×|×|×|×
 MySQL|〇|〇|×|〇|×|〇|×|〇|×
 Oracle|〇|〇|〇|〇|×|〇|〇|〇|〇|〇
 PostgreSQL|〇|〇|〇|〇|×|×|×|〇|〇|〇
@@ -78,6 +79,7 @@ SQLServer|〇|〇|×|〇|×|〇|×|〇|〇|〇
 # DB接続の設定
 
 - [Cassandra](doc/ja/START_Cassandra.md)
+- [MongoDB](doc/jp/START_MongoDB.md)
 - [MySQL](doc/ja/START_MySQL.md)
 - [Oracle](doc/ja/START_Oracle.md)
 - [PostgreSQL](doc/ja/START_PostgreSQL.md)

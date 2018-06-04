@@ -1,3 +1,9 @@
+-- # 
+-- # 
+-- # To see function & procedure lists, "execute privileges" & "select mysql.proc" are required.
+-- # 
+-- # 
+
 create user 'milu'@'localhost' identified by 'milu';
 
 grant select on *.* to 'milu'@'localhost';
@@ -19,8 +25,10 @@ grant execute on *.* to 'milu'@'%';
 
 flush privileges;
 
------------------------------------------------------
+-- # ---------------------------------------------------
 
 create user 'user01'@'localhost' identified by 'user01';
 
 grant select on sakila.* to 'user01'@'localhost';
+
+

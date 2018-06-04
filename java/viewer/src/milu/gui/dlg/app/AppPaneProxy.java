@@ -59,6 +59,7 @@ public class AppPaneProxy extends AppPaneAbstract
 			FXCollections.observableArrayList( ProxyType.NO_PROXY, ProxyType.SYSTEM, ProxyType.MANUAL );
 		cbxProxyType.setItems(proxyTypeLst);
 		cbxProxyType.getSelectionModel().select(appConf.getProxyType());
+		this.setDisableInput(appConf.getProxyType());
 		cbxProxyType.setConverter
 		(
 			new StringConverter<ProxyType>()
@@ -123,7 +124,32 @@ public class AppPaneProxy extends AppPaneAbstract
 	
 	private void setAction()
 	{
-		
+		this.cbxProxyType.valueProperty().addListener( (obs,oldVal,newVal)->this.setDisableInput(newVal) );
+	}
+	
+	private void setDisableInput( ProxyType proxyType )
+	{
+		if ( ProxyType.NO_PROXY.equals(proxyType) )
+		{
+			this.txtHost.setDisable(true);
+			this.txtPort.setDisable(true);
+			this.txtUser.setDisable(true);
+			this.txtPwd.setDisable(true);
+		}
+		else if ( ProxyType.SYSTEM.equals(proxyType) )
+		{
+			this.txtHost.setDisable(true);
+			this.txtPort.setDisable(true);
+			this.txtUser.setDisable(false);
+			this.txtPwd.setDisable(false);
+		}
+		else
+		{
+			this.txtHost.setDisable(false);
+			this.txtPort.setDisable(false);
+			this.txtUser.setDisable(false);
+			this.txtPwd.setDisable(false);
+		}
 	}
 
 	@Override
@@ -133,6 +159,7 @@ public class AppPaneProxy extends AppPaneAbstract
 		
 		appConf.setProxyType( this.cbxProxyType.getValue() );
 		appConf.setProxyHost( this.txtHost.getText() );
+		appConf.setProxyPort( Integer.valueOf(this.txtPort.getText()) );
 		appConf.setProxyUser( this.txtUser.getText() );
 		appConf.setProxyPassword( this.txtPwd.getText() );
 		

@@ -2,20 +2,27 @@ package milu.gui.dlg;
 
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.text.MessageFormat;
+import java.io.BufferedInputStream;
+import java.io.DataInputStream;
+import java.io.IOException;
 
 import javafx.application.Platform;
+import javafx.scene.control.Label;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TabPane.TabClosingPolicy;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import javafx.scene.layout.BorderPane;
+import javafx.geometry.Insets;
 import javafx.stage.Stage;
-
+import milu.main.AppConst;
 import milu.main.MainController;
 import milu.net.CheckUpdate;
 import milu.tool.MyTool;
@@ -85,13 +92,45 @@ public class VersionDialog extends Dialog<Boolean>
 	{
 		URL urlVerInfo = getClass().getResource( "/conf/html/dlg/verinfo.html" );
 		WebView   webView   = new WebView();
-		WebEngine webEngine = webView.getEngine(); 
-		webEngine.load( urlVerInfo.toExternalForm() );
+		WebEngine webEngine = webView.getEngine();
+		//webEngine.load( urlVerInfo.toExternalForm() );
+		StringBuffer sb = new StringBuffer();
+		String strFmt = null;
+		try
+		{
+			// https://www.mkyong.com/java/how-to-read-file-from-java-bufferedinputstream-example/
+			BufferedInputStream bis = (BufferedInputStream)urlVerInfo.getContent();
+			DataInputStream     dis = new DataInputStream(bis);
+			int readSize = 0;
+			int pos = 0;
+			while ( ( readSize = dis.available() ) > 0 )
+			{
+				byte[] b = new byte [readSize];
+				dis.read( b, pos, readSize );
+				pos += readSize;
+				sb.append( new String( b ) );
+			}
+			strFmt = sb.toString();
+		}
+		catch ( IOException ioEx )
+		{
+			ioEx.printStackTrace();
+			return;
+		}
+		webEngine.loadContent( MessageFormat.format( strFmt, AppConst.VER.val(), AppConst.UPDATE_DATE.val() ) );
 		
-		Button btnCheck = new Button("Check");
+		Button btnCheck = new Button("Check for Update");
+		
+		Label  lblCheck = new Label();
+		
+		HBox hBox = new HBox(2);
+		hBox.setPadding( new Insets( 10, 10, 10, 10 ) );
+		hBox.setSpacing(10);
+		hBox.getChildren().addAll( btnCheck, lblCheck );
 		
 		VBox vBox = new VBox(2);
-		vBox.getChildren().addAll( webView, btnCheck );
+		vBox.setPadding( new Insets( 10, 10, 10, 10 ) );
+		vBox.getChildren().addAll( webView, hBox );
 		
 		this.verTab.setContent( vBox );
 		ResourceBundle langRB = this.mainCtrl.getLangResource("conf.lang.gui.dlg.VersionDialog");
@@ -105,12 +144,21 @@ public class VersionDialog extends Dialog<Boolean>
 				checkUpdate.setAppConf(this.mainCtrl.getAppConf());
 				try
 				{
-					String strRecv = checkUpdate.getData();
-					System.out.println( strRecv );
+					boolean isExistNew = checkUpdate.check();
+					String newVersion = checkUpdate.getNewVersion();
+					if ( isExistNew )
+					{
+						lblCheck.setText( "New Verion is Found.(" + newVersion + ")" );
+					}
+					else
+					{
+						lblCheck.setText( "This version is up-to-date." );
+					}
 				}
 				catch ( Exception ex )
 				{
 					ex.printStackTrace();
+					lblCheck.setText( "Check proxy configuration." );
 				}
 			}
 		);

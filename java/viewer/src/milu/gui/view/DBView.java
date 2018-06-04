@@ -127,7 +127,6 @@ public class DBView extends Stage
         		"/conf/css/ctrl/common/table/ObjTableView.css",
         		"/conf/css/ctrl/menu/MainToolBar.css",
         		"/conf/css/ctrl/query/DBSqlTab.css",
-        		"/conf/css/ctrl/query/SqlTableView.css",
         		"/conf/css/ctrl/query/SqlTextArea.css",
         		"/conf/css/ctrl/schema/SchemaTreeView.css",
         		"/conf/css/ctrl/schema/SchemaERView.css"

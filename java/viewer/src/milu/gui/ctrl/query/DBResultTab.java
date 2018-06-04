@@ -27,7 +27,6 @@ import milu.gui.ctrl.common.inf.CopyInterface;
 import milu.gui.ctrl.common.inf.CounterInterface;
 import milu.gui.ctrl.common.inf.ToggleHorizontalVerticalInterface;
 import milu.gui.ctrl.common.table.ObjTableView;
-//import milu.gui.ctrl.query.SqlTableView;
 import milu.gui.view.DBView;
 import milu.main.MainController;
 import milu.tool.MyTool;
@@ -47,7 +46,7 @@ public class DBResultTab extends Tab
 	// TextField for SQL
 	private TextField  textFieldSQL = new TextField(); 
 	
-	// "SqlTableView & Warning Message" on this Pane.
+	// "ObjTableView & Warning Message" on this Pane.
 	private VBox         lowerPane = new VBox(2);
 	
 	// TableView for SQL result
