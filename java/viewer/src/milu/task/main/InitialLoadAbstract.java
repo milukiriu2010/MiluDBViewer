@@ -29,7 +29,7 @@ abstract public class InitialLoadAbstract
 	{
 		this.assignedSize = assignedSize;
 	}
-	
+	/*
 	protected void showException( Exception ex )
 	{
 		MyAlertDialog alertDlg = new MyAlertDialog( AlertType.WARNING, this.mainCtrl );
@@ -38,7 +38,8 @@ abstract public class InitialLoadAbstract
 		alertDlg.setTxtExp( ex );
 		alertDlg.showAndWait();
 		alertDlg = null;
-	}	
+	}
+	*/	
 
 	abstract public void load();
 }

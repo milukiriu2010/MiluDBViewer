@@ -220,7 +220,8 @@ public class DBJdbcTab extends Tab
 				}
 				catch ( SQLException sqlEx )
 				{
-					this.showException( sqlEx );
+					//this.showException( sqlEx );
+					MyTool.showException( this.dbView.getMainController(), "conf.lang.gui.common.MyAlert", "TITLE_MISC_ERROR", sqlEx );
 				}
 				finally
 				{
@@ -321,10 +322,12 @@ public class DBJdbcTab extends Tab
 		}
 		catch ( SQLException sqlEx )
 		{
-			this.showException( sqlEx );
+			//this.showException( sqlEx );
+			MyTool.showException( this.dbView.getMainController(), "conf.lang.gui.common.MyAlert", "TITLE_MISC_ERROR", sqlEx );
 		}
 	}
 	
+	/*
 	private void showException( Exception ex )
 	{
 		MainController mainCtrl = this.dbView.getMainController();
@@ -335,6 +338,7 @@ public class DBJdbcTab extends Tab
 		alertDlg.showAndWait();
 		alertDlg = null;
 	}
+	*/
 	
 	@Override
 	public void driverAdd( DriverShim driver )

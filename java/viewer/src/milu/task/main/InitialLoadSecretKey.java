@@ -8,6 +8,7 @@ import milu.file.ext.MyFileExtAbstract;
 import milu.file.ext.MyFileExtFactory;
 import milu.main.AppConst;
 import milu.security.MySecurityKey;
+import milu.tool.MyTool;
 
 public class InitialLoadSecretKey extends InitialLoadAbstract 
 {
@@ -34,7 +35,8 @@ public class InitialLoadSecretKey extends InitialLoadAbstract
 		}
 		catch ( Exception ex )
 		{
-			this.showException(ex);
+			//this.showException(ex);
+			MyTool.showException( this.mainCtrl, "conf.lang.gui.common.MyAlert", "TITLE_MISC_ERROR", ex );
 		}
 		finally
 		{

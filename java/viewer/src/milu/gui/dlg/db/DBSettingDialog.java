@@ -190,7 +190,7 @@ public class DBSettingDialog extends Dialog<MyDBAbstract>
 		// [Pane on Dialog(1)]-[Right]
 		// ----------------------------------------
 		// ComboBox for DB type(Oracle/MySQL/PostgreSQL...)
-		List<MyDBAbstract> myDBAbsLst = new ArrayList<MyDBAbstract>();
+		List<MyDBAbstract> myDBAbsLst = new ArrayList<>();
 		Enumeration<Driver> drivers = DriverManager.getDrivers();
 		while (drivers.hasMoreElements())
 		{
@@ -339,7 +339,8 @@ public class DBSettingDialog extends Dialog<MyDBAbstract>
 				}
 				catch ( IOException ioEx )
 				{
-					this.showException(ioEx);
+					//this.showException(ioEx);
+					MyTool.showException( this.mainCtrl, "conf.lang.gui.common.MyAlert", "TITLE_MISC_ERROR", ioEx );
 				}
 			}
 		);
@@ -356,7 +357,8 @@ public class DBSettingDialog extends Dialog<MyDBAbstract>
 				}
 				catch ( IOException ioEx )
 				{
-					this.showException(ioEx);
+					//this.showException(ioEx);
+					MyTool.showException( this.mainCtrl, "conf.lang.gui.common.MyAlert", "TITLE_MISC_ERROR", ioEx );
 				}
 			}
 		);
@@ -377,7 +379,8 @@ public class DBSettingDialog extends Dialog<MyDBAbstract>
 				}
 				catch ( IOException ioEx )
 				{
-					this.showException(ioEx);
+					//this.showException(ioEx);
+					MyTool.showException( this.mainCtrl, "conf.lang.gui.common.MyAlert", "TITLE_MISC_ERROR", ioEx );
 				}
 			}
 		);
@@ -463,11 +466,13 @@ public class DBSettingDialog extends Dialog<MyDBAbstract>
 							}
 							catch ( IOException ioEx )
 							{
-								this.showException(ioEx);
+								//this.showException(ioEx);
+								MyTool.showException( this.mainCtrl, "conf.lang.gui.common.MyAlert", "TITLE_MISC_ERROR", ioEx );
 							}
 							catch ( Exception ex )
 							{
-								this.showException(ex);
+								//this.showException(ex);
+								MyTool.showException( this.mainCtrl, "conf.lang.gui.common.MyAlert", "TITLE_MISC_ERROR", ex );
 							}
 						}
 					}
@@ -593,15 +598,19 @@ public class DBSettingDialog extends Dialog<MyDBAbstract>
 		*/
 		catch ( SQLException sqlEx )
 		{
+			/*
     		MyAlertDialog alertDlg = new MyAlertDialog( AlertType.WARNING, this.mainCtrl );
     		ResourceBundle langRB = this.mainCtrl.getLangResource("conf.lang.gui.common.MyAlert");
     		alertDlg.setHeaderText( langRB.getString( "TITLE_DB_CONNECT_ERROR" ) );
     		alertDlg.setTxtExp( sqlEx );
     		alertDlg.showAndWait();
+    		*/
+			MyTool.showException( this.mainCtrl, "conf.lang.gui.common.MyAlert", "TITLE_DB_CONNECT_ERROR", sqlEx );
 		}
 		catch ( Exception ex )
 		{
-			this.showException(ex);
+			//this.showException(ex);
+			MyTool.showException( this.mainCtrl, "conf.lang.gui.common.MyAlert", "TITLE_MISC_ERROR", ex );
 		}
 		
 		// If DB connection is failed, this dialog keeps to open.
@@ -612,7 +621,7 @@ public class DBSettingDialog extends Dialog<MyDBAbstract>
 			event.consume();
 		}
 	}
-	
+	/*
 	private void showException( Exception ex )
 	{
 		MyAlertDialog alertDlg = new MyAlertDialog( AlertType.WARNING, this.mainCtrl );
@@ -621,7 +630,7 @@ public class DBSettingDialog extends Dialog<MyDBAbstract>
 		alertDlg.setTxtExp( ex );
 		alertDlg.showAndWait();
 	}
-	
+	*/
 	private void setDisableAllButton( boolean disable )
 	{
 		ObservableList<ButtonType>  btnTypeLst = this.getDialogPane().getButtonTypes();
@@ -739,7 +748,8 @@ public class DBSettingDialog extends Dialog<MyDBAbstract>
 		}
 		catch ( Exception ex )
 		{
-			this.showException(ex);
+			//this.showException(ex);
+			MyTool.showException( this.mainCtrl, "conf.lang.gui.common.MyAlert", "TITLE_MISC_ERROR", ex );
 		}
 	}
 }

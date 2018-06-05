@@ -26,6 +26,7 @@ import milu.gui.ctrl.common.inf.PaneSwitchDriverInterface;
 import milu.gui.dlg.MyAlertDialog;
 import milu.main.AppConst;
 import milu.main.MainController;
+import milu.tool.MyTool;
 
 public class DriverControlPane extends Pane 
 {
@@ -239,7 +240,7 @@ public class DriverControlPane extends Pane
 					}
 					catch ( SQLException sqlEx )
 					{
-						this.showException( sqlEx );
+						MyTool.showException( this.mainCtrl, "conf.lang.gui.common.MyAlert", "TITLE_MISC_ERROR", sqlEx );
 					}
 				}
 				
@@ -259,7 +260,7 @@ public class DriverControlPane extends Pane
 				}
 				catch ( Exception ex )
 				{
-					this.showException(ex);
+					MyTool.showException( this.mainCtrl, "conf.lang.gui.common.MyAlert", "TITLE_MISC_ERROR", ex );
 				}
 				finally
 				{
@@ -278,6 +279,7 @@ public class DriverControlPane extends Pane
 		this.btnCancel.setOnAction( (event)->this.psdInf.driverCancel() );
 	}
 	
+	/*
 	private void showException( Exception ex )
 	{
 		MyAlertDialog alertDlg = new MyAlertDialog( AlertType.WARNING, this.mainCtrl );
@@ -287,6 +289,7 @@ public class DriverControlPane extends Pane
 		alertDlg.showAndWait();
 		alertDlg = null;
 	}
+	*/
 	
 	// https://gist.github.com/skrb/6389257
 	class EditListCell extends ListCell<String>

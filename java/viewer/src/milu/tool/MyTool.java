@@ -6,6 +6,7 @@ import java.io.StringWriter;
 import java.lang.reflect.Constructor;
 import java.util.Collections;
 import java.util.List;
+import java.util.ResourceBundle;
 
 import javafx.geometry.Bounds;
 import javafx.geometry.Orientation;
@@ -22,6 +23,7 @@ import javafx.scene.shape.Path;
 import javafx.stage.Screen;
 import javafx.stage.Window;
 import javafx.scene.control.ScrollBar;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.effect.Blend;
 import javafx.scene.effect.BlendMode;
 import java.awt.MouseInfo;
@@ -29,6 +31,7 @@ import java.awt.Point;
 
 import milu.entity.schema.SchemaEntity;
 import milu.main.MainController;
+import milu.gui.dlg.MyAlertDialog;
 import milu.gui.view.DBView;
 
 public class MyTool
@@ -375,51 +378,6 @@ public class MyTool
 		return obj;
 	}
 	
-	/*
-	public static Point2D getMousePosOnScreen()
-	{
-		Point p = MouseInfo.getPointerInfo().getLocation();
-		Point2D pd = new Point2D( p.x, p.y );
-		return pd;
-	}
-	
-	public static Point2D getRightWindowPos( Point2D p, double w, double h )
-	{
-		List<Screen> screens = Screen.getScreens();
-		for ( Screen screen : screens )
-		{
-			Rectangle2D screenBounds = screen.getBounds();
-			if ( screenBounds.contains(p) )
-			{
-				//System.out.println( "getRightWindowPos:contains" );
-				double x = screenBounds.getWidth();
-				double y = screenBounds.getHeight();
-				//System.out.println( "screenBx:"     + screenBounds.getWidth()  + ":y:" + screenBounds.getHeight() );
-				//System.out.println( "p2     x:"     + p2.getX()  + ":y:" + p2.getY() );
-				x = (x - w)/2 + screenBounds.getMinX();
-				y = (y - h)/2 + screenBounds.getMinY();
-				return new Point2D(x,y);
-			}
-		}
-		return new Point2D(0,0);
-	}
-	
-	public static Screen getActiveScreen()
-	{
-		Point2D p = MyTool.getMousePosOnScreen();
-		List<Screen> screens = Screen.getScreens();
-		for ( Screen screen : screens )
-		{
-			Rectangle2D screenBounds = screen.getBounds();
-			if ( screenBounds.contains(p) )
-			{
-				return screen;
-			}
-		}
-		return Screen.getPrimary();
-	}
-	*/
-	
 	public static void setWindowLocation( Window window, double w, double h )
 	{
 		double x = 0.0;
@@ -445,5 +403,35 @@ public class MyTool
 		}
 		window.setX(x);
 		window.setY(y);
+	}
+	
+	public static void showException( MainController mainCtrl, String resourceName, String headID, Exception ex )
+	{
+		MyAlertDialog alertDlg = new MyAlertDialog( AlertType.WARNING, mainCtrl );
+		ResourceBundle langRB = mainCtrl.getLangResource(resourceName);
+		alertDlg.setHeaderText( langRB.getString(headID) );
+		alertDlg.setTxtExp( ex );
+		alertDlg.showAndWait();
+		alertDlg = null;
+	}
+	
+	public static void showException( MainController mainCtrl, String resourceName, String headID, Exception ex, String msgID )
+	{
+		MyAlertDialog alertDlg = new MyAlertDialog( AlertType.WARNING, mainCtrl );
+		ResourceBundle langRB = mainCtrl.getLangResource(resourceName);
+		alertDlg.setHeaderText( langRB.getString(headID) );
+		alertDlg.setTxtExp( ex, langRB.getString(msgID) );
+		alertDlg.showAndWait();
+		alertDlg = null;
+	}
+	
+	public static void showMsg( MainController mainCtrl, String resourceName, String headID, String msgID )
+	{
+		MyAlertDialog alertDlg = new MyAlertDialog( AlertType.WARNING, mainCtrl );
+		ResourceBundle langRB = mainCtrl.getLangResource(resourceName);
+		alertDlg.setHeaderText( langRB.getString(headID) );
+		alertDlg.setTxtMsg( langRB.getString(msgID) );
+		alertDlg.showAndWait();
+		alertDlg = null;
 	}
 }

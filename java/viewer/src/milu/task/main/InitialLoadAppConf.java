@@ -6,6 +6,7 @@ import milu.file.json.MyJsonHandleAbstract;
 import milu.file.json.MyJsonHandleFactory;
 import milu.main.AppConf;
 import milu.main.AppConst;
+import milu.tool.MyTool;
 
 public class InitialLoadAppConf extends InitialLoadAbstract 
 {
@@ -36,7 +37,8 @@ public class InitialLoadAppConf extends InitialLoadAbstract
 		{
 			// "app_conf.json" exists
 			// but, cannot read.
-			this.showException(ex);
+			//this.showException(ex);
+			MyTool.showException( this.mainCtrl, "conf.lang.gui.common.MyAlert", "TITLE_MISC_ERROR", ex );
 		}
 		finally
 		{

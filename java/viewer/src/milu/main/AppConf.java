@@ -1,6 +1,19 @@
 package milu.main;
 
+import java.io.UnsupportedEncodingException;
+import java.security.InvalidAlgorithmParameterException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
+import javax.crypto.SecretKey;
+
+import com.google.gson.annotations.Expose;
+
 import milu.net.ProxyType;
+import milu.security.MySecurityKey;
 
 /**********************************
  * Application Configuration
@@ -11,52 +24,76 @@ import milu.net.ProxyType;
 final public class AppConf
 {
 	// Max fetch rows when selecting.
+	@Expose(serialize = true, deserialize = true)
 	private Integer fetchMax = 100;
 	
 	// MySQL - Explain Extended
+	@Expose(serialize = true, deserialize = true)
 	private Boolean mysqlExplainExtended   = false;
 	
 	// MySQL - Explain Partitions
+	@Expose(serialize = true, deserialize = true)
 	private Boolean mysqlExplainPartitions = false;
 	
 	// MySQL - Explain Format
+	@Expose(serialize = true, deserialize = true)
 	private String  mysqlExplainFormat     = "TRADITIONAL";
 	
 	// Oracle - TNS Admin
+	@Expose(serialize = true, deserialize = true)
 	private String  oracleTnsAdmin = "";
 	
 	// PostgreSQL - Explain Analyze
+	@Expose(serialize = true, deserialize = true)
 	private Boolean postgresExplainAnalyze = false;
 	
 	// PostgreSQL - Explain Verbose
+	@Expose(serialize = true, deserialize = true)
 	private Boolean postgresExplainVerbose = false;
 	
 	// PostgreSQL - Explain Costs
+	@Expose(serialize = true, deserialize = true)
 	private Boolean postgresExplainCosts   = true;
 	
 	// PostgreSQL - Explain Buffers
+	@Expose(serialize = true, deserialize = true)
 	private Boolean postgresExplainBuffers = false;
 	
 	// PostgreSQL - Explain Timing
+	@Expose(serialize = true, deserialize = true)
 	private Boolean postgresExplainTiming  = false;
 	
 	// PostgreSQL - Explain Format
+	@Expose(serialize = true, deserialize = true)
 	private String  postgresExplainFormat = "TEXT";
 	
 	// Proxy Type
+	@Expose(serialize = true, deserialize = true)
 	private ProxyType proxyType = ProxyType.NO_PROXY;
 	
 	// Proxy Host/IP
+	@Expose(serialize = true, deserialize = true)
 	private String  proxyHost = "";
 	
 	// Proxy Port
+	@Expose(serialize = true, deserialize = true)
 	private Integer proxyPort = 8080;
 	
 	// Proxy User
+	@Expose(serialize = true, deserialize = true)
 	private String  proxyUser = "";
 	
 	// Proxy Password
+	@Expose(serialize = false, deserialize = true)
 	private String  proxyPassword = "";
+	
+	// Proxy Password(Encrypted)
+	@Expose(serialize = true, deserialize = true)
+	private String  proxyPasswordEnc = "";
+	
+	// Initial Vector
+	@Expose(serialize = true, deserialize = true)
+	private byte[]  proxyIV = null;
 	
 	public AppConf()
 	{
@@ -247,4 +284,70 @@ final public class AppConf
 		this.proxyPassword = proxyPassword;
 	}
 	
+	public void setProxyPassword( SecretKey secretKey )
+		throws 
+			NoSuchAlgorithmException, 
+			NoSuchPaddingException,
+			InvalidKeyException,
+			InvalidAlgorithmParameterException,
+			BadPaddingException,
+			IllegalBlockSizeException,
+			UnsupportedEncodingException
+	{
+		//System.out.println( "AppConf.setProxyPassword" );
+		if ( secretKey == null )
+		{
+			return;
+		}
+		if ( this.proxyPasswordEnc == null || this.proxyPasswordEnc.length() == 0 )
+		{
+			return;
+		}
+		if ( this.proxyIV == null )
+		{
+			return;
+		}
+		
+		MySecurityKey mySecKey = new MySecurityKey();
+		this.proxyPassword = mySecKey.decrypt( secretKey, this.proxyIV, this.proxyPasswordEnc );
+		//System.out.println( "Decode(setProxyPassword):before:" + this.proxyPasswordEnc );
+		//System.out.println( "Decode(setProxyPassword):after :" + this.proxyPassword );
+	}
+	
+	public String getProxyPasswordEnc()
+	{
+		return this.proxyPasswordEnc;
+	}
+	
+	
+	public void setProxyPasswordEnc( SecretKey secretKey )
+		throws 
+			NoSuchAlgorithmException, 
+			NoSuchPaddingException,
+			InvalidKeyException,
+			InvalidAlgorithmParameterException,
+			BadPaddingException,
+			IllegalBlockSizeException
+	{
+		//System.out.println( "AppConf.setProxyPasswordEnc" );
+		if ( secretKey == null )
+		{
+			return;
+		}
+		if ( this.proxyPassword == null || this.proxyPassword.length() == 0 )
+		{
+			return;
+		}
+		
+		MySecurityKey mySecKey = new MySecurityKey();
+		this.proxyIV = mySecKey.createIV();
+		this.proxyPasswordEnc = mySecKey.encrypt( secretKey, this.proxyIV, this.proxyPassword );
+		//System.out.println( "Encode(AppConf.setProxyPasswordEnc):before:" + this.proxyPassword );
+		//System.out.println( "Encode(AppConf.setProxyPasswordEnc):after :" + this.proxyPasswordEnc );
+	}
+	
+	public byte[] getProxyIV()
+	{
+		return this.proxyIV;
+	}	
 }

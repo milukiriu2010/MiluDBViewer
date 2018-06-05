@@ -9,6 +9,7 @@ import java.io.IOException;
 
 import javafx.application.Platform;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
@@ -90,6 +91,8 @@ public class VersionDialog extends Dialog<Boolean>
 	
 	private void setContentOnVerTab()
 	{
+		ResourceBundle langRB = this.mainCtrl.getLangResource("conf.lang.gui.dlg.VersionDialog");
+		
 		URL urlVerInfo = getClass().getResource( "/conf/html/dlg/verinfo.html" );
 		WebView   webView   = new WebView();
 		WebEngine webEngine = webView.getEngine();
@@ -119,9 +122,13 @@ public class VersionDialog extends Dialog<Boolean>
 		}
 		webEngine.loadContent( MessageFormat.format( strFmt, AppConst.VER.val(), AppConst.UPDATE_DATE.val() ) );
 		
-		Button btnCheck = new Button("Check for Update");
+		Button btnCheck = new Button( langRB.getString("BTN_CHECK_UPDATE") );
 		
 		Label  lblCheck = new Label();
+		
+		TextField txtErrMsg = new TextField();
+		txtErrMsg.setEditable(false);
+		txtErrMsg.visibleProperty().setValue(false);
 		
 		HBox hBox = new HBox(2);
 		hBox.setPadding( new Insets( 10, 10, 10, 10 ) );
@@ -130,10 +137,9 @@ public class VersionDialog extends Dialog<Boolean>
 		
 		VBox vBox = new VBox(2);
 		vBox.setPadding( new Insets( 10, 10, 10, 10 ) );
-		vBox.getChildren().addAll( webView, hBox );
+		vBox.getChildren().addAll( webView, hBox, txtErrMsg );
 		
 		this.verTab.setContent( vBox );
-		ResourceBundle langRB = this.mainCtrl.getLangResource("conf.lang.gui.dlg.VersionDialog");
 		this.verTab.setText( langRB.getString( "TITLE_ABOUT" ) );
 		
 		btnCheck.setOnAction
@@ -148,17 +154,24 @@ public class VersionDialog extends Dialog<Boolean>
 					String newVersion = checkUpdate.getNewVersion();
 					if ( isExistNew )
 					{
-						lblCheck.setText( "New Verion is Found.(" + newVersion + ")" );
+						//lblCheck.setText( "New Verion is Found.(" + newVersion + ")" );
+						lblCheck.setText( MessageFormat.format( langRB.getString("LABEL_FOUND_NEW_VERSION"), newVersion ) );
 					}
 					else
 					{
-						lblCheck.setText( "This version is up-to-date." );
+						//lblCheck.setText( "This version is up-to-date." );
+						lblCheck.setText( MessageFormat.format( langRB.getString("LABEL_THIS_VERSION"), newVersion ) );
 					}
+					txtErrMsg.visibleProperty().setValue(false);
 				}
 				catch ( Exception ex )
 				{
+					// Unable to tunnel through proxy. Proxy returns "HTTP/1.1 407 Proxy Authentication Required"
 					ex.printStackTrace();
-					lblCheck.setText( "Check proxy configuration." );
+					//lblCheck.setText( "Check proxy configuration." );
+					lblCheck.setText( langRB.getString("LABEL_PROXY_ERROR") );
+					txtErrMsg.setText( ex.getMessage() );
+					txtErrMsg.visibleProperty().setValue(true);
 				}
 			}
 		);

@@ -11,22 +11,35 @@ public class SQLBag
 	
 	public enum TYPE
 	{
-		SELECT,
-		INSERT,
-		UPDATE,
-		DELETE,
-		CREATE_TABLE,
-		CREATE_INDEX,
-		CREATE_VIEW,
-		ALTER_VIEW,
-		ALTER,
-		DROP,
-		TRUNCATE,
-		EXECUTE,
-		MERGE,
-		UPSERT,
-		REPLACE,
-		UNKNOWN_TYPE
+		SELECT("SELECT"),
+		INSERT("INSERT"),
+		UPDATE("UPDATE"),
+		DELETE("DELETE"),
+		CREATE_TABLE("CREATE TABLE"),
+		CREATE_INDEX("CREATE INDEX"),
+		CREATE_VIEW("CREATE VIEW"),
+		ALTER_VIEW("ALTER VIEW"),
+		ALTER("ALTER"),
+		DROP("DROP"),
+		TRUNCATE("TRUNCATE"),
+		EXECUTE("EXECUTE"),
+		MERGE("MERGE"),
+		UPSERT("UPSERT"),
+		REPLACE("REPLACE"),
+		UNKNOWN_TYPE("UNKNOWN TYPE")
+		;
+		
+		private String val = null;
+		
+		private TYPE( String val )
+		{
+			this.val = val;
+		}
+		
+		public String getVal()
+		{
+			return this.val;
+		}
 	}
 	
 	private String sql      = null;

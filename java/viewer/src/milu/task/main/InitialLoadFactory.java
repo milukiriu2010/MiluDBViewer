@@ -11,7 +11,8 @@ public class InitialLoadFactory
 		LANG,
 		APPCONF,
 		DRIVER,
-		SECRETKEY
+		SECRETKEY,
+		PROXYPASSWORD
 	}
 	
 	public static InitialLoadAbstract getInstance( FACTORY_TYPE type, MainController mainCtrl, ProgressInterface progressInf, double assignedSize )
@@ -37,6 +38,10 @@ public class InitialLoadFactory
 		else if ( FACTORY_TYPE.SECRETKEY.equals(type) )
 		{
 			ilAbs = new InitialLoadSecretKey();
+		}
+		else if ( FACTORY_TYPE.PROXYPASSWORD.equals(type) )
+		{
+			ilAbs = new InitialLoadProxyPassword();
 		}
 		else
 		{

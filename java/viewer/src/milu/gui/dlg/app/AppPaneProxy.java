@@ -17,6 +17,7 @@ import javafx.util.StringConverter;
 import milu.main.AppConf;
 import milu.main.MainController;
 import milu.net.ProxyType;
+import milu.tool.MyTool;
 
 public class AppPaneProxy extends AppPaneAbstract 
 {
@@ -155,13 +156,21 @@ public class AppPaneProxy extends AppPaneAbstract
 	@Override
 	public boolean apply() 
 	{
-		AppConf appConf = mainCtrl.getAppConf();
+		AppConf appConf = this.mainCtrl.getAppConf();
 		
-		appConf.setProxyType( this.cbxProxyType.getValue() );
-		appConf.setProxyHost( this.txtHost.getText() );
-		appConf.setProxyPort( Integer.valueOf(this.txtPort.getText()) );
-		appConf.setProxyUser( this.txtUser.getText() );
-		appConf.setProxyPassword( this.txtPwd.getText() );
+		try
+		{
+			appConf.setProxyType( this.cbxProxyType.getValue() );
+			appConf.setProxyHost( this.txtHost.getText() );
+			appConf.setProxyPort( Integer.valueOf(this.txtPort.getText()) );
+			appConf.setProxyUser( this.txtUser.getText() );
+			appConf.setProxyPassword( this.txtPwd.getText() );
+			appConf.setProxyPasswordEnc( this.mainCtrl.getSecretKey() );
+		}
+		catch ( Exception ex )
+		{
+			MyTool.showException( this.mainCtrl, "conf.lang.gui.common.MyAlert", "TITLE_MISC_ERROR", ex );
+		}
 		
 		return true;
 	}

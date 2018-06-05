@@ -46,9 +46,15 @@ public class MyJsonHandleAppConf extends MyJsonHandleAbstract
 			json = new String( data );
 		}
 		
+		/*
 		Gson gson = new Gson();
 		//Type type = new TypeToken<AppConf>() {}.getType();
 		//Object obj = gson.fromJson( json, type );
+		AppConf obj = gson.fromJson( json, AppConf.class );
+		*/
+		
+		GsonBuilder gsonBuilder = new GsonBuilder();
+		Gson gson = gsonBuilder.excludeFieldsWithoutExposeAnnotation().create();
 		AppConf obj = gson.fromJson( json, AppConf.class );
 		
 		return obj;
@@ -57,11 +63,18 @@ public class MyJsonHandleAppConf extends MyJsonHandleAbstract
 	@Override
 	public void save( Object obj ) throws IOException
 	{
+		/*
 		//Type type = new TypeToken<AppConf>() {}.getType();
 		GsonBuilder gsonBuilder = new GsonBuilder();
 		//gsonBuilder.registerTypeAdapter( type, new JsonElementAdapter() );
 		Gson gson = gsonBuilder.setPrettyPrinting().create();
 		String json = gson.toJson( (AppConf)obj, AppConf.class );
+		*/
+
+		GsonBuilder gsonBuilder = new GsonBuilder();
+		Gson gson = gsonBuilder.setPrettyPrinting().excludeFieldsWithoutExposeAnnotation().create();
+		String json = gson.toJson( (AppConf)obj, AppConf.class );
+		
 		
 		System.out.println( "====== save(" + this.file.getAbsolutePath() + ") ======" );
 		System.out.println( json );

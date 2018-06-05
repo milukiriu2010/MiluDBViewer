@@ -146,7 +146,8 @@ public class AppSettingDialog extends Dialog<Boolean>
 		    	}
 		    	catch ( Exception ex )
 		    	{
-		    		this.showException(ex);
+		    		//this.showException(ex);
+		    		MyTool.showException( this.mainCtrl, "conf.lang.gui.common.MyAlert", "TITLE_MISC_ERROR", ex );
 		    	}
 		    	// if false, do not close this dialog.
 		    	if ( ret == false )
@@ -173,7 +174,8 @@ public class AppSettingDialog extends Dialog<Boolean>
 		    	}
 		    	catch ( Exception ex )
 		    	{
-		    		this.showException(ex);
+		    		//this.showException(ex);
+		    		MyTool.showException( this.mainCtrl, "conf.lang.gui.common.MyAlert", "TITLE_MISC_ERROR", ex );
 		    	}
 		    	// always consume
 	    		event.consume();
@@ -210,7 +212,7 @@ public class AppSettingDialog extends Dialog<Boolean>
 			}
 		);
 	}
-	
+	/*
 	private void showException( Exception ex )
 	{
 		MyAlertDialog alertDlg = new MyAlertDialog( AlertType.WARNING, this.mainCtrl );
@@ -219,5 +221,6 @@ public class AppSettingDialog extends Dialog<Boolean>
 		alertDlg.setTxtExp( ex );
 		alertDlg.showAndWait();
 		alertDlg = null;
-	}	
+	}
+	*/	
 }

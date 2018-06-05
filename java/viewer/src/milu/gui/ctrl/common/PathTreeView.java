@@ -136,7 +136,8 @@ public class PathTreeView extends TreeView<Path>
 								}
 								catch ( InvalidPathException ipEx )
 								{
-									showException(ipEx,"TITLE_NOT_ALLOWED_CHARACTER");
+									//showException(ipEx,"TITLE_NOT_ALLOWED_CHARACTER");
+									MyTool.showException( PathTreeView.this.mainCtrl, "conf.lang.gui.common.MyAlert", "TITLE_MISC_ERROR", ipEx, "TITLE_NOT_ALLOWED_CHARACTER" );
 									Platform.runLater( ()->requestFocus() );
 									return selectedPath;
 								}
@@ -240,7 +241,8 @@ public class PathTreeView extends TreeView<Path>
 						System.out.println( "pathOld:" + pathOld );
 						System.out.println( "pathNew:" + pathNew );
 						//this.getSelectionModel().getSelectedItem().setValue(pathOld);
-						this.showMsg("TITLE_ALREADY_EXIST");
+						//this.showMsg("TITLE_ALREADY_EXIST");
+						MyTool.showMsg( this.mainCtrl, "conf.lang.gui.common.MyAlert", "TITLE_MISC_ERROR", "TITLE_ALREADY_EXIST" );
 						event.consume();
 						// -------------------------------------------------
 						// itemTarget set wrong value
@@ -270,7 +272,7 @@ public class PathTreeView extends TreeView<Path>
 				}
 				catch ( Exception ex )
 				{
-					this.showException(ex);
+					MyTool.showException( this.mainCtrl, "conf.lang.gui.common.MyAlert", "TITLE_MISC_ERROR", ex );
 				}
 			}
 		);
@@ -292,24 +294,7 @@ public class PathTreeView extends TreeView<Path>
 		);
 		
 	}
-	/*
-	public void renamePath( TreeItem<Path> itemParent, Path pathOld, Path pathNew )
-	{
-		for ( TreeItem<Path> itemChild : itemParent.getChildren() )
-		{
-			String childNameOld = itemChild.toString();
-			String childNameNew = childNameOld.replace( pathOld.toString(), pathNew.toString() );
-			System.out.println( "childNameOld:" + childNameOld );
-			System.out.println( "childNameNew:" + childNameNew );
-			itemChild.setValue( Paths.get(childNameNew) );
-			
-			if ( itemChild.isLeaf() == false )
-			{
-				this.renamePath( itemChild, pathOld, pathNew );
-			}
-		}
-	}
-	*/
+	
 	public void setDragDropEvent( TextFieldTreeCell<Path> treeCell )
 	{
 		treeCell.setOnDragDetected
@@ -380,7 +365,7 @@ public class PathTreeView extends TreeView<Path>
 					}
 					catch ( Exception ex )
 					{
-						this.showException(ex);
+						MyTool.showException( this.mainCtrl, "conf.lang.gui.common.MyAlert", "TITLE_MISC_ERROR", ex );
 					}
 					
 				}
@@ -649,6 +634,7 @@ public class PathTreeView extends TreeView<Path>
 		}
 	}
 	
+	/*
 	private void showException( Exception ex )
 	{
 		MyAlertDialog alertDlg = new MyAlertDialog( AlertType.WARNING, this.mainCtrl );
@@ -657,7 +643,8 @@ public class PathTreeView extends TreeView<Path>
 		alertDlg.setTxtExp( ex );
 		alertDlg.showAndWait();
 	}
-	
+	*/
+	/*
 	private void showException( Exception ex, String msgID )
 	{
 		MyAlertDialog alertDlg = new MyAlertDialog( AlertType.WARNING, this.mainCtrl );
@@ -665,8 +652,10 @@ public class PathTreeView extends TreeView<Path>
 		alertDlg.setHeaderText( langRB.getString( "TITLE_MISC_ERROR" ) );
 		alertDlg.setTxtExp( ex, langRB.getString( msgID ) );
 		alertDlg.showAndWait();
-	}	
+	}
+	*/	
 	
+	/*
 	private void showMsg( String msgID )
 	{
 		MyAlertDialog alertDlg = new MyAlertDialog( AlertType.WARNING, this.mainCtrl );
@@ -675,5 +664,5 @@ public class PathTreeView extends TreeView<Path>
 		alertDlg.setTxtMsg( langRB.getString( msgID ) );
 		alertDlg.showAndWait();
 	}	
-	
+	*/
 }

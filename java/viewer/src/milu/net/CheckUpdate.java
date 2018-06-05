@@ -153,12 +153,18 @@ public class CheckUpdate
 
 		for ( int i = 0; i <= 2; i++ )
 		{
-			if ( nowVer[i].compareTo(newVer[i]) < 0 )
+			// "nowVer" is older than "newVer"
+			if ( 
+					( nowVer[i].compareTo(newVer[i]) < 0 ) 
+					&&
+					( nowVer[i].length() <= newVer[i].length() )
+			)
 			{
 				System.out.println( "compareVersion break i:" + i );
 				this.isExistNew = true;
 				return;
 			}
+			// "nowVer" is newer than "newVer"
 			else if ( nowVer[i].compareTo(newVer[i]) > 0 )
 			{
 				return;
