@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-10"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER">
+		<attributes>
+			<attribute name="module" value="true"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="lib" path="lib/jsqlparser/jsqlparser-1.2-SNAPSHOT.jar"/>
 	<classpathentry kind="lib" path="lib/excel/commons-collections4-4.1.jar"/>
 	<classpathentry kind="lib" path="lib/excel/poi-3.17.jar"/>
@@ -9,5 +13,6 @@
 	<classpathentry kind="lib" path="lib/excel/poi-ooxml-schemas-3.17.jar"/>
 	<classpathentry kind="lib" path="lib/excel/xmlbeans-2.6.0.jar"/>
 	<classpathentry kind="lib" path="lib/gson/gson-2.8.3-SNAPSHOT.jar"/>
+	<classpathentry kind="lib" path="lib/hibernate/hibernate-core-5.3.1.Final.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

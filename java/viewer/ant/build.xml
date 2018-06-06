@@ -18,6 +18,7 @@
 		<pathelement path="../lib/excel/poi-ooxml-schemas-3.17.jar" />
 		<pathelement path="../lib/excel/xmlbeans-2.6.0.jar" />
 		<pathelement path="../lib/gson/gson-2.8.3-SNAPSHOT.jar" />
+		<pathelement path="../lib/hibernate/hibernate-core-5.3.1.Final.jar" />
 	</path>
 	
 	<target name="compile">
@@ -57,6 +58,7 @@
 							lib/excel/poi-ooxml-schemas-3.17.jar
 							lib/excel/xmlbeans-2.6.0.jar
 							lib/gson/gson-2.8.3-SNAPSHOT.jar
+							lib/hibernate/hibernate-core-5.3.1.Final.jar
 				"/>
             </manifest>
 		</jar>

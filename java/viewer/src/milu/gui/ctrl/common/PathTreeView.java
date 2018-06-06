@@ -2,7 +2,6 @@ package milu.gui.ctrl.common;
 
 import javafx.scene.control.TreeView;
 import javafx.application.Platform;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.cell.TextFieldTreeCell;
 import javafx.util.StringConverter;
 import javafx.scene.control.TreeItem;
@@ -13,7 +12,6 @@ import javafx.scene.input.DragEvent;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ResourceBundle;
 import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.io.File;
@@ -21,7 +19,6 @@ import java.io.IOException;
 import java.nio.file.InvalidPathException;
 
 import milu.gui.ctrl.common.inf.ChangePathInterface;
-import milu.gui.dlg.MyAlertDialog;
 import milu.main.MainController;
 import milu.tool.MyTool;
 

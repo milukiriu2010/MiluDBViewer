@@ -2,6 +2,8 @@ package milu.gui.ctrl.query;
 
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextArea;
+import javafx.scene.control.skin.TextAreaSkin;
+import javafx.scene.control.ContextMenu;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Font;
 
@@ -10,6 +12,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 
 import javafx.beans.binding.Bindings;
@@ -23,18 +26,30 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.shape.Path;
 import javafx.scene.control.Label;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.ScrollBar;
+import javafx.beans.property.ObjectProperty;
+
+
 import net.sf.jsqlparser.JSQLParserException;
+
+import org.hibernate.engine.jdbc.internal.BasicFormatterImpl;
+
 import milu.tool.MyTool;
-import milu.gui.view.DBView;
 import milu.entity.schema.SchemaEntity;
 import milu.entity.schema.search.SearchSchemaEntityInterface;
 import milu.entity.schema.search.SearchSchemaEntityVisitorFactory;
 import milu.ctrl.sql.parse.SQLBag;
 import milu.ctrl.sql.parse.SQLParse;
 import milu.db.MyDBAbstract;
+import milu.gui.ctrl.common.inf.ChangeLangInterface;
+import milu.gui.view.DBView;
+import milu.main.MainController;
 
 public class SqlTextArea extends TextArea
+	implements 
+		ChangeLangInterface,
+		SQLFormatInterface
 {
 	private DBView  dbView = null;
 	
@@ -76,7 +91,6 @@ public class SqlTextArea extends TextArea
 	 */
 	public void init()
 	{
-		//this.parentPane = MyTool.findAnchorPane( this );
 		this.parentPane = (AnchorPane)MyTool.searchParentNode( this, AnchorPane.class );
 		if ( this.parentPane != null )
 		{
@@ -128,9 +142,41 @@ public class SqlTextArea extends TextArea
 		if ( this.parentPane != null )
 		{
 			this.setKeyAction();
+			
+			this.setMenu();
 		}
 		
 		this.setAction();
+	}
+	
+	// https://stackoverflow.com/questions/32980159/javafx-append-to-right-click-menu-for-textfield?utm_medium=organic&utm_source=google_rich_qa&utm_campaign=google_rich_qa
+	private void setMenu()
+	{
+		/*
+		TextAreaSkin textAreaSkin = new TextAreaSkin(this)
+		{
+			@Override
+			public void populateContextMenu(ContextMenu contextMenu) {
+			}
+		};
+		*/
+		/*
+		ContextMenu contextMenu = new ContextMenu();
+		this.menuItemFmtSQL.setOnAction
+		(
+			(event)->
+			{
+				String formatted = new BasicFormatterImpl().format( this.getText() );
+				this.setText(formatted);
+			}
+		);
+		
+		contextMenu.getItems().addAll( this.menuItemFmtSQL );
+		this.setContextMenu(contextMenu);
+		*/
+		System.out.println( "TextArea ContextMenu1:" + this.getContextMenu() );
+		ObjectProperty<ContextMenu> contextMenProperty = this.contextMenuProperty();
+		System.out.println( "TextArea ContextMenu2:" + contextMenProperty );
 	}
 	
 	// shift label position
@@ -430,6 +476,7 @@ public class SqlTextArea extends TextArea
 				//event.consume();
 			}
 		);
+		
 		this.comboHint.addEventHandler
 		(
 			KeyEvent.KEY_PRESSED,
@@ -627,4 +674,22 @@ public class SqlTextArea extends TextArea
 		
 		return sqlBagLst;
 	}
+	
+	/**************************************************
+	 * Override from ChangeLangInterface
+	 ************************************************** 
+	 */
+	@Override	
+	public void changeLang()
+	{
+	}
+	
+	
+	@Override
+	public void formatSQL()
+	{
+		String formatted = new BasicFormatterImpl().format( this.getText() );
+		this.setText(formatted);
+	}
+
 }

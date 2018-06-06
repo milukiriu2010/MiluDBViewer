@@ -9,6 +9,7 @@
 @set MYCLASSPATH=%MYCLASSPATH%;lib/excel/poi-ooxml-schemas-3.17.jar
 @set MYCLASSPATH=%MYCLASSPATH%;lib/excel/xmlbeans-2.6.0.jar
 @set MYCLASSPATH=%MYCLASSPATH%;lib/gson/gson-2.8.3-SNAPSHOT.jar
+@set MYCLASSPATH=%MYCLASSPATH%;lib/hibernate/hibernate-core-5.3.1.Final.jar
 
 @rem ============================================
 @rem === set NLS_LANG ===========================

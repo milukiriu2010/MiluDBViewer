@@ -3,8 +3,8 @@ package milu.gui.dlg;
 import java.net.URL;
 import java.util.ResourceBundle;
 import java.text.MessageFormat;
-import java.io.BufferedInputStream;
 import java.io.DataInputStream;
+import java.io.InputStream;
 import java.io.IOException;
 
 import javafx.application.Platform;
@@ -100,10 +100,27 @@ public class VersionDialog extends Dialog<Boolean>
 		StringBuffer sb = new StringBuffer();
 		String strFmt = null;
 		try
+		(
+			InputStream is = urlVerInfo.openStream();
+			DataInputStream     dis = new DataInputStream(is);
+		)
 		{
+			/*
 			// https://www.mkyong.com/java/how-to-read-file-from-java-bufferedinputstream-example/
 			BufferedInputStream bis = (BufferedInputStream)urlVerInfo.getContent();
 			DataInputStream     dis = new DataInputStream(bis);
+			int readSize = 0;
+			int pos = 0;
+			while ( ( readSize = dis.available() ) > 0 )
+			{
+				byte[] b = new byte [readSize];
+				dis.read( b, pos, readSize );
+				pos += readSize;
+				sb.append( new String( b ) );
+			}
+			strFmt = sb.toString();
+			*/
+			
 			int readSize = 0;
 			int pos = 0;
 			while ( ( readSize = dis.available() ) > 0 )

@@ -6,7 +6,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.TreeView;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.geometry.Insets;
@@ -16,7 +15,6 @@ import javafx.scene.layout.BorderPane;
 import javafx.event.ActionEvent;
 import javafx.application.Platform;
 import milu.gui.ctrl.common.ButtonOrderNoneDialogPane;
-import milu.gui.dlg.MyAlertDialog;
 import milu.main.MainController;
 import milu.tool.MyTool;
 

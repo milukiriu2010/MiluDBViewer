@@ -17,6 +17,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TabPane.TabClosingPolicy;
 import javafx.scene.control.Button;
+import javafx.scene.control.ToolBar;
 
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -46,12 +47,16 @@ public class DBSqlScriptTab extends Tab
 		CounterInterface,
 		CopyInterface,
 		FocusInterface,
-		ChangeLangInterface
+		ChangeLangInterface,
+		SQLFormatInterface
 {
 	private DBView          dbView = null;
 	
 	// Counter for how many times this class is opened.
 	private static int counterOpend = 0;
+	
+	// ToolBar
+	private ToolBar  toolBar = null;
 	
 	// TextArea on this pane
 	private AnchorPane   upperPane = new AnchorPane();
@@ -85,6 +90,8 @@ public class DBSqlScriptTab extends Tab
 		// Counter for how many times this class is opened.
 		DBSqlScriptTab.counterOpend++;
 		
+		this.toolBar = new DBSqlScriptToolBar(this.dbView,this);
+		
         // http://tutorials.jenkov.com/javafx/textarea.html
 		this.textAreaSQL  = new SqlTextArea( dbView );
         // AnchorPane
@@ -112,6 +119,7 @@ public class DBSqlScriptTab extends Tab
 		this.splitPane.setDividerPositions( 0.3f, 0.7f );
 		
 		BorderPane brdPane = new BorderPane();
+		brdPane.setTop(this.toolBar);
 		brdPane.setCenter( splitPane );
 		brdPane.setBottom( hBox );
 		
@@ -350,7 +358,12 @@ public class DBSqlScriptTab extends Tab
 	@Override	
 	public void changeLang()
 	{
-		//this.tableViewSQL.changeLang();
+		this.textAreaSQL.changeLang();
 	}
 	
+	@Override
+	public void formatSQL()
+	{
+		this.textAreaSQL.formatSQL();
+	}
 }

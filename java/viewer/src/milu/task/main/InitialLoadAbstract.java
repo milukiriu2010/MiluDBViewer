@@ -1,9 +1,5 @@
 package milu.task.main;
 
-import java.util.ResourceBundle;
-
-import javafx.scene.control.Alert.AlertType;
-import milu.gui.dlg.MyAlertDialog;
 import milu.main.MainController;
 import milu.task.ProgressInterface;
 
