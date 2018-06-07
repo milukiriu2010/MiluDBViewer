@@ -2,34 +2,136 @@ package milu.gui.ctrl.query;
 
 import javafx.scene.control.ToolBar;
 import javafx.scene.control.Tooltip;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyCodeCombination;
+import javafx.scene.input.KeyCombination;
 
 import java.util.ResourceBundle;
 
 import javafx.scene.control.Button;
+import javafx.scene.control.Separator;
+import milu.db.access.ExecSQLAbstract;
+import milu.db.access.ExecSQLExplainFactory;
+import milu.gui.ctrl.common.inf.ActionInterface;
 import milu.gui.ctrl.common.inf.ChangeLangInterface;
+import milu.gui.ctrl.common.table.CopyTableInterface;
+import milu.gui.ctrl.common.table.DirectionSwitchInterface;
 import milu.gui.view.DBView;
 import milu.main.MainController;
 import milu.tool.MyTool;
 
 class DBSqlScriptToolBar extends ToolBar
-	implements ChangeLangInterface
+	implements 
+		ActionInterface,
+		ChangeLangInterface
 {
 	private DBView          dbView = null;
 	
-	private Button          btnFmtSQL = new Button();
+	// Exec SQL
+	private Button    btnExecSQL = new Button();
+	// Explain SQL
+	private Button    btnExplainSQL = new Button();
+	// Toggle Horizontal/Vertical mode
+	private Button    btnToggleHV = new Button();
+	// Button to copy table data(no column)
+	private Button    btnCopyTblNoHead = new Button();
+	// Button to copy table data(with column)
+	private Button    btnCopyTblWithHead = new Button();
+	// Format SQL
+	private Button    btnFmtSQL = new Button();
 	
-	DBSqlScriptToolBar( DBView dbView, SQLFormatInterface sqlFmtInterface )
+	DBSqlScriptToolBar( DBView dbView )
 	{
 		this.dbView = dbView;
 		
 		MainController mainCtrl = this.dbView.getMainController();
-		this.btnFmtSQL.setGraphic( MyTool.createImageView( 16, 16, mainCtrl.getImage("file:resources/images/sql_format.png") ) );
+		this.btnExecSQL.setGraphic( MyTool.createImageView( 20, 20, mainCtrl.getImage("file:resources/images/execsql.png") ) );
+		this.btnExplainSQL.setGraphic( MyTool.createImageView( 20, 20, mainCtrl.getImage("file:resources/images/explain.png") ) );
+		this.btnFmtSQL.setGraphic( MyTool.createImageView( 20, 20, mainCtrl.getImage("file:resources/images/sql_format.png") ) );
+		this.btnToggleHV.setGraphic( MyTool.createImageView( 20, 20, mainCtrl.getImage("file:resources/images/direction.png") ) );
+		this.btnCopyTblNoHead.setGraphic( MyTool.createImageView( 20, 20, mainCtrl.getImage("file:resources/images/copy.png") ) );
+		this.btnCopyTblWithHead.setGraphic( MyTool.createImageView( 20, 20, mainCtrl.getImage("file:resources/images/copy2.png") ) );
 		
-		this.getItems().add( btnFmtSQL );
+		this.getItems().addAll(	this.btnExecSQL	);
 		
-		this.btnFmtSQL.setOnAction(	(event)->sqlFmtInterface.formatSQL() );
+		ExecSQLAbstract execSQLAbs = new ExecSQLExplainFactory().createFactory( null, this.dbView.getMyDBAbstract(), mainCtrl.getAppConf() );
+		if ( execSQLAbs != null )
+		{
+			this.getItems().add( this.btnExplainSQL );
+		}
+		
+		this.getItems().addAll
+		(
+			new Separator(),
+			this.btnToggleHV,
+			this.btnCopyTblNoHead,
+			this.btnCopyTblWithHead,
+			new Separator(),
+			this.btnFmtSQL 
+		);
 		
 		this.changeLang();
+	}
+	
+	@Override
+	public void setAction( Object obj )
+	{
+		if ( obj instanceof SQLExecInterface )
+		{
+			// mouse click, "space/return" key enter 
+			this.btnExecSQL.setOnAction( ((SQLExecInterface)obj)::execSQL );
+			
+			// ---------------------------------
+			// Mnemonic for "Exec SQL"
+			// Ctrl+G
+			// ---------------------------------
+			this.btnExecSQL.getScene().getAccelerators().put
+			(
+				new KeyCodeCombination( KeyCode.G, KeyCombination.CONTROL_DOWN ),
+				// Runnable.run()
+				()->((SQLExecInterface)obj).execSQL(null)
+			);
+		}
+		
+		if ( obj instanceof SQLExplainInterface )
+		{
+			// mouse click, "space/return" key enter 
+			this.btnExplainSQL.setOnAction( ((SQLExplainInterface)obj)::explainSQL );
+		}
+		
+		if ( obj instanceof DirectionSwitchInterface )
+		{
+			// mouse click, "space/return" key enter 
+			this.btnToggleHV.setOnAction( ((DirectionSwitchInterface)obj)::switchDirection );
+			
+			// ---------------------------------
+			// Mnemonic for "Exec SQL"
+			// Ctrl+G
+			// ---------------------------------
+			this.btnToggleHV.getScene().getAccelerators().put
+			(
+				new KeyCodeCombination( KeyCode.D, KeyCombination.CONTROL_DOWN ),
+				// Runnable.run()
+				()->((DirectionSwitchInterface)obj).switchDirection(null)
+			);
+		}
+
+		if ( obj instanceof CopyTableInterface )
+		{
+			// mouse click, "space/return" key enter 
+			this.btnCopyTblNoHead.setOnAction( ((CopyTableInterface)obj)::copyTableNoHead );
+			
+			// mouse click, "space/return" key enter 
+			this.btnCopyTblWithHead.setOnAction( ((CopyTableInterface)obj)::copyTableWithHead );
+		}
+		
+		if ( obj instanceof SQLFormatInterface )
+		{
+			// mouse click, "space/return" key enter 
+			this.btnFmtSQL.setOnAction(	((SQLFormatInterface)obj)::formatSQL );
+			// any key
+			this.btnFmtSQL.setOnKeyPressed( ((SQLFormatInterface)obj)::formatSQL );
+		}
 	}
 	
 	/**************************************************
@@ -42,7 +144,47 @@ class DBSqlScriptToolBar extends ToolBar
 		MainController mainCtrl = this.dbView.getMainController();
 		ResourceBundle langRB = mainCtrl.getLangResource("conf.lang.gui.ctrl.query.DBSqlTab");
 		
-		Tooltip tipFmtSQL = new Tooltip( langRB.getString( "LABEL_FORMAT_SQL" ));
+		// ----------------------------------------------
+		// ToolTip
+		//   Button[Exec Query] 
+		// ----------------------------------------------
+		Tooltip tipExecSQL = new Tooltip( langRB.getString( "TIP_EXEC_SQL" ));
+		tipExecSQL.getStyleClass().add("MainToolBar_MyToolTip");
+		this.btnExecSQL.setTooltip(tipExecSQL);
+		
+		// ----------------------------------------------
+		// ToolTip
+		//   Button[Exec Explain] 
+		// ----------------------------------------------
+		Tooltip tipExplainSQL = new Tooltip( langRB.getString( "TIP_EXEC_EXPLAIN" ) );
+		tipExplainSQL.getStyleClass().add("MainToolBar_MyToolTip");
+		this.btnExplainSQL.setTooltip( tipExplainSQL );
+		
+		// ----------------------------------------------
+		// ToolTip
+		//   Button[Toggle Horizontal/Vertical mode] 
+		// ----------------------------------------------
+		Tooltip tipToggleHV = new Tooltip( langRB.getString( "TIP_TOGGLE_HV" ));
+		tipToggleHV.getStyleClass().add("MainToolBar_MyToolTip");
+		this.btnToggleHV.setTooltip( tipToggleHV );
+		
+		// ----------------------------------------------
+		// ToolTip
+		//   Button[Copy table data without column] 
+		// ----------------------------------------------
+		Tooltip tipCopyTblNoHead = new Tooltip( langRB.getString( "TIP_COPY_TABLE_NO_HEAD" ));
+		tipCopyTblNoHead.getStyleClass().add("MainToolBar_MyToolTip");
+		this.btnCopyTblNoHead.setTooltip( tipCopyTblNoHead );
+		
+		// ----------------------------------------------
+		// ToolTip
+		//   Button[Copy table data with column] 
+		// ----------------------------------------------
+		Tooltip tipCopyTblWithHead = new Tooltip( langRB.getString( "TIP_COPY_TABLE_WITH_HEAD" ));
+		tipCopyTblWithHead.getStyleClass().add("MainToolBar_MyToolTip");
+		this.btnCopyTblWithHead.setTooltip( tipCopyTblWithHead );
+		
+		Tooltip tipFmtSQL = new Tooltip( langRB.getString( "TIP_FORMAT_SQL" ));
 		tipFmtSQL.getStyleClass().add("MainToolBar_MyToolTip");
 		this.btnFmtSQL.setTooltip(tipFmtSQL);
 	}	

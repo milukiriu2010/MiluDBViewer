@@ -12,11 +12,14 @@ import javafx.concurrent.Task;
 
 import java.lang.reflect.Constructor;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.ResourceBundle;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
+import milu.gui.ctrl.common.inf.ActionInterface;
 import milu.gui.ctrl.common.inf.ChangeLangInterface;
 import milu.gui.ctrl.common.inf.CopyInterface;
 import milu.gui.ctrl.common.inf.ExecExplainDBInterface;
@@ -179,6 +182,13 @@ public class DBView extends Stage
 	private void setMnemonic()
 	{
 		this.mainToolBar.setMnemonic();
+		
+		List<ActionInterface> actionTabLst = this.tabPane.getTabs().stream()
+				.filter( ActionInterface.class::isInstance )
+				.map( ActionInterface.class::cast )
+				.collect( Collectors.toList() );
+		
+		actionTabLst.forEach( obj->obj.setAction(null)  );
 	}
 	
 	private void setAction()

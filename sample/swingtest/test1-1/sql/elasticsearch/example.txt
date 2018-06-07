@@ -1,0 +1,97 @@
+https://qiita.com/kws9/items/7695262be0befb94897f
+
+==============================================================================================================
+
+☆ Index生成
+
+$ curl -XPUT '10.100.93.50:9200/customer'
+{"acknowledged":true,"shards_acknowledged":true,"index":"customer"}
+
+==============================================================================================================
+
+☆ Index確認
+
+$ curl -XGET '10.100.93.50:9200/_cat/indices?v'
+health status index    uuid                   pri rep docs.count docs.deleted store.size pri.store.size
+yellow open   customer verchBG6Riya2udgUtsrwA   5   1          0            0      1.1kb          1.1kb
+
+==============================================================================================================
+
+☆ Type生成
+
+$ curl -XPUT '10.100.93.50:9200/customer/external/1?pretty' -d '{ "name": "John Doe" }'
+{
+  "error" : "Content-Type header [application/x-www-form-urlencoded] is not supported",
+  "status" : 406
+}
+
+
+$ curl -XPUT '10.100.93.50:9200/customer/external/1?pretty' -d '{ "name": "John Doe" }' -H 'Content-Type: application/json'
+{
+  "_index" : "customer",
+  "_type" : "external",
+  "_id" : "1",
+  "_version" : 1,
+  "result" : "created",
+  "_shards" : {
+    "total" : 2,
+    "successful" : 1,
+    "failed" : 0
+  },
+  "_seq_no" : 0,
+  "_primary_term" : 1
+}
+
+==============================================================================================================
+
+☆ Type確認
+
+$ curl -XGET '10.100.93.50:9200/customer/external/1?pretty'
+{
+  "_index" : "customer",
+  "_type" : "external",
+  "_id" : "1",
+  "_version" : 1,
+  "found" : true,
+  "_source" : {
+    "name" : "John Doe"
+  }
+}
+
+==============================================================================================================
+
+☆ DocumentのUpdate
+
+$ curl -XPOST '10.100.93.50:9200/customer/external/1/_update?pretty' -d '{ "doc": { "name": "Jane Doe", "age": 20 } }'  -H 'Content-Type: application/json'
+{
+  "_index" : "customer",
+  "_type" : "external",
+  "_id" : "1",
+  "_version" : 2,
+  "result" : "updated",
+  "_shards" : {
+    "total" : 2,
+    "successful" : 1,
+    "failed" : 0
+  },
+  "_seq_no" : 1,
+  "_primary_term" : 1
+}
+
+==============================================================================================================
+
+☆ Documentの確認
+
+$ curl -XGET '10.100.93.50:9200/customer/external/1?pretty'
+{
+  "_index" : "customer",
+  "_type" : "external",
+  "_id" : "1",
+  "_version" : 2,
+  "found" : true,
+  "_source" : {
+    "name" : "Jane Doe",
+    "age" : 20
+  }
+}
+

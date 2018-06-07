@@ -2,7 +2,6 @@ package sql.format;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.util.Stack;
 
 import javafx.application.Application;
 import javafx.geometry.Orientation;
@@ -20,11 +19,8 @@ import net.sf.jsqlparser.statement.select.Select;
 import net.sf.jsqlparser.util.deparser.ExpressionDeParser;
 import net.sf.jsqlparser.util.deparser.SelectDeParser;
 //import sql.parse.visitor.ExampleStatementVisitor;
-import net.sf.jsqlparser.expression.operators.conditional.AndExpression;
-import net.sf.jsqlparser.expression.operators.relational.EqualsTo;
-import net.sf.jsqlparser.statement.select.SubSelect;
 
-public class SQLFormat2 extends Application 
+public class SQLFormat3 extends Application 
 {
 	private TextArea  taSQL    = new TextArea();
 	private TextArea  taResult = new TextArea();
@@ -105,58 +101,20 @@ public class SQLFormat2 extends Application
 		if ( "SELECT".equals(sqlType) )
 		{
 			Select select = (Select)stmt;
-			final Stack<Object> stack = new Stack<>();
 			StringBuilder buffer = new StringBuilder();
-			//ExpressionDeParser expressionDeParser = new Example2ExpressionDeParser();
+			ExpressionDeParser expressionDeParser = new Example2ExpressionDeParser();
+			/*
 			ExpressionDeParser expressionDeParser = new ExpressionDeParser()
 			{
 				@Override
 				public void visit( Column tableColumn )
 				{
 					System.out.println( "Column:" + tableColumn );
-					if ( stack.size() > 0 )
-					{
-						stack.pop();
-					}
-					else
-					{
-						this.getBuffer().append( "\n    " + tableColumn );
-					}
-					System.out.println( "Buffer:" + this.getBuffer().toString() );
+					this.getBuffer().append( "\t\n" + tableColumn );					
 				}
-				
-				@Override
-				public void visit( AndExpression andExpression )
-				{
-					super.visit(andExpression);
-					System.out.println( "AndExpression:" + andExpression );
-					this.getBuffer().append( "\n    " + andExpression );
-					stack.push(andExpression);
-				}
-				/*
-				@Override
-				public void visit​​(EqualsTo equalsTo)
-				{
-					System.out.println( "EqualsTo:" + equalsTo );
-					this.getBuffer().append( "\n    " + equalsTo );
-					stack.push(equalsTo);
-				}
-				*/
-				@Override
-				public void visit(SubSelect subSelect)
-				{
-					System.out.println( "SubSelect:" + subSelect );
-					if ( stack.size() > 0 )
-					{
-						stack.pop();
-					}
-					else
-					{
-						this.getBuffer().append( "\n    " + subSelect );
-					}
-				}
+		
 			};
-			
+			*/
 			SelectDeParser deparser = new SelectDeParser(expressionDeParser, buffer);
 			expressionDeParser.setSelectVisitor(deparser);
 			expressionDeParser.setBuffer(buffer);

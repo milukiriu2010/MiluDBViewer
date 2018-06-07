@@ -16,6 +16,7 @@ import javafx.scene.control.TabPane;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TabPane.TabClosingPolicy;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.control.Button;
 import javafx.scene.control.ToolBar;
 
@@ -24,6 +25,8 @@ import javafx.scene.layout.VBox;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.AnchorPane;
 import javafx.concurrent.Task;
+import javafx.event.Event;
+import milu.gui.ctrl.common.inf.ActionInterface;
 import milu.gui.ctrl.common.inf.ChangeLangInterface;
 import milu.gui.ctrl.common.inf.CopyInterface;
 import milu.gui.ctrl.common.inf.CounterInterface;
@@ -31,6 +34,8 @@ import milu.gui.ctrl.common.inf.ExecExplainDBInterface;
 import milu.gui.ctrl.common.inf.ExecQueryDBInterface;
 import milu.gui.ctrl.common.inf.FocusInterface;
 import milu.gui.ctrl.common.inf.ToggleHorizontalVerticalInterface;
+import milu.gui.ctrl.common.table.CopyTableInterface;
+import milu.gui.ctrl.common.table.DirectionSwitchInterface;
 import milu.gui.view.DBView;
 import milu.main.AppConf;
 import milu.main.MainController;
@@ -48,6 +53,11 @@ public class DBSqlScriptTab extends Tab
 		CopyInterface,
 		FocusInterface,
 		ChangeLangInterface,
+		ActionInterface,
+		SQLExecInterface,
+		SQLExplainInterface,
+		CopyTableInterface,
+		DirectionSwitchInterface,
 		SQLFormatInterface
 {
 	private DBView          dbView = null;
@@ -90,7 +100,7 @@ public class DBSqlScriptTab extends Tab
 		// Counter for how many times this class is opened.
 		DBSqlScriptTab.counterOpend++;
 		
-		this.toolBar = new DBSqlScriptToolBar(this.dbView,this);
+		this.toolBar = new DBSqlScriptToolBar(this.dbView);
 		
         // http://tutorials.jenkov.com/javafx/textarea.html
 		this.textAreaSQL  = new SqlTextArea( dbView );
@@ -126,45 +136,43 @@ public class DBSqlScriptTab extends Tab
 		this.setContent( brdPane );
 		
 		MainController mainCtrl = this.dbView.getMainController();
-		
 		// set icon on Tab
 		this.setGraphic( MyTool.createImageView( 16, 16, mainCtrl.getImage("file:resources/images/sql.png") ) );
 		
 		// Tab Title
 		this.setText( "SQL" + Integer.valueOf( counterOpend ) );
-		
-		this.setAction();
 	}
 	
-	private void setAction()
+	@Override
+	public void setAction( Object obj )
 	{
+		// set Action on ToolBar
+		((ActionInterface)this.toolBar).setAction(this);
+		
 		// shutdown the thread pool on closing this window. 
 		// http://winterbe.com/posts/2015/04/07/java8-concurrency-tutorial-thread-executor-examples/
 		this.setOnCloseRequest
-		(	
-			(event)->
+		((event)->{
+			try
 			{
-				try
-				{
-					System.out.println( "shutdown executor start." );
-					service.shutdown();
-					service.awaitTermination( 3, TimeUnit.SECONDS );
-				}
-				catch ( InterruptedException intEx )
-				{
-					System.out.println( "tasks interrupted" );
-				}
-				finally
-				{
-					if ( !service.isTerminated() )
-					{
-						System.out.println( "executor still working..." );
-					}
-					service.shutdownNow();
-					System.out.println( "executor finished." );
-				}
+				System.out.println( "shutdown executor start." );
+				service.shutdown();
+				service.awaitTermination( 3, TimeUnit.SECONDS );
 			}
-		);
+			catch ( InterruptedException intEx )
+			{
+				System.out.println( "tasks interrupted" );
+			}
+			finally
+			{
+				if ( !service.isTerminated() )
+				{
+					System.out.println( "executor still working..." );
+				}
+				service.shutdownNow();
+				System.out.println( "executor finished." );
+			}
+		});
 	}
 
 	/**
@@ -351,6 +359,73 @@ public class DBSqlScriptTab extends Tab
 		}
 	}
 	
+	// SQLExecInterface
+	@Override
+	public void execSQL( Event event )
+	{
+		/*
+		if (event instanceof KeyEvent)
+		{
+			KeyEvent keyEvent = (KeyEvent)event;
+			System.out.println( "execSQL KeyEvent:" + keyEvent.getCode() );
+			if ( keyEvent.isControlDown() )
+			{
+				System.out.println( "execSQL KeyEvent => Ctrl is down." );
+			}
+			return;
+		}
+		*/		
+		
+		this.execTask(ExecTaskFactory.FACTORY_TYPE.SCRIPT);
+	}
+	
+	// SQLExplainInterface
+	@Override
+	public void explainSQL( Event event )
+	{
+		this.execTask(ExecTaskFactory.FACTORY_TYPE.EXPLAIN);
+	}
+	
+	// CopyTableInterface
+	@Override
+	public void copyTableNoHead( Event event )
+	{
+		Tab selectedTab = this.tabPane.getSelectionModel().getSelectedItem();
+		if ( selectedTab instanceof CopyTableInterface )
+		{
+			((CopyTableInterface)selectedTab).copyTableNoHead( event );
+		}
+	}
+	
+	// CopyTableInterface
+	@Override
+	public void copyTableWithHead( Event event )
+	{
+		Tab selectedTab = this.tabPane.getSelectionModel().getSelectedItem();
+		if ( selectedTab instanceof CopyTableInterface )
+		{
+			((CopyTableInterface)selectedTab).copyTableWithHead( event );
+		}
+	}
+	
+	// DirectionSwitchInterface
+	@Override
+	public void switchDirection( Event event )
+	{
+		Tab selectedTab = this.tabPane.getSelectionModel().getSelectedItem();
+		if ( selectedTab instanceof DirectionSwitchInterface )
+		{
+			((DirectionSwitchInterface)selectedTab).switchDirection( event );
+		}
+	}
+
+	// SQLFormatInterface
+	@Override
+	public void formatSQL( Event event )
+	{
+		this.textAreaSQL.formatSQL( event );
+	}
+	
 	/**************************************************
 	 * Override from ChangeLangInterface
 	 ************************************************** 
@@ -361,9 +436,4 @@ public class DBSqlScriptTab extends Tab
 		this.textAreaSQL.changeLang();
 	}
 	
-	@Override
-	public void formatSQL()
-	{
-		this.textAreaSQL.formatSQL();
-	}
 }

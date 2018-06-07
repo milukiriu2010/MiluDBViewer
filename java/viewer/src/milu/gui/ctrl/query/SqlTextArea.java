@@ -2,7 +2,6 @@ package milu.gui.ctrl.query;
 
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextArea;
-import javafx.scene.control.skin.TextAreaSkin;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Font;
@@ -12,7 +11,6 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 
 import javafx.beans.binding.Bindings;
@@ -20,13 +18,13 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
+import javafx.event.Event;
 import javafx.geometry.Point2D;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.shape.Path;
 import javafx.scene.control.Label;
-import javafx.scene.control.MenuItem;
 import javafx.scene.control.ScrollBar;
 import javafx.beans.property.ObjectProperty;
 
@@ -44,7 +42,6 @@ import milu.ctrl.sql.parse.SQLParse;
 import milu.db.MyDBAbstract;
 import milu.gui.ctrl.common.inf.ChangeLangInterface;
 import milu.gui.view.DBView;
-import milu.main.MainController;
 
 public class SqlTextArea extends TextArea
 	implements 
@@ -686,8 +683,22 @@ public class SqlTextArea extends TextArea
 	
 	
 	@Override
-	public void formatSQL()
+	public void formatSQL( Event event )
 	{
+		if (event instanceof KeyEvent)
+		{
+			KeyEvent keyEvent = (KeyEvent)event;
+			System.out.println( "formatSQL KeyEvent:" + keyEvent.getCode() );
+			if ( keyEvent.isAltDown() )
+			{
+				System.out.println( "formatSQL KeyEvent => Alt is down." );
+			}
+			return;
+		}
+		else
+		{
+			System.out.println( "formatSQL event:" + event.getEventType() );
+		}
 		String formatted = new BasicFormatterImpl().format( this.getText() );
 		this.setText(formatted);
 	}

@@ -180,21 +180,6 @@ public class MyTool
 		return screenLoc;
 	}
 	
-	/*
-	public static AnchorPane findAnchorPane( Node node )
-	{
-		for ( Node n = node; n != null ; n=n.getParent() ) 
-		{
-			System.out.println( "findAnchorPane :" + n.getClass() );
-			if ( n instanceof AnchorPane )
-			{
-				return ((AnchorPane)n);
-			}
-		}
-		return null;
-	}
-	*/
-	
 	// https://stackoverflow.com/questions/24810197/how-to-know-if-a-scroll-bar-is-visible-on-a-javafx-tableview
 	public static ScrollBar getScrollBarVertical( Node node )
 	{

@@ -30,6 +30,7 @@ import javafx.util.Callback;
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.event.Event;
 import milu.tool.MyTool;
 import milu.file.table.MyFileAbstract;
 import milu.file.table.MyFileFactory;
@@ -44,7 +45,9 @@ public class ObjTableView extends TableView<List<Object>>
 	implements 
 		SetTableViewDataInterface,
 		ToggleHorizontalVerticalInterface,
+		DirectionSwitchInterface,
 		CopyInterface,
+		CopyTableInterface,
 		ChangeLangInterface
 {
 	private DBView  dbView = null;
@@ -244,6 +247,16 @@ public class ObjTableView extends TableView<List<Object>>
 		tpAbs.switchDirection();
 	}
 	
+	// DirectionSwitchInterface
+	@Override
+	public synchronized void switchDirection( Event event )
+	{
+		this.tableColSet.clear();
+		TableProcessAbstract tpAbs = TableProcessFactory.getInstance( this.tableViewDirection, this );
+		tpAbs.switchDirection();
+	}
+	
+	
 	// Set ColumnName & Data to TableView Horizontally
 	@Override
 	public synchronized void setTableViewData( List<Object> headLst, List<List<Object>> dataLst )
@@ -275,11 +288,23 @@ public class ObjTableView extends TableView<List<Object>>
 	{
 		this.copyTable( COPY_TYPE.WITH_HEAD );
 	}
-
+	
+	// CopyTableInterface
+	@Override
+	public synchronized void copyTableNoHead( Event event )
+	{
+		this.copyTable( COPY_TYPE.NO_HEAD );
+	}
+	// CopyTableInterface
+	@Override
+	public synchronized void copyTableWithHead( Event event )
+	{
+		this.copyTable( COPY_TYPE.WITH_HEAD );
+	}
+	
 	// @withHead
 	//   1:Copy table data with heads
 	//   0:Copy table data without heads
-	//@SuppressWarnings("rawtypes")
 	private void copyTable( COPY_TYPE copyType )
 	{
 		TableProcessAbstract tpAbs = TableProcessFactory.getInstance( this.tableViewDirection, this );

@@ -409,8 +409,10 @@ public class JSQLParseExample2 extends Application
     	}
     	else if ( selectItem instanceof AllTableColumns )
     	{
+    		sb.append( tab + "SelectItem:AllTableColumns:" + selectItem.toString() + "\n" );
     		processTable( ((AllTableColumns) selectItem).getTable(), level+1, sb );
     	}
+    	// select * from ...
     	else if ( selectItem instanceof AllColumns )
     	{
     		sb.append( tab + "SelectItem:AllColumns:" + selectItem.toString() + "\n" );

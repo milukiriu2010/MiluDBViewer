@@ -20,12 +20,16 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.layout.BorderPane;
 
+import javafx.event.Event;
+
 import java.sql.SQLException;
 
 import milu.gui.ctrl.common.inf.ChangeLangInterface;
 import milu.gui.ctrl.common.inf.CopyInterface;
 import milu.gui.ctrl.common.inf.CounterInterface;
 import milu.gui.ctrl.common.inf.ToggleHorizontalVerticalInterface;
+import milu.gui.ctrl.common.table.CopyTableInterface;
+import milu.gui.ctrl.common.table.DirectionSwitchInterface;
 import milu.gui.ctrl.common.table.ObjTableView;
 import milu.gui.view.DBView;
 import milu.main.MainController;
@@ -37,8 +41,10 @@ import milu.task.ToggleHVTask;
 public class DBResultTab extends Tab
 	implements 
 		ToggleHorizontalVerticalInterface,
+		DirectionSwitchInterface,
 		CopyInterface,
 		CounterInterface,
+		CopyTableInterface,
 		ChangeLangInterface
 {
 	private DBView          dbView = null;
@@ -256,6 +262,49 @@ public class DBResultTab extends Tab
 		}
 	}
 	
+	// DirectionSwitchInterface
+	@Override
+	public void switchDirection( Event event )
+	{
+		long startTime = System.nanoTime();
+		ResourceBundle langRB = this.dbView.getMainController().getLangResource("conf.lang.gui.ctrl.query.DBSqlTab");
+		int cnt = this.tableViewSQL.getRowSize();
+		if ( cnt > 0 )
+		{
+			final ToggleHVTask toggleHVTask = new ToggleHVTask( this.tableViewSQL, cnt );
+			// execute task
+			this.service.submit( toggleHVTask );
+			
+			toggleHVTask.progressProperty().addListener
+			(
+				(obs,oldVal,newVal)->
+				{
+					System.out.println( "ToggleHVTask:Progress[" + obs.getClass() + "]oldVal[" + oldVal + "]newVal[" + newVal + "]" );
+					// task start.
+					if ( newVal.doubleValue() == 0.0 )
+					{
+						this.dbView.taskProcessing();
+						Label label = new Label( langRB.getString("LABEL_PROCESSING") );
+						this.lowerPane.getChildren().clear();
+						this.lowerPane.getChildren().add( label );
+						System.out.println( "ToggleHVTask:clear" );
+					}
+					// task done.
+					else if ( newVal.doubleValue() == 1.0 )
+					{
+						this.lowerPane.getChildren().clear();
+						this.lowerPane.getChildren().add( this.tableViewSQL );
+						this.dbView.taskDone();
+						long endTime = System.nanoTime();
+						this.setExecTime( endTime - startTime );
+						System.out.println( "ToggleHVTask:set" );
+					}
+				}
+			);
+		}
+	}
+	
+	
 	private void showSQLException( SQLException sqlEx, MyDBAbstract myDBAbs )
 	{
 		System.out.println( "SQLState:" + sqlEx.getSQLState() );
@@ -329,6 +378,20 @@ public class DBResultTab extends Tab
 	public void copyTableWithHead()
 	{
 		this.tableViewSQL.copyTableWithHead();
+	}
+
+	// CopyTableInterface
+	@Override
+	public void copyTableNoHead( Event event )
+	{
+		this.tableViewSQL.copyTableNoHead( event );
+	}
+
+	// CopyTableInterface
+	@Override
+	public void copyTableWithHead( Event event )
+	{
+		this.tableViewSQL.copyTableWithHead( event );
 	}
 	
 	/**************************************************
