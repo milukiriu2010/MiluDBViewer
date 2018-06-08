@@ -93,14 +93,13 @@ class TableProcessHorizontal extends TableProcessAbstract
 			if ( i == 1 )
 			{
 				tableCol = new TableColumn<List<Object>,Object>( "-" );
-				System.out.println( "tableCol TypeSelector:" + tableCol.getTypeSelector() );
 				
 				// https://stackoverflow.com/questions/16857031/javafx-table-column-different-font-with-css
 				// tableCol:styleClass=table-column
 				tableCol.getStyleClass().add("ObjTableView_Cell_First");
 				
 				// disable sort of the first column
-				tableCol.setSortable(false);
+				//tableCol.setSortable(false);
 			}
 			// set "Column Name" to the second - last column header 
 			else

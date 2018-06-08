@@ -82,10 +82,19 @@ public class ExecSQLSelect extends ExecSQLAbstract
 				List<Object> dataRow = new ArrayList<>();
 				for ( int i = 1; i <= headCnt; i++ )
 				{
-					Object colName = this.colNameLst.get( i-1 );
+					Object colName      = this.colNameLst.get( i-1 );
+					Object colClassName = this.colClassNameLst.get( i-1 );
 					try
 					{
-						dataRow.add( rs.getObject( (String)colName ) );
+						// java.sql.SQLEXception: Attempt to read a SQLXML that is not readable
+						if ( "java.sql.SQLXML".equals(colClassName) )
+						{
+							dataRow.add( rs.getString( (String)colName ) );
+						}
+						else
+						{
+							dataRow.add( rs.getObject( (String)colName ) );
+						}
 					}
 					catch ( Exception ex )
 					{

@@ -95,12 +95,6 @@ class TableProcessVertical extends TableProcessAbstract
 			if ( i == 1 )
 			{
 				tableCol = new TableColumn<List<Object>,Object>( "-" );
-				ObservableList<String> styleClassList = tableCol.getStyleClass();
-				for ( String styleClass : styleClassList )
-				{
-					// table-column
-					System.out.println( "styleClass:" + styleClass );
-				}
 				
 				// https://stackoverflow.com/questions/16857031/javafx-table-column-different-font-with-css
 				// tableCol:styleClass=table-column

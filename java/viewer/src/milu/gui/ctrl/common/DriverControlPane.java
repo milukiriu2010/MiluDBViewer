@@ -220,11 +220,14 @@ public class DriverControlPane extends Pane
 					//if ( driver != null )
 					if (LoadDriver.isAlreadyLoadCheck(this.driverClassNameTxt.getText()))
 					{
+						MyTool.showMsg( this.mainCtrl, "conf.lang.gui.common.MyAlert", "TITLE_NOT_ALLOWED_DUPLICATE" );
+						/*
 						MyAlertDialog alertDlg = new MyAlertDialog( AlertType.WARNING, this.mainCtrl );
 						ResourceBundle langRB = this.mainCtrl.getLangResource("conf.lang.gui.common.MyAlert");
 						alertDlg.setHeaderText( langRB.getString("TITLE_NOT_ALLOWED_DUPLICATE") );
 						alertDlg.showAndWait();
 						alertDlg = null;
+						*/
 						return;
 					}
 				}

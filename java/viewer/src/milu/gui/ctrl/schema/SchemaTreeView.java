@@ -87,7 +87,6 @@ public class SchemaTreeView extends TreeView<SchemaEntity>
 	 */
 	public void init()
 	{
-		//this.parentPane = MyTool.findAnchorPane( this );
 		this.parentPane = (AnchorPane)MyTool.searchParentNode( this, AnchorPane.class );
 		if ( this.parentPane != null )
 		{

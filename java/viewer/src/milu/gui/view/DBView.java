@@ -21,7 +21,6 @@ import java.util.stream.Collectors;
 
 import milu.gui.ctrl.common.inf.ActionInterface;
 import milu.gui.ctrl.common.inf.ChangeLangInterface;
-import milu.gui.ctrl.common.inf.CopyInterface;
 import milu.gui.ctrl.common.inf.ExecQueryDBInterface;
 import milu.gui.ctrl.common.inf.FocusInterface;
 import milu.gui.ctrl.common.inf.RefreshInterface;
@@ -222,7 +221,6 @@ public class DBView extends Stage
 						{
 							System.out.println( "CollectTask:Done[" + newVal + "]" );
 							this.endProc();
-							//this.brdPane.setBottom(null);
 							this.setBottomMsg(null);
 						}
 					}
@@ -316,17 +314,6 @@ public class DBView extends Stage
 		);
 		*/
 	}
-	/*
-	public void taskProcessing()
-	{
-		this.mainToolBar.taskProcessing();
-	}
-	
-	public void taskDone()
-	{
-		this.mainToolBar.taskDone();
-	}
-	*/
 	
 	// ProcBeginInterface
 	@Override
@@ -420,34 +407,6 @@ public class DBView extends Stage
 	public void createNewDBConnection()
 	{
 		this.mainCtrl.createNewDBConnectionAndOpenNewWindow();
-	}
-
-	/************************************************
-	 * Copy datas on TableView without column heads 
-	 ************************************************
-	 */
-	public void copyTableNoHead()
-	{
-		// Call copy on Selected Tab.
-		Tab tab = this.tabPane.getSelectionModel().getSelectedItem();
-		if ( tab instanceof CopyInterface )
-		{
-			((CopyInterface)tab).copyTableNoHead();
-		}		
-	}
-	
-	/************************************************
-	 * Copy datas on TableView with column heads 
-	 ************************************************
-	 */
-	public void copyTableWithHead()
-	{
-		// Call copy on Selected Tab.
-		Tab tab = this.tabPane.getSelectionModel().getSelectedItem();
-		if ( tab instanceof CopyInterface )
-		{
-			((CopyInterface)tab).copyTableWithHead();
-		}		
 	}
 	
 	public void openView( Class<?> castClazz )

@@ -7,6 +7,7 @@ import java.lang.reflect.Constructor;
 import java.util.Collections;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.sql.SQLException;
 
 import javafx.geometry.Bounds;
 import javafx.geometry.Orientation;
@@ -29,6 +30,7 @@ import javafx.scene.effect.BlendMode;
 import java.awt.MouseInfo;
 import java.awt.Point;
 
+import milu.db.MyDBAbstract;
 import milu.entity.schema.SchemaEntity;
 import milu.main.MainController;
 import milu.gui.dlg.MyAlertDialog;
@@ -418,12 +420,31 @@ public class MyTool
 		alertDlg = null;
 	}
 	
+	public static void showException( MainController mainCtrl, String resourceName, String headID, SQLException sqlEx, MyDBAbstract myDBAbs )
+	{
+		MyAlertDialog alertDlg = new MyAlertDialog( AlertType.WARNING, mainCtrl );
+		ResourceBundle langRB = mainCtrl.getLangResource(resourceName);
+		alertDlg.setHeaderText( langRB.getString(headID) );
+		alertDlg.setTxtExp( sqlEx, myDBAbs );
+		alertDlg.showAndWait();
+		alertDlg = null;
+	}
+	
 	public static void showException( MainController mainCtrl, String resourceName, String headID, Exception ex, String msgID )
 	{
 		MyAlertDialog alertDlg = new MyAlertDialog( AlertType.WARNING, mainCtrl );
 		ResourceBundle langRB = mainCtrl.getLangResource(resourceName);
 		alertDlg.setHeaderText( langRB.getString(headID) );
 		alertDlg.setTxtExp( ex, langRB.getString(msgID) );
+		alertDlg.showAndWait();
+		alertDlg = null;
+	}
+	
+	public static void showMsg( MainController mainCtrl, String resourceName, String headID )
+	{
+		MyAlertDialog alertDlg = new MyAlertDialog( AlertType.WARNING, mainCtrl );
+		ResourceBundle langRB = mainCtrl.getLangResource(resourceName);
+		alertDlg.setHeaderText( langRB.getString(headID) );
 		alertDlg.showAndWait();
 		alertDlg = null;
 	}

@@ -26,12 +26,13 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.event.Event;
 import milu.db.driver.DriverShim;
 import milu.gui.ctrl.common.DriverControlPane;
 import milu.gui.ctrl.common.inf.ChangeLangInterface;
-import milu.gui.ctrl.common.inf.CopyInterface;
 import milu.gui.ctrl.common.inf.FocusInterface;
 import milu.gui.ctrl.common.inf.PaneSwitchDriverInterface;
+import milu.gui.ctrl.common.table.CopyTableInterface;
 import milu.gui.ctrl.common.table.ObjTableView;
 import milu.gui.view.DBView;
 import milu.main.AppConst;
@@ -41,7 +42,7 @@ import milu.tool.MyTool;
 public class DBJdbcTab extends Tab 
 	implements
 		PaneSwitchDriverInterface,
-		CopyInterface,
+		CopyTableInterface,
 		FocusInterface,
 		ChangeLangInterface
 {
@@ -218,7 +219,6 @@ public class DBJdbcTab extends Tab
 				}
 				catch ( SQLException sqlEx )
 				{
-					//this.showException( sqlEx );
 					MyTool.showException( this.dbView.getMainController(), "conf.lang.gui.common.MyAlert", "TITLE_MISC_ERROR", sqlEx );
 				}
 				finally
@@ -320,23 +320,9 @@ public class DBJdbcTab extends Tab
 		}
 		catch ( SQLException sqlEx )
 		{
-			//this.showException( sqlEx );
 			MyTool.showException( this.dbView.getMainController(), "conf.lang.gui.common.MyAlert", "TITLE_MISC_ERROR", sqlEx );
 		}
 	}
-	
-	/*
-	private void showException( Exception ex )
-	{
-		MainController mainCtrl = this.dbView.getMainController();
-		MyAlertDialog alertDlg = new MyAlertDialog( AlertType.WARNING, mainCtrl );
-		ResourceBundle langRB = mainCtrl.getLangResource("conf.lang.gui.common.MyAlert");
-		alertDlg.setHeaderText( langRB.getString("TITLE_MISC_ERROR") );
-		alertDlg.setTxtExp( ex );
-		alertDlg.showAndWait();
-		alertDlg = null;
-	}
-	*/
 	
 	@Override
 	public void driverAdd( DriverShim driver )
@@ -381,23 +367,18 @@ public class DBJdbcTab extends Tab
 		//Platform.runLater( ()->{ this.textAreaSQL.requestFocus(); System.out.println( "textAreaSQL focused."); } );
 	}
 	
-	/**************************************************
-	 * Override from CopyInterface
-	 ************************************************** 
-	 */
+	// CopyTableInterface
 	@Override
-	public void copyTableNoHead()
+	public void copyTableNoHead( Event event )
 	{
-		this.driverTableView.copyTableNoHead();
+		this.driverTableView.copyTableNoHead(event);
 	}
 	
-	/**
-	 * Override from CopyInterface
-	 */
+	// CopyTableInterface
 	@Override
-	public void copyTableWithHead()
+	public void copyTableWithHead( Event event )
 	{
-		this.driverTableView.copyTableWithHead();
+		this.driverTableView.copyTableWithHead(event);
 	}
 	
 	/**************************************************

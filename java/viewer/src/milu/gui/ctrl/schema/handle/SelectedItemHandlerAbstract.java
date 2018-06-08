@@ -519,21 +519,27 @@ abstract public class SelectedItemHandlerAbstract
 				else if ( ex instanceof SQLException )
 				{
 					SQLException sqlEx = (SQLException)ex;
+					MyTool.showException( this.dbView.getMainController(), "conf.lang.gui.common.MyAlert", "TITLE_EXEC_QUERY_ERROR", sqlEx, myDBAbs );
+					/*
 					ResourceBundle langRB = this.dbView.getMainController().getLangResource("conf.lang.gui.common.MyAlert");
 					MyAlertDialog alertDlg = new MyAlertDialog( AlertType.WARNING, this.dbView.getMainController() );
 					alertDlg.setHeaderText( langRB.getString("TITLE_EXEC_QUERY_ERROR") );
 		    		alertDlg.setTxtExp( sqlEx, myDBAbs );
 		    		alertDlg.showAndWait();
 		    		alertDlg = null;
+		    		*/
 				}
 				else
 				{
+					MyTool.showException( this.dbView.getMainController(), "conf.lang.gui.common.MyAlert", "TITLE_MISC_ERROR", ex );
+					/*
 					ResourceBundle langRB = this.dbView.getMainController().getLangResource("conf.lang.gui.common.MyAlert");
 					MyAlertDialog alertDlg = new MyAlertDialog( AlertType.WARNING, this.dbView.getMainController() );
 					alertDlg.setHeaderText( langRB.getString("TITLE_MISC_ERROR") );
 		    		alertDlg.setTxtExp( ex );
 		    		alertDlg.showAndWait();
 		    		alertDlg = null;
+		    		*/
 				}
 			}
 		);

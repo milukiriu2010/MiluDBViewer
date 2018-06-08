@@ -35,7 +35,6 @@ import milu.tool.MyTool;
 import milu.file.table.MyFileAbstract;
 import milu.file.table.MyFileFactory;
 import milu.gui.ctrl.common.inf.ChangeLangInterface;
-import milu.gui.ctrl.common.inf.CopyInterface;
 import milu.gui.ctrl.common.inf.SetTableViewDataInterface;
 import milu.gui.dlg.MyAlertDialog;
 import milu.gui.view.DBView;
@@ -44,7 +43,6 @@ public class ObjTableView extends TableView<List<Object>>
 	implements 
 		SetTableViewDataInterface,
 		DirectionSwitchInterface,
-		CopyInterface,
 		CopyTableInterface,
 		ChangeLangInterface
 {
@@ -201,10 +199,10 @@ public class ObjTableView extends TableView<List<Object>>
 		ContextMenu contextMenu = new ContextMenu();
 		
 		MenuItem menuItemCopyTblNoHead = new MenuItem( langRB.getString("MENU_COPY_TABLE_NO_HEAD") );
-		menuItemCopyTblNoHead.setOnAction( event->this.copyTableNoHead() );
+		menuItemCopyTblNoHead.setOnAction( this::copyTableNoHead );
 		
 		MenuItem menuItemCopyTblWithHead = new MenuItem( langRB.getString("MENU_COPY_TABLE_WITH_HEAD") );
-		menuItemCopyTblWithHead.setOnAction( event->this.copyTableWithHead() );
+		menuItemCopyTblWithHead.setOnAction( this::copyTableWithHead );
 
 		MenuItem menuItemSave2Excel = new MenuItem( langRB.getString("MENU_SAVE_2_EXCEL") );
 		menuItemSave2Excel.setOnAction( event->this.save2Excel() );
@@ -254,26 +252,6 @@ public class ObjTableView extends TableView<List<Object>>
 		tpAbs.setData( headLst, dataLst );
 	}
 	
-	/**************************************************
-	 * Override from CopyInterface
-	 ************************************************** 
-	 */
-	@Override
-	public synchronized void copyTableNoHead()
-	{
-		this.copyTable( COPY_TYPE.NO_HEAD );
-	}
-
-	/**************************************************
-	 * Override from CopyInterface
-	 ************************************************** 
-	 */
-	@Override
-	public synchronized void copyTableWithHead()
-	{
-		this.copyTable( COPY_TYPE.WITH_HEAD );
-	}
-	
 	// CopyTableInterface
 	@Override
 	public synchronized void copyTableNoHead( Event event )
@@ -321,12 +299,15 @@ public class ObjTableView extends TableView<List<Object>>
 			}
 			catch( IOException ioEx )
 			{
+				MyTool.showException( this.dbView.getMainController(), "conf.lang.gui.ctrl.query.ObjTableView", "TITLE_SAVE_ERROR", ioEx );
+				/*
 				ResourceBundle langRB = this.dbView.getMainController().getLangResource("conf.lang.gui.ctrl.query.ObjTableView");
 				MyAlertDialog alertDlg = new MyAlertDialog(AlertType.WARNING,this.dbView.getMainController());
 				alertDlg.setHeaderText( langRB.getString("TITLE_SAVE_ERROR") );
 	    		alertDlg.setTxtExp( ioEx );
 	    		alertDlg.showAndWait();
 	    		alertDlg = null;
+	    		*/
 	    	}
 			finally
 			{

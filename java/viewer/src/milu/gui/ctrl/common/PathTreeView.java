@@ -630,36 +630,4 @@ public class PathTreeView extends TreeView<Path>
 			return null;
 		}
 	}
-	
-	/*
-	private void showException( Exception ex )
-	{
-		MyAlertDialog alertDlg = new MyAlertDialog( AlertType.WARNING, this.mainCtrl );
-		ResourceBundle langRB = this.mainCtrl.getLangResource("conf.lang.gui.common.MyAlert");
-		alertDlg.setHeaderText( langRB.getString( "TITLE_MISC_ERROR" ) );
-		alertDlg.setTxtExp( ex );
-		alertDlg.showAndWait();
-	}
-	*/
-	/*
-	private void showException( Exception ex, String msgID )
-	{
-		MyAlertDialog alertDlg = new MyAlertDialog( AlertType.WARNING, this.mainCtrl );
-		ResourceBundle langRB = this.mainCtrl.getLangResource("conf.lang.gui.common.MyAlert");
-		alertDlg.setHeaderText( langRB.getString( "TITLE_MISC_ERROR" ) );
-		alertDlg.setTxtExp( ex, langRB.getString( msgID ) );
-		alertDlg.showAndWait();
-	}
-	*/	
-	
-	/*
-	private void showMsg( String msgID )
-	{
-		MyAlertDialog alertDlg = new MyAlertDialog( AlertType.WARNING, this.mainCtrl );
-		ResourceBundle langRB = this.mainCtrl.getLangResource("conf.lang.gui.common.MyAlert");
-		alertDlg.setHeaderText( langRB.getString( "TITLE_MISC_ERROR" ) );
-		alertDlg.setTxtMsg( langRB.getString( msgID ) );
-		alertDlg.showAndWait();
-	}	
-	*/
 }
