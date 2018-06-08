@@ -12,16 +12,18 @@ import milu.db.MyDBAbstract;
 import milu.gui.ctrl.query.DBResultTab;
 import milu.gui.view.DBView;
 import milu.main.AppConf;
+import milu.gui.ctrl.common.inf.ProcInterface;
 
 public class ExecScriptAllTask extends Task<Exception>
 	implements ExecTaskInterface
 {
-	private DBView       dbView     = null;
-	private MyDBAbstract myDBAbs    = null;
-	private AppConf      appConf    = null;
-	private List<SQLBag> sqlBagLst  = null;
-	private TabPane      tabPane    = null;
-	private Exception    taskEx     = null;
+	private DBView        dbView     = null;
+	private MyDBAbstract  myDBAbs    = null;
+	private AppConf       appConf    = null;
+	private List<SQLBag>  sqlBagLst  = null;
+	private TabPane       tabPane    = null;
+	private Exception     taskEx     = null;
+	private ProcInterface procInf    = null;
 	
 	@Override
 	public void setDBView( DBView dbView )
@@ -52,7 +54,13 @@ public class ExecScriptAllTask extends Task<Exception>
 	{
 		this.sqlBagLst = sqlBagLst;
 	}
-
+	
+	@Override
+	public void setProcInf( ProcInterface procInf )
+	{
+		this.procInf = procInf;
+	}
+	
 	@Override
 	protected Exception call()
 	{
@@ -80,6 +88,7 @@ public class ExecScriptAllTask extends Task<Exception>
 				execScriptEach.setAppConf(this.appConf);
 				execScriptEach.setTabPane(this.tabPane);
 				execScriptEach.setSQLBag(sqlBag);
+				execScriptEach.setProcInf(this.procInf);
 				execScriptEach.exec();
 				
 				List<Object> resData = new ArrayList<>();
@@ -132,6 +141,7 @@ public class ExecScriptAllTask extends Task<Exception>
 						DBResultTab dbResultTab = new DBResultTab( this.dbView );
 						dbResultTab.setText( "Result" );
 						dbResultTab.setSQL(null);
+						dbResultTab.setProcInf(this.procInf);
 						dbResultTab.setDataOnTableViewSQL(resHeadLst, resDataLst);
 						long endTimeTotal = System.nanoTime();
 						dbResultTab.setExecTime( endTimeTotal - startTimeTotalF );

@@ -24,7 +24,7 @@ public class Example2ExpressionDeParser extends ExpressionDeParser
 	{
 		System.out.println( "setSelectVisitor" );
 		this.selectorVisitor = selectorVisitor;
-		super.setSelectVisitor(selectorVisitor);
+		super.setSelectVisitor(this.selectorVisitor);
 	}
 	
 	// @Override

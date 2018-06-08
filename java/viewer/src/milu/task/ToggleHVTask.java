@@ -1,16 +1,16 @@
 package milu.task;
 
 import javafx.concurrent.Task;
-import milu.gui.ctrl.common.inf.ToggleHorizontalVerticalInterface;
+import milu.gui.ctrl.common.table.DirectionSwitchInterface;
 import javafx.application.Platform;
 
 public class ToggleHVTask extends Task<Double> 
 {
-	private ToggleHorizontalVerticalInterface  toggleHVInteface = null;
+	private DirectionSwitchInterface  toggleHVInteface = null;
 	
 	private int cnt = -1;
 	
-	public ToggleHVTask( ToggleHorizontalVerticalInterface toggleHVInteface, int cnt )
+	public ToggleHVTask( DirectionSwitchInterface toggleHVInteface, int cnt )
 	{
 		super();
 		this.toggleHVInteface = toggleHVInteface;
@@ -35,7 +35,7 @@ public class ToggleHVTask extends Task<Double>
 			(
 				()->
 				{
-					this.toggleHVInteface.switchDirection();
+					this.toggleHVInteface.switchDirection(null);
 					System.out.println( "ToggleHVTask:runlater." );
 					this.updateProgress( MAX, MAX );
 				}

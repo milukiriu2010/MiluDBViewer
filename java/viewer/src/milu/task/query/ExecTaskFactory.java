@@ -8,6 +8,7 @@ import milu.ctrl.sql.parse.SQLBag;
 import milu.db.MyDBAbstract;
 import milu.gui.view.DBView;
 import milu.main.AppConf;
+import milu.gui.ctrl.common.inf.ProcInterface;
 
 public class ExecTaskFactory 
 {
@@ -24,7 +25,8 @@ public class ExecTaskFactory
 		MyDBAbstract  myDBAbs,
 		AppConf       appConf,
 		TabPane       tabPane,
-		List<SQLBag>  sqlBagLst
+		List<SQLBag>  sqlBagLst,
+		ProcInterface procInf
 	)
 	{
 		Task<Exception> task = null;
@@ -47,6 +49,7 @@ public class ExecTaskFactory
 		((ExecTaskInterface)task).setAppConf(appConf);
 		((ExecTaskInterface)task).setTabPane(tabPane);
 		((ExecTaskInterface)task).setSQLBagLst(sqlBagLst);
+		((ExecTaskInterface)task).setProcInf(procInf);
 		
 		return task;
 	}

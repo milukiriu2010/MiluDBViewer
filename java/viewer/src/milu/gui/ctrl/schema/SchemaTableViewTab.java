@@ -5,7 +5,6 @@ import java.util.List;
 import javafx.scene.control.Tab;
 import javafx.scene.layout.BorderPane;
 import milu.gui.ctrl.common.inf.SetTableViewDataInterface;
-import milu.gui.ctrl.common.inf.ToggleHorizontalVerticalInterface;
 import milu.gui.ctrl.common.table.ObjTableView;
 import milu.gui.view.DBView;
 
@@ -17,8 +16,7 @@ import milu.gui.view.DBView;
  */
 public class SchemaTableViewTab extends Tab
 	implements
-		SetTableViewDataInterface,
-		ToggleHorizontalVerticalInterface
+		SetTableViewDataInterface
 {
 	private DBView        dbView       = null;
 	private ObjTableView  objTableView = null;
@@ -42,15 +40,4 @@ public class SchemaTableViewTab extends Tab
 	{
 		this.objTableView.setTableViewData( headLst, dataLst );
 	}
-	
-	/**************************************************
-	 * Override from ToggleHorizontalVerticalInterface
-	 ************************************************** 
-	 */
-	@Override
-	public void switchDirection()
-	{
-		this.objTableView.switchDirection();
-	}
-	
 }

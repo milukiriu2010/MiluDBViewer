@@ -16,7 +16,6 @@ import javafx.scene.control.TabPane;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TabPane.TabClosingPolicy;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.control.Button;
 import javafx.scene.control.ToolBar;
 
@@ -28,12 +27,10 @@ import javafx.concurrent.Task;
 import javafx.event.Event;
 import milu.gui.ctrl.common.inf.ActionInterface;
 import milu.gui.ctrl.common.inf.ChangeLangInterface;
-import milu.gui.ctrl.common.inf.CopyInterface;
 import milu.gui.ctrl.common.inf.CounterInterface;
-import milu.gui.ctrl.common.inf.ExecExplainDBInterface;
 import milu.gui.ctrl.common.inf.ExecQueryDBInterface;
 import milu.gui.ctrl.common.inf.FocusInterface;
-import milu.gui.ctrl.common.inf.ToggleHorizontalVerticalInterface;
+import milu.gui.ctrl.common.inf.ProcInterface;
 import milu.gui.ctrl.common.table.CopyTableInterface;
 import milu.gui.ctrl.common.table.DirectionSwitchInterface;
 import milu.gui.view.DBView;
@@ -47,10 +44,7 @@ import milu.db.MyDBAbstract;
 public class DBSqlScriptTab extends Tab
 	implements 
 		ExecQueryDBInterface,
-		ExecExplainDBInterface,
-		ToggleHorizontalVerticalInterface,
 		CounterInterface,
-		CopyInterface,
 		FocusInterface,
 		ChangeLangInterface,
 		ActionInterface,
@@ -58,6 +52,7 @@ public class DBSqlScriptTab extends Tab
 		SQLExplainInterface,
 		CopyTableInterface,
 		DirectionSwitchInterface,
+		ProcInterface,
 		SQLFormatInterface
 {
 	private DBView          dbView = null;
@@ -201,20 +196,6 @@ public class DBSqlScriptTab extends Tab
 	{
 		this.labelExecTimeSQL.setText( String.format( "%,d", nanoSec ) + "nsec" );
 	}
-	
-	/**************************************************
-	 * Override from ToggleHorizontalVerticalInterface
-	 ************************************************** 
-	 */
-	@Override
-	public void switchDirection()
-	{
-		Tab selectedTab = this.tabPane.getSelectionModel().getSelectedItem();
-		if ( selectedTab instanceof ToggleHorizontalVerticalInterface )
-		{
-			((ToggleHorizontalVerticalInterface)selectedTab).switchDirection();
-		}
-	}
 
 	/**************************************************
 	 * Override from ExecQueryDBInterface
@@ -224,15 +205,6 @@ public class DBSqlScriptTab extends Tab
 	public void Go()
 	{
 		this.execTask(ExecTaskFactory.FACTORY_TYPE.SCRIPT);
-	}
-	
-	/**
-	 * Override from ExecExplainDBInterface
-	 */
-	@Override
-	public void Explain()
-	{
-		this.execTask(ExecTaskFactory.FACTORY_TYPE.EXPLAIN);
 	}
 	
 	private void execTask( ExecTaskFactory.FACTORY_TYPE factoryType )
@@ -247,7 +219,17 @@ public class DBSqlScriptTab extends Tab
 		List<SQLBag> sqlBagLst = this.textAreaSQL.getSQLBagLst();
 		this.setCount( sqlBagLst.size() );
 		
-		Task<Exception> task = ExecTaskFactory.createFactory( factoryType, this.dbView, myDBAbs, appConf, this.tabPane, sqlBagLst ); 
+		Task<Exception> task =
+			ExecTaskFactory.createFactory
+			( 
+				factoryType, 
+				this.dbView, 
+				myDBAbs, 
+				appConf, 
+				this.tabPane, 
+				sqlBagLst, 
+				this 
+			); 
 		
 		// execute task
 		final Future<?> future = this.service.submit( task );
@@ -261,7 +243,7 @@ public class DBSqlScriptTab extends Tab
 				// task start.
 				if ( newVal.doubleValue() == 0.0 )
 				{
-					this.dbView.taskProcessing();
+					this.beginProc();
 					VBox vBox = new VBox(2);
 					Label  labelProcess = new Label( langRB.getString("LABEL_PROCESSING") );
 					Button btnCancel    = new Button( langRB.getString("BTN_CANCEL") );
@@ -291,7 +273,7 @@ public class DBSqlScriptTab extends Tab
 					//this.lowerPane.getChildren().add( this.tabPane );
 					// remove tab for cancel
 					this.tabPane.getTabs().remove(0);
-					this.dbView.taskDone();
+					this.endProc();
 					long endTime = System.nanoTime();
 					this.setExecTime( endTime - startTime );
 					System.out.println( "ExecExplainAllTask:clear" );
@@ -330,33 +312,6 @@ public class DBSqlScriptTab extends Tab
 		
 		long endTime = System.nanoTime();
 		this.setExecTime( endTime - startTime );
-	}
-	
-	/**************************************************
-	 * Override from CopyInterface
-	 ************************************************** 
-	 */
-	@Override
-	public void copyTableNoHead()
-	{
-		Tab selectedTab = this.tabPane.getSelectionModel().getSelectedItem();
-		if ( selectedTab instanceof CopyInterface )
-		{
-			((CopyInterface)selectedTab).copyTableNoHead();
-		}
-	}
-	
-	/**
-	 * Override from CopyInterface
-	 */
-	@Override
-	public void copyTableWithHead()
-	{
-		Tab selectedTab = this.tabPane.getSelectionModel().getSelectedItem();
-		if ( selectedTab instanceof CopyInterface )
-		{
-			((CopyInterface)selectedTab).copyTableWithHead();
-		}
 	}
 	
 	// SQLExecInterface
@@ -424,6 +379,19 @@ public class DBSqlScriptTab extends Tab
 	public void formatSQL( Event event )
 	{
 		this.textAreaSQL.formatSQL( event );
+	}
+	// ProcBeginInterface
+	@Override
+	public void beginProc()
+	{
+		((ProcInterface)this.toolBar).beginProc();
+	}
+	
+	// ProcEndInterface
+	@Override
+	public void endProc()
+	{
+		((ProcInterface)this.toolBar).endProc();
 	}
 	
 	/**************************************************

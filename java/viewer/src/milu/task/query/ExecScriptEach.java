@@ -13,6 +13,7 @@ import milu.gui.view.DBView;
 import milu.main.AppConf;
 import milu.db.access.ExecSQLFactory;
 import milu.db.access.ExecSQLAbstract;
+import milu.gui.ctrl.common.inf.ProcInterface;
 
 public class ExecScriptEach 
 {
@@ -26,7 +27,7 @@ public class ExecScriptEach
 	private int           procCnt  = -1;
 	private long          execTime = -1;
 	private Exception     myEx     = null;
-	
+	private ProcInterface procInf    = null;
 	
 	public void setNo( int no )
 	{
@@ -56,6 +57,11 @@ public class ExecScriptEach
 	public void setSQLBag( SQLBag sqlBag )
 	{
 		this.sqlBag = sqlBag;
+	}
+	
+	public void setProcInf( ProcInterface procInf )
+	{
+		this.procInf = procInf;
 	}
 	
 	public int getProcCnt()
@@ -118,6 +124,7 @@ public class ExecScriptEach
 					DBResultTab dbResultTab = new DBResultTab( this.dbView );
 					dbResultTab.setText( "Script " + no );
 					dbResultTab.setSQL(sqlBag.getSQL());
+					dbResultTab.setProcInf(this.procInf);
 					dbResultTab.setDataOnTableViewSQL(headLst, dataLst);
 					
 					if ( this.myEx != null )

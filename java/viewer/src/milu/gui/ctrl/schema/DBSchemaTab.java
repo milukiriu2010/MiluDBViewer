@@ -23,7 +23,6 @@ import milu.gui.ctrl.common.inf.ChangeLangInterface;
 import milu.gui.ctrl.common.inf.ExecQueryDBInterface;
 import milu.gui.ctrl.common.inf.FocusInterface;
 import milu.gui.ctrl.common.inf.RefreshInterface;
-import milu.gui.ctrl.common.inf.ToggleHorizontalVerticalInterface;
 import milu.gui.ctrl.schema.SchemaTreeView;
 import milu.gui.ctrl.schema.handle.SelectedItemHandlerAbstract;
 import milu.gui.ctrl.schema.handle.SelectedItemHandlerFactory;
@@ -33,7 +32,6 @@ public class DBSchemaTab extends Tab
 	implements 
 		ExecQueryDBInterface,
 		RefreshInterface,
-		ToggleHorizontalVerticalInterface,
 		FocusInterface,
 		ChangeLangInterface
 {
@@ -213,23 +211,6 @@ public class DBSchemaTab extends Tab
     		alertDlg.setTxtExp( ex );
     		alertDlg.showAndWait();
     		alertDlg = null;
-		}
-	}
-	
-	/**************************************************
-	 * Override from ToggleHorizontalVerticalInterface
-	 ************************************************** 
-	 */
-	@Override
-	public void switchDirection()
-	{
-		final Tab selectedTab = this.tabPane.getSelectionModel().getSelectedItem();
-		if ( 
-			( selectedTab != null ) && 
-			( selectedTab instanceof ToggleHorizontalVerticalInterface )
-		)
-		{
-			((ToggleHorizontalVerticalInterface)selectedTab).switchDirection();
 		}
 	}
 	

@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import javafx.scene.control.TabPane;
 import milu.ctrl.sql.parse.SQLBag;
 import milu.db.MyDBAbstract;
+import milu.gui.ctrl.common.inf.ProcInterface;
 import milu.gui.ctrl.query.DBResultTab;
 import milu.gui.view.DBView;
 import milu.main.AppConf;
@@ -16,12 +17,13 @@ import milu.main.AppConf;
 public class ExecExplainAllTask extends Task<Exception>
 	implements ExecTaskInterface
 {
-	private DBView       dbView     = null;
-	private MyDBAbstract myDBAbs    = null;
-	private AppConf      appConf    = null;
-	private List<SQLBag> sqlBagLst  = null;
-	private TabPane      tabPane    = null;
-	private Exception    taskEx     = null;
+	private DBView        dbView     = null;
+	private MyDBAbstract  myDBAbs    = null;
+	private AppConf       appConf    = null;
+	private List<SQLBag>  sqlBagLst  = null;
+	private TabPane       tabPane    = null;
+	private Exception     taskEx     = null;
+	private ProcInterface procInf    = null;
 	
 	@Override
 	public void setDBView( DBView dbView )
@@ -52,7 +54,13 @@ public class ExecExplainAllTask extends Task<Exception>
 	{
 		this.sqlBagLst = sqlBagLst;
 	}
-
+	
+	@Override
+	public void setProcInf( ProcInterface procInf )
+	{
+		this.procInf = procInf;
+	}
+	
 	@Override
 	protected Exception call()
 	{
@@ -80,6 +88,7 @@ public class ExecExplainAllTask extends Task<Exception>
 				execExplainEach.setAppConf(this.appConf);
 				execExplainEach.setTabPane(this.tabPane);
 				execExplainEach.setSQLBag(sqlBag);
+				execExplainEach.setProcInf(this.procInf);
 				execExplainEach.exec();
 				
 				List<Object> resData = new ArrayList<>();
@@ -132,6 +141,7 @@ public class ExecExplainAllTask extends Task<Exception>
 						DBResultTab dbResultTab = new DBResultTab( this.dbView );
 						dbResultTab.setText( "Result" );
 						dbResultTab.setSQL(null);
+						dbResultTab.setProcInf(this.procInf);
 						dbResultTab.setDataOnTableViewSQL(resHeadLst, resDataLst);
 						long endTimeTotal = System.nanoTime();
 						dbResultTab.setExecTime( endTimeTotal - startTimeTotalF );

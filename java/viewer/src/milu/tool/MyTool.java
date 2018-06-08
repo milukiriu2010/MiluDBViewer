@@ -246,9 +246,27 @@ public class MyTool
 	{
 		for ( Node n = node; n != null ; n=n.getParent() ) 
 		{
+			System.out.println( "searchParentNode:" + n );
 			if ( searchNodeClass.isInstance(n) )
 			{
 				return n;
+			}
+		}
+		return null;
+	}
+	
+	public static Node searchParentNode( Node node, final Class<?> searchNodeClass, int cnt )
+	{
+		for ( Node n = node; n != null ; n=n.getParent() ) 
+		{
+			System.out.println( "searchParentNode:" + n );
+			if ( searchNodeClass.isInstance(n) )
+			{
+				if ( cnt <= 1 )
+				{
+					return n;
+				}
+				cnt = cnt - 1;
 			}
 		}
 		return null;

@@ -14,6 +14,7 @@ import milu.db.access.ExecSQLAbstract;
 import milu.db.access.ExecSQLExplainFactory;
 import milu.gui.ctrl.common.inf.ActionInterface;
 import milu.gui.ctrl.common.inf.ChangeLangInterface;
+import milu.gui.ctrl.common.inf.ProcInterface;
 import milu.gui.ctrl.common.table.CopyTableInterface;
 import milu.gui.ctrl.common.table.DirectionSwitchInterface;
 import milu.gui.view.DBView;
@@ -23,6 +24,7 @@ import milu.tool.MyTool;
 class DBSqlScriptToolBar extends ToolBar
 	implements 
 		ActionInterface,
+		ProcInterface,
 		ChangeLangInterface
 {
 	private DBView          dbView = null;
@@ -47,10 +49,10 @@ class DBSqlScriptToolBar extends ToolBar
 		MainController mainCtrl = this.dbView.getMainController();
 		this.btnExecSQL.setGraphic( MyTool.createImageView( 20, 20, mainCtrl.getImage("file:resources/images/execsql.png") ) );
 		this.btnExplainSQL.setGraphic( MyTool.createImageView( 20, 20, mainCtrl.getImage("file:resources/images/explain.png") ) );
-		this.btnFmtSQL.setGraphic( MyTool.createImageView( 20, 20, mainCtrl.getImage("file:resources/images/sql_format.png") ) );
 		this.btnToggleHV.setGraphic( MyTool.createImageView( 20, 20, mainCtrl.getImage("file:resources/images/direction.png") ) );
 		this.btnCopyTblNoHead.setGraphic( MyTool.createImageView( 20, 20, mainCtrl.getImage("file:resources/images/copy.png") ) );
 		this.btnCopyTblWithHead.setGraphic( MyTool.createImageView( 20, 20, mainCtrl.getImage("file:resources/images/copy2.png") ) );
+		this.btnFmtSQL.setGraphic( MyTool.createImageView( 20, 20, mainCtrl.getImage("file:resources/images/sql_format.png") ) );
 		
 		this.getItems().addAll(	this.btnExecSQL	);
 		
@@ -132,6 +134,24 @@ class DBSqlScriptToolBar extends ToolBar
 			// any key
 			this.btnFmtSQL.setOnKeyPressed( ((SQLFormatInterface)obj)::formatSQL );
 		}
+	}
+	
+	// ProcBeginInterface
+	@Override
+	public void beginProc()
+	{
+		this.btnExecSQL.setDisable(true);
+		this.btnExplainSQL.setDisable(true);
+		this.btnToggleHV.setDisable(true);
+	}
+	
+	// ProcEndInterface
+	@Override
+	public void endProc()
+	{
+		this.btnExecSQL.setDisable(false);
+		this.btnExplainSQL.setDisable(false);
+		this.btnToggleHV.setDisable(false);
 	}
 	
 	/**************************************************

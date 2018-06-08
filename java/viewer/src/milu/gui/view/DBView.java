@@ -22,11 +22,10 @@ import java.util.stream.Collectors;
 import milu.gui.ctrl.common.inf.ActionInterface;
 import milu.gui.ctrl.common.inf.ChangeLangInterface;
 import milu.gui.ctrl.common.inf.CopyInterface;
-import milu.gui.ctrl.common.inf.ExecExplainDBInterface;
 import milu.gui.ctrl.common.inf.ExecQueryDBInterface;
 import milu.gui.ctrl.common.inf.FocusInterface;
 import milu.gui.ctrl.common.inf.RefreshInterface;
-import milu.gui.ctrl.common.inf.ToggleHorizontalVerticalInterface;
+import milu.gui.ctrl.common.inf.ProcInterface;
 import milu.gui.ctrl.menu.MainMenuBar;
 import milu.gui.ctrl.menu.MainToolBar;
 import milu.gui.ctrl.query.DBSqlScriptTab;
@@ -36,7 +35,8 @@ import milu.db.MyDBAbstract;
 import milu.task.collect.CollectTaskFactory;
 
 public class DBView extends Stage
-	implements 
+	implements
+		ProcInterface,
 		ChangeLangInterface
 {
 	// Main Controller
@@ -182,7 +182,11 @@ public class DBView extends Stage
 	private void setMnemonic()
 	{
 		this.mainToolBar.setMnemonic();
-		
+		this.setActionOnTab();
+	}
+	
+	private void setActionOnTab()
+	{
 		List<ActionInterface> actionTabLst = this.tabPane.getTabs().stream()
 				.filter( ActionInterface.class::isInstance )
 				.map( ActionInterface.class::cast )
@@ -217,7 +221,7 @@ public class DBView extends Stage
 						if ( newVal.doubleValue() == 1.0 )
 						{
 							System.out.println( "CollectTask:Done[" + newVal + "]" );
-							this.taskDone();
+							this.endProc();
 							//this.brdPane.setBottom(null);
 							this.setBottomMsg(null);
 						}
@@ -312,7 +316,7 @@ public class DBView extends Stage
 		);
 		*/
 	}
-	
+	/*
 	public void taskProcessing()
 	{
 		this.mainToolBar.taskProcessing();
@@ -322,7 +326,21 @@ public class DBView extends Stage
 	{
 		this.mainToolBar.taskDone();
 	}
+	*/
 	
+	// ProcBeginInterface
+	@Override
+	public void beginProc()
+	{
+		this.mainToolBar.beginProc();
+	}
+	
+	// ProcBeginInterface
+	@Override
+	public void endProc()
+	{
+		this.mainToolBar.endProc();
+	}
 	/**
 	 * Quit Application
 	 */
@@ -368,33 +386,6 @@ public class DBView extends Stage
 		}
 	}
 	
-	/**
-	 * Exec Explain for SQL
-	 */
-	public void execExplain()
-	{
-		// Call Explain on Selected Tab.
-		Tab tab = this.tabPane.getSelectionModel().getSelectedItem();
-		if ( tab instanceof ExecExplainDBInterface )
-		{
-			((ExecExplainDBInterface)tab).Explain();
-		}
-	}
-	
-	/********************************
-	 * Switch Direction 
-	 ********************************
-	 */
-	public void switchDirection()
-	{
-		// Call switch direction on Selected Tab.
-		Tab tab = this.tabPane.getSelectionModel().getSelectedItem();
-		if ( tab instanceof ToggleHorizontalVerticalInterface )
-		{
-			((ToggleHorizontalVerticalInterface)tab).switchDirection();
-		}
-	}
-
 	/********************************
 	 * Create New Tab 
 	 ********************************
@@ -410,6 +401,7 @@ public class DBView extends Stage
 		{
 			((FocusInterface)newTab).setFocus();
 		}
+		this.setActionOnTab();
 	}
 
 	/********************************

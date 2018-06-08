@@ -25,9 +25,8 @@ import javafx.event.Event;
 import java.sql.SQLException;
 
 import milu.gui.ctrl.common.inf.ChangeLangInterface;
-import milu.gui.ctrl.common.inf.CopyInterface;
 import milu.gui.ctrl.common.inf.CounterInterface;
-import milu.gui.ctrl.common.inf.ToggleHorizontalVerticalInterface;
+import milu.gui.ctrl.common.inf.ProcInterface;
 import milu.gui.ctrl.common.table.CopyTableInterface;
 import milu.gui.ctrl.common.table.DirectionSwitchInterface;
 import milu.gui.ctrl.common.table.ObjTableView;
@@ -40,9 +39,7 @@ import milu.task.ToggleHVTask;
 
 public class DBResultTab extends Tab
 	implements 
-		ToggleHorizontalVerticalInterface,
 		DirectionSwitchInterface,
-		CopyInterface,
 		CounterInterface,
 		CopyTableInterface,
 		ChangeLangInterface
@@ -65,7 +62,10 @@ public class DBResultTab extends Tab
 	private Label labelExecTimeSQL = new Label();
 	
 	// Thread Pool
-	private ExecutorService service = Executors.newSingleThreadExecutor();	
+	private ExecutorService service = Executors.newSingleThreadExecutor();
+	
+	// call ProcInterface
+	private ProcInterface procInf = null;
 	
 	public DBResultTab( DBView dbView )
 	{
@@ -105,6 +105,12 @@ public class DBResultTab extends Tab
 		this.setGraphic( iv );
 				
 		this.setAction();
+	}
+	
+	public void setProcInf( ProcInterface procInf )
+	{
+		this.procInf = procInf;
+		System.out.println( "ResultTab:procInf:" + this.procInf );
 	}
 	
 	private void setAction()
@@ -217,51 +223,6 @@ public class DBResultTab extends Tab
 		this.labelExecTimeSQL.setText( String.format( "%,d", nanoSec ) + "nsec" );
 	}
 	
-	/**************************************************
-	 * Override from ToggleHorizontalVerticalInterface
-	 ************************************************** 
-	 */
-	@Override
-	public void switchDirection()
-	{
-		long startTime = System.nanoTime();
-		ResourceBundle langRB = this.dbView.getMainController().getLangResource("conf.lang.gui.ctrl.query.DBSqlTab");
-		int cnt = this.tableViewSQL.getRowSize();
-		if ( cnt > 0 )
-		{
-			final ToggleHVTask toggleHVTask = new ToggleHVTask( this.tableViewSQL, cnt );
-			// execute task
-			this.service.submit( toggleHVTask );
-			
-			toggleHVTask.progressProperty().addListener
-			(
-				(obs,oldVal,newVal)->
-				{
-					System.out.println( "ToggleHVTask:Progress[" + obs.getClass() + "]oldVal[" + oldVal + "]newVal[" + newVal + "]" );
-					// task start.
-					if ( newVal.doubleValue() == 0.0 )
-					{
-						this.dbView.taskProcessing();
-						Label label = new Label( langRB.getString("LABEL_PROCESSING") );
-						this.lowerPane.getChildren().clear();
-						this.lowerPane.getChildren().add( label );
-						System.out.println( "ToggleHVTask:clear" );
-					}
-					// task done.
-					else if ( newVal.doubleValue() == 1.0 )
-					{
-						this.lowerPane.getChildren().clear();
-						this.lowerPane.getChildren().add( this.tableViewSQL );
-						this.dbView.taskDone();
-						long endTime = System.nanoTime();
-						this.setExecTime( endTime - startTime );
-						System.out.println( "ToggleHVTask:set" );
-					}
-				}
-			);
-		}
-	}
-	
 	// DirectionSwitchInterface
 	@Override
 	public void switchDirection( Event event )
@@ -283,7 +244,8 @@ public class DBResultTab extends Tab
 					// task start.
 					if ( newVal.doubleValue() == 0.0 )
 					{
-						this.dbView.taskProcessing();
+						//this.dbView.taskProcessing();
+						this.procInf.beginProc();
 						Label label = new Label( langRB.getString("LABEL_PROCESSING") );
 						this.lowerPane.getChildren().clear();
 						this.lowerPane.getChildren().add( label );
@@ -294,7 +256,8 @@ public class DBResultTab extends Tab
 					{
 						this.lowerPane.getChildren().clear();
 						this.lowerPane.getChildren().add( this.tableViewSQL );
-						this.dbView.taskDone();
+						//this.dbView.taskDone();
+						this.procInf.endProc();
 						long endTime = System.nanoTime();
 						this.setExecTime( endTime - startTime );
 						System.out.println( "ToggleHVTask:set" );
@@ -361,25 +324,6 @@ public class DBResultTab extends Tab
 		this.lowerPane.getChildren().add( splitPane );
 	}
 	
-	/**************************************************
-	 * Override from CopyInterface
-	 ************************************************** 
-	 */
-	@Override
-	public void copyTableNoHead()
-	{
-		this.tableViewSQL.copyTableNoHead();
-	}
-	
-	/**
-	 * Override from CopyInterface
-	 */
-	@Override
-	public void copyTableWithHead()
-	{
-		this.tableViewSQL.copyTableWithHead();
-	}
-
 	// CopyTableInterface
 	@Override
 	public void copyTableNoHead( Event event )

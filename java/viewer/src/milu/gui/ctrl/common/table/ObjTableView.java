@@ -37,14 +37,12 @@ import milu.file.table.MyFileFactory;
 import milu.gui.ctrl.common.inf.ChangeLangInterface;
 import milu.gui.ctrl.common.inf.CopyInterface;
 import milu.gui.ctrl.common.inf.SetTableViewDataInterface;
-import milu.gui.ctrl.common.inf.ToggleHorizontalVerticalInterface;
 import milu.gui.dlg.MyAlertDialog;
 import milu.gui.view.DBView;
 
 public class ObjTableView extends TableView<List<Object>>
 	implements 
 		SetTableViewDataInterface,
-		ToggleHorizontalVerticalInterface,
 		DirectionSwitchInterface,
 		CopyInterface,
 		CopyTableInterface,
@@ -232,19 +230,6 @@ public class ObjTableView extends TableView<List<Object>>
 	{
 		TableProcessAbstract tpAbs = TableProcessFactory.getInstance( this.tableViewDirection, this );
 		return tpAbs.getRowSize();
-	}
-	
-	/**************************************************
-	 * Override from ToggleHorizontalVerticalInterface
-	 ************************************************** 
-	 */
-	// @SuppressWarnings("rawtypes")
-	@Override
-	public synchronized void switchDirection()
-	{
-		this.tableColSet.clear();
-		TableProcessAbstract tpAbs = TableProcessFactory.getInstance( this.tableViewDirection, this );
-		tpAbs.switchDirection();
 	}
 	
 	// DirectionSwitchInterface

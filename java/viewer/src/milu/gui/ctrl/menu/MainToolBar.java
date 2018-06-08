@@ -10,16 +10,17 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
 import milu.gui.ctrl.common.inf.ChangeLangInterface;
+import milu.gui.ctrl.common.inf.ProcInterface;
 import milu.gui.ctrl.schema.DBSchemaTab;
 import milu.gui.view.DBView;
 import milu.gui.view.FadeView;
 import milu.main.MainController;
 import milu.tool.MyTool;
-import milu.db.access.ExecSQLAbstract;
-import milu.db.access.ExecSQLExplainFactory;
 
 public class MainToolBar extends ToolBar
-	implements ChangeLangInterface
+	implements
+		ProcInterface,
+		ChangeLangInterface
 {
 	// DBView
 	private DBView  dbView = null;
@@ -262,14 +263,18 @@ public class MainToolBar extends ToolBar
 		*/
 	}
 	
-	public void taskProcessing()
+	// ProcBeginInterface
+	@Override
+	public void beginProc()
 	{
 		//this.btnGo.setDisable(true);
 		//this.btnExplain.setDisable(true);
 		//this.btnToggleHV.setDisable(true);
 	}
 	
-	public void taskDone()
+	// ProcBeginInterface
+	@Override
+	public void endProc()
 	{
 		//this.btnGo.setDisable(false);
 		//this.btnExplain.setDisable(false);
