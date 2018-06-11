@@ -2,10 +2,6 @@ package milu.gui.ctrl.common.table;
 
 import java.util.List;
 import java.sql.Timestamp;
-import java.sql.SQLXML;
-import java.io.IOException;
-import java.io.InputStream;
-import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 
 import javafx.beans.property.SimpleObjectProperty;

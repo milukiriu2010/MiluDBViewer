@@ -1,6 +1,7 @@
 package milu.gui.ctrl.common.table;
 
 import java.util.List;
+import java.util.ArrayList;
 import java.util.Set;
 import java.util.HashSet;
 import java.util.ResourceBundle;
@@ -16,7 +17,6 @@ import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TextInputControl;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.ContextMenu;
@@ -36,7 +36,6 @@ import milu.file.table.MyFileAbstract;
 import milu.file.table.MyFileFactory;
 import milu.gui.ctrl.common.inf.ChangeLangInterface;
 import milu.gui.ctrl.common.inf.SetTableViewDataInterface;
-import milu.gui.dlg.MyAlertDialog;
 import milu.gui.view.DBView;
 
 public class ObjTableView extends TableView<List<Object>>
@@ -47,6 +46,9 @@ public class ObjTableView extends TableView<List<Object>>
 		ChangeLangInterface
 {
 	private DBView  dbView = null;
+	
+	private List<Object>        headObjLst = new ArrayList<>();
+	private List<List<Object>>  dataObjLst = new ArrayList<>();
 	
 	// Listener for "this.tableViewDirection = 2:vertical"
 	// This listener enables to select the whole column, when cliking a cell.
@@ -226,8 +228,11 @@ public class ObjTableView extends TableView<List<Object>>
 	
 	public synchronized int getRowSize()
 	{
+		/*
 		TableProcessAbstract tpAbs = TableProcessFactory.getInstance( this.tableViewDirection, this );
 		return tpAbs.getRowSize();
+		*/
+		return this.dataObjLst.size();
 	}
 	
 	// DirectionSwitchInterface
@@ -247,9 +252,33 @@ public class ObjTableView extends TableView<List<Object>>
 		// Clear TableView
 		this.getItems().clear();
 		this.getColumns().clear();
+		this.headObjLst.clear();
+		this.dataObjLst.clear();
+		//this.headObjLst = headLst.stream().collect(Collectors.toList());
+		//this.dataObjLst = dataLst.stream().collect(Collectors.toList());
+		//this.headObjLst = new ArrayList<>( headLst );
+		//this.dataObjLst = new ArrayList<>( dataLst );
+		this.headObjLst = headLst;
+		this.dataObjLst = dataLst;
 		
 		TableProcessAbstract tpAbs = TableProcessFactory.getInstance( this.tableViewDirection, this );
-		tpAbs.setData( headLst, dataLst );
+		tpAbs.setData( this.headObjLst, this.dataObjLst );
+	}
+
+	synchronized void setTableViewData()
+	{
+		// Clear TableView
+		this.getItems().clear();
+		this.getColumns().clear();
+		
+		//List<Object>       headLst = this.headObjLst.stream().collect(Collectors.toList());
+		//List<List<Object>> dataLst = this.dataObjLst.stream().collect(Collectors.toList());
+		//List<Object>        headLst = new ArrayList<>( this.headObjLst );
+		//List<List<Object>>  dataLst = new ArrayList<>( this.dataObjLst );
+		
+		TableProcessAbstract tpAbs = TableProcessFactory.getInstance( this.tableViewDirection, this );
+		//tpAbs.setData( headLst, dataLst );
+		tpAbs.setData( this.headObjLst, this.dataObjLst );
 	}
 	
 	// CopyTableInterface
@@ -320,15 +349,21 @@ public class ObjTableView extends TableView<List<Object>>
 	// Get ColumnName from TableView 
 	private List<Object> getHeadList()
 	{
+		/*
 		TableProcessAbstract tpAbs = TableProcessFactory.getInstance( this.tableViewDirection, this );
 		return tpAbs.getHeadList();
+		*/
+		return this.headObjLst;
 	}
 	
 	// Get Data from TableView 
 	private List<List<Object>> getDataList()
 	{
+		/*
 		TableProcessAbstract tpAbs = TableProcessFactory.getInstance( this.tableViewDirection, this );
 		return tpAbs.getDataList();
+		*/
+		return this.dataObjLst;
 	}
 	
 	/**************************************************

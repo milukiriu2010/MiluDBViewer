@@ -22,11 +22,15 @@ public class CheckUpdate
 {
 	private AppConf appConf = null;
 	
+	// https://sourceforge.net/projects/miludbviewer/rss?path=/
 	private URL url = null;
 	
+	// x.x.x
 	private String  newVersion = null;
 	
 	private boolean isExistNew = false;
+	
+	private String  newLink = null;
 	
 	public void setAppConf( AppConf appConf )
 	{
@@ -43,63 +47,83 @@ public class CheckUpdate
 		return this.isExistNew;
 	}
 	
+	public String getNewLink()
+	{
+		return this.newLink;
+	}
+	
+	// <item>
+	//     <title><![CDATA[/MiluDBViewer0.2.0/MiluDBViewer_Setup0.2.0.exe]]></title>
+	//     <link>https://sourceforge.net/projects/miludbviewer/files/MiluDBViewer0.2.0/MiluDBViewer_Setup0.2.0.exe/download</link>
+	//     <guid>https://sourceforge.net/projects/miludbviewer/files/MiluDBViewer0.2.0/MiluDBViewer_Setup0.2.0.exe/download</guid>
+	//     <pubDate>Wed, 06 Jun 2018 23:14:06 UT</pubDate>
+	//     <description><![CDATA[/MiluDBViewer0.2.0/MiluDBViewer_Setup0.2.0.exe]]></description>
+	//     <files:sf-file-id xmlns:files="https://sourceforge.net/api/files.rdf#">28362746</files:sf-file-id>
+	//     <files:extra-info xmlns:files="https://sourceforge.net/api/files.rdf#">PE32 executable</files:extra-info>
+	//     <media:content xmlns:media="http://video.search.yahoo.com/mrss/" type="application/x-dosexec; charset=binary" url="https://sourceforge.net/projects/miludbviewer/files/MiluDBViewer0.2.0/MiluDBViewer_Setup0.2.0.exe/download" filesize="37500847"><media:hash algo="md5">d949b66fd32ce1b5811cccc61a28307b</media:hash></media:content>
+	// </item>
 	public boolean check() 
-			throws MalformedURLException, IOException, ParserConfigurationException, SAXException, XPathExpressionException
+		throws 
+			MalformedURLException, 
+			IOException, 
+			ParserConfigurationException, 
+			SAXException, 
+			XPathExpressionException
 	{
 		this.url = new URL("https://sourceforge.net/projects/miludbviewer/rss?path=/");
-		//this.url = new URL("http://www.livedoor.com/");
 		
 		System.out.println( "ProxyType:" + this.appConf.getProxyType() );
 		
 		ProxyAbstract proxyAbs = ProxyFactory.getInstance( this.appConf );
 		proxyAbs.selectProxy();
 		
-		/*
-		HttpURLConnection uc = null;
-		if ( proxy == null )
-		{
-			uc = (HttpURLConnection)url.openConnection();
-		}
-		else
-		{
-			uc = (HttpURLConnection)url.openConnection(proxy);
-		}
-		*/
-		//HttpURLConnection uc = (HttpURLConnection)url.openConnection(proxy);
-		//proxyAbs.callProxyAuth(uc);
-		//proxyAbs.callProxyAuth(null);
 		HttpURLConnection uc = (HttpURLConnection)url.openConnection();
 		uc.connect();
 		
 		StringBuffer page = new StringBuffer();
-		BufferedReader in = new BufferedReader(new InputStreamReader(uc.getInputStream()));
-		String line = null;
-		while ( (line = in.readLine()) != null )
+		try( BufferedReader in = new BufferedReader(new InputStreamReader(uc.getInputStream())); )
 		{
-		   page.append( line + "\n" );
+			String line = null;
+			while ( (line = in.readLine()) != null )
+			{
+			   page.append( line + "\n" );
+			}
 		}
 		
 		String strXML = page.toString();
 		System.out.println( "Recv Data:" + strXML );
 		
 		MyXMLParse myXMLParse = new MyXMLParse();
-		List<String> pathLst = myXMLParse.analyze(strXML, "/rss/channel/item/title" );
+		List<String> titlePathLst = myXMLParse.analyze(strXML, "/rss/channel/item/title" );
 		
-		// https://sourceforge.net/projects/miludbviewer/files/MiluDBViewer0.1.9/MiluDBViewer0.1.9.tar.gz/download
-		
+		// ---------------------------------------------------
+		// /rss/channel/item/title
+		// ---------------------------------------------------
 		// /MiluDBViewer0.1.9/MiluDBViewer0.1.9.tar.gz
 		// /MiluDBViewer0.1.9/MiluDBViewer_Setup0.1.9.exe
 		// /MiluDBViewer0.1.8/MiluDBViewer0.1.8.tar.gz
 		// /MiluDBViewer0.1.8/MiluDBViewer_Setup0.1.8.exe
-		this.getNewVersion(pathLst);
+		String titlePathFirst = this.getNewVersion(titlePathLst);
 		System.out.println( "NewVersion:" + this.newVersion );
 		
 		this.compareVersion();
 		
+		if ( this.isExistNew == true )
+		{
+			List<String> titleLinkLst = myXMLParse.analyze(strXML, "/rss/channel/item/link" );
+			
+			// ---------------------------------------------------
+			// /rss/channel/item/link
+			// ---------------------------------------------------
+			// https://sourceforge.net/projects/miludbviewer/files/MiluDBViewer0.1.9/MiluDBViewer_Setup0.1.9.exe/download
+			// https://sourceforge.net/projects/miludbviewer/files/MiluDBViewer0.1.9/MiluDBViewer0.1.9.tar.gz/download
+			this.getNewLink( titleLinkLst, titlePathFirst );
+		}
+		
 		return this.isExistNew;
 	}
 	
-	private void getNewVersion( List<String> pathLst1 )
+	private String getNewVersion( List<String> pathLst1 )
 	{
 		// System.getProperty:os.name
 		//   "Windows 10"
@@ -125,13 +149,15 @@ public class CheckUpdate
 
 		if ( pathFirst == null )
 		{
-			return;
+			return null;
 		}
 		
 		System.out.println( pathFirst );
 		String[] pathFirstArray = pathFirst.split("/");
 		System.out.println( pathFirstArray[1] );
 		this.newVersion = pathFirstArray[1].replace( "MiluDBViewer", "" );
+		
+		return pathFirst;
 	}
 	
 	private void compareVersion()
@@ -170,4 +196,13 @@ public class CheckUpdate
 			}
 		}
 	}
+	
+	private void getNewLink( List<String> pathLst1, String link )
+	{
+		this.newLink = 
+			pathLst1.stream()
+				.filter( (path)->path.contains(link) )
+				.findFirst()
+				.get();
+	}	
 }

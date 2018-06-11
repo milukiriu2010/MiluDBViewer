@@ -28,8 +28,8 @@ class TableProcessVertical extends TableProcessAbstract
 	@Override
 	void switchDirection()
 	{
+		/*
 		// Get ColumnName from TableView
-		/**/
 		int colSize = this.objTableView.getItems().size();
 		List<Object> headLst = new ArrayList<>();
 		for ( int i = 0; i < colSize; i++ )
@@ -38,11 +38,9 @@ class TableProcessVertical extends TableProcessAbstract
 			// ColumnName
 			headLst.add( dataRow.get(0) );
 		}
-		/**/
 		//List<String> headLst = this.getHeadList();
 		
 		// Get Data from TableView 
-		/**/
 		int rowSize = this.objTableView.getColumns().size();
 		List<List<Object>> dataLst = new ArrayList<>();
 		for ( int i = 1; i < rowSize; i++ )
@@ -56,12 +54,23 @@ class TableProcessVertical extends TableProcessAbstract
 			}
 			dataLst.add( dataRow );
 		}
-		/**/
 		//List<List<String>> dataLst = this.getDataList();
 		
 		// Switch Direction of tableVieSQL from Vertical to Horizontal
 		this.objTableView.setTableViewDirection( Orientation.HORIZONTAL );
 		this.objTableView.setTableViewData( headLst, dataLst );
+		
+        // disable to select the whole column
+        // https://stackoverflow.com/questions/38012247/javafx-tableview-select-the-whole-tablecolumn-and-get-the-index
+        this.objTableView.getSelectionModel().setCellSelectionEnabled( false );
+        this.objTableView.getFocusModel().focusedCellProperty().removeListener
+        ( 
+        	(ChangeListener<? super TablePosition>)this.objTableView.tableViewChangeListner 
+        );
+        */
+		// Switch Direction of tableVieSQL from Vertical to Horizontal
+		this.objTableView.setTableViewDirection( Orientation.HORIZONTAL );
+		this.objTableView.setTableViewData();
 		
         // disable to select the whole column
         // https://stackoverflow.com/questions/38012247/javafx-tableview-select-the-whole-tablecolumn-and-get-the-index

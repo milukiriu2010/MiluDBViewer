@@ -1,7 +1,6 @@
 package milu.gui.ctrl.schema.handle;
 
 import javafx.scene.control.TreeItem;
-import javafx.scene.control.Alert.AlertType;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
@@ -14,7 +13,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.ResourceBundle;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -22,7 +20,6 @@ import java.util.concurrent.TimeUnit;
 import milu.gui.ctrl.common.inf.SetTableViewDataInterface;
 import milu.gui.ctrl.schema.SchemaTreeView;
 import milu.gui.ctrl.schema.SetSrcTextInterface;
-import milu.gui.dlg.MyAlertDialog;
 import milu.db.MyDBAbstract;
 import milu.db.obj.abs.AbsDBFactory;
 import milu.entity.schema.SchemaEntity;

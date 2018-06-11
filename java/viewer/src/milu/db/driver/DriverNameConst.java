@@ -1,15 +1,15 @@
 package milu.db.driver;
 
-public enum DriverNameConst 
+public enum DriverNameConst
 {
-	DB_ORACLE("Oracle"),
-	DB_POSTGRESQL("PostgreSQL"),
-	DB_MYSQL("MySQL"),
 	DB_CASSANDRA1("Cassandra(zhicwu)"),
 	DB_CASSANDRA2("Cassandra(adejanovski)"),
-	DB_SQLSERVER("SQLServer"),
+	DB_MONGODB1("MongoDB(Unity)"),
+	DB_MYSQL("MySQL"),
+	DB_ORACLE("Oracle"),
+	DB_POSTGRESQL("PostgreSQL"),
 	DB_SQLITE("SQLite"),
-	DB_MONGODB1("MongoDB(Unity)")
+	DB_SQLSERVER("SQLServer")
 	;
 	
 	private String val = null;

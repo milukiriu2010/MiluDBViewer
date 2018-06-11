@@ -23,6 +23,10 @@ import milu.security.MySecurityKey;
  */
 final public class AppConf
 {
+	// Initial Directory for JDBC Driver
+	@Expose(serialize = true, deserialize = true)
+	private String  initDirJDBC = "";
+	
 	// Max fetch rows when selecting.
 	@Expose(serialize = true, deserialize = true)
 	private Integer fetchMax = 100;
@@ -95,8 +99,15 @@ final public class AppConf
 	@Expose(serialize = true, deserialize = true)
 	private byte[]  proxyIV = null;
 	
-	public AppConf()
+	// Initial Directory for JDBC Driver
+	public String getInitDirJDBC()
 	{
+		return this.initDirJDBC;
+	}
+	
+	public void setInitDirJDBC( String initDirJDBC )
+	{
+		this.initDirJDBC = initDirJDBC;
 	}
 	
 	/**

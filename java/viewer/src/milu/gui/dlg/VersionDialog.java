@@ -26,6 +26,7 @@ import javafx.stage.Stage;
 import milu.main.AppConst;
 import milu.main.MainController;
 import milu.net.CheckUpdate;
+import milu.net.DownloadModule;
 import milu.tool.MyTool;
 
 public class VersionDialog extends Dialog<Boolean>
@@ -105,22 +106,6 @@ public class VersionDialog extends Dialog<Boolean>
 			DataInputStream     dis = new DataInputStream(is);
 		)
 		{
-			/*
-			// https://www.mkyong.com/java/how-to-read-file-from-java-bufferedinputstream-example/
-			BufferedInputStream bis = (BufferedInputStream)urlVerInfo.getContent();
-			DataInputStream     dis = new DataInputStream(bis);
-			int readSize = 0;
-			int pos = 0;
-			while ( ( readSize = dis.available() ) > 0 )
-			{
-				byte[] b = new byte [readSize];
-				dis.read( b, pos, readSize );
-				pos += readSize;
-				sb.append( new String( b ) );
-			}
-			strFmt = sb.toString();
-			*/
-			
 			int readSize = 0;
 			int pos = 0;
 			while ( ( readSize = dis.available() ) > 0 )
@@ -147,14 +132,18 @@ public class VersionDialog extends Dialog<Boolean>
 		txtErrMsg.setEditable(false);
 		txtErrMsg.visibleProperty().setValue(false);
 		
-		HBox hBox = new HBox(2);
-		hBox.setPadding( new Insets( 10, 10, 10, 10 ) );
-		hBox.setSpacing(10);
-		hBox.getChildren().addAll( btnCheck, lblCheck );
+		Button btnDownload = new Button( "Download" );
+		btnDownload.setDisable(true);
+		
+		
+		HBox hBoxCheck = new HBox(2);
+		hBoxCheck.setPadding( new Insets( 10, 10, 10, 10 ) );
+		hBoxCheck.setSpacing(10);
+		hBoxCheck.getChildren().addAll( btnCheck, lblCheck );
 		
 		VBox vBox = new VBox(2);
 		vBox.setPadding( new Insets( 10, 10, 10, 10 ) );
-		vBox.getChildren().addAll( webView, hBox, txtErrMsg );
+		vBox.getChildren().addAll( webView, hBoxCheck, txtErrMsg, btnDownload );
 		
 		this.verTab.setContent( vBox );
 		this.verTab.setText( langRB.getString( "TITLE_ABOUT" ) );
@@ -163,6 +152,7 @@ public class VersionDialog extends Dialog<Boolean>
 		(
 			(event)->
 			{
+				btnDownload.setDisable(true);
 				CheckUpdate checkUpdate = new CheckUpdate();
 				checkUpdate.setAppConf(this.mainCtrl.getAppConf());
 				try
@@ -173,6 +163,22 @@ public class VersionDialog extends Dialog<Boolean>
 					{
 						//lblCheck.setText( "New Verion is Found.(" + newVersion + ")" );
 						lblCheck.setText( MessageFormat.format( langRB.getString("LABEL_FOUND_NEW_VERSION"), newVersion ) );
+						btnDownload.setDisable(false);
+						String newLink = checkUpdate.getNewLink();
+						System.out.println( "NewLink:" + newLink );
+						btnDownload.setOnAction
+						((event2)->{
+							try
+							{
+								DownloadModule dlModule = new DownloadModule();
+								dlModule.setAppConf(this.mainCtrl.getAppConf());
+								dlModule.exec(newLink);
+							}
+							catch ( Exception ex2 )
+							{
+								throw new RuntimeException( ex2 );
+							}
+						});
 					}
 					else
 					{
@@ -192,6 +198,7 @@ public class VersionDialog extends Dialog<Boolean>
 				}
 			}
 		);
+		
 	}
 	
 	private void setContentOnLibTab()

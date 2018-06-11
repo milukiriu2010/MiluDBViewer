@@ -1,30 +1,37 @@
 package milu.gui.ctrl.common;
 
 import java.io.File;
+import java.io.IOException;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Map;
 import java.util.ResourceBundle;
+import java.util.stream.Collectors;
 
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
-import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.ComboBox;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.geometry.Insets;
 import javafx.stage.FileChooser;
+import javafx.util.StringConverter;
+import milu.db.driver.DriverClassConst;
+import milu.db.driver.DriverNameConst;
 import milu.db.driver.DriverShim;
 import milu.db.driver.LoadDriver;
 import milu.file.json.MyJsonHandleAbstract;
 import milu.file.json.MyJsonHandleFactory;
 import milu.gui.ctrl.common.inf.PaneSwitchDriverInterface;
-import milu.gui.dlg.MyAlertDialog;
 import milu.main.AppConst;
+import milu.main.AppConf;
 import milu.main.MainController;
 import milu.tool.MyTool;
 
@@ -49,6 +56,11 @@ public class DriverControlPane extends Pane
 	// Edit "Driver Class Name"
 	// ---------------------------------------------------------
 	private TextField driverClassNameTxt = new TextField();
+	
+	// ---------------------------------------------------------
+	// ComboBox to choose "Driver Class Name"
+	// ---------------------------------------------------------	
+	private ComboBox<DriverNameConst>  driverClassNameCombo = new ComboBox<>();
 	
 	// ---------------------------------------------------------
 	// Edit "Driver Template URL"
@@ -96,6 +108,52 @@ public class DriverControlPane extends Pane
 		Label lblDriverClassName = new Label(langRBa.getString("LABEL_JDBC_DRIVER_CLASS_NAME"));
 		this.driverClassNameTxt.setPromptText("Loaded by Class.forName");
 
+		// ---------------------------------------------------------
+		// ComboBox to choose "Driver Class Name"
+		// ---------------------------------------------------------
+		/*
+		List<String> driverNameLst = 
+				DriverShim.driverDBMap.values().stream()
+					.map(x->x.val())
+					.sorted()
+					.collect(Collectors.toList());
+		ObservableList<String> driverNameObsLst = FXCollections.observableArrayList( driverNameLst );
+		this.driverClassNameCombo.setItems(driverNameObsLst);
+		*/
+		List<DriverNameConst> driverNameLst = 
+				DriverShim.driverDBMap.values().stream()
+					.sorted()
+					.collect(Collectors.toList());
+		ObservableList<DriverNameConst> driverNameObsLst = 
+			FXCollections.observableArrayList( driverNameLst );
+		this.driverClassNameCombo.setItems(driverNameObsLst);
+		this.driverClassNameCombo.setConverter
+		(
+			new StringConverter<DriverNameConst>()
+			{
+				@Override
+				public String toString( DriverNameConst obj )
+				{
+					if ( obj != null )
+					{
+						return obj.val();
+					}
+					else
+					{
+						return "";
+					}
+				}
+				
+				@Override
+				public DriverNameConst fromString( String str )
+				{
+					return null;
+				}
+			}
+		);
+		
+		HBox driverClassNameHBox = new HBox(2);
+		driverClassNameHBox.getChildren().addAll( lblDriverClassName, this.driverClassNameCombo );
 		
 		// ---------------------------------------------------------
 		// Edit "Driver Template URL"
@@ -127,7 +185,7 @@ public class DriverControlPane extends Pane
 			lblDriverPath,
 			this.driverPathListView,
 			hBoxDriverPathBtn,
-			lblDriverClassName,
+			driverClassNameHBox,
 			this.driverClassNameTxt,
 			lblDriverTemplateUrl,
 			this.driverTemplateUrlTxt,
@@ -148,6 +206,7 @@ public class DriverControlPane extends Pane
 		this.driverClassNameTxt.setText("");
 		//this.driverClassNameTxt.setDisable(false);
 		this.driverClassNameTxt.setEditable(true);
+		this.driverClassNameCombo.setVisible(true);
 		
 		this.driverTemplateUrlTxt.setText("");
 		this.driverReferenceUrlTxt.setText("");
@@ -162,6 +221,7 @@ public class DriverControlPane extends Pane
 		this.driverClassNameTxt.setText( this.driverEdit.getDriverClassName() );
 		//this.driverClassNameTxt.setDisable(true);
 		this.driverClassNameTxt.setEditable(false);
+		this.driverClassNameCombo.setVisible(false);
 
 		this.driverTemplateUrlTxt.setText( this.driverEdit.getTemplateUrl() );
 		this.driverReferenceUrlTxt.setText( this.driverEdit.getReferenceUrl() );
@@ -172,6 +232,8 @@ public class DriverControlPane extends Pane
 	
 	private void setAction()
 	{		
+		AppConf appConf = this.mainCtrl.getAppConf();
+		
 		this.driverPathListView.setCellFactory(	(callback)->new EditListCell() );
 		
 		this.btnAddJar.setOnAction
@@ -179,12 +241,34 @@ public class DriverControlPane extends Pane
 			(event)->
 			{
 				FileChooser fc = new FileChooser();
+				if ( "".equals(appConf.getInitDirJDBC()) == false )
+				{
+					fc.setInitialDirectory(new File(appConf.getInitDirJDBC()));
+				}
 				List<File> fileLst = fc.showOpenMultipleDialog(this.getScene().getWindow());
 				if ( fileLst == null )
 				{
 					return;
 				}
-				fileLst.forEach( (file)->this.driverPathListView.getItems().add(file.getAbsolutePath()) );
+				fileLst.forEach
+				((file)->{
+					this.driverPathListView.getItems().add(file.getAbsolutePath());
+					appConf.setInitDirJDBC(file.getParent());
+				});
+				
+				// save AppConf to "the default configuration file".
+				try
+				{
+					MyJsonHandleAbstract myJsonAbs =
+							new MyJsonHandleFactory().createInstance(AppConf.class);
+							
+					myJsonAbs.open(AppConst.APP_CONF.val());
+					myJsonAbs.save( appConf );
+				}
+				catch ( IOException ioEx )
+				{
+					MyTool.showException( this.mainCtrl, "conf.lang.gui.common.MyAlert", "TITLE_MISC_ERROR", ioEx );
+				}
 			}
 		);
 		
@@ -196,6 +280,15 @@ public class DriverControlPane extends Pane
 				this.driverPathListView.getItems().removeAll( selectedItems );
 			}
 		);
+		
+		// switch key<=>val
+		Map<DriverNameConst, DriverClassConst> inverseDriverMap =
+				DriverShim.driverDBMap.entrySet().stream()
+					.collect(Collectors.toMap(Map.Entry::getValue, Map.Entry::getKey));
+		this.driverClassNameCombo.getSelectionModel().selectedItemProperty().addListener
+		((obs,oldVal,newVal)->{
+			this.driverClassNameTxt.setText(inverseDriverMap.get(newVal).val());
+		});
 		
 		this.btnLoad.setOnAction
 		(

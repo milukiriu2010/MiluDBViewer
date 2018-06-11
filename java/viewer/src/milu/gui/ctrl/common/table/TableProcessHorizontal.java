@@ -27,8 +27,8 @@ class TableProcessHorizontal extends TableProcessAbstract
 	@Override
 	void switchDirection()
 	{
+		/*
 		// Get ColumnName from TableView 
-		/**/
 		// https://stackoverflow.com/questions/41104798/javafx-simplest-way-to-get-cell-data-using-table-index
 		int colSize = this.objTableView.getColumns().size();
 		List<Object> headLst = new ArrayList<>();
@@ -38,10 +38,8 @@ class TableProcessHorizontal extends TableProcessAbstract
 			TableColumn<List<Object>,?> tableColumn = this.objTableView.getColumns().get(i);
 			headLst.add( tableColumn.getText() );
 		}
-		/**/
 		//List<String> headLst = this.getHeadList();
 		
-		/**/
 		// Get Data from TableView
 		int rowSize = this.objTableView.getItems().size();
 		List<List<Object>> dataLst = new ArrayList<>();
@@ -53,13 +51,24 @@ class TableProcessHorizontal extends TableProcessAbstract
 			dataRow.remove( 0 );
 			dataLst.add( dataRow );
 		}
-		/**/
 		//List<List<String>> dataLst = this.getDataList();
 		
 		
 		// Switch Direction of tableVieSQL from Horizontal to Vertical
 		this.objTableView.setTableViewDirection( Orientation.VERTICAL );
 		this.objTableView.setTableViewData( headLst, dataLst );
+		
+        // enable to select the whole column
+        // https://stackoverflow.com/questions/38012247/javafx-tableview-select-the-whole-tablecolumn-and-get-the-index
+        this.objTableView.getSelectionModel().setCellSelectionEnabled( true );
+        this.objTableView.getFocusModel().focusedCellProperty().addListener
+        ( 
+        	(ChangeListener<? super TablePosition>)this.objTableView.tableViewChangeListner 
+        );
+		*/
+		// Switch Direction of tableVieSQL from Horizontal to Vertical
+		this.objTableView.setTableViewDirection( Orientation.VERTICAL );
+		this.objTableView.setTableViewData();
 		
         // enable to select the whole column
         // https://stackoverflow.com/questions/38012247/javafx-tableview-select-the-whole-tablecolumn-and-get-the-index
@@ -116,6 +125,7 @@ class TableProcessHorizontal extends TableProcessAbstract
 			this.objTableView.getColumns().add( tableCol );
 		}
 
+		/*
 		// Reconstruct data list on TableView(horizontal mode)
 		for ( int i = 0; i < dataLst.size(); i++ )
 		{
@@ -127,6 +137,26 @@ class TableProcessHorizontal extends TableProcessAbstract
 		// Add Data to TableView
 		//this.objTableView.getItems().addAll( dataLst );
 		this.objTableView.setItems( FXCollections.observableArrayList(dataLst) );
+		*/
+		
+		// Reconstruct data list on TableView(horizontal mode)
+		List<List<Object>> dataLst2 = new ArrayList<>();
+		for ( int i = 0; i < dataLst.size(); i++ )
+		{
+			List<Object>  dataRow  = dataLst.get(i);
+			List<Object>  dataRow2 = new ArrayList<>();
+			for ( int j = 0; j < dataRow.size(); j++ )
+			{
+				dataRow2.add(dataRow.get(j));
+			}
+			// add "No" on first column
+			dataRow2.add( 0, Integer.valueOf(i+1) );
+			dataLst2.add(dataRow2);
+		}
+		
+		// Add Data to TableView
+		//this.objTableView.getItems().addAll( dataLst );
+		this.objTableView.setItems( FXCollections.observableArrayList(dataLst2) );
 	}
 	
 	// https://stackoverflow.com/questions/25170119/allow-user-to-copy-data-from-tableview

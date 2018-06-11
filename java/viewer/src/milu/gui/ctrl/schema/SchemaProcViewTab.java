@@ -4,13 +4,12 @@ import javafx.scene.control.Tab;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.BorderPane;
 
-import milu.gui.ctrl.query.SqlTextArea;
 import milu.gui.view.DBView;
 
 public class SchemaProcViewTab extends Tab
 	implements SetSrcTextInterface
 {
-	private DBView     dbView      = null;
+	//private DBView     dbView      = null;
 	
 	private TextArea   srcTextArea = null;
 	
@@ -18,9 +17,10 @@ public class SchemaProcViewTab extends Tab
 	{
 		super();
 		
-		this.dbView = dbView;
+		//this.dbView = dbView;
 		
-		this.srcTextArea = new SqlTextArea( this.dbView );
+		//this.srcTextArea = new SqlTextArea( this.dbView );
+		this.srcTextArea = new TextArea();
 		this.srcTextArea.setEditable( false );
 		
 		BorderPane brdPane = new BorderPane();
