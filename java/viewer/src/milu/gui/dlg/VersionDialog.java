@@ -153,8 +153,8 @@ public class VersionDialog extends Dialog<Boolean>
 		
 		//btnCheck.setOnKeyPressed(value);
 		
-		//btnCheck.setOnAction
-		btnCheck.setOnKeyPressed
+		btnCheck.setOnAction
+		//btnCheck.setOnKeyPressed
 		(
 			(event)->
 			{
@@ -195,6 +195,7 @@ public class VersionDialog extends Dialog<Boolean>
 								
 								String downloadFileName = dlModule.getDownloadFileName();
 								ModuleUpdate mdlUpdate = new ModuleUpdate();
+								mdlUpdate.setAppConf(this.mainCtrl.getAppConf());
 								mdlUpdate.exec(downloadFileName);
 								
 							}

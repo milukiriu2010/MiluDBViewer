@@ -42,6 +42,12 @@ public class InitialLoadAppConf extends InitialLoadAbstract
 		}
 		finally
 		{
+			AppConf appConf = this.mainCtrl.getAppConf();
+			if ( this.propMap.containsKey("instDir") )
+			{
+				appConf.setInstDir(this.propMap.get("instDir"));
+			}
+			
 			this.progressInf.addProgress( this.assignedSize );
 			this.progressInf.setMsg( "AppConf" );
 		}

@@ -23,6 +23,10 @@ import milu.security.MySecurityKey;
  */
 final public class AppConf
 {
+	// Install Directory(for Development)
+	@Expose(serialize = false, deserialize = false)
+	private String  instDir = "";
+	
 	// Initial Directory for JDBC Driver
 	@Expose(serialize = true, deserialize = true)
 	private String  initDirJDBC = "";
@@ -98,6 +102,17 @@ final public class AppConf
 	// Initial Vector
 	@Expose(serialize = true, deserialize = true)
 	private byte[]  proxyIV = null;
+	
+	// Install Directory(for Development)
+	public void setInstDir( String instDir )
+	{
+		this.instDir = instDir;
+	}
+	
+	public String getInstDir()
+	{
+		return this.instDir;
+	}
 	
 	// Initial Directory for JDBC Driver
 	public String getInitDirJDBC()

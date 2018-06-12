@@ -1,5 +1,6 @@
 package milu.task.main;
 
+import java.util.Map;
 import java.util.List;
 import java.util.ArrayList;
 
@@ -17,12 +18,19 @@ public class InitialLoadTask extends Task<Exception>
 	
 	private MainController mainCtrl = null;
 	
-	private double         progress = 0.0;
+	private double        progress = 0.0;
+	
+	private Map<String,String>  propMap = null;
 	
 	public void setMainController( MainController mainCtrl )
 	{
 		this.mainCtrl = mainCtrl;
-	}	
+	}
+	
+	public void setPropMap( Map<String,String> propMap )
+	{
+		this.propMap = propMap;
+	}
 
 	@Override
 	protected Exception call()
@@ -47,7 +55,9 @@ public class InitialLoadTask extends Task<Exception>
 			(
 				(factoryType)->
 				{
-					InitialLoadAbstract ilAbs = InitialLoadFactory.getInstance( factoryType, this.mainCtrl, this, assigendSize );
+					InitialLoadAbstract ilAbs = 
+						InitialLoadFactory.getInstance
+						( factoryType, this.mainCtrl, this.propMap, this, assigendSize );
 					ilAbs.load();
 				}
 			);

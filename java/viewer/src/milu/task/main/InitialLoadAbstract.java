@@ -1,11 +1,15 @@
 package milu.task.main;
 
+import java.util.Map;
+
 import milu.main.MainController;
 import milu.task.ProgressInterface;
 
 abstract public class InitialLoadAbstract 
 {
 	protected MainController  mainCtrl = null;
+	
+	protected Map<String,String>  propMap = null;
 	
 	protected ProgressInterface  progressInf = null;
 	
@@ -14,6 +18,11 @@ abstract public class InitialLoadAbstract
 	public void setMainController( MainController mainCtrl )
 	{
 		this.mainCtrl = mainCtrl;
+	}
+	
+	public void setPropMap( Map<String,String> propMap )
+	{
+		this.propMap = propMap;
 	}
 	
 	void setProgressInterface( ProgressInterface progressInf )
@@ -25,17 +34,6 @@ abstract public class InitialLoadAbstract
 	{
 		this.assignedSize = assignedSize;
 	}
-	/*
-	protected void showException( Exception ex )
-	{
-		MyAlertDialog alertDlg = new MyAlertDialog( AlertType.WARNING, this.mainCtrl );
-		ResourceBundle langRB = this.mainCtrl.getLangResource("conf.lang.gui.common.MyAlert");
-		alertDlg.setHeaderText( langRB.getString("TITLE_MISC_ERROR") );
-		alertDlg.setTxtExp( ex );
-		alertDlg.showAndWait();
-		alertDlg = null;
-	}
-	*/	
 
 	abstract public void load();
 }

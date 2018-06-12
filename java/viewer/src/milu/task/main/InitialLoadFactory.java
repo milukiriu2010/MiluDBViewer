@@ -1,5 +1,7 @@
 package milu.task.main;
 
+import java.util.Map;
+
 import milu.main.MainController;
 import milu.task.ProgressInterface;
 
@@ -15,7 +17,14 @@ public class InitialLoadFactory
 		PROXYPASSWORD
 	}
 	
-	public static InitialLoadAbstract getInstance( FACTORY_TYPE type, MainController mainCtrl, ProgressInterface progressInf, double assignedSize )
+	public static InitialLoadAbstract getInstance
+	( 
+		FACTORY_TYPE        type, 
+		MainController      mainCtrl,
+		Map<String,String>  propMap,
+		ProgressInterface   progressInf, 
+		double             assignedSize 
+	)
 	{
 		InitialLoadAbstract ilAbs = null;
 		
@@ -49,6 +58,7 @@ public class InitialLoadFactory
 		}
 		
 		ilAbs.setMainController(mainCtrl);
+		ilAbs.setPropMap(propMap);
 		ilAbs.setProgressInterface(progressInf);
 		ilAbs.setAssignedSize(assignedSize);
 		

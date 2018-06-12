@@ -4,6 +4,8 @@ import java.util.ResourceBundle;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
+import java.util.Map;
+import java.util.HashMap;
 
 import javafx.application.Application;
 import javafx.geometry.Pos;
@@ -35,6 +37,8 @@ public class MiluDBViewer extends Application
 	
     public static void main(String[] args)
     {
+    	
+    	
     	launch(args);
     	// https://stackoverflow.com/questions/46053974/using-platform-exit-and-system-exitint-together?utm_medium=organic&utm_source=google_rich_qa&utm_campaign=google_rich_qa
     	System.exit(0);
@@ -43,6 +47,18 @@ public class MiluDBViewer extends Application
     @Override
     public void start(Stage initStage) throws Exception
     {
+    	Map<String,String> propMap = new HashMap<>();
+    	Parameters params = this.getParameters();
+    	if ( params != null )
+    	{
+    		// -----------------------------------
+    		// command args
+    		// -----------------------------------
+    		//   --instDir=/home/kiriu
+    		// -----------------------------------
+    		params.getNamed().forEach( propMap::put );
+    	}
+    	
 		MainController mainCtrl = new MainController();
     	try
     	{
@@ -64,6 +80,7 @@ public class MiluDBViewer extends Application
     	    
     	    final InitialLoadTask  ilTask = new InitialLoadTask();
     	    ilTask.setMainController(mainCtrl);
+    	    ilTask.setPropMap(propMap);
 			// execute task
 			this.service.submit( ilTask );
     	    

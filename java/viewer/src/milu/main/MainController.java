@@ -315,9 +315,9 @@ public class MainController
 		Locale nextLocale = new Locale( langCode );
 		Locale.setDefault( nextLocale );
 		
-		//this.loadLangResources();
 		this.langMap.clear();
-		InitialLoadAbstract ilAbs = InitialLoadFactory.getInstance( InitialLoadFactory.FACTORY_TYPE.LANG, this, null, 0.0 );
+		InitialLoadAbstract ilAbs = 
+				InitialLoadFactory.getInstance( InitialLoadFactory.FACTORY_TYPE.LANG, this, null, null, 0.0 );
 		ilAbs.load();
 		
 		this.myDBViewMap.forEach
