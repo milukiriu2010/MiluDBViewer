@@ -19,6 +19,7 @@
 		<pathelement path="../lib/excel/xmlbeans-2.6.0.jar" />
 		<pathelement path="../lib/gson/gson-2.8.3-SNAPSHOT.jar" />
 		<pathelement path="../lib/hibernate/hibernate-core-5.3.1.Final.jar" />
+		<pathelement path="../lib/jarchivelib/jarchivelib-0.7.1-jar-with-dependencies.jar" />
 	</path>
 	
 	<target name="compile">
@@ -59,6 +60,7 @@
 							lib/excel/xmlbeans-2.6.0.jar
 							lib/gson/gson-2.8.3-SNAPSHOT.jar
 							lib/hibernate/hibernate-core-5.3.1.Final.jar
+							lib/jarchivelib/jarchivelib-0.7.1-jar-with-dependencies.jar
 				"/>
             </manifest>
 		</jar>

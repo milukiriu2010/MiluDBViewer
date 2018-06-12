@@ -172,6 +172,7 @@ public class VersionDialog extends Dialog<Boolean>
 						String newLink = checkUpdate.getNewLink();
 						System.out.println( "NewLink:" + newLink );
 						System.out.println( "FileSize:" + checkUpdate.getFileSize() );
+						/*
 						if ( event instanceof KeyEvent )
 						{
 							KeyEvent keyEvent = (KeyEvent)event;
@@ -204,6 +205,7 @@ public class VersionDialog extends Dialog<Boolean>
 								throw new RuntimeException( ex2 );
 							}
 						});
+						*/
 					}
 					else
 					{
