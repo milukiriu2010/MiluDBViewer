@@ -27,6 +27,8 @@ public class SchemaTreeContextMenu extends ContextMenu
 	
 	private SchemaTreeView schemaTreeView = null;
 	
+	private GetDataInterface getDataInf = null;
+	
 	// [Refresh]
 	private MenuItem  menuItemRefresh = new MenuItem();
 	
@@ -57,12 +59,13 @@ public class SchemaTreeContextMenu extends ContextMenu
 	// [Generate DELETE]
 	private MenuItem  menuItemGenerateDelete = new MenuItem();
 
-	SchemaTreeContextMenu( DBView dbView, SchemaTreeView schemaTreeView )
+	SchemaTreeContextMenu( DBView dbView, SchemaTreeView schemaTreeView, GetDataInterface getDataInf )
 	{
 		super();
 		
 		this.dbView = dbView;
 		this.schemaTreeView = schemaTreeView;
+		this.getDataInf = getDataInf;
 		
 		this.changeLang();
 		
@@ -91,7 +94,8 @@ public class SchemaTreeContextMenu extends ContextMenu
 						// clear self data
 						selectedEntity.clearSelfData();
 						// refresh
-						this.dbView.Refresh();
+						//this.dbView.Refresh();
+						this.getDataInf.getDataWithRefresh(event);
 						break;
 					default:
 						// remove children on TreeView
@@ -102,7 +106,8 @@ public class SchemaTreeContextMenu extends ContextMenu
 						// clear self data
 						selectedEntity.clearSelfData();
 						// refresh
-						this.dbView.Refresh();
+						//this.dbView.Refresh();
+						this.getDataInf.getDataWithRefresh(event);
 						break;
 				}
 			} 

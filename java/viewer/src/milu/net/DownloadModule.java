@@ -18,9 +18,16 @@ public class DownloadModule
 	// // https://sourceforge.net/projects/miludbviewer/files/MiluDBViewer0.1.9/MiluDBViewer_Setup0.1.9.exe/download
 	private URL url = null;
 	
+	private String downloadFileName = null;
+	
 	public void setAppConf( AppConf appConf )
 	{
 		this.appConf = appConf;
+	}
+	
+	public String getDownloadFileName()
+	{
+		return this.downloadFileName;
 	}
 	
 	public boolean exec( String strUrl )
@@ -52,14 +59,13 @@ public class DownloadModule
 		uc.connect();
 		
 		// https://www.mkyong.com/java/how-to-write-to-file-in-java-fileoutputstream-example/
-		File downloadFile = new File( downloadDir.getAbsolutePath() + File.separator + strFile );
+		this.downloadFileName = downloadDir.getAbsolutePath() + File.separator + strFile;
+		File downloadFile = new File( this.downloadFileName );
 		try(
 			InputStream is = uc.getInputStream();
 			FileOutputStream fop = new FileOutputStream(downloadFile); 
 		)
 		{
-			//fop.write(is.readAllBytes());
-			//fop.flush();
 			final int BUF_SIZE = 1024;
 			int readByte = -1;
 			byte[] readBuf = new byte[BUF_SIZE];

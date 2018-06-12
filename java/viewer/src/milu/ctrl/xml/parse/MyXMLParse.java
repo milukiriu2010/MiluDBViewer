@@ -20,6 +20,7 @@ import javax.xml.xpath.XPathExpressionException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import org.w3c.dom.NamedNodeMap;
 import org.xml.sax.SAXException;
 
 // http://www.suzushin7.jp/entry/2017/10/14/how-to-get-xml-contents-by-using-dom-in-java
@@ -35,20 +36,8 @@ public class MyXMLParse
 		// http://www.baeldung.com/convert-string-to-input-stream
 		InputStream inStreamXML = new ByteArrayInputStream(strXML.getBytes());
 		Document document = builder.parse(inStreamXML);
-		/*
-		Element root = document.getDocumentElement();
-
-		System.out.println( "===========================================" );
-		System.out.println( "Root:" + root.getTagName() );
-		NodeList childNodes = root.getChildNodes();
-		for ( int i = 0; i< childNodes.getLength(); i++ )
-		{
-			Node node = childNodes.item(i);
-			System.out.println( "  Node:" + node.getNodeName() );
-		}
-		*/
 		
-		List<String>  pathLst = new ArrayList<>();
+		List<String>  dataLst = new ArrayList<>();
 		
 		System.out.println( "===========================================" );
 		
@@ -61,21 +50,44 @@ public class MyXMLParse
 		for ( int i = 0; i< hitNodes.getLength(); i++ )
 		{
 			Node hitNode = hitNodes.item(i);
-			// System.out.println( "  Hit Node Tag:" + hitNode.getNodeName() );
-			NodeList hitNodeTextLst = hitNode.getChildNodes();
-			
-			if ( hitNodeTextLst.getLength() > 0 )
+			NamedNodeMap attributes = hitNode.getAttributes();
+			System.out.println( "  Hit[NodeName]    =>" + hitNode.getNodeName() );
+			System.out.println( "  Hit[NodeValue]   =>" + hitNode.getNodeValue() );
+			System.out.println( "  Hit[BaseURI]     =>" + hitNode.getBaseURI() );
+			System.out.println( "  Hit[LocalName]   =>" + hitNode.getLocalName() );
+			System.out.println( "  Hit[NamespaceURI]=>" + hitNode.getNamespaceURI() );
+			System.out.println( "  Hit[Prefix]      =>" + hitNode.getPrefix() );
+			if ( attributes != null )
 			{
-				// /MiluDBViewer0.1.9/MiluDBViewer0.1.9.tar.gz
-				// /MiluDBViewer0.1.9/MiluDBViewer_Setup0.1.9.exe
-				// https://sourceforge.net/projects/miludbviewer/files/MiluDBViewer0.1.9/MiluDBViewer0.1.9.tar.gz/download
-				// System.out.println( "  Hit Node Val:" + hitNodeTextLst.item(0).getNodeValue() );
-				pathLst.add( hitNodeTextLst.item(0).getNodeValue() );
+				for ( int j = 0; j < attributes.getLength(); j++ )
+				{
+					Node nodeAttr = attributes.item(j);
+					System.out.println( "  Hit[Attributes][" + nodeAttr.getNodeName() + "]=>" + nodeAttr.getNodeValue() );
+				}
+			}
+			System.out.println( "  Hit[TextContent] =>" + hitNode.getTextContent() );
+			System.out.println( "*************************************************");
+			if ( hitNode.getNodeValue() != null )
+			{
+				dataLst.add( hitNode.getNodeValue() );
+			}
+			else
+			{
+				NodeList hitNodeTextLst = hitNode.getChildNodes();
+				
+				// check "text" as child
+				if ( hitNodeTextLst.getLength() > 0 )
+				{
+					// /MiluDBViewer0.1.9/MiluDBViewer0.1.9.tar.gz
+					// /MiluDBViewer0.1.9/MiluDBViewer_Setup0.1.9.exe
+					// https://sourceforge.net/projects/miludbviewer/files/MiluDBViewer0.1.9/MiluDBViewer0.1.9.tar.gz/download
+					// System.out.println( "  Hit Node Val:" + hitNodeTextLst.item(0).getNodeValue() );
+					dataLst.add( hitNodeTextLst.item(0).getNodeValue() );
+				}
 			}
 		}
 		System.out.println( "===========================================" );
 		
-		
-		return pathLst;
+		return dataLst;
 	}
 }

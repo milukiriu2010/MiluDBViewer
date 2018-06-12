@@ -21,12 +21,14 @@ import javafx.scene.layout.VBox;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.input.KeyEvent;
 import javafx.geometry.Insets;
 import javafx.stage.Stage;
 import milu.main.AppConst;
 import milu.main.MainController;
 import milu.net.CheckUpdate;
 import milu.net.DownloadModule;
+import milu.net.ModuleUpdate;
 import milu.tool.MyTool;
 
 public class VersionDialog extends Dialog<Boolean>
@@ -133,7 +135,7 @@ public class VersionDialog extends Dialog<Boolean>
 		txtErrMsg.visibleProperty().setValue(false);
 		
 		Button btnDownload = new Button( "Download" );
-		btnDownload.setDisable(true);
+		//btnDownload.setDisable(true);
 		
 		
 		HBox hBoxCheck = new HBox(2);
@@ -143,16 +145,20 @@ public class VersionDialog extends Dialog<Boolean>
 		
 		VBox vBox = new VBox(2);
 		vBox.setPadding( new Insets( 10, 10, 10, 10 ) );
-		vBox.getChildren().addAll( webView, hBoxCheck, txtErrMsg, btnDownload );
+		//vBox.getChildren().addAll( webView, hBoxCheck, txtErrMsg, btnDownload );
+		vBox.getChildren().addAll( webView, hBoxCheck, txtErrMsg );
 		
 		this.verTab.setContent( vBox );
 		this.verTab.setText( langRB.getString( "TITLE_ABOUT" ) );
 		
-		btnCheck.setOnAction
+		//btnCheck.setOnKeyPressed(value);
+		
+		//btnCheck.setOnAction
+		btnCheck.setOnKeyPressed
 		(
 			(event)->
 			{
-				btnDownload.setDisable(true);
+				//btnDownload.setDisable(true);
 				CheckUpdate checkUpdate = new CheckUpdate();
 				checkUpdate.setAppConf(this.mainCtrl.getAppConf());
 				try
@@ -163,9 +169,22 @@ public class VersionDialog extends Dialog<Boolean>
 					{
 						//lblCheck.setText( "New Verion is Found.(" + newVersion + ")" );
 						lblCheck.setText( MessageFormat.format( langRB.getString("LABEL_FOUND_NEW_VERSION"), newVersion ) );
-						btnDownload.setDisable(false);
 						String newLink = checkUpdate.getNewLink();
 						System.out.println( "NewLink:" + newLink );
+						System.out.println( "FileSize:" + checkUpdate.getFileSize() );
+						if ( event instanceof KeyEvent )
+						{
+							KeyEvent keyEvent = (KeyEvent)event;
+							if ( keyEvent.isControlDown() == false )
+							{
+								return;
+							}
+						}
+						else
+						{
+							return;
+						}
+						vBox.getChildren().add(btnDownload);
 						btnDownload.setOnAction
 						((event2)->{
 							try
@@ -173,6 +192,11 @@ public class VersionDialog extends Dialog<Boolean>
 								DownloadModule dlModule = new DownloadModule();
 								dlModule.setAppConf(this.mainCtrl.getAppConf());
 								dlModule.exec(newLink);
+								
+								String downloadFileName = dlModule.getDownloadFileName();
+								ModuleUpdate mdlUpdate = new ModuleUpdate();
+								mdlUpdate.exec(downloadFileName);
+								
 							}
 							catch ( Exception ex2 )
 							{

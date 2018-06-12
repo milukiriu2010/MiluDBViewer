@@ -37,13 +37,13 @@ public class SchemaTreeView extends TreeView<SchemaEntity>
 	
 	private SchemaTreeContextMenu  schemaTreeContextMenu = null;
 	
-	public SchemaTreeView( DBView dbView )
+	public SchemaTreeView( DBView dbView, GetDataInterface getDataInf )
 	{
 		super();
 		
 		this.dbView = dbView;
 		
-		this.schemaTreeContextMenu = new SchemaTreeContextMenu( this.dbView, this );
+		this.schemaTreeContextMenu = new SchemaTreeContextMenu( this.dbView, this, getDataInf );
 		this.setContextMenu(this.schemaTreeContextMenu);
 		
 		this.lblChildrenCnt.getStyleClass().add("SchemaTreeView_LabelChildrenCount");
@@ -57,7 +57,8 @@ public class SchemaTreeView extends TreeView<SchemaEntity>
 			// public void changed( ObservableValue obs, Object oldVal, Object newVal )
 			( obs, oldVal, newVal )->
 			{
-				dbView.Go();
+				//dbView.Go();
+				getDataInf.getDataNoRefresh( null );
 				if ( newVal != null )
 				{
 					// scroll, when "<=(arrow)" key is clicked. 

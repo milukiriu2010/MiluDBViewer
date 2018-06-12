@@ -30,8 +30,8 @@ public class FadeView extends Stage
 		StackPane stackPane = new StackPane();
 		stackPane.setStyle( "-fx-background-color: #ffffcc; -fx-border-color: #000000; -fx-border-width: 2px;" );
 		stackPane.getChildren().add(lblMsg);
-				
-		Scene scene = new Scene( stackPane, WIDTH, 100 );
+		
+		Scene scene = new Scene( stackPane, WIDTH, HEIGHT );
 		//Makes scene background transparent
 		scene.setFill(Color.TRANSPARENT);
 		this.setScene(scene);
@@ -39,8 +39,11 @@ public class FadeView extends Stage
 		this.show();
 		
         Timeline timeline = new Timeline();
-        KeyFrame key = new KeyFrame(Duration.millis(2000),
-                       new KeyValue (this.getScene().getRoot().opacityProperty(), 0)); 
+        KeyFrame key = 
+    		new KeyFrame(
+    			Duration.millis(2000),
+                new KeyValue(this.getScene().getRoot().opacityProperty(), 0)
+            ); 
         timeline.getKeyFrames().add(key);
         timeline.setOnFinished( (event)->this.hide() );
 		timeline.play();

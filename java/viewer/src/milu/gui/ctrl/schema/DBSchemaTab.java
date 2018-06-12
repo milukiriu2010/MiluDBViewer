@@ -12,6 +12,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.Node;
 import javafx.application.Platform;
+import javafx.event.Event;
 import javafx.geometry.Orientation;
 
 import milu.db.MyDBAbstract;
@@ -30,9 +31,8 @@ import milu.gui.dlg.MyAlertDialog;
 
 public class DBSchemaTab extends Tab
 	implements 
-		ExecQueryDBInterface,
-		RefreshInterface,
 		FocusInterface,
+		GetDataInterface,
 		ChangeLangInterface
 {
 	private DBView          dbView = null;
@@ -49,7 +49,7 @@ public class DBSchemaTab extends Tab
 		
 		this.dbView = dbView;
 		
-		this.schemaTreeView = new SchemaTreeView( this.dbView );
+		this.schemaTreeView = new SchemaTreeView( this.dbView, this );
 		this.tabPane        = new TabPane();
 		// no tab text & dragging doesn't work well.
 		// -----------------------------------------------------
@@ -80,6 +80,8 @@ public class DBSchemaTab extends Tab
 		this.setAction();
 		
 		this.changeLang();
+		
+		this.getDataNoRefresh( null );
 	}
 	
 	private void setAction()
@@ -114,6 +116,7 @@ public class DBSchemaTab extends Tab
 	 * Override from ExecQueryDBInterface
 	 ************************************************** 
 	 */
+	/*
 	@Override
 	public void Go()
 	{
@@ -161,11 +164,13 @@ public class DBSchemaTab extends Tab
     		alertDlg = null;
 		}
 	}
+	*/
 	
 	/**************************************************
 	 * Override from RefreshInterface
 	 ************************************************** 
 	 */
+	/*
 	@Override
 	public void Refresh()
 	{
@@ -212,6 +217,68 @@ public class DBSchemaTab extends Tab
     		alertDlg.showAndWait();
     		alertDlg = null;
 		}
+	}
+	*/
+	
+	// GetDataInterface
+	@Override
+	public void getDataNoRefresh( Event event )
+	{
+		this.getSchemaData( event, SelectedItemHandlerAbstract.REFRESH_TYPE.NO_REFRESH );
+	}
+	
+	// GetDataInterface
+	@Override
+	public void getDataWithRefresh( Event event )
+	{
+		this.getSchemaData( event, SelectedItemHandlerAbstract.REFRESH_TYPE.WITH_REFRESH );
+	}
+	
+	private void getSchemaData( Event event, SelectedItemHandlerAbstract.REFRESH_TYPE refreshType )
+	{
+		MyDBAbstract myDBAbs = this.dbView.getMyDBAbstract();
+		try
+		{
+			SelectedItemHandlerAbstract handleAbs = 
+				SelectedItemHandlerFactory.getInstance
+				( 
+					this.schemaTreeView, 
+					this.tabPane, 
+					this.dbView,
+					myDBAbs, 
+					refreshType 
+				);
+			if ( handleAbs != null )
+			{
+				handleAbs.exec();
+			}
+		}
+		catch ( UnsupportedOperationException uoEx )
+		{
+			ResourceBundle langRB = this.dbView.getMainController().getLangResource("conf.lang.gui.common.MyAlert");
+			MyAlertDialog alertDlg = new MyAlertDialog( AlertType.WARNING, this.dbView.getMainController() );
+			alertDlg.setHeaderText( langRB.getString("TITLE_UNSUPPORT_ERROR") );
+    		alertDlg.showAndWait();
+    		alertDlg = null;
+		}
+		catch ( SQLException sqlEx )
+		{
+			ResourceBundle langRB = this.dbView.getMainController().getLangResource("conf.lang.gui.common.MyAlert");
+			MyAlertDialog alertDlg = new MyAlertDialog( AlertType.WARNING, this.dbView.getMainController() );
+			alertDlg.setHeaderText( langRB.getString("TITLE_EXEC_QUERY_ERROR") );
+    		alertDlg.setTxtExp( sqlEx, myDBAbs );
+    		alertDlg.showAndWait();
+    		alertDlg = null;
+		}
+		catch ( Exception ex )
+		{
+			ResourceBundle langRB = this.dbView.getMainController().getLangResource("conf.lang.gui.common.MyAlert");
+			MyAlertDialog alertDlg = new MyAlertDialog( AlertType.WARNING, this.dbView.getMainController() );
+			alertDlg.setHeaderText( langRB.getString("TITLE_MISC_ERROR") );
+    		alertDlg.setTxtExp( ex );
+    		alertDlg.showAndWait();
+    		alertDlg = null;
+		}		
 	}
 	
 	/**************************************************

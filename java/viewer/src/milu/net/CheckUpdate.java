@@ -32,6 +32,8 @@ public class CheckUpdate
 	
 	private String  newLink = null;
 	
+	private Integer fileSize = null;
+	
 	public void setAppConf( AppConf appConf )
 	{
 		this.appConf = appConf;
@@ -52,6 +54,12 @@ public class CheckUpdate
 		return this.newLink;
 	}
 	
+	public Integer getFileSize()
+	{
+		return this.fileSize;
+	}
+	
+	// ---------------------------------------------------------------------------------------
 	// <item>
 	//     <title><![CDATA[/MiluDBViewer0.2.0/MiluDBViewer_Setup0.2.0.exe]]></title>
 	//     <link>https://sourceforge.net/projects/miludbviewer/files/MiluDBViewer0.2.0/MiluDBViewer_Setup0.2.0.exe/download</link>
@@ -62,6 +70,7 @@ public class CheckUpdate
 	//     <files:extra-info xmlns:files="https://sourceforge.net/api/files.rdf#">PE32 executable</files:extra-info>
 	//     <media:content xmlns:media="http://video.search.yahoo.com/mrss/" type="application/x-dosexec; charset=binary" url="https://sourceforge.net/projects/miludbviewer/files/MiluDBViewer0.2.0/MiluDBViewer_Setup0.2.0.exe/download" filesize="37500847"><media:hash algo="md5">d949b66fd32ce1b5811cccc61a28307b</media:hash></media:content>
 	// </item>
+	// ---------------------------------------------------------------------------------------
 	public boolean check() 
 		throws 
 			MalformedURLException, 
@@ -103,27 +112,41 @@ public class CheckUpdate
 		// /MiluDBViewer0.1.9/MiluDBViewer_Setup0.1.9.exe
 		// /MiluDBViewer0.1.8/MiluDBViewer0.1.8.tar.gz
 		// /MiluDBViewer0.1.8/MiluDBViewer_Setup0.1.8.exe
-		String titlePathFirst = this.getNewVersion(titlePathLst);
+		int pos = this.getNewVersion(titlePathLst);
 		System.out.println( "NewVersion:" + this.newVersion );
 		
 		this.compareVersion();
 		
 		if ( this.isExistNew == true )
 		{
-			List<String> titleLinkLst = myXMLParse.analyze(strXML, "/rss/channel/item/link" );
-			
 			// ---------------------------------------------------
 			// /rss/channel/item/link
 			// ---------------------------------------------------
 			// https://sourceforge.net/projects/miludbviewer/files/MiluDBViewer0.1.9/MiluDBViewer_Setup0.1.9.exe/download
 			// https://sourceforge.net/projects/miludbviewer/files/MiluDBViewer0.1.9/MiluDBViewer0.1.9.tar.gz/download
-			this.getNewLink( titleLinkLst, titlePathFirst );
+			List<String> titleLinkLst = myXMLParse.analyze(strXML, "/rss/channel/item/link" );
+			
+			this.getNewLink( titleLinkLst, pos );
+			
+			// ---------------------------------------------------
+			// /rss/channel/item/media:content
+			// ---------------------------------------------------
+			//List<String> mediaContentLst = myXMLParse.analyze(strXML, "//rss/channel/item/*[name()='media:content']" );
+			List<String> mediaContentLst = myXMLParse.analyze(strXML, "//rss/channel/item/*[name()='media:content']/@filesize" );
+			//List<String> mediaContentLst = myXMLParse.analyze(strXML, "//rss/channel/item/guid" );
+			//List<String> mediaContentLst = myXMLParse.analyze(strXML, "//rss/channel/item/media:content" );
+			//List<String> mediaContentLst = myXMLParse.analyze(strXML, "//rss/channel/item/media:content[@filesize]" );
+			//List<String> mediaContentLst = myXMLParse.analyze(strXML, "/rss/channel/item/media:content/@filesize" );
+			//List<String> mediaContentLst = myXMLParse.analyze(strXML, "//rss/channel/item/media:content/@filesize" );
+			
+			this.fileSize = Integer.valueOf(mediaContentLst.get(pos));
+			
 		}
 		
 		return this.isExistNew;
 	}
 	
-	private String getNewVersion( List<String> pathLst1 )
+	private int getNewVersion( List<String> pathLst1 )
 	{
 		// System.getProperty:os.name
 		//   "Windows 10"
@@ -149,7 +172,7 @@ public class CheckUpdate
 
 		if ( pathFirst == null )
 		{
-			return null;
+			return -1;
 		}
 		
 		System.out.println( pathFirst );
@@ -157,7 +180,7 @@ public class CheckUpdate
 		System.out.println( pathFirstArray[1] );
 		this.newVersion = pathFirstArray[1].replace( "MiluDBViewer", "" );
 		
-		return pathFirst;
+		return pathLst1.indexOf(pathFirst);
 	}
 	
 	private void compareVersion()
@@ -197,12 +220,15 @@ public class CheckUpdate
 		}
 	}
 	
-	private void getNewLink( List<String> pathLst1, String link )
+	private void getNewLink( List<String> pathLst1, int pos )
 	{
+		/*
 		this.newLink = 
 			pathLst1.stream()
 				.filter( (path)->path.contains(link) )
 				.findFirst()
 				.get();
+				*/
+		this.newLink = pathLst1.get(pos);
 	}	
 }
