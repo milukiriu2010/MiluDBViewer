@@ -1,0 +1,109 @@
+https://medium.com/@ryannel/installing-zookeeper-on-ubuntu-9f1f70f22e25
+https://medium.com/@sarkaramrit2/setting-up-solr-cloud-6-3-0-with-zookeeper-3-4-6-867b96ec4272
+
+=======================================================================
+
+sudo /opt/zookeeper-3.4.12/bin/zkServer.sh start
+sudo -u solr /opt/solr/bin/solr start -e cloud -z localhost:2181
+
+# /opt/solr/bin/solr start -e cloud -z localhost:2181 -noprompt
+
+=======================================================================
+
+https://lucene.apache.org/solr/guide/7_3/solr-tutorial.html
+https://lucene.apache.org/solr/guide/6_6/running-solr.html
+
+=======================================================================
+
+import
+
+/opt/solr/bin/post -c gettingstarted example/exampledocs/*.xml
+  java -classpath /opt/solr/dist/solr-core-7.3.1.jar -Dauto=yes -Dc=gettingstarted -Ddata=files org.apache.solr.util.SimplePostTool example/exampledocs/gb18030-example.xml example/exampledocs/hd.xml example/exampledocs/ipod_other.xml example/exampledocs/ipod_video.xml example/exampledocs/manufacturers.xml example/exampledocs/mem.xml example/exampledocs/money.xml example/exampledocs/monitor.xml example/exampledocs/monitor2.xml example/exampledocs/mp500.xml example/exampledocs/sd500.xml example/exampledocs/solr.xml example/exampledocs/utf8-example.xml example/exampledocs/vidcard.xml
+  SimplePostTool version 5.0.0
+  Posting files to [base] url http://localhost:8983/solr/gettingstarted/update...
+  Entering auto mode. File endings considered are xml,json,jsonl,csv,pdf,doc,docx,ppt,pptx,xls,xlsx,odt,odp,ods,ott,otp,ots,rtf,htm,html,txt,log
+  POSTing file gb18030-example.xml (application/xml) to [base]
+  POSTing file hd.xml (application/xml) to [base]
+  POSTing file ipod_other.xml (application/xml) to [base]
+  POSTing file ipod_video.xml (application/xml) to [base]
+  POSTing file manufacturers.xml (application/xml) to [base]
+  POSTing file mem.xml (application/xml) to [base]
+  POSTing file money.xml (application/xml) to [base]
+  POSTing file monitor.xml (application/xml) to [base]
+  POSTing file monitor2.xml (application/xml) to [base]
+  POSTing file mp500.xml (application/xml) to [base]
+  POSTing file sd500.xml (application/xml) to [base]
+  POSTing file solr.xml (application/xml) to [base]
+  POSTing file utf8-example.xml (application/xml) to [base]
+  POSTing file vidcard.xml (application/xml) to [base]
+  14 files indexed.
+  COMMITting Solr index changes to http://localhost:8983/solr/gettingstarted/update...
+  Time spent: 0:00:05.652
+
+
+=======================================================================
+
+https://examples.javacodegeeks.com/enterprise-java/apache-solr/apache-solr-tutorial-beginners/
+
+$ /opt/solr/bin/solr create -c jcg -d basic_configs
+Specified configuration directory basic_configs not found!
+
+***********************************************************************
+
+$ /opt/solr/bin/solr create -c jcg
+WARNING: Using _default configset with data driven schema functionality. NOT RECOMMENDED for production use.
+         To turn off: bin/solr config -c jcg -p 8983 -property update.autoCreateFields -value false
+
+ERROR: Failed to create new core instance directory: /var/solr/data/jcg
+
+***********************************************************************
+
+$ sudo /opt/solr/bin/solr create -c jcg
+
+WARNING: Using _default configset with data driven schema functionality. NOT RECOMMENDED for production use.
+         To turn off: bin/solr config -c jcg -p 8983 -property update.autoCreateFields -value false
+WARNING: Creating cores as the root user can cause Solr to fail and is not advisable. Exiting.
+         If you started Solr as root (not advisable either), force core creation by adding argument -force
+
+***********************************************************************
+
+$ sudo -u solr /opt/solr/bin/solr create -c jcg
+WARNING: Using _default configset with data driven schema functionality. NOT RECOMMENDED for production use.
+         To turn off: bin/solr config -c jcg -p 8983 -property update.autoCreateFields -value false
+
+Created new core 'jcg'
+
+$ sudo ls -F /var/solr/data/jcg
+conf/  core.properties	data/
+
+=======================================================================
+
+import 
+
+$ java -Dtype=text/csv -Durl=http://localhost:8983/solr/jcg/update -jar example/exampledocs/post.jar  example/exampledocs/books.csv
+SimplePostTool version 5.0.0
+Posting files to [base] url http://localhost:8983/solr/jcg/update using content-type text/csv...
+POSTing file books.csv to [base]
+1 files indexed.
+COMMITting Solr index changes to http://localhost:8983/solr/jcg/update...
+Time spent: 0:00:00.593
+
+=======================================================================
+
+search
+
+http://localhost:8983/solr/jcg/select?q=name:"A Clash of Kings"
+
+http://localhost:8983/solr/gettingstarted/select?q=sd500&wtjson
+
+=======================================================================
+
+JDBC
+https://lucene.apache.org/solr/guide/6_6/solr-jdbc-squirrel-sql.html
+
+all .jars found in $SOLR_HOME/dist/solrj-libs
+
+the SolrJ .jar found at $SOLR_HOME/dist/solr-solrj-<version>.jar
+
+=======================================================================
+
