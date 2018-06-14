@@ -349,6 +349,7 @@ public class DBView extends Stage
 	 * Exec SQL Query 
 	 ********************************
 	 */
+	/*
 	public void Go()
 	{
 		// Call SQL on Selected Tab.
@@ -358,11 +359,13 @@ public class DBView extends Stage
 			((ExecQueryDBInterface)tab).Go();
 		}
 	}
+	*/
 	
 	/********************************
 	 * Refresh Activated Tab 
 	 ********************************
 	 */
+	/*
 	public void Refresh()
 	{
 		// Call SQL on Selected Tab.
@@ -372,6 +375,7 @@ public class DBView extends Stage
 			((RefreshInterface)tab).Refresh();
 		}
 	}
+	*/
 	
 	/********************************
 	 * Create New Tab 
@@ -455,7 +459,7 @@ public class DBView extends Stage
 			}
 			this.tabPane.getTabs().add( newTab );
 			this.tabPane.getSelectionModel().select( newTab );
-			this.Go();
+			//this.Go();
 			tab = newTab;
 		}
 		

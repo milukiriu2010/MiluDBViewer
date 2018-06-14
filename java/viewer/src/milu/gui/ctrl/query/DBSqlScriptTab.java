@@ -43,7 +43,6 @@ import milu.db.MyDBAbstract;
 
 public class DBSqlScriptTab extends Tab
 	implements 
-		ExecQueryDBInterface,
 		CounterInterface,
 		FocusInterface,
 		ChangeLangInterface,
@@ -83,7 +82,7 @@ public class DBSqlScriptTab extends Tab
 	private Label labelExecTimeSQL = new Label("*");
 	
 	// Thread Pool
-	private ExecutorService service = Executors.newSingleThreadExecutor();	
+	private ExecutorService service = Executors.newSingleThreadExecutor();
 	
 	public DBSqlScriptTab( DBView dbView )
 	{
@@ -201,11 +200,13 @@ public class DBSqlScriptTab extends Tab
 	 * Override from ExecQueryDBInterface
 	 ************************************************** 
 	 */
+	/*
 	@Override
 	public void Go()
 	{
 		this.execTask(ExecTaskFactory.FACTORY_TYPE.SCRIPT);
 	}
+	*/
 	
 	private void execTask( ExecTaskFactory.FACTORY_TYPE factoryType )
 	{
@@ -380,14 +381,15 @@ public class DBSqlScriptTab extends Tab
 	{
 		this.textAreaSQL.formatSQL( event );
 	}
-	// ProcBeginInterface
+	
+	// ProcInterface
 	@Override
 	public void beginProc()
 	{
 		((ProcInterface)this.toolBar).beginProc();
 	}
 	
-	// ProcEndInterface
+	// ProcInterface
 	@Override
 	public void endProc()
 	{

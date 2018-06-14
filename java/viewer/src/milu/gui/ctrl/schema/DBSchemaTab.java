@@ -21,9 +21,7 @@ import milu.gui.view.DBView;
 import milu.main.MainController;
 import milu.tool.MyTool;
 import milu.gui.ctrl.common.inf.ChangeLangInterface;
-import milu.gui.ctrl.common.inf.ExecQueryDBInterface;
 import milu.gui.ctrl.common.inf.FocusInterface;
-import milu.gui.ctrl.common.inf.RefreshInterface;
 import milu.gui.ctrl.schema.SchemaTreeView;
 import milu.gui.ctrl.schema.handle.SelectedItemHandlerAbstract;
 import milu.gui.ctrl.schema.handle.SelectedItemHandlerFactory;
@@ -112,114 +110,6 @@ public class DBSchemaTab extends Tab
 		Platform.runLater( ()->{ this.schemaTreeView.requestFocus(); System.out.println( "schemaTreeView focused."); } );
 	}
 	
-	/**************************************************
-	 * Override from ExecQueryDBInterface
-	 ************************************************** 
-	 */
-	/*
-	@Override
-	public void Go()
-	{
-		MyDBAbstract myDBAbs = this.dbView.getMyDBAbstract();
-		try
-		{
-			SelectedItemHandlerAbstract handleAbs = 
-				SelectedItemHandlerFactory.getInstance
-				( 
-					this.schemaTreeView, 
-					this.tabPane, 
-					this.dbView,
-					myDBAbs, 
-					SelectedItemHandlerAbstract.REFRESH_TYPE.NO_REFRESH 
-				);
-			if ( handleAbs != null )
-			{
-				handleAbs.exec();
-			}
-		}
-		catch ( UnsupportedOperationException uoEx )
-		{
-			ResourceBundle langRB = this.dbView.getMainController().getLangResource("conf.lang.gui.common.MyAlert");
-			MyAlertDialog alertDlg = new MyAlertDialog( AlertType.WARNING, this.dbView.getMainController() );
-			alertDlg.setHeaderText( langRB.getString("TITLE_UNSUPPORT_ERROR") );
-    		alertDlg.showAndWait();
-    		alertDlg = null;
-		}
-		catch ( SQLException sqlEx )
-		{
-			ResourceBundle langRB = this.dbView.getMainController().getLangResource("conf.lang.gui.common.MyAlert");
-			MyAlertDialog alertDlg = new MyAlertDialog( AlertType.WARNING, this.dbView.getMainController() );
-			alertDlg.setHeaderText( langRB.getString("TITLE_EXEC_QUERY_ERROR") );
-    		alertDlg.setTxtExp( sqlEx, myDBAbs );
-    		alertDlg.showAndWait();
-    		alertDlg = null;
-		}
-		catch ( Exception ex )
-		{
-			ResourceBundle langRB = this.dbView.getMainController().getLangResource("conf.lang.gui.common.MyAlert");
-			MyAlertDialog alertDlg = new MyAlertDialog( AlertType.WARNING, this.dbView.getMainController() );
-			alertDlg.setHeaderText( langRB.getString("TITLE_MISC_ERROR") );
-    		alertDlg.setTxtExp( ex );
-    		alertDlg.showAndWait();
-    		alertDlg = null;
-		}
-	}
-	*/
-	
-	/**************************************************
-	 * Override from RefreshInterface
-	 ************************************************** 
-	 */
-	/*
-	@Override
-	public void Refresh()
-	{
-		MyDBAbstract myDBAbs = this.dbView.getMyDBAbstract();
-		try
-		{
-			SelectedItemHandlerAbstract handleAbs = 
-				SelectedItemHandlerFactory.getInstance
-				( 
-					this.schemaTreeView, 
-					this.tabPane, 
-					this.dbView,
-					myDBAbs, 
-					SelectedItemHandlerAbstract.REFRESH_TYPE.WITH_REFRESH 
-				);
-			if ( handleAbs != null )
-			{
-				handleAbs.exec();
-			}			
-		}
-		catch ( UnsupportedOperationException uoEx )
-		{
-			ResourceBundle langRB = this.dbView.getMainController().getLangResource("conf.lang.gui.common.MyAlert");
-			MyAlertDialog alertDlg = new MyAlertDialog( AlertType.WARNING, this.dbView.getMainController() );
-			alertDlg.setHeaderText( langRB.getString("TITLE_UNSUPPORT_ERROR") );
-    		alertDlg.showAndWait();
-    		alertDlg = null;
-		}
-		catch ( SQLException sqlEx )
-		{
-			ResourceBundle langRB = this.dbView.getMainController().getLangResource("conf.lang.gui.common.MyAlert");
-			MyAlertDialog alertDlg = new MyAlertDialog( AlertType.WARNING, this.dbView.getMainController() );
-			alertDlg.setHeaderText( langRB.getString("TITLE_EXEC_QUERY_ERROR") );
-    		alertDlg.setTxtExp( sqlEx, myDBAbs );
-    		alertDlg.showAndWait();
-    		alertDlg = null;
-		}
-		catch ( Exception ex )
-		{
-			ResourceBundle langRB = this.dbView.getMainController().getLangResource("conf.lang.gui.common.MyAlert");
-			MyAlertDialog alertDlg = new MyAlertDialog( AlertType.WARNING, this.dbView.getMainController() );
-			alertDlg.setHeaderText( langRB.getString("TITLE_MISC_ERROR") );
-    		alertDlg.setTxtExp( ex );
-    		alertDlg.showAndWait();
-    		alertDlg = null;
-		}
-	}
-	*/
-	
 	// GetDataInterface
 	@Override
 	public void getDataNoRefresh( Event event )
@@ -290,7 +180,6 @@ public class DBSchemaTab extends Tab
 	{
 		MainController mainCtrl = this.dbView.getMainController();
 		ResourceBundle langRB = mainCtrl.getLangResource("conf.lang.gui.ctrl.schema.DBSchemaTab");
-		
 		
 		// Tab Title
 		Node tabGraphic = this.getGraphic();

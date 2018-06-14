@@ -1,66 +1,45 @@
-package milu.task.main;
-
-import java.util.Map;
-import java.util.List;
-import java.util.ArrayList;
+package milu.task.version;
 
 import javafx.concurrent.Task;
-
 import milu.main.MainController;
-
 import milu.task.ProgressInterface;
 
-public class InitialLoadTask extends Task<Exception>
+public class ModuleCheckTask extends Task<Exception> 
 	implements 
-		ProgressInterface
+		ModuleTaskInterface,
+		ProgressInterface 
 {
 	private final double MAX = 100.0;
 	
 	private MainController mainCtrl = null;
 	
+	private String         strUrl = null;
+	
 	private double        progress = 0.0;
 	
-	private Map<String,String>  propMap = null;
-	
+	// ModuleTaskInterface
+	@Override
 	public void setMainController( MainController mainCtrl )
 	{
 		this.mainCtrl = mainCtrl;
 	}
 	
-	public void setPropMap( Map<String,String> propMap )
-	{
-		this.propMap = propMap;
-	}
-
+	// ModuleTaskInterface
 	@Override
-	protected Exception call()
+	public void setUrl( String strUrl )
+	{
+		this.strUrl = strUrl;
+	}
+	
+	// Task
+	@Override
+	protected Exception call() 
 	{
 		Exception    taskEx = null;
-		List<InitialLoadFactory.FACTORY_TYPE> ilLst = new ArrayList<>();
-		ilLst.add(InitialLoadFactory.FACTORY_TYPE.IMAGE);
-		ilLst.add(InitialLoadFactory.FACTORY_TYPE.LANG);
-		ilLst.add(InitialLoadFactory.FACTORY_TYPE.APPCONF);
-		ilLst.add(InitialLoadFactory.FACTORY_TYPE.DRIVER);
-		ilLst.add(InitialLoadFactory.FACTORY_TYPE.SECRETKEY);
-		ilLst.add(InitialLoadFactory.FACTORY_TYPE.PROXYPASSWORD);
 		
 		try
 		{
 			this.setProgress(0.0);
-			
-			Thread.sleep(100);
-			
-			double assigendSize = MAX/ilLst.size();
-			ilLst.forEach
-			(
-				(factoryType)->
-				{
-					InitialLoadAbstract ilAbs = 
-						InitialLoadFactory.getInstance
-						( factoryType, this.mainCtrl, this.propMap, this, assigendSize );
-					ilAbs.load();
-				}
-			);
 			
 			Thread.sleep(100);
 			
@@ -78,7 +57,7 @@ public class InitialLoadTask extends Task<Exception>
 			this.setMsg("");
 		}
 	}
-	
+
 	@Override
 	synchronized public void addProgress( double addpos )
 	{

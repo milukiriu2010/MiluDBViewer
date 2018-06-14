@@ -20,6 +20,7 @@ import javafx.scene.input.KeyCombination;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 import milu.gui.ctrl.common.inf.ChangeLangInterface;
+import milu.gui.ctrl.info.VersionTab;
 import milu.gui.ctrl.jdbc.DBJdbcTab;
 import milu.gui.dlg.SystemInfoDialog;
 import milu.gui.dlg.VersionDialog;
@@ -78,12 +79,14 @@ public class MainMenuBar extends MenuBar
     //   - [System Info]
     //   - [JDBC Info]
 	//   - [About]
+    //   - [Version]
     //     etc
 	// ----------------------------------------------
     Menu     menuHelp        = new Menu();
     MenuItem menuItemSysInfo = new MenuItem();
     MenuItem menuItemJDBC    = new MenuItem("JDBC");
     MenuItem menuItemAbout   = new MenuItem();
+    MenuItem menuItemVersion = new MenuItem();
     
 	public MainMenuBar( DBView dbView )
 	{
@@ -173,13 +176,15 @@ public class MainMenuBar extends MenuBar
 	    //   - [System Info]
 	    //   - [JDBC Info]
 		//   - [About]
+		//   - [Version]
 	    //     etc
 		// ----------------------------------------------
 		this.menuHelp.getItems().addAll
 		( 
 			this.menuItemSysInfo,
 			this.menuItemJDBC,
-			this.menuItemAbout
+			this.menuItemAbout,
+			this.menuItemVersion
 		);
 		// set icon on menuItemSysInfo
 		this.menuItemSysInfo.setGraphic( MyTool.createImageView( 16, 16, mainController.getImage("file:resources/images/sysinfo.png") ) );
@@ -187,6 +192,8 @@ public class MainMenuBar extends MenuBar
 		this.menuItemJDBC.setGraphic( MyTool.createImageView( 16, 16, mainController.getImage("file:resources/images/jdbc.png") ) );
 		// set icon on menuItemAbout
 		this.menuItemAbout.setGraphic( MyTool.createImageView( 16, 16, mainController.getImage("file:resources/images/winicon.gif") ) );
+		// set icon on menuItemVersion
+		this.menuItemVersion.setGraphic( MyTool.createImageView( 16, 16, mainController.getImage("file:resources/images/winicon.gif") ) );
 		
 		// put Menu on MenuBar
 		this.getMenus().addAll( this.menuFile, this.menuWin, this.menuHelp, this.menuLang );
@@ -304,7 +311,6 @@ public class MainMenuBar extends MenuBar
 		// [Help]
 		//   - [JDBC Info] menu clicked
 		// ----------------------------------------------
-		//this.menuItemJDBC.setOnAction( (event)->this.dbView.openJdbcView() );
 		this.menuItemJDBC.setOnAction( (event)->this.dbView.openView( DBJdbcTab.class ) );
 		
 		// ----------------------------------------------
@@ -326,6 +332,11 @@ public class MainMenuBar extends MenuBar
 			}
 		);
 		
+		// ----------------------------------------------
+		// [Help]
+		//   - [Version] menu clicked
+		// ----------------------------------------------
+		this.menuItemVersion.setOnAction( (event)->this.dbView.openView( VersionTab.class ) );
 		
 	}
 	
@@ -375,10 +386,12 @@ public class MainMenuBar extends MenuBar
 		// [Help]
 		//   - [System Info]
 		//   - [About]
+		//   - [Version]
 		// ----------------------------------------------
 	    this.menuHelp.setText( langRB.getString( "MENU_HELP" ) );
 	    this.menuItemSysInfo.setText( langRB.getString( "MENU_HELP_SYSINFO" ) );
 	    this.menuItemAbout.setText( langRB.getString( "MENU_HELP_ABOUT" ) );
+	    this.menuItemVersion.setText( langRB.getString( "MENU_HELP_VERSION" ) );
 	}
 	
 }

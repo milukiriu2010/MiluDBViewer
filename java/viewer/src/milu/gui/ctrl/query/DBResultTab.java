@@ -294,7 +294,11 @@ public class DBResultTab extends Tab
 				try
 				{
 					myDBAbs.reconnect();
-					dbView.Go();
+					//dbView.Go();
+					if ( this.procInf instanceof SQLExecInterface )
+					{
+						((SQLExecInterface)this.procInf).execSQL(event);
+					}
 				}
 				catch ( SQLException sqlEx2 )
 				{

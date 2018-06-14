@@ -15,6 +15,7 @@ public class InitialLoadLangResource extends InitialLoadAbstract
 			"conf.lang.gui.common.NodeName",
 			"conf.lang.gui.ctrl.common.DriverControlPane",
 			"conf.lang.gui.ctrl.common.table.ObjTableView",
+			"conf.lang.gui.ctrl.info.VersionTab",
 			"conf.lang.gui.ctrl.menu.MainMenuBar",
 			"conf.lang.gui.ctrl.menu.MainToolBar",
 			"conf.lang.gui.ctrl.query.DBSqlTab",

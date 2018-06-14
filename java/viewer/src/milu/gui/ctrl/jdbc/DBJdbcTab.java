@@ -52,26 +52,26 @@ public class DBJdbcTab extends Tab
     private List<Object> headLst = new ArrayList<>(Arrays.asList("KEY","VALUE"));
 	
 	// ----------------------------------------
-	// [Pane on Dialog(1)]
+	// [Pane(1) on Tab]
 	// ----------------------------------------
 	// Top Pane
 	private BorderPane topPane = new BorderPane();
 	
 	// ----------------------------------------
-	// [Pane on Dialog(2)]
+	// [Pane(2) on Tab]
 	// ----------------------------------------
 	// Pane for Driver
 	private Pane  driverCtrlPane = null; 
 	
     // -----------------------------------------------------
-	// [Pane on Dialog(1)]-[Center]
+	// [Pane(1) on Tab]-[Center]
     // -----------------------------------------------------
 	// Left  => Driver List
 	// Right => Driver Info
 	private SplitPane  showPane = new SplitPane();
 	
     // -----------------------------------------------------
-	// [Pane on Dialog(1)]-[Center]-[Left]
+	// [Pane(1) on Tab]-[Center]-[Left]
     // -----------------------------------------------------
 	private ListView<DriverShim>   driverListView = new ListView<>();
 	
@@ -82,7 +82,7 @@ public class DBJdbcTab extends Tab
 	private Button  btnDel  = new Button();
 	
 	// -----------------------------------------------------
-	// [Pane on Dialog(1)]-[Center]-[Right]
+	// [Pane(1) on Tab]-[Center]-[Right]
 	// -----------------------------------------------------
 	private TextField  majorVerTxt = new TextField();
 	
