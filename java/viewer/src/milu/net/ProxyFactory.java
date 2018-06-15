@@ -4,7 +4,7 @@ import milu.main.AppConf;
 
 public class ProxyFactory 
 {
-	static ProxyAbstract getInstance( AppConf appConf )
+	public static ProxyAbstract getInstance( AppConf appConf )
 	{
 		ProxyAbstract proxyAbs = null;
 		ProxyType proxyType = appConf.getProxyType();

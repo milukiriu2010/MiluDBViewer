@@ -4,7 +4,7 @@ public class ProxyNoProxy extends ProxyAbstract
 {
 
 	@Override
-	void selectProxy() 
+	public void selectProxy() 
 	{
 		System.clearProperty( "http.proxyHost" );
 		System.clearProperty( "http.proxyPort" );

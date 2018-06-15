@@ -4,7 +4,7 @@ public class ProxyManual extends ProxyAbstract
 {
 
 	@Override
-	void selectProxy() 
+	public void selectProxy() 
 	{
 		// jdk-10.0.1/conf/net.properties
 		/**/

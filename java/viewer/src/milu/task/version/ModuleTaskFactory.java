@@ -2,19 +2,22 @@ package milu.task.version;
 
 import javafx.concurrent.Task;
 import milu.main.MainController;
+import milu.gui.ctrl.info.MapInterface;
 
 public class ModuleTaskFactory 
 {
 	public enum FACTORY_TYPE
 	{
-		CHECK
+		CHECK,
+		UPDATE
 	}
 	
 	public static Task<Exception> createFactory
 	(
 		FACTORY_TYPE   factoryType,
 		MainController mainCtrl,
-		String         strUrl
+		String         strUrl,
+		MapInterface   mapInf
 	)
 	{
 		Task<Exception> task = null;
@@ -28,6 +31,8 @@ public class ModuleTaskFactory
 		}
 		
 		((ModuleTaskInterface)task).setMainController(mainCtrl);
+		((ModuleTaskInterface)task).setUrl(strUrl);
+		((ModuleTaskInterface)task).setMapInterface(mapInf);
 		
 		return task;
 	}

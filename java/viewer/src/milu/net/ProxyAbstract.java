@@ -5,7 +5,7 @@ import java.net.PasswordAuthentication;
 
 import milu.main.AppConf;
 
-abstract class ProxyAbstract 
+abstract public class ProxyAbstract 
 {
 	protected AppConf appConf = null;
 	
@@ -14,7 +14,7 @@ abstract class ProxyAbstract
 		this.appConf = appConf;
 	}
 	
-	abstract void selectProxy();
+	abstract public void selectProxy();
 	
 	// http://www.rgagnon.com/javadetails/java-0085.html
 	protected void callProxyAuth()

@@ -1,7 +1,11 @@
 package milu.task.version;
 
 import javafx.concurrent.Task;
+import java.util.Map;
+import java.util.HashMap;
+
 import milu.main.MainController;
+import milu.gui.ctrl.info.MapInterface;
 import milu.task.ProgressInterface;
 
 public class ModuleCheckTask extends Task<Exception> 
@@ -13,9 +17,11 @@ public class ModuleCheckTask extends Task<Exception>
 	
 	private MainController mainCtrl = null;
 	
-	private String         strUrl = null;
+	private String         strUrl   = null;
 	
-	private double        progress = 0.0;
+	private MapInterface   mapInf   = null;
+	
+	private double        progress  = 0.0;
 	
 	// ModuleTaskInterface
 	@Override
@@ -31,17 +37,33 @@ public class ModuleCheckTask extends Task<Exception>
 		this.strUrl = strUrl;
 	}
 	
+	// MapInterface
+	@Override
+	public void setMapInterface( MapInterface mapInf )
+	{
+		this.mapInf = mapInf;
+	}
+	
 	// Task
 	@Override
 	protected Exception call() 
 	{
 		Exception    taskEx = null;
 		
+		ModuleCheck mdChk = new ModuleCheck();
 		try
 		{
 			this.setProgress(0.0);
 			
 			Thread.sleep(100);
+			
+			System.out.println( "ModuleCheck start." );
+			
+			mdChk.setAppConf(this.mainCtrl.getAppConf());
+			mdChk.setProgressInterface(this);
+			mdChk.check(this.strUrl);
+			
+			System.out.println( "ModuleCheck end." );
 			
 			return taskEx;
 		}
@@ -52,6 +74,7 @@ public class ModuleCheckTask extends Task<Exception>
 		}
 		finally
 		{
+			this.mapInf.setValue(mdChk.getValue());
 			this.setProgress(MAX);
 			this.updateValue(taskEx);
 			this.setMsg("");
@@ -77,7 +100,7 @@ public class ModuleCheckTask extends Task<Exception>
 	{
 		if ( "".equals(msg) == false )
 		{
-			String strMsg = String.format( "Loaded(%.3f%%) %s", this.progress, msg );
+			String strMsg = String.format( "%s", msg );
 			this.updateMessage(strMsg);
 		}
 		else
