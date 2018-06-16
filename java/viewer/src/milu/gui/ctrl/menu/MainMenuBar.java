@@ -85,7 +85,7 @@ public class MainMenuBar extends MenuBar
     Menu     menuHelp        = new Menu();
     MenuItem menuItemSysInfo = new MenuItem();
     MenuItem menuItemJDBC    = new MenuItem("JDBC");
-    MenuItem menuItemAbout   = new MenuItem();
+    //MenuItem menuItemAbout   = new MenuItem();
     MenuItem menuItemVersion = new MenuItem();
     
 	public MainMenuBar( DBView dbView )
@@ -183,7 +183,7 @@ public class MainMenuBar extends MenuBar
 		( 
 			this.menuItemSysInfo,
 			this.menuItemJDBC,
-			this.menuItemAbout,
+			//this.menuItemAbout,
 			this.menuItemVersion
 		);
 		// set icon on menuItemSysInfo
@@ -191,7 +191,7 @@ public class MainMenuBar extends MenuBar
 		// set icon on menuItemSysInfo
 		this.menuItemJDBC.setGraphic( MyTool.createImageView( 16, 16, mainController.getImage("file:resources/images/jdbc.png") ) );
 		// set icon on menuItemAbout
-		this.menuItemAbout.setGraphic( MyTool.createImageView( 16, 16, mainController.getImage("file:resources/images/winicon.gif") ) );
+		//this.menuItemAbout.setGraphic( MyTool.createImageView( 16, 16, mainController.getImage("file:resources/images/winicon.gif") ) );
 		// set icon on menuItemVersion
 		this.menuItemVersion.setGraphic( MyTool.createImageView( 16, 16, mainController.getImage("file:resources/images/winicon.gif") ) );
 		
@@ -227,26 +227,18 @@ public class MainMenuBar extends MenuBar
 		for ( CheckMenuItem menuItemLang : this.menuItemLangLst )
 		{
 			menuItemLang.setOnAction
-			(
-				// ----------------------------------------
-				// @param actionEvent
-				//   interface EventHandler<ActionEvent>
-				//     void handle(T event)
-				// ----------------------------------------
-				(actionEvent)->
+			((actionEvent)->{
+				// check off the item of other language 
+				for ( CheckMenuItem chkMenuItem : this.menuItemLangLst )
 				{
-					// check off the item of other language 
-					for ( CheckMenuItem chkMenuItem : this.menuItemLangLst )
+					if ( chkMenuItem != menuItemLang )
 					{
-						if ( chkMenuItem != menuItemLang )
-						{
-							chkMenuItem.selectedProperty().set( false );
-						}
+						chkMenuItem.selectedProperty().set( false );
 					}
-					String langCode = this.langMap.get( menuItemLang.getText() );
-					this.dbView.requestChangeLang( langCode );
 				}
-			);
+				String langCode = this.langMap.get( menuItemLang.getText() );
+				this.dbView.requestChangeLang( langCode );
+			});
 		}
 
 		// ----------------------------------------------
@@ -257,35 +249,26 @@ public class MainMenuBar extends MenuBar
 	    //     etc
 		// ----------------------------------------------
 		this.menuWin.setOnShowing
-		( 
-			(event)->
+		((event)->{
+			this.menuWin.getItems().removeAll(this.menuWin.getItems());
+			List<Window>  showingWinLst = Stage.getWindows().filtered( win->win.isShowing() );
+			for ( Window win : showingWinLst )
 			{
-				this.menuWin.getItems().removeAll(this.menuWin.getItems());
-				List<Window>  showingWinLst = Stage.getWindows().filtered( win->win.isShowing() );
-				for ( Window win : showingWinLst )
+				if ( win instanceof DBView )
 				{
-					if ( win instanceof DBView )
+					// Add window list on Menu.
+					CheckMenuItem menuItemWin = new CheckMenuItem( ((DBView)win).getTitle() );
+					if ( win == this.dbView )
 					{
-						// Add window list on Menu.
-						CheckMenuItem menuItemWin = new CheckMenuItem( ((DBView)win).getTitle() );
-						if ( win == this.dbView )
-						{
-							menuItemWin.setSelected(true);
-						}
-						this.menuWin.getItems().add( menuItemWin );
-						
-						// Activate the selected window
-						menuItemWin.setOnAction
-						(
-							(event2)->
-							{
-								win.requestFocus();
-							}
-						);
+						menuItemWin.setSelected(true);
 					}
+					this.menuWin.getItems().add( menuItemWin );
+					
+					// Activate the selected window
+					menuItemWin.setOnAction((event2)->win.requestFocus());
 				}
-			} 
-		);
+			}
+		});
 		
 		// ----------------------------------------------
 		// [Help]
@@ -306,7 +289,6 @@ public class MainMenuBar extends MenuBar
 			}
 		);
 		
-		
 		// ----------------------------------------------
 		// [Help]
 		//   - [JDBC Info] menu clicked
@@ -317,6 +299,7 @@ public class MainMenuBar extends MenuBar
 		// [Help]
 		//   - [About] menu clicked
 		// ----------------------------------------------
+		/*
 		this.menuItemAbout.setOnAction
 		(
 			// ----------------------------------------
@@ -331,6 +314,7 @@ public class MainMenuBar extends MenuBar
 				verDlg = null;
 			}
 		);
+		*/
 		
 		// ----------------------------------------------
 		// [Help]
@@ -390,7 +374,7 @@ public class MainMenuBar extends MenuBar
 		// ----------------------------------------------
 	    this.menuHelp.setText( langRB.getString( "MENU_HELP" ) );
 	    this.menuItemSysInfo.setText( langRB.getString( "MENU_HELP_SYSINFO" ) );
-	    this.menuItemAbout.setText( langRB.getString( "MENU_HELP_ABOUT" ) );
+	    //this.menuItemAbout.setText( langRB.getString( "MENU_HELP_ABOUT" ) );
 	    this.menuItemVersion.setText( langRB.getString( "MENU_HELP_VERSION" ) );
 	}
 	

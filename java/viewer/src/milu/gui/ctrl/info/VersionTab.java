@@ -147,6 +147,7 @@ public class VersionTab extends Tab implements ChangeLangInterface
 			this.setText( extLangRB.getString("MENU_HELP_VERSION") );
 		}
 		
+		((ChangeLangInterface)this.updatePane).changeLang();
 	}
 
 }

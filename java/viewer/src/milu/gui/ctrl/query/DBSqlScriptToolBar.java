@@ -109,13 +109,15 @@ class DBSqlScriptToolBar extends ToolBar
 			// ---------------------------------
 			// Mnemonic for "Exec SQL"
 			// Ctrl+G
-			// ---------------------------------
+			// ---------------------------------]
+			/**/
 			this.btnToggleHV.getScene().getAccelerators().put
 			(
 				new KeyCodeCombination( KeyCode.D, KeyCombination.CONTROL_DOWN ),
 				// Runnable.run()
 				()->((DirectionSwitchInterface)obj).switchDirection(null)
 			);
+			/**/
 		}
 
 		if ( obj instanceof CopyTableInterface )

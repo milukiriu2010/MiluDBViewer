@@ -9,6 +9,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.concurrent.Task;
+import javafx.event.Event;
 
 import java.lang.reflect.Constructor;
 import java.sql.SQLException;
@@ -24,6 +25,7 @@ import milu.gui.ctrl.common.inf.ChangeLangInterface;
 import milu.gui.ctrl.common.inf.ExecQueryDBInterface;
 import milu.gui.ctrl.common.inf.FocusInterface;
 import milu.gui.ctrl.common.inf.RefreshInterface;
+import milu.gui.ctrl.common.table.DirectionSwitchInterface;
 import milu.gui.ctrl.common.inf.ProcInterface;
 import milu.gui.ctrl.menu.MainMenuBar;
 import milu.gui.ctrl.menu.MainToolBar;
@@ -36,6 +38,7 @@ import milu.task.collect.CollectTaskFactory;
 public class DBView extends Stage
 	implements
 		ProcInterface,
+		DirectionSwitchInterface,
 		ChangeLangInterface
 {
 	// Main Controller
@@ -376,6 +379,16 @@ public class DBView extends Stage
 		}
 	}
 	*/
+	// DirectionSwitchInterface
+	@Override
+	public void switchDirection( Event event )
+	{
+		Tab selectedTab = this.tabPane.getSelectionModel().getSelectedItem();
+		if ( selectedTab instanceof DirectionSwitchInterface )
+		{
+			((DirectionSwitchInterface)selectedTab).switchDirection( event );
+		}
+	}
 	
 	/********************************
 	 * Create New Tab 

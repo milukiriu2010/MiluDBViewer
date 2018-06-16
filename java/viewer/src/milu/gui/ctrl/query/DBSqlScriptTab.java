@@ -331,7 +331,7 @@ public class DBSqlScriptTab extends Tab
 			return;
 		}
 		*/		
-		
+		System.out.println( "execSQL" );
 		this.execTask(ExecTaskFactory.FACTORY_TYPE.SCRIPT);
 	}
 	

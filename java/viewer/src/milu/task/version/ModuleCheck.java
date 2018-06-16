@@ -1,6 +1,7 @@
 package milu.task.version;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
@@ -21,6 +22,7 @@ import org.xml.sax.SAXException;
 import milu.task.ProgressInterface;
 import milu.ctrl.xml.parse.MyXMLParse;
 import milu.main.AppConf;
+import milu.main.AppConst;
 import milu.net.ProxyAbstract;
 import milu.net.ProxyFactory;
 
@@ -40,6 +42,10 @@ class ModuleCheck
 	
 	private Integer fileSize = null;
 	
+	private Boolean isExistNew = false;
+	
+	private String  downloadFileName = null;
+	
 	void setAppConf( AppConf appConf )
 	{
 		this.appConf = appConf;
@@ -56,6 +62,8 @@ class ModuleCheck
 		dataMap.put( "newVersion", this.newVersion );
 		dataMap.put( "newLink"   , this.newLink );
 		dataMap.put( "fileSize"  , this.fileSize );
+		dataMap.put( "isExistNew", this.isExistNew );
+		dataMap.put( "downloadFileName", this.downloadFileName );
 		return dataMap;
 	}
 	
@@ -80,22 +88,22 @@ class ModuleCheck
 			XPathExpressionException
 	{
 		String strXML = this.accessRemoteURL( strUrl );
-		
 		this.progressInf.setProgress(50);
 		
 		Document xmlDoc = this.str2doc( strXML );
-		
 		this.progressInf.setProgress(60);
 		
 		Node nodeItem = this.searchNodeItem( xmlDoc );
-		
 		this.progressInf.setProgress(70);
 		
 		this.searchNodeLink( nodeItem );
-		
 		this.progressInf.setProgress(80);
 		
 		this.searchNodeMediaContent( nodeItem );
+		this.progressInf.setProgress(90);
+		
+		this.compareVersion();
+		this.analyzeDownloadFileName();
 	}
 	
 	private String accessRemoteURL( String strUrl )
@@ -215,5 +223,57 @@ class ModuleCheck
 		this.fileSize = Integer.valueOf(node.getNodeValue());
 		System.out.println( "fileSize:" + this.fileSize );
 	}
+	
+	private void compareVersion()
+	{
+		this.isExistNew = false;
+		if ( this.newVersion == null )
+		{
+			return;
+		}
+		
+		String[] nowVer = AppConst.VER.val().split("\\.");
+		String[] newVer = this.newVersion.split("\\.");
+		
+		if ( nowVer.length != 3 || newVer.length != 3 )
+		{
+			return;
+		}
 
+		for ( int i = 0; i <= 2; i++ )
+		{
+			// "nowVer" is older than "newVer"
+			if ( 
+					( nowVer[i].compareTo(newVer[i]) < 0 ) 
+					&&
+					( nowVer[i].length() <= newVer[i].length() )
+			)
+			{
+				System.out.println( "compareVersion break i:" + i );
+				this.isExistNew = true;
+				return;
+			}
+			// "nowVer" is newer than "newVer"
+			else if ( nowVer[i].compareTo(newVer[i]) > 0 )
+			{
+				return;
+			}
+		}
+	}
+
+	private void analyzeDownloadFileName()
+	{
+		String[] strPaths = this.newLink.split("/");
+		System.out.println( "DownloadModule:strPaths:" + strPaths.length );
+		this.downloadFileName = null;
+		for ( String strPath: strPaths )
+		{
+			System.out.println( "DownloadModule:strPath:" + strPath );
+			if ( strPath.endsWith("exe") || strPath.endsWith("tar.gz") )
+			{
+				this.downloadFileName = strPath;
+				break;
+			}
+		}
+	}
 }

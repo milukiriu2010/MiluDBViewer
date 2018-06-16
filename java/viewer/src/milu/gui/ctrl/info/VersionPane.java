@@ -12,8 +12,6 @@ import java.util.HashMap;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.Tab;
-import javafx.scene.control.TextField;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
@@ -22,9 +20,7 @@ import javafx.scene.layout.VBox;
 import javafx.event.Event;
 import javafx.concurrent.Task;
 import milu.gui.ctrl.common.inf.CloseInterface;
-import milu.gui.ctrl.common.inf.ProcInterface;
 import milu.gui.ctrl.common.inf.ChangeLangInterface;
-import milu.main.AppConst;
 import milu.main.MainController;
 import milu.task.version.ModuleTaskFactory;
 import milu.tool.MyTool;
@@ -33,7 +29,6 @@ public class VersionPane extends Pane
 	implements
 		CloseInterface,
 		MapInterface,
-		ProcInterface,
 		ChangeLangInterface 
 {
 	private MainController    mainCtrl = null;
@@ -59,14 +54,7 @@ public class VersionPane extends Pane
 	// Thread Pool
 	private ExecutorService service = Executors.newSingleThreadExecutor();
 	
-	private boolean isExistNew = false;
-	
-	// x.x.x
-	private String  newVersion = null;
-	
-	private String  newLink = null;
-	
-	private Integer fileSize = null;
+	private Map<String,Object> dataMap = new HashMap<>();
 	
 	public VersionPane( MainController mainCtrl )
 	{
@@ -75,6 +63,8 @@ public class VersionPane extends Pane
 		this.mainCtrl = mainCtrl;
 		
 		this.setTopPane();
+		
+		this.barProgress.setPrefWidth(500);
 		
 		this.getChildren().add( this.basePane );
 		
@@ -109,29 +99,77 @@ public class VersionPane extends Pane
 			);
 		
 		// execute task
-		final Future<?> future = this.service.submit( task );
+		this.service.submit( task );
 		
 		this.barProgress.progressProperty().unbind();
 		this.barProgress.progressProperty().bind(task.progressProperty());
 		
 		task.progressProperty().addListener
-		(
-			(obs,oldVal,newVal)->
+		((obs,oldVal,newVal)->{
+			System.out.println( "ModuleCheckTask:Progress[" + obs.getClass() + "]oldVal[" + oldVal + "]newVal[" + newVal + "]" );
+			// task start.
+			if ( newVal.doubleValue() == 0.0 )
 			{
-				System.out.println( "ModuleCheckTask:Progress[" + obs.getClass() + "]oldVal[" + oldVal + "]newVal[" + newVal + "]" );
-				// task start.
-				if ( newVal.doubleValue() == 0.0 )
-				{
-					this.beginProc();
-				}
-				// task done.
-				else if ( newVal.doubleValue() == 1.0 )
-				{
-					this.endProc();
-				}
+				this.beginUpdateCheck();
 			}
-		);
+			// task done.
+			else if ( newVal.doubleValue() == 1.0 )
+			{
+				this.endUpdateCheck();
+			}
+		});
 		
+		task.messageProperty().addListener
+		((obs,oldVal,msg)->{
+			this.lblProgress.setText(msg);
+		});
+		
+		task.valueProperty().addListener((obs,oldVal,ex)->{
+			if ( ex == null )
+			{
+				return;
+			}
+			
+			MyTool.showException( this.mainCtrl, "conf.lang.gui.ctrl.info.VersionTab", "LABEL_PROXY_ERROR", ex );
+		});
+	}
+	
+	private void moduleDownload( Event event )
+	{
+		Task<Exception> task = 
+			ModuleTaskFactory.createFactory( 
+				ModuleTaskFactory.FACTORY_TYPE.DOWNLOAD, 
+				this.mainCtrl, 
+				(String)this.dataMap.get("newLink"),
+				this
+			);
+			
+		// execute task
+		this.service.submit( task );
+		
+		this.barProgress.progressProperty().unbind();
+		this.barProgress.progressProperty().bind(task.progressProperty());
+			
+		task.progressProperty().addListener
+		((obs,oldVal,newVal)->{
+			System.out.println( "ModuleDownloadTask:Progress[" + obs.getClass() + "]oldVal[" + oldVal + "]newVal[" + newVal + "]" );
+			// task start.
+			if ( newVal.doubleValue() == 0.0 )
+			{
+				this.beginDownload();
+			}
+			// task done.
+			else if ( newVal.doubleValue() == 1.0 )
+			{
+				this.endDownload();
+			}
+		});
+		
+		task.messageProperty().addListener
+		((obs,oldVal,msg)->{
+			this.lblProgress.setText(msg);
+		});
+			
 		task.valueProperty().addListener((obs,oldVal,ex)->{
 			if ( ex == null )
 			{
@@ -144,44 +182,48 @@ public class VersionPane extends Pane
 	
 	private void moduleUpdate( Event event )
 	{
+		Task<Exception> task = 
+			ModuleTaskFactory.createFactory( 
+				ModuleTaskFactory.FACTORY_TYPE.UPDATE, 
+				this.mainCtrl, 
+				null,
+				this
+			);
+			
+		// execute task
+		this.service.submit( task );
 		
-	}
-	
-	private void compareVersion()
-	{
-		this.isExistNew = false;
-		if ( this.newVersion == null )
-		{
-			return;
-		}
-		
-		String[] nowVer = AppConst.VER.val().split("\\.");
-		String[] newVer = this.newVersion.split("\\.");
-		
-		if ( nowVer.length != 3 || newVer.length != 3 )
-		{
-			return;
-		}
-
-		for ( int i = 0; i <= 2; i++ )
-		{
-			// "nowVer" is older than "newVer"
-			if ( 
-					( nowVer[i].compareTo(newVer[i]) < 0 ) 
-					&&
-					( nowVer[i].length() <= newVer[i].length() )
-			)
+		this.barProgress.progressProperty().unbind();
+		this.barProgress.progressProperty().bind(task.progressProperty());
+			
+		task.progressProperty().addListener
+		((obs,oldVal,newVal)->{
+			//System.out.println( "ModuleUpdateTask:Progress[" + obs.getClass() + "]oldVal[" + oldVal + "]newVal[" + newVal + "]" );
+			// task start.
+			if ( newVal.doubleValue() == 0.0 )
 			{
-				System.out.println( "compareVersion break i:" + i );
-				this.isExistNew = true;
+				this.beginUpdate();
+			}
+			// task done.
+			else if ( newVal.doubleValue() == 1.0 )
+			{
+				this.endUpdate();
+			}
+		});
+		
+		task.messageProperty().addListener
+		((obs,oldVal,msg)->{
+			this.lblProgress.setText(msg);
+		});
+		
+		task.valueProperty().addListener((obs,oldVal,ex)->{
+			if ( ex == null )
+			{
 				return;
 			}
-			// "nowVer" is newer than "newVer"
-			else if ( nowVer[i].compareTo(newVer[i]) > 0 )
-			{
-				return;
-			}
-		}
+			
+			MyTool.showException( this.mainCtrl, "conf.lang.gui.ctrl.info.VersionTab", "LABEL_PROXY_ERROR", ex );
+		});
 	}
 	
 	// CloseInterface
@@ -211,47 +253,85 @@ public class VersionPane extends Pane
 	
 	// MapInterface
 	@Override
+	public Map<String, Object> getValue()
+	{
+		return this.dataMap;
+	}
+	
+	// MapInterface
+	@Override
 	public void setValue( Map<String, Object> dataMap )
 	{
-		this.newVersion = (String)dataMap.get("newVersion");
-		this.newLink    = (String)dataMap.get("newLink");
-		this.fileSize   = (Integer)dataMap.get("fileSize");
-		System.out.println( "MapInterface:done." );
+		this.dataMap = dataMap;
 	}
 	
-	// ProcInterface
-	@Override
-	public void beginProc()
+	private void beginUpdateCheck()
 	{
 		this.btnCheck.setDisable(true);
-		VBox vBox = new VBox(2);
-		vBox.getChildren().addAll( this.barProgress, this.lblProgress );
+		HBox hBox = new HBox(2);
+		hBox.setPadding( new Insets( 10, 10, 10, 10 ) );
+		hBox.setSpacing(10);
+		hBox.getChildren().addAll( this.barProgress, this.lblProgress );
 		this.basePane.setLeft(null);
-		this.basePane.setBottom(vBox);
+		this.basePane.setBottom(hBox);
 	}
 	
-	// ProcInterface
-	@Override
-	public void endProc()
+	private void endUpdateCheck()
 	{
 		ResourceBundle langRB = this.mainCtrl.getLangResource("conf.lang.gui.ctrl.info.VersionTab");
 		this.btnCheck.setDisable(false);
 		this.basePane.setBottom(null);
-		this.compareVersion();
-		if ( this.isExistNew )
+		if ( (Boolean)this.dataMap.get("isExistNew") )
 		{
-			this.lblCheck.setText( MessageFormat.format( langRB.getString("LABEL_FOUND_NEW_VERSION"), this.newVersion ) );
+			this.lblCheck.setText( MessageFormat.format( langRB.getString("LABEL_FOUND_NEW_VERSION"), this.dataMap.get("newVersion") ) );
 			HBox hBoxLeft = new HBox(2);
 			hBoxLeft.getChildren().add( this.btnUpdate );
 			hBoxLeft.setPadding( new Insets( 10, 10, 10, 10 ) );
 			hBoxLeft.setSpacing(10);
 			this.basePane.setLeft(hBoxLeft);
-			this.btnUpdate.setOnAction( this::moduleUpdate );
+			this.btnUpdate.setOnAction( this::moduleDownload );
 		}
 		else
 		{
-			this.lblCheck.setText( MessageFormat.format( langRB.getString("LABEL_THIS_VERSION"), this.newVersion ) );
+			this.lblCheck.setText( MessageFormat.format( langRB.getString("LABEL_THIS_VERSION"), this.dataMap.get("newVersion") ) );
 		}
+	}
+	
+	private void beginDownload()
+	{
+		this.btnCheck.setDisable(true);
+		HBox hBox = new HBox(2);
+		hBox.setPadding( new Insets( 10, 10, 10, 10 ) );
+		hBox.setSpacing(10);
+		hBox.getChildren().addAll( this.barProgress, this.lblProgress );
+		this.btnUpdate.setDisable(true);
+		this.basePane.setBottom(hBox);
+	}
+	
+	private void endDownload()
+	{
+		this.btnCheck.setDisable(false);
+		this.btnUpdate.setDisable(false);
+		this.basePane.setBottom(null);
+		this.moduleUpdate(null);
+	}
+	
+	private void beginUpdate()
+	{
+		this.btnCheck.setDisable(true);
+		HBox hBox = new HBox(2);
+		hBox.setPadding( new Insets( 10, 10, 10, 10 ) );
+		hBox.setSpacing(10);
+		hBox.getChildren().addAll( this.barProgress, this.lblProgress );
+		this.btnUpdate.setDisable(true);
+		this.basePane.setBottom(hBox);
+	}
+	
+	private void endUpdate()
+	{
+		this.btnCheck.setDisable(false);
+		this.btnUpdate.setDisable(false);
+		this.basePane.setBottom(null);
 	}
 	
 	@Override

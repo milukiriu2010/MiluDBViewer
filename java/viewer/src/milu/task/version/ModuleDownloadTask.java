@@ -5,7 +5,7 @@ import milu.gui.ctrl.info.MapInterface;
 import milu.main.MainController;
 import milu.task.ProgressInterface;
 
-public class ModuleUpdateTask extends Task<Exception> 
+public class ModuleDownloadTask extends Task<Exception> 
 	implements 
 		ModuleTaskInterface, 
 		ProgressInterface 
@@ -13,6 +13,8 @@ public class ModuleUpdateTask extends Task<Exception>
 	private final double MAX = 100.0;
 	
 	private MainController mainCtrl = null;
+	
+	private String         strUrl   = null;
 	
 	private MapInterface   mapInf   = null;
 	
@@ -29,6 +31,7 @@ public class ModuleUpdateTask extends Task<Exception>
 	@Override
 	public void setUrl( String strUrl )
 	{
+		this.strUrl = strUrl;
 	}
 	
 	// MapInterface
@@ -49,15 +52,15 @@ public class ModuleUpdateTask extends Task<Exception>
 			
 			Thread.sleep(100);
 			
-			System.out.println( "ModuleUpdate start." );
+			System.out.println( "ModuleDownload start." );
 			
-			ModuleUpdate mdUp = new ModuleUpdate();
-			mdUp.setAppConf(this.mainCtrl.getAppConf());
-			mdUp.setProgressInterface(this);
-			mdUp.setValue(this.mapInf.getValue());
-			mdUp.exec();
+			ModuleDownload mdDl = new ModuleDownload();
+			mdDl.setAppConf(this.mainCtrl.getAppConf());
+			mdDl.setProgressInterface(this);
+			mdDl.setValue(this.mapInf.getValue());
+			mdDl.check(this.strUrl);
 			
-			System.out.println( "ModuleUpdate end." );
+			System.out.println( "ModuleDownload end." );
 			
 			return taskEx;
 		}

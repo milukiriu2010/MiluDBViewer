@@ -30,7 +30,7 @@ public class MainToolBar extends ToolBar
 	// Button to get explain
 	//private Button btnExplain  = new Button();
 	// Button to toggle Horizontal/Vertical mode
-	//private Button btnToggleHV = new Button();
+	private Button btnToggleHV = new Button();
 	// Button to commit
 	private Button btnCommit   = new Button();
 	// Button to rollback
@@ -142,6 +142,8 @@ public class MainToolBar extends ToolBar
 		// Explain button clicked
 		//this.btnExplain.setOnAction( event->this.dbView.execExplain() );
 		
+		//this.btnToggleHV.setOnAction( this.dbView::switchDirection );
+		
 		// Commit button clicked
 		this.btnCommit.setOnAction
 		(	
@@ -163,7 +165,7 @@ public class MainToolBar extends ToolBar
 		);
 		
 		// "Toggle H/V" button clicked
-		//this.btnToggleHV.setOnAction( (event)->{ this.dbView.switchDirection();	} );
+		this.btnToggleHV.setOnAction( this.dbView::switchDirection );
 		
 		// "New Tab" button clicked
 		this.btnNewTab.setOnAction(	(event)->{ this.dbView.createNewTab(); } );
@@ -201,17 +203,20 @@ public class MainToolBar extends ToolBar
 			dbView::Go
 		);
 		*/
-		/*
+		/**/
 		// ---------------------------------
 		// Mnemonic for "Toggle horizontal/vertical mode for Table"
 		// Ctrl+D
 		// ---------------------------------
+		/*
 		this.btnToggleHV.getScene().getAccelerators().put
 		(
 			new KeyCodeCombination( KeyCode.D, KeyCombination.CONTROL_DOWN ),	
-			dbView::switchDirection
+			()->this.dbView.switchDirection(null)
 		);
 		*/
+		
+		/**/
 		// ---------------------------------
 		// Mnemonic for "Open new tab"
 		// Ctrl+T
@@ -270,6 +275,7 @@ public class MainToolBar extends ToolBar
 		//this.btnGo.setDisable(true);
 		//this.btnExplain.setDisable(true);
 		//this.btnToggleHV.setDisable(true);
+		this.btnSchema.setDisable(true);
 	}
 	
 	// ProcBeginInterface
