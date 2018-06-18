@@ -53,6 +53,7 @@ public class ModuleUpdateTask extends Task<Exception>
 			
 			ModuleUpdate mdUp = new ModuleUpdate();
 			mdUp.setAppConf(this.mainCtrl.getAppConf());
+			mdUp.setAssignedSize(MAX);
 			mdUp.setProgressInterface(this);
 			mdUp.setValue(this.mapInf.getValue());
 			mdUp.exec();

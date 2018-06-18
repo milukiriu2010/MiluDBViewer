@@ -2,9 +2,6 @@ package milu.gui.ctrl.query;
 
 import javafx.scene.control.ToolBar;
 import javafx.scene.control.Tooltip;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyCodeCombination;
-import javafx.scene.input.KeyCombination;
 
 import java.util.ResourceBundle;
 
@@ -82,17 +79,6 @@ class DBSqlScriptToolBar extends ToolBar
 		{
 			// mouse click, "space/return" key enter 
 			this.btnExecSQL.setOnAction( ((SQLExecInterface)obj)::execSQL );
-			
-			// ---------------------------------
-			// Mnemonic for "Exec SQL"
-			// Ctrl+G
-			// ---------------------------------
-			this.btnExecSQL.getScene().getAccelerators().put
-			(
-				new KeyCodeCombination( KeyCode.G, KeyCombination.CONTROL_DOWN ),
-				// Runnable.run()
-				()->((SQLExecInterface)obj).execSQL(null)
-			);
 		}
 		
 		if ( obj instanceof SQLExplainInterface )
@@ -105,19 +91,6 @@ class DBSqlScriptToolBar extends ToolBar
 		{
 			// mouse click, "space/return" key enter 
 			this.btnToggleHV.setOnAction( ((DirectionSwitchInterface)obj)::switchDirection );
-			
-			// ---------------------------------
-			// Mnemonic for "Exec SQL"
-			// Ctrl+G
-			// ---------------------------------]
-			/**/
-			this.btnToggleHV.getScene().getAccelerators().put
-			(
-				new KeyCodeCombination( KeyCode.D, KeyCombination.CONTROL_DOWN ),
-				// Runnable.run()
-				()->((DirectionSwitchInterface)obj).switchDirection(null)
-			);
-			/**/
 		}
 
 		if ( obj instanceof CopyTableInterface )

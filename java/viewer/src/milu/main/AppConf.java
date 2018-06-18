@@ -31,6 +31,11 @@ final public class AppConf
 	@Expose(serialize = true, deserialize = true)
 	private String  initDirJDBC = "";
 	
+	// Initial Directory for File DB(SQLite)
+	@Expose(serialize = true, deserialize = true)
+	private String  initDirFileDB = "";
+
+	
 	// Max fetch rows when selecting.
 	@Expose(serialize = true, deserialize = true)
 	private Integer fetchMax = 100;
@@ -123,6 +128,17 @@ final public class AppConf
 	public void setInitDirJDBC( String initDirJDBC )
 	{
 		this.initDirJDBC = initDirJDBC;
+	}
+	
+	// Initial Directory for File DB(SQLite)
+	public String getInitDirFileDB()
+	{
+		return this.initDirFileDB;
+	}
+	
+	public void setInitDirFileDB( String initDirFileDB )
+	{
+		this.initDirFileDB = initDirFileDB;
 	}
 	
 	/**

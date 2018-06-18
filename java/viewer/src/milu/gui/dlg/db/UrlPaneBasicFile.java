@@ -1,6 +1,7 @@
 package milu.gui.dlg.db;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.ResourceBundle;
@@ -25,7 +26,11 @@ import javafx.stage.Stage;
 
 import milu.db.MyDBAbstract;
 import milu.db.driver.DriverShim;
+import milu.file.json.MyJsonHandleAbstract;
+import milu.file.json.MyJsonHandleFactory;
 import milu.gui.ctrl.common.PersistentButtonToggleGroup;
+import milu.main.AppConf;
+import milu.main.AppConst;
 import milu.main.MainController;
 import milu.tool.MyTool;
 
@@ -99,7 +104,9 @@ public class UrlPaneBasicFile extends UrlPaneAbstract
 		this.dbnameTextField.setText( dbOptsAux.get("DBName") );
 		
 		this.btnOpen.setGraphic( MyTool.createImageView( 16, 16, this.mainCtrl.getImage("file:resources/images/folder.png")) );
-		this.btnOpen.setTooltip( new Tooltip(langRB.getString( "TOOLTIP_OPEN_FILE" )) );
+		Tooltip tipOpen = new Tooltip(langRB.getString( "TOOLTIP_OPEN_FILE" ));
+		tipOpen.getStyleClass().add("DBSettingDialog_MyToolTip");
+		this.btnOpen.setTooltip( tipOpen );
 
 		// ----------------------------------------------------
 		// get URL by Driver Info
@@ -158,64 +165,68 @@ public class UrlPaneBasicFile extends UrlPaneAbstract
 		// --------------------------------------------
 		// Selected Toggle Button is changed
 		// --------------------------------------------
-		this.tglGroup.selectedToggleProperty().addListener
-		(
-			(obs,oldVal,newVal)->
+		this.tglGroup.selectedToggleProperty().addListener((obs,oldVal,newVal)->{
+			if ( newVal == this.tglBtnBasic )
 			{
-				if ( newVal == this.tglBtnBasic )
-				{
-					this.setPaneBasic();
-				}
-				else if ( newVal == this.tglBtnFreeHand )
-				{
-					this.setPaneFreeHand();
-				}
-				Stage stage = (Stage)this.dlg.getDialogPane().getScene().getWindow();
-				stage.sizeToScene();
+				this.setPaneBasic();
 			}
-		);
+			else if ( newVal == this.tglBtnFreeHand )
+			{
+				this.setPaneFreeHand();
+			}
+			Stage stage = (Stage)this.dlg.getDialogPane().getScene().getWindow();
+			stage.sizeToScene();
+		});
 		
 		// --------------------------------------------
 		// Update urlTextField, when DBName is changed
 		// --------------------------------------------
-		this.dbnameTextField.textProperty().addListener
-		(
-			(obs, oldVal, newVal) ->
-			{
-				this.setUrlTextArea();
-			}
-		);
+		this.dbnameTextField.textProperty().addListener((obs, oldVal, newVal)->{
+			this.setUrlTextArea();
+		});
 		
-		this.btnOpen.setOnAction
-		(
-			(event)->
+		AppConf appConf = this.mainCtrl.getAppConf();
+		this.btnOpen.setOnAction((event)->{
+			FileChooser fc = new FileChooser();
+			if ( appConf.getInitDirFileDB().isEmpty() != true )
 			{
-				FileChooser fc = new FileChooser();
-				File file = fc.showOpenDialog(this.getScene().getWindow());
-				if ( file == null )
-				{
-					return;
-				}
-				this.dbnameTextField.setText(file.getAbsolutePath());
+				fc.setInitialDirectory( new File(appConf.getInitDirFileDB()) );
 			}
-		);
+			if ( (this.dbnameTextField.getText() != null) && 
+				 (this.dbnameTextField.getText().isEmpty() != true ) )
+			{
+				fc.setInitialDirectory( new File(this.dbnameTextField.getText()).getParentFile() );
+			}
+			File file = fc.showOpenDialog(this.getScene().getWindow());
+			if ( file == null )
+			{
+				return;
+			}
+			this.dbnameTextField.setText(file.getAbsolutePath());
+			appConf.setInitDirFileDB(file.getParentFile().getAbsolutePath());
+			
+			try
+			{
+				MyJsonHandleAbstract myJsonAbs =
+						new MyJsonHandleFactory().createInstance(AppConf.class);
+						
+				myJsonAbs.open(AppConst.APP_CONF.val());
+				myJsonAbs.save( appConf );
+			}
+			catch ( IOException ioEx )
+			{
+				MyTool.showException( this.mainCtrl, "conf.lang.gui.common.MyAlert", "TITLE_MISC_ERROR", ioEx );
+			}
+		});
 		
-		this.tmplBtn.setOnAction
-		(
-			(event)->
-			{
-				this.urlTextArea.setText( this.tmplTextField.getText() );
-			}
-		);
+		this.tmplBtn.setOnAction((event)->{
+			this.urlTextArea.setText( this.tmplTextField.getText() );
+		});
 		
-		this.lblUrl.setOnMouseClicked
-		(
-			(event)->
-			{
-				Application application = this.mainCtrl.getApplication();
-				application.getHostServices().showDocument( this.lblUrl.getText() );
-			}
-		);
+		this.lblUrl.setOnMouseClicked((event)->{
+			Application application = this.mainCtrl.getApplication();
+			application.getHostServices().showDocument( this.lblUrl.getText() );
+		});
 	}
 	
 	private void setPaneBasic()

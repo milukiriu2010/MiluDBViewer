@@ -15,7 +15,7 @@ import javafx.scene.layout.HBox;
 import milu.main.AppConf;
 import milu.main.MainController;
 
-public class AppPaneDBConfOracle extends AppPaneAbstract 
+class AppPaneDBConfOracle extends AppPaneAbstract 
 {
 	// ----------------------------------------------------
 	// Items for "TNS"
@@ -103,7 +103,9 @@ public class AppPaneDBConfOracle extends AppPaneAbstract
 		ivFolder.setFitWidth(16);
 		ivFolder.setFitHeight(16);
 		this.folderBtn.setGraphic( ivFolder );
-		this.folderBtn.setTooltip( new Tooltip(this.extLangRB.getString( "TOOLTIP_NEW_FOLDER" )) );
+		Tooltip tipFolder = new Tooltip(this.extLangRB.getString( "TOOLTIP_NEW_FOLDER" ));
+		tipFolder.getStyleClass().add("AppPane_MyToolTip");		
+		this.folderBtn.setTooltip( tipFolder );
 		
 		HBox hBoxTnsAdmin = new HBox(2);
 		hBoxTnsAdmin.getChildren().addAll( lblTnsAdmin, this.tnsAdminTextField, this.folderBtn );
@@ -122,18 +124,19 @@ public class AppPaneDBConfOracle extends AppPaneAbstract
 	
 	private void setAction()
 	{
-		this.folderBtn.setOnAction
-		(
-			(event)->
+		this.folderBtn.setOnAction((event)->{
+			DirectoryChooser dc = new DirectoryChooser();
+			if ( ( this.tnsAdminTextField.getText() != null ) &&
+				 ( this.tnsAdminTextField.getText().isEmpty() != true ) )
 			{
-				DirectoryChooser dc = new DirectoryChooser();
-				File dir = dc.showDialog(this.dlg.getDialogPane().getScene().getWindow());
-				if ( dir != null )
-				{
-					this.tnsAdminTextField.setText( dir.getAbsolutePath() );
-				}
+				dc.setInitialDirectory( new File(this.tnsAdminTextField.getText()).getParentFile() );
 			}
-		);
+			File dir = dc.showDialog(this.dlg.getDialogPane().getScene().getWindow());
+			if ( dir != null )
+			{
+				this.tnsAdminTextField.setText( dir.getAbsolutePath() );
+			}
+		});
 	}
 
 	@Override

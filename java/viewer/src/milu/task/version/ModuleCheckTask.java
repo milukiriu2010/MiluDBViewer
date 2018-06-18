@@ -1,8 +1,6 @@
 package milu.task.version;
 
 import javafx.concurrent.Task;
-import java.util.Map;
-import java.util.HashMap;
 
 import milu.main.MainController;
 import milu.gui.ctrl.info.MapInterface;

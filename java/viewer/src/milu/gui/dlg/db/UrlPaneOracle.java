@@ -45,7 +45,7 @@ import milu.main.AppConf;
 import milu.main.MainController;
 import milu.tool.MyTool;
 
-public class UrlPaneOracle extends UrlPaneAbstract
+class UrlPaneOracle extends UrlPaneAbstract
 {
 	private Dialog<?>      dlg            = null;
 	
@@ -106,6 +106,7 @@ public class UrlPaneOracle extends UrlPaneAbstract
 	// field for URL
 	private TextArea  urlTextArea       = new TextArea();
 	
+	// UrlPaneAbstract
 	@Override
 	void createPane( Dialog<?> dlg, MainController mainCtrl, MyDBAbstract myDBAbs )
 	{
@@ -220,7 +221,9 @@ public class UrlPaneOracle extends UrlPaneAbstract
 		
 		// "select folder" button
 		this.folderBtn.setGraphic( MyTool.createImageView( 16, 16, this.mainCtrl.getImage("file:resources/images/folder.png") ));
-		this.folderBtn.setTooltip( new Tooltip(langRB.getString( "TOOLTIP_OPEN_FOLDER" )) );
+		Tooltip tipFolder = new Tooltip(langRB.getString( "TOOLTIP_OPEN_FOLDER" ));
+		tipFolder.getStyleClass().add("DBSettingDialog_MyToolTip");
+		this.folderBtn.setTooltip( tipFolder );
 
 		// ----------------------------------------------------
 		// get URL by Driver Info
@@ -289,158 +292,122 @@ public class UrlPaneOracle extends UrlPaneAbstract
 		// --------------------------------------------
 		// Selected Toggle Button is changed
 		// --------------------------------------------
-		this.tglGroup.selectedToggleProperty().addListener
-		(
-			(obs,oldVal,newVal)->
+		this.tglGroup.selectedToggleProperty().addListener((obs,oldVal,newVal)->{
+			if ( newVal == this.tglBtnBasic )
 			{
-				if ( newVal == this.tglBtnBasic )
-				{
-					this.setPaneBasic();
-				}
-				else if ( newVal == this.tglBtnTNS )
-				{
-					this.setPaneTNS();
-				}
-				else if ( newVal == this.tglBtnFreeHand )
-				{
-					this.setPaneFreeHand();
-				}
-				Stage stage = (Stage)this.dlg.getDialogPane().getScene().getWindow();
-				stage.sizeToScene();
+				this.setPaneBasic();
 			}
-		);
+			else if ( newVal == this.tglBtnTNS )
+			{
+				this.setPaneTNS();
+			}
+			else if ( newVal == this.tglBtnFreeHand )
+			{
+				this.setPaneFreeHand();
+			}
+			Stage stage = (Stage)this.dlg.getDialogPane().getScene().getWindow();
+			stage.sizeToScene();
+		});
 		
 		// --------------------------------------------
 		// Update urlTextField, when DBName is changed
 		// --------------------------------------------
-		this.dbnameTextField.textProperty().addListener
-		(
-			(obs, oldVal, newVal) ->
-			{
-				this.setUrlTextArea();
-			}
-		);
+		this.dbnameTextField.textProperty().addListener((obs, oldVal, newVal)->{
+			this.setUrlTextArea();
+		});
 		
 		// --------------------------------------------
 		// Update urlTextField, when Host is changed
 		// --------------------------------------------
-		this.hostTextField.textProperty().addListener
-		(
-			(obs, oldVal, newVal) ->
-			{
-				this.setUrlTextArea();
-			}
-		);
+		this.hostTextField.textProperty().addListener((obs, oldVal, newVal)->{
+			this.setUrlTextArea();
+		});
 		
 		// --------------------------------------------
 		// restriction for TextField "Port"
 		// https://stackoverflow.com/questions/15615890/recommended-way-to-restrict-input-in-javafx-textfield
 		// --------------------------------------------
-		this.portTextField.textProperty().addListener
-		(
-			(obs, oldVal, newVal) ->
+		this.portTextField.textProperty().addListener((obs, oldVal, newVal)->{
+			if ( newVal == null )
 			{
-				if ( newVal == null )
-				{
-				}
-				// "Numeric" or "No Input" are allowed.
-				else if ( newVal.length() == 0 )
-				{
-				}
-				// if alphabets or marks are input, back to previous input.
-				else if ( newVal.matches( "^[0-9]+$" ) == false )
-				{
-					((StringProperty)obs).setValue( oldVal );
-				}
-				
-				this.setUrlTextArea();
 			}
-		);
+			// "Numeric" or "No Input" are allowed.
+			else if ( newVal.length() == 0 )
+			{
+			}
+			// if alphabets or marks are input, back to previous input.
+			else if ( newVal.matches( "^[0-9]+$" ) == false )
+			{
+				((StringProperty)obs).setValue( oldVal );
+			}
+			
+			this.setUrlTextArea();
+		});
 		
-		this.tnsNamesCombo.valueProperty().addListener
-		(
-			(obs,oldVal,newVal)->
-			{
-				System.out.println( "TNSName:ComboBox:" + newVal );
-				this.setUrlTextArea();
-			}
-		);
+		this.tnsNamesCombo.valueProperty().addListener((obs,oldVal,newVal)->{
+			this.setUrlTextArea();
+		});
 		
 		// https://stackoverflow.com/questions/37923502/how-to-get-entered-value-in-editable-combobox-in-javafx
-		this.tnsNamesCombo.getEditor().focusedProperty().addListener
-		(
-			(obs,oldVal,newVal)->
+		this.tnsNamesCombo.getEditor().focusedProperty().addListener((obs,oldVal,newVal)->{
+			// lose focus
+			if ( newVal == false )
 			{
-				// lose focus
-				if ( newVal == false )
-				{
-					System.out.println( "TNSName:ComboBox:lose focus." );
-					this.tnsNamesCombo.setValue( this.tnsNamesCombo.getEditor().getText() );
-					this.tnsNamesCombo.hide();
-				}
-				// get focus
-				else if ( newVal == true )
-				{
-					this.tnsNamesCombo.show();
-				}
+				System.out.println( "TNSName:ComboBox:lose focus." );
+				this.tnsNamesCombo.setValue( this.tnsNamesCombo.getEditor().getText() );
+				this.tnsNamesCombo.hide();
 			}
-		);
+			// get focus
+			else if ( newVal == true )
+			{
+				this.tnsNamesCombo.show();
+			}
+		});
 		
 		// https://stackoverflow.com/questions/19010619/javafx-filtered-combobox
-		this.tnsNamesCombo.getEditor().textProperty().addListener
-		(
-			(obs,oldVal,newVal)->
-			{
-				final TextField editor   = this.tnsNamesCombo.getEditor();
-				final String    selected = this.tnsNamesCombo.getSelectionModel().getSelectedItem();
-				
-				// This needs run on the GUI thread to avoid the error described
-				// here: https://bugs.openjdk.java.net/browse/JDK-8081700.
-				Platform.runLater
-				(
-					()->
-					{
-						// If the no item in the list is selected 
-						// or 
-						// the selected item isn't equal to the current input, we refilter the list.
-						if ( selected == null || !selected.equals(editor.getText()) )
-						{
-							this.filteredItems.setPredicate
-							(
-								(item)->
-								{
-			                        // We return true for any items that starts with the
-			                        // same letters as the input. We use toUpperCase to
-			                        // avoid case sensitivity.
-			                        if ( item.toUpperCase().startsWith(newVal.toUpperCase()) ) 
-			                        {
-			                            return true;
-			                        } 
-			                        else
-			                        {
-			                            return false;
-			                        }									
-								}
-							);
-						}
-					}
-				);
-			}
-		);
-		
-		this.folderBtn.setOnAction
-		(
-			(event)->
-			{
-				DirectoryChooser dc = new DirectoryChooser();
-				File dir = dc.showDialog(this.dlg.getDialogPane().getScene().getWindow());
-				if ( dir != null )
+		this.tnsNamesCombo.getEditor().textProperty().addListener((obs,oldVal,newVal)->{
+			final TextField editor   = this.tnsNamesCombo.getEditor();
+			final String    selected = this.tnsNamesCombo.getSelectionModel().getSelectedItem();
+			
+			// This needs run on the GUI thread to avoid the error described
+			// here: https://bugs.openjdk.java.net/browse/JDK-8081700.
+			Platform.runLater(()->{
+				// If the no item in the list is selected 
+				// or 
+				// the selected item isn't equal to the current input, we refilter the list.
+				if ( selected == null || !selected.equals(editor.getText()) )
 				{
-					this.tnsAdminTextField.setText( dir.getAbsolutePath() );
-					this.loadTnsNamesOra( dir );
+					this.filteredItems.setPredicate((item)->{
+                        // We return true for any items that starts with the
+                        // same letters as the input. We use toUpperCase to
+                        // avoid case sensitivity.
+                        if ( item.toUpperCase().startsWith(newVal.toUpperCase()) ) 
+                        {
+                            return true;
+                        } 
+                        else
+                        {
+                            return false;
+                        }									
+					});
 				}
+			});
+		});
+		
+		this.folderBtn.setOnAction((event)->{
+			DirectoryChooser dc = new DirectoryChooser();
+			if ( ( this.tnsAdminTextField.getText() != null ) &&
+				 ( this.tnsAdminTextField.getText().isEmpty() != true ) )
+			{
+				dc.setInitialDirectory( new File(this.tnsAdminTextField.getText()).getParentFile() );
 			}
-		);
+			File dir = dc.showDialog(this.dlg.getDialogPane().getScene().getWindow());
+			if ( dir != null )
+			{
+				this.tnsAdminTextField.setText( dir.getAbsolutePath() );
+				this.loadTnsNamesOra( dir );
+			}
+		});
 		
 		/*
 		this.tnsAdminTextField.focusedProperty().addListener
@@ -455,22 +422,14 @@ public class UrlPaneOracle extends UrlPaneAbstract
 		);
 		*/
 		
-		this.tmplBtn.setOnAction
-		(
-			(event)->
-			{
-				this.urlTextArea.setText( this.tmplTextField.getText() );
-			}
-		);
+		this.tmplBtn.setOnAction((event)->{
+			this.urlTextArea.setText( this.tmplTextField.getText() );
+		});
 		
-		this.lblUrl.setOnMouseClicked
-		(
-			(event)->
-			{
-				Application application = this.mainCtrl.getApplication();
-				application.getHostServices().showDocument( this.lblUrl.getText() );
-			}
-		);
+		this.lblUrl.setOnMouseClicked((event)->{
+			Application application = this.mainCtrl.getApplication();
+			application.getHostServices().showDocument( this.lblUrl.getText() );
+		});
 	}
 	
 	private void setPaneBasic()
@@ -563,7 +522,8 @@ public class UrlPaneOracle extends UrlPaneAbstract
 		
 		this.getChildren().addAll( vBox );
 	}
-
+	
+	// UrlInterface
 	@Override
 	public String setUrl( MyDBAbstract.UPDATE update ) 
 	{
@@ -626,13 +586,10 @@ public class UrlPaneOracle extends UrlPaneAbstract
 			return tnsNameLst;
 		}
 		
-		//MyFileAbstract myFileAbs = MyFileFactory.getInstance(file);
 		MyFileExtAbstract<String> myFileAbs = MyFileExtFactory.getInstance(MyFileExtFactory.TYPE.TNSNAMES_ORACLE);
 		
 		try
 		{
-			//myFileAbs.open( file );
-			//String strTNSFile = myFileAbs.load();
 			String strTNSFile = myFileAbs.load( file, String.class );
 			//System.out.println( "=== tnsnames.ora ===" );
 			//System.out.println( strTNSFile );
@@ -657,21 +614,27 @@ public class UrlPaneOracle extends UrlPaneAbstract
 		}
 		catch ( IOException ioEx )
 		{
+			/*
 			ResourceBundle extLangRB = this.mainCtrl.getLangResource("conf.lang.gui.common.MyAlert");
 			
     		MyAlertDialog alertDlg = new MyAlertDialog( AlertType.WARNING, this.mainCtrl );
     		alertDlg.setHeaderText( extLangRB.getString( "TITLE_FILE_NOT_FOUND" ) );
     		alertDlg.setTxtExp( ioEx );
     		alertDlg.showAndWait();
+    		*/
+    		MyTool.showException( this.mainCtrl, "conf.lang.gui.common.MyAlert", "TITLE_FILE_NOT_FOUND", ioEx );
     	}
 		catch ( Exception ex )
 		{
+			/*
 			ResourceBundle extLangRB = this.mainCtrl.getLangResource("conf.lang.gui.common.MyAlert");
 			
     		MyAlertDialog alertDlg = new MyAlertDialog( AlertType.WARNING, this.mainCtrl );
     		alertDlg.setHeaderText( extLangRB.getString( "TITLE_FILE_NOT_FOUND" ) );
     		alertDlg.setTxtExp( ex );
     		alertDlg.showAndWait();
+    		*/
+    		MyTool.showException( this.mainCtrl, "conf.lang.gui.common.MyAlert", "TITLE_FILE_NOT_FOUND", ex );
     	}
 		
 		return tnsNameLst;

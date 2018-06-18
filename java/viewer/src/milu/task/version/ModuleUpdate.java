@@ -20,7 +20,7 @@ public class ModuleUpdate
 	
 	private String downloadFileName = null;
 	
-	private double  assignedSize = 0.0;
+	//private double  assignedSize = 0.0;
 	
 	void setAppConf( AppConf appConf )
 	{
@@ -39,7 +39,7 @@ public class ModuleUpdate
 	
 	void setAssignedSize( double assignedSize )
 	{
-		this.assignedSize = assignedSize;
+		//this.assignedSize = assignedSize;
 	}
 	
 	public void exec()

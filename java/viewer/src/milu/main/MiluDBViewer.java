@@ -106,18 +106,17 @@ public class MiluDBViewer extends Application
 				}
 			);
 			
-			ilTask.valueProperty().addListener
-			(
-				(obs,oldVal,ex)->
-				{
-					MyAlertDialog alertDlg = new MyAlertDialog( AlertType.WARNING, mainCtrl );
-		    		ResourceBundle langRB = mainCtrl.getLangResource("conf.lang.gui.common.MyAlert");
-					alertDlg.setHeaderText( langRB.getString("TITLE_MISC_ERROR") );
-		    		alertDlg.setTxtExp( ex );
-		    		alertDlg.showAndWait();
-		    		alertDlg = null;
-				}
-			);
+			ilTask.valueProperty().addListener((obs,oldVal,ex)->{
+				/*
+				MyAlertDialog alertDlg = new MyAlertDialog( AlertType.WARNING, mainCtrl );
+	    		ResourceBundle langRB = mainCtrl.getLangResource("conf.lang.gui.common.MyAlert");
+				alertDlg.setHeaderText( langRB.getString("TITLE_MISC_ERROR") );
+	    		alertDlg.setTxtExp( ex );
+	    		alertDlg.showAndWait();
+	    		alertDlg = null;
+	    		*/
+	    		MyTool.showException( mainCtrl, "conf.lang.gui.common.MyAlert", "TITLE_MISC_ERROR", ex );
+			});
     	}
     	catch ( Exception ex )
     	{

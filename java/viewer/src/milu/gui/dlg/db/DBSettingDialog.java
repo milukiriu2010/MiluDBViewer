@@ -167,16 +167,24 @@ public class DBSettingDialog extends Dialog<MyDBAbstract>
 		}
 		
 		this.btnNewFolder.setGraphic( MyTool.createImageView( 16, 16, this.mainCtrl.getImage( "file:resources/images/folder_new.png" ) ) );
-		this.btnNewFolder.setTooltip( new Tooltip(langRB.getString( "TOOLTIP_NEW_FOLDER" )) );
+		Tooltip tipNewFolder = new Tooltip(langRB.getString( "TOOLTIP_NEW_FOLDER" ));
+		tipNewFolder.getStyleClass().add("DBSettingDialog_MyToolTip");
+		this.btnNewFolder.setTooltip( tipNewFolder );
 		
 		this.btnNewConnection.setGraphic( MyTool.createImageView( 16, 16, this.mainCtrl.getImage( "file:resources/images/file_new.png" ) ) );
-		this.btnNewConnection.setTooltip( new Tooltip(langRB.getString( "TOOLTIP_NEW_CONNECTION" )) );
+		Tooltip tipNewConnection = new Tooltip(langRB.getString( "TOOLTIP_NEW_CONNECTION" ));
+		tipNewConnection.getStyleClass().add("DBSettingDialog_MyToolTip");
+		this.btnNewConnection.setTooltip( tipNewConnection );
 		
 		this.btnEditFolder.setGraphic( MyTool.createImageView( 16, 16, this.mainCtrl.getImage( "file:resources/images/edit.png" ) ) );
-		this.btnEditFolder.setTooltip( new Tooltip(langRB.getString( "TOOLTIP_EDIT" )) );
+		Tooltip tipEditFolder = new Tooltip(langRB.getString( "TOOLTIP_EDIT" ));
+		tipEditFolder.getStyleClass().add("DBSettingDialog_MyToolTip");
+		this.btnEditFolder.setTooltip( tipEditFolder );
 		
 		this.btnDelFolder.setGraphic( MyTool.createImageView( 16, 16, this.mainCtrl.getImage( "file:resources/images/delete.png" ) ) );
-		this.btnDelFolder.setTooltip( new Tooltip(langRB.getString( "TOOLTIP_DEL" )) );
+		Tooltip tipDelFolder = new Tooltip(langRB.getString( "TOOLTIP_DEL" ));
+		tipDelFolder.getStyleClass().add("DBSettingDialog_MyToolTip");
+		this.btnDelFolder.setTooltip( tipDelFolder );
 		
 		HBox hBoxBtn = new HBox(2);
 		hBoxBtn.getChildren().addAll( this.btnNewFolder, this.btnNewConnection, this.btnEditFolder, this.btnDelFolder );
@@ -584,25 +592,8 @@ public class DBSettingDialog extends Dialog<MyDBAbstract>
 			// Connect to DB
 			myDBAbs.connect();
 		}
-		/*
-		catch ( ClassNotFoundException cnfEx )
-		{
-    		MyAlertDialog alertDlg = new MyAlertDialog( AlertType.WARNING, this.mainCtrl );
-    		ResourceBundle langRB = this.mainCtrl.getLangResource("conf.lang.gui.common.MyAlert");
-    		alertDlg.setHeaderText( langRB.getString( "TITLE_DB_DRIVER_ERROR" ) );
-    		alertDlg.setTxtExp( cnfEx );
-    		alertDlg.showAndWait();
-		}
-		*/
 		catch ( SQLException sqlEx )
 		{
-			/*
-    		MyAlertDialog alertDlg = new MyAlertDialog( AlertType.WARNING, this.mainCtrl );
-    		ResourceBundle langRB = this.mainCtrl.getLangResource("conf.lang.gui.common.MyAlert");
-    		alertDlg.setHeaderText( langRB.getString( "TITLE_DB_CONNECT_ERROR" ) );
-    		alertDlg.setTxtExp( sqlEx );
-    		alertDlg.showAndWait();
-    		*/
 			MyTool.showException( this.mainCtrl, "conf.lang.gui.common.MyAlert", "TITLE_DB_CONNECT_ERROR", sqlEx );
 		}
 		catch ( Exception ex )
@@ -619,16 +610,7 @@ public class DBSettingDialog extends Dialog<MyDBAbstract>
 			event.consume();
 		}
 	}
-	/*
-	private void showException( Exception ex )
-	{
-		MyAlertDialog alertDlg = new MyAlertDialog( AlertType.WARNING, this.mainCtrl );
-		ResourceBundle langRB = this.mainCtrl.getLangResource("conf.lang.gui.common.MyAlert");
-		alertDlg.setHeaderText( langRB.getString( "TITLE_MISC_ERROR" ) );
-		alertDlg.setTxtExp( ex );
-		alertDlg.showAndWait();
-	}
-	*/
+	
 	private void setDisableAllButton( boolean disable )
 	{
 		ObservableList<ButtonType>  btnTypeLst = this.getDialogPane().getButtonTypes();

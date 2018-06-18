@@ -28,7 +28,6 @@ import javafx.event.Event;
 import milu.gui.ctrl.common.inf.ActionInterface;
 import milu.gui.ctrl.common.inf.ChangeLangInterface;
 import milu.gui.ctrl.common.inf.CounterInterface;
-import milu.gui.ctrl.common.inf.ExecQueryDBInterface;
 import milu.gui.ctrl.common.inf.FocusInterface;
 import milu.gui.ctrl.common.inf.ProcInterface;
 import milu.gui.ctrl.common.table.CopyTableInterface;

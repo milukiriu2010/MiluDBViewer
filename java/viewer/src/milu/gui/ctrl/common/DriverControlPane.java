@@ -314,13 +314,6 @@ public class DriverControlPane extends Pane
 					if (LoadDriver.isAlreadyLoadCheck(this.driverClassNameTxt.getText()))
 					{
 						MyTool.showMsg( this.mainCtrl, "conf.lang.gui.common.MyAlert", "TITLE_NOT_ALLOWED_DUPLICATE" );
-						/*
-						MyAlertDialog alertDlg = new MyAlertDialog( AlertType.WARNING, this.mainCtrl );
-						ResourceBundle langRB = this.mainCtrl.getLangResource("conf.lang.gui.common.MyAlert");
-						alertDlg.setHeaderText( langRB.getString("TITLE_NOT_ALLOWED_DUPLICATE") );
-						alertDlg.showAndWait();
-						alertDlg = null;
-						*/
 						return;
 					}
 				}
@@ -374,18 +367,6 @@ public class DriverControlPane extends Pane
 		
 		this.btnCancel.setOnAction( (event)->this.psdInf.driverCancel() );
 	}
-	
-	/*
-	private void showException( Exception ex )
-	{
-		MyAlertDialog alertDlg = new MyAlertDialog( AlertType.WARNING, this.mainCtrl );
-		ResourceBundle langRB = this.mainCtrl.getLangResource("conf.lang.gui.common.MyAlert");
-		alertDlg.setHeaderText( langRB.getString("TITLE_MISC_ERROR") );
-		alertDlg.setTxtExp( ex );
-		alertDlg.showAndWait();
-		alertDlg = null;
-	}
-	*/
 	
 	// https://gist.github.com/skrb/6389257
 	class EditListCell extends ListCell<String>

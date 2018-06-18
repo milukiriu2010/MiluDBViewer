@@ -23,7 +23,6 @@ import milu.gui.ctrl.common.inf.ChangeLangInterface;
 import milu.gui.ctrl.info.VersionTab;
 import milu.gui.ctrl.jdbc.DBJdbcTab;
 import milu.gui.dlg.SystemInfoDialog;
-import milu.gui.dlg.VersionDialog;
 import milu.gui.dlg.app.AppSettingDialog;
 import milu.gui.view.DBView;
 import milu.main.MainController;

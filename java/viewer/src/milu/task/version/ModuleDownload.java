@@ -81,7 +81,7 @@ class ModuleDownload
 			int dlByte = 0;
 			while ( (readByte=is.read(readBuf)) != -1 )
 			{
-				double progress = (double)dlByte*100.0/(double)this.fileSize;
+				double progress = (double)dlByte*this.assignedSize/(double)this.fileSize;
 				String strMsg = String.format( "%d/%d bytes - %.3f%%", dlByte, this.fileSize, progress );
 				this.progressInf.setMsg( strMsg );
 				this.progressInf.setProgress( progress );

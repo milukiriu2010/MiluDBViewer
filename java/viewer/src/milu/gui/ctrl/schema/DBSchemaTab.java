@@ -145,30 +145,39 @@ public class DBSchemaTab extends Tab
 		}
 		catch ( UnsupportedOperationException uoEx )
 		{
+			/*
 			ResourceBundle langRB = this.dbView.getMainController().getLangResource("conf.lang.gui.common.MyAlert");
 			MyAlertDialog alertDlg = new MyAlertDialog( AlertType.WARNING, this.dbView.getMainController() );
 			alertDlg.setHeaderText( langRB.getString("TITLE_UNSUPPORT_ERROR") );
     		alertDlg.showAndWait();
     		alertDlg = null;
+    		*/
+    		MyTool.showException( this.dbView.getMainController(), "conf.lang.gui.common.MyAlert", "TITLE_UNSUPPORT_ERROR", uoEx );
 		}
 		catch ( SQLException sqlEx )
 		{
+			/*
 			ResourceBundle langRB = this.dbView.getMainController().getLangResource("conf.lang.gui.common.MyAlert");
 			MyAlertDialog alertDlg = new MyAlertDialog( AlertType.WARNING, this.dbView.getMainController() );
 			alertDlg.setHeaderText( langRB.getString("TITLE_EXEC_QUERY_ERROR") );
     		alertDlg.setTxtExp( sqlEx, myDBAbs );
     		alertDlg.showAndWait();
     		alertDlg = null;
+    		*/
+			MyTool.showException( this.dbView.getMainController(), "conf.lang.gui.common.MyAlert", "TITLE_EXEC_QUERY_ERROR", sqlEx );
 		}
 		catch ( Exception ex )
 		{
+			/*
 			ResourceBundle langRB = this.dbView.getMainController().getLangResource("conf.lang.gui.common.MyAlert");
 			MyAlertDialog alertDlg = new MyAlertDialog( AlertType.WARNING, this.dbView.getMainController() );
 			alertDlg.setHeaderText( langRB.getString("TITLE_MISC_ERROR") );
     		alertDlg.setTxtExp( ex );
     		alertDlg.showAndWait();
     		alertDlg = null;
-		}		
+    		*/
+    		MyTool.showException( this.dbView.getMainController(), "conf.lang.gui.common.MyAlert", "TITLE_MISC_ERROR", ex );
+		}
 	}
 	
 	/**************************************************

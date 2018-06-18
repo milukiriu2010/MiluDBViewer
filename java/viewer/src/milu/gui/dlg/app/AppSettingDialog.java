@@ -210,15 +210,4 @@ public class AppSettingDialog extends Dialog<Boolean>
 			}
 		);
 	}
-	/*
-	private void showException( Exception ex )
-	{
-		MyAlertDialog alertDlg = new MyAlertDialog( AlertType.WARNING, this.mainCtrl );
-		ResourceBundle langRB = this.mainCtrl.getLangResource("conf.lang.gui.common.MyAlert");
-		alertDlg.setHeaderText( langRB.getString("TITLE_MISC_ERROR") );
-		alertDlg.setTxtExp( ex );
-		alertDlg.showAndWait();
-		alertDlg = null;
-	}
-	*/	
 }

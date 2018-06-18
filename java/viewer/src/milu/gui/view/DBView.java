@@ -20,24 +20,31 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyCodeCombination;
+import javafx.scene.input.KeyCombination;
+import javafx.collections.ObservableMap;
+
 import milu.gui.ctrl.common.inf.ActionInterface;
 import milu.gui.ctrl.common.inf.ChangeLangInterface;
-import milu.gui.ctrl.common.inf.ExecQueryDBInterface;
 import milu.gui.ctrl.common.inf.FocusInterface;
+import milu.gui.ctrl.common.inf.ProcInterface;
 import milu.gui.ctrl.common.inf.RefreshInterface;
 import milu.gui.ctrl.common.table.DirectionSwitchInterface;
-import milu.gui.ctrl.common.inf.ProcInterface;
 import milu.gui.ctrl.menu.MainMenuBar;
 import milu.gui.ctrl.menu.MainToolBar;
+import milu.gui.ctrl.query.SQLExecInterface;
 import milu.gui.ctrl.query.DBSqlScriptTab;
 import milu.gui.dlg.MyAlertDialog;
 import milu.main.MainController;
 import milu.db.MyDBAbstract;
 import milu.task.collect.CollectTaskFactory;
+import milu.tool.MyTool;
 
 public class DBView extends Stage
 	implements
 		ProcInterface,
+		SQLExecInterface,
 		DirectionSwitchInterface,
 		ChangeLangInterface
 {
@@ -183,7 +190,33 @@ public class DBView extends Stage
 	// Mnemonic for Button
 	private void setMnemonic()
 	{
+		Scene scene = this.getScene();
+		ObservableMap<KeyCombination,Runnable> accelerators = scene.getAccelerators();
+		
 		this.mainToolBar.setMnemonic();
+		
+		// ---------------------------------
+		// Mnemonic for "Exec SQL"
+		// Ctrl+G
+		// ---------------------------------		
+		accelerators.put
+		(
+			new KeyCodeCombination( KeyCode.G, KeyCombination.CONTROL_DOWN ),
+			// Runnable.run()
+			()->((SQLExecInterface)this).execSQL(null)
+		);
+		
+		// ---------------------------------
+		// Mnemonic for "Toggle horizontal/vertical mode for Table"
+		// Ctrl+D
+		// ---------------------------------		
+		accelerators.put
+		(
+			new KeyCodeCombination( KeyCode.D, KeyCombination.CONTROL_DOWN ),
+			// Runnable.run()
+			()->((DirectionSwitchInterface)this).switchDirection(null)
+		);
+		
 		this.setActionOnTab();
 	}
 	
@@ -248,12 +281,15 @@ public class DBView extends Stage
 						{
 							return;
 						}
+						/*
 			    		MyAlertDialog alertDlg = new MyAlertDialog( AlertType.WARNING, this.mainCtrl );
 			    		ResourceBundle langRB = this.mainCtrl.getLangResource("conf.lang.gui.common.MyAlert");
 						alertDlg.setHeaderText( langRB.getString("TITLE_MISC_ERROR") );
 			    		alertDlg.setTxtExp( ex );
 			    		alertDlg.showAndWait();
-			    		alertDlg = null;					
+			    		alertDlg = null;
+			    		*/
+			    		MyTool.showException( this.mainCtrl, "conf.lang.gui.common.MyAlert", "TITLE_MISC_ERROR", ex );
 			    	}
 				);
 			}
@@ -379,6 +415,18 @@ public class DBView extends Stage
 		}
 	}
 	*/
+	
+	// SQLExecInterface
+	@Override
+	public void execSQL( Event event )
+	{
+		Tab tab = this.tabPane.getSelectionModel().getSelectedItem();
+		if ( tab instanceof SQLExecInterface )
+		{
+			((SQLExecInterface)tab).execSQL( event );
+		}
+	}
+	
 	// DirectionSwitchInterface
 	@Override
 	public void switchDirection( Event event )
@@ -510,21 +558,27 @@ public class DBView extends Stage
 		}
 		catch ( SQLException sqlEx )
 		{
+			/*
     		MyAlertDialog alertDlg = new MyAlertDialog( AlertType.WARNING, this.mainCtrl );
     		ResourceBundle langRB = this.mainCtrl.getLangResource("conf.lang.gui.common.MyAlert");
 			alertDlg.setHeaderText( langRB.getString("TITLE_EXEC_QUERY_ERROR") );
     		alertDlg.setTxtExp( sqlEx, myDBAbs );
     		alertDlg.showAndWait();
     		alertDlg = null;
+    		*/
+    		MyTool.showException( this.mainCtrl, "conf.lang.gui.common.MyAlert", "TITLE_EXEC_QUERY_ERROR", sqlEx, myDBAbs );
 		}
 		catch ( Exception ex )
 		{
+			/*
     		MyAlertDialog alertDlg = new MyAlertDialog( AlertType.WARNING, this.mainCtrl );
     		ResourceBundle langRB = this.mainCtrl.getLangResource("conf.lang.gui.common.MyAlert");
 			alertDlg.setHeaderText( langRB.getString("TITLE_MISC_ERROR") );
     		alertDlg.setTxtExp( ex );
     		alertDlg.showAndWait();
     		alertDlg = null;
+    		*/
+    		MyTool.showException( this.mainCtrl, "conf.lang.gui.common.MyAlert", "TITLE_MISC_ERROR", ex );
 		}
 	}
 	
