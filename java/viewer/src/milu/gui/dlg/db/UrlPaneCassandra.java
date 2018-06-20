@@ -12,6 +12,7 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.Tooltip;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.Button;
 import javafx.scene.layout.GridPane;
@@ -80,6 +81,7 @@ public class UrlPaneCassandra extends UrlPaneAbstract
 		this.myDBAbs   = myDBAbs;
 		
 		ResourceBundle extLangRB = this.mainCtrl.getLangResource("conf.lang.gui.dlg.db.DBSettingDialog");
+		ResourceBundle langRB = this.mainCtrl.getLangResource("conf.lang.gui.common.NodeName");
 		
 		// ToggleButton for Basic
 		this.tglBtnBasic.setText(extLangRB.getString("TOGGLE_BASIC"));
@@ -120,7 +122,9 @@ public class UrlPaneCassandra extends UrlPaneAbstract
 		this.tmplTextField.setEditable(false);
 
 		this.tmplBtn.setGraphic( MyTool.createImageView( 16, 16, this.mainCtrl.getImage("file:resources/images/copy.png") ) );
-		
+		Tooltip tipCopy = new Tooltip(langRB.getString( "TOOLTIP_COPY" ));
+		tipCopy.getStyleClass().add("DBSettingDialog_MyToolTip");
+		this.tmplBtn.setTooltip( tipCopy );		
 		// ----------------------------------------------------
 		// Items for "All"
 		// ----------------------------------------------------

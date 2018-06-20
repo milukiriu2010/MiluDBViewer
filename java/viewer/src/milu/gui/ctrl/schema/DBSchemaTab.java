@@ -7,7 +7,6 @@ import javafx.scene.control.SplitPane;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.Label;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.Node;
@@ -25,7 +24,6 @@ import milu.gui.ctrl.common.inf.FocusInterface;
 import milu.gui.ctrl.schema.SchemaTreeView;
 import milu.gui.ctrl.schema.handle.SelectedItemHandlerAbstract;
 import milu.gui.ctrl.schema.handle.SelectedItemHandlerFactory;
-import milu.gui.dlg.MyAlertDialog;
 
 public class DBSchemaTab extends Tab
 	implements 

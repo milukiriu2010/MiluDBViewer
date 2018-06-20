@@ -8,7 +8,6 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.Tooltip;
-import javafx.scene.image.ImageView;
 import javafx.application.Application;
 import javafx.scene.Cursor;
 import javafx.scene.control.Button;
@@ -21,6 +20,7 @@ import milu.db.MyDBAbstract;
 import milu.db.driver.DriverShim;
 import milu.gui.ctrl.common.PersistentButtonToggleGroup;
 import milu.main.MainController;
+import milu.tool.MyTool;
 
 public class UrlPaneGeneral extends UrlPaneAbstract
 {	
@@ -83,11 +83,10 @@ public class UrlPaneGeneral extends UrlPaneAbstract
 		this.tmplTextField.setText( driverShim.getTemplateUrl() );
 		this.tmplTextField.setEditable(false);
 
-		ImageView   ivCopy = new ImageView( this.mainCtrl.getImage("file:resources/images/copy.png") );
-		ivCopy.setFitWidth(16);
-		ivCopy.setFitHeight(16);
-		this.tmplBtn.setGraphic(ivCopy);
-		this.tmplBtn.setTooltip( new Tooltip(langRB.getString( "TOOLTIP_COPY" )) );
+		this.tmplBtn.setGraphic( MyTool.createImageView( 16, 16, this.mainCtrl.getImage("file:resources/images/copy.png") ));
+		Tooltip tipCopy = new Tooltip(langRB.getString( "TOOLTIP_COPY" ));
+		tipCopy.getStyleClass().add("DBSettingDialog_MyToolTip");
+		this.tmplBtn.setTooltip( tipCopy );
 		
 		// ----------------------------------------------------
 		// Items for "All"

@@ -29,7 +29,6 @@ import milu.gui.ctrl.common.inf.ActionInterface;
 import milu.gui.ctrl.common.inf.ChangeLangInterface;
 import milu.gui.ctrl.common.inf.FocusInterface;
 import milu.gui.ctrl.common.inf.ProcInterface;
-import milu.gui.ctrl.common.inf.RefreshInterface;
 import milu.gui.ctrl.common.table.DirectionSwitchInterface;
 import milu.gui.ctrl.menu.MainMenuBar;
 import milu.gui.ctrl.menu.MainToolBar;
@@ -383,38 +382,6 @@ public class DBView extends Stage
 	{
 		this.mainCtrl.changeLang( langCode );
 	}
-	
-	/********************************
-	 * Exec SQL Query 
-	 ********************************
-	 */
-	/*
-	public void Go()
-	{
-		// Call SQL on Selected Tab.
-		Tab tab = this.tabPane.getSelectionModel().getSelectedItem();
-		if ( tab instanceof ExecQueryDBInterface )
-		{
-			((ExecQueryDBInterface)tab).Go();
-		}
-	}
-	*/
-	
-	/********************************
-	 * Refresh Activated Tab 
-	 ********************************
-	 */
-	/*
-	public void Refresh()
-	{
-		// Call SQL on Selected Tab.
-		Tab tab = this.tabPane.getSelectionModel().getSelectedItem();
-		if ( tab instanceof RefreshInterface )
-		{
-			((RefreshInterface)tab).Refresh();
-		}
-	}
-	*/
 	
 	// SQLExecInterface
 	@Override

@@ -1,6 +1,7 @@
 package milu.task.main;
 
 import milu.main.AppConf;
+import milu.main.AppConst;
 import milu.tool.MyTool;
 
 public class InitialLoadProxyPassword extends InitialLoadAbstract 
@@ -12,6 +13,7 @@ public class InitialLoadProxyPassword extends InitialLoadAbstract
 		AppConf appConf = this.mainCtrl.getAppConf();
 		try
 		{
+			System.setProperty( "http.agent", AppConst.APP_NAME.val() + "(" + System.getProperty("os.name") + ")" );
 			appConf.setProxyPassword(this.mainCtrl.getSecretKey());
 		}
 		catch ( Exception ex )

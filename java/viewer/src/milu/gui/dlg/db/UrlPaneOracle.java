@@ -24,7 +24,6 @@ import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.Tooltip;
 import javafx.scene.control.Dialog;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Button;
 import javafx.scene.layout.GridPane;
@@ -40,7 +39,6 @@ import milu.db.driver.DriverShim;
 import milu.file.ext.MyFileExtAbstract;
 import milu.file.ext.MyFileExtFactory;
 import milu.gui.ctrl.common.PersistentButtonToggleGroup;
-import milu.gui.dlg.MyAlertDialog;
 import milu.main.AppConf;
 import milu.main.MainController;
 import milu.tool.MyTool;
@@ -238,7 +236,9 @@ class UrlPaneOracle extends UrlPaneAbstract
 		this.tmplTextField.setEditable(false);
 
 		this.tmplBtn.setGraphic( MyTool.createImageView( 16, 16, this.mainCtrl.getImage("file:resources/images/copy.png") ));
-		this.tmplBtn.setTooltip( new Tooltip(langRB.getString( "TOOLTIP_COPY" )) );
+		Tooltip tipCopy = new Tooltip(langRB.getString( "TOOLTIP_COPY" ));
+		tipCopy.getStyleClass().add("DBSettingDialog_MyToolTip");
+		this.tmplBtn.setTooltip( tipCopy );
 		
 		// ----------------------------------------------------
 		// Items for "All"
