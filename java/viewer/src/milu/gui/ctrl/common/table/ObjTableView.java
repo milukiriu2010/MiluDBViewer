@@ -164,36 +164,25 @@ public class ObjTableView extends TableView<List<Object>>
 		this.setContextMenu();
 	}
 	
-	public void setTableViewDirection( Orientation tableViewDirection )
-	{
-		this.tableViewDirection = tableViewDirection;
-	}
-	
 	void selectArea()
 	{
 		getSelectionModel().clearSelection();
 		
-		this.tableColSet.forEach
-		(
-			(tableCol)->
-			{
-    			getSelectionModel().selectRange
-				( 
-					0, 
-					tableCol, 
-					getItems().size(), 
-					tableCol 
-				);
-			}
-		);
+		this.tableColSet.forEach((tableCol)->{
+			getSelectionModel().selectRange
+			( 
+				0, 
+				tableCol, 
+				getItems().size(), 
+				tableCol 
+			);
+		});
 	}
 	
 	Callback<TableColumn<List<Object>,Object>, TableCell<List<Object>,Object>> getCellFactory()
 	{
 		return this.cellFactory;
 	}
-	
-	
 	
 	private void setContextMenu()
 	{
@@ -233,6 +222,20 @@ public class ObjTableView extends TableView<List<Object>>
 		return tpAbs.getRowSize();
 		*/
 		return this.dataObjLst.size();
+	}
+	
+	// DirectionSwitchInterface
+	@Override
+	public Orientation getOrientation()
+	{
+		return this.tableViewDirection;
+	}
+	
+	// DirectionSwitchInterface
+	@Override
+	public void setOrientation( Orientation orientation )
+	{
+		this.tableViewDirection = orientation;
 	}
 	
 	// DirectionSwitchInterface

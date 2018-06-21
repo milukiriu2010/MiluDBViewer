@@ -19,12 +19,16 @@ import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
 import javafx.stage.Stage;
 import javafx.stage.Window;
+import milu.file.json.MyJsonHandleAbstract;
+import milu.file.json.MyJsonHandleFactory;
 import milu.gui.ctrl.common.inf.ChangeLangInterface;
 import milu.gui.ctrl.info.VersionTab;
 import milu.gui.ctrl.jdbc.DBJdbcTab;
 import milu.gui.dlg.SystemInfoDialog;
 import milu.gui.dlg.app.AppSettingDialog;
 import milu.gui.view.DBView;
+import milu.main.AppConf;
+import milu.main.AppConst;
 import milu.main.MainController;
 import milu.tool.MyTool;
 
@@ -77,14 +81,12 @@ public class MainMenuBar extends MenuBar
 	// [Help]
     //   - [System Info]
     //   - [JDBC Info]
-	//   - [About]
     //   - [Version]
     //     etc
 	// ----------------------------------------------
     Menu     menuHelp        = new Menu();
     MenuItem menuItemSysInfo = new MenuItem();
     MenuItem menuItemJDBC    = new MenuItem("JDBC");
-    //MenuItem menuItemAbout   = new MenuItem();
     MenuItem menuItemVersion = new MenuItem();
     
 	public MainMenuBar( DBView dbView )
@@ -126,12 +128,12 @@ public class MainMenuBar extends MenuBar
 			this.menuItemQuit 
 		);
 		
-		MainController mainController = this.dbView.getMainController();
+		MainController mainCtrl = this.dbView.getMainController();
 		
 		// set icon on menuItemPref
-		this.menuItemPref.setGraphic( MyTool.createImageView( 16, 16, mainController.getImage("file:resources/images/config.png") ) );
+		this.menuItemPref.setGraphic( MyTool.createImageView( 16, 16, mainCtrl.getImage("file:resources/images/config.png") ) );
 		// set icon on menuItemQuit
-		this.menuItemQuit.setGraphic( MyTool.createImageView( 16, 16, mainController.getImage("file:resources/images/quit.png") ) );
+		this.menuItemQuit.setGraphic( MyTool.createImageView( 16, 16, mainCtrl.getImage("file:resources/images/quit.png") ) );
 		// https://blog.idrsolutions.com/2014/04/tutorial-how-to-setup-key-combinations-in-javafx/
 		// Close [Alt+F4]
 		this.menuItemQuit.setAccelerator( new KeyCodeCombination(KeyCode.F4, KeyCombination.ALT_DOWN ));
@@ -182,17 +184,14 @@ public class MainMenuBar extends MenuBar
 		( 
 			this.menuItemSysInfo,
 			this.menuItemJDBC,
-			//this.menuItemAbout,
 			this.menuItemVersion
 		);
 		// set icon on menuItemSysInfo
-		this.menuItemSysInfo.setGraphic( MyTool.createImageView( 16, 16, mainController.getImage("file:resources/images/sysinfo.png") ) );
+		this.menuItemSysInfo.setGraphic( MyTool.createImageView( 16, 16, mainCtrl.getImage("file:resources/images/sysinfo.png") ) );
 		// set icon on menuItemSysInfo
-		this.menuItemJDBC.setGraphic( MyTool.createImageView( 16, 16, mainController.getImage("file:resources/images/jdbc.png") ) );
-		// set icon on menuItemAbout
-		//this.menuItemAbout.setGraphic( MyTool.createImageView( 16, 16, mainController.getImage("file:resources/images/winicon.gif") ) );
+		this.menuItemJDBC.setGraphic( MyTool.createImageView( 16, 16, mainCtrl.getImage("file:resources/images/jdbc.png") ) );
 		// set icon on menuItemVersion
-		this.menuItemVersion.setGraphic( MyTool.createImageView( 16, 16, mainController.getImage("file:resources/images/winicon.gif") ) );
+		this.menuItemVersion.setGraphic( MyTool.createImageView( 16, 16, mainCtrl.getImage("file:resources/images/winicon.gif") ) );
 		
 		// put Menu on MenuBar
 		this.getMenus().addAll( this.menuFile, this.menuWin, this.menuHelp, this.menuLang );
@@ -200,24 +199,17 @@ public class MainMenuBar extends MenuBar
 	
 	private void setAction()
 	{
+		final MainController mainCtrl = this.dbView.getMainController();
+		AppConf appConf = mainCtrl.getAppConf();
+		
 		// "Preferences" menu clicked
-		this.menuItemPref.setOnAction
-		(
-			// ----------------------------------------
-			// @param actionEvent
-			//   interface EventHandler<ActionEvent>
-			//     void handle(T event)
-			// ----------------------------------------
-			(actionEvent)->
-			{
-				MainController mainController = this.dbView.getMainController();
-				AppSettingDialog dlg = new AppSettingDialog( mainController );
-				dlg.showAndWait();
-			}
-		);
+		this.menuItemPref.setOnAction((event)->{
+			AppSettingDialog dlg = new AppSettingDialog( mainCtrl );
+			dlg.showAndWait();
+		});
 		
 		// "Quit" menu clicked
-		this.menuItemQuit.setOnAction(	event->this.dbView.quit() );
+		this.menuItemQuit.setOnAction( mainCtrl::quit );
 		
 		// [Language]
 		//   - [English] menu clicked
@@ -225,8 +217,7 @@ public class MainMenuBar extends MenuBar
 		//   .....
 		for ( CheckMenuItem menuItemLang : this.menuItemLangLst )
 		{
-			menuItemLang.setOnAction
-			((actionEvent)->{
+			menuItemLang.setOnAction((event)->{
 				// check off the item of other language 
 				for ( CheckMenuItem chkMenuItem : this.menuItemLangLst )
 				{
@@ -236,7 +227,21 @@ public class MainMenuBar extends MenuBar
 					}
 				}
 				String langCode = this.langMap.get( menuItemLang.getText() );
-				this.dbView.requestChangeLang( langCode );
+				appConf.setLangCode(langCode);
+				
+				try
+				{
+					MyJsonHandleAbstract myJsonAbs =
+						new MyJsonHandleFactory().createInstance(AppConf.class);
+							
+					myJsonAbs.open(AppConst.APP_CONF.val());
+					myJsonAbs.save( appConf );
+				}
+				catch ( Exception ex )
+				{
+		    		MyTool.showException( mainCtrl, "conf.lang.gui.common.MyAlert", "TITLE_MISC_ERROR", ex );
+				}
+				mainCtrl.changeLang();
 			});
 		}
 
@@ -247,8 +252,7 @@ public class MainMenuBar extends MenuBar
 		//   - [Window Title]
 	    //     etc
 		// ----------------------------------------------
-		this.menuWin.setOnShowing
-		((event)->{
+		this.menuWin.setOnShowing((event)->{
 			this.menuWin.getItems().removeAll(this.menuWin.getItems());
 			List<Window>  showingWinLst = Stage.getWindows().filtered( win->win.isShowing() );
 			for ( Window win : showingWinLst )
@@ -273,20 +277,11 @@ public class MainMenuBar extends MenuBar
 		// [Help]
 		//   - [System Information] menu clicked
 		// ----------------------------------------------
-		this.menuItemSysInfo.setOnAction
-		(
-			// ----------------------------------------
-			// @param actionEvent
-			//   interface EventHandler<ActionEvent>
-			//     void handle(T event)
-			// ----------------------------------------
-			(actionEvent)->
-			{
-				SystemInfoDialog sysInfoDlg = new SystemInfoDialog( this.dbView );
-				sysInfoDlg.showAndWait();
-				sysInfoDlg = null;
-			}
-		);
+		this.menuItemSysInfo.setOnAction((event)->{
+			SystemInfoDialog sysInfoDlg = new SystemInfoDialog( this.dbView );
+			sysInfoDlg.showAndWait();
+			sysInfoDlg = null;
+		});
 		
 		// ----------------------------------------------
 		// [Help]
@@ -296,38 +291,16 @@ public class MainMenuBar extends MenuBar
 		
 		// ----------------------------------------------
 		// [Help]
-		//   - [About] menu clicked
-		// ----------------------------------------------
-		/*
-		this.menuItemAbout.setOnAction
-		(
-			// ----------------------------------------
-			// @param actionEvent
-			//   interface EventHandler<ActionEvent>
-			//     void handle(T event)
-			// ----------------------------------------
-			(actionEvent)->
-			{
-				VersionDialog verDlg = new VersionDialog( this.dbView.getMainController() );
-				verDlg.showAndWait();
-				verDlg = null;
-			}
-		);
-		*/
-		
-		// ----------------------------------------------
-		// [Help]
 		//   - [Version] menu clicked
 		// ----------------------------------------------
 		this.menuItemVersion.setOnAction( (event)->this.dbView.openView( VersionTab.class ) );
-		
 	}
 	
 	/**************************************************
 	 * Override from ChangeLangInterface
 	 ************************************************** 
 	 */
-	@Override	
+	@Override
 	public void changeLang()
 	{
 		MainController mainCtrl = this.dbView.getMainController();

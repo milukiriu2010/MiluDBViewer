@@ -2,6 +2,7 @@ package milu.task.query;
 
 import javafx.application.Platform;
 import javafx.concurrent.Task;
+import javafx.geometry.Orientation;
 
 import java.util.List;
 import java.util.ArrayList;
@@ -59,6 +60,11 @@ public class ExecExplainAllTask extends Task<Exception>
 	public void setProcInf( ProcInterface procInf )
 	{
 		this.procInf = procInf;
+	}
+	
+	@Override
+	public void setOrientation( Orientation orientation )
+	{
 	}
 	
 	@Override

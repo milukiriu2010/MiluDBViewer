@@ -15,7 +15,6 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.layout.BorderPane;
@@ -99,11 +98,8 @@ public class DBResultTab extends Tab
 		MainController mainCtrl = this.dbView.getMainController();
 		
 		// set icon on Tab
-		ImageView iv = new ImageView( mainCtrl.getImage("file:resources/images/result.png") );
-		iv.setFitHeight( 16 );
-		iv.setFitWidth( 16 );
-		this.setGraphic( iv );
-				
+		this.setGraphic( MyTool.createImageView( 16, 16, mainCtrl.getImage("file:resources/images/result.png") ) );
+		
 		this.setAction();
 	}
 	
@@ -221,6 +217,20 @@ public class DBResultTab extends Tab
 	public void setExecTime( long nanoSec )
 	{
 		this.labelExecTimeSQL.setText( String.format( "%,d", nanoSec ) + "nsec" );
+	}
+	
+	// DirectionSwitchInterface
+	@Override
+	public Orientation getOrientation()
+	{
+		return this.tableViewSQL.getOrientation();
+	}
+	
+	// DirectionSwitchInterface
+	@Override
+	public void setOrientation( Orientation orientation )
+	{
+		this.tableViewSQL.setOrientation(orientation);
 	}
 	
 	// DirectionSwitchInterface

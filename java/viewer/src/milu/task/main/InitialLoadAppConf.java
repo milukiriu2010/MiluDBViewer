@@ -1,6 +1,7 @@
 package milu.task.main;
 
 import java.io.FileNotFoundException;
+import java.util.Locale;
 
 import milu.file.json.MyJsonHandleAbstract;
 import milu.file.json.MyJsonHandleFactory;
@@ -46,6 +47,14 @@ public class InitialLoadAppConf extends InitialLoadAbstract
 			if ( this.propMap.containsKey("instDir") )
 			{
 				appConf.setInstDir(this.propMap.get("instDir"));
+			}
+			{
+				String langCode = appConf.getLangCode();
+				if ( langCode != null && langCode.isEmpty() == false )
+				{
+					Locale nextLocale = new Locale( langCode );
+					Locale.setDefault( nextLocale );
+				}
 			}
 			
 			this.progressInf.addProgress( this.assignedSize );

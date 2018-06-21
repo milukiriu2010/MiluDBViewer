@@ -16,6 +16,7 @@ import milu.db.MyDBAbstract;
 import milu.entity.schema.SchemaEntity;
 import milu.gui.view.DBView;
 import milu.main.MainController;
+import milu.gui.ctrl.imp.ImportDataTab;
 import milu.gui.ctrl.common.inf.ChangeLangInterface;
 
 public class SchemaTreeContextMenu extends ContextMenu 
@@ -58,6 +59,9 @@ public class SchemaTreeContextMenu extends ContextMenu
 	
 	// [Generate DELETE]
 	private MenuItem  menuItemGenerateDelete = new MenuItem();
+	
+	// [Import Data]
+	private MenuItem  menuItemImportData = new MenuItem();
 
 	SchemaTreeContextMenu( DBView dbView, SchemaTreeView schemaTreeView, GetDataInterface getDataInf )
 	{
@@ -74,58 +78,49 @@ public class SchemaTreeContextMenu extends ContextMenu
 	
 	private void setAction()
 	{
-		this.menuItemRefresh.setOnAction
-		( 
-			(event)->
-			{ 
-				TreeItem<SchemaEntity>  itemSelected = this.schemaTreeView.getSelectionModel().getSelectedItem();
-				SchemaEntity selectedEntity = itemSelected.getValue();
-				SchemaEntity.SCHEMA_TYPE schemaType = selectedEntity.getType();
-				switch ( schemaType )
-				{
-					case TABLE:
-						// remove grand children & refresh
-						ObservableList<TreeItem<SchemaEntity>>  itemChildren1 = itemSelected.getChildren();
-						for ( TreeItem<SchemaEntity> itemChild : itemChildren1 )
-						{
-							ObservableList<TreeItem<SchemaEntity>> itemGrandChildren = itemChild.getChildren();
-							itemChild.getChildren().removeAll( itemGrandChildren );
-						}
-						// clear self data
-						selectedEntity.clearSelfData();
-						// refresh
-						//this.dbView.Refresh();
-						this.getDataInf.getDataWithRefresh(event);
-						break;
-					default:
-						// remove children on TreeView
-						ObservableList<TreeItem<SchemaEntity>>  itemChildren2 = itemSelected.getChildren();
-						itemSelected.getChildren().removeAll( itemChildren2 );
-						// remove children of selected SchemaEntity
-						selectedEntity.delEntityAll();
-						// clear self data
-						selectedEntity.clearSelfData();
-						// refresh
-						//this.dbView.Refresh();
-						this.getDataInf.getDataWithRefresh(event);
-						break;
-				}
-			} 
-		);
-		
-		this.menuItemCopyObjectName.setOnAction
-		( 
-			(event)->
-			{ 
-				TreeItem<SchemaEntity>  itemSelected = this.schemaTreeView.getSelectionModel().getSelectedItem();
-				SchemaEntity selectedEntity = itemSelected.getValue();
-				// Copy to clipboard
-				final ClipboardContent content = new ClipboardContent();
-				content.putString( selectedEntity.getName() );
-				final Clipboard clipboard = Clipboard.getSystemClipboard();
-				clipboard.setContent( content );				
+		this.menuItemRefresh.setOnAction((event)->{ 
+			TreeItem<SchemaEntity>  itemSelected = this.schemaTreeView.getSelectionModel().getSelectedItem();
+			SchemaEntity selectedEntity = itemSelected.getValue();
+			SchemaEntity.SCHEMA_TYPE schemaType = selectedEntity.getType();
+			switch ( schemaType )
+			{
+				case TABLE:
+					// remove grand children & refresh
+					ObservableList<TreeItem<SchemaEntity>>  itemChildren1 = itemSelected.getChildren();
+					for ( TreeItem<SchemaEntity> itemChild : itemChildren1 )
+					{
+						ObservableList<TreeItem<SchemaEntity>> itemGrandChildren = itemChild.getChildren();
+						itemChild.getChildren().removeAll( itemGrandChildren );
+					}
+					// clear self data
+					selectedEntity.clearSelfData();
+					// refresh
+					//this.dbView.Refresh();
+					this.getDataInf.getDataWithRefresh(event);
+					break;
+				default:
+					// remove children on TreeView
+					ObservableList<TreeItem<SchemaEntity>>  itemChildren2 = itemSelected.getChildren();
+					itemSelected.getChildren().removeAll( itemChildren2 );
+					// remove children of selected SchemaEntity
+					selectedEntity.delEntityAll();
+					// clear self data
+					selectedEntity.clearSelfData();
+					// refresh
+					this.getDataInf.getDataWithRefresh(event);
+					break;
 			}
-		);
+		});
+		
+		this.menuItemCopyObjectName.setOnAction((event)->{ 
+			TreeItem<SchemaEntity>  itemSelected = this.schemaTreeView.getSelectionModel().getSelectedItem();
+			SchemaEntity selectedEntity = itemSelected.getValue();
+			// Copy to clipboard
+			final ClipboardContent content = new ClipboardContent();
+			content.putString( selectedEntity.getName() );
+			final Clipboard clipboard = Clipboard.getSystemClipboard();
+			clipboard.setContent( content );				
+		});
 		
 		this.menuItemGenerateSelect.setOnAction( (event)->{	this.GenerateSQL( GenerateSQLFactory.TYPE.SELECT );	} );
 		this.menuItemInsertPlaceHolderName.setOnAction( (event)->{	this.GenerateSQL( GenerateSQLFactory.TYPE.INSERT_BY_NAME );	} );
@@ -133,6 +128,7 @@ public class SchemaTreeContextMenu extends ContextMenu
 		this.menuItemUpdatePlaceHolderName.setOnAction( (event)->{	this.GenerateSQL( GenerateSQLFactory.TYPE.UPDATE_BY_NAME );	} );
 		this.menuItemUpdatePlaceHolderSimple.setOnAction( (event)->{	this.GenerateSQL( GenerateSQLFactory.TYPE.UPDATE_BY_SIMPLE );	} );
 		this.menuItemGenerateDelete.setOnAction( (event)->{	this.GenerateSQL( GenerateSQLFactory.TYPE.DELETE );	} );
+		this.menuItemImportData.setOnAction( (event)->{ this.dbView.openView(ImportDataTab.class); } );
 		
 		this.getItems().addAll
 		( 
@@ -143,7 +139,9 @@ public class SchemaTreeContextMenu extends ContextMenu
 			this.menuItemGenerateSelect,
 			this.subMenuGenerateInsert,
 			this.subMenuGenerateUpdate,
-			this.menuItemGenerateDelete
+			this.menuItemGenerateDelete,
+			new SeparatorMenuItem(),
+			this.menuItemImportData
 		);
 		
 		this.subMenuGenerateInsert.getItems().addAll
@@ -206,6 +204,7 @@ public class SchemaTreeContextMenu extends ContextMenu
 				this.subMenuGenerateInsert.setDisable(true);
 				this.subMenuGenerateUpdate.setDisable(true);
 				this.menuItemGenerateDelete.setDisable(true);
+				this.menuItemImportData.setDisable(true);
 				break;
 			case SCHEMA:
 			case INDEX_COLUMN:
@@ -216,6 +215,7 @@ public class SchemaTreeContextMenu extends ContextMenu
 				this.subMenuGenerateInsert.setDisable(true);
 				this.subMenuGenerateUpdate.setDisable(true);
 				this.menuItemGenerateDelete.setDisable(true);
+				this.menuItemImportData.setDisable(true);
 				break;
 			case TABLE:
 				this.menuItemRefresh.setDisable(false);
@@ -223,6 +223,7 @@ public class SchemaTreeContextMenu extends ContextMenu
 				this.subMenuGenerateInsert.setDisable(false);
 				this.subMenuGenerateUpdate.setDisable(false);
 				this.menuItemGenerateDelete.setDisable(false);
+				this.menuItemImportData.setDisable(false);
 				break;
 			case VIEW:
 			case SYSTEM_VIEW:
@@ -232,6 +233,7 @@ public class SchemaTreeContextMenu extends ContextMenu
 				this.subMenuGenerateInsert.setDisable(true);
 				this.subMenuGenerateUpdate.setDisable(true);
 				this.menuItemGenerateDelete.setDisable(true);
+				this.menuItemImportData.setDisable(false);
 				break;
 			default:
 				break;
@@ -268,5 +270,6 @@ public class SchemaTreeContextMenu extends ContextMenu
 		
 		this.menuItemGenerateDelete.setText( langRB.getString("MENU_GENERATE_DELETE") );
 		
+		this.menuItemImportData.setText( langRB.getString("MENU_IMPORT_DATA") );
 	}
 }

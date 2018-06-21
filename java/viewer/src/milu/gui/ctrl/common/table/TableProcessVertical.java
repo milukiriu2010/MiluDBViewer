@@ -69,7 +69,7 @@ class TableProcessVertical extends TableProcessAbstract
         );
         */
 		// Switch Direction of tableVieSQL from Vertical to Horizontal
-		this.objTableView.setTableViewDirection( Orientation.HORIZONTAL );
+		this.objTableView.setOrientation( Orientation.HORIZONTAL );
 		this.objTableView.setTableViewData();
 		
         // disable to select the whole column

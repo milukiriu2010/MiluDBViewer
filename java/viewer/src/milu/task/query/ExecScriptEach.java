@@ -5,15 +5,17 @@ import java.util.List;
 
 import javafx.application.Platform;
 import javafx.scene.control.TabPane;
+import javafx.geometry.Orientation;
+
 import milu.ctrl.sql.parse.SQLBag;
 import milu.db.MyDBAbstract;
 import milu.db.access.MyDBOverFetchSizeException;
-import milu.gui.ctrl.query.DBResultTab;
-import milu.gui.view.DBView;
-import milu.main.AppConf;
 import milu.db.access.ExecSQLFactory;
 import milu.db.access.ExecSQLAbstract;
 import milu.gui.ctrl.common.inf.ProcInterface;
+import milu.gui.ctrl.query.DBResultTab;
+import milu.gui.view.DBView;
+import milu.main.AppConf;
 
 public class ExecScriptEach 
 {
@@ -27,7 +29,8 @@ public class ExecScriptEach
 	private int           procCnt  = -1;
 	private long          execTime = -1;
 	private Exception     myEx     = null;
-	private ProcInterface procInf    = null;
+	private ProcInterface procInf     = null;
+	private Orientation   orientation = null;
 	
 	public void setNo( int no )
 	{
@@ -62,6 +65,11 @@ public class ExecScriptEach
 	public void setProcInf( ProcInterface procInf )
 	{
 		this.procInf = procInf;
+	}
+	
+	public void setOrientation( Orientation orientation )
+	{
+		this.orientation = orientation;
 	}
 	
 	public int getProcCnt()
@@ -125,6 +133,7 @@ public class ExecScriptEach
 					dbResultTab.setText( "Script " + no );
 					dbResultTab.setSQL(sqlBag.getSQL());
 					dbResultTab.setProcInf(this.procInf);
+					dbResultTab.setOrientation(this.orientation);
 					dbResultTab.setDataOnTableViewSQL(headLst, dataLst);
 					
 					if ( this.myEx != null )

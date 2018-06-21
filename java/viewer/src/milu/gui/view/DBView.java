@@ -20,6 +20,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
+import javafx.geometry.Orientation;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
@@ -45,6 +46,7 @@ public class DBView extends Stage
 		ProcInterface,
 		SQLExecInterface,
 		DirectionSwitchInterface,
+		NewWinInterface,
 		ChangeLangInterface
 {
 	// Main Controller
@@ -280,14 +282,6 @@ public class DBView extends Stage
 						{
 							return;
 						}
-						/*
-			    		MyAlertDialog alertDlg = new MyAlertDialog( AlertType.WARNING, this.mainCtrl );
-			    		ResourceBundle langRB = this.mainCtrl.getLangResource("conf.lang.gui.common.MyAlert");
-						alertDlg.setHeaderText( langRB.getString("TITLE_MISC_ERROR") );
-			    		alertDlg.setTxtExp( ex );
-			    		alertDlg.showAndWait();
-			    		alertDlg = null;
-			    		*/
 			    		MyTool.showException( this.mainCtrl, "conf.lang.gui.common.MyAlert", "TITLE_MISC_ERROR", ex );
 			    	}
 				);
@@ -366,22 +360,6 @@ public class DBView extends Stage
 	{
 		this.mainToolBar.endProc();
 	}
-	/**
-	 * Quit Application
-	 */
-	public void quit()
-	{
-		this.mainCtrl.quit();
-	}
-	
-	/**
-	 * Reuqest for changing language
-	 * @param langCode
-	 */
-	public void requestChangeLang( String langCode )
-	{
-		this.mainCtrl.changeLang( langCode );
-	}
 	
 	// SQLExecInterface
 	@Override
@@ -392,6 +370,20 @@ public class DBView extends Stage
 		{
 			((SQLExecInterface)tab).execSQL( event );
 		}
+	}
+	
+	// DirectionSwitchInterface
+	@Override
+	public Orientation getOrientation()
+	{
+		throw new UnsupportedOperationException();
+	}
+	
+	// DirectionSwitchInterface
+	@Override
+	public void setOrientation( Orientation orientation )
+	{
+		throw new UnsupportedOperationException();
 	}
 	
 	// DirectionSwitchInterface
@@ -409,7 +401,9 @@ public class DBView extends Stage
 	 * Create New Tab 
 	 ********************************
 	 */
-	public void createNewTab()
+	// NewWinInterface
+	@Override
+	public void createNewTab( Event event )
 	{
 		Tab newTab = null;
 		newTab = new DBSqlScriptTab( this );
@@ -427,7 +421,8 @@ public class DBView extends Stage
 	 * Create New Window 
 	 ********************************
 	 */
-	public void createNewWindow()
+	// NewWinInterface
+	public void createNewWindow( Event event )
 	{
 		this.mainCtrl.createNewWindow( this.myDBAbs, this );
 	}
@@ -436,11 +431,15 @@ public class DBView extends Stage
 	 * Create New DB Connection 
 	 ********************************
 	 */
-	public void createNewDBConnection()
+	// NewWinInterface
+	@Override
+	public void createNewDBConnection( Event event )
 	{
 		this.mainCtrl.createNewDBConnectionAndOpenNewWindow();
 	}
 	
+	// NewWinInterface
+	@Override
 	public void openView( Class<?> castClazz )
 	{
 		// https://www.mkyong.com/java8/java-8-streams-filter-examples/
@@ -525,26 +524,10 @@ public class DBView extends Stage
 		}
 		catch ( SQLException sqlEx )
 		{
-			/*
-    		MyAlertDialog alertDlg = new MyAlertDialog( AlertType.WARNING, this.mainCtrl );
-    		ResourceBundle langRB = this.mainCtrl.getLangResource("conf.lang.gui.common.MyAlert");
-			alertDlg.setHeaderText( langRB.getString("TITLE_EXEC_QUERY_ERROR") );
-    		alertDlg.setTxtExp( sqlEx, myDBAbs );
-    		alertDlg.showAndWait();
-    		alertDlg = null;
-    		*/
     		MyTool.showException( this.mainCtrl, "conf.lang.gui.common.MyAlert", "TITLE_EXEC_QUERY_ERROR", sqlEx, myDBAbs );
 		}
 		catch ( Exception ex )
 		{
-			/*
-    		MyAlertDialog alertDlg = new MyAlertDialog( AlertType.WARNING, this.mainCtrl );
-    		ResourceBundle langRB = this.mainCtrl.getLangResource("conf.lang.gui.common.MyAlert");
-			alertDlg.setHeaderText( langRB.getString("TITLE_MISC_ERROR") );
-    		alertDlg.setTxtExp( ex );
-    		alertDlg.showAndWait();
-    		alertDlg = null;
-    		*/
     		MyTool.showException( this.mainCtrl, "conf.lang.gui.common.MyAlert", "TITLE_MISC_ERROR", ex );
 		}
 	}

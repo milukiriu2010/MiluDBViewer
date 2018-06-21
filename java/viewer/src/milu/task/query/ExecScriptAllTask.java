@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.ArrayList;
 
 import javafx.scene.control.TabPane;
+import javafx.geometry.Orientation;
+
 import milu.ctrl.sql.parse.SQLBag;
 import milu.db.MyDBAbstract;
 import milu.gui.ctrl.query.DBResultTab;
@@ -17,13 +19,14 @@ import milu.gui.ctrl.common.inf.ProcInterface;
 public class ExecScriptAllTask extends Task<Exception>
 	implements ExecTaskInterface
 {
-	private DBView        dbView     = null;
-	private MyDBAbstract  myDBAbs    = null;
-	private AppConf       appConf    = null;
-	private List<SQLBag>  sqlBagLst  = null;
-	private TabPane       tabPane    = null;
-	private Exception     taskEx     = null;
-	private ProcInterface procInf    = null;
+	private DBView        dbView      = null;
+	private MyDBAbstract  myDBAbs     = null;
+	private AppConf       appConf     = null;
+	private List<SQLBag>  sqlBagLst   = null;
+	private TabPane       tabPane     = null;
+	private Exception     taskEx      = null;
+	private ProcInterface procInf     = null;
+	private Orientation   orientation = null;
 	
 	@Override
 	public void setDBView( DBView dbView )
@@ -62,6 +65,12 @@ public class ExecScriptAllTask extends Task<Exception>
 	}
 	
 	@Override
+	public void setOrientation( Orientation orientation )
+	{
+		this.orientation = orientation;
+	}
+	
+	@Override
 	protected Exception call()
 	{
 		System.out.println( "ExecScriptAllTask:start." );
@@ -89,6 +98,7 @@ public class ExecScriptAllTask extends Task<Exception>
 				execScriptEach.setTabPane(this.tabPane);
 				execScriptEach.setSQLBag(sqlBag);
 				execScriptEach.setProcInf(this.procInf);
+				execScriptEach.setOrientation(this.orientation);
 				execScriptEach.exec();
 				
 				List<Object> resData = new ArrayList<>();

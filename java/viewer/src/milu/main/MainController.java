@@ -16,6 +16,8 @@ import javafx.stage.Stage;
 import javafx.stage.Window;
 import javafx.application.Application;
 import javafx.application.Platform;
+import javafx.event.Event;
+
 import milu.gui.ctrl.common.DraggingTabPaneSupport;
 import milu.gui.dlg.db.DBSettingDialog;
 import milu.gui.view.DBView;
@@ -24,11 +26,15 @@ import milu.db.MyDBAbstract;
 import milu.db.driver.DriverShim;
 import milu.entity.schema.SchemaEntity;
 import milu.entity.schema.search.ChangeLangSchemaEntityVisitor;
+import milu.gui.ctrl.common.inf.ChangeLangInterface;
 import milu.task.main.InitialLoadAbstract;
 import milu.task.main.InitialLoadFactory;
 import milu.tool.MyTool;
 
 public class MainController
+	implements
+		QuitInterface,
+		ChangeLangInterface
 {
 	// Application
 	private Application application = null;
@@ -218,16 +224,6 @@ public class MainController
 		}
 		else
 		{
-			/*
-			Point2D pd = MyTool.getMousePosOnScreen();
-			Point2D pd2 = MyTool.getRightWindowPos( pd, dbView.getWidth(), dbView.getHeight() );
-			dbView.setX( pd2.getX() );
-			dbView.setY( pd2.getY() );
-			//System.out.println( "Window width:" + dbView.getWidth() + ":height:" + dbView.getHeight() );
-			//System.out.println( "pd     x:"     + pd.getX()  + ":y:" + pd.getY() );
-			//System.out.println( "pd2    x:"     + pd2.getX() + ":y:" + pd2.getY() );
-			 * 
-			 */
 			MyTool.setWindowLocation( dbView, dbView.getWidth(), dbView.getHeight() );
 		}
 	}
@@ -268,15 +264,13 @@ public class MainController
 		
 		if ( this.myDBViewMap.size() == 0 )
 		{
-			this.quit();
+			this.quit(null);
 		}
 	}
 	
-	/*********************************
-	 * Quit Application
-	 *********************************
-	 */
-	public void quit()
+	// QuitInterface
+	@Override
+	public void quit( Event event )
 	{
 		this.closeAllDB();
 		System.out.println( "MiluDBViewer Exit." );
@@ -309,11 +303,17 @@ public class MainController
 	 *        en => English
 	 *********************************
 	 */
-	public void changeLang( String langCode )
+	// ChangeLangInterface
+	@Override
+	public void changeLang()
 	{
+		String langCode = appConf.getLangCode();
 		System.out.println( "changeLang start:" + langCode );
-		Locale nextLocale = new Locale( langCode );
-		Locale.setDefault( nextLocale );
+		if ( langCode != null && langCode.isEmpty() == false )
+		{
+			Locale nextLocale = new Locale( langCode );
+			Locale.setDefault( nextLocale );
+		}
 		
 		this.langMap.clear();
 		InitialLoadAbstract ilAbs = 

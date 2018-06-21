@@ -43,6 +43,8 @@ public class InitialLoadTask extends Task<Exception>
 		ilLst.add(InitialLoadFactory.FACTORY_TYPE.DRIVER);
 		ilLst.add(InitialLoadFactory.FACTORY_TYPE.SECRETKEY);
 		ilLst.add(InitialLoadFactory.FACTORY_TYPE.PROXYPASSWORD);
+		// load language resource again, after load "AppConf" 
+		ilLst.add(InitialLoadFactory.FACTORY_TYPE.LANG);
 		
 		try
 		{

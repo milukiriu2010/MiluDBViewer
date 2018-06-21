@@ -77,7 +77,9 @@ public class InitialLoadImage extends InitialLoadAbstract
 				"file:resources/images/delete.png",
 				"file:resources/images/edit.png",
 				// DBSqlScriptTab
-				"file:resources/images/sql_format.png"
+				"file:resources/images/sql_format.png",
+				// ImportDataTab
+				"file:resources/images/import.png"
 			};
 	
 		for ( String image : images )

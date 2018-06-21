@@ -2,8 +2,9 @@ package milu.task.query;
 
 import java.util.List;
 import javafx.concurrent.Task;
-
 import javafx.scene.control.TabPane;
+import javafx.geometry.Orientation;
+
 import milu.ctrl.sql.parse.SQLBag;
 import milu.db.MyDBAbstract;
 import milu.gui.view.DBView;
@@ -26,7 +27,8 @@ public class ExecTaskFactory
 		AppConf       appConf,
 		TabPane       tabPane,
 		List<SQLBag>  sqlBagLst,
-		ProcInterface procInf
+		ProcInterface procInf,
+		Orientation   orientation
 	)
 	{
 		Task<Exception> task = null;
@@ -50,6 +52,7 @@ public class ExecTaskFactory
 		((ExecTaskInterface)task).setTabPane(tabPane);
 		((ExecTaskInterface)task).setSQLBagLst(sqlBagLst);
 		((ExecTaskInterface)task).setProcInf(procInf);
+		((ExecTaskInterface)task).setOrientation(orientation);
 		
 		return task;
 	}

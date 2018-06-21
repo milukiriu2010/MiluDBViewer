@@ -79,8 +79,6 @@ public class SchemaTreeView extends TreeView<SchemaEntity>
 		);
 		
 		this.setAction();
-		
-		//this.setContextMenu();
 	}
 	
 	/**
@@ -114,51 +112,6 @@ public class SchemaTreeView extends TreeView<SchemaEntity>
 		}
 		this.lblChildrenCnt.setText(cnt);
 	}
-	
-	/*
-	private void setContextMenu()
-	{
-		ResourceBundle langRB = this.dbView.getMainController().getLangResource("conf.lang.gui.ctrl.schema.SchemaTreeView");
-		ContextMenu  contextMenu = new ContextMenu();
-		
-		//MenuItem  menuItemRefresh = new MenuItem( langRB.getString("MENU_REFRESH") );
-		this.menuItemRefresh.setText( langRB.getString("MENU_REFRESH") );
-		this.menuItemRefresh.setOnAction
-		( 
-			(event)->
-			{ 
-				TreeItem<SchemaEntity>  itemSelected = this.getSelectionModel().getSelectedItem();
-				SchemaEntity scEnt = itemSelected.getValue();
-				SchemaEntity.SCHEMA_TYPE schemaType = scEnt.getType();
-				switch ( schemaType )
-				{
-					case TABLE:
-						// remove grand children & refresh
-						ObservableList<TreeItem<SchemaEntity>>  itemChildren1 = itemSelected.getChildren();
-						for ( TreeItem<SchemaEntity> itemChild : itemChildren1 )
-						{
-							ObservableList<TreeItem<SchemaEntity>> itemGrandChildren = itemChild.getChildren();
-							itemChild.getChildren().removeAll( itemGrandChildren );
-						}
-						this.dbView.Refresh();
-						break;
-					default:
-						// remove children on TreeView
-						ObservableList<TreeItem<SchemaEntity>>  itemChildren2 = itemSelected.getChildren();
-						itemSelected.getChildren().removeAll( itemChildren2 );
-						// remove children of selected SchemaEntity
-						scEnt.delEntityAll();
-						// refresh
-						this.dbView.Refresh();
-						break;
-				}
-			} 
-		);
-		
-		contextMenu.getItems().addAll( this.menuItemRefresh );
-		this.setContextMenu(contextMenu);
-	}
-	*/
 	
 	private void setAction()
 	{

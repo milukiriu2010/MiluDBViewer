@@ -35,6 +35,9 @@ final public class AppConf
 	@Expose(serialize = true, deserialize = true)
 	private String  initDirFileDB = "";
 
+	// Language Code
+	@Expose(serialize = true, deserialize = true)
+	private String  langCode = "";
 	
 	// Max fetch rows when selecting.
 	@Expose(serialize = true, deserialize = true)
@@ -139,6 +142,17 @@ final public class AppConf
 	public void setInitDirFileDB( String initDirFileDB )
 	{
 		this.initDirFileDB = initDirFileDB;
+	}
+	
+	// Language Code
+	public String getLangCode()
+	{
+		return this.langCode;
+	}
+	
+	public void setLangCode( String langCode )
+	{
+		this.langCode = langCode;
 	}
 	
 	/**

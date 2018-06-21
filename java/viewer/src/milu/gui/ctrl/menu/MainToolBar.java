@@ -168,22 +168,15 @@ public class MainToolBar extends ToolBar
 		this.btnToggleHV.setOnAction( this.dbView::switchDirection );
 		
 		// "New Tab" button clicked
-		this.btnNewTab.setOnAction(	(event)->{ this.dbView.createNewTab(); } );
+		this.btnNewTab.setOnAction(	this.dbView::createNewTab );
 		
 		// "New Window" button clicked
-		this.btnNewWin.setOnAction(	(event)->{ this.dbView.createNewWindow(); } );
+		this.btnNewWin.setOnAction(	this.dbView::createNewWindow );
 		
 		// "New DB Connection" button clicked
-		this.btnNewCon.setOnAction( (event)->{ this.dbView.createNewDBConnection(); } );
-		
-		// "Copy data on TableView without column heads" button clicked
-		//this.btnCopyTblNoHead.setOnAction( (event)->{ this.dbView.copyTableNoHead(); } );
-		
-		// "Copy data on TableView with column heads" button clicked
-		//this.btnCopyTblWithHead.setOnAction( (event)->{ this.dbView.copyTableWithHead(); } );
+		this.btnNewCon.setOnAction( this.dbView::createNewDBConnection );
 		
 		// "Open Schema View" button clicked
-		//this.btnSchema.setOnAction( (event)->{ this.dbView.openSchemaView(); } );
 		this.btnSchema.setOnAction( (event)->{ this.dbView.openView(DBSchemaTab.class); } );
 		// disable until finishing to get schema list.
 		this.btnSchema.setDisable(true);
@@ -191,31 +184,6 @@ public class MainToolBar extends ToolBar
 	
 	public void setMnemonic()
 	{
-		/*
-		// ---------------------------------
-		// Mnemonic for "Exec SQL"
-		// Ctrl+G
-		// ---------------------------------
-		this.btnGo.getScene().getAccelerators().put
-		(
-			new KeyCodeCombination( KeyCode.G, KeyCombination.CONTROL_DOWN ),
-			// Runnable.run()
-			dbView::Go
-		);
-		*/
-		/**/
-		// ---------------------------------
-		// Mnemonic for "Toggle horizontal/vertical mode for Table"
-		// Ctrl+D
-		// ---------------------------------
-		/*
-		this.btnToggleHV.getScene().getAccelerators().put
-		(
-			new KeyCodeCombination( KeyCode.D, KeyCombination.CONTROL_DOWN ),	
-			()->this.dbView.switchDirection(null)
-		);
-		*/
-		
 		/**/
 		// ---------------------------------
 		// Mnemonic for "Open new tab"
@@ -224,7 +192,7 @@ public class MainToolBar extends ToolBar
 		this.btnNewTab.getScene().getAccelerators().put
 		(
 			new KeyCodeCombination( KeyCode.T, KeyCombination.CONTROL_DOWN ),	
-			dbView::createNewTab
+			()->{ dbView.createNewTab(null); }
 		);
 		/*
 		this.btnNewTab.getScene().getAccelerators().put
@@ -241,40 +209,14 @@ public class MainToolBar extends ToolBar
 		this.btnNewWin.getScene().getAccelerators().put
 		(
 			new KeyCodeCombination( KeyCode.N, KeyCombination.CONTROL_DOWN ),	
-			dbView::createNewWindow
+			()->{ dbView.createNewWindow(null); }
 		);
-		/*
-		// ------------------------------------------------------------
-		// Mnemonic for "Copy datas on TableView without column heads"
-		// Alt+C
-		// ------------------------------------------------------------
-		this.btnCopyTblNoHead.getScene().getAccelerators().put
-		(
-			new KeyCodeCombination( KeyCode.C, KeyCombination.ALT_DOWN ),	
-			dbView::copyTableNoHead
-		);
-		*/
-		/*
-		// ------------------------------------------------------------
-		// Mnemonic for "Copy datas on TableView with column heads"
-		// Alt+Shift+C
-		// ------------------------------------------------------------
-		this.btnCopyTblWithHead.getScene().getAccelerators().put
-		(
-			//new KeyCodeCombination( KeyCode.C, KeyCombination.ALT_DOWN | KeyCombination.SHIFT_DOWN ),	
-			KeyCombination.keyCombination( "ALT+SHIFT+C" ),
-			dbView::copyTableWithHead
-		);
-		*/
 	}
 	
 	// ProcBeginInterface
 	@Override
 	public void beginProc()
 	{
-		//this.btnGo.setDisable(true);
-		//this.btnExplain.setDisable(true);
-		//this.btnToggleHV.setDisable(true);
 		this.btnSchema.setDisable(true);
 	}
 	
@@ -282,10 +224,6 @@ public class MainToolBar extends ToolBar
 	@Override
 	public void endProc()
 	{
-		//this.btnGo.setDisable(false);
-		//this.btnExplain.setDisable(false);
-		//this.btnToggleHV.setDisable(false);
-		// disable until finishing to get schema list.
 		this.btnSchema.setDisable(false);
 	}
 	
