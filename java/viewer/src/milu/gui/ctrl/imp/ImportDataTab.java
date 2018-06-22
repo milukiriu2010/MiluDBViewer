@@ -6,6 +6,7 @@ import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tab;
 import javafx.scene.layout.Pane;
+import milu.entity.schema.SchemaEntity;
 import milu.gui.ctrl.common.inf.ChangeLangInterface;
 import milu.gui.view.DBView;
 import milu.main.MainController;
@@ -21,14 +22,14 @@ public class ImportDataTab extends Tab
     // -----------------------------------------------------
 	private Pane       basePane = null;
 	
-	public ImportDataTab( DBView dbView )
+	public ImportDataTab( DBView dbView, SchemaEntity schemaEntity )
 	{
 		super();
 		this.dbView = dbView;
 		
 		MainController mainCtrl = this.dbView.getMainController();
 		
-		this.basePane = new ImportDataPane(dbView);
+		this.basePane = new ImportDataPane(dbView,schemaEntity);
 		this.setContent(this.basePane);
 		
 		// set icon on Tab

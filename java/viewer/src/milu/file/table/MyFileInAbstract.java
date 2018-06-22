@@ -5,7 +5,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.FileNotFoundException;
 
-public abstract class MyFileAbstract
+public abstract class MyFileInAbstract
 {
 	abstract public void open( File file ) throws FileNotFoundException;
 	abstract public void close();

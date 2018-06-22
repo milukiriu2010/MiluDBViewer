@@ -1,15 +1,19 @@
 package milu.gui.ctrl.imp;
 
 import javafx.scene.layout.Pane;
+import javafx.geometry.Insets;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+import milu.entity.schema.SchemaEntity;
 import milu.gui.view.DBView;
 
 class ImportDataPane extends Pane 
 {
 	private DBView          dbView = null;
+	
+	SchemaEntity            dstSchemaEntity = null;
 	
 	private BorderPane      basePane = new BorderPane();
 	
@@ -20,23 +24,52 @@ class ImportDataPane extends Pane
 	private RadioButton rbSrcFile  = new RadioButton("File");
 	private RadioButton rbSrcDB    = new RadioButton("DB");
 	
-	ImportDataPane( DBView dbView )
+    // -----------------------------------------------------
+	// [Center]
+    // -----------------------------------------------------
+	private Pane  selectedPane = null;
+	
+	ImportDataPane( DBView dbView, SchemaEntity dstSchemaEntity )
 	{
 		this.dbView = dbView;
+		this.dstSchemaEntity = dstSchemaEntity;
 		
 		this.setPane();
 		
 		this.getChildren().add(this.basePane);
+		
+		this.setAction();
 	}
 	
 	private void setPane()
 	{
 		rbSrcFile.setToggleGroup(tglSrc);
 		rbSrcDB.setToggleGroup(tglSrc);
+		rbSrcFile.setSelected(true);
 		
 		HBox hBoxSrc = new HBox(2);
+		hBoxSrc.setPadding( new Insets( 10, 10, 10, 10 ) );
+		hBoxSrc.setSpacing(10);
 		hBoxSrc.getChildren().addAll(rbSrcFile,rbSrcDB);
 		
 		this.basePane.setTop(hBoxSrc);
+		
+		this.selectedPane = new ImportDataPaneFile( this.dbView );
+		this.basePane.setCenter(this.selectedPane);
+	}
+	
+	private void setAction()
+	{
+		this.tglSrc.selectedToggleProperty().addListener((obs,oldVal,newVal)->{
+			if ( newVal == this.rbSrcFile )
+			{
+				this.selectedPane = new ImportDataPaneFile( this.dbView );
+			}
+			else if ( newVal == this.rbSrcDB )
+			{
+				this.selectedPane = new ImportDataPaneDB( this.dbView );
+			}
+			this.basePane.setCenter(this.selectedPane);
+		});
 	}
 }

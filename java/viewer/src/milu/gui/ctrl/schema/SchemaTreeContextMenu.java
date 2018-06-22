@@ -123,12 +123,15 @@ public class SchemaTreeContextMenu extends ContextMenu
 		});
 		
 		this.menuItemGenerateSelect.setOnAction( (event)->{	this.GenerateSQL( GenerateSQLFactory.TYPE.SELECT );	} );
-		this.menuItemInsertPlaceHolderName.setOnAction( (event)->{	this.GenerateSQL( GenerateSQLFactory.TYPE.INSERT_BY_NAME );	} );
-		this.menuItemInsertPlaceHolderSimple.setOnAction( (event)->{	this.GenerateSQL( GenerateSQLFactory.TYPE.INSERT_BY_SIMPLE );	} );
-		this.menuItemUpdatePlaceHolderName.setOnAction( (event)->{	this.GenerateSQL( GenerateSQLFactory.TYPE.UPDATE_BY_NAME );	} );
-		this.menuItemUpdatePlaceHolderSimple.setOnAction( (event)->{	this.GenerateSQL( GenerateSQLFactory.TYPE.UPDATE_BY_SIMPLE );	} );
+		this.menuItemInsertPlaceHolderName.setOnAction( (event)->{ this.GenerateSQL( GenerateSQLFactory.TYPE.INSERT_BY_NAME );	} );
+		this.menuItemInsertPlaceHolderSimple.setOnAction( (event)->{ this.GenerateSQL( GenerateSQLFactory.TYPE.INSERT_BY_SIMPLE );	} );
+		this.menuItemUpdatePlaceHolderName.setOnAction( (event)->{ this.GenerateSQL( GenerateSQLFactory.TYPE.UPDATE_BY_NAME );	} );
+		this.menuItemUpdatePlaceHolderSimple.setOnAction( (event)->{ this.GenerateSQL( GenerateSQLFactory.TYPE.UPDATE_BY_SIMPLE );	} );
 		this.menuItemGenerateDelete.setOnAction( (event)->{	this.GenerateSQL( GenerateSQLFactory.TYPE.DELETE );	} );
-		this.menuItemImportData.setOnAction( (event)->{ this.dbView.openView(ImportDataTab.class); } );
+		this.menuItemImportData.setOnAction( (event)->{
+			SchemaEntity schemaEntity = this.schemaTreeView.getSelectionModel().getSelectedItem().getValue();
+			this.dbView.openView(ImportDataTab.class,schemaEntity);
+		});
 		
 		this.getItems().addAll
 		( 

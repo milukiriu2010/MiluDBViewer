@@ -32,8 +32,8 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.Event;
 import milu.tool.MyTool;
-import milu.file.table.MyFileAbstract;
-import milu.file.table.MyFileFactory;
+import milu.file.table.MyFileInAbstract;
+import milu.file.table.MyFileInFactory;
 import milu.gui.ctrl.common.inf.ChangeLangInterface;
 import milu.gui.ctrl.common.inf.SetTableViewDataInterface;
 import milu.gui.view.DBView;
@@ -316,7 +316,7 @@ public class ObjTableView extends TableView<List<Object>>
 		File file = fileChooser.showSaveDialog( this.getScene().getWindow() );
 		if ( file != null )
 		{
-			MyFileAbstract myFileAbs = MyFileFactory.getInstance( file );
+			MyFileInAbstract myFileAbs = MyFileInFactory.getInstance( file );
 			try
 			{
 				myFileAbs.open( file );

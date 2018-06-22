@@ -668,6 +668,8 @@ public class DBSettingDialog extends Dialog<MyDBAbstract>
 		stage.sizeToScene();
 	}
 	
+	// ChangePathInterface
+	@Override
 	public void changePath( Path path )
 	{
 		System.out.println( "changePath[" + path.toString() + "]" );

@@ -38,6 +38,7 @@ import milu.gui.ctrl.query.DBSqlScriptTab;
 import milu.gui.dlg.MyAlertDialog;
 import milu.main.MainController;
 import milu.db.MyDBAbstract;
+import milu.entity.schema.SchemaEntity;
 import milu.task.collect.CollectTaskFactory;
 import milu.tool.MyTool;
 
@@ -486,7 +487,6 @@ public class DBView extends Stage
 			}
 			this.tabPane.getTabs().add( newTab );
 			this.tabPane.getSelectionModel().select( newTab );
-			//this.Go();
 			tab = newTab;
 		}
 		
@@ -494,6 +494,47 @@ public class DBView extends Stage
 		{
 			((FocusInterface)tab).setFocus();
 		}
+	}
+	
+	// NewWinInterface
+	@Override
+	public void openView( Class<?> castClazz, SchemaEntity schemaEntity )
+	{
+		// Create "castClazz" Tab, if it doesn't exist.
+		//final Tab newTab = TabFactory.getInstance( this, castClazz );
+		Object obj = null;
+		Constructor<?>[] constructors = castClazz.getDeclaredConstructors();
+		for ( int i = 0; i < constructors.length; i++ )
+		{
+			try
+			{
+				// exit loop 
+				// when match "new XXViewTab( DBView dbView )"
+				obj = castClazz.cast(constructors[i].newInstance(this,schemaEntity));
+				break;
+			}
+			catch ( Exception ex )
+			{
+			}
+		}
+		if ( obj == null )
+		{
+			return;
+		}
+		
+		Tab newTab = null;
+		if ( obj instanceof Tab )
+		{
+			newTab = (Tab)obj;
+		}
+		this.tabPane.getTabs().add( newTab );
+		this.tabPane.getSelectionModel().select( newTab );
+
+		if ( newTab instanceof FocusInterface )
+		{
+			((FocusInterface)newTab).setFocus();
+		}
+		
 	}
 	
 	public void setBottomMsg( String msg )

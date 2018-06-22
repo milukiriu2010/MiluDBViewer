@@ -73,310 +73,261 @@ public class PathTreeView extends TreeView<Path>
 		
 		// configure this TreeView
 		this.setEditable(true);
-		this.setCellFactory
-		(
-			(treeView)->
-			{
-				TextFieldTreeCell<Path> treeCell =
-					new TextFieldTreeCell<Path>
-					(
-						new StringConverter<Path>()
+		this.setCellFactory((treeView)->{
+			TextFieldTreeCell<Path> treeCell =
+				new TextFieldTreeCell<Path>
+				(
+					new StringConverter<Path>()
+					{
+						@Override
+						public String toString(Path path)
 						{
-							@Override
-							public String toString(Path path)
+							if ( Files.isDirectory(path) )
 							{
-								if ( Files.isDirectory(path) )
+								return path.getFileName().toString();
+							}
+							else if ( Files.isRegularFile(path) )
+							{
+								String fileName = path.getFileName().toString();
+								int pos = fileName.lastIndexOf(".");
+								// No file extension 
+								if ( pos <= 0 )
 								{
-									return path.getFileName().toString();
-								}
-								else if ( Files.isRegularFile(path) )
-								{
-									String fileName = path.getFileName().toString();
-									int pos = fileName.lastIndexOf(".");
-									// No file extension 
-									if ( pos <= 0 )
-									{
-										return fileName;
-									}
-									else
-									{
-										return fileName.substring( 0, pos );
-									}
+									return fileName;
 								}
 								else
 								{
-									return "";
+									return fileName.substring( 0, pos );
 								}
 							}
-							
-							@Override
-							public Path fromString(String strPath)
+							else
 							{
-								Path selectedPath = null;
-								try
+								return "";
+							}
+						}
+						
+						@Override
+						public Path fromString(String strPath)
+						{
+							Path selectedPath = null;
+							try
+							{
+								selectedPath = treeView.getSelectionModel().getSelectedItem().getValue();
+								Path parentPath = selectedPath.getParent();
+								
+								if ( Files.isDirectory(selectedPath) )
 								{
-									selectedPath = treeView.getSelectionModel().getSelectedItem().getValue();
-									Path parentPath = selectedPath.getParent();
-									
-									if ( Files.isDirectory(selectedPath) )
-									{
-										return Paths.get( parentPath.toString() + File.separator + strPath );
-									}
-									else if ( Files.isRegularFile(selectedPath) )
-									{
-										return Paths.get( parentPath.toString() + File.separator + strPath + "." + fileExt );
-									}
-									else
-									{
-										return selectedPath;
-									}
+									return Paths.get( parentPath.toString() + File.separator + strPath );
 								}
-								catch ( InvalidPathException ipEx )
+								else if ( Files.isRegularFile(selectedPath) )
 								{
-									//showException(ipEx,"TITLE_NOT_ALLOWED_CHARACTER");
-									MyTool.showException( PathTreeView.this.mainCtrl, "conf.lang.gui.common.MyAlert", "TITLE_MISC_ERROR", ipEx, "TITLE_NOT_ALLOWED_CHARACTER" );
-									Platform.runLater( ()->requestFocus() );
+									return Paths.get( parentPath.toString() + File.separator + strPath + "." + fileExt );
+								}
+								else
+								{
 									return selectedPath;
 								}
 							}
+							catch ( InvalidPathException ipEx )
+							{
+								//showException(ipEx,"TITLE_NOT_ALLOWED_CHARACTER");
+								MyTool.showException( PathTreeView.this.mainCtrl, "conf.lang.gui.common.MyAlert", "TITLE_MISC_ERROR", ipEx, "TITLE_NOT_ALLOWED_CHARACTER" );
+								Platform.runLater( ()->requestFocus() );
+								return selectedPath;
+							}
 						}
-					);
-				this.setDragDropEvent(treeCell);
+					}
+				);
+			this.setDragDropEvent(treeCell);
+			
+			// disable editor for root item.
+			// ----------------------------------------------------
+			//if ( treeView.getSelectionModel().getSelectedItem() == treeView.getRoot() )
+			//{
+			//	treeCell.setDisable(true);
+			//}
+			// ----------------------------------------------------
+			//if ( treeCell.getTreeItem() == treeView.getRoot() )
+			//{
+			//	treeCell.setDisable(true);
+			//}
+			// ----------------------------------------------------
+			//if ( treeCell.getTreeItem() != null && treeCell.getTreeItem().getParent() == null )
+			//{
+			//	treeCell.setDisable(true);
+			//}
+			// ----------------------------------------------------
+			TreeItem<Path> treeItem = treeCell.getTreeItem();
+			if ( treeItem != null )
+			{
+				System.out.println( "TreeCell:" + treeItem.getValue().toString() );
+			}
+			else
+			{
+				System.out.println( "TreeCell:null" );
+			}
+			System.out.println( "TreeCell.getText:" + treeCell.getText() );
+			
+			
+			return treeCell;
+		});
+		
+		this.setOnEditStart((event)->{
+			//this.treeCell.focusTraversableProperty().
+			
+			//if ( this.getSelectionModel().getSelectedItem() == this.getRoot() )
+			//{
+			//	this.getOnEditCancel();
+			//}
 				
-				// disable editor for root item.
-				// ----------------------------------------------------
-				//if ( treeView.getSelectionModel().getSelectedItem() == treeView.getRoot() )
-				//{
-				//	treeCell.setDisable(true);
-				//}
-				// ----------------------------------------------------
-				//if ( treeCell.getTreeItem() == treeView.getRoot() )
-				//{
-				//	treeCell.setDisable(true);
-				//}
-				// ----------------------------------------------------
-				//if ( treeCell.getTreeItem() != null && treeCell.getTreeItem().getParent() == null )
-				//{
-				//	treeCell.setDisable(true);
-				//}
-				// ----------------------------------------------------
-				TreeItem<Path> treeItem = treeCell.getTreeItem();
-				if ( treeItem != null )
+		});
+		
+		// rename or move
+		this.setOnEditCommit((event)->{
+			TreeItem<Path> itemTarget = event.getTreeItem();
+			if ( itemTarget == this.getRoot() )
+			{
+				event.consume();
+				return;
+			}
+			
+			Path pathOld = event.getOldValue();
+			Path pathNew = event.getNewValue();
+			try
+			{
+				if ( Files.exists(pathNew) == false )
 				{
-					System.out.println( "TreeCell:" + treeItem.getValue().toString() );
+					Files.move( pathOld, pathNew );
+					event.consume();
+					//this.renamePath( event.getTreeItem(), pathOld, pathNew );
+					
+					// -------------------------------------------------
+					// itemTarget is still "pathOld",
+					// so call re-create tree in Platform.runLater
+					// -------------------------------------------------
+					Platform.runLater(()->{
+						itemTarget.getChildren().removeAll(itemTarget.getChildren());
+						try
+						{
+							createTree(itemTarget);
+						}
+						catch ( IOException ioEx )
+						{
+							throw new RuntimeException(ioEx);
+						}
+					});
 				}
 				else
 				{
-					System.out.println( "TreeCell:null" );
-				}
-				System.out.println( "TreeCell.getText:" + treeCell.getText() );
-				
-				
-				return treeCell;
-			}
-		);
-		
-		this.setOnEditStart
-		(
-			(event)->
-			{
-				//this.treeCell.focusTraversableProperty().
-				
-				//if ( this.getSelectionModel().getSelectedItem() == this.getRoot() )
-				//{
-				//	this.getOnEditCancel();
-				//}
-				
-			}
-		);
-		
-		// rename or move
-		this.setOnEditCommit
-		(
-			(event)->
-			{
-				TreeItem<Path> itemTarget = event.getTreeItem();
-				if ( itemTarget == this.getRoot() )
-				{
+					System.out.println( "PathTreeView:setOnEditCommit:already exists." );
+					System.out.println( "pathOld:" + pathOld );
+					System.out.println( "pathNew:" + pathNew );
+					//this.getSelectionModel().getSelectedItem().setValue(pathOld);
+					//this.showMsg("TITLE_ALREADY_EXIST");
+					MyTool.showMsg( this.mainCtrl, "conf.lang.gui.common.MyAlert", "TITLE_MISC_ERROR", "TITLE_ALREADY_EXIST" );
 					event.consume();
-					return;
-				}
-				
-				Path pathOld = event.getOldValue();
-				Path pathNew = event.getNewValue();
-				try
-				{
-					if ( Files.exists(pathNew) == false )
-					{
-						Files.move( pathOld, pathNew );
-						event.consume();
-						//this.renamePath( event.getTreeItem(), pathOld, pathNew );
-						
-						// -------------------------------------------------
-						// itemTarget is still "pathOld",
-						// so call re-create tree in Platform.runLater
-						// -------------------------------------------------
-						Platform.runLater
-						(
-							()->
-							{
-								itemTarget.getChildren().removeAll(itemTarget.getChildren());
-								try
-								{
-									createTree(itemTarget);
-								}
-								catch ( IOException ioEx )
-								{
-									throw new RuntimeException(ioEx);
-								}
-							}
-						);
-					}
-					else
-					{
-						System.out.println( "PathTreeView:setOnEditCommit:already exists." );
-						System.out.println( "pathOld:" + pathOld );
-						System.out.println( "pathNew:" + pathNew );
-						//this.getSelectionModel().getSelectedItem().setValue(pathOld);
-						//this.showMsg("TITLE_ALREADY_EXIST");
-						MyTool.showMsg( this.mainCtrl, "conf.lang.gui.common.MyAlert", "TITLE_MISC_ERROR", "TITLE_ALREADY_EXIST" );
-						event.consume();
-						// -------------------------------------------------
-						// itemTarget set wrong value
-						// so call re-create tree in Platform.runLater
-						// -------------------------------------------------
-						Platform.runLater
-						(
-							()->
-							{
-								TreeItem<Path> itemParent = itemTarget.getParent();
-								itemParent.getChildren().removeAll(itemParent.getChildren());
-								try
-								{
-									createTree(itemParent);
-								}
-								catch ( IOException ioEx )
-								{
-									throw new RuntimeException(ioEx);
-								}
-								finally
-								{
-									Platform.runLater( ()->requestFocus() );
-								}
-							}
-						);
-					}
-				}
-				catch ( Exception ex )
-				{
-					MyTool.showException( this.mainCtrl, "conf.lang.gui.common.MyAlert", "TITLE_MISC_ERROR", ex );
+					// -------------------------------------------------
+					// itemTarget set wrong value
+					// so call re-create tree in Platform.runLater
+					// -------------------------------------------------
+					Platform.runLater(()->{
+						TreeItem<Path> itemParent = itemTarget.getParent();
+						itemParent.getChildren().removeAll(itemParent.getChildren());
+						try
+						{
+							createTree(itemParent);
+						}
+						catch ( IOException ioEx )
+						{
+							throw new RuntimeException(ioEx);
+						}
+						finally
+						{
+							Platform.runLater( ()->requestFocus() );
+						}
+					});
 				}
 			}
-		);
-		
-		this.setOnEditCancel
-		(
-			(event)->
+			catch ( Exception ex )
 			{
-				
+				MyTool.showException( this.mainCtrl, "conf.lang.gui.common.MyAlert", "TITLE_MISC_ERROR", ex );
 			}
-		);
+		});
 		
-		this.getSelectionModel().selectedItemProperty().addListener
-		(
-			(obs,oldVal,newVal)->
-			{
-				this.chgPathInf.changePath( newVal.getValue() );
-			}
-		);
+		this.setOnEditCancel((event)->{
+				
+		});
+		
+		this.getSelectionModel().selectedItemProperty().addListener((obs,oldVal,newVal)->{
+			this.chgPathInf.changePath( newVal.getValue() );
+		});
 		
 	}
 	
 	public void setDragDropEvent( TextFieldTreeCell<Path> treeCell )
 	{
-		treeCell.setOnDragDetected
-		(
-			(event)->
+		treeCell.setOnDragDetected((event)->{
+			System.out.println( "TreeCell:DragDetected." );
+			TreeItem<Path> selectedItem = this.getSelectionModel().getSelectedItem();
+			this.itemDrag = selectedItem;
+			Dragboard dragBoard = treeCell.startDragAndDrop(TransferMode.MOVE);
+			ClipboardContent content = new ClipboardContent();
+			content.putString(selectedItem.getValue().toString());
+			dragBoard.setContent(content);
+			event.consume();
+		});
+		
+		treeCell.setOnDragOver((event)->{
+			if (this.check(event, treeCell.getTreeItem(), treeCell) == true )
 			{
-				System.out.println( "TreeCell:DragDetected." );
-				TreeItem<Path> selectedItem = this.getSelectionModel().getSelectedItem();
-				this.itemDrag = selectedItem;
-				Dragboard dragBoard = treeCell.startDragAndDrop(TransferMode.MOVE);
-				ClipboardContent content = new ClipboardContent();
-				content.putString(selectedItem.getValue().toString());
-				dragBoard.setContent(content);
-				event.consume();
+				event.acceptTransferModes(TransferMode.MOVE);
 			}
-		);
+		});
 		
-		treeCell.setOnDragOver
-		(
-			(event)->
+		treeCell.setOnDragDropped((event)->{
+			TreeItem<Path> itemCurr = treeCell.getTreeItem();
+			if (this.check( event, itemCurr, treeCell) == true )
 			{
-				if (this.check(event, treeCell.getTreeItem(), treeCell) == true )
-				{
-					event.acceptTransferModes(TransferMode.MOVE);
-				}
-			}
-		);
-		
-		
-		treeCell.setOnDragDropped
-		(
-			(event)->
-			{
-				TreeItem<Path> itemCurr = treeCell.getTreeItem();
-				if (this.check( event, itemCurr, treeCell) == true )
-				{
-					System.out.println( "TreeCell:DragDropped." );
-					String itemDragName = this.itemDrag.getValue().toFile().getName();
-					String itemCurrAbsolutePathName = itemCurr.getValue().toString();
-					Path pathNew = Paths.get( itemCurrAbsolutePathName + File.separator + itemDragName );
-					System.out.println( pathNew.toString() );
+				System.out.println( "TreeCell:DragDropped." );
+				String itemDragName = this.itemDrag.getValue().toFile().getName();
+				String itemCurrAbsolutePathName = itemCurr.getValue().toString();
+				Path pathNew = Paths.get( itemCurrAbsolutePathName + File.separator + itemDragName );
+				System.out.println( pathNew.toString() );
 
-					try
-					{
-						Files.move( this.itemDrag.getValue(), pathNew );
-						//this.itemDrag.getChildren().removeAll(this.itemDrag.getChildren());
-						TreeItem<Path> itemParent = this.itemDrag.getParent();
-						itemParent.getChildren().removeAll(itemParent.getChildren());
-						createTree(itemParent);
-						event.consume();
-						
-						Platform.runLater
-						(
-							()->
-							{
-								try
-								{
-									itemCurr.getChildren().removeAll(itemCurr.getChildren());
-									createTree(itemCurr);
-								}
-								catch ( IOException ioEx )
-								{
-									throw new RuntimeException(ioEx);
-								}
-							}
-						);
-						
-					}
-					catch ( Exception ex )
-					{
-						MyTool.showException( this.mainCtrl, "conf.lang.gui.common.MyAlert", "TITLE_MISC_ERROR", ex );
-					}
+				try
+				{
+					Files.move( this.itemDrag.getValue(), pathNew );
+					//this.itemDrag.getChildren().removeAll(this.itemDrag.getChildren());
+					TreeItem<Path> itemParent = this.itemDrag.getParent();
+					itemParent.getChildren().removeAll(itemParent.getChildren());
+					createTree(itemParent);
+					event.consume();
+					
+					Platform.runLater(()->{
+						try
+						{
+							itemCurr.getChildren().removeAll(itemCurr.getChildren());
+							createTree(itemCurr);
+						}
+						catch ( IOException ioEx )
+						{
+							throw new RuntimeException(ioEx);
+						}
+					});
 					
 				}
+				catch ( Exception ex )
+				{
+					MyTool.showException( this.mainCtrl, "conf.lang.gui.common.MyAlert", "TITLE_MISC_ERROR", ex );
+				}
+				
 			}
-		);
+		});
 		
-		treeCell.setOnDragDone
-		(
-			(event)->
-			{
-				System.out.println( "TreeCell:DragDone." );
-				this.itemDrag = null;
-			}
-		);
+		treeCell.setOnDragDone((event)->{
+			System.out.println( "TreeCell:DragDone." );
+			this.itemDrag = null;
+		});
 	}
 	
 	private boolean check( DragEvent event, TreeItem<Path> itemCur, TextFieldTreeCell<Path> treeCell )
@@ -478,16 +429,12 @@ public class PathTreeView extends TreeView<Path>
         
         selectedItem.getChildren().add(newItem);
         this.getSelectionModel().select(newItem);
-        Platform.runLater
-        ( 
-        	()->
-        	{
-	        	this.requestFocus();
-	        	this.edit(newItem); 
-	        	//this.treeCell.updateSelected(true); 
-	        	//this.treeCell.requestFocus(); 
-        	} 
-        );
+        Platform.runLater(()->{
+        	this.requestFocus();
+        	this.edit(newItem); 
+        	//this.treeCell.updateSelected(true); 
+        	//this.treeCell.requestFocus(); 
+        });
 	}
 	
 	public void addNewFile() throws IOException
@@ -514,16 +461,12 @@ public class PathTreeView extends TreeView<Path>
         
         selectedItem.getChildren().add(newItem);
         this.getSelectionModel().select(newItem);
-        Platform.runLater
-        ( 
-        	()->
-        	{ 
-        		this.requestFocus(); 
-        		this.edit(newItem); 
-        		//this.treeCell.updateSelected(true); 
-        		//this.treeCell.requestFocus(); 
-        	} 
-        );
+        Platform.runLater(()->{ 
+    		this.requestFocus(); 
+    		this.edit(newItem); 
+    		//this.treeCell.updateSelected(true); 
+    		//this.treeCell.requestFocus(); 
+        });
 	}
 	
 	public void editItem()
@@ -538,14 +481,10 @@ public class PathTreeView extends TreeView<Path>
 			return;
 		}
 		
-        Platform.runLater
-        ( 
-        	()->
-        	{ 
-        		this.requestFocus(); 
-        		this.edit(selectedItem); 
-        	} 
-        );
+        Platform.runLater(()->{ 
+    		this.requestFocus(); 
+    		this.edit(selectedItem); 
+    	});
 		
 	}
 	
