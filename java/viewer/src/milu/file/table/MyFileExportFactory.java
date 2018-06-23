@@ -4,14 +4,14 @@ import java.io.File;
 
 import milu.tool.MyTool;
 
-public class MyFileInFactory
+public class MyFileExportFactory
 {
-	public static MyFileInAbstract getInstance( File file )
+	public static MyFileExportAbstract getInstance( File file )
 	{
 		String ext = MyTool.getFileExtension( file );
 		if ( "xlsx".equals( ext ) )
 		{
-			return new MyFileInExcel();
+			return new MyFileExportExcel();
 		}
 		else
 		{

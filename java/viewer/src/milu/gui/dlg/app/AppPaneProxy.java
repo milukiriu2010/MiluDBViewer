@@ -10,6 +10,7 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
+import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.util.StringConverter;
@@ -126,6 +127,20 @@ public class AppPaneProxy extends AppPaneAbstract
 	private void setAction()
 	{
 		this.cbxProxyType.valueProperty().addListener( (obs,oldVal,newVal)->this.setDisableInput(newVal) );
+		this.txtPort.textProperty().addListener((obs,oldVal,newVal)->{
+			if ( newVal == null )
+			{
+			}
+			// "Numeric" or "No Input" are allowed.
+			else if ( newVal.length() == 0 )
+			{
+			}
+			// if alphabets or marks are input, back to previous input.
+			else if ( newVal.matches( "^[0-9]+$" ) == false )
+			{
+				((StringProperty)obs).setValue( oldVal );
+			}
+		});
 	}
 	
 	private void setDisableInput( ProxyType proxyType )

@@ -31,6 +31,7 @@ import milu.gui.ctrl.common.PersistentButtonToggleGroup;
 import milu.main.AppConf;
 import milu.main.AppConst;
 import milu.main.MainController;
+import milu.tool.MyFileTool;
 import milu.tool.MyTool;
 
 public class UrlPaneBasicFile extends UrlPaneAbstract
@@ -203,6 +204,8 @@ public class UrlPaneBasicFile extends UrlPaneAbstract
 			this.dbnameTextField.setText(file.getAbsolutePath());
 			appConf.setInitDirFileDB(file.getParentFile().getAbsolutePath());
 			
+			MyFileTool.save( this.mainCtrl, appConf );
+			/*
 			try
 			{
 				MyJsonHandleAbstract myJsonAbs =
@@ -215,6 +218,7 @@ public class UrlPaneBasicFile extends UrlPaneAbstract
 			{
 				MyTool.showException( this.mainCtrl, "conf.lang.gui.common.MyAlert", "TITLE_MISC_ERROR", ioEx );
 			}
+			*/
 		});
 		
 		this.tmplBtn.setOnAction((event)->{

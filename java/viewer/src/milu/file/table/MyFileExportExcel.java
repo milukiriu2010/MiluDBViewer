@@ -19,7 +19,7 @@ import org.apache.poi.ss.usermodel.VerticalAlignment;
 import org.apache.poi.xssf.streaming.SXSSFSheet;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 
-public class MyFileInExcel extends MyFileInAbstract
+public class MyFileExportExcel extends MyFileExportAbstract
 {
 	private FileOutputStream   foutStream = null;
 	

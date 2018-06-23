@@ -1,6 +1,9 @@
 package milu.gui.ctrl.imp;
 
 import javafx.scene.layout.Pane;
+
+import java.util.Map;
+
 import javafx.geometry.Insets;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.ToggleGroup;
@@ -9,7 +12,8 @@ import javafx.scene.layout.HBox;
 import milu.entity.schema.SchemaEntity;
 import milu.gui.view.DBView;
 
-class ImportDataPane extends Pane 
+class ImportDataPane extends Pane
+	implements WizardInterface
 {
 	private DBView          dbView = null;
 	
@@ -54,7 +58,7 @@ class ImportDataPane extends Pane
 		
 		this.basePane.setTop(hBoxSrc);
 		
-		this.selectedPane = new ImportDataPaneFile( this.dbView );
+		this.selectedPane = new ImportDataPaneFile( this.dbView, this );
 		this.basePane.setCenter(this.selectedPane);
 	}
 	
@@ -63,13 +67,26 @@ class ImportDataPane extends Pane
 		this.tglSrc.selectedToggleProperty().addListener((obs,oldVal,newVal)->{
 			if ( newVal == this.rbSrcFile )
 			{
-				this.selectedPane = new ImportDataPaneFile( this.dbView );
+				this.selectedPane = new ImportDataPaneFile( this.dbView, this );
 			}
 			else if ( newVal == this.rbSrcDB )
 			{
-				this.selectedPane = new ImportDataPaneDB( this.dbView );
+				this.selectedPane = new ImportDataPaneDB( this.dbView, this );
 			}
 			this.basePane.setCenter(this.selectedPane);
 		});
+	}
+	
+	// WizardInterface
+	@Override
+	public void next( Pane pane, Map<String,Object> mapObj )
+	{
+		this.basePane.setTop(null);
+		this.basePane.setCenter(null);
+		if ( pane instanceof ImportDataPaneFile )
+		{
+			this.selectedPane = new ImportDataPaneFileTableView( this.dbView, this, mapObj );
+		}
+		this.basePane.setCenter(this.selectedPane);
 	}
 }

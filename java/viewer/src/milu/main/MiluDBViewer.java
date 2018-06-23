@@ -83,37 +83,21 @@ public class MiluDBViewer extends Application
 			// execute task
 			this.service.submit( ilTask );
     	    
-			ilTask.progressProperty().addListener
-			(
-				(obs,oldVal,newVal)->
+			ilTask.progressProperty().addListener((obs,oldVal,newVal)->{
+				this.loadProgress.setProgress(newVal.doubleValue());
+				if ( newVal.doubleValue() == 1.0 )
 				{
-					this.loadProgress.setProgress(newVal.doubleValue());
-					if ( newVal.doubleValue() == 1.0 )
-					{
-			    		this.serviceShutdown();
-						initStage.hide();
-			    		mainCtrl.init(this);
-					}
+		    		this.serviceShutdown();
+					initStage.hide();
+		    		mainCtrl.init(this);
 				}
-			);
+			});
 			
-			ilTask.messageProperty().addListener
-			(
-				(obs,oldVal,newVal)->
-				{
-					this.progressText.setText(newVal);
-				}
-			);
+			ilTask.messageProperty().addListener((obs,oldVal,newVal)->{
+				this.progressText.setText(newVal);
+			});
 			
 			ilTask.valueProperty().addListener((obs,oldVal,ex)->{
-				/*
-				MyAlertDialog alertDlg = new MyAlertDialog( AlertType.WARNING, mainCtrl );
-	    		ResourceBundle langRB = mainCtrl.getLangResource("conf.lang.gui.common.MyAlert");
-				alertDlg.setHeaderText( langRB.getString("TITLE_MISC_ERROR") );
-	    		alertDlg.setTxtExp( ex );
-	    		alertDlg.showAndWait();
-	    		alertDlg = null;
-	    		*/
 	    		MyTool.showException( mainCtrl, "conf.lang.gui.common.MyAlert", "TITLE_MISC_ERROR", ex );
 			});
     	}

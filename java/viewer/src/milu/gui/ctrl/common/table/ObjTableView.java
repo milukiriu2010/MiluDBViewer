@@ -13,6 +13,7 @@ import java.io.IOException;
 import javafx.scene.control.TablePosition;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TableCell;
+import javafx.scene.control.TableRow;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TextInputControl;
@@ -32,8 +33,8 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.Event;
 import milu.tool.MyTool;
-import milu.file.table.MyFileInAbstract;
-import milu.file.table.MyFileInFactory;
+import milu.file.table.MyFileExportAbstract;
+import milu.file.table.MyFileExportFactory;
 import milu.gui.ctrl.common.inf.ChangeLangInterface;
 import milu.gui.ctrl.common.inf.SetTableViewDataInterface;
 import milu.gui.view.DBView;
@@ -49,6 +50,8 @@ public class ObjTableView extends TableView<List<Object>>
 	
 	private List<Object>        headObjLst = new ArrayList<>();
 	private List<List<Object>>  dataObjLst = new ArrayList<>();
+	
+	private int skipRowCnt = 0;
 	
 	// Listener for "this.tableViewDirection = 2:vertical"
 	// This listener enables to select the whole column, when cliking a cell.
@@ -160,8 +163,56 @@ public class ObjTableView extends TableView<List<Object>>
 					return new EditingCell(objTableView);
 				}
 			};
+		
+		/*
+		this.setRowFactory((tableView)->{
+			TableRow<List<Object>> row = new TableRow<>();
+			//row.setStyle("-fx-text-background-color:red;");
+			row.setStyle("-fx-background-color:#808080;");
+			return row;
+		});
+		*/
         
 		this.setContextMenu();
+	}
+	
+	public int getSkipRowCnt()
+	{
+		return this.skipRowCnt;
+	}
+	
+	public void setSkipRowCnt( int skipRowCnt )
+	{
+		this.skipRowCnt = skipRowCnt;
+		this.setRowFactory((tableView)->{
+			final TableRow<List<Object>> row = new TableRow<>() {
+				@Override
+				protected void updateItem( List<Object> dataLst, boolean empty )
+				{
+					super.updateItem(dataLst, empty );
+					
+					if (!empty)
+					{
+						Object obj = dataLst.get(0);
+						if ( obj instanceof Number )
+						{
+							Number num = (Number)obj;
+							if ( num.intValue() <= ObjTableView.this.skipRowCnt )
+							{
+								setStyle("-fx-background-color:#808080;");
+							}
+							else
+							{
+								getStyleClass().remove("-fx-background-color:#808080;");
+							}
+						}
+					}
+				}
+			};
+			
+			return row;
+		});
+		this.refresh();
 	}
 	
 	void selectArea()
@@ -316,7 +367,7 @@ public class ObjTableView extends TableView<List<Object>>
 		File file = fileChooser.showSaveDialog( this.getScene().getWindow() );
 		if ( file != null )
 		{
-			MyFileInAbstract myFileAbs = MyFileInFactory.getInstance( file );
+			MyFileExportAbstract myFileAbs = MyFileExportFactory.getInstance( file );
 			try
 			{
 				myFileAbs.open( file );

@@ -34,6 +34,10 @@ final public class AppConf
 	// Initial Directory for File DB(SQLite)
 	@Expose(serialize = true, deserialize = true)
 	private String  initDirFileDB = "";
+	
+	// Initial Directory to Import File(Excel)
+	@Expose(serialize = true, deserialize = true)
+	private String  initDirImportFile = "";
 
 	// Language Code
 	@Expose(serialize = true, deserialize = true)
@@ -142,6 +146,17 @@ final public class AppConf
 	public void setInitDirFileDB( String initDirFileDB )
 	{
 		this.initDirFileDB = initDirFileDB;
+	}
+	
+	// Initial Directory to Import File(Excel)
+	public String getInitDirImportFile()
+	{
+		return this.initDirImportFile;
+	}
+	
+	public void setInitDirImportFile( String initDirImportFile )
+	{
+		this.initDirImportFile = initDirImportFile;
 	}
 	
 	// Language Code
