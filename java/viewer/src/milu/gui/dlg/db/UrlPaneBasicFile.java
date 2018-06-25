@@ -1,7 +1,6 @@
 package milu.gui.dlg.db;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.ResourceBundle;
@@ -25,11 +24,8 @@ import javafx.stage.Stage;
 
 import milu.db.MyDBAbstract;
 import milu.db.driver.DriverShim;
-import milu.file.json.MyJsonHandleAbstract;
-import milu.file.json.MyJsonHandleFactory;
 import milu.gui.ctrl.common.PersistentButtonToggleGroup;
 import milu.main.AppConf;
-import milu.main.AppConst;
 import milu.main.MainController;
 import milu.tool.MyFileTool;
 import milu.tool.MyTool;

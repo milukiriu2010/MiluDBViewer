@@ -22,6 +22,7 @@ import javafx.stage.Window;
 import milu.file.json.MyJsonHandleAbstract;
 import milu.file.json.MyJsonHandleFactory;
 import milu.gui.ctrl.common.inf.ChangeLangInterface;
+import milu.gui.ctrl.info.SystemTab;
 import milu.gui.ctrl.info.VersionTab;
 import milu.gui.ctrl.jdbc.DBJdbcTab;
 import milu.gui.dlg.SystemInfoDialog;
@@ -84,10 +85,11 @@ public class MainMenuBar extends MenuBar
     //   - [Version]
     //     etc
 	// ----------------------------------------------
-    Menu     menuHelp        = new Menu();
-    MenuItem menuItemSysInfo = new MenuItem();
-    MenuItem menuItemJDBC    = new MenuItem("JDBC");
-    MenuItem menuItemVersion = new MenuItem();
+    Menu     menuHelp         = new Menu();
+    MenuItem menuItemSysInfo  = new MenuItem();
+    MenuItem menuItemSysInfo2 = new MenuItem();
+    MenuItem menuItemJDBC     = new MenuItem("JDBC");
+    MenuItem menuItemVersion  = new MenuItem();
     
 	public MainMenuBar( DBView dbView )
 	{
@@ -183,11 +185,14 @@ public class MainMenuBar extends MenuBar
 		this.menuHelp.getItems().addAll
 		( 
 			this.menuItemSysInfo,
+			this.menuItemSysInfo2,
 			this.menuItemJDBC,
 			this.menuItemVersion
 		);
 		// set icon on menuItemSysInfo
 		this.menuItemSysInfo.setGraphic( MyTool.createImageView( 16, 16, mainCtrl.getImage("file:resources/images/sysinfo.png") ) );
+		// set icon on menuItemSysInfo
+		this.menuItemSysInfo2.setGraphic( MyTool.createImageView( 16, 16, mainCtrl.getImage("file:resources/images/sysinfo.png") ) );
 		// set icon on menuItemSysInfo
 		this.menuItemJDBC.setGraphic( MyTool.createImageView( 16, 16, mainCtrl.getImage("file:resources/images/jdbc.png") ) );
 		// set icon on menuItemVersion
@@ -285,6 +290,12 @@ public class MainMenuBar extends MenuBar
 		
 		// ----------------------------------------------
 		// [Help]
+		//   - [System Information] menu clicked
+		// ----------------------------------------------
+		this.menuItemSysInfo2.setOnAction((event)->this.dbView.openView(SystemTab.class));
+		
+		// ----------------------------------------------
+		// [Help]
 		//   - [JDBC Info] menu clicked
 		// ----------------------------------------------
 		this.menuItemJDBC.setOnAction( (event)->this.dbView.openView( DBJdbcTab.class ) );
@@ -346,6 +357,7 @@ public class MainMenuBar extends MenuBar
 		// ----------------------------------------------
 	    this.menuHelp.setText( langRB.getString( "MENU_HELP" ) );
 	    this.menuItemSysInfo.setText( langRB.getString( "MENU_HELP_SYSINFO" ) );
+	    this.menuItemSysInfo2.setText( langRB.getString( "MENU_HELP_SYSINFO" ) );
 	    //this.menuItemAbout.setText( langRB.getString( "MENU_HELP_ABOUT" ) );
 	    this.menuItemVersion.setText( langRB.getString( "MENU_HELP_VERSION" ) );
 	}

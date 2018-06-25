@@ -23,7 +23,9 @@ import milu.main.AppConst;
 import milu.main.MainController;
 import milu.tool.MyTool;
 
-public class VersionTab extends Tab implements ChangeLangInterface 
+public class VersionTab extends Tab 
+	implements 
+		ChangeLangInterface 
 {
 	private DBView          dbView = null;
 	
@@ -130,6 +132,7 @@ public class VersionTab extends Tab implements ChangeLangInterface
 		this.setOnCloseRequest( ((CloseInterface)this.updatePane)::closeRequest	);
 	}
 	
+	// ChangeLangInterface
 	@Override
 	public void changeLang() 
 	{

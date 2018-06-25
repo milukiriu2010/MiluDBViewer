@@ -3,7 +3,6 @@ package milu.file.table;
 import java.util.List;
 import java.util.ArrayList;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 
 public abstract class MyFileImportAbstract 

@@ -393,7 +393,7 @@ public class ObjTableView extends TableView<List<Object>>
 	}
 	
 	// Get ColumnName from TableView 
-	private List<Object> getHeadList()
+	public List<Object> getHeadList()
 	{
 		/*
 		TableProcessAbstract tpAbs = TableProcessFactory.getInstance( this.tableViewDirection, this );
@@ -403,7 +403,7 @@ public class ObjTableView extends TableView<List<Object>>
 	}
 	
 	// Get Data from TableView 
-	private List<List<Object>> getDataList()
+	public List<List<Object>> getDataList()
 	{
 		/*
 		TableProcessAbstract tpAbs = TableProcessFactory.getInstance( this.tableViewDirection, this );
