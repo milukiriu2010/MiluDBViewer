@@ -87,7 +87,6 @@ public class MainMenuBar extends MenuBar
 	// ----------------------------------------------
     Menu     menuHelp         = new Menu();
     MenuItem menuItemSysInfo  = new MenuItem();
-    MenuItem menuItemSysInfo2 = new MenuItem();
     MenuItem menuItemJDBC     = new MenuItem("JDBC");
     MenuItem menuItemVersion  = new MenuItem();
     
@@ -185,14 +184,11 @@ public class MainMenuBar extends MenuBar
 		this.menuHelp.getItems().addAll
 		( 
 			this.menuItemSysInfo,
-			this.menuItemSysInfo2,
 			this.menuItemJDBC,
 			this.menuItemVersion
 		);
 		// set icon on menuItemSysInfo
 		this.menuItemSysInfo.setGraphic( MyTool.createImageView( 16, 16, mainCtrl.getImage("file:resources/images/sysinfo.png") ) );
-		// set icon on menuItemSysInfo
-		this.menuItemSysInfo2.setGraphic( MyTool.createImageView( 16, 16, mainCtrl.getImage("file:resources/images/sysinfo.png") ) );
 		// set icon on menuItemSysInfo
 		this.menuItemJDBC.setGraphic( MyTool.createImageView( 16, 16, mainCtrl.getImage("file:resources/images/jdbc.png") ) );
 		// set icon on menuItemVersion
@@ -282,17 +278,7 @@ public class MainMenuBar extends MenuBar
 		// [Help]
 		//   - [System Information] menu clicked
 		// ----------------------------------------------
-		this.menuItemSysInfo.setOnAction((event)->{
-			SystemInfoDialog sysInfoDlg = new SystemInfoDialog( this.dbView );
-			sysInfoDlg.showAndWait();
-			sysInfoDlg = null;
-		});
-		
-		// ----------------------------------------------
-		// [Help]
-		//   - [System Information] menu clicked
-		// ----------------------------------------------
-		this.menuItemSysInfo2.setOnAction((event)->this.dbView.openView(SystemTab.class));
+		this.menuItemSysInfo.setOnAction((event)->this.dbView.openView(SystemTab.class));
 		
 		// ----------------------------------------------
 		// [Help]
@@ -357,7 +343,6 @@ public class MainMenuBar extends MenuBar
 		// ----------------------------------------------
 	    this.menuHelp.setText( langRB.getString( "MENU_HELP" ) );
 	    this.menuItemSysInfo.setText( langRB.getString( "MENU_HELP_SYSINFO" ) );
-	    this.menuItemSysInfo2.setText( langRB.getString( "MENU_HELP_SYSINFO" ) );
 	    //this.menuItemAbout.setText( langRB.getString( "MENU_HELP_ABOUT" ) );
 	    this.menuItemVersion.setText( langRB.getString( "MENU_HELP_VERSION" ) );
 	}

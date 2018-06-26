@@ -1,6 +1,9 @@
 package milu.gui.ctrl.info;
 
+import java.util.ResourceBundle;
+
 import javafx.geometry.Side;
+import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
@@ -23,7 +26,6 @@ public class SystemTab extends Tab implements ChangeLangInterface
 	public SystemTab( DBView dbView )
 	{
 		super();
-		System.out.println( "SystemTab" );
 		
 		this.dbView = dbView;
 		MainController mainCtrl = this.dbView.getMainController();
@@ -33,7 +35,9 @@ public class SystemTab extends Tab implements ChangeLangInterface
 		
 		this.tabPane.getTabs().addAll( 
 				new SystemPropertyTab(this.dbView),
-				new SystemEnvTab(this.dbView)
+				new SystemEnvTab(this.dbView),
+				new SystemDisplayTab(this.dbView),
+				new SystemMemTab(this.dbView)
 			);
 		
 		//this.setContent(this.tabPane);
@@ -70,7 +74,19 @@ public class SystemTab extends Tab implements ChangeLangInterface
 	@Override
 	public void changeLang() 
 	{
-		this.setText("System");
+		MainController mainCtrl = this.dbView.getMainController();
+		ResourceBundle langRB = mainCtrl.getLangResource("conf.lang.gui.ctrl.info.SystemTab");
+		
+		// Tab Title
+		Node tabGraphic = this.getGraphic();
+		if ( tabGraphic instanceof Label )
+		{
+			((Label)tabGraphic).setText( langRB.getString("TITLE_SYSINFO") );
+		}
+		else
+		{
+			this.setText(langRB.getString("TITLE_SYSINFO"));
+		}
 		
 		this.tabPane.getTabs().forEach((tab)->{
 			if ( tab instanceof ChangeLangInterface )

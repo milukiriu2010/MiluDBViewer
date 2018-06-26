@@ -306,8 +306,8 @@ public class ObjTableView extends TableView<List<Object>>
 		// Clear TableView
 		this.getItems().clear();
 		this.getColumns().clear();
-		this.headObjLst.clear();
-		this.dataObjLst.clear();
+		//this.headObjLst.clear();
+		//this.dataObjLst.clear();
 		//this.headObjLst = headLst.stream().collect(Collectors.toList());
 		//this.dataObjLst = dataLst.stream().collect(Collectors.toList());
 		//this.headObjLst = new ArrayList<>( headLst );

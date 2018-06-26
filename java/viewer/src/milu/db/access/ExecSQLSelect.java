@@ -7,23 +7,49 @@ import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
+import java.util.LinkedHashMap;
 
 public class ExecSQLSelect extends ExecSQLAbstract 
 {
-	// Column Type Name List
-	List<String>  colTypeNameLst  = new ArrayList<String>();
 	// Column Class Name List
-	List<String>  colClassNameLst = new ArrayList<String>();
+	private List<String>  colClassNameLst = new ArrayList<String>();
+	
+	// Column Meta Info Head List
+	private List<Object> colMetaInfoHeadLst = 
+			Arrays.asList("Name","Class","Type","Size","Precision","Scale","Nullable");
+
+	// Column Meta Info Data List
+	// -------------------------------------------
+	// 0:ColumnName
+	// 1:ColumnClassName
+	// 2:ColumnTypeName
+	// 3:ColumnDisplaySize
+	// 4:Precision
+	// 5:Scale
+	// 6:isNullable
+	private List<Map<String,Object>> colMetaInfoDataLst = new ArrayList<>();
+	
+	public List<Object> getColMetaInfoHeadLst()
+	{
+		return this.colMetaInfoHeadLst;
+	}	
+	
+	public List<Map<String,Object>> getColMetaInfoDataLst()
+	{
+		return this.colMetaInfoDataLst;
+	}
 	
 	@Override
 	protected void clear()
 	{
 		super.clear();
 		
-		this.colTypeNameLst.clear();
 		this.colClassNameLst.clear();
-	}	
+		this.colMetaInfoDataLst.clear();
+	}
 	
 	@Override
 	public void exec(int checkCnt)		
@@ -54,20 +80,34 @@ public class ExecSQLSelect extends ExecSQLAbstract
 			for ( int i = 1; i <= headCnt; i++ )
 			{
 				this.colNameLst.add( rsmd.getColumnName( i ) );
-				this.colTypeNameLst.add( rsmd.getColumnTypeName( i ) );
+				//this.colTypeNameLst.add( rsmd.getColumnTypeName( i ) );
 				this.colClassNameLst.add( rsmd.getColumnClassName( i ) );
+				
+				Map<String,Object> mapObj = new LinkedHashMap<>();
+				mapObj.put( (String)this.colMetaInfoHeadLst.get(0), rsmd.getColumnName( i ) );
+				mapObj.put( (String)this.colMetaInfoHeadLst.get(1), rsmd.getColumnClassName( i ) );
+				mapObj.put( (String)this.colMetaInfoHeadLst.get(2), rsmd.getColumnTypeName( i ) );
+				mapObj.put( (String)this.colMetaInfoHeadLst.get(3), Integer.valueOf(rsmd.getColumnDisplaySize(i)) );
+				mapObj.put( (String)this.colMetaInfoHeadLst.get(4), Integer.valueOf(rsmd.getPrecision(i)) );
+				mapObj.put( (String)this.colMetaInfoHeadLst.get(5), Integer.valueOf(rsmd.getScale(i)) );
+				mapObj.put( (String)this.colMetaInfoHeadLst.get(6), Integer.valueOf(rsmd.isNullable(i)) );
+				
+				this.colMetaInfoDataLst.add( mapObj );
+				
 				// ----------------------------------------------------------
 				// [Oracle XMLType Column] 
 				//   ColumTypeName   => SYS.XMLTYPE
 				//   ColumnClassName => oracle.jdbc.OracleOpaque
 				//                      java.sql.SQLXML( by xmlparser2.jar )
 				// ----------------------------------------------------------
+				/*
 				System.out.println
 				( 
 					rsmd.getColumnName( i )     + ":" + 
 					rsmd.getColumnTypeName( i ) + ":" +
 					rsmd.getColumnClassName( i )
 				);
+				*/
 			}
 			System.out.println( "----------------------------" );
 			

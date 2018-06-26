@@ -16,6 +16,7 @@ public class InitialLoadLangResource extends InitialLoadAbstract
 			"conf.lang.gui.ctrl.common.DriverControlPane",
 			"conf.lang.gui.ctrl.common.table.ObjTableView",
 			"conf.lang.gui.ctrl.imp.ImportDataTab",
+			"conf.lang.gui.ctrl.info.SystemTab",
 			"conf.lang.gui.ctrl.info.VersionTab",
 			"conf.lang.gui.ctrl.menu.MainMenuBar",
 			"conf.lang.gui.ctrl.menu.MainToolBar",

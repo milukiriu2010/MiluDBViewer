@@ -32,6 +32,9 @@ public class ImportDataTab extends Tab
 		this.basePane = new ImportDataPane(dbView,schemaEntity);
 		this.setContent(this.basePane);
 		
+		//this.basePane.prefHeightProperty().bind(this.getTabPane().heightProperty());
+		//this.basePane.prefWidthProperty().bind(this.getTabPane().widthProperty());
+		
 		// set icon on Tab
 		this.setGraphic( MyTool.createImageView( 16, 16, mainCtrl.getImage("file:resources/images/import.png") ) );
 		

@@ -73,6 +73,9 @@ public class ImportDataPaneFile extends Pane
 		
 		this.getChildren().add(this.basePane);
 		
+		//this.basePane.prefHeightProperty().bind(this.heightProperty());
+		//this.basePane.prefWidthProperty().bind(this.widthProperty());
+		
 		this.setAction();
 	}
 	
@@ -82,6 +85,7 @@ public class ImportDataPaneFile extends Pane
 		AppConf appConf = mainCtrl.getAppConf();
 		this.btnOpen.setOnAction((event)->{
 			FileChooser fc = new FileChooser();
+			// Initial Directory
 			if ( appConf.getInitDirImportFile().isEmpty() != true )
 			{
 				fc.setInitialDirectory( new File(appConf.getInitDirImportFile()) );
@@ -91,6 +95,10 @@ public class ImportDataPaneFile extends Pane
 			{
 				fc.setInitialDirectory( new File(this.txtSrcFile.getText()).getParentFile() );
 			}
+			// Extension Filter
+			FileChooser.ExtensionFilter  extFilter = 
+				new FileChooser.ExtensionFilter( "Excel(*.xlsx)", "*.xlsx" );
+			fc.getExtensionFilters().add(extFilter);
 			File file = fc.showOpenDialog(this.getScene().getWindow());
 			if ( file == null )
 			{

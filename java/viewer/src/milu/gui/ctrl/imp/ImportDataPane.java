@@ -42,6 +42,9 @@ class ImportDataPane extends Pane
 		
 		this.getChildren().add(this.basePane);
 		
+		this.basePane.prefHeightProperty().bind(this.heightProperty());
+		this.basePane.prefWidthProperty().bind(this.widthProperty());
+		
 		this.setAction();
 	}
 	

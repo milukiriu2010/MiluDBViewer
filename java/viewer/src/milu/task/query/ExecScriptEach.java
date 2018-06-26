@@ -2,6 +2,9 @@ package milu.task.query;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.ArrayList;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import javafx.application.Platform;
 import javafx.scene.control.TabPane;
@@ -12,7 +15,9 @@ import milu.db.MyDBAbstract;
 import milu.db.access.MyDBOverFetchSizeException;
 import milu.db.access.ExecSQLFactory;
 import milu.db.access.ExecSQLAbstract;
+import milu.db.access.ExecSQLSelect;
 import milu.gui.ctrl.common.inf.ProcInterface;
+import milu.gui.ctrl.query.DBResultSelectTab;
 import milu.gui.ctrl.query.DBResultTab;
 import milu.gui.view.DBView;
 import milu.main.AppConf;
@@ -31,6 +36,12 @@ public class ExecScriptEach
 	private Exception     myEx     = null;
 	private ProcInterface procInf     = null;
 	private Orientation   orientation = null;
+	
+	enum TYPE
+	{
+		DATA,
+		META
+	}
 	
 	public void setNo( int no )
 	{
@@ -124,28 +135,92 @@ public class ExecScriptEach
 			
 			this.execTime = execSQLAbs.getExecTime();
 			
-			Platform.runLater
-			(
-				()->
-				{
-					
-					DBResultTab dbResultTab = new DBResultTab( this.dbView );
-					dbResultTab.setText( "Script " + no );
-					dbResultTab.setSQL(sqlBag.getSQL());
-					dbResultTab.setProcInf(this.procInf);
-					dbResultTab.setOrientation(this.orientation);
-					dbResultTab.setDataOnTableViewSQL(headLst, dataLst);
-					
-					if ( this.myEx != null )
+			if ( execSQLAbs instanceof ExecSQLSelect )
+			{
+				List<Map<String,Object>> metaInfoDataMap = ((ExecSQLSelect)execSQLAbs).getColMetaInfoDataLst();
+				
+				// Result Meta Data
+				List<List<Object>> metaInfoDataLst = 
+					metaInfoDataMap.stream()
+						.map( (Map<String,Object> map) -> map.values().stream().collect(Collectors.toList()) )
+						.collect(Collectors.toList());
+				
+				/*
+				System.out.println( "====== Meta Data ======");
+				metaInfoDataLst.forEach(
+					(metaLst)->
 					{
-						dbResultTab.setException(this.myEx);
+						System.out.println( "*******************");
+						metaLst.forEach(System.out::println);
 					}
-					dbResultTab.setExecTime( this.execTime );
-					
-					this.tabPane.getTabs().add( dbResultTab );
-				}
-			);
+				);
+				System.out.println( "======+++++++++++======");
+				*/
+				
+				Platform.runLater( ()->{
+					DBResultSelectTab  dbRSTab = new DBResultSelectTab( this.dbView );
+					dbRSTab.setText( "Script " + no );
+					this.tabPane.getTabs().add(dbRSTab);
+					this.createDBResultTab(headLst,dataLst,dbRSTab.getChildTabPane(),ExecScriptEach.TYPE.DATA);
+					this.createDBResultTab(((ExecSQLSelect)execSQLAbs).getColMetaInfoHeadLst(),metaInfoDataLst,dbRSTab.getChildTabPane(),ExecScriptEach.TYPE.META);
+					//this.createDBResultTab(headLst,dataLst,this.tabPane);	
+				});
+			}
+			else
+			{
+				Platform.runLater( ()->this.createDBResultTab(headLst,dataLst,this.tabPane,ExecScriptEach.TYPE.DATA) );
+			}
 		}
 		
+	}
+	
+	private void createDBResultTab( List<Object> headLst, List<List<Object>> dataLst, TabPane tabP, ExecScriptEach.TYPE type )
+	{
+		DBResultTab dbResultTab = new DBResultTab( this.dbView );
+		// SELECT
+		if ( SQLBag.TYPE.SELECT.equals(sqlBag.getType()) )
+		{
+			// [SELECT]-[DATA(ResultSet)]
+			if ( ExecScriptEach.TYPE.DATA.equals(type) )
+			{
+				dbResultTab.setText( "Data" );
+				dbResultTab.setGraphic(null);
+				dbResultTab.setSQL(sqlBag.getSQL());
+				dbResultTab.setProcInf(this.procInf);
+				dbResultTab.setOrientation(this.orientation);
+				dbResultTab.setDataOnTableViewSQL(headLst, dataLst);
+				
+				if ( this.myEx != null )
+				{
+					dbResultTab.setException(this.myEx);
+				}
+				dbResultTab.setExecTime( this.execTime );
+			}
+			// [SELECT]-[META(ResultSetMetaData)]
+			else
+			{
+				dbResultTab.setText( "Meta" );
+				dbResultTab.setGraphic(null);
+				dbResultTab.setSQL(sqlBag.getSQL());
+				dbResultTab.setDataOnTableViewSQL(headLst, dataLst);
+			}
+		}
+		// INSERT,UPDATE,DELETE...
+		else
+		{
+			dbResultTab.setText( "Script " + no );
+			dbResultTab.setSQL(sqlBag.getSQL());
+			dbResultTab.setProcInf(this.procInf);
+			dbResultTab.setOrientation(this.orientation);
+			dbResultTab.setDataOnTableViewSQL(headLst, dataLst);
+			
+			if ( this.myEx != null )
+			{
+				dbResultTab.setException(this.myEx);
+			}
+			dbResultTab.setExecTime( this.execTime );
+		}
+		
+		tabP.getTabs().add( dbResultTab );
 	}
 }

@@ -25,7 +25,7 @@ public class SystemPropertyTab extends Tab
 	
 	private ObjTableView    objTableView = null;
 	
-	private ObservableList<Object> objHeadLst = null;
+	private ObservableList<Object> objHeadLst = FXCollections.observableArrayList();
 	
 	SystemPropertyTab( DBView dbView )
 	{
@@ -87,14 +87,16 @@ public class SystemPropertyTab extends Tab
 	@Override
 	public void changeLang() 
 	{
-		ResourceBundle langRB = this.dbView.getMainController().getLangResource("conf.lang.gui.dlg.SystemInfoDialog");
+		MainController mainCtrl = this.dbView.getMainController();
+		ResourceBundle langRB = mainCtrl.getLangResource("conf.lang.gui.ctrl.info.SystemTab");
+		ResourceBundle extLangRB = mainCtrl.getLangResource("conf.lang.gui.common.NodeName");
 		
-		this.setText("System Property");
+		this.setText(langRB.getString("TITLE_SYSPROP"));
 		
-		this.objHeadLst = 
-				FXCollections.observableArrayList(
-					langRB.getString( "ITEM_KEY" ),
-					langRB.getString( "ITEM_VAL" )
+		this.objHeadLst.clear();
+		this.objHeadLst.addAll(
+					extLangRB.getString( "ITEM_KEY" ),
+					extLangRB.getString( "ITEM_VAL" )
 				);
 	}
 }

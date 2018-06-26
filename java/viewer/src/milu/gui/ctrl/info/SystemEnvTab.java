@@ -13,6 +13,7 @@ import milu.gui.ctrl.common.inf.ChangeLangInterface;
 import milu.gui.ctrl.common.inf.FocusInterface;
 import milu.gui.ctrl.common.table.ObjTableView;
 import milu.gui.view.DBView;
+import milu.main.MainController;
 
 public class SystemEnvTab extends Tab 
 	implements 
@@ -23,7 +24,7 @@ public class SystemEnvTab extends Tab
 	
 	private ObjTableView    objTableView = null;
 	
-	private ObservableList<Object> objHeadLst = null;
+	private ObservableList<Object> objHeadLst = FXCollections.observableArrayList();
 	
 	SystemEnvTab( DBView dbView )
 	{
@@ -37,7 +38,7 @@ public class SystemEnvTab extends Tab
 		
 		this.changeLang();
 		
-		this.setContent(this.objTableView);		
+		this.setContent(this.objTableView);
 	}
 	
 	// FocusInterface
@@ -81,14 +82,16 @@ public class SystemEnvTab extends Tab
 	@Override
 	public void changeLang() 
 	{
-		ResourceBundle langRB = this.dbView.getMainController().getLangResource("conf.lang.gui.dlg.SystemInfoDialog");
+		MainController mainCtrl = this.dbView.getMainController();
+		ResourceBundle langRB = mainCtrl.getLangResource("conf.lang.gui.ctrl.info.SystemTab");
+		ResourceBundle extLangRB = mainCtrl.getLangResource("conf.lang.gui.common.NodeName");
 		
-		this.setText("System Env");
+		this.setText(langRB.getString("TITLE_SYSENV"));
 		
-		this.objHeadLst = 
-				FXCollections.observableArrayList(
-					langRB.getString( "ITEM_KEY" ),
-					langRB.getString( "ITEM_VAL" )
+		this.objHeadLst.clear();
+		this.objHeadLst.addAll(
+					extLangRB.getString( "ITEM_KEY" ),
+					extLangRB.getString( "ITEM_VAL" )
 				);
 	}	
 }

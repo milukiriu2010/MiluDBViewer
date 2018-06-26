@@ -50,6 +50,7 @@ public class InitialLoadImage extends InitialLoadAbstract
 				// MainMenuBar
 				"file:resources/images/config.png",
 				"file:resources/images/quit.png",
+				"file:resources/images/memory.png",
 				"file:resources/images/sysinfo.png",
 				"file:resources/images/jdbc.png",
 				// MainToolBar

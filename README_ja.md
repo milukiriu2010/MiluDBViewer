@@ -79,7 +79,7 @@ SQLServer|〇|〇|×|〇|×|〇|×|〇|〇|〇
 # DB接続の設定
 
 - [Cassandra](doc/ja/START_Cassandra.md)
-- [MongoDB](doc/jp/START_MongoDB.md)
+- [MongoDB](doc/ja/START_MongoDB.md)
 - [MySQL](doc/ja/START_MySQL.md)
 - [Oracle](doc/ja/START_Oracle.md)
 - [PostgreSQL](doc/ja/START_PostgreSQL.md)
