@@ -1,5 +1,7 @@
 package milu.db.access;
 
+import java.util.List;
+
 import milu.ctrl.sql.parse.SQLBag;
 import milu.db.MyDBAbstract;
 import milu.main.AppConf;
@@ -7,7 +9,7 @@ import milu.main.AppConf;
 public class ExecSQLFactory extends ExecSQLFactoryAbstract {
 
 	@Override
-	public ExecSQLAbstract createFactory(SQLBag sqlBag, MyDBAbstract myDBAbs, AppConf appConf ) 
+	public ExecSQLAbstract createFactory( SQLBag sqlBag, MyDBAbstract myDBAbs, AppConf appConf ) 
 	{
 		ExecSQLAbstract execSQLAbs = null;
 		if ( SQLBag.TYPE.SELECT.equals(sqlBag.getType()) )
@@ -80,4 +82,30 @@ public class ExecSQLFactory extends ExecSQLFactoryAbstract {
 		return execSQLAbs;
 	}
 
+	@Override
+	public ExecSQLAbstract createPreparedFactory( SQLBag sqlBag, MyDBAbstract myDBAbs, AppConf appConf, List<Object> preLst ) 
+	{
+		ExecSQLAbstract execSQLAbs = null;
+		if ( SQLBag.TYPE.INSERT.equals(sqlBag.getType()) )
+		{
+			execSQLAbs = new ExecSQLTransactionPrepared();
+		}
+		else if ( SQLBag.TYPE.UPDATE.equals(sqlBag.getType()) )
+		{
+			execSQLAbs = new ExecSQLTransactionPrepared();
+		}
+		else if ( SQLBag.TYPE.DELETE.equals(sqlBag.getType()) )
+		{
+			execSQLAbs = new ExecSQLTransactionPrepared();
+		}
+		else
+		{
+			return null;
+		}
+		execSQLAbs.setSQLBag(sqlBag);
+		execSQLAbs.setMyDBAbstract(myDBAbs);
+		execSQLAbs.setAppConf(appConf);
+		execSQLAbs.setPreLst(preLst);
+		return execSQLAbs;
+	}
 }

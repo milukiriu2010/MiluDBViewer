@@ -227,6 +227,11 @@ public class SchemaTreeContextMenu extends ContextMenu
 				this.subMenuGenerateUpdate.setDisable(false);
 				this.menuItemGenerateDelete.setDisable(false);
 				this.menuItemImportData.setDisable(false);
+				
+				
+				
+				
+				this.menuItemImportData.setDisable(true);
 				break;
 			case VIEW:
 			case SYSTEM_VIEW:

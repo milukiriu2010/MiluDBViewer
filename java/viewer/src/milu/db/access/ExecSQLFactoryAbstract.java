@@ -1,5 +1,7 @@
 package milu.db.access;
 
+import java.util.List;
+
 import milu.ctrl.sql.parse.SQLBag;
 import milu.db.MyDBAbstract;
 import milu.main.AppConf;
@@ -7,4 +9,5 @@ import milu.main.AppConf;
 abstract public class ExecSQLFactoryAbstract 
 {
 	abstract public ExecSQLAbstract createFactory( SQLBag sqlBag, MyDBAbstract myDBAbs, AppConf appConf );
+	abstract public ExecSQLAbstract createPreparedFactory( SQLBag sqlBag, MyDBAbstract myDBAbs, AppConf appConf, List<Object> preLst );
 }

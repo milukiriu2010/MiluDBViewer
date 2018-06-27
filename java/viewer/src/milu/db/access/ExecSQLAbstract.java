@@ -25,9 +25,11 @@ abstract public class ExecSQLAbstract
 	protected long          execEndTime   = -1;
 	
 	// Column Name List
-	protected List<Object>  colNameLst      = new ArrayList<>();	
+	protected List<Object>  colNameLst      = new ArrayList<>();
 	// Data List
-	protected List<List<Object>> dataLst    = new ArrayList<>();	
+	protected List<List<Object>> dataLst    = new ArrayList<>();
+	// Prepared List
+	protected List<Object>   preLst = null;
 	
 	public void setMyDBAbstract( MyDBAbstract myDBAbs )
 	{
@@ -57,6 +59,11 @@ abstract public class ExecSQLAbstract
 	public List<List<Object>> getDataLst()
 	{
 		return this.dataLst;
+	}
+	
+	public void setPreLst( List<Object> preLst )
+	{
+		this.preLst = preLst;
 	}
 	
 	protected void clear()

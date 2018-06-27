@@ -23,7 +23,6 @@ public class InitialLoadLangResource extends InitialLoadAbstract
 			"conf.lang.gui.ctrl.query.DBSqlTab",
 			"conf.lang.gui.ctrl.schema.DBSchemaTab",
 			"conf.lang.gui.ctrl.schema.SchemaTreeView",
-			"conf.lang.gui.dlg.SystemInfoDialog",
 			"conf.lang.gui.dlg.app.AppSettingDialog",
 			"conf.lang.gui.dlg.db.DBSettingDialog"
 		};

@@ -3,6 +3,7 @@ package milu.gui.ctrl.imp;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Map;
 
 import javafx.scene.layout.Pane;
 import milu.gui.ctrl.common.PathTreeView;
@@ -21,7 +22,7 @@ public class ImportDataPaneDB extends Pane
 	
 	private PathTreeView  pathTreeView = new PathTreeView();
 	
-	ImportDataPaneDB( DBView dbView, WizardInterface wizardInf )
+	ImportDataPaneDB( DBView dbView, WizardInterface wizardInf, Map<String,Object> mapObj )
 	{
 		this.dbView = dbView;
 		this.wizardInf = wizardInf;

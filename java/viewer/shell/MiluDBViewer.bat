@@ -10,6 +10,7 @@
 @set MYCLASSPATH=%MYCLASSPATH%;lib/excel/xmlbeans-2.6.0.jar
 @set MYCLASSPATH=%MYCLASSPATH%;lib/gson/gson-2.8.3-SNAPSHOT.jar
 @set MYCLASSPATH=%MYCLASSPATH%;lib/hibernate/hibernate-core-5.3.1.Final.jar
+@set MYCLASSPATH=%MYCLASSPATH%;lib/jarchivelib/jarchivelib-0.7.1-jar-with-dependencies.jar
 
 @rem ============================================
 @rem === set NLS_LANG ===========================

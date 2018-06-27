@@ -183,17 +183,19 @@ public class ObjTableView extends TableView<List<Object>>
 	
 	public void setSkipRowCnt( int skipRowCnt )
 	{
+		System.out.println("ObjTableView.skipRowCnt:" + skipRowCnt);
 		this.skipRowCnt = skipRowCnt;
 		this.setRowFactory((tableView)->{
 			final TableRow<List<Object>> row = new TableRow<>() {
 				@Override
 				protected void updateItem( List<Object> dataLst, boolean empty )
 				{
-					super.updateItem(dataLst, empty );
+					super.updateItem( dataLst, empty );
 					
 					if (!empty)
 					{
 						Object obj = dataLst.get(0);
+						System.out.println("updateItem:0:" + obj );
 						if ( obj instanceof Number )
 						{
 							Number num = (Number)obj;
@@ -206,6 +208,14 @@ public class ObjTableView extends TableView<List<Object>>
 								getStyleClass().remove("-fx-background-color:#808080;");
 							}
 						}
+						else
+						{
+							getStyleClass().remove("-fx-background-color:#808080;");
+						}
+					}
+					else
+					{
+						getStyleClass().remove("-fx-background-color:#808080;");
 					}
 				}
 			};

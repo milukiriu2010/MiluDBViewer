@@ -2,27 +2,34 @@ package milu.gui.ctrl.imp;
 
 import java.io.File;
 import java.util.Map;
+import java.util.ResourceBundle;
 import java.util.HashMap;
 
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Tooltip;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 import javafx.stage.FileChooser;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.BorderPane;
+import milu.gui.ctrl.common.inf.ChangeLangInterface;
 import milu.gui.view.DBView;
 import milu.main.AppConf;
 import milu.main.MainController;
 import milu.tool.MyFileTool;
+import milu.tool.MyTool;
 
 public class ImportDataPaneFile extends Pane 
+	implements ChangeLangInterface 
 {
 	private DBView          dbView = null;
 	
 	private WizardInterface wizardInf = null;
+	
+	private Map<String,Object> mapObj = null;
 	
 	private BorderPane      basePane = new BorderPane();
 	
@@ -38,18 +45,16 @@ public class ImportDataPaneFile extends Pane
     // ----------------------------------------------------- 
 	private Button     btnNext    = new Button();
 	
-	ImportDataPaneFile( DBView dbView, WizardInterface wizardInf )
+	ImportDataPaneFile( DBView dbView, WizardInterface wizardInf, Map<String,Object> mapObj )
 	{
 		this.dbView    = dbView;
 		this.wizardInf = wizardInf;
-		
-		lblSrcFile.setText("Source File");
-		btnOpen.setText("Open");
-		btnNext.setText("Next");
+		this.mapObj    = mapObj;
 		
 	    // -----------------------------------------------------
 		// [Center]
-	    // ----------------------------------------------------- 
+	    // -----------------------------------------------------
+		this.txtSrcFile.setPrefWidth(500);
 		HBox hBoxSrc = new HBox(2);
 		hBoxSrc.setPadding( new Insets( 10, 10, 10, 10 ) );
 		hBoxSrc.setSpacing(10);
@@ -77,6 +82,8 @@ public class ImportDataPaneFile extends Pane
 		//this.basePane.prefWidthProperty().bind(this.widthProperty());
 		
 		this.setAction();
+		
+		this.changeLang();
 	}
 	
 	private void setAction()
@@ -111,9 +118,28 @@ public class ImportDataPaneFile extends Pane
 		});
 		
 		this.btnNext.setOnAction((event)->{
-			Map<String,Object> mapObj = new HashMap<>();
-			mapObj.put( "File", this.txtSrcFile.getText() );
-			this.wizardInf.next( this, mapObj);
+			this.mapObj.put( "File", this.txtSrcFile.getText() );
+			this.wizardInf.next( this, this.mapObj);
 		});
+	}
+	
+	// ChangeLangInterface
+	@Override
+	public void changeLang() 
+	{
+		MainController mainCtrl = this.dbView.getMainController();
+		ResourceBundle langRB = mainCtrl.getLangResource("conf.lang.gui.ctrl.imp.ImportDataTab");
+		ResourceBundle extLangRB = mainCtrl.getLangResource("conf.lang.gui.common.NodeName");
+		
+		this.lblSrcFile.setText(langRB.getString("LABEL_SRC_FILE"));
+		
+		// "select folder" button
+		this.btnOpen.setGraphic( MyTool.createImageView( 16, 16, mainCtrl.getImage("file:resources/images/folder.png") ));
+		Tooltip tipOpen = new Tooltip(extLangRB.getString( "TOOLTIP_OPEN_FILE" ));
+		tipOpen.getStyleClass().add("MainToolBar_MyToolTip");
+		this.btnOpen.setTooltip( tipOpen );
+		
+		this.btnNext.setText(extLangRB.getString("TOOLTIP_NEXT"));
+
 	}
 }

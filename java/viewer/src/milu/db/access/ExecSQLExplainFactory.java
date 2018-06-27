@@ -1,5 +1,7 @@
 package milu.db.access;
 
+import java.util.List;
+
 import milu.ctrl.sql.parse.SQLBag;
 import milu.db.MyDBAbstract;
 import milu.db.MyDBPostgres;
@@ -47,4 +49,9 @@ public class ExecSQLExplainFactory extends ExecSQLFactoryAbstract
 		return execSQLAbs;
 	}
 
+	@Override
+	public ExecSQLAbstract createPreparedFactory( SQLBag sqlBag, MyDBAbstract myDBAbs, AppConf appConf, List<Object> preLst ) 
+	{
+		throw new UnsupportedOperationException();
+	}
 }

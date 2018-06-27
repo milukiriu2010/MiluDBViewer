@@ -74,6 +74,7 @@ export MYCLASSPATH=$MYCLASSPATH:$prgdir/lib/excel/poi-ooxml-schemas-3.17.jar
 export MYCLASSPATH=$MYCLASSPATH:$prgdir/lib/excel/xmlbeans-2.6.0.jar
 export MYCLASSPATH=$MYCLASSPATH:$prgdir/lib/gson/gson-2.8.3-SNAPSHOT.jar
 export MYCLASSPATH=$MYCLASSPATH:$prgdir/lib/hibernate/hibernate-core-5.3.1.Final.jar
+export MYCLASSPATH=$MYCLASSPATH:$prgdir/lib/jarchivelib/jarchivelib-0.7.1-jar-with-dependencies.jar
 
 #echo "CLASSPATH=>"
 #echo $MYCLASSPATH

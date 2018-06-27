@@ -18,6 +18,7 @@ import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.Statement;
+import java.sql.PreparedStatement;
 import java.sql.DatabaseMetaData;
 
 import java.sql.SQLException;
@@ -448,7 +449,6 @@ abstract public class MyDBAbstract
 		
 		this.conn = null;
 		// Connection
-		//this.conn = DriverManager.getConnection( this.url, this.username, this.password );
 		this.conn =	DriverManager.getConnection( this.url, this.createProp() );
 		this.conn.setAutoCommit( false );
 		System.out.println( "DB[" + this.url + "] Connected!!" );
@@ -519,6 +519,12 @@ abstract public class MyDBAbstract
 		throws SQLException
 	{
 		return this.conn.createStatement();
+	}
+	
+	public synchronized PreparedStatement createPreparedStatement( String sql )
+		throws SQLException
+	{
+		return this.conn.prepareStatement(sql);
 	}
 	
 	public synchronized DatabaseMetaData getMetaData()
