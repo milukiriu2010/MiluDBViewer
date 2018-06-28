@@ -1,10 +1,9 @@
 package milu.gui.ctrl.imp;
 
-import javafx.scene.layout.Pane;
-
 import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.HashMap;
+import java.util.Stack;
 
 import javafx.geometry.Insets;
 import javafx.scene.control.Label;
@@ -13,9 +12,11 @@ import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.Tooltip;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import milu.entity.schema.SchemaEntity;
 import milu.entity.schema.search.SearchSchemaEntityInterface;
 import milu.entity.schema.search.SearchSchemaEntityVisitorFactory;
+import milu.gui.ctrl.common.inf.CloseInterface;
 import milu.gui.ctrl.common.inf.ChangeLangInterface;
 import milu.gui.view.DBView;
 import milu.main.MainController;
@@ -28,6 +29,34 @@ class ImportDataPane extends Pane
 {
 	private DBView          dbView = null;
 	
+	private CloseInterface  closeInf = null;
+	
+	private Stack<Pane>     paneStack = new Stack<>();
+	
+	// -------------------------------------------------
+	// [1:ImportDataPane]
+	//   <Put>
+	//     DST_SCHEMA_ENTITY => SchemaEntity
+	//     TABLE_NAME_PATH   => String
+	// -------------------------------------------------
+	// [2:ImportDataPaneFile]
+	//   <Put>
+	//     SRC_FILE          => String
+	// -------------------------------------------------
+	// [3:ImportDataPaneFileTableView]
+	//   <Get>
+	//     SRC_FILE          => String
+	//   <Put>
+	//     IMPORT_HEAD_LST   => List<Object>
+	//     IMPORT_DATA_LST   => List<List<Object>>
+	//     SKIP_ROW_COUNT    => Integer
+	// -------------------------------------------------
+	// [4:ImportDataPaneResult]
+	//   <Get>
+	//     DST_SCHEMA_ENTITY => SchemaEntity
+	//     IMPORT_DATA_LST   => List<List<Object>>
+	//     SKIP_ROW_COUNT    => Integer
+	// -------------------------------------------------
 	private Map<String,Object> mapObj = new HashMap<>();
 	
 	private BorderPane      basePane = new BorderPane();
@@ -46,10 +75,11 @@ class ImportDataPane extends Pane
     // -----------------------------------------------------
 	private Pane  selectedPane = null;
 	
-	ImportDataPane( DBView dbView, SchemaEntity dstSchemaEntity )
+	ImportDataPane( DBView dbView, SchemaEntity dstSchemaEntity, CloseInterface closeInf )
 	{
-		this.dbView = dbView;
-		this.mapObj.put( "dstSchemaEntity", dstSchemaEntity );
+		this.dbView   = dbView;
+		this.closeInf = closeInf;
+		this.mapObj.put( ImportData.DST_SCHEMA_ENTITY.val(), dstSchemaEntity );
 		
 		// ---------------------------------------------------
 		// Get Table Name
@@ -65,7 +95,7 @@ class ImportDataPane extends Pane
 			schemaName = hitSchemaEntity.getName() + ".";
 		}
 		String tableNamePath = schemaName + tableName;
-		this.mapObj.put( "tableNamePath", tableNamePath );
+		this.mapObj.put( ImportData.TABLE_NAME_PATH.val(), tableNamePath );
 		this.lblDstDB.setText( tableNamePath );
 		
 		this.setPane();
@@ -109,6 +139,7 @@ class ImportDataPane extends Pane
 				this.selectedPane = new ImportDataPaneDB( this.dbView, this, this.mapObj );
 			}
 			this.basePane.setCenter(this.selectedPane);
+			this.paneStack.clear();
 		});
 	}
 	
@@ -116,7 +147,8 @@ class ImportDataPane extends Pane
 	@Override
 	public void next( Pane pane, Map<String,Object> mapObj )
 	{
-		this.basePane.setTop(null);
+		this.paneStack.push(pane);
+		//this.basePane.setTop(null);
 		this.basePane.setCenter(null);
 		if ( pane instanceof ImportDataPaneFile )
 		{
@@ -127,6 +159,21 @@ class ImportDataPane extends Pane
 			this.selectedPane = new ImportDataPaneResult( this.dbView, this, mapObj );
 		}
 		this.basePane.setCenter(this.selectedPane);
+	}
+	
+	// WizardInterface
+	@Override
+	public void prev()
+	{
+		Pane prevPane = this.paneStack.pop();
+		this.basePane.setCenter(prevPane);
+	}
+	
+	// WizardInterface
+	@Override
+	public void close()
+	{
+		this.closeInf.closeRequest(null);
 	}
 	
 	// ChangeLangInterface

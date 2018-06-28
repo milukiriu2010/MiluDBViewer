@@ -12,7 +12,7 @@ public class ExecSQLTransactionPrepared extends ExecSQLAbstract
 	@Override
 	public void exec(int checkCnt) throws SQLException, Exception 
 	{
-		System.out.println( "transaction:" + this.sqlBag.getSQL() );
+		//System.out.println( "transaction:" + this.sqlBag.getSQL() );
 		try
 		(
 			PreparedStatement stmt   = this.myDBAbs.createPreparedStatement(this.sqlBag.getSQL());
@@ -26,7 +26,7 @@ public class ExecSQLTransactionPrepared extends ExecSQLAbstract
 			
 			for ( int i=1; i <= this.preLst.size(); i++ )
 			{
-				Object obj = this.preLst.get(i);
+				Object obj = this.preLst.get(i-1);
 				stmt.setObject( i, obj );
 			}
 			

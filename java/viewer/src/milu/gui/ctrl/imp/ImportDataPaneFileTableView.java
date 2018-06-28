@@ -53,6 +53,7 @@ public class ImportDataPaneFileTableView extends Pane
 	// [Bottom]
     // -----------------------------------------------------
 	private Button btnImport = new Button();
+	private Button btnBack   = new Button();
 
 
 	ImportDataPaneFileTableView( DBView dbView, WizardInterface wizardInf, Map<String,Object> mapObj )
@@ -61,7 +62,8 @@ public class ImportDataPaneFileTableView extends Pane
 		this.wizardInf = wizardInf;
 		this.mapObj    = mapObj;
 		
-		this.objTableView = new ObjTableView( this.dbView );
+		MainController mainCtrl = this.dbView.getMainController();
+		
 		
 	    // -----------------------------------------------------
 		// [Top]
@@ -76,16 +78,20 @@ public class ImportDataPaneFileTableView extends Pane
 	    // -----------------------------------------------------
 		// [Center]
 	    // -----------------------------------------------------
+		this.objTableView = new ObjTableView( this.dbView );
+		this.objTableView.setPrefHeight(200);
 		this.basePane.setCenter(this.objTableView);
 		
 	    // -----------------------------------------------------
 		// [Bottom]
 	    // -----------------------------------------------------
+		this.btnBack.setGraphic( MyTool.createImageView( 20, 20, mainCtrl.getImage("file:resources/images/back.png") ) );
+		
 		HBox hBoxNext = new HBox(2);
 		hBoxNext.setPadding( new Insets( 10, 10, 10, 10 ) );
 		hBoxNext.setSpacing(10);
 		hBoxNext.setAlignment(Pos.BOTTOM_RIGHT);
-		hBoxNext.getChildren().add(this.btnImport);
+		hBoxNext.getChildren().addAll(this.btnBack,this.btnImport);
 		this.basePane.setBottom(hBoxNext);
 		
 		this.getChildren().addAll(this.basePane);
@@ -124,18 +130,21 @@ public class ImportDataPaneFileTableView extends Pane
 		});
 		
 		this.btnImport.setOnAction((event)->{
-			Map<String,Object> mapObj = new HashMap<>();
-			mapObj.put( "importHeadLst", this.objTableView.getHeadList() );
-			mapObj.put( "importDataLst", this.objTableView.getDataList() );
-			mapObj.put( "skipRowCount" , this.skipRowCount );
+			this.mapObj.put( ImportData.IMPORT_HEAD_LST.val(), this.objTableView.getHeadList() );
+			this.mapObj.put( ImportData.IMPORT_DATA_LST.val(), this.objTableView.getDataList() );
+			this.mapObj.put( ImportData.SKIP_ROW_COUNT.val(), this.skipRowCount );
 			this.wizardInf.next( this, mapObj );
+		});
+		
+		this.btnBack.setOnAction((event)->{
+			this.wizardInf.prev();
 		});
 	}
 	
 	private void loadData()
 	{
 		MainController mainCtrl = this.dbView.getMainController();
-		String strFile = (String)this.mapObj.get("File");
+		String strFile = (String)this.mapObj.get(ImportData.SRC_FILE.val());
 		File file = new File(strFile);
 		MyFileImportAbstract myFileAbs = MyFileImportFactory.getInstance(file);
 		try

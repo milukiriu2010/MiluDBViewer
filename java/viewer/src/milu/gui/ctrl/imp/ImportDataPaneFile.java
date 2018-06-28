@@ -118,7 +118,7 @@ public class ImportDataPaneFile extends Pane
 		});
 		
 		this.btnNext.setOnAction((event)->{
-			this.mapObj.put( "File", this.txtSrcFile.getText() );
+			this.mapObj.put( ImportData.SRC_FILE.val(), this.txtSrcFile.getText() );
 			this.wizardInf.next( this, this.mapObj);
 		});
 	}
