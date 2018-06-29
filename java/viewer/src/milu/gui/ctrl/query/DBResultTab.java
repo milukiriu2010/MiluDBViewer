@@ -32,6 +32,7 @@ import milu.gui.ctrl.common.table.ObjTableView;
 import milu.gui.view.DBView;
 import milu.main.MainController;
 import milu.tool.MyTool;
+import milu.tool.MyStringTool;
 import milu.db.MyDBAbstract;
 import milu.db.access.MyDBOverFetchSizeException;
 import milu.task.ToggleHVTask;
@@ -167,7 +168,7 @@ public class DBResultTab extends Tab
 			Label     labelTitle = new Label( langRB.getString("TITLE_OVER_FETCH_SIZE") );
 			String    msg        = langRB.getString("WARN_OVER_FETCH_SIZE");
 			TextArea  txtMsg     = new TextArea( msg );
-			int lfCnt = MyTool.getCharCount( msg, "\n" ); 
+			int lfCnt = MyStringTool.getCharCount( msg, "\n" ); 
 			txtMsg.setPrefRowCount( lfCnt+1 );
 			
 			this.tableViewSQL.prefHeightProperty().unbind();
@@ -183,12 +184,12 @@ public class DBResultTab extends Tab
 			
 			String    strMsg     = ex.getMessage();
 			TextArea  txtMsg     = new TextArea( strMsg );
-			txtMsg.setPrefColumnCount( MyTool.getCharCount( strMsg, "\n" )+1 );
+			txtMsg.setPrefColumnCount( MyStringTool.getCharCount( strMsg, "\n" )+1 );
 			txtMsg.setEditable( false );
 			
-			String    strExp     = MyTool.getExceptionString( ex );
+			String    strExp     = MyStringTool.getExceptionString( ex );
 			TextArea  txtExp     = new TextArea( strExp );
-			txtExp.setPrefRowCount( MyTool.getCharCount( strExp, "\n" )+1 );
+			txtExp.setPrefRowCount( MyStringTool.getCharCount( strExp, "\n" )+1 );
 			txtExp.setEditable( false );
 			
 			VBox vBoxExp = new VBox(2);
@@ -288,12 +289,12 @@ public class DBResultTab extends Tab
 		
 		String    strMsg     = sqlEx.getMessage();
 		TextArea  txtMsg     = new TextArea( strMsg );
-		txtMsg.setPrefColumnCount( MyTool.getCharCount( strMsg, "\n" )+1 );
+		txtMsg.setPrefColumnCount( MyStringTool.getCharCount( strMsg, "\n" )+1 );
 		txtMsg.setEditable( false );
 		
-		String    strExp     = MyTool.getExceptionString( sqlEx );
+		String    strExp     = MyStringTool.getExceptionString( sqlEx );
 		TextArea  txtExp     = new TextArea( strExp );
-		txtExp.setPrefRowCount( MyTool.getCharCount( strExp, "\n" )+1 );
+		txtExp.setPrefRowCount( MyStringTool.getCharCount( strExp, "\n" )+1 );
 		txtExp.setEditable( false );
 		
 		Button    btnReConnect = new Button (langRB.getString("BTN_RECONNECT"));
@@ -314,11 +315,11 @@ public class DBResultTab extends Tab
 				{
 					String strMsg2 = sqlEx2.getMessage();
 					txtMsg.setText(strMsg2);
-					txtMsg.setPrefColumnCount( MyTool.getCharCount( strMsg, "\n" )+1 );
+					txtMsg.setPrefColumnCount( MyStringTool.getCharCount( strMsg, "\n" )+1 );
 					
-					String strExp2 = MyTool.getExceptionString( sqlEx2 );
+					String strExp2 = MyStringTool.getExceptionString( sqlEx2 );
 					txtExp.setText(strExp2);
-					txtExp.setPrefRowCount( MyTool.getCharCount( strExp2, "\n" )+1 );
+					txtExp.setPrefRowCount( MyStringTool.getCharCount( strExp2, "\n" )+1 );
 				}
 			} 
 		);

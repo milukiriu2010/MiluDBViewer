@@ -3,7 +3,6 @@ package milu.gui.ctrl.imp;
 import java.io.File;
 import java.util.Map;
 import java.util.ResourceBundle;
-import java.util.HashMap;
 
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;

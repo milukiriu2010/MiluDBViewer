@@ -1,9 +1,5 @@
 package milu.tool;
 
-import java.io.File;
-import java.io.PrintWriter;
-import java.io.StringWriter;
-import java.lang.reflect.Constructor;
 import java.util.Collections;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -34,61 +30,9 @@ import milu.db.MyDBAbstract;
 import milu.entity.schema.SchemaEntity;
 import milu.main.MainController;
 import milu.gui.dlg.MyAlertDialog;
-import milu.gui.view.DBView;
 
 public class MyTool
 {
-	public static int getCharCount( String strSrc, String strChk )
-	{
-		if ( strSrc == null || strChk == null )
-		{
-			return 0;
-		}
-		else
-		{
-			return strSrc.length() - strSrc.replace( strChk, "" ).length();
-		}
-	}
-	
-	public static int lastIndexOf(char ch, String str) 
-	{
-		if ( str.length() < 1 )
-		{
-			return -1;
-		}
-	    if (str.charAt(str.length() - 1) == ch)
-	    { 
-	    	return str.length()-1; 
-	    }
-	    if (str.length() <= 1)
-	    { 
-	    	return -1; 
-	    }
-	    return lastIndexOf( ch, str.substring(0,str.length()-1) );
-	}
-	
-	public static String getFileExtension( File file )
-	{
-		String name = file.getName();
-		int pos = name.lastIndexOf(".");
-		if ( pos == -1 )
-		{
-			return "";
-		}
-		else
-		{
-			return name.substring( pos+1 );
-		}
-	}
-	
-	public static String getExceptionString( Exception exp )
-	{
-		StringWriter sw = new StringWriter();
-		PrintWriter  pw = new PrintWriter( sw );
-		exp.printStackTrace( pw );
-		return sw.toString();
-	}
-	
 	public static ImageView createImageView( int width, int height, Image image )
 	{
 		ImageView iv = new ImageView( image );
@@ -334,54 +278,7 @@ public class MyTool
 			}		
 		}
 	}
-	
-	public static String bytesToHex(byte[] bytes) 
-	{
-		final char[] hexArray = "0123456789ABCDEF".toCharArray();
-	    char[] hexChars = new char[bytes.length * 2];
-	    
-	    for ( int j = 0; j < bytes.length; j++ ) 
-	    {
-	        int v = bytes[j] & 0xFF;
-	        hexChars[j * 2] = hexArray[v >>> 4];
-	        hexChars[j * 2 + 1] = hexArray[v & 0x0F];
-	    }
-	    return new String(hexChars);
-	}
 
-	public static <T> T cast( Object obj, Class<T> clazz )
-	{
-		try
-		{
-			return clazz.cast(obj);
-		}
-		catch ( ClassCastException ccEx )
-		{
-			return null;
-		}
-	}
-	
-	public static <T> T newInstance( Class<T> castClazz, DBView dbView )
-	{
-		Constructor<?>[] constructors = castClazz.getDeclaredConstructors();
-		
-		T obj = null;
-		for ( int i = 0; i < constructors.length; i++ )
-		{
-			try
-			{
-				// exit loop 
-				// when match "new SelectdItemHandlerEachXX( DBView dbView )"
-				obj = castClazz.cast(constructors[i].newInstance(dbView));
-				break;
-			}
-			catch ( Exception ex )
-			{
-			}
-		}
-		
-		return obj;
-	}
 	
 	public static void setWindowLocation( Window window, double w, double h )
 	{

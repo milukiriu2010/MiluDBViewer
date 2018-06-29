@@ -34,6 +34,7 @@ import net.sf.jsqlparser.JSQLParserException;
 import org.hibernate.engine.jdbc.internal.BasicFormatterImpl;
 
 import milu.tool.MyTool;
+import milu.tool.MyStringTool;
 import milu.entity.schema.SchemaEntity;
 import milu.entity.schema.search.SearchSchemaEntityInterface;
 import milu.entity.schema.search.SearchSchemaEntityVisitorFactory;
@@ -321,7 +322,7 @@ public class SqlTextArea extends TextArea
 				
 				String chr = event.getCharacter();
 				System.out.println( "Character:" + chr );
-				System.out.println( "CharacterHex[" + MyTool.bytesToHex( chr.getBytes() ) + "]" );
+				System.out.println( "CharacterHex[" + MyStringTool.bytesToHex( chr.getBytes() ) + "]" );
 				
 				try
 				{
@@ -514,7 +515,7 @@ public class SqlTextArea extends TextArea
 	private void extractLastWord()
 	{
 		String strBeforeCaret = this.getText().substring( 0, this.getCaretPosition() );
-		int lastIndex = MyTool.lastIndexOf( '\n', strBeforeCaret );
+		int lastIndex = MyStringTool.lastIndexOf( '\n', strBeforeCaret );
 		String strThisLine = strBeforeCaret;
 		// Cut string before "return code(\n)"
 		if ( lastIndex != -1 )

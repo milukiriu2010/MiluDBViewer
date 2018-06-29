@@ -37,6 +37,7 @@ import milu.main.AppConf;
 import milu.main.MainController;
 import milu.task.query.ExecTaskFactory;
 import milu.tool.MyTool;
+import milu.tool.MyStringTool;
 import milu.ctrl.sql.parse.SQLBag;
 import milu.db.MyDBAbstract;
 
@@ -290,12 +291,12 @@ public class DBSqlScriptTab extends Tab
 		
 		String    strMsg     = ex.getMessage();
 		TextArea  txtMsg     = new TextArea( strMsg );
-		txtMsg.setPrefColumnCount( MyTool.getCharCount( strMsg, "\n" )+1 );
+		txtMsg.setPrefColumnCount( MyStringTool.getCharCount( strMsg, "\n" )+1 );
 		txtMsg.setEditable( false );
 		
-		String    strExp     = MyTool.getExceptionString( ex );
+		String    strExp     = MyStringTool.getExceptionString( ex );
 		TextArea  txtExp     = new TextArea( strExp );
-		txtExp.setPrefRowCount( MyTool.getCharCount( strExp, "\n" )+1 );
+		txtExp.setPrefRowCount( MyStringTool.getCharCount( strExp, "\n" )+1 );
 		txtExp.setEditable( false );
 		
 		VBox vBoxExp = new VBox(2);

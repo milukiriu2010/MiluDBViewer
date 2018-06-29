@@ -197,6 +197,25 @@ public class MainController
 			this.close(null);
 		}
 	}
+	
+	public void createNewWindow( MyDBAbstract myDBAbs )
+	{
+		// get Active Window(JavaFX9)
+		// https://stackoverflow.com/questions/32922424/how-to-get-the-current-opened-stage-in-javafx
+		List<Window>  focusWinLst = Stage.getWindows().filtered( window2->window2.isFocused() );
+		System.out.println( "focusWinLst.size:" + focusWinLst.size() );
+		DBView dbView = null;
+		if ( focusWinLst.size() > 0 )
+		{
+			Window focusWin = focusWinLst.get(0);
+			if ( focusWin instanceof DBView )
+			{
+				dbView = (DBView)focusWin;
+			}
+		}
+		
+		this.createNewWindow( myDBAbs, dbView );
+	}
 
 	public void createNewWindow( MyDBAbstract myDBAbs, DBView dbViewPrev )
 	{

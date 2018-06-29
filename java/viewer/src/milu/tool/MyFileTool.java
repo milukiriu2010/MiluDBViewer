@@ -17,6 +17,34 @@ import milu.main.MainController;
 
 public class MyFileTool
 {
+	public static String getBaseName( String fileName )
+	{
+		int pos = fileName.lastIndexOf(".");
+		if ( pos == -1 )
+		{
+			return fileName;
+		}
+		else
+		{
+			return fileName.substring( 0, pos );
+		}
+	}
+	
+	
+	public static String getFileExtension( File file )
+	{
+		String name = file.getName();
+		int pos = name.lastIndexOf(".");
+		if ( pos == -1 )
+		{
+			return "";
+		}
+		else
+		{
+			return name.substring( pos+1 );
+		}
+	}
+	
 	// https://howtodoinjava.com/core-java/io/how-to-copy-directories-in-java/
     public static void copyFolder(File sourceFolder, File destinationFolder) throws IOException
     {

@@ -33,6 +33,7 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.Event;
 import milu.tool.MyTool;
+import milu.tool.MyStringTool;
 import milu.file.table.MyFileExportAbstract;
 import milu.file.table.MyFileExportFactory;
 import milu.gui.ctrl.common.inf.ChangeLangInterface;
@@ -522,7 +523,7 @@ public class ObjTableView extends TableView<List<Object>>
         private void createTextField()
         {
         	String str = getString();
-        	int rtnStr = MyTool.getCharCount( str, "\n" );
+        	int rtnStr = MyStringTool.getCharCount( str, "\n" );
         	if ( rtnStr == 0 )
         	{
         		textInputCtrl = new TextField( str );

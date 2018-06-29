@@ -15,6 +15,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
 import milu.tool.MyTool;
+import milu.tool.MyStringTool;
 import milu.db.MyDBAbstract;
 import milu.main.MainController;
 
@@ -71,7 +72,7 @@ public class MyAlertDialog extends Alert
 	{
 		this.txtMsg.setText( msg );
 		// count "\n"
-		int lfCnt = MyTool.getCharCount( msg, "\n" ); 
+		int lfCnt = MyStringTool.getCharCount( msg, "\n" ); 
 		this.txtMsg.setPrefRowCount( lfCnt+1 );
 		
 		BorderPane  paneTxt = new BorderPane();
@@ -90,7 +91,7 @@ public class MyAlertDialog extends Alert
 		String msg = exp.getMessage();
 		this.txtMsg.setText( msg );
 		// count "\n"
-		int lfCnt = MyTool.getCharCount( msg, "\n" ); 
+		int lfCnt = MyStringTool.getCharCount( msg, "\n" ); 
 		this.txtMsg.setPrefRowCount( lfCnt+1 );
 
 		this.txtExp.setText( sw.toString() );
@@ -113,14 +114,14 @@ public class MyAlertDialog extends Alert
 		String msg = exp.getMessage();
 		this.txtMsg.setText( msg );
 		// count "\n"
-		int lfCnt = MyTool.getCharCount( msg, "\n" ); 
+		int lfCnt = MyStringTool.getCharCount( msg, "\n" ); 
 		this.txtMsg.setPrefRowCount( lfCnt+1 );
 
 		this.txtExp.setText( sw.toString() );
 		this.txtExp.setMaxWidth( Double.MAX_VALUE );
 		
 		this.txtMsgExtra.setText( msgExtra );
-		this.txtMsgExtra.setPrefColumnCount( MyTool.getCharCount( msgExtra, "\n" ) ); 
+		this.txtMsgExtra.setPrefColumnCount( MyStringTool.getCharCount( msgExtra, "\n" ) ); 
 		
 		BorderPane  paneTxt = new BorderPane();
 		paneTxt.setTop( this.txtMsgExtra );
@@ -140,7 +141,7 @@ public class MyAlertDialog extends Alert
 		String msg = exp.getMessage();
 		this.txtMsg.setText( msg );
 		// count "\n"
-		int lfCnt = MyTool.getCharCount( msg, "\n" ); 
+		int lfCnt = MyStringTool.getCharCount( msg, "\n" ); 
 		this.txtMsg.setPrefRowCount( lfCnt+1 );
 
 		this.txtExp.setText( sw.toString() );

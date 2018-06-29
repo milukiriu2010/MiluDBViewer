@@ -21,7 +21,7 @@ import milu.file.json.MyJsonHandleAbstract;
 import milu.file.json.MyJsonHandleFactory;
 import milu.gui.dlg.MyAlertDialog;
 import milu.main.AppConst;
-import milu.tool.MyTool;
+import milu.tool.MyFileTool;
 
 public class InitialLoadDriver extends InitialLoadAbstract 
 {
@@ -47,7 +47,7 @@ public class InitialLoadDriver extends InitialLoadAbstract
 		List<File> jsonLst =
 				fileLst.stream()
 					.filter( file -> file.isFile() )
-					.filter( file -> MyTool.getFileExtension(file).equals("json") )
+					.filter( file -> MyFileTool.getFileExtension(file).equals("json") )
 					.collect(Collectors.toList());
 		
 		jsonLst.forEach

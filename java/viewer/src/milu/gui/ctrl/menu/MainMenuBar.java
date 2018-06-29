@@ -8,6 +8,11 @@ import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.Set;
 import java.util.TreeMap;
+import java.io.IOException;
+import java.nio.file.DirectoryStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
@@ -64,6 +69,16 @@ public class MainMenuBar extends MenuBar
 	// ----------------------------------------------
     Menu     menuLang   = new Menu();
     List<CheckMenuItem> menuItemLangLst = new ArrayList<CheckMenuItem>();
+    
+	// ----------------------------------------------
+	// Menu 
+	// ----------------------------------------------
+	// [Bookmark]
+    //   - <separator>
+	//   - [DB Alias]
+    //     etc
+	// ----------------------------------------------
+    Menu     menuBookMark = new Menu();
     
 	// ----------------------------------------------
 	// Menu 
@@ -163,6 +178,16 @@ public class MainMenuBar extends MenuBar
 		// ----------------------------------------------
 		// Menu 
 		// ----------------------------------------------
+		// [Bookmark]
+	    //   - <separator>
+		//   - [DB Alias]
+	    //     etc
+		// ----------------------------------------------
+	    this.menuBookMark.getItems().addAll( new MenuItem("dummy") );
+	    
+		// ----------------------------------------------
+		// Menu 
+		// ----------------------------------------------
 		// [Window]
 	    //   - <separator>
 		//   - [Window Title]
@@ -194,7 +219,7 @@ public class MainMenuBar extends MenuBar
 		this.menuItemVersion.setGraphic( MyTool.createImageView( 16, 16, mainCtrl.getImage("file:resources/images/winicon.gif") ) );
 		
 		// put Menu on MenuBar
-		this.getMenus().addAll( this.menuFile, this.menuWin, this.menuHelp, this.menuLang );
+		this.getMenus().addAll( this.menuFile, this.menuBookMark, this.menuWin, this.menuHelp, this.menuLang );
 	}
 	
 	private void setAction()
@@ -244,6 +269,28 @@ public class MainMenuBar extends MenuBar
 				mainCtrl.changeLang();
 			});
 		}
+		
+	    
+		// ----------------------------------------------
+		// Menu 
+		// ----------------------------------------------
+		// [Bookmark]
+	    //   - <separator>
+		//   - [DB Alias]
+	    //     etc
+		// ----------------------------------------------
+	    this.menuBookMark.setOnShowing((event)->{
+	    	this.menuBookMark.getItems().removeAll(this.menuBookMark.getItems());
+	    	try
+	    	{
+	    		this.createMenuBookMark( Paths.get(AppConst.DB_DIR.val()), this.menuBookMark );
+	    	}
+	    	catch ( IOException ioEx )
+	    	{
+	    		throw new RuntimeException(ioEx);
+	    	}
+	    });
+		
 
 		// ----------------------------------------------
 		// Menu 
@@ -292,6 +339,40 @@ public class MainMenuBar extends MenuBar
 		this.menuItemVersion.setOnAction( (event)->this.dbView.openView( VersionTab.class ) );
 	}
 	
+	private void createMenuBookMark( Path pathParent, Menu menuParent ) throws IOException
+	{
+		if ( Files.isDirectory(pathParent) == false )
+		{
+			return;
+		}
+		
+		try
+		(
+	    	DirectoryStream<Path> directoryStream = 
+    			Files.newDirectoryStream(pathParent);
+		)
+		{
+			for ( Path path : directoryStream )
+			{
+				if ( Files.isRegularFile(path) )
+				{
+					if ( path.toString().endsWith("json") )
+					{
+						MenuItem menuItem = new DBMenuItem(path,this.dbView.getMainController());
+						menuParent.getItems().add(menuItem);
+					}
+				}
+				else if ( Files.isDirectory(path) )
+				{
+					Menu menuSub = new Menu(path.toFile().getName());
+					menuParent.getItems().add(menuSub);
+					
+					this.createMenuBookMark( path, menuSub );
+				}
+			}
+		}
+	}
+	
 	/**************************************************
 	 * Override from ChangeLangInterface
 	 ************************************************** 
@@ -321,6 +402,16 @@ public class MainMenuBar extends MenuBar
 	    //     etc
 		// ----------------------------------------------
 		this.menuLang.setText( langRB.getString( "MENU_LANG" ) );
+	    
+		// ----------------------------------------------
+		// Menu 
+		// ----------------------------------------------
+		// [Bookmark]
+	    //   - <separator>
+		//   - [DB Alias]
+	    //     etc
+		// ----------------------------------------------
+		this.menuBookMark.setText( langRB.getString("MENU_BOOKMARK") );
 	    
 		// ----------------------------------------------
 		// Menu 

@@ -131,6 +131,10 @@ public class ExecSQLSelect extends ExecSQLAbstract
 						{
 							dataRow.add( rs.getString( (String)colName ) );
 						}
+						else if ( "oracle.jdbc.OracleClob".equals(colClassName) )
+						{
+							dataRow.add( rs.getString( (String)colName ) );
+						}
 						else
 						{
 							dataRow.add( rs.getObject( (String)colName ) );
