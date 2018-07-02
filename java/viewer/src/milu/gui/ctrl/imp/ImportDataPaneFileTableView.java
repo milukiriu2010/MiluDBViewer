@@ -16,6 +16,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
+import milu.entity.schema.SchemaEntity;
 import milu.file.table.MyFileImportFactory;
 import milu.file.table.MyFileImportAbstract;
 import milu.gui.ctrl.common.inf.ChangeLangInterface;
@@ -78,6 +79,7 @@ public class ImportDataPaneFileTableView extends Pane
 		// [Center]
 	    // -----------------------------------------------------
 		this.objTableView = new ObjTableView( this.dbView );
+		this.objTableView.setPrefWidth(500);
 		this.objTableView.setPrefHeight(200);
 		this.basePane.setCenter(this.objTableView);
 		
@@ -142,6 +144,9 @@ public class ImportDataPaneFileTableView extends Pane
 	
 	private void loadData()
 	{
+		SchemaEntity dstSchemaEntity = (SchemaEntity)this.mapObj.get(ImportData.DST_SCHEMA_ENTITY.val());
+		int columnCnt = dstSchemaEntity.getDefinitionLst().size();
+		
 		MainController mainCtrl = this.dbView.getMainController();
 		String strFile = (String)this.mapObj.get(ImportData.SRC_FILE.val());
 		File file = new File(strFile);
@@ -149,7 +154,7 @@ public class ImportDataPaneFileTableView extends Pane
 		try
 		{
 			myFileAbs.open(file);
-			myFileAbs.load();
+			myFileAbs.load(columnCnt);
 			List<Object>       headLst = myFileAbs.getHeadLst();  
 			List<List<Object>> dataLst = myFileAbs.getDataLst();
 			System.out.println( "headLst.size:" + headLst.size() );

@@ -56,6 +56,7 @@ public class ModuleDownloadTask extends Task<Exception>
 			
 			ModuleDownload mdDl = new ModuleDownload();
 			mdDl.setAppConf(this.mainCtrl.getAppConf());
+			mdDl.setAssignedSize(MAX);
 			mdDl.setProgressInterface(this);
 			mdDl.setValue(this.mapInf.getValue());
 			mdDl.check(this.strUrl);

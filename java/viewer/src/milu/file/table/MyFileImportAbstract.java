@@ -22,5 +22,5 @@ public abstract class MyFileImportAbstract
 	
 	abstract public void open( File file ) throws Exception; 
 	abstract public void close() throws IOException;
-	abstract public void load();
+	abstract public void load(int columnCnt);
 }

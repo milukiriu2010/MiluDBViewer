@@ -47,30 +47,14 @@ public class MyFileImportExcel extends MyFileImportAbstract
 	
 	// https://www.callicoder.com/java-read-excel-file-apache-poi/
 	@Override
-	public void load() 
+	public void load(int columnCnt) 
 	{
 		this.headLst.clear();
 		this.dataLst.clear();
 		
 		DataFormatter dataFormatter = new DataFormatter();
-		
+
 		/*
-		Iterator<Row> rowIterator = this.sheet.rowIterator();
-		while ( rowIterator.hasNext() )
-		{
-			Row row = rowIterator.next();
-			List<Object> dataRow = new ArrayList<>();
-			
-			Iterator<Cell> cellIterator = row.cellIterator();
-			while( cellIterator.hasNext() )
-			{
-				Cell cell = cellIterator.next();
-				String cellVal = dataFormatter.formatCellValue(cell);
-				dataRow.add(cellVal);
-			}
-			this.dataLst.add(dataRow);
-		}
-		*/
 		int cnt = 0;
 		for ( Row row : this.sheet )
 		{
@@ -90,7 +74,32 @@ public class MyFileImportExcel extends MyFileImportAbstract
 			this.dataLst.add(dataRow);
 			cnt++;
 		}
-		
+		*/
+		int i = 0;
+		for ( Row row : this.sheet )
+		{
+			List<Object> dataRow = new ArrayList<>();
+			
+			for ( int j = 0; j < columnCnt; j++ )
+			{
+				Cell cell = row.getCell(j);
+				if ( cell == null )
+				{
+					dataRow.add("");
+				}
+				else
+				{
+					String cellVal = dataFormatter.formatCellValue(cell);
+					dataRow.add(cellVal);
+				}
+				if ( i == 0 )
+				{
+					this.headLst.add(MyStringTool.getAplha(j, ""));
+				}
+			}
+			this.dataLst.add(dataRow);
+			i++;
+		}
 	}
 
 }

@@ -1,5 +1,6 @@
 package milu.ctrl.sql.generate;
 
+import java.util.Map;
 import milu.entity.schema.SchemaEntity;
 import milu.entity.schema.search.SearchSchemaEntityInterface;
 import milu.entity.schema.search.SearchSchemaEntityVisitorFactory;
@@ -48,7 +49,19 @@ public abstract class GenerateSQLAbstract
 			}
 			else
 			{
-				if ( schemaName.toUpperCase().equals(myDBAbs.getDBOptsAux().get("DBName").toUpperCase()) )
+				Map<String, String> dbOptsAux = myDBAbs.getDBOptsAux();
+				if ( dbOptsAux == null )
+				{
+					return schemaName;
+				}
+				
+				String dbName = dbOptsAux.get("DBName");
+				if ( dbName == null )
+				{
+					return schemaName;
+				}
+				
+				if ( schemaName.toUpperCase().equals(dbName.toUpperCase()) )
 				{
 					schemaName = null;
 				}
