@@ -40,7 +40,7 @@ import milu.main.MainController;
 import milu.db.MyDBAbstract;
 import milu.entity.schema.SchemaEntity;
 import milu.task.collect.CollectTaskFactory;
-import milu.tool.MyTool;
+import milu.tool.MyGUITool;
 
 public class DBView extends Stage
 	implements
@@ -283,7 +283,7 @@ public class DBView extends Stage
 						{
 							return;
 						}
-			    		MyTool.showException( this.mainCtrl, "conf.lang.gui.common.MyAlert", "TITLE_MISC_ERROR", ex );
+			    		MyGUITool.showException( this.mainCtrl, "conf.lang.gui.common.MyAlert", "TITLE_MISC_ERROR", ex );
 			    	}
 				);
 			}
@@ -565,11 +565,11 @@ public class DBView extends Stage
 		}
 		catch ( SQLException sqlEx )
 		{
-    		MyTool.showException( this.mainCtrl, "conf.lang.gui.common.MyAlert", "TITLE_EXEC_QUERY_ERROR", sqlEx, myDBAbs );
+    		MyGUITool.showException( this.mainCtrl, "conf.lang.gui.common.MyAlert", "TITLE_EXEC_QUERY_ERROR", sqlEx, myDBAbs );
 		}
 		catch ( Exception ex )
 		{
-    		MyTool.showException( this.mainCtrl, "conf.lang.gui.common.MyAlert", "TITLE_MISC_ERROR", ex );
+    		MyGUITool.showException( this.mainCtrl, "conf.lang.gui.common.MyAlert", "TITLE_MISC_ERROR", ex );
 		}
 	}
 	

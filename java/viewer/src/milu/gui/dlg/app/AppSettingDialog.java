@@ -16,7 +16,7 @@ import javafx.event.ActionEvent;
 import javafx.application.Platform;
 import milu.gui.ctrl.common.ButtonOrderNoneDialogPane;
 import milu.main.MainController;
-import milu.tool.MyTool;
+import milu.tool.MyGUITool;
 
 public class AppSettingDialog extends Dialog<Boolean>
 {
@@ -103,7 +103,7 @@ public class AppSettingDialog extends Dialog<Boolean>
 		stage.getIcons().add( this.mainCtrl.getImage( "file:resources/images/winicon.gif" ) );
 
 		// set location
-		Platform.runLater( ()->MyTool.setWindowLocation( stage, stage.getWidth(), stage.getHeight() ) );
+		Platform.runLater( ()->MyGUITool.setWindowLocation( stage, stage.getWidth(), stage.getHeight() ) );
 		
 		// set Action
 		this.setAction();
@@ -145,7 +145,7 @@ public class AppSettingDialog extends Dialog<Boolean>
 		    	catch ( Exception ex )
 		    	{
 		    		//this.showException(ex);
-		    		MyTool.showException( this.mainCtrl, "conf.lang.gui.common.MyAlert", "TITLE_MISC_ERROR", ex );
+		    		MyGUITool.showException( this.mainCtrl, "conf.lang.gui.common.MyAlert", "TITLE_MISC_ERROR", ex );
 		    	}
 		    	// if false, do not close this dialog.
 		    	if ( ret == false )
@@ -173,7 +173,7 @@ public class AppSettingDialog extends Dialog<Boolean>
 		    	catch ( Exception ex )
 		    	{
 		    		//this.showException(ex);
-		    		MyTool.showException( this.mainCtrl, "conf.lang.gui.common.MyAlert", "TITLE_MISC_ERROR", ex );
+		    		MyGUITool.showException( this.mainCtrl, "conf.lang.gui.common.MyAlert", "TITLE_MISC_ERROR", ex );
 		    	}
 		    	// always consume
 	    		event.consume();

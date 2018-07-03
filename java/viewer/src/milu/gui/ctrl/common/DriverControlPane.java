@@ -33,7 +33,7 @@ import milu.gui.ctrl.common.inf.PaneSwitchDriverInterface;
 import milu.main.AppConst;
 import milu.main.AppConf;
 import milu.main.MainController;
-import milu.tool.MyTool;
+import milu.tool.MyGUITool;
 
 public class DriverControlPane extends Pane 
 {
@@ -267,7 +267,7 @@ public class DriverControlPane extends Pane
 				}
 				catch ( IOException ioEx )
 				{
-					MyTool.showException( this.mainCtrl, "conf.lang.gui.common.MyAlert", "TITLE_MISC_ERROR", ioEx );
+					MyGUITool.showException( this.mainCtrl, "conf.lang.gui.common.MyAlert", "TITLE_MISC_ERROR", ioEx );
 				}
 			}
 		);
@@ -313,7 +313,7 @@ public class DriverControlPane extends Pane
 					//if ( driver != null )
 					if (LoadDriver.isAlreadyLoadCheck(this.driverClassNameTxt.getText()))
 					{
-						MyTool.showMsg( this.mainCtrl, "conf.lang.gui.common.MyAlert", "TITLE_NOT_ALLOWED_DUPLICATE" );
+						MyGUITool.showMsg( this.mainCtrl, "conf.lang.gui.common.MyAlert", "TITLE_NOT_ALLOWED_DUPLICATE" );
 						return;
 					}
 				}
@@ -329,7 +329,7 @@ public class DriverControlPane extends Pane
 					}
 					catch ( SQLException sqlEx )
 					{
-						MyTool.showException( this.mainCtrl, "conf.lang.gui.common.MyAlert", "TITLE_MISC_ERROR", sqlEx );
+						MyGUITool.showException( this.mainCtrl, "conf.lang.gui.common.MyAlert", "TITLE_MISC_ERROR", sqlEx );
 					}
 				}
 				
@@ -349,7 +349,7 @@ public class DriverControlPane extends Pane
 				}
 				catch ( Exception ex )
 				{
-					MyTool.showException( this.mainCtrl, "conf.lang.gui.common.MyAlert", "TITLE_MISC_ERROR", ex );
+					MyGUITool.showException( this.mainCtrl, "conf.lang.gui.common.MyAlert", "TITLE_MISC_ERROR", ex );
 				}
 				finally
 				{

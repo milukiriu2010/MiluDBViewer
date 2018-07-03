@@ -13,7 +13,7 @@ import milu.gui.ctrl.common.inf.FocusInterface;
 import milu.gui.ctrl.common.inf.ChangeLangInterface;
 import milu.gui.view.DBView;
 import milu.main.MainController;
-import milu.tool.MyTool;
+import milu.tool.MyGUITool;
 
 public class SystemTab extends Tab implements ChangeLangInterface
 {
@@ -47,7 +47,7 @@ public class SystemTab extends Tab implements ChangeLangInterface
 		this.setContent(this.basePane);
 		
 		// set icon on Tab
-		this.setGraphic( MyTool.createImageView( 16, 16, mainCtrl.getImage("file:resources/images/sysinfo.png") ) );
+		this.setGraphic( MyGUITool.createImageView( 16, 16, mainCtrl.getImage("file:resources/images/sysinfo.png") ) );
 		
 		this.setAction();
 		

@@ -37,7 +37,7 @@ import milu.gui.ctrl.common.table.ObjTableView;
 import milu.gui.view.DBView;
 import milu.main.AppConst;
 import milu.main.MainController;
-import milu.tool.MyTool;
+import milu.tool.MyGUITool;
 
 public class DBJdbcTab extends Tab 
 	implements
@@ -111,7 +111,7 @@ public class DBJdbcTab extends Tab
 		this.driverCtrlPane = new DriverControlPane( mainCtrl, this );
 		
 		// set icon on Tab
-		this.setGraphic( MyTool.createImageView( 16, 16, mainCtrl.getImage("file:resources/images/jdbc.png") ) );
+		this.setGraphic( MyGUITool.createImageView( 16, 16, mainCtrl.getImage("file:resources/images/jdbc.png") ) );
 		
 		// set Title on Tab
 		this.setText("JDBC");
@@ -219,7 +219,7 @@ public class DBJdbcTab extends Tab
 				}
 				catch ( SQLException sqlEx )
 				{
-					MyTool.showException( this.dbView.getMainController(), "conf.lang.gui.common.MyAlert", "TITLE_MISC_ERROR", sqlEx );
+					MyGUITool.showException( this.dbView.getMainController(), "conf.lang.gui.common.MyAlert", "TITLE_MISC_ERROR", sqlEx );
 				}
 				finally
 				{
@@ -320,7 +320,7 @@ public class DBJdbcTab extends Tab
 		}
 		catch ( SQLException sqlEx )
 		{
-			MyTool.showException( this.dbView.getMainController(), "conf.lang.gui.common.MyAlert", "TITLE_MISC_ERROR", sqlEx );
+			MyGUITool.showException( this.dbView.getMainController(), "conf.lang.gui.common.MyAlert", "TITLE_MISC_ERROR", sqlEx );
 		}
 	}
 	

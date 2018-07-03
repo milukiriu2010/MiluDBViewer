@@ -18,7 +18,7 @@ import milu.db.MyDBAbstract;
 
 import milu.gui.view.DBView;
 import milu.main.MainController;
-import milu.tool.MyTool;
+import milu.tool.MyGUITool;
 import milu.gui.ctrl.common.inf.ChangeLangInterface;
 import milu.gui.ctrl.common.inf.FocusInterface;
 import milu.gui.ctrl.schema.SchemaTreeView;
@@ -71,7 +71,7 @@ public class DBSchemaTab extends Tab
 		this.setContent( brdPane );
 
 		// set icon on Tab
-		this.setGraphic( MyTool.createImageView( 16, 16, this.dbView.getMainController().getImage("file:resources/images/schema.png") ) );
+		this.setGraphic( MyGUITool.createImageView( 16, 16, this.dbView.getMainController().getImage("file:resources/images/schema.png") ) );
 		
 		this.setAction();
 		
@@ -150,7 +150,7 @@ public class DBSchemaTab extends Tab
     		alertDlg.showAndWait();
     		alertDlg = null;
     		*/
-    		MyTool.showException( this.dbView.getMainController(), "conf.lang.gui.common.MyAlert", "TITLE_UNSUPPORT_ERROR", uoEx );
+    		MyGUITool.showException( this.dbView.getMainController(), "conf.lang.gui.common.MyAlert", "TITLE_UNSUPPORT_ERROR", uoEx );
 		}
 		catch ( SQLException sqlEx )
 		{
@@ -162,7 +162,7 @@ public class DBSchemaTab extends Tab
     		alertDlg.showAndWait();
     		alertDlg = null;
     		*/
-			MyTool.showException( this.dbView.getMainController(), "conf.lang.gui.common.MyAlert", "TITLE_EXEC_QUERY_ERROR", sqlEx );
+			MyGUITool.showException( this.dbView.getMainController(), "conf.lang.gui.common.MyAlert", "TITLE_EXEC_QUERY_ERROR", sqlEx );
 		}
 		catch ( Exception ex )
 		{
@@ -174,7 +174,7 @@ public class DBSchemaTab extends Tab
     		alertDlg.showAndWait();
     		alertDlg = null;
     		*/
-    		MyTool.showException( this.dbView.getMainController(), "conf.lang.gui.common.MyAlert", "TITLE_MISC_ERROR", ex );
+    		MyGUITool.showException( this.dbView.getMainController(), "conf.lang.gui.common.MyAlert", "TITLE_MISC_ERROR", ex );
 		}
 	}
 	

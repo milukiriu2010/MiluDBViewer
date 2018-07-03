@@ -20,7 +20,7 @@ import java.nio.file.InvalidPathException;
 
 import milu.gui.ctrl.common.inf.ChangePathInterface;
 import milu.main.MainController;
-import milu.tool.MyTool;
+import milu.tool.MyGUITool;
 
 // https://stackoverflow.com/questions/34534775/configuring-a-treeview-which-scans-local-fie-system-to-only-include-folders-whic?utm_medium=organic&utm_source=google_rich_qa&utm_campaign=google_rich_qa
 public class PathTreeView extends TreeView<Path> 
@@ -63,7 +63,7 @@ public class PathTreeView extends TreeView<Path>
 		// create root
 		TreeItem<Path> itemRoot = new TreeItem<Path>(Paths.get(this.rootDir));
 		itemRoot.setExpanded(true);
-		itemRoot.setGraphic( MyTool.createImageView( 16, 16, this.mainCtrl.getImage("file:resources/images/folder.png") ) );
+		itemRoot.setGraphic( MyGUITool.createImageView( 16, 16, this.mainCtrl.getImage("file:resources/images/folder.png") ) );
 		this.setRoot(itemRoot);
 		this.getSelectionModel().select(itemRoot);
 		//this.setShowRoot(false);
@@ -131,7 +131,7 @@ public class PathTreeView extends TreeView<Path>
 							catch ( InvalidPathException ipEx )
 							{
 								//showException(ipEx,"TITLE_NOT_ALLOWED_CHARACTER");
-								MyTool.showException( PathTreeView.this.mainCtrl, "conf.lang.gui.common.MyAlert", "TITLE_MISC_ERROR", ipEx, "TITLE_NOT_ALLOWED_CHARACTER" );
+								MyGUITool.showException( PathTreeView.this.mainCtrl, "conf.lang.gui.common.MyAlert", "TITLE_MISC_ERROR", ipEx, "TITLE_NOT_ALLOWED_CHARACTER" );
 								Platform.runLater( ()->requestFocus() );
 								return selectedPath;
 							}
@@ -224,7 +224,7 @@ public class PathTreeView extends TreeView<Path>
 					System.out.println( "pathNew:" + pathNew );
 					//this.getSelectionModel().getSelectedItem().setValue(pathOld);
 					//this.showMsg("TITLE_ALREADY_EXIST");
-					MyTool.showMsg( this.mainCtrl, "conf.lang.gui.common.MyAlert", "TITLE_MISC_ERROR", "TITLE_ALREADY_EXIST" );
+					MyGUITool.showMsg( this.mainCtrl, "conf.lang.gui.common.MyAlert", "TITLE_MISC_ERROR", "TITLE_ALREADY_EXIST" );
 					event.consume();
 					// -------------------------------------------------
 					// itemTarget set wrong value
@@ -250,7 +250,7 @@ public class PathTreeView extends TreeView<Path>
 			}
 			catch ( Exception ex )
 			{
-				MyTool.showException( this.mainCtrl, "conf.lang.gui.common.MyAlert", "TITLE_MISC_ERROR", ex );
+				MyGUITool.showException( this.mainCtrl, "conf.lang.gui.common.MyAlert", "TITLE_MISC_ERROR", ex );
 			}
 		});
 		
@@ -318,7 +318,7 @@ public class PathTreeView extends TreeView<Path>
 				}
 				catch ( Exception ex )
 				{
-					MyTool.showException( this.mainCtrl, "conf.lang.gui.common.MyAlert", "TITLE_MISC_ERROR", ex );
+					MyGUITool.showException( this.mainCtrl, "conf.lang.gui.common.MyAlert", "TITLE_MISC_ERROR", ex );
 				}
 				
 			}
@@ -380,7 +380,7 @@ public class PathTreeView extends TreeView<Path>
 		        	{
 		        		System.out.println( "file:pathOK(" + this.fileExt + "):" + path.toString() );
 			            TreeItem<Path> newItem = new TreeItem<Path>(path);
-			            newItem.setGraphic( MyTool.createImageView( 16, 16, this.mainCtrl.getImage("file:resources/images/file.png") ) );
+			            newItem.setGraphic( MyGUITool.createImageView( 16, 16, this.mainCtrl.getImage("file:resources/images/file.png") ) );
 			            newItem.setExpanded(true);
 		
 			            itemParent.getChildren().add(newItem);
@@ -393,7 +393,7 @@ public class PathTreeView extends TreeView<Path>
 	        	else if (Files.isDirectory(path)) 
 	            {
 		            TreeItem<Path> newItem = new TreeItem<Path>(path);
-		            newItem.setGraphic( MyTool.createImageView( 16, 16, this.mainCtrl.getImage("file:resources/images/folder.png") ) );
+		            newItem.setGraphic( MyGUITool.createImageView( 16, 16, this.mainCtrl.getImage("file:resources/images/folder.png") ) );
 		            newItem.setExpanded(true);
 	
 		            itemParent.getChildren().add(newItem);
@@ -424,7 +424,7 @@ public class PathTreeView extends TreeView<Path>
         Path newPath = this.getNewFolderPath( parentPath.toString() + File.separator, "New", 0, "" );
         Files.createDirectory( newPath );
         newItem.setValue( newPath );
-        newItem.setGraphic( MyTool.createImageView( 16, 16, this.mainCtrl.getImage("file:resources/images/folder.png") ) );
+        newItem.setGraphic( MyGUITool.createImageView( 16, 16, this.mainCtrl.getImage("file:resources/images/folder.png") ) );
         newItem.setExpanded(true);
         
         selectedItem.getChildren().add(newItem);
@@ -457,7 +457,7 @@ public class PathTreeView extends TreeView<Path>
         Path newPath = this.getNewFolderPath( parentPath.toString() + File.separator, "New", 0, "." + this.fileExt );
         Files.createFile( newPath );
         newItem.setValue( newPath );
-        newItem.setGraphic( MyTool.createImageView( 16, 16, this.mainCtrl.getImage("file:resources/images/file.png") ) );
+        newItem.setGraphic( MyGUITool.createImageView( 16, 16, this.mainCtrl.getImage("file:resources/images/file.png") ) );
         
         selectedItem.getChildren().add(newItem);
         this.getSelectionModel().select(newItem);

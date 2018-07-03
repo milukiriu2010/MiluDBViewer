@@ -32,7 +32,7 @@ import javafx.util.Callback;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.Event;
-import milu.tool.MyTool;
+import milu.tool.MyGUITool;
 import milu.tool.MyStringTool;
 import milu.file.table.MyFileExportAbstract;
 import milu.file.table.MyFileExportFactory;
@@ -195,28 +195,37 @@ public class ObjTableView extends TableView<List<Object>>
 					
 					if (!empty)
 					{
-						Object obj = dataLst.get(0);
-						System.out.println("updateItem:0:" + obj );
-						if ( obj instanceof Number )
+						Object obj0 = dataLst.get(0);
+						//Object obj1 = dataLst.get(1);
+						//System.out.println("updateItem:" + obj0 + ":" + obj1 );
+						if ( obj0 instanceof Number )
 						{
-							Number num = (Number)obj;
+							Number num = (Number)obj0;
 							if ( num.intValue() <= ObjTableView.this.skipRowCnt )
 							{
-								setStyle("-fx-background-color:#808080;");
+								//System.out.println("updateItem:set:" + obj0 + ":" + obj1 );
+								//setStyle("-fx-background-color:#808080;");
+								getStyleClass().add("ObjTableView_Row_Skip");
 							}
 							else
 							{
-								getStyleClass().remove("-fx-background-color:#808080;");
+								//System.out.println("updateItem:rm0:" + obj0 + ":" + obj1 );
+								//getStyleClass().remove("-fx-background-color:#808080;");
+								getStyleClass().remove("ObjTableView_Row_Skip");
 							}
 						}
 						else
 						{
-							getStyleClass().remove("-fx-background-color:#808080;");
+							//System.out.println("updateItem:rm1:" + obj0 + ":" + obj1 );
+							//getStyleClass().remove("-fx-background-color:#808080;");
+							getStyleClass().remove("ObjTableView_Row_Skip");
 						}
 					}
 					else
 					{
-						getStyleClass().remove("-fx-background-color:#808080;");
+						//System.out.println("updateItem:rm2:");
+						//getStyleClass().remove("-fx-background-color:#808080;");
+						getStyleClass().remove("ObjTableView_Row_Skip");
 					}
 				}
 			};
@@ -393,7 +402,7 @@ public class ObjTableView extends TableView<List<Object>>
 			}
 			catch( IOException ioEx )
 			{
-				MyTool.showException( this.dbView.getMainController(), "conf.lang.gui.ctrl.query.ObjTableView", "TITLE_SAVE_ERROR", ioEx );
+				MyGUITool.showException( this.dbView.getMainController(), "conf.lang.gui.ctrl.query.ObjTableView", "TITLE_SAVE_ERROR", ioEx );
 	    	}
 			finally
 			{

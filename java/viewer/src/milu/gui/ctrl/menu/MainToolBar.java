@@ -15,7 +15,7 @@ import milu.gui.ctrl.schema.DBSchemaTab;
 import milu.gui.view.DBView;
 import milu.gui.view.FadeView;
 import milu.main.MainController;
-import milu.tool.MyTool;
+import milu.tool.MyGUITool;
 
 public class MainToolBar extends ToolBar
 	implements
@@ -58,22 +58,22 @@ public class MainToolBar extends ToolBar
 		MainController mainCtrl = this.dbView.getMainController();
 		
 		// Button to commit
-		this.btnCommit.setGraphic( MyTool.createImageView( 20, 20, mainCtrl.getImage("file:resources/images/commit.png") ) );
+		this.btnCommit.setGraphic( MyGUITool.createImageView( 20, 20, mainCtrl.getImage("file:resources/images/commit.png") ) );
 		
 		// Button to rollback
-		this.btnRollback.setGraphic( MyTool.createImageView( 20, 20, mainCtrl.getImage("file:resources/images/rollback.png") ) );
+		this.btnRollback.setGraphic( MyGUITool.createImageView( 20, 20, mainCtrl.getImage("file:resources/images/rollback.png") ) );
 		
 		// Button to add a new tab
-		this.btnNewTab.setGraphic( MyTool.createImageView( 20, 20, mainCtrl.getImage("file:resources/images/newtab.png") ) );
+		this.btnNewTab.setGraphic( MyGUITool.createImageView( 20, 20, mainCtrl.getImage("file:resources/images/newtab.png") ) );
 		
 		// Button to add a new window
-		this.btnNewWin.setGraphic( MyTool.createImageView( 20, 20, mainCtrl.getImage("file:resources/images/newwin.png") ) );
+		this.btnNewWin.setGraphic( MyGUITool.createImageView( 20, 20, mainCtrl.getImage("file:resources/images/newwin.png") ) );
 		
 		// Button for new DB connection
-		this.btnNewCon.setGraphic( MyTool.createImageView( 20, 20, mainCtrl.getImage("file:resources/images/connect.png") ) );
+		this.btnNewCon.setGraphic( MyGUITool.createImageView( 20, 20, mainCtrl.getImage("file:resources/images/connect.png") ) );
 		
 		// Button to Open Schema View
-		this.btnSchema.setGraphic( MyTool.createImageView( 20, 20, mainCtrl.getImage("file:resources/images/schema.png") ) );
+		this.btnSchema.setGraphic( MyGUITool.createImageView( 20, 20, mainCtrl.getImage("file:resources/images/schema.png") ) );
 		
 		this.getItems().addAll
 		(

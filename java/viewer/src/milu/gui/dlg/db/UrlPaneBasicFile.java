@@ -28,7 +28,7 @@ import milu.gui.ctrl.common.PersistentButtonToggleGroup;
 import milu.main.AppConf;
 import milu.main.MainController;
 import milu.tool.MyFileTool;
-import milu.tool.MyTool;
+import milu.tool.MyGUITool;
 
 public class UrlPaneBasicFile extends UrlPaneAbstract
 {
@@ -99,7 +99,7 @@ public class UrlPaneBasicFile extends UrlPaneAbstract
 		Map<String,String> dbOptsAux = this.myDBAbs.getDBOptsAux();
 		this.dbnameTextField.setText( dbOptsAux.get("DBName") );
 		
-		this.btnOpen.setGraphic( MyTool.createImageView( 16, 16, this.mainCtrl.getImage("file:resources/images/folder.png")) );
+		this.btnOpen.setGraphic( MyGUITool.createImageView( 16, 16, this.mainCtrl.getImage("file:resources/images/folder.png")) );
 		Tooltip tipOpen = new Tooltip(langRB.getString( "TOOLTIP_OPEN_FILE" ));
 		tipOpen.getStyleClass().add("DBSettingDialog_MyToolTip");
 		this.btnOpen.setTooltip( tipOpen );
@@ -115,7 +115,7 @@ public class UrlPaneBasicFile extends UrlPaneAbstract
 		this.tmplTextField.setText( driverShim.getTemplateUrl() );
 		this.tmplTextField.setEditable(false);
 
-		this.tmplBtn.setGraphic( MyTool.createImageView( 16, 16, this.mainCtrl.getImage("file:resources/images/copy.png") ));
+		this.tmplBtn.setGraphic( MyGUITool.createImageView( 16, 16, this.mainCtrl.getImage("file:resources/images/copy.png") ));
 		Tooltip tipCopy = new Tooltip(langRB.getString( "TOOLTIP_COPY" ));
 		tipCopy.getStyleClass().add("DBSettingDialog_MyToolTip");
 		this.tmplBtn.setTooltip( tipCopy );

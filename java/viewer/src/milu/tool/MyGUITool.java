@@ -31,7 +31,7 @@ import milu.entity.schema.SchemaEntity;
 import milu.main.MainController;
 import milu.gui.dlg.MyAlertDialog;
 
-public class MyTool
+public class MyGUITool
 {
 	public static ImageView createImageView( int width, int height, Image image )
 	{

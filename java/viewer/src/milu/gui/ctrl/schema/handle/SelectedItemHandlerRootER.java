@@ -14,7 +14,7 @@ import milu.gui.ctrl.schema.SchemaERViewTab;
 import milu.main.MainController;
 import milu.task.collect.CollectDataType;
 import milu.task.collect.CollectTaskFactory;
-import milu.tool.MyTool;
+import milu.tool.MyGUITool;
 
 /**
  * This class is invoked, when "root sequence" item is clicked on SchemaTreeView.
@@ -170,7 +170,7 @@ public class SelectedItemHandlerRootER extends SelectedItemHandlerAbstract
 		
 		// set icon on Tab
 		MainController mainCtrl = this.dbView.getMainController();
-		Node imageGroup = MyTool.createImageView( 16, 16, mainCtrl, selectedEntity );
+		Node imageGroup = MyGUITool.createImageView( 16, 16, mainCtrl, selectedEntity );
 		newTab.setGraphic( imageGroup );		
 
 		// add on tabpane

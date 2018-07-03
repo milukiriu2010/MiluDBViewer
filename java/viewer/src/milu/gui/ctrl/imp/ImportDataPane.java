@@ -9,7 +9,6 @@ import javafx.geometry.Insets;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.ToggleGroup;
-import javafx.scene.control.Tooltip;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
@@ -20,7 +19,6 @@ import milu.gui.ctrl.common.inf.CloseInterface;
 import milu.gui.ctrl.common.inf.ChangeLangInterface;
 import milu.gui.view.DBView;
 import milu.main.MainController;
-import milu.tool.MyTool;
 
 class ImportDataPane extends Pane
 	implements 
@@ -114,6 +112,7 @@ class ImportDataPane extends Pane
 	{
 		this.rbSrcFile.setToggleGroup(tglSrc);
 		this.rbSrcDB.setToggleGroup(tglSrc);
+		this.rbSrcDB.setDisable(true);
 		this.rbSrcFile.setSelected(true);
 		
 		HBox hBoxSrc = new HBox(2);
@@ -188,5 +187,9 @@ class ImportDataPane extends Pane
 		this.rbSrcDB.setText(extLangRB.getString("LABEL_DB"));
 		this.lblArrow.setText(langRB.getString("LABEL_IMPORT_ARROW"));
 
+		if ( selectedPane instanceof ChangeLangInterface )
+		{
+			((ChangeLangInterface)selectedPane).changeLang();
+		}
 	}
 }

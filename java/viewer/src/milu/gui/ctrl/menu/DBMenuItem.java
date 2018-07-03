@@ -7,7 +7,7 @@ import milu.db.MyDBAbstract;
 import milu.file.json.MyJsonHandleAbstract;
 import milu.file.json.MyJsonHandleFactory;
 import milu.main.MainController;
-import milu.tool.MyTool;
+import milu.tool.MyGUITool;
 import milu.tool.MyFileTool;
 
 public class DBMenuItem extends MenuItem 
@@ -51,7 +51,7 @@ public class DBMenuItem extends MenuItem
 			}
 			catch ( Exception ex )
 			{
-				MyTool.showException( this.mainCtrl, "conf.lang.gui.common.MyAlert", "TITLE_MISC_ERROR", ex );
+				MyGUITool.showException( this.mainCtrl, "conf.lang.gui.common.MyAlert", "TITLE_MISC_ERROR", ex );
 			}			
 			
 		});

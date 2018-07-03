@@ -57,7 +57,7 @@ import milu.gui.ctrl.common.inf.PaneSwitchDriverInterface;
 import milu.gui.ctrl.common.inf.ChangePathInterface;
 import milu.main.AppConst;
 import milu.main.MainController;
-import milu.tool.MyTool;
+import milu.tool.MyGUITool;
 
 // Dialog sample
 // http://code.makery.ch/blog/javafx-dialogs-official/
@@ -166,22 +166,22 @@ public class DBSettingDialog extends Dialog<MyDBAbstract>
 			ioEx.printStackTrace();
 		}
 		
-		this.btnNewFolder.setGraphic( MyTool.createImageView( 16, 16, this.mainCtrl.getImage( "file:resources/images/folder_new.png" ) ) );
+		this.btnNewFolder.setGraphic( MyGUITool.createImageView( 16, 16, this.mainCtrl.getImage( "file:resources/images/folder_new.png" ) ) );
 		Tooltip tipNewFolder = new Tooltip(langRB.getString( "TOOLTIP_NEW_FOLDER" ));
 		tipNewFolder.getStyleClass().add("DBSettingDialog_MyToolTip");
 		this.btnNewFolder.setTooltip( tipNewFolder );
 		
-		this.btnNewConnection.setGraphic( MyTool.createImageView( 16, 16, this.mainCtrl.getImage( "file:resources/images/file_new.png" ) ) );
+		this.btnNewConnection.setGraphic( MyGUITool.createImageView( 16, 16, this.mainCtrl.getImage( "file:resources/images/file_new.png" ) ) );
 		Tooltip tipNewConnection = new Tooltip(langRB.getString( "TOOLTIP_NEW_CONNECTION" ));
 		tipNewConnection.getStyleClass().add("DBSettingDialog_MyToolTip");
 		this.btnNewConnection.setTooltip( tipNewConnection );
 		
-		this.btnEditFolder.setGraphic( MyTool.createImageView( 16, 16, this.mainCtrl.getImage( "file:resources/images/edit.png" ) ) );
+		this.btnEditFolder.setGraphic( MyGUITool.createImageView( 16, 16, this.mainCtrl.getImage( "file:resources/images/edit.png" ) ) );
 		Tooltip tipEditFolder = new Tooltip(langRB.getString( "TOOLTIP_EDIT" ));
 		tipEditFolder.getStyleClass().add("DBSettingDialog_MyToolTip");
 		this.btnEditFolder.setTooltip( tipEditFolder );
 		
-		this.btnDelFolder.setGraphic( MyTool.createImageView( 16, 16, this.mainCtrl.getImage( "file:resources/images/delete.png" ) ) );
+		this.btnDelFolder.setGraphic( MyGUITool.createImageView( 16, 16, this.mainCtrl.getImage( "file:resources/images/delete.png" ) ) );
 		Tooltip tipDelFolder = new Tooltip(langRB.getString( "TOOLTIP_DEL" ));
 		tipDelFolder.getStyleClass().add("DBSettingDialog_MyToolTip");
 		this.btnDelFolder.setTooltip( tipDelFolder );
@@ -322,7 +322,7 @@ public class DBSettingDialog extends Dialog<MyDBAbstract>
 		Platform.runLater( this.pathTreeView::requestFocus );
 		
 		// set location
-		Platform.runLater( ()->MyTool.setWindowLocation( stage, stage.getWidth(), stage.getHeight() ) );
+		Platform.runLater( ()->MyGUITool.setWindowLocation( stage, stage.getWidth(), stage.getHeight() ) );
 		
 		// set size
 		this.setResizable( true );
@@ -346,7 +346,7 @@ public class DBSettingDialog extends Dialog<MyDBAbstract>
 				catch ( IOException ioEx )
 				{
 					//this.showException(ioEx);
-					MyTool.showException( this.mainCtrl, "conf.lang.gui.common.MyAlert", "TITLE_MISC_ERROR", ioEx );
+					MyGUITool.showException( this.mainCtrl, "conf.lang.gui.common.MyAlert", "TITLE_MISC_ERROR", ioEx );
 				}
 			}
 		);
@@ -364,7 +364,7 @@ public class DBSettingDialog extends Dialog<MyDBAbstract>
 				catch ( IOException ioEx )
 				{
 					//this.showException(ioEx);
-					MyTool.showException( this.mainCtrl, "conf.lang.gui.common.MyAlert", "TITLE_MISC_ERROR", ioEx );
+					MyGUITool.showException( this.mainCtrl, "conf.lang.gui.common.MyAlert", "TITLE_MISC_ERROR", ioEx );
 				}
 			}
 		);
@@ -386,7 +386,7 @@ public class DBSettingDialog extends Dialog<MyDBAbstract>
 				catch ( IOException ioEx )
 				{
 					//this.showException(ioEx);
-					MyTool.showException( this.mainCtrl, "conf.lang.gui.common.MyAlert", "TITLE_MISC_ERROR", ioEx );
+					MyGUITool.showException( this.mainCtrl, "conf.lang.gui.common.MyAlert", "TITLE_MISC_ERROR", ioEx );
 				}
 			}
 		);
@@ -473,12 +473,12 @@ public class DBSettingDialog extends Dialog<MyDBAbstract>
 							catch ( IOException ioEx )
 							{
 								//this.showException(ioEx);
-								MyTool.showException( this.mainCtrl, "conf.lang.gui.common.MyAlert", "TITLE_MISC_ERROR", ioEx );
+								MyGUITool.showException( this.mainCtrl, "conf.lang.gui.common.MyAlert", "TITLE_MISC_ERROR", ioEx );
 							}
 							catch ( Exception ex )
 							{
 								//this.showException(ex);
-								MyTool.showException( this.mainCtrl, "conf.lang.gui.common.MyAlert", "TITLE_MISC_ERROR", ex );
+								MyGUITool.showException( this.mainCtrl, "conf.lang.gui.common.MyAlert", "TITLE_MISC_ERROR", ex );
 							}
 						}
 					}
@@ -594,12 +594,12 @@ public class DBSettingDialog extends Dialog<MyDBAbstract>
 		}
 		catch ( SQLException sqlEx )
 		{
-			MyTool.showException( this.mainCtrl, "conf.lang.gui.common.MyAlert", "TITLE_DB_CONNECT_ERROR", sqlEx );
+			MyGUITool.showException( this.mainCtrl, "conf.lang.gui.common.MyAlert", "TITLE_DB_CONNECT_ERROR", sqlEx );
 		}
 		catch ( Exception ex )
 		{
 			//this.showException(ex);
-			MyTool.showException( this.mainCtrl, "conf.lang.gui.common.MyAlert", "TITLE_MISC_ERROR", ex );
+			MyGUITool.showException( this.mainCtrl, "conf.lang.gui.common.MyAlert", "TITLE_MISC_ERROR", ex );
 		}
 		
 		// If DB connection is failed, this dialog keeps to open.
@@ -730,7 +730,7 @@ public class DBSettingDialog extends Dialog<MyDBAbstract>
 		}
 		catch ( Exception ex )
 		{
-			MyTool.showException( this.mainCtrl, "conf.lang.gui.common.MyAlert", "TITLE_MISC_ERROR", ex );
+			MyGUITool.showException( this.mainCtrl, "conf.lang.gui.common.MyAlert", "TITLE_MISC_ERROR", ex );
 		}
 	}
 }

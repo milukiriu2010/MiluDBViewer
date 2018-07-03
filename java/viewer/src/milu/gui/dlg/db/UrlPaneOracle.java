@@ -41,7 +41,7 @@ import milu.file.ext.MyFileExtFactory;
 import milu.gui.ctrl.common.PersistentButtonToggleGroup;
 import milu.main.AppConf;
 import milu.main.MainController;
-import milu.tool.MyTool;
+import milu.tool.MyGUITool;
 
 class UrlPaneOracle extends UrlPaneAbstract
 {
@@ -218,7 +218,7 @@ class UrlPaneOracle extends UrlPaneAbstract
 		}
 		
 		// "select folder" button
-		this.folderBtn.setGraphic( MyTool.createImageView( 16, 16, this.mainCtrl.getImage("file:resources/images/folder.png") ));
+		this.folderBtn.setGraphic( MyGUITool.createImageView( 16, 16, this.mainCtrl.getImage("file:resources/images/folder.png") ));
 		Tooltip tipFolder = new Tooltip(langRB.getString( "TOOLTIP_OPEN_FOLDER" ));
 		tipFolder.getStyleClass().add("DBSettingDialog_MyToolTip");
 		this.folderBtn.setTooltip( tipFolder );
@@ -235,7 +235,7 @@ class UrlPaneOracle extends UrlPaneAbstract
 		this.tmplTextField.setText( driverShim.getTemplateUrl() );
 		this.tmplTextField.setEditable(false);
 
-		this.tmplBtn.setGraphic( MyTool.createImageView( 16, 16, this.mainCtrl.getImage("file:resources/images/copy.png") ));
+		this.tmplBtn.setGraphic( MyGUITool.createImageView( 16, 16, this.mainCtrl.getImage("file:resources/images/copy.png") ));
 		Tooltip tipCopy = new Tooltip(langRB.getString( "TOOLTIP_COPY" ));
 		tipCopy.getStyleClass().add("DBSettingDialog_MyToolTip");
 		this.tmplBtn.setTooltip( tipCopy );
@@ -622,7 +622,7 @@ class UrlPaneOracle extends UrlPaneAbstract
     		alertDlg.setTxtExp( ioEx );
     		alertDlg.showAndWait();
     		*/
-    		MyTool.showException( this.mainCtrl, "conf.lang.gui.common.MyAlert", "TITLE_FILE_NOT_FOUND", ioEx );
+    		MyGUITool.showException( this.mainCtrl, "conf.lang.gui.common.MyAlert", "TITLE_FILE_NOT_FOUND", ioEx );
     	}
 		catch ( Exception ex )
 		{
@@ -634,7 +634,7 @@ class UrlPaneOracle extends UrlPaneAbstract
     		alertDlg.setTxtExp( ex );
     		alertDlg.showAndWait();
     		*/
-    		MyTool.showException( this.mainCtrl, "conf.lang.gui.common.MyAlert", "TITLE_FILE_NOT_FOUND", ex );
+    		MyGUITool.showException( this.mainCtrl, "conf.lang.gui.common.MyAlert", "TITLE_FILE_NOT_FOUND", ex );
     	}
 		
 		return tnsNameLst;

@@ -35,7 +35,7 @@ import milu.gui.view.DBView;
 import milu.main.AppConf;
 import milu.main.AppConst;
 import milu.main.MainController;
-import milu.tool.MyTool;
+import milu.tool.MyGUITool;
 
 public class MainMenuBar extends MenuBar
 	implements ChangeLangInterface
@@ -146,9 +146,9 @@ public class MainMenuBar extends MenuBar
 		MainController mainCtrl = this.dbView.getMainController();
 		
 		// set icon on menuItemPref
-		this.menuItemPref.setGraphic( MyTool.createImageView( 16, 16, mainCtrl.getImage("file:resources/images/config.png") ) );
+		this.menuItemPref.setGraphic( MyGUITool.createImageView( 16, 16, mainCtrl.getImage("file:resources/images/config.png") ) );
 		// set icon on menuItemQuit
-		this.menuItemQuit.setGraphic( MyTool.createImageView( 16, 16, mainCtrl.getImage("file:resources/images/quit.png") ) );
+		this.menuItemQuit.setGraphic( MyGUITool.createImageView( 16, 16, mainCtrl.getImage("file:resources/images/quit.png") ) );
 		// https://blog.idrsolutions.com/2014/04/tutorial-how-to-setup-key-combinations-in-javafx/
 		// Close [Alt+F4]
 		this.menuItemQuit.setAccelerator( new KeyCodeCombination(KeyCode.F4, KeyCombination.ALT_DOWN ));
@@ -212,11 +212,11 @@ public class MainMenuBar extends MenuBar
 			this.menuItemVersion
 		);
 		// set icon on menuItemSysInfo
-		this.menuItemSysInfo.setGraphic( MyTool.createImageView( 16, 16, mainCtrl.getImage("file:resources/images/sysinfo.png") ) );
+		this.menuItemSysInfo.setGraphic( MyGUITool.createImageView( 16, 16, mainCtrl.getImage("file:resources/images/sysinfo.png") ) );
 		// set icon on menuItemSysInfo
-		this.menuItemJDBC.setGraphic( MyTool.createImageView( 16, 16, mainCtrl.getImage("file:resources/images/jdbc.png") ) );
+		this.menuItemJDBC.setGraphic( MyGUITool.createImageView( 16, 16, mainCtrl.getImage("file:resources/images/jdbc.png") ) );
 		// set icon on menuItemVersion
-		this.menuItemVersion.setGraphic( MyTool.createImageView( 16, 16, mainCtrl.getImage("file:resources/images/winicon.gif") ) );
+		this.menuItemVersion.setGraphic( MyGUITool.createImageView( 16, 16, mainCtrl.getImage("file:resources/images/winicon.gif") ) );
 		
 		// put Menu on MenuBar
 		this.getMenus().addAll( this.menuFile, this.menuBookMark, this.menuWin, this.menuHelp, this.menuLang );
@@ -264,7 +264,7 @@ public class MainMenuBar extends MenuBar
 				}
 				catch ( Exception ex )
 				{
-		    		MyTool.showException( mainCtrl, "conf.lang.gui.common.MyAlert", "TITLE_MISC_ERROR", ex );
+		    		MyGUITool.showException( mainCtrl, "conf.lang.gui.common.MyAlert", "TITLE_MISC_ERROR", ex );
 				}
 				mainCtrl.changeLang();
 			});

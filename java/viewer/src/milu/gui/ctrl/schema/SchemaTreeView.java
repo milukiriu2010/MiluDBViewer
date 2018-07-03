@@ -17,7 +17,7 @@ import javafx.beans.property.BooleanProperty;
 import milu.gui.ctrl.common.inf.ChangeLangInterface;
 import milu.gui.view.DBView;
 import milu.main.MainController;
-import milu.tool.MyTool;
+import milu.tool.MyGUITool;
 import milu.entity.schema.SchemaEntity;
 
 public class SchemaTreeView extends TreeView<SchemaEntity>
@@ -86,7 +86,7 @@ public class SchemaTreeView extends TreeView<SchemaEntity>
 	 */
 	public void init()
 	{
-		this.parentPane = (AnchorPane)MyTool.searchParentNode( this, AnchorPane.class );
+		this.parentPane = (AnchorPane)MyGUITool.searchParentNode( this, AnchorPane.class );
 		if ( this.parentPane != null )
 		{
 			this.parentPane.getChildren().add( this.lblChildrenCnt );
@@ -264,7 +264,7 @@ public class SchemaTreeView extends TreeView<SchemaEntity>
 	// vertical scrollbar visible   => margin scrollbar width
 	private void shiftLabelChildrenCountPosition()
 	{
-		ScrollBar scrollBarVertical = MyTool.getScrollBarVertical(this);
+		ScrollBar scrollBarVertical = MyGUITool.getScrollBarVertical(this);
 		if ( scrollBarVertical != null )
 		{
 			System.out.println( "SchemaTreeView:ScrollBar Found." );
@@ -300,7 +300,7 @@ public class SchemaTreeView extends TreeView<SchemaEntity>
 		  SchemaEntity             schemaEntity )
 	{
 		MainController mainCtrl = this.dbView.getMainController();
-		Node imageGroup = MyTool.createImageView( 16, 16, mainCtrl, schemaEntity );
+		Node imageGroup = MyGUITool.createImageView( 16, 16, mainCtrl, schemaEntity );
 		
 		TreeItem<SchemaEntity> itemNew = new TreeItem<SchemaEntity>( schemaEntity, imageGroup );
 		if ( itemParent != null )
@@ -349,7 +349,7 @@ public class SchemaTreeView extends TreeView<SchemaEntity>
 	{
 		// https://stackoverflow.com/questions/10113045/javafx-2-0-get-treeitems-or-nodes-currently-visible-on-screen
 		// VirtualFlow => Java 9
-		Node node = MyTool.searchChildNode( this, VirtualFlow.class );
+		Node node = MyGUITool.searchChildNode( this, VirtualFlow.class );
 		VirtualFlow<?> nodeVF = null;
 		int visibleIdFirst = -1;
 		int visibleIdLast  = -1;

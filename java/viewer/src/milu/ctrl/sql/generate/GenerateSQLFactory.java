@@ -7,6 +7,7 @@ public class GenerateSQLFactory
 		SELECT,
 		INSERT_BY_NAME,
 		INSERT_BY_SIMPLE,
+		INSERT_BY_SIMPLE_WITHOUT_COMMENT,
 		UPDATE_BY_NAME,
 		UPDATE_BY_SIMPLE,
 		DELETE
@@ -26,6 +27,10 @@ public class GenerateSQLFactory
 		else if ( TYPE.INSERT_BY_SIMPLE.equals(type) )
 		{
 			gsAbs = new GenerateSQLInsertBySimple();
+		}
+		else if ( TYPE.INSERT_BY_SIMPLE_WITHOUT_COMMENT.equals(type) )
+		{
+			gsAbs = new GenerateSQLInsertBySimpleWithoutComment();
 		}
 		else if ( TYPE.UPDATE_BY_NAME.equals(type) )
 		{

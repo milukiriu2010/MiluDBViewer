@@ -1,5 +1,6 @@
 package milu.gui.ctrl.imp;
 
+import java.text.MessageFormat;
 import java.util.ResourceBundle;
 
 import javafx.event.Event;
@@ -12,7 +13,7 @@ import milu.gui.ctrl.common.inf.CloseInterface;
 import milu.gui.ctrl.common.inf.ChangeLangInterface;
 import milu.gui.view.DBView;
 import milu.main.MainController;
-import milu.tool.MyTool;
+import milu.tool.MyGUITool;
 
 public class ImportDataTab extends Tab 
 	implements
@@ -20,6 +21,9 @@ public class ImportDataTab extends Tab
 		ChangeLangInterface 
 {
 	private DBView          dbView = null;
+	
+	// Counter for how many times this class is opened.
+	private static int counterOpend = 0;	
 	
     // -----------------------------------------------------
 	// [Pane(1) on Tab]
@@ -31,6 +35,10 @@ public class ImportDataTab extends Tab
 		super();
 		this.dbView = dbView;
 		
+		// Increment Counter
+		// Counter for how many times this class is opened.
+		ImportDataTab.counterOpend++;
+		
 		MainController mainCtrl = this.dbView.getMainController();
 		
 		this.basePane = new ImportDataPane(dbView,schemaEntity,this);
@@ -40,7 +48,7 @@ public class ImportDataTab extends Tab
 		//this.basePane.prefWidthProperty().bind(this.getTabPane().widthProperty());
 		
 		// set icon on Tab
-		this.setGraphic( MyTool.createImageView( 16, 16, mainCtrl.getImage("file:resources/images/import.png") ) );
+		this.setGraphic( MyGUITool.createImageView( 16, 16, mainCtrl.getImage("file:resources/images/import.png") ) );
 		
 		this.changeLang();
 	}
@@ -61,13 +69,21 @@ public class ImportDataTab extends Tab
 
 		// Tab Title
 		Node tabGraphic = this.getGraphic();
+		MessageFormat mfImportData = new MessageFormat(extLangRB.getString("TITLE_TAB_IMPORT_DATA"));
+		String strImportData = mfImportData.format( new Object[] { Integer.valueOf(ImportDataTab.counterOpend) });
 		if ( tabGraphic instanceof Label )
 		{
-			((Label)tabGraphic).setText( extLangRB.getString("TITLE_TAB_IMPORT_DATA") );
+			((Label)tabGraphic).setText( strImportData );
 		}
 		else
 		{
-			this.setText( extLangRB.getString("TITLE_TAB_IMPORT_DATA") );
+			this.setText( strImportData );
+		}
+		
+		// basePane
+		if ( basePane instanceof ChangeLangInterface )
+		{
+			((ChangeLangInterface)basePane).changeLang();
 		}
 	}
 

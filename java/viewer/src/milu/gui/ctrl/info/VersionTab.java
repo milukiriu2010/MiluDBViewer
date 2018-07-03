@@ -21,7 +21,7 @@ import milu.gui.ctrl.common.inf.ChangeLangInterface;
 import milu.gui.view.DBView;
 import milu.main.AppConst;
 import milu.main.MainController;
-import milu.tool.MyTool;
+import milu.tool.MyGUITool;
 
 public class VersionTab extends Tab 
 	implements 
@@ -67,7 +67,7 @@ public class VersionTab extends Tab
 		this.setContent( this.basePane );
 		
 		// set icon on Tab
-		this.setGraphic( MyTool.createImageView( 16, 16, mainCtrl.getImage("file:resources/images/winicon.gif") ) );
+		this.setGraphic( MyGUITool.createImageView( 16, 16, mainCtrl.getImage("file:resources/images/winicon.gif") ) );
 		
 		this.setAction();
 		

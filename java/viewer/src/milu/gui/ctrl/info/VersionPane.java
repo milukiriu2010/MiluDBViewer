@@ -21,7 +21,7 @@ import milu.gui.ctrl.common.inf.CloseInterface;
 import milu.gui.ctrl.common.inf.ChangeLangInterface;
 import milu.main.MainController;
 import milu.task.version.ModuleTaskFactory;
-import milu.tool.MyTool;
+import milu.tool.MyGUITool;
 
 public class VersionPane extends Pane 
 	implements
@@ -128,7 +128,7 @@ public class VersionPane extends Pane
 				return;
 			}
 			
-			MyTool.showException( this.mainCtrl, "conf.lang.gui.ctrl.info.VersionTab", "LABEL_PROXY_ERROR", ex );
+			MyGUITool.showException( this.mainCtrl, "conf.lang.gui.ctrl.info.VersionTab", "LABEL_PROXY_ERROR", ex );
 		});
 	}
 	
@@ -174,7 +174,7 @@ public class VersionPane extends Pane
 				return;
 			}
 			
-			MyTool.showException( this.mainCtrl, "conf.lang.gui.ctrl.info.VersionTab", "LABEL_PROXY_ERROR", ex );
+			MyGUITool.showException( this.mainCtrl, "conf.lang.gui.ctrl.info.VersionTab", "LABEL_PROXY_ERROR", ex );
 		});
 	}
 	
@@ -220,7 +220,7 @@ public class VersionPane extends Pane
 				return;
 			}
 			
-			MyTool.showException( this.mainCtrl, "conf.lang.gui.ctrl.info.VersionTab", "LABEL_PROXY_ERROR", ex );
+			MyGUITool.showException( this.mainCtrl, "conf.lang.gui.ctrl.info.VersionTab", "LABEL_PROXY_ERROR", ex );
 		});
 	}
 	

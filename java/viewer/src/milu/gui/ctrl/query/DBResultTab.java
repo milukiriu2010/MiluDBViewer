@@ -31,7 +31,7 @@ import milu.gui.ctrl.common.table.DirectionSwitchInterface;
 import milu.gui.ctrl.common.table.ObjTableView;
 import milu.gui.view.DBView;
 import milu.main.MainController;
-import milu.tool.MyTool;
+import milu.tool.MyGUITool;
 import milu.tool.MyStringTool;
 import milu.db.MyDBAbstract;
 import milu.db.access.MyDBOverFetchSizeException;
@@ -99,7 +99,7 @@ public class DBResultTab extends Tab
 		MainController mainCtrl = this.dbView.getMainController();
 		
 		// set icon on Tab
-		this.setGraphic( MyTool.createImageView( 16, 16, mainCtrl.getImage("file:resources/images/result.png") ) );
+		this.setGraphic( MyGUITool.createImageView( 16, 16, mainCtrl.getImage("file:resources/images/result.png") ) );
 		
 		this.setAction();
 	}

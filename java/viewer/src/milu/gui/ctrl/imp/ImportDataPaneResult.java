@@ -14,6 +14,7 @@ import javafx.scene.control.Tooltip;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 
 import milu.db.MyDBAbstract;
 import milu.db.access.ExecSQLAbstract;
@@ -28,7 +29,7 @@ import milu.gui.view.DBView;
 import milu.gui.view.FadeView;
 import milu.main.AppConf;
 import milu.main.MainController;
-import milu.tool.MyTool;
+import milu.tool.MyGUITool;
 
 public class ImportDataPaneResult extends Pane
 	implements
@@ -51,6 +52,7 @@ public class ImportDataPaneResult extends Pane
 	private TextField txtOK    = new TextField();
 	private Label     lblNG    = new Label();
 	private TextField txtNG    = new TextField();
+	private TextField txtSQL   = new TextField();
 	
     // -----------------------------------------------------
 	// [Center]
@@ -79,13 +81,18 @@ public class ImportDataPaneResult extends Pane
 		this.txtTotal.setEditable(false);
 		this.txtOK.setEditable(false);
 		this.txtNG.setEditable(false);
+		this.txtSQL.setEditable(false);
 		
 		HBox hBoxRS = new HBox(2);
 		hBoxRS.setPadding( new Insets( 10, 10, 10, 10 ) );
 		hBoxRS.setSpacing(10);
 		hBoxRS.setAlignment(Pos.CENTER);
 		hBoxRS.getChildren().addAll(this.lblTotal,this.txtTotal,this.lblOK,this.txtOK,this.lblNG,this.txtNG);
-		this.basePane.setTop(hBoxRS);
+		VBox vBoxRS = new VBox(2);
+		vBoxRS.setPadding( new Insets( 10, 10, 10, 10 ) );
+		vBoxRS.setSpacing(10);
+		vBoxRS.getChildren().addAll(hBoxRS,this.txtSQL);
+		this.basePane.setTop(vBoxRS);
 		
 	    // -----------------------------------------------------
 		// [Center]
@@ -98,10 +105,10 @@ public class ImportDataPaneResult extends Pane
 	    // -----------------------------------------------------
 		// [Bottom]
 	    // -----------------------------------------------------		
-		this.btnCommit.setGraphic( MyTool.createImageView( 20, 20, mainCtrl.getImage("file:resources/images/commit.png") ) );
-		this.btnRollback.setGraphic( MyTool.createImageView( 20, 20, mainCtrl.getImage("file:resources/images/rollback.png") ) );
-		this.btnBack.setGraphic( MyTool.createImageView( 20, 20, mainCtrl.getImage("file:resources/images/back.png") ) );
-		this.btnClose.setGraphic( MyTool.createImageView( 20, 20, mainCtrl.getImage("file:resources/images/close.png") ) );
+		this.btnCommit.setGraphic( MyGUITool.createImageView( 20, 20, mainCtrl.getImage("file:resources/images/commit.png") ) );
+		this.btnRollback.setGraphic( MyGUITool.createImageView( 20, 20, mainCtrl.getImage("file:resources/images/rollback.png") ) );
+		this.btnBack.setGraphic( MyGUITool.createImageView( 20, 20, mainCtrl.getImage("file:resources/images/back.png") ) );
+		this.btnClose.setGraphic( MyGUITool.createImageView( 20, 20, mainCtrl.getImage("file:resources/images/close.png") ) );
 		
 		HBox hBoxTran = new HBox(2);
 		hBoxTran.setPadding( new Insets( 10, 10, 10, 10 ) );
@@ -144,13 +151,14 @@ public class ImportDataPaneResult extends Pane
 		});
 	}
 	
+	@SuppressWarnings("unchecked")
 	private void importData()
 	{
 		// --------------------------------------------------
 		// Create SQL
 		// --------------------------------------------------
 		MyDBAbstract myDBAbs = this.dbView.getMyDBAbstract();
-		GenerateSQLAbstract gsAbs = GenerateSQLFactory.getInstance(GenerateSQLFactory.TYPE.INSERT_BY_SIMPLE);
+		GenerateSQLAbstract gsAbs = GenerateSQLFactory.getInstance(GenerateSQLFactory.TYPE.INSERT_BY_SIMPLE_WITHOUT_COMMENT);
 		SchemaEntity schemaEntity = (SchemaEntity)this.mapObj.get(ImportData.DST_SCHEMA_ENTITY.val());
 		String strSQL = gsAbs.generate( schemaEntity, myDBAbs );
 		System.out.println( "strSQL:" + strSQL );
@@ -167,6 +175,21 @@ public class ImportDataPaneResult extends Pane
 		// --------------------------------------------------
 		MainController mainCtrl = this.dbView.getMainController();
 		AppConf appConf = mainCtrl.getAppConf();
+		/*
+		SQLParse sqlParse = new SQLParse();
+		try
+		{
+			sqlParse.setStrSQL(strSQL);
+			sqlParse.parse();
+		}
+		catch ( JSQLParserException jsqlEx )
+		{
+			jsqlEx.printStackTrace();
+		}
+		List<SQLBag> sqlBagLst = sqlParse.getSQLBagLst();
+		System.out.println( "sqlBagLst.size:" + sqlBagLst.size() );
+		SQLBag sqlBag = sqlBagLst.get(0);
+		*/
 		SQLBag sqlBag = new SQLBag();
 		sqlBag.setSQL(strSQL);
 		sqlBag.setCommand(SQLBag.COMMAND.TRANSACTION);
@@ -202,6 +225,7 @@ public class ImportDataPaneResult extends Pane
 		this.txtTotal.setText(String.valueOf(dataFilterLst.size()));
 		this.txtOK.setText(String.valueOf(cntOK));
 		this.txtNG.setText(String.valueOf(cntNG));
+		this.txtSQL.setText(strSQL.replaceAll("\n|\t", " "));
 		this.objTableView.setTableViewData(ngHeadLst,ngDataLst);
 	}
 	
@@ -211,17 +235,17 @@ public class ImportDataPaneResult extends Pane
 	{
 		MainController mainCtrl = this.dbView.getMainController();
 		ResourceBundle langRB    = mainCtrl.getLangResource("conf.lang.gui.ctrl.imp.ImportDataTab");
-		ResourceBundle extLangRB = mainCtrl.getLangResource("conf.lang.gui.ctrl.menu.MainToolBar");
+		ResourceBundle extLangRB = mainCtrl.getLangResource("conf.lang.gui.common.NodeName");
 		
-		this.lblTotal.setText(langRB.getString( "LABEL_TOTAL" ));
-		this.lblOK.setText(langRB.getString( "LABEL_OK" ));
-		this.lblNG.setText(langRB.getString( "LABEL_NG" ));
+		this.lblTotal.setText(extLangRB.getString( "LABEL_TOTAL" ));
+		this.lblOK.setText(extLangRB.getString( "LABEL_OK" ));
+		this.lblNG.setText(extLangRB.getString( "LABEL_NG" ));
 		
 		// ----------------------------------------------
 		// ToolTip
 		//   Button[Commit] 
 		// ----------------------------------------------
-		Tooltip tipCommit = new Tooltip( extLangRB.getString( "TIP_COMMIT" ) );
+		Tooltip tipCommit = new Tooltip( extLangRB.getString( "TOOLTIP_COMMIT" ) );
 		tipCommit.getStyleClass().add("MainToolBar_MyToolTip");
 		this.btnCommit.setTooltip( tipCommit );
 		
@@ -229,8 +253,24 @@ public class ImportDataPaneResult extends Pane
 		// ToolTip
 		//   Button[Rollback] 
 		// ----------------------------------------------
-		Tooltip tipRollback = new Tooltip( extLangRB.getString( "TIP_ROLLBACK" ) );
+		Tooltip tipRollback = new Tooltip( extLangRB.getString( "TOOLTIP_ROLLBACK" ) );
 		tipRollback.getStyleClass().add("MainToolBar_MyToolTip");
 		this.btnRollback.setTooltip( tipRollback );
+		
+		// ----------------------------------------------
+		// ToolTip
+		//   Button[Back] 
+		// ----------------------------------------------
+		Tooltip tipBack = new Tooltip(extLangRB.getString( "TOOLTIP_BACK" ));
+		tipBack.getStyleClass().add("MainToolBar_MyToolTip");
+		this.btnBack.setTooltip(tipBack);
+		
+		// ----------------------------------------------
+		// ToolTip
+		//   Button[Close] 
+		// ----------------------------------------------
+		Tooltip tipClose = new Tooltip(extLangRB.getString( "TOOLTIP_CLOSE" ));
+		tipClose.getStyleClass().add("MainToolBar_MyToolTip");
+		this.btnClose.setTooltip(tipClose);
 	}
 }

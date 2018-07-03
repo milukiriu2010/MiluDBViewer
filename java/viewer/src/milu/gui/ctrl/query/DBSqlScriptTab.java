@@ -36,7 +36,7 @@ import milu.gui.view.DBView;
 import milu.main.AppConf;
 import milu.main.MainController;
 import milu.task.query.ExecTaskFactory;
-import milu.tool.MyTool;
+import milu.tool.MyGUITool;
 import milu.tool.MyStringTool;
 import milu.ctrl.sql.parse.SQLBag;
 import milu.db.MyDBAbstract;
@@ -131,7 +131,7 @@ public class DBSqlScriptTab extends Tab
 		
 		MainController mainCtrl = this.dbView.getMainController();
 		// set icon on Tab
-		this.setGraphic( MyTool.createImageView( 16, 16, mainCtrl.getImage("file:resources/images/sql.png") ) );
+		this.setGraphic( MyGUITool.createImageView( 16, 16, mainCtrl.getImage("file:resources/images/sql.png") ) );
 		
 		// Tab Title
 		this.setText( "SQL" + Integer.valueOf( counterOpend ) );

@@ -80,6 +80,7 @@ public class InitialLoadImage extends InitialLoadAbstract
 				"file:resources/images/sql_format.png",
 				// ImportDataTab
 				"file:resources/images/import.png",
+				"file:resources/images/next.png",
 				"file:resources/images/back.png",
 				"file:resources/images/close.png"
 			};

@@ -1,5 +1,6 @@
 package milu.task.version;
 
+import java.io.File;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -19,6 +20,7 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 import milu.task.ProgressInterface;
+import milu.tool.MyFileTool;
 import milu.ctrl.xml.parse.MyXMLParse;
 import milu.main.AppConf;
 import milu.main.AppConst;
@@ -86,6 +88,9 @@ class ModuleCheck
 			SAXException, 
 			XPathExpressionException
 	{
+		MyFileTool.purgeDirectory(new File(AppConst.DOWNLOAD_DIR.val()) );
+		this.progressInf.setProgress(40);
+		
 		String strXML = this.accessRemoteURL( strUrl );
 		this.progressInf.setProgress(50);
 		

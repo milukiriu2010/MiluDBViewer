@@ -20,7 +20,7 @@ import milu.db.MyDBAbstract;
 import milu.db.driver.DriverShim;
 import milu.gui.ctrl.common.PersistentButtonToggleGroup;
 import milu.main.MainController;
-import milu.tool.MyTool;
+import milu.tool.MyGUITool;
 
 public class UrlPaneGeneral extends UrlPaneAbstract
 {	
@@ -83,7 +83,7 @@ public class UrlPaneGeneral extends UrlPaneAbstract
 		this.tmplTextField.setText( driverShim.getTemplateUrl() );
 		this.tmplTextField.setEditable(false);
 
-		this.tmplBtn.setGraphic( MyTool.createImageView( 16, 16, this.mainCtrl.getImage("file:resources/images/copy.png") ));
+		this.tmplBtn.setGraphic( MyGUITool.createImageView( 16, 16, this.mainCtrl.getImage("file:resources/images/copy.png") ));
 		Tooltip tipCopy = new Tooltip(langRB.getString( "TOOLTIP_COPY" ));
 		tipCopy.getStyleClass().add("DBSettingDialog_MyToolTip");
 		this.tmplBtn.setTooltip( tipCopy );

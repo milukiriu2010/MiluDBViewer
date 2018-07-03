@@ -30,7 +30,6 @@ public class MyFileTool
 		}
 	}
 	
-	
 	public static String getFileExtension( File file )
 	{
 		String name = file.getName();
@@ -42,6 +41,14 @@ public class MyFileTool
 		else
 		{
 			return name.substring( pos+1 );
+		}
+	}
+	
+	public static void purgeDirectory( File dir )
+	{
+		for ( File file: dir.listFiles() )
+		{
+			file.delete();
 		}
 	}
 	
@@ -92,10 +99,11 @@ public class MyFileTool
 		}
 		catch ( IOException ioEx )
 		{
-			MyTool.showException( mainCtrl, "conf.lang.gui.common.MyAlert", "TITLE_MISC_ERROR", ioEx );
+			MyGUITool.showException( mainCtrl, "conf.lang.gui.common.MyAlert", "TITLE_MISC_ERROR", ioEx );
 		}
     }
 	
+    // It doesn't work well.
 	// https://stackoverflow.com/questions/6214703/copy-entire-directory-contents-to-another-directory?utm_medium=organic&utm_source=google_rich_qa&utm_campaign=google_rich_qa
 	public static void copyDir(String src, String dest, boolean overwrite) throws IOException
 	{

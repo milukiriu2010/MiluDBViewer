@@ -19,7 +19,7 @@ import javafx.scene.control.ProgressBar;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.effect.DropShadow;
 import milu.gui.dlg.MyAlertDialog;
-import milu.tool.MyTool;
+import milu.tool.MyGUITool;
 import milu.task.main.InitialLoadTask;
 
 public class MiluDBViewer extends Application
@@ -61,7 +61,7 @@ public class MiluDBViewer extends Application
 		MainController mainCtrl = new MainController();
     	try
     	{
-    		ImageView splash = MyTool.createImageView( SPLASH_WIDTH, SPLASH_HEIGHT, new Image("file:resources/images/banner.gif") );
+    		ImageView splash = MyGUITool.createImageView( SPLASH_WIDTH, SPLASH_HEIGHT, new Image("file:resources/images/banner.gif") );
     		this.loadProgress.setPrefWidth( SPLASH_WIDTH-20 );
     		this.progressText.setAlignment(Pos.CENTER);
     		this.splashLayout.getChildren().addAll( splash, this.loadProgress, this.progressText );
@@ -74,7 +74,7 @@ public class MiluDBViewer extends Application
     	    initStage.setScene(splashScene);
     	    //initStage.setX(bounds.getMinX() + bounds.getWidth() / 2 - SPLASH_WIDTH / 2);
     	    //initStage.setY(bounds.getMinY() + bounds.getHeight() / 2 - SPLASH_HEIGHT / 2);
-    	    MyTool.setWindowLocation(initStage, SPLASH_WIDTH, SPLASH_HEIGHT );
+    	    MyGUITool.setWindowLocation(initStage, SPLASH_WIDTH, SPLASH_HEIGHT );
     	    initStage.show();
     	    
     	    final InitialLoadTask  ilTask = new InitialLoadTask();
@@ -98,7 +98,7 @@ public class MiluDBViewer extends Application
 			});
 			
 			ilTask.valueProperty().addListener((obs,oldVal,ex)->{
-	    		MyTool.showException( mainCtrl, "conf.lang.gui.common.MyAlert", "TITLE_MISC_ERROR", ex );
+	    		MyGUITool.showException( mainCtrl, "conf.lang.gui.common.MyAlert", "TITLE_MISC_ERROR", ex );
 			});
     	}
     	catch ( Exception ex )

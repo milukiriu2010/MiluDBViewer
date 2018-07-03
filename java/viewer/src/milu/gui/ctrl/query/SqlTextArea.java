@@ -33,7 +33,7 @@ import net.sf.jsqlparser.JSQLParserException;
 
 import org.hibernate.engine.jdbc.internal.BasicFormatterImpl;
 
-import milu.tool.MyTool;
+import milu.tool.MyGUITool;
 import milu.tool.MyStringTool;
 import milu.entity.schema.SchemaEntity;
 import milu.entity.schema.search.SearchSchemaEntityInterface;
@@ -89,7 +89,7 @@ public class SqlTextArea extends TextArea
 	 */
 	public void init()
 	{
-		this.parentPane = (AnchorPane)MyTool.searchParentNode( this, AnchorPane.class );
+		this.parentPane = (AnchorPane)MyGUITool.searchParentNode( this, AnchorPane.class );
 		if ( this.parentPane != null )
 		{
 			// add "Hint ComboBox" on TextArea
@@ -183,7 +183,7 @@ public class SqlTextArea extends TextArea
 	// vertical scrollbar visible   => margin scrollbar width
 	private void shiftLabelCaretPosition()
 	{
-		ScrollBar scrollBarVertical = MyTool.getScrollBarVertical(this);
+		ScrollBar scrollBarVertical = MyGUITool.getScrollBarVertical(this);
 		if ( scrollBarVertical != null )
 		{
 			System.out.println( "SqlTextArea:ScrollBar Found." );
@@ -351,8 +351,8 @@ public class SqlTextArea extends TextArea
 						
 						if ( this.hints.size() > 0 )
 						{
-							Path caret = MyTool.findCaret(this);
-							Point2D screenLoc = MyTool.findScreenLocation(caret,this);
+							Path caret = MyGUITool.findCaret(this);
+							Point2D screenLoc = MyGUITool.findScreenLocation(caret,this);
 							//System.out.println( "X:" + screenLoc.getX() + "/Y:" + screenLoc.getY() );
 							AnchorPane.setLeftAnchor( this.comboHint, screenLoc.getX() );
 							AnchorPane.setTopAnchor( this.comboHint, screenLoc.getY() );
@@ -505,6 +505,7 @@ public class SqlTextArea extends TextArea
 			return strSQL;
 		}
 		
+		// cut the last ";"
 		while ( strSQL.charAt(strSQL.length()-1) == ';' )
 		{
 			strSQL = strSQL.substring( 0, strSQL.length()-1 );
@@ -700,8 +701,37 @@ public class SqlTextArea extends TextArea
 		{
 			System.out.println( "formatSQL event:" + event.getEventType() );
 		}
-		String formatted = new BasicFormatterImpl().format( this.getText() );
-		this.setText(formatted);
+		//String formatted = new BasicFormatterImpl().format( this.getText() );
+		//this.setText(formatted);
+		String strSelected = this.getSelectedText();
+		if ( strSelected.length() > 0 )
+		{
+			int caretPos  = this.getCaretPosition();
+			int anchorPos = this.getAnchor();
+			
+			String strFormatted = new BasicFormatterImpl().format( strSelected );
+			String strFirst  = null;
+			String strSecond = null;
+			if ( caretPos <= anchorPos )
+			{
+				strFirst  = this.getText().substring( 0, caretPos );
+				strSecond = this.getText().substring( anchorPos, this.getText().length() );
+			}
+			else
+			{
+				strFirst  = this.getText().substring( 0, anchorPos );
+				strSecond = this.getText().substring( caretPos, this.getText().length() );
+			}
+			//this.setText( strFirst + strFormatted.trim() + strSecond );
+			this.setText( strFirst + MyStringTool.replaceMultiLine(strFormatted, "^\\s{4}", "") + strSecond );
+		}
+		else
+		{
+			String strFormatted = new BasicFormatterImpl().format( this.getText() );
+			//this.setText(strFormatted.trim());
+			//this.setText( MyStringTool.replaceMultiLine(strFormatted, "^\\s{4}", "") );
+			this.setText( MyStringTool.replaceMultiLine(strFormatted, "^\\s{4}(.*)", "$1") );
+		}
 	}
 
 }

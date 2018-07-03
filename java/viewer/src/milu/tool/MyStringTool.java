@@ -1,13 +1,55 @@
 package milu.tool;
 
+import java.io.File;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.lang.reflect.Constructor;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import milu.gui.view.DBView;
 
 public class MyStringTool 
 {
+	public static String replaceMultiLine( String strOrg, String strSrc, String strDst )
+	{
+		/**/
+		String lineSP = System.getProperty("line.separator");
+		StringBuffer sb = new StringBuffer();
+		String[] strSplitLst = strOrg.split(lineSP.replace("\\", "\\\\"));
+		for ( int i=0; i < strSplitLst.length; i++ )
+		{
+			String strSplit = strSplitLst[i];
+			strSplit.replace(strSrc,strDst);
+			sb.append(strSplit);
+			if ( i != (strSplitLst.length-1) )
+			{
+				sb.append(lineSP);
+			}
+		}
+		return sb.toString();
+		/**/
+		/*
+		String lineSP = System.getProperty("line.separator");
+		StringBuffer sb = new StringBuffer();
+		//Pattern p = Pattern.compile( strSrc, Pattern.MULTILINE|Pattern.DOTALL);
+		Pattern p = Pattern.compile( strSrc );
+		Matcher m = p.matcher(strOrg);
+		int i = 0;
+		while ( m.find() )
+		{
+			System.out.println( "replaceMultiLine:" + m.group() );
+			if ( i != 0 )
+			{
+				sb.append(lineSP);
+			}
+			sb.append( m.group().replaceAll( strSrc, strDst ) );
+			i++;
+		}
+		return sb.toString();
+		*/
+	}
+	
 	public static int getCharCount( String strSrc, String strChk )
 	{
 		if ( strSrc == null || strChk == null )

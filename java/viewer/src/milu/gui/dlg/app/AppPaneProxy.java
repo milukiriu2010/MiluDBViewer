@@ -18,7 +18,7 @@ import javafx.util.StringConverter;
 import milu.main.AppConf;
 import milu.main.MainController;
 import milu.net.ProxyType;
-import milu.tool.MyTool;
+import milu.tool.MyGUITool;
 
 public class AppPaneProxy extends AppPaneAbstract 
 {
@@ -184,7 +184,7 @@ public class AppPaneProxy extends AppPaneAbstract
 		}
 		catch ( Exception ex )
 		{
-			MyTool.showException( this.mainCtrl, "conf.lang.gui.common.MyAlert", "TITLE_MISC_ERROR", ex );
+			MyGUITool.showException( this.mainCtrl, "conf.lang.gui.common.MyAlert", "TITLE_MISC_ERROR", ex );
 		}
 		
 		return true;

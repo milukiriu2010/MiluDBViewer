@@ -2,7 +2,7 @@ package milu.task.main;
 
 import milu.main.AppConf;
 import milu.main.AppConst;
-import milu.tool.MyTool;
+import milu.tool.MyGUITool;
 
 public class InitialLoadProxyPassword extends InitialLoadAbstract 
 {
@@ -18,7 +18,7 @@ public class InitialLoadProxyPassword extends InitialLoadAbstract
 		}
 		catch ( Exception ex )
 		{
-			MyTool.showException( this.mainCtrl, "conf.lang.gui.common.MyAlert", "TITLE_MISC_ERROR", ex );
+			MyGUITool.showException( this.mainCtrl, "conf.lang.gui.common.MyAlert", "TITLE_MISC_ERROR", ex );
 		}
 		finally
 		{

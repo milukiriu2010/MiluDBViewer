@@ -3,7 +3,7 @@ package milu.gui.view;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Duration;
-import milu.tool.MyTool;
+import milu.tool.MyGUITool;
 import javafx.scene.control.Label;
 import javafx.scene.paint.Color;
 import javafx.animation.KeyFrame;
@@ -35,7 +35,7 @@ public class FadeView extends Stage
 		//Makes scene background transparent
 		scene.setFill(Color.TRANSPARENT);
 		this.setScene(scene);
-		MyTool.setWindowLocation( this, WIDTH, HEIGHT );
+		MyGUITool.setWindowLocation( this, WIDTH, HEIGHT );
 		this.show();
 		
         Timeline timeline = new Timeline();

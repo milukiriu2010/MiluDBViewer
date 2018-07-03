@@ -27,7 +27,7 @@ import milu.gui.view.DBView;
 import milu.main.MainController;
 import milu.task.collect.CollectDataType;
 import milu.task.collect.CollectTaskFactory;
-import milu.tool.MyTool;
+import milu.tool.MyGUITool;
 
 abstract public class SelectedItemHandlerAbstract 
 {
@@ -295,7 +295,7 @@ abstract public class SelectedItemHandlerAbstract
 		
 		// set icon on Tab
 		MainController mainCtrl = this.dbView.getMainController();
-		Node imageGroup = MyTool.createImageView( 16, 16, mainCtrl, selectedEntity );
+		Node imageGroup = MyGUITool.createImageView( 16, 16, mainCtrl, selectedEntity );
 		newTab.setGraphic( imageGroup );
 		
 		// get function ddl
@@ -393,7 +393,7 @@ abstract public class SelectedItemHandlerAbstract
 		
 		// set icon on Tab
 		MainController mainCtrl = this.dbView.getMainController();
-		Node imageGroup = MyTool.createImageView( 16, 16, mainCtrl, selectedEntity );
+		Node imageGroup = MyGUITool.createImageView( 16, 16, mainCtrl, selectedEntity );
 		newTab.setGraphic( imageGroup );
 		
 		// get view definition
@@ -516,7 +516,7 @@ abstract public class SelectedItemHandlerAbstract
 				else if ( ex instanceof SQLException )
 				{
 					SQLException sqlEx = (SQLException)ex;
-					MyTool.showException( this.dbView.getMainController(), "conf.lang.gui.common.MyAlert", "TITLE_EXEC_QUERY_ERROR", sqlEx, myDBAbs );
+					MyGUITool.showException( this.dbView.getMainController(), "conf.lang.gui.common.MyAlert", "TITLE_EXEC_QUERY_ERROR", sqlEx, myDBAbs );
 					/*
 					ResourceBundle langRB = this.dbView.getMainController().getLangResource("conf.lang.gui.common.MyAlert");
 					MyAlertDialog alertDlg = new MyAlertDialog( AlertType.WARNING, this.dbView.getMainController() );
@@ -528,7 +528,7 @@ abstract public class SelectedItemHandlerAbstract
 				}
 				else
 				{
-					MyTool.showException( this.dbView.getMainController(), "conf.lang.gui.common.MyAlert", "TITLE_MISC_ERROR", ex );
+					MyGUITool.showException( this.dbView.getMainController(), "conf.lang.gui.common.MyAlert", "TITLE_MISC_ERROR", ex );
 					/*
 					ResourceBundle langRB = this.dbView.getMainController().getLangResource("conf.lang.gui.common.MyAlert");
 					MyAlertDialog alertDlg = new MyAlertDialog( AlertType.WARNING, this.dbView.getMainController() );

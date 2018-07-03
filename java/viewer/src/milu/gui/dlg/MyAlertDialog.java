@@ -14,7 +14,7 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
-import milu.tool.MyTool;
+import milu.tool.MyGUITool;
 import milu.tool.MyStringTool;
 import milu.db.MyDBAbstract;
 import milu.main.MainController;
@@ -65,7 +65,7 @@ public class MyAlertDialog extends Alert
 		stage.getIcons().add( this.mainCtrl.getImage( "file:resources/images/winicon.gif" ) );
 		
 		// set location
-		Platform.runLater( ()->MyTool.setWindowLocation( stage, stage.getWidth(), stage.getHeight() ) );
+		Platform.runLater( ()->MyGUITool.setWindowLocation( stage, stage.getWidth(), stage.getHeight() ) );
 	}
 	
 	public void setTxtMsg( String msg )

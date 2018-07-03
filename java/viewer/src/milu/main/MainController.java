@@ -29,7 +29,7 @@ import milu.entity.schema.search.ChangeLangSchemaEntityVisitor;
 import milu.gui.ctrl.common.inf.ChangeLangInterface;
 import milu.task.main.InitialLoadAbstract;
 import milu.task.main.InitialLoadFactory;
-import milu.tool.MyTool;
+import milu.tool.MyGUITool;
 
 public class MainController
 	implements
@@ -243,7 +243,7 @@ public class MainController
 		}
 		else
 		{
-			MyTool.setWindowLocation( dbView, dbView.getWidth(), dbView.getHeight() );
+			MyGUITool.setWindowLocation( dbView, dbView.getWidth(), dbView.getHeight() );
 		}
 	}
 	

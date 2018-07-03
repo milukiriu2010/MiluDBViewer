@@ -19,7 +19,7 @@ import milu.gui.view.DBView;
 import milu.main.AppConf;
 import milu.main.MainController;
 import milu.tool.MyFileTool;
-import milu.tool.MyTool;
+import milu.tool.MyGUITool;
 
 public class ImportDataPaneFile extends Pane 
 	implements ChangeLangInterface 
@@ -71,6 +71,7 @@ public class ImportDataPaneFile extends Pane
 		HBox.setHgrow(spacer, Priority.ALWAYS);
 		spacer.setMinSize(10,1);
 		
+		this.btnNext.setDisable(true);
 		hBoxBtm.getChildren().addAll( spacer, this.btnNext );
 		
 		this.basePane.setBottom(hBoxBtm);
@@ -120,6 +121,10 @@ public class ImportDataPaneFile extends Pane
 			this.mapObj.put( ImportData.SRC_FILE.val(), this.txtSrcFile.getText() );
 			this.wizardInf.next( this, this.mapObj);
 		});
+		
+		this.txtSrcFile.textProperty().addListener((obs,oldVal,newVal)->{
+			this.btnNext.setDisable((new File(newVal).exists() == false));
+		});
 	}
 	
 	// ChangeLangInterface
@@ -133,12 +138,16 @@ public class ImportDataPaneFile extends Pane
 		this.lblSrcFile.setText(langRB.getString("LABEL_SRC_FILE"));
 		
 		// "select folder" button
-		this.btnOpen.setGraphic( MyTool.createImageView( 16, 16, mainCtrl.getImage("file:resources/images/folder.png") ));
+		this.btnOpen.setGraphic( MyGUITool.createImageView( 16, 16, mainCtrl.getImage("file:resources/images/folder.png") ));
 		Tooltip tipOpen = new Tooltip(extLangRB.getString( "TOOLTIP_OPEN_FILE" ));
 		tipOpen.getStyleClass().add("MainToolBar_MyToolTip");
 		this.btnOpen.setTooltip( tipOpen );
 		
-		this.btnNext.setText(extLangRB.getString("TOOLTIP_NEXT"));
+		// "next" button
+		this.btnNext.setGraphic( MyGUITool.createImageView( 16, 16, mainCtrl.getImage("file:resources/images/next.png") ));
+		Tooltip tipNext = new Tooltip(extLangRB.getString( "TOOLTIP_NEXT" ));
+		tipNext.getStyleClass().add("MainToolBar_MyToolTip");
+		this.btnNext.setTooltip(tipNext);
 
 	}
 }

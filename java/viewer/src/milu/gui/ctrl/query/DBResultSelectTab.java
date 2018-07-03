@@ -11,7 +11,7 @@ import milu.gui.ctrl.common.table.CopyTableInterface;
 import milu.gui.ctrl.common.table.DirectionSwitchInterface;
 import milu.gui.view.DBView;
 import milu.main.MainController;
-import milu.tool.MyTool;
+import milu.tool.MyGUITool;
 
 public class DBResultSelectTab extends Tab
 	implements
@@ -38,7 +38,7 @@ public class DBResultSelectTab extends Tab
 		MainController mainCtrl = this.dbView.getMainController();
 		
 		// set icon on Tab
-		this.setGraphic( MyTool.createImageView( 16, 16, mainCtrl.getImage("file:resources/images/result.png") ) );
+		this.setGraphic( MyGUITool.createImageView( 16, 16, mainCtrl.getImage("file:resources/images/result.png") ) );
 
 		this.setContent(this.basePane);
 	}

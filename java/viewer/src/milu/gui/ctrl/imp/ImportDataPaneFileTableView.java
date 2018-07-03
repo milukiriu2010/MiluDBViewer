@@ -2,6 +2,7 @@ package milu.gui.ctrl.imp;
 
 import java.util.Map;
 import java.util.ResourceBundle;
+import java.util.stream.Collectors;
 import java.util.List;
 import java.io.File;
 import java.io.IOException;
@@ -23,7 +24,7 @@ import milu.gui.ctrl.common.inf.ChangeLangInterface;
 import milu.gui.ctrl.common.table.ObjTableView;
 import milu.gui.view.DBView;
 import milu.main.MainController;
-import milu.tool.MyTool;
+import milu.tool.MyGUITool;
 
 public class ImportDataPaneFileTableView extends Pane
 	implements ChangeLangInterface 
@@ -86,7 +87,7 @@ public class ImportDataPaneFileTableView extends Pane
 	    // -----------------------------------------------------
 		// [Bottom]
 	    // -----------------------------------------------------
-		this.btnBack.setGraphic( MyTool.createImageView( 20, 20, mainCtrl.getImage("file:resources/images/back.png") ) );
+		this.btnBack.setGraphic( MyGUITool.createImageView( 20, 20, mainCtrl.getImage("file:resources/images/back.png") ) );
 		
 		HBox hBoxNext = new HBox(2);
 		hBoxNext.setPadding( new Insets( 10, 10, 10, 10 ) );
@@ -146,6 +147,9 @@ public class ImportDataPaneFileTableView extends Pane
 	{
 		SchemaEntity dstSchemaEntity = (SchemaEntity)this.mapObj.get(ImportData.DST_SCHEMA_ENTITY.val());
 		int columnCnt = dstSchemaEntity.getDefinitionLst().size();
+		List<Object> columnLst = dstSchemaEntity.getDefinitionLst().stream()
+			.map( data->data.get("column_name") )
+			.collect(Collectors.toList());
 		
 		MainController mainCtrl = this.dbView.getMainController();
 		String strFile = (String)this.mapObj.get(ImportData.SRC_FILE.val());
@@ -155,12 +159,14 @@ public class ImportDataPaneFileTableView extends Pane
 		{
 			myFileAbs.open(file);
 			myFileAbs.load(columnCnt);
-			List<Object>       headLst = myFileAbs.getHeadLst();  
+			//List<Object>       headLst = myFileAbs.getHeadLst();  
 			List<List<Object>> dataLst = myFileAbs.getDataLst();
-			System.out.println( "headLst.size:" + headLst.size() );
-			System.out.println( "dataLst.size:" + dataLst.size() );
+			//System.out.println( "headLst.size:" + headLst.size() );
+			System.out.println( "columnLst.size:" + columnLst.size() );
+			System.out.println( "dataLst.size  :" + dataLst.size() );
 			
-			this.objTableView.setTableViewData(headLst, dataLst);
+			this.objTableView.setTableViewData(columnLst, dataLst);
+			//this.objTableView.setTableViewData(headLst, dataLst);
 			/*
 			int no = 0;
 			for ( List<Object> dataRow : dataLst )
@@ -177,7 +183,7 @@ public class ImportDataPaneFileTableView extends Pane
 		}
 		catch ( Exception ex )
 		{
-			MyTool.showException( mainCtrl, "conf.lang.gui.common.MyAlert", "TITLE_MISC_ERROR", ex );
+			MyGUITool.showException( mainCtrl, "conf.lang.gui.common.MyAlert", "TITLE_MISC_ERROR", ex );
 		}
 		finally
 		{
@@ -202,7 +208,18 @@ public class ImportDataPaneFileTableView extends Pane
 		
 		this.lblSkipRowCnt.setText(langRB.getString("LABEL_SKIP_ROW_CNT"));
 		
-		this.btnImport.setText(langRB.getString("BTN_IMPORT"));
+		// "import" button
+		this.btnImport.setGraphic( MyGUITool.createImageView( 16, 16, mainCtrl.getImage("file:resources/images/next.png") ));
+		Tooltip tipImport = new Tooltip(langRB.getString( "TOOLTIP_IMPORT" ));
+		tipImport.getStyleClass().add("MainToolBar_MyToolTip");
+		this.btnImport.setTooltip(tipImport);
+		
+		// "back" button
+		this.btnBack.setGraphic( MyGUITool.createImageView( 16, 16, mainCtrl.getImage("file:resources/images/back.png") ));
+		Tooltip tipBack = new Tooltip(extLangRB.getString( "TOOLTIP_BACK" ));
+		tipBack.getStyleClass().add("MainToolBar_MyToolTip");
+		this.btnBack.setTooltip(tipBack);
+		
 	}
 
 }

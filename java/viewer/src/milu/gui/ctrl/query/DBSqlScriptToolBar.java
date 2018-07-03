@@ -16,7 +16,7 @@ import milu.gui.ctrl.common.table.CopyTableInterface;
 import milu.gui.ctrl.common.table.DirectionSwitchInterface;
 import milu.gui.view.DBView;
 import milu.main.MainController;
-import milu.tool.MyTool;
+import milu.tool.MyGUITool;
 
 class DBSqlScriptToolBar extends ToolBar
 	implements 
@@ -44,12 +44,12 @@ class DBSqlScriptToolBar extends ToolBar
 		this.dbView = dbView;
 		
 		MainController mainCtrl = this.dbView.getMainController();
-		this.btnExecSQL.setGraphic( MyTool.createImageView( 20, 20, mainCtrl.getImage("file:resources/images/execsql.png") ) );
-		this.btnExplainSQL.setGraphic( MyTool.createImageView( 20, 20, mainCtrl.getImage("file:resources/images/explain.png") ) );
-		this.btnToggleHV.setGraphic( MyTool.createImageView( 20, 20, mainCtrl.getImage("file:resources/images/direction.png") ) );
-		this.btnCopyTblNoHead.setGraphic( MyTool.createImageView( 20, 20, mainCtrl.getImage("file:resources/images/copy.png") ) );
-		this.btnCopyTblWithHead.setGraphic( MyTool.createImageView( 20, 20, mainCtrl.getImage("file:resources/images/copy2.png") ) );
-		this.btnFmtSQL.setGraphic( MyTool.createImageView( 20, 20, mainCtrl.getImage("file:resources/images/sql_format.png") ) );
+		this.btnExecSQL.setGraphic( MyGUITool.createImageView( 20, 20, mainCtrl.getImage("file:resources/images/execsql.png") ) );
+		this.btnExplainSQL.setGraphic( MyGUITool.createImageView( 20, 20, mainCtrl.getImage("file:resources/images/explain.png") ) );
+		this.btnToggleHV.setGraphic( MyGUITool.createImageView( 20, 20, mainCtrl.getImage("file:resources/images/direction.png") ) );
+		this.btnCopyTblNoHead.setGraphic( MyGUITool.createImageView( 20, 20, mainCtrl.getImage("file:resources/images/copy.png") ) );
+		this.btnCopyTblWithHead.setGraphic( MyGUITool.createImageView( 20, 20, mainCtrl.getImage("file:resources/images/copy2.png") ) );
+		this.btnFmtSQL.setGraphic( MyGUITool.createImageView( 20, 20, mainCtrl.getImage("file:resources/images/sql_format.png") ) );
 		
 		this.getItems().addAll(	this.btnExecSQL	);
 		

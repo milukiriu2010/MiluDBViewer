@@ -16,3 +16,8 @@
     -fx-padding: 0.166667em;	
     
 }
+
+.ObjTableView_Row_Skip
+{
+	-fx-background-color: #808080;
+}
