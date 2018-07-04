@@ -283,7 +283,9 @@ public class DBResultTab extends Tab
 	{
 		System.out.println( "SQLState:" + sqlEx.getSQLState() );
 		System.out.println( "ErrorCode:" + sqlEx.getErrorCode() );
-		ResourceBundle langRB = this.dbView.getMainController().getLangResource("conf.lang.gui.ctrl.query.DBSqlTab");
+		MainController mainCtrl = this.dbView.getMainController(); 
+		ResourceBundle langRB = mainCtrl.getLangResource("conf.lang.gui.ctrl.query.DBSqlTab");
+		ResourceBundle altLangRB = mainCtrl.getLangResource("conf.lang.gui.common.MyAlert");
 		
 		Label     labelTitle = new Label( langRB.getString("TITLE_EXEC_QUERY_ERROR") );
 		
@@ -297,7 +299,7 @@ public class DBResultTab extends Tab
 		txtExp.setPrefRowCount( MyStringTool.getCharCount( strExp, "\n" )+1 );
 		txtExp.setEditable( false );
 		
-		Button    btnReConnect = new Button (langRB.getString("BTN_RECONNECT"));
+		Button    btnReConnect = new Button (altLangRB.getString("BTN_RECONNECT"));
 		btnReConnect.setOnAction
 		(
 			event->

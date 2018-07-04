@@ -101,7 +101,7 @@ public class UrlPaneBasicFile extends UrlPaneAbstract
 		
 		this.btnOpen.setGraphic( MyGUITool.createImageView( 16, 16, this.mainCtrl.getImage("file:resources/images/folder.png")) );
 		Tooltip tipOpen = new Tooltip(langRB.getString( "TOOLTIP_OPEN_FILE" ));
-		tipOpen.getStyleClass().add("DBSettingDialog_MyToolTip");
+		tipOpen.getStyleClass().add("Common_MyToolTip");
 		this.btnOpen.setTooltip( tipOpen );
 
 		// ----------------------------------------------------
@@ -117,7 +117,7 @@ public class UrlPaneBasicFile extends UrlPaneAbstract
 
 		this.tmplBtn.setGraphic( MyGUITool.createImageView( 16, 16, this.mainCtrl.getImage("file:resources/images/copy.png") ));
 		Tooltip tipCopy = new Tooltip(langRB.getString( "TOOLTIP_COPY" ));
-		tipCopy.getStyleClass().add("DBSettingDialog_MyToolTip");
+		tipCopy.getStyleClass().add("Common_MyToolTip");
 		this.tmplBtn.setTooltip( tipCopy );
 		
 		// ----------------------------------------------------

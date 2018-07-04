@@ -104,7 +104,7 @@ class AppPaneDBConfOracle extends AppPaneAbstract
 		ivFolder.setFitHeight(16);
 		this.folderBtn.setGraphic( ivFolder );
 		Tooltip tipFolder = new Tooltip(this.extLangRB.getString( "TOOLTIP_NEW_FOLDER" ));
-		tipFolder.getStyleClass().add("AppPane_MyToolTip");		
+		tipFolder.getStyleClass().add("Common_MyToolTip");		
 		this.folderBtn.setTooltip( tipFolder );
 		
 		HBox hBoxTnsAdmin = new HBox(2);

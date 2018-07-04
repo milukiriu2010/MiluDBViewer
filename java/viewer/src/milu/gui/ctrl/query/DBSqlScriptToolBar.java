@@ -107,7 +107,7 @@ class DBSqlScriptToolBar extends ToolBar
 			// mouse click, "space/return" key enter 
 			this.btnFmtSQL.setOnAction(	((SQLFormatInterface)obj)::formatSQL );
 			// any key
-			this.btnFmtSQL.setOnKeyPressed( ((SQLFormatInterface)obj)::formatSQL );
+			//this.btnFmtSQL.setOnKeyPressed( ((SQLFormatInterface)obj)::formatSQL );
 		}
 	}
 	
@@ -143,44 +143,44 @@ class DBSqlScriptToolBar extends ToolBar
 		// ToolTip
 		//   Button[Exec Query] 
 		// ----------------------------------------------
-		Tooltip tipExecSQL = new Tooltip( langRB.getString( "TIP_EXEC_SQL" ));
-		tipExecSQL.getStyleClass().add("MainToolBar_MyToolTip");
+		Tooltip tipExecSQL = new Tooltip( langRB.getString( "TOOLTIP_EXEC_SQL" ));
+		tipExecSQL.getStyleClass().add("Common_MyToolTip");
 		this.btnExecSQL.setTooltip(tipExecSQL);
 		
 		// ----------------------------------------------
 		// ToolTip
 		//   Button[Exec Explain] 
 		// ----------------------------------------------
-		Tooltip tipExplainSQL = new Tooltip( langRB.getString( "TIP_EXEC_EXPLAIN" ) );
-		tipExplainSQL.getStyleClass().add("MainToolBar_MyToolTip");
+		Tooltip tipExplainSQL = new Tooltip( langRB.getString( "TOOLTIP_EXEC_EXPLAIN" ) );
+		tipExplainSQL.getStyleClass().add("Common_MyToolTip");
 		this.btnExplainSQL.setTooltip( tipExplainSQL );
 		
 		// ----------------------------------------------
 		// ToolTip
 		//   Button[Toggle Horizontal/Vertical mode] 
 		// ----------------------------------------------
-		Tooltip tipToggleHV = new Tooltip( langRB.getString( "TIP_TOGGLE_HV" ));
-		tipToggleHV.getStyleClass().add("MainToolBar_MyToolTip");
+		Tooltip tipToggleHV = new Tooltip( langRB.getString( "TOOLTIP_TOGGLE_HV" ));
+		tipToggleHV.getStyleClass().add("Common_MyToolTip");
 		this.btnToggleHV.setTooltip( tipToggleHV );
 		
 		// ----------------------------------------------
 		// ToolTip
 		//   Button[Copy table data without column] 
 		// ----------------------------------------------
-		Tooltip tipCopyTblNoHead = new Tooltip( langRB.getString( "TIP_COPY_TABLE_NO_HEAD" ));
-		tipCopyTblNoHead.getStyleClass().add("MainToolBar_MyToolTip");
+		Tooltip tipCopyTblNoHead = new Tooltip( langRB.getString( "TOOLTIP_COPY_TABLE_NO_HEAD" ));
+		tipCopyTblNoHead.getStyleClass().add("Common_MyToolTip");
 		this.btnCopyTblNoHead.setTooltip( tipCopyTblNoHead );
 		
 		// ----------------------------------------------
 		// ToolTip
 		//   Button[Copy table data with column] 
 		// ----------------------------------------------
-		Tooltip tipCopyTblWithHead = new Tooltip( langRB.getString( "TIP_COPY_TABLE_WITH_HEAD" ));
-		tipCopyTblWithHead.getStyleClass().add("MainToolBar_MyToolTip");
+		Tooltip tipCopyTblWithHead = new Tooltip( langRB.getString( "TOOLTIP_COPY_TABLE_WITH_HEAD" ));
+		tipCopyTblWithHead.getStyleClass().add("Common_MyToolTip");
 		this.btnCopyTblWithHead.setTooltip( tipCopyTblWithHead );
 		
-		Tooltip tipFmtSQL = new Tooltip( langRB.getString( "TIP_FORMAT_SQL" ));
-		tipFmtSQL.getStyleClass().add("MainToolBar_MyToolTip");
+		Tooltip tipFmtSQL = new Tooltip( langRB.getString( "TOOLTIP_FORMAT_SQL" ));
+		tipFmtSQL.getStyleClass().add("Common_MyToolTip");
 		this.btnFmtSQL.setTooltip(tipFmtSQL);
 	}	
 }

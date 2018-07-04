@@ -142,6 +142,7 @@ public class DBSettingDialog extends Dialog<MyDBAbstract>
 		
 		// Set dialog title.
 		ResourceBundle langRB = this.mainCtrl.getLangResource("conf.lang.gui.dlg.db.DBSettingDialog");
+		ResourceBundle cmnLangRB = this.mainCtrl.getLangResource("conf.lang.gui.common.NodeName");
 		this.setTitle( langRB.getString( "TITLE_DB_SETTING" ) );
 		
 		// ----------------------------------------
@@ -167,23 +168,23 @@ public class DBSettingDialog extends Dialog<MyDBAbstract>
 		}
 		
 		this.btnNewFolder.setGraphic( MyGUITool.createImageView( 16, 16, this.mainCtrl.getImage( "file:resources/images/folder_new.png" ) ) );
-		Tooltip tipNewFolder = new Tooltip(langRB.getString( "TOOLTIP_NEW_FOLDER" ));
-		tipNewFolder.getStyleClass().add("DBSettingDialog_MyToolTip");
+		Tooltip tipNewFolder = new Tooltip(cmnLangRB.getString( "TOOLTIP_NEW_FOLDER" ));
+		tipNewFolder.getStyleClass().add("Common_MyToolTip");
 		this.btnNewFolder.setTooltip( tipNewFolder );
 		
 		this.btnNewConnection.setGraphic( MyGUITool.createImageView( 16, 16, this.mainCtrl.getImage( "file:resources/images/file_new.png" ) ) );
-		Tooltip tipNewConnection = new Tooltip(langRB.getString( "TOOLTIP_NEW_CONNECTION" ));
-		tipNewConnection.getStyleClass().add("DBSettingDialog_MyToolTip");
+		Tooltip tipNewConnection = new Tooltip(cmnLangRB.getString( "TOOLTIP_NEW_CONNECTION" ));
+		tipNewConnection.getStyleClass().add("Common_MyToolTip");
 		this.btnNewConnection.setTooltip( tipNewConnection );
 		
 		this.btnEditFolder.setGraphic( MyGUITool.createImageView( 16, 16, this.mainCtrl.getImage( "file:resources/images/edit.png" ) ) );
-		Tooltip tipEditFolder = new Tooltip(langRB.getString( "TOOLTIP_EDIT" ));
-		tipEditFolder.getStyleClass().add("DBSettingDialog_MyToolTip");
+		Tooltip tipEditFolder = new Tooltip(cmnLangRB.getString( "TOOLTIP_EDIT" ));
+		tipEditFolder.getStyleClass().add("Common_MyToolTip");
 		this.btnEditFolder.setTooltip( tipEditFolder );
 		
 		this.btnDelFolder.setGraphic( MyGUITool.createImageView( 16, 16, this.mainCtrl.getImage( "file:resources/images/delete.png" ) ) );
-		Tooltip tipDelFolder = new Tooltip(langRB.getString( "TOOLTIP_DEL" ));
-		tipDelFolder.getStyleClass().add("DBSettingDialog_MyToolTip");
+		Tooltip tipDelFolder = new Tooltip(cmnLangRB.getString( "TOOLTIP_DEL" ));
+		tipDelFolder.getStyleClass().add("Common_MyToolTip");
 		this.btnDelFolder.setTooltip( tipDelFolder );
 		
 		HBox hBoxBtn = new HBox(2);
@@ -272,7 +273,7 @@ public class DBSettingDialog extends Dialog<MyDBAbstract>
 		
 		// add button connect and cancel
 		this.okButtonType            = new ButtonType( langRB.getString( "BTN_OK" )    , ButtonData.OK_DONE );
-		ButtonType cancelButtonType  = new ButtonType( langRB.getString( "BTN_CANCEL" ), ButtonData.CANCEL_CLOSE );
+		ButtonType cancelButtonType  = new ButtonType( cmnLangRB.getString( "BTN_CANCEL" ), ButtonData.CANCEL_CLOSE );
 		//this.getDialogPane().getButtonTypes().addAll( this.okButtonType, ButtonType.CANCEL );
 		this.getDialogPane().getButtonTypes().addAll( this.okButtonType, cancelButtonType );
 
@@ -308,10 +309,16 @@ public class DBSettingDialog extends Dialog<MyDBAbstract>
 		
 		// set CSS for this dialog
 		Scene scene = this.getDialogPane().getScene();
-		scene.getStylesheets().add
-		(
-			getClass().getResource("/conf/css/dlg/DBSettingDialog.css").toExternalForm()
-		);
+		// load css on DBSettingDialog elements
+		String [] cssLst =
+			{
+				"/conf/css/ctrl/common/Common.css",
+				"/conf/css/dlg/DBSettingDialog.css"
+			};
+        for ( String css : cssLst )
+        {
+    		scene.getStylesheets().add(	getClass().getResource(css).toExternalForm() );
+        }		
 		
 		// set Action
 		this.setAction();

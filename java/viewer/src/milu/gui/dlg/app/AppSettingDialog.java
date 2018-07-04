@@ -38,6 +38,7 @@ public class AppSettingDialog extends Dialog<Boolean>
 		
 		this.mainCtrl = mainCtrl;
 		ResourceBundle langRB = this.mainCtrl.getLangResource("conf.lang.gui.dlg.app.AppSettingDialog");
+		ResourceBundle cmnLangRB = this.mainCtrl.getLangResource("conf.lang.gui.common.NodeName");
 		
 		// set DialogPane which has no button order.
 		this.setDialogPane( new ButtonOrderNoneDialogPane() );
@@ -87,16 +88,22 @@ public class AppSettingDialog extends Dialog<Boolean>
 		
 		// add button "Apply&Close" and "Cancel"
 		this.okButtonType           = new ButtonType( langRB.getString( "BTN_OK" )    , ButtonData.OK_DONE );
-		ButtonType cancelButtonType = new ButtonType( langRB.getString( "BTN_CANCEL" ), ButtonData.CANCEL_CLOSE );
+		ButtonType cancelButtonType = new ButtonType( cmnLangRB.getString( "BTN_CANCEL" ), ButtonData.CANCEL_CLOSE );
 		this.applyButtonType        = new ButtonType( langRB.getString( "BTN_APPLY" ) , ButtonData.APPLY );
 		this.getDialogPane().getButtonTypes().addAll( applyButtonType, okButtonType, cancelButtonType );
 	
 		// set css for this dialog
 		Scene scene = this.getDialogPane().getScene();
-		scene.getStylesheets().add
-		(
-			getClass().getResource("/conf/css/dlg/AppSettingDialog.css").toExternalForm()
-		);
+		// load css on AppSettingDialog elements
+		String [] cssLst =
+			{
+				"/conf/css/ctrl/common/Common.css",
+				"/conf/css/dlg/AppSettingDialog.css"
+			};
+        for ( String css : cssLst )
+        {
+    		scene.getStylesheets().add(	getClass().getResource(css).toExternalForm() );
+        }
 		
         // Window Icon
 		Stage stage = (Stage)this.getDialogPane().getScene().getWindow();
@@ -144,7 +151,6 @@ public class AppSettingDialog extends Dialog<Boolean>
 		    	}
 		    	catch ( Exception ex )
 		    	{
-		    		//this.showException(ex);
 		    		MyGUITool.showException( this.mainCtrl, "conf.lang.gui.common.MyAlert", "TITLE_MISC_ERROR", ex );
 		    	}
 		    	// if false, do not close this dialog.
@@ -172,7 +178,6 @@ public class AppSettingDialog extends Dialog<Boolean>
 		    	}
 		    	catch ( Exception ex )
 		    	{
-		    		//this.showException(ex);
 		    		MyGUITool.showException( this.mainCtrl, "conf.lang.gui.common.MyAlert", "TITLE_MISC_ERROR", ex );
 		    	}
 		    	// always consume

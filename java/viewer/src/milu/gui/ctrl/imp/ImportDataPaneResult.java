@@ -234,7 +234,6 @@ public class ImportDataPaneResult extends Pane
 	public void changeLang()
 	{
 		MainController mainCtrl = this.dbView.getMainController();
-		ResourceBundle langRB    = mainCtrl.getLangResource("conf.lang.gui.ctrl.imp.ImportDataTab");
 		ResourceBundle extLangRB = mainCtrl.getLangResource("conf.lang.gui.common.NodeName");
 		
 		this.lblTotal.setText(extLangRB.getString( "LABEL_TOTAL" ));
@@ -246,7 +245,7 @@ public class ImportDataPaneResult extends Pane
 		//   Button[Commit] 
 		// ----------------------------------------------
 		Tooltip tipCommit = new Tooltip( extLangRB.getString( "TOOLTIP_COMMIT" ) );
-		tipCommit.getStyleClass().add("MainToolBar_MyToolTip");
+		tipCommit.getStyleClass().add("Common_MyToolTip");
 		this.btnCommit.setTooltip( tipCommit );
 		
 		// ----------------------------------------------
@@ -254,7 +253,7 @@ public class ImportDataPaneResult extends Pane
 		//   Button[Rollback] 
 		// ----------------------------------------------
 		Tooltip tipRollback = new Tooltip( extLangRB.getString( "TOOLTIP_ROLLBACK" ) );
-		tipRollback.getStyleClass().add("MainToolBar_MyToolTip");
+		tipRollback.getStyleClass().add("Common_MyToolTip");
 		this.btnRollback.setTooltip( tipRollback );
 		
 		// ----------------------------------------------
@@ -262,7 +261,7 @@ public class ImportDataPaneResult extends Pane
 		//   Button[Back] 
 		// ----------------------------------------------
 		Tooltip tipBack = new Tooltip(extLangRB.getString( "TOOLTIP_BACK" ));
-		tipBack.getStyleClass().add("MainToolBar_MyToolTip");
+		tipBack.getStyleClass().add("Common_MyToolTip");
 		this.btnBack.setTooltip(tipBack);
 		
 		// ----------------------------------------------
@@ -270,7 +269,7 @@ public class ImportDataPaneResult extends Pane
 		//   Button[Close] 
 		// ----------------------------------------------
 		Tooltip tipClose = new Tooltip(extLangRB.getString( "TOOLTIP_CLOSE" ));
-		tipClose.getStyleClass().add("MainToolBar_MyToolTip");
+		tipClose.getStyleClass().add("Common_MyToolTip");
 		this.btnClose.setTooltip(tipClose);
 	}
 }

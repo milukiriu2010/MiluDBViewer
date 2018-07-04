@@ -85,7 +85,7 @@ public class UrlPaneGeneral extends UrlPaneAbstract
 
 		this.tmplBtn.setGraphic( MyGUITool.createImageView( 16, 16, this.mainCtrl.getImage("file:resources/images/copy.png") ));
 		Tooltip tipCopy = new Tooltip(langRB.getString( "TOOLTIP_COPY" ));
-		tipCopy.getStyleClass().add("DBSettingDialog_MyToolTip");
+		tipCopy.getStyleClass().add("Common_MyToolTip");
 		this.tmplBtn.setTooltip( tipCopy );
 		
 		// ----------------------------------------------------

@@ -684,9 +684,11 @@ public class SqlTextArea extends TextArea
 	}
 	
 	
+	// SQLFormatInterface
 	@Override
 	public void formatSQL( Event event )
 	{
+		/*
 		if (event instanceof KeyEvent)
 		{
 			KeyEvent keyEvent = (KeyEvent)event;
@@ -701,9 +703,15 @@ public class SqlTextArea extends TextArea
 		{
 			System.out.println( "formatSQL event:" + event.getEventType() );
 		}
+		*/
 		//String formatted = new BasicFormatterImpl().format( this.getText() );
 		//this.setText(formatted);
+		String lineSP = System.getProperty("line.separator");
 		String strSelected = this.getSelectedText();
+		
+		// ------------------------------------------------
+		// when some words are selected. 
+		// ------------------------------------------------
 		if ( strSelected.length() > 0 )
 		{
 			int caretPos  = this.getCaretPosition();
@@ -722,15 +730,36 @@ public class SqlTextArea extends TextArea
 				strFirst  = this.getText().substring( 0, anchorPos );
 				strSecond = this.getText().substring( caretPos, this.getText().length() );
 			}
-			//this.setText( strFirst + strFormatted.trim() + strSecond );
-			this.setText( strFirst + MyStringTool.replaceMultiLine(strFormatted, "^\\s{4}", "") + strSecond );
+			
+			String strCutFirst4Space = MyStringTool.replaceMultiLine(strFormatted, "^\\s{4}(.*)", "$1");
+			String strCutSpace = strCutFirst4Space.replaceAll( "^\\s+", "" );
+			
+			this.setText( strFirst + strCutSpace + strSecond );
 		}
+		// ------------------------------------------------
+		// when any words are not selected. 
+		// ------------------------------------------------
 		else
 		{
+			// -----------------------------------------------
+			// select * from A;
+			// select * from B;
+			// -----------------------------------------------
+			// =>
+			// -----------------------------------------------
+			// 
+			//     select 
+			//         * 
+			//     from 
+			//         A; select 
+			//             * 
+			//         from 
+			//             B;
+			// -----------------------------------------------
 			String strFormatted = new BasicFormatterImpl().format( this.getText() );
-			//this.setText(strFormatted.trim());
-			//this.setText( MyStringTool.replaceMultiLine(strFormatted, "^\\s{4}", "") );
-			this.setText( MyStringTool.replaceMultiLine(strFormatted, "^\\s{4}(.*)", "$1") );
+			String strCutFirst4Space = MyStringTool.replaceMultiLine(strFormatted, "^\\s{4}(.*)", "$1").trim();
+			String strSemiColon2LineSP = strCutFirst4Space.replaceAll(";",";"+lineSP);
+			this.setText( strSemiColon2LineSP );
 		}
 	}
 

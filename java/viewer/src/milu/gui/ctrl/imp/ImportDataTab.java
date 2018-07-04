@@ -20,10 +20,12 @@ public class ImportDataTab extends Tab
 		CloseInterface,
 		ChangeLangInterface 
 {
-	private DBView          dbView = null;
-	
 	// Counter for how many times this class is opened.
-	private static int counterOpend = 0;	
+	private static int counterOpend = 0;
+	
+	private int counter = 0;
+	
+	private DBView          dbView = null;
 	
     // -----------------------------------------------------
 	// [Pane(1) on Tab]
@@ -38,6 +40,7 @@ public class ImportDataTab extends Tab
 		// Increment Counter
 		// Counter for how many times this class is opened.
 		ImportDataTab.counterOpend++;
+		this.counter = ImportDataTab.counterOpend;
 		
 		MainController mainCtrl = this.dbView.getMainController();
 		
@@ -70,7 +73,7 @@ public class ImportDataTab extends Tab
 		// Tab Title
 		Node tabGraphic = this.getGraphic();
 		MessageFormat mfImportData = new MessageFormat(extLangRB.getString("TITLE_TAB_IMPORT_DATA"));
-		String strImportData = mfImportData.format( new Object[] { Integer.valueOf(ImportDataTab.counterOpend) });
+		String strImportData = mfImportData.format( new Object[] { Integer.valueOf(this.counter) });
 		if ( tabGraphic instanceof Label )
 		{
 			((Label)tabGraphic).setText( strImportData );

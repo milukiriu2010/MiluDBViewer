@@ -78,6 +78,7 @@ public class InitialLoadImage extends InitialLoadAbstract
 				"file:resources/images/edit.png",
 				// DBSqlScriptTab
 				"file:resources/images/sql_format.png",
+				"file:resources/images/sql_oneline.png",
 				// ImportDataTab
 				"file:resources/images/import.png",
 				"file:resources/images/next.png",

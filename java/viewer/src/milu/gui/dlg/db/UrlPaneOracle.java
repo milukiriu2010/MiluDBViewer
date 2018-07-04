@@ -220,7 +220,7 @@ class UrlPaneOracle extends UrlPaneAbstract
 		// "select folder" button
 		this.folderBtn.setGraphic( MyGUITool.createImageView( 16, 16, this.mainCtrl.getImage("file:resources/images/folder.png") ));
 		Tooltip tipFolder = new Tooltip(langRB.getString( "TOOLTIP_OPEN_FOLDER" ));
-		tipFolder.getStyleClass().add("DBSettingDialog_MyToolTip");
+		tipFolder.getStyleClass().add("Common_MyToolTip");
 		this.folderBtn.setTooltip( tipFolder );
 
 		// ----------------------------------------------------
@@ -237,7 +237,7 @@ class UrlPaneOracle extends UrlPaneAbstract
 
 		this.tmplBtn.setGraphic( MyGUITool.createImageView( 16, 16, this.mainCtrl.getImage("file:resources/images/copy.png") ));
 		Tooltip tipCopy = new Tooltip(langRB.getString( "TOOLTIP_COPY" ));
-		tipCopy.getStyleClass().add("DBSettingDialog_MyToolTip");
+		tipCopy.getStyleClass().add("Common_MyToolTip");
 		this.tmplBtn.setTooltip( tipCopy );
 		
 		// ----------------------------------------------------
@@ -571,13 +571,6 @@ class UrlPaneOracle extends UrlPaneAbstract
 	
 	private List<String> loadTnsNamesOra( File dir )
 	{
-		// "UnsupportedOperationException"
-		//ObservableList<String>  obsLst = this.tnsNamesCombo.getItems();
-		//if ( obsLst != null && obsLst.size() > 0 )
-		//{
-		//	this.tnsNamesCombo.getItems().removeAll( obsLst );
-		//}
-		
 		List<String> tnsNameLst = new ArrayList<>();
 		
 		File file = new File( dir.getAbsolutePath() + File.separator + "tnsnames.ora" );
@@ -601,7 +594,6 @@ class UrlPaneOracle extends UrlPaneAbstract
 			while ( m.find() )
 			{
 				itemLst.add( m.group().replaceAll("^(\\w+)\\s*=", "$1") );
-				//this.tnsNamesCombo.getItems().addAll( m.group().replaceAll("^(\\w+)\\s*=", "$1") );
 			}
 			ObservableList<String> obsItemLst = FXCollections.observableList( itemLst );
 			Collections.sort( obsItemLst );
@@ -614,26 +606,10 @@ class UrlPaneOracle extends UrlPaneAbstract
 		}
 		catch ( IOException ioEx )
 		{
-			/*
-			ResourceBundle extLangRB = this.mainCtrl.getLangResource("conf.lang.gui.common.MyAlert");
-			
-    		MyAlertDialog alertDlg = new MyAlertDialog( AlertType.WARNING, this.mainCtrl );
-    		alertDlg.setHeaderText( extLangRB.getString( "TITLE_FILE_NOT_FOUND" ) );
-    		alertDlg.setTxtExp( ioEx );
-    		alertDlg.showAndWait();
-    		*/
     		MyGUITool.showException( this.mainCtrl, "conf.lang.gui.common.MyAlert", "TITLE_FILE_NOT_FOUND", ioEx );
     	}
 		catch ( Exception ex )
 		{
-			/*
-			ResourceBundle extLangRB = this.mainCtrl.getLangResource("conf.lang.gui.common.MyAlert");
-			
-    		MyAlertDialog alertDlg = new MyAlertDialog( AlertType.WARNING, this.mainCtrl );
-    		alertDlg.setHeaderText( extLangRB.getString( "TITLE_FILE_NOT_FOUND" ) );
-    		alertDlg.setTxtExp( ex );
-    		alertDlg.showAndWait();
-    		*/
     		MyGUITool.showException( this.mainCtrl, "conf.lang.gui.common.MyAlert", "TITLE_FILE_NOT_FOUND", ex );
     	}
 		

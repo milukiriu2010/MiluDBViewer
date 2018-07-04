@@ -211,13 +211,13 @@ public class ImportDataPaneFileTableView extends Pane
 		// "import" button
 		this.btnImport.setGraphic( MyGUITool.createImageView( 16, 16, mainCtrl.getImage("file:resources/images/next.png") ));
 		Tooltip tipImport = new Tooltip(langRB.getString( "TOOLTIP_IMPORT" ));
-		tipImport.getStyleClass().add("MainToolBar_MyToolTip");
+		tipImport.getStyleClass().add("Common_MyToolTip");
 		this.btnImport.setTooltip(tipImport);
 		
 		// "back" button
 		this.btnBack.setGraphic( MyGUITool.createImageView( 16, 16, mainCtrl.getImage("file:resources/images/back.png") ));
 		Tooltip tipBack = new Tooltip(extLangRB.getString( "TOOLTIP_BACK" ));
-		tipBack.getStyleClass().add("MainToolBar_MyToolTip");
+		tipBack.getStyleClass().add("Common_MyToolTip");
 		this.btnBack.setTooltip(tipBack);
 		
 	}

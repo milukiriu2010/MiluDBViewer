@@ -140,13 +140,13 @@ public class ImportDataPaneFile extends Pane
 		// "select folder" button
 		this.btnOpen.setGraphic( MyGUITool.createImageView( 16, 16, mainCtrl.getImage("file:resources/images/folder.png") ));
 		Tooltip tipOpen = new Tooltip(extLangRB.getString( "TOOLTIP_OPEN_FILE" ));
-		tipOpen.getStyleClass().add("MainToolBar_MyToolTip");
+		tipOpen.getStyleClass().add("Common_MyToolTip");
 		this.btnOpen.setTooltip( tipOpen );
 		
 		// "next" button
 		this.btnNext.setGraphic( MyGUITool.createImageView( 16, 16, mainCtrl.getImage("file:resources/images/next.png") ));
 		Tooltip tipNext = new Tooltip(extLangRB.getString( "TOOLTIP_NEXT" ));
-		tipNext.getStyleClass().add("MainToolBar_MyToolTip");
+		tipNext.getStyleClass().add("Common_MyToolTip");
 		this.btnNext.setTooltip(tipNext);
 
 	}

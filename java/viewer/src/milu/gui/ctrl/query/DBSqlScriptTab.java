@@ -201,8 +201,8 @@ public class DBSqlScriptTab extends Tab
 	{
 		long startTime = System.nanoTime();
 		MyDBAbstract myDBAbs = this.dbView.getMyDBAbstract();
-		MainController mainController = this.dbView.getMainController();
-		AppConf appConf = mainController.getAppConf();
+		MainController mainCtrl = this.dbView.getMainController();
+		AppConf appConf = mainCtrl.getAppConf();
 		
 		// Get "orientation" of the active tab
 		Tab activeTab = 
@@ -240,14 +240,15 @@ public class DBSqlScriptTab extends Tab
 		
 		task.progressProperty().addListener((obs,oldVal,newVal)->{
 			System.out.println( "ExecExplainAllTask:Progress[" + obs.getClass() + "]oldVal[" + oldVal + "]newVal[" + newVal + "]" );
-			ResourceBundle langRB = this.dbView.getMainController().getLangResource("conf.lang.gui.ctrl.query.DBSqlTab");
+			ResourceBundle langRB = mainCtrl.getLangResource("conf.lang.gui.ctrl.query.DBSqlTab");
+			ResourceBundle cmnLangRB = mainCtrl.getLangResource("conf.lang.gui.common.NodeName");
 			// task start.
 			if ( newVal.doubleValue() == 0.0 )
 			{
 				this.beginProc();
 				VBox vBox = new VBox(2);
 				Label  labelProcess = new Label( langRB.getString("LABEL_PROCESSING") );
-				Button btnCancel    = new Button( langRB.getString("BTN_CANCEL") );
+				Button btnCancel    = new Button( cmnLangRB.getString("BTN_CANCEL") );
 				vBox.getChildren().addAll( labelProcess, btnCancel );
 				
 				// Oracle =>

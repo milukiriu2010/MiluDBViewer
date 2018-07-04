@@ -137,9 +137,9 @@ public class DBView extends Stage
         // load css on DBView elements
         String[] cssLst =
         	{
+        		"/conf/css/ctrl/common/Common.css",
         		"/conf/css/ctrl/common/LabelTable.css",
         		"/conf/css/ctrl/common/table/ObjTableView.css",
-        		"/conf/css/ctrl/menu/MainToolBar.css",
         		"/conf/css/ctrl/query/DBSqlTab.css",
         		"/conf/css/ctrl/query/SqlTextArea.css",
         		"/conf/css/ctrl/schema/SchemaTreeView.css",

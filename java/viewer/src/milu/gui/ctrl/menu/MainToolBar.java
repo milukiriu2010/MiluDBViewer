@@ -171,52 +171,53 @@ public class MainToolBar extends ToolBar
 	{
 		MainController mainCtrl = this.dbView.getMainController();
 		ResourceBundle langRB = mainCtrl.getLangResource("conf.lang.gui.ctrl.menu.MainToolBar");
+		ResourceBundle cmnLangRB = mainCtrl.getLangResource("conf.lang.gui.common.NodeName");
 		
 		// ----------------------------------------------
 		// ToolTip
 		//   Button[Commit] 
 		// ----------------------------------------------
-		Tooltip tipCommit = new Tooltip( langRB.getString( "TIP_COMMIT" ) );
-		tipCommit.getStyleClass().add("MainToolBar_MyToolTip");
+		Tooltip tipCommit = new Tooltip( cmnLangRB.getString( "TOOLTIP_COMMIT" ) );
+		tipCommit.getStyleClass().add("Common_MyToolTip");
 		this.btnCommit.setTooltip( tipCommit );
 		
 		// ----------------------------------------------
 		// ToolTip
 		//   Button[Rollback] 
 		// ----------------------------------------------
-		Tooltip tipRollback = new Tooltip( langRB.getString( "TIP_ROLLBACK" ) );
-		tipRollback.getStyleClass().add("MainToolBar_MyToolTip");
+		Tooltip tipRollback = new Tooltip( cmnLangRB.getString( "TOOLTIP_ROLLBACK" ) );
+		tipRollback.getStyleClass().add("Common_MyToolTip");
 		this.btnRollback.setTooltip( tipRollback );
 		// ----------------------------------------------
 		// ToolTip
 		//   Button[New Tab] 
 		// ----------------------------------------------
-		Tooltip tipNewTab = new Tooltip( langRB.getString( "TIP_NEW_TAB" ));
-		tipNewTab.getStyleClass().add("MainToolBar_MyToolTip");
+		Tooltip tipNewTab = new Tooltip( langRB.getString( "TOOLTIP_NEW_TAB" ));
+		tipNewTab.getStyleClass().add("Common_MyToolTip");
 		this.btnNewTab.setTooltip( tipNewTab );
 
 		// ----------------------------------------------
 		// ToolTip
 		//   Button[New Window] 
 		// ----------------------------------------------
-		Tooltip tipNewWin = new Tooltip( langRB.getString( "TIP_NEW_WIN" ));
-		tipNewWin.getStyleClass().add("MainToolBar_MyToolTip");
+		Tooltip tipNewWin = new Tooltip( langRB.getString( "TOOLTIP_NEW_WIN" ));
+		tipNewWin.getStyleClass().add("Common_MyToolTip");
 		this.btnNewWin.setTooltip( tipNewWin );
 
 		// ----------------------------------------------
 		// ToolTip
 		//   Button[New DB Connection] 
 		// ----------------------------------------------
-		Tooltip tipNewCon = new Tooltip( langRB.getString( "TIP_NEW_CON" ));
-		tipNewCon.getStyleClass().add("MainToolBar_MyToolTip");
+		Tooltip tipNewCon = new Tooltip( langRB.getString( "TOOLTIP_NEW_CON" ));
+		tipNewCon.getStyleClass().add("Common_MyToolTip");
 		this.btnNewCon.setTooltip( tipNewCon );
 
 		// ----------------------------------------------
 		// ToolTip
 		//   Button[Open Schema View] 
 		// ----------------------------------------------
-		Tooltip tipSchema = new Tooltip( langRB.getString( "TIP_SCHEMA" ));
-		tipSchema.getStyleClass().add("MainToolBar_MyToolTip");
+		Tooltip tipSchema = new Tooltip( langRB.getString( "TOOLTIP_SCHEMA" ));
+		tipSchema.getStyleClass().add("Common_MyToolTip");
 		this.btnSchema.setTooltip( tipSchema );
 	}
 	
