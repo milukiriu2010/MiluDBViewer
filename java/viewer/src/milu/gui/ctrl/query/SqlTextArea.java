@@ -763,4 +763,59 @@ public class SqlTextArea extends TextArea
 		}
 	}
 
+	// SQLFormatInterface
+	@Override
+	public void oneLineSQL( Event event )
+	{
+		String strSelected = this.getSelectedText();
+		
+		// ------------------------------------------------
+		// when some words are selected. 
+		// ------------------------------------------------
+		if ( strSelected.length() > 0 )
+		{
+			int caretPos  = this.getCaretPosition();
+			int anchorPos = this.getAnchor();
+			
+			String strFirst  = null;
+			String strSecond = null;
+			if ( caretPos <= anchorPos )
+			{
+				strFirst  = this.getText().substring( 0, caretPos );
+				strSecond = this.getText().substring( anchorPos, this.getText().length() );
+			}
+			else
+			{
+				strFirst  = this.getText().substring( 0, anchorPos );
+				strSecond = this.getText().substring( caretPos, this.getText().length() );
+			}
+			
+			String strCutSpace = strSelected.replaceAll( "\\s+", " " );
+			
+			this.setText( strFirst + strCutSpace + strSecond );
+		}
+		// ------------------------------------------------
+		// when any words are not selected. 
+		// ------------------------------------------------
+		else
+		{
+			// -----------------------------------------------
+			// 
+			//     select 
+			//         * 
+			//     from 
+			//         A; 
+			//     select 
+			//         * 
+			//     from 
+			//         B;
+			// -----------------------------------------------
+			// =>
+			// -----------------------------------------------
+			// select * from A;
+			// select * from B;
+			// -----------------------------------------------
+			this.setText( this.getText().replaceAll( "\\s+", " " ) );
+		}
+	}
 }

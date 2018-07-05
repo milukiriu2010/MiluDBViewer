@@ -38,6 +38,12 @@ class DBSqlScriptToolBar extends ToolBar
 	private Button    btnCopyTblWithHead = new Button();
 	// Format SQL
 	private Button    btnFmtSQL = new Button();
+	// One Line SQL
+	private Button    btnOneLineSQL = new Button();
+	// Previous SQL
+	private Button    btnPrevSQL = new Button();
+	// Next SQL
+	private Button    btnNextSQL = new Button();
 	
 	DBSqlScriptToolBar( DBView dbView )
 	{
@@ -50,6 +56,9 @@ class DBSqlScriptToolBar extends ToolBar
 		this.btnCopyTblNoHead.setGraphic( MyGUITool.createImageView( 20, 20, mainCtrl.getImage("file:resources/images/copy.png") ) );
 		this.btnCopyTblWithHead.setGraphic( MyGUITool.createImageView( 20, 20, mainCtrl.getImage("file:resources/images/copy2.png") ) );
 		this.btnFmtSQL.setGraphic( MyGUITool.createImageView( 20, 20, mainCtrl.getImage("file:resources/images/sql_format.png") ) );
+		this.btnOneLineSQL.setGraphic( MyGUITool.createImageView( 20, 20, mainCtrl.getImage("file:resources/images/sql_oneline.png") ) );
+		this.btnPrevSQL.setGraphic( MyGUITool.createImageView( 20, 20, mainCtrl.getImage("file:resources/images/back.png") ) );
+		this.btnNextSQL.setGraphic( MyGUITool.createImageView( 20, 20, mainCtrl.getImage("file:resources/images/next.png") ) );
 		
 		this.getItems().addAll(	this.btnExecSQL	);
 		
@@ -66,7 +75,11 @@ class DBSqlScriptToolBar extends ToolBar
 			this.btnCopyTblNoHead,
 			this.btnCopyTblWithHead,
 			new Separator(),
-			this.btnFmtSQL 
+			this.btnPrevSQL,
+			this.btnNextSQL,
+			new Separator(),
+			this.btnFmtSQL,
+			this.btnOneLineSQL
 		);
 		
 		this.changeLang();
@@ -108,6 +121,18 @@ class DBSqlScriptToolBar extends ToolBar
 			this.btnFmtSQL.setOnAction(	((SQLFormatInterface)obj)::formatSQL );
 			// any key
 			//this.btnFmtSQL.setOnKeyPressed( ((SQLFormatInterface)obj)::formatSQL );
+			
+			// mouse click, "space/return" key enter 
+			this.btnOneLineSQL.setOnAction( ((SQLFormatInterface)obj)::oneLineSQL );
+		}
+		
+		if ( obj instanceof SQLHistoryInterface )
+		{
+			// mouse click, "space/return" key enter 
+			this.btnPrevSQL.setOnAction( ((SQLHistoryInterface)obj)::prevSQL );
+			
+			// mouse click, "space/return" key enter 
+			this.btnNextSQL.setOnAction( ((SQLHistoryInterface)obj)::nextSQL );
 		}
 	}
 	
@@ -179,8 +204,20 @@ class DBSqlScriptToolBar extends ToolBar
 		tipCopyTblWithHead.getStyleClass().add("Common_MyToolTip");
 		this.btnCopyTblWithHead.setTooltip( tipCopyTblWithHead );
 		
+		// ----------------------------------------------
+		// ToolTip
+		//   Button[Format SQL] 
+		// ----------------------------------------------
 		Tooltip tipFmtSQL = new Tooltip( langRB.getString( "TOOLTIP_FORMAT_SQL" ));
 		tipFmtSQL.getStyleClass().add("Common_MyToolTip");
 		this.btnFmtSQL.setTooltip(tipFmtSQL);
+		
+		// ----------------------------------------------
+		// ToolTip
+		//   Button[1Line SQL] 
+		// ----------------------------------------------
+		Tooltip tipOneLineSQL = new Tooltip( langRB.getString( "TOOLTIP_ONELINE_SQL" ));
+		tipOneLineSQL.getStyleClass().add("Common_MyToolTip");
+		this.btnOneLineSQL.setTooltip(tipOneLineSQL);
 	}	
 }

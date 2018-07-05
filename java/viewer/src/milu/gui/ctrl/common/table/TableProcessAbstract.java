@@ -25,9 +25,9 @@ abstract class TableProcessAbstract
 	
 	abstract void copyTable( COPY_TYPE copyType );
 	
-	abstract List<Object> getHeadList();
+	//abstract List<Object> getHeadList();
 	
-	abstract List<List<Object>> getDataList();
+	//abstract List<List<Object>> getDataList();
 	
 	void setTableColumnCellValueFactory( final int index, TableColumn<List<Object>,Object> tableCol )
 	{

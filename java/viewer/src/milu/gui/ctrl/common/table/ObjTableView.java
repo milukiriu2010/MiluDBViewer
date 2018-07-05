@@ -32,18 +32,22 @@ import javafx.util.Callback;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.Event;
+
 import milu.tool.MyGUITool;
 import milu.tool.MyStringTool;
 import milu.file.table.MyFileExportAbstract;
 import milu.file.table.MyFileExportFactory;
 import milu.gui.ctrl.common.inf.ChangeLangInterface;
 import milu.gui.ctrl.common.inf.SetTableViewDataInterface;
+import milu.task.ProgressInterface;
+import milu.task.ProgressReportInterface;
 import milu.gui.view.DBView;
 
 public class ObjTableView extends TableView<List<Object>>
 	implements 
 		SetTableViewDataInterface,
 		DirectionSwitchInterface,
+		ProgressReportInterface,
 		CopyTableInterface,
 		ChangeLangInterface
 {
@@ -66,6 +70,11 @@ public class ObjTableView extends TableView<List<Object>>
 	
 	// tableView Direction
 	private Orientation tableViewDirection = Orientation.HORIZONTAL;
+	
+	// variable for ProgressReportInterface
+	ProgressInterface progressInf = null;
+	
+	double assignedSize = 0.0;
 	
 	enum COPY_TYPE
 	{
@@ -164,15 +173,6 @@ public class ObjTableView extends TableView<List<Object>>
 					return new EditingCell(objTableView);
 				}
 			};
-		
-		/*
-		this.setRowFactory((tableView)->{
-			TableRow<List<Object>> row = new TableRow<>();
-			//row.setStyle("-fx-text-background-color:red;");
-			row.setStyle("-fx-background-color:#808080;");
-			return row;
-		});
-		*/
         
 		this.setContextMenu();
 	}
@@ -326,12 +326,6 @@ public class ObjTableView extends TableView<List<Object>>
 		// Clear TableView
 		this.getItems().clear();
 		this.getColumns().clear();
-		//this.headObjLst.clear();
-		//this.dataObjLst.clear();
-		//this.headObjLst = headLst.stream().collect(Collectors.toList());
-		//this.dataObjLst = dataLst.stream().collect(Collectors.toList());
-		//this.headObjLst = new ArrayList<>( headLst );
-		//this.dataObjLst = new ArrayList<>( dataLst );
 		this.headObjLst = headLst;
 		this.dataObjLst = dataLst;
 		
@@ -345,14 +339,22 @@ public class ObjTableView extends TableView<List<Object>>
 		this.getItems().clear();
 		this.getColumns().clear();
 		
-		//List<Object>       headLst = this.headObjLst.stream().collect(Collectors.toList());
-		//List<List<Object>> dataLst = this.dataObjLst.stream().collect(Collectors.toList());
-		//List<Object>        headLst = new ArrayList<>( this.headObjLst );
-		//List<List<Object>>  dataLst = new ArrayList<>( this.dataObjLst );
-		
 		TableProcessAbstract tpAbs = TableProcessFactory.getInstance( this.tableViewDirection, this );
-		//tpAbs.setData( headLst, dataLst );
 		tpAbs.setData( this.headObjLst, this.dataObjLst );
+	}
+	
+	// ProgressReportInterface
+	@Override
+	public void setProgressInterface( ProgressInterface progressInf )
+	{
+		this.progressInf = progressInf;
+	}
+	
+	// ProgressReportInterface
+	@Override
+	public void setAssignedSize( double assignedSize )
+	{
+		this.assignedSize = assignedSize;
 	}
 	
 	// CopyTableInterface

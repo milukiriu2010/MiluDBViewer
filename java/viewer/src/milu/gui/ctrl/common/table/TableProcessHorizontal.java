@@ -27,45 +27,6 @@ class TableProcessHorizontal extends TableProcessAbstract
 	@Override
 	void switchDirection()
 	{
-		/*
-		// Get ColumnName from TableView 
-		// https://stackoverflow.com/questions/41104798/javafx-simplest-way-to-get-cell-data-using-table-index
-		int colSize = this.objTableView.getColumns().size();
-		List<Object> headLst = new ArrayList<>();
-		// skip "No" column, so start from 1
-		for ( int i = 1; i < colSize; i++ )
-		{
-			TableColumn<List<Object>,?> tableColumn = this.objTableView.getColumns().get(i);
-			headLst.add( tableColumn.getText() );
-		}
-		//List<String> headLst = this.getHeadList();
-		
-		// Get Data from TableView
-		int rowSize = this.objTableView.getItems().size();
-		List<List<Object>> dataLst = new ArrayList<>();
-		for ( int i = 0; i < rowSize; i++ )
-		{
-			List<Object> dataRow = this.objTableView.getItems().get(i);
-			
-			// remove "No" column
-			dataRow.remove( 0 );
-			dataLst.add( dataRow );
-		}
-		//List<List<String>> dataLst = this.getDataList();
-		
-		
-		// Switch Direction of tableVieSQL from Horizontal to Vertical
-		this.objTableView.setTableViewDirection( Orientation.VERTICAL );
-		this.objTableView.setTableViewData( headLst, dataLst );
-		
-        // enable to select the whole column
-        // https://stackoverflow.com/questions/38012247/javafx-tableview-select-the-whole-tablecolumn-and-get-the-index
-        this.objTableView.getSelectionModel().setCellSelectionEnabled( true );
-        this.objTableView.getFocusModel().focusedCellProperty().addListener
-        ( 
-        	(ChangeListener<? super TablePosition>)this.objTableView.tableViewChangeListner 
-        );
-		*/
 		// Switch Direction of tableVieSQL from Horizontal to Vertical
 		this.objTableView.setOrientation( Orientation.VERTICAL );
 		this.objTableView.setTableViewData();
@@ -125,22 +86,9 @@ class TableProcessHorizontal extends TableProcessAbstract
 			this.objTableView.getColumns().add( tableCol );
 		}
 
-		/*
-		// Reconstruct data list on TableView(horizontal mode)
-		for ( int i = 0; i < dataLst.size(); i++ )
-		{
-			// add "No" on first column
-			List<Object> dataRow = dataLst.get( i );
-			dataRow.add( 0, Integer.valueOf(i+1) );
-		}
-		
-		// Add Data to TableView
-		//this.objTableView.getItems().addAll( dataLst );
-		this.objTableView.setItems( FXCollections.observableArrayList(dataLst) );
-		*/
-		
 		// Reconstruct data list on TableView(horizontal mode)
 		List<List<Object>> dataLst2 = new ArrayList<>();
+		double divAssignedSize = this.objTableView.assignedSize/dataLst.size();
 		for ( int i = 0; i < dataLst.size(); i++ )
 		{
 			List<Object>  dataRow  = dataLst.get(i);
@@ -152,10 +100,14 @@ class TableProcessHorizontal extends TableProcessAbstract
 			// add "No" on first column
 			dataRow2.add( 0, Integer.valueOf(i+1) );
 			dataLst2.add(dataRow2);
+			if ( this.objTableView.progressInf != null )
+			{
+				this.objTableView.progressInf.addProgress(divAssignedSize);
+				this.objTableView.progressInf.setMsg("...");
+			}
 		}
 		
 		// Add Data to TableView
-		//this.objTableView.getItems().addAll( dataLst );
 		this.objTableView.setItems( FXCollections.observableArrayList(dataLst2) );
 	}
 	
@@ -207,7 +159,7 @@ class TableProcessHorizontal extends TableProcessAbstract
 		final Clipboard clipboard = Clipboard.getSystemClipboard();
 		clipboard.setContent( content );
 	}
-	
+	/*
 	@Override
 	List<Object> getHeadList()
 	{
@@ -222,7 +174,8 @@ class TableProcessHorizontal extends TableProcessAbstract
 		}			
 		return headLst;
 	}
-	
+	*/
+	/*
 	@Override
 	List<List<Object>> getDataList()
 	{
@@ -244,4 +197,5 @@ class TableProcessHorizontal extends TableProcessAbstract
 		}
 		return dataLst;
 	}
+	*/
 }

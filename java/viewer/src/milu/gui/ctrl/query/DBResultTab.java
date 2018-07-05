@@ -14,6 +14,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.scene.control.ProgressBar;
 
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -37,6 +38,9 @@ import milu.db.MyDBAbstract;
 import milu.db.access.MyDBOverFetchSizeException;
 import milu.task.ToggleHVTask;
 
+//-----------------------------------------
+//SQL Result
+//-----------------------------------------
 public class DBResultTab extends Tab
 	implements 
 		DirectionSwitchInterface,
@@ -60,6 +64,8 @@ public class DBResultTab extends Tab
 	
 	// Label for SQL execution time
 	private Label labelExecTimeSQL = new Label();
+	
+	private ProgressBar barProgress = new ProgressBar();
 	
 	// Thread Pool
 	private ExecutorService service = Executors.newSingleThreadExecutor();
@@ -86,7 +92,7 @@ public class DBResultTab extends Tab
         hBox.setPadding( new Insets( 2, 2, 2, 2 ) );
         hBox.getChildren().addAll( this.labelCntSQL, this.labelExecTimeSQL );
         
-		
+        this.barProgress.setPrefWidth(500);
 		//this.tableViewSQL.prefHeightProperty().bind( this.lowerPane.heightProperty() );
 		
 		BorderPane brdPane = new BorderPane();
@@ -241,41 +247,53 @@ public class DBResultTab extends Tab
 		long startTime = System.nanoTime();
 		ResourceBundle langRB = this.dbView.getMainController().getLangResource("conf.lang.gui.ctrl.query.DBSqlTab");
 		int cnt = this.tableViewSQL.getRowSize();
-		if ( cnt > 0 )
+		if ( cnt <= 0 )
 		{
-			final ToggleHVTask toggleHVTask = new ToggleHVTask( this.tableViewSQL, cnt );
-			// execute task
-			this.service.submit( toggleHVTask );
-			
-			toggleHVTask.progressProperty().addListener
-			(
-				(obs,oldVal,newVal)->
-				{
-					System.out.println( "ToggleHVTask:Progress[" + obs.getClass() + "]oldVal[" + oldVal + "]newVal[" + newVal + "]" );
-					// task start.
-					if ( newVal.doubleValue() == 0.0 )
-					{
-						//this.dbView.taskProcessing();
-						this.procInf.beginProc();
-						Label label = new Label( langRB.getString("LABEL_PROCESSING") );
-						this.lowerPane.getChildren().clear();
-						this.lowerPane.getChildren().add( label );
-						System.out.println( "ToggleHVTask:clear" );
-					}
-					// task done.
-					else if ( newVal.doubleValue() == 1.0 )
-					{
-						this.lowerPane.getChildren().clear();
-						this.lowerPane.getChildren().add( this.tableViewSQL );
-						//this.dbView.taskDone();
-						this.procInf.endProc();
-						long endTime = System.nanoTime();
-						this.setExecTime( endTime - startTime );
-						System.out.println( "ToggleHVTask:set" );
-					}
-				}
-			);
+			return;
 		}
+		
+		final ToggleHVTask toggleHVTask = new ToggleHVTask( this.tableViewSQL, cnt );
+		// execute task
+		this.service.submit( toggleHVTask );
+		
+		this.barProgress.progressProperty().unbind();
+		this.barProgress.progressProperty().bind(toggleHVTask.progressProperty());
+		
+		Label lblMsg = new Label();
+		
+		toggleHVTask.progressProperty().addListener((obs,oldVal,newVal)->{
+			System.out.println( "ToggleHVTask:Progress[" + obs.getClass() + "]oldVal[" + oldVal + "]newVal[" + newVal + "]" );
+			// task start.
+			if ( newVal.doubleValue() == 0.0 )
+			{
+				this.procInf.beginProc();
+				lblMsg.setText( langRB.getString("LABEL_PROCESSING") );
+				this.lowerPane.getChildren().clear();
+				this.lowerPane.getChildren().addAll( lblMsg, this.barProgress );
+				System.out.println( "ToggleHVTask:clear" );
+			}
+			// task done.
+			else if ( newVal.doubleValue() == 1.0 )
+			{
+				this.lowerPane.getChildren().clear();
+				this.lowerPane.getChildren().add( this.tableViewSQL );
+				this.procInf.endProc();
+				long endTime = System.nanoTime();
+				this.setExecTime( endTime - startTime );
+				System.out.println( "ToggleHVTask:set" );
+			}
+			/*
+			else
+			{
+				this.barProgress.setProgress(newVal.doubleValue());
+			}
+			*/
+		});
+		
+		toggleHVTask.messageProperty().addListener((obs,oldVal,newVal)->{
+			System.out.println( "DBResultTab:" + newVal );
+			lblMsg.setText(newVal);
+		});
 	}
 	
 	

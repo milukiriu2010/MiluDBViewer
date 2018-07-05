@@ -1,6 +1,7 @@
 package milu.gui.ctrl.query;
 
 import java.util.List;
+import java.util.Queue;
 import java.util.ResourceBundle;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -25,6 +26,9 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.AnchorPane;
 import javafx.concurrent.Task;
 import javafx.event.Event;
+
+import milu.ctrl.sql.parse.SQLBag;
+import milu.db.MyDBAbstract;
 import milu.gui.ctrl.common.inf.ActionInterface;
 import milu.gui.ctrl.common.inf.ChangeLangInterface;
 import milu.gui.ctrl.common.inf.CounterInterface;
@@ -38,8 +42,7 @@ import milu.main.MainController;
 import milu.task.query.ExecTaskFactory;
 import milu.tool.MyGUITool;
 import milu.tool.MyStringTool;
-import milu.ctrl.sql.parse.SQLBag;
-import milu.db.MyDBAbstract;
+import milu.tool.LimitedQueue;
 
 public class DBSqlScriptTab extends Tab
 	implements 
@@ -52,7 +55,8 @@ public class DBSqlScriptTab extends Tab
 		CopyTableInterface,
 		DirectionSwitchInterface,
 		ProcInterface,
-		SQLFormatInterface
+		SQLFormatInterface,
+		SQLHistoryInterface
 {
 	private DBView          dbView = null;
 	
@@ -80,6 +84,9 @@ public class DBSqlScriptTab extends Tab
 	
 	// Label for SQL execution time
 	private Label labelExecTimeSQL = new Label("*");
+	
+	// Queue for SQL
+	private Queue<String>  sqlQueue = null;
 	
 	// Thread Pool
 	private ExecutorService service = Executors.newSingleThreadExecutor();
@@ -265,8 +272,6 @@ public class DBSqlScriptTab extends Tab
 			// task done.
 			else if ( newVal.doubleValue() == 1.0 )
 			{
-				//this.lowerPane.getChildren().clear();
-				//this.lowerPane.getChildren().add( this.tabPane );
 				// remove tab for cancel
 				this.tabPane.getTabs().remove(0);
 				this.endProc();
@@ -325,7 +330,6 @@ public class DBSqlScriptTab extends Tab
 			return;
 		}
 		*/		
-		System.out.println( "execSQL" );
 		this.execTask(ExecTaskFactory.FACTORY_TYPE.SCRIPT);
 	}
 	
@@ -388,6 +392,25 @@ public class DBSqlScriptTab extends Tab
 	public void formatSQL( Event event )
 	{
 		this.textAreaSQL.formatSQL( event );
+	}
+
+	// SQLFormatInterface
+	@Override
+	public void oneLineSQL( Event event )
+	{
+		this.textAreaSQL.oneLineSQL( event );
+	}
+
+	// SQLHistoryInterface
+	@Override
+	public void prevSQL( Event event )
+	{
+	}
+
+	// SQLHistoryInterface
+	@Override
+	public void nextSQL( Event event )
+	{
 	}
 	
 	// ProcInterface

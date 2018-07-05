@@ -13,6 +13,9 @@ import milu.gui.view.DBView;
 import milu.main.MainController;
 import milu.tool.MyGUITool;
 
+// -----------------------------------------
+// SQL ResultSetMetaData
+// -----------------------------------------
 public class DBResultSelectTab extends Tab
 	implements
 		CopyTableInterface,
