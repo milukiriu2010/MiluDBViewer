@@ -53,22 +53,23 @@ public class InitialLoadImage extends InitialLoadAbstract
 				"file:resources/images/sysinfo.png",
 				"file:resources/images/jdbc.png",
 				// MainToolBar
-				"file:resources/images/execsql.png",
-				"file:resources/images/explain.png",
-				"file:resources/images/direction.png",
 				"file:resources/images/commit.png",
 				"file:resources/images/rollback.png",
 				"file:resources/images/newtab.png",
 				"file:resources/images/newwin.png",
 				"file:resources/images/connect.png",
-				"file:resources/images/copy.png",
-				"file:resources/images/copy2.png",
 				// Dialog
 				"file:resources/images/winicon.gif",
 				// DBSqlTab
 				"file:resources/images/sql.png",
 				"file:resources/images/result.png",
 				//"file:resources/images/script.png",
+				"file:resources/images/execsql.png",
+				"file:resources/images/explain.png",
+				"file:resources/images/direction.png",
+				"file:resources/images/copy.png",
+				"file:resources/images/copy2.png",
+				"file:resources/images/save.png",
 				// DBSettingDialog
 				"file:resources/images/folder.png",
 				"file:resources/images/folder_new.png",

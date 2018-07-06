@@ -13,12 +13,19 @@ public class LimitedQueue<E> extends LinkedList<E>
     {
         this.limit = limit;
     }
-
+    
+    @Override
+    public void add(int index,E o) 
+    {
+        super.add(index,o);
+        while (this.size() > limit) { super.removeLast(); }
+    }
+    
     @Override
     public boolean add(E o) 
     {
         super.add(o);
-        while (size() > limit) { super.remove(); }
+        while (this.size() > limit) { super.removeLast(); }
         return true;
     }
 }

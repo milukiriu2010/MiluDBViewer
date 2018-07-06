@@ -5,8 +5,11 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.CopyOption;
 import java.nio.file.StandardCopyOption;
-
 import java.io.File;
+import java.io.FileReader;
+import java.io.BufferedReader;
+import java.io.FileWriter;
+import java.io.BufferedWriter;
 import java.io.IOException;
 
 import milu.file.json.MyJsonHandleAbstract;
@@ -44,6 +47,7 @@ public class MyFileTool
 		}
 	}
 	
+	// delete all folders & files under "dir"
 	public static void purgeDirectory( File dir )
 	{
 		for ( File file: dir.listFiles() )
@@ -87,6 +91,34 @@ public class MyFileTool
         }
     }
     
+    public static String loadFile( File file, MainController mainCtrl, AppConf appConf )
+    {
+    	String lineSP = System.getProperty("line.separator");
+    	StringBuffer sb = new StringBuffer();
+    	try ( BufferedReader br = new BufferedReader(new FileReader(file)) )
+    	{
+    		br.lines().forEach(line->sb.append(line+lineSP));
+    	}
+    	catch ( IOException ioEx )
+    	{
+    		MyGUITool.showException( mainCtrl, "conf.lang.gui.common.MyAlert", "TITLE_MISC_ERROR", ioEx );
+    	}
+    	
+    	return sb.toString();
+    }
+    
+    public static void saveFile( File file, String str, MainController mainCtrl, AppConf appConf )
+    {
+    	try ( BufferedWriter wr = new BufferedWriter(new FileWriter(file)) )
+    	{
+    		wr.write(str);
+    	}
+    	catch ( IOException ioEx )
+    	{
+    		MyGUITool.showException( mainCtrl, "conf.lang.gui.common.MyAlert", "TITLE_MISC_ERROR", ioEx );
+    	}
+    }
+    
     public static void save( MainController mainCtrl, AppConf appConf )
     {
 		try
@@ -105,6 +137,7 @@ public class MyFileTool
 	
     // It doesn't work well.
 	// https://stackoverflow.com/questions/6214703/copy-entire-directory-contents-to-another-directory?utm_medium=organic&utm_source=google_rich_qa&utm_campaign=google_rich_qa
+    /*
 	public static void copyDir(String src, String dest, boolean overwrite) throws IOException
 	{
         Files.walk(Paths.get(src)).forEach(a ->{
@@ -122,4 +155,5 @@ public class MyFileTool
         	}
         });		
 	}
+	*/
 }

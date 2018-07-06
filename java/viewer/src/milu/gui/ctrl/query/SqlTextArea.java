@@ -688,7 +688,6 @@ public class SqlTextArea extends TextArea
 	@Override
 	public void formatSQL( Event event )
 	{
-		/*
 		if (event instanceof KeyEvent)
 		{
 			KeyEvent keyEvent = (KeyEvent)event;
@@ -696,6 +695,8 @@ public class SqlTextArea extends TextArea
 			if ( keyEvent.isAltDown() )
 			{
 				System.out.println( "formatSQL KeyEvent => Alt is down." );
+				String formatted = new BasicFormatterImpl().format( this.getText() );
+				this.setText(formatted);
 			}
 			return;
 		}
@@ -703,9 +704,7 @@ public class SqlTextArea extends TextArea
 		{
 			System.out.println( "formatSQL event:" + event.getEventType() );
 		}
-		*/
-		//String formatted = new BasicFormatterImpl().format( this.getText() );
-		//this.setText(formatted);
+		
 		String lineSP = System.getProperty("line.separator");
 		String strSelected = this.getSelectedText();
 		

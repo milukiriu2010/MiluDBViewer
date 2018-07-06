@@ -1,7 +1,7 @@
 package milu.gui.ctrl.query;
 
+import java.io.File;
 import java.util.List;
-import java.util.Queue;
 import java.util.ResourceBundle;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -22,6 +22,7 @@ import javafx.scene.control.ToolBar;
 
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.stage.FileChooser;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.AnchorPane;
 import javafx.concurrent.Task;
@@ -43,6 +44,7 @@ import milu.task.query.ExecTaskFactory;
 import milu.tool.MyGUITool;
 import milu.tool.MyStringTool;
 import milu.tool.LimitedQueue;
+import milu.tool.MyFileTool;
 
 public class DBSqlScriptTab extends Tab
 	implements 
@@ -56,7 +58,8 @@ public class DBSqlScriptTab extends Tab
 		DirectionSwitchInterface,
 		ProcInterface,
 		SQLFormatInterface,
-		SQLHistoryInterface
+		SQLHistoryInterface,
+		SQLFileInterface
 {
 	private DBView          dbView = null;
 	
@@ -85,8 +88,11 @@ public class DBSqlScriptTab extends Tab
 	// Label for SQL execution time
 	private Label labelExecTimeSQL = new Label("*");
 	
-	// Queue for SQL
-	private Queue<String>  sqlQueue = null;
+	// SQL History List
+	private List<String>  histSQLLst = null;
+	
+	// SQL History Position
+	private int           histSQLPos = -1;
 	
 	// Thread Pool
 	private ExecutorService service = Executors.newSingleThreadExecutor();
@@ -142,6 +148,9 @@ public class DBSqlScriptTab extends Tab
 		
 		// Tab Title
 		this.setText( "SQL" + Integer.valueOf( counterOpend ) );
+		
+		// SQL History List
+		this.histSQLLst = new LimitedQueue<String>(10);
 	}
 	
 	// ActionInterface
@@ -223,6 +232,14 @@ public class DBSqlScriptTab extends Tab
 			orientation = ((DirectionSwitchInterface)activeTab).getOrientation();
 		}
 		
+		// put "new SQL" to "SQL History List"
+		String strSQL = this.textAreaSQL.getText();
+		if ( this.histSQLLst.contains(strSQL) == false )
+		{
+			this.histSQLPos = 0;
+			this.histSQLLst.add(0,strSQL);
+		}
+		
 		// remove Tab "SQL Result"
 		this.tabPane.getTabs().removeAll(this.tabPane.getTabs());
 		
@@ -282,7 +299,9 @@ public class DBSqlScriptTab extends Tab
 		});
 		
 		// Exception Returned by Task
-		task.valueProperty().addListener( (obs,oldVal,newVal)->this.showException(newVal,startTime) );
+		task.valueProperty().addListener((obs,oldVal,ex)->{
+			this.showException(ex,startTime);
+		});
 	}
 	
 	private void showException( Exception ex, long startTime )
@@ -318,18 +337,6 @@ public class DBSqlScriptTab extends Tab
 	@Override
 	public void execSQL( Event event )
 	{
-		/*
-		if (event instanceof KeyEvent)
-		{
-			KeyEvent keyEvent = (KeyEvent)event;
-			System.out.println( "execSQL KeyEvent:" + keyEvent.getCode() );
-			if ( keyEvent.isControlDown() )
-			{
-				System.out.println( "execSQL KeyEvent => Ctrl is down." );
-			}
-			return;
-		}
-		*/		
 		this.execTask(ExecTaskFactory.FACTORY_TYPE.SCRIPT);
 	}
 	
@@ -405,12 +412,95 @@ public class DBSqlScriptTab extends Tab
 	@Override
 	public void prevSQL( Event event )
 	{
+		this.histSQLPos++;
+		int size = this.histSQLLst.size();
+		if ( size == 0 )
+		{
+			this.histSQLPos = 0;
+		}
+		else if ( this.histSQLPos > (size-1) )
+		{
+			this.histSQLPos = size-1;
+		}
+		this.setSQLTextFromHistory();
 	}
 
 	// SQLHistoryInterface
 	@Override
 	public void nextSQL( Event event )
 	{
+		this.histSQLPos--;
+		if ( this.histSQLPos < -1 )
+		{
+			this.histSQLPos = -1;
+		}
+		this.setSQLTextFromHistory();
+	}
+	
+	private void setSQLTextFromHistory()
+	{
+		if ( this.histSQLPos >= this.histSQLLst.size() )
+		{
+			return;
+		}
+		else if ( this.histSQLPos == -1 )
+		{
+			this.textAreaSQL.setText(null);
+			return;
+		}
+		
+		String strSQL = this.histSQLLst.get(this.histSQLPos);
+		if ( strSQL != null )
+		{
+			this.textAreaSQL.setText(strSQL);
+		}
+	}
+
+	// SQLFileInterface
+	@Override
+	public void openSQL( Event event )
+	{
+		MainController mainCtrl = this.dbView.getMainController();
+		AppConf appConf = mainCtrl.getAppConf();
+		FileChooser fc = new FileChooser();
+		// Initial Directory
+		if ( appConf.getInitDirSQLFile().isEmpty() != true )
+		{
+			fc.setInitialDirectory( new File(appConf.getInitDirSQLFile()) );
+		}
+		File file = fc.showOpenDialog(this.getTabPane().getScene().getWindow());
+		if ( file == null )
+		{
+			return;
+		}
+		appConf.setInitDirSQLFile(file.getParent());
+		MyFileTool.save(mainCtrl, appConf);
+		
+		String strSQL = MyFileTool.loadFile(file, mainCtrl, appConf);
+		this.textAreaSQL.setText(strSQL);
+	}
+
+	// SQLFileInterface
+	@Override
+	public void saveSQL( Event event )
+	{
+		MainController mainCtrl = this.dbView.getMainController();
+		AppConf appConf = mainCtrl.getAppConf();
+		FileChooser fc = new FileChooser();
+		// Initial Directory
+		if ( appConf.getInitDirSQLFile().isEmpty() != true )
+		{
+			fc.setInitialDirectory( new File(appConf.getInitDirSQLFile()) );
+		}
+		File file = fc.showOpenDialog(this.getTabPane().getScene().getWindow());
+		if ( file == null )
+		{
+			return;
+		}
+		appConf.setInitDirSQLFile(file.getParent());
+		MyFileTool.save(mainCtrl, appConf);
+		
+		MyFileTool.saveFile(file, this.textAreaSQL.getText(), mainCtrl, appConf);
 	}
 	
 	// ProcInterface

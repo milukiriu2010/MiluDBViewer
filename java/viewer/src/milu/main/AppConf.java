@@ -38,6 +38,10 @@ final public class AppConf
 	// Initial Directory to Import File(Excel)
 	@Expose(serialize = true, deserialize = true)
 	private String  initDirImportFile = "";
+	
+	// Initial Directory to SQL File
+	@Expose(serialize = true, deserialize = true)
+	private String  initDirSQLFile = "";
 
 	// Language Code
 	@Expose(serialize = true, deserialize = true)
@@ -157,6 +161,17 @@ final public class AppConf
 	public void setInitDirImportFile( String initDirImportFile )
 	{
 		this.initDirImportFile = initDirImportFile;
+	}
+	
+	// Initial Directory to SQL File
+	public String getInitDirSQLFile()
+	{
+		return this.initDirSQLFile;
+	}
+	
+	public void setInitDirSQLFile( String initDirSQLFile )
+	{
+		this.initDirSQLFile = initDirSQLFile;
 	}
 	
 	// Language Code
