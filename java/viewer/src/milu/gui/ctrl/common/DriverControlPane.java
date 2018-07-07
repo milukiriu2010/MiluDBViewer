@@ -2,12 +2,15 @@ package milu.gui.ctrl.common;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
+import java.lang.reflect.Type;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -23,12 +26,17 @@ import javafx.scene.layout.VBox;
 import javafx.geometry.Insets;
 import javafx.stage.FileChooser;
 import javafx.util.StringConverter;
+
+import com.google.gson.reflect.TypeToken;
+
 import milu.db.driver.DriverClassConst;
 import milu.db.driver.DriverNameConst;
+import milu.db.driver.DriverInfo;
 import milu.db.driver.DriverShim;
 import milu.db.driver.LoadDriver;
 import milu.file.json.MyJsonHandleAbstract;
 import milu.file.json.MyJsonHandleFactory;
+import milu.file.json.MyJsonList;
 import milu.gui.ctrl.common.inf.PaneSwitchDriverInterface;
 import milu.main.AppConst;
 import milu.main.AppConf;
@@ -111,15 +119,6 @@ public class DriverControlPane extends Pane
 		// ---------------------------------------------------------
 		// ComboBox to choose "Driver Class Name"
 		// ---------------------------------------------------------
-		/*
-		List<String> driverNameLst = 
-				DriverShim.driverDBMap.values().stream()
-					.map(x->x.val())
-					.sorted()
-					.collect(Collectors.toList());
-		ObservableList<String> driverNameObsLst = FXCollections.observableArrayList( driverNameLst );
-		this.driverClassNameCombo.setItems(driverNameObsLst);
-		*/
 		List<DriverNameConst> driverNameLst = 
 				DriverShim.driverDBMap.values().stream()
 					.sorted()
@@ -236,57 +235,78 @@ public class DriverControlPane extends Pane
 		
 		this.driverPathListView.setCellFactory(	(callback)->new EditListCell() );
 		
-		this.btnAddJar.setOnAction
-		(
-			(event)->
+		this.btnAddJar.setOnAction((event)->{
+			FileChooser fc = new FileChooser();
+			if ( "".equals(appConf.getInitDirJDBC()) == false )
 			{
-				FileChooser fc = new FileChooser();
-				if ( "".equals(appConf.getInitDirJDBC()) == false )
-				{
-					fc.setInitialDirectory(new File(appConf.getInitDirJDBC()));
-				}
-				List<File> fileLst = fc.showOpenMultipleDialog(this.getScene().getWindow());
-				if ( fileLst == null )
-				{
-					return;
-				}
-				fileLst.forEach
-				((file)->{
-					this.driverPathListView.getItems().add(file.getAbsolutePath());
-					appConf.setInitDirJDBC(file.getParent());
-				});
-				
-				// save AppConf to "the default configuration file".
-				try
-				{
-					MyJsonHandleAbstract myJsonAbs =
-							new MyJsonHandleFactory().createInstance(AppConf.class);
-							
-					myJsonAbs.open(AppConst.APP_CONF.val());
-					myJsonAbs.save( appConf );
-				}
-				catch ( IOException ioEx )
-				{
-					MyGUITool.showException( this.mainCtrl, "conf.lang.gui.common.MyAlert", "TITLE_MISC_ERROR", ioEx );
-				}
+				fc.setInitialDirectory(new File(appConf.getInitDirJDBC()));
 			}
-		);
+			List<File> fileLst = fc.showOpenMultipleDialog(this.getScene().getWindow());
+			if ( fileLst == null )
+			{
+				return;
+			}
+			fileLst.forEach
+			((file)->{
+				this.driverPathListView.getItems().add(file.getAbsolutePath());
+				appConf.setInitDirJDBC(file.getParent());
+			});
+			
+			// save AppConf to "the default configuration file".
+			try
+			{
+				MyJsonHandleAbstract myJsonAbs =
+						new MyJsonHandleFactory().createInstance(AppConf.class);
+						
+				myJsonAbs.open(AppConst.APP_CONF.val());
+				myJsonAbs.save( appConf );
+			}
+			catch ( IOException ioEx )
+			{
+				MyGUITool.showException( this.mainCtrl, "conf.lang.gui.common.MyAlert", "TITLE_MISC_ERROR", ioEx );
+			}
+		});
 		
-		this.btnDelJar.setOnAction
-		(
-			(event)->
-			{
-				ObservableList<String>  selectedItems = this.driverPathListView.getSelectionModel().getSelectedItems();
-				this.driverPathListView.getItems().removeAll( selectedItems );
-			}
-		);
+		this.btnDelJar.setOnAction((event)->{
+			ObservableList<String>  selectedItems = this.driverPathListView.getSelectionModel().getSelectedItems();
+			this.driverPathListView.getItems().removeAll( selectedItems );
+		});
+		
+		URL url = getClass().getResource( "/conf/json/driver.json" );
+		MyJsonList<DriverInfo> myJsonLst = new MyJsonList<>();
+		try
+		{
+			Type type = new TypeToken<List<DriverInfo>>() {}.getType();
+			//List<DriverInfo> driverInfoLst = myJsonLst.load(url,DriverInfo.class);
+			//Collection<DriverInfo> driverInfoLst = myJsonLst.load(url,DriverInfo.class);
+			List<DriverInfo> driverInfoLst = myJsonLst.load(url,type);
+			System.out.println( "=== MyJsonLst =========================================" );
+			driverInfoLst.forEach((driverInfo)->{
+				System.out.println( "ClassName   :" + driverInfo.getDriverClassName() );
+				System.out.println( "TemplateURL :" + driverInfo.getTemplateUrl() );
+				System.out.println( "ReferenceURL:" + driverInfo.getReferenceUrl() );
+				System.out.println( "***********************************************" );
+			});
+			System.out.println( "=======================================================" );
+		}
+		catch ( Exception ex )
+		{
+			ex.printStackTrace();
+		}
+		
+		
+		
+		
+		
 		
 		// switch key<=>val
 		Map<DriverNameConst, DriverClassConst> inverseDriverMap =
 				DriverShim.driverDBMap.entrySet().stream()
 					.collect(Collectors.toMap(Map.Entry::getValue, Map.Entry::getKey));
-		this.driverClassNameCombo.getSelectionModel().selectedItemProperty().addListener
-		((obs,oldVal,newVal)->{
+		// -------------------------------------------
+		// set DriverClassName by DriverName
+		// -------------------------------------------
+		this.driverClassNameCombo.getSelectionModel().selectedItemProperty().addListener((obs,oldVal,newVal)->{
 			this.driverClassNameTxt.setText(inverseDriverMap.get(newVal).val());
 		});
 		

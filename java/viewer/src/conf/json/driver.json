@@ -1,0 +1,17 @@
+[
+	{
+	  "driverClassName": "org.sqlite.JDBC",
+	  "tmplateUrl": "jdbc:sqlite:filename",
+	  "referenceUrl": "https://github.com/xerial/sqlite-jdbc"
+	},
+	{
+	  "driverClassName": "mongodb.jdbc.MongoDriver",
+	  "tmplateUrl": "jdbc:mongo://\u003cserverName\u003e:27017/\u003cdatabaseName\u003e",
+	  "referenceUrl": "http://www.unityjdbc.com/mongojdbc/mongo_jdbc.php"
+	},
+	{
+	  "driverClassName": "org.h2.Driver",
+	  "tmplateUrl": "jdbc:h2:~/test",
+	  "referenceUrl": "http://www.h2database.com/html/features.html"
+	}
+]

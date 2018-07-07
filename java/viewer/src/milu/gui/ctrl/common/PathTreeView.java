@@ -34,8 +34,6 @@ public class PathTreeView extends TreeView<Path>
 	// File Extension
 	private String  fileExt = "";
 	
-	//private TextFieldTreeCell<Path> treeCell = null;
-	
 	private TreeItem<Path>  itemDrag = null;
 	
 	public void setMainController( MainController mainCtrl )
@@ -130,7 +128,6 @@ public class PathTreeView extends TreeView<Path>
 							}
 							catch ( InvalidPathException ipEx )
 							{
-								//showException(ipEx,"TITLE_NOT_ALLOWED_CHARACTER");
 								MyGUITool.showException( PathTreeView.this.mainCtrl, "conf.lang.gui.common.MyAlert", "TITLE_MISC_ERROR", ipEx, "TITLE_NOT_ALLOWED_CHARACTER" );
 								Platform.runLater( ()->requestFocus() );
 								return selectedPath;
@@ -157,6 +154,7 @@ public class PathTreeView extends TreeView<Path>
 			//	treeCell.setDisable(true);
 			//}
 			// ----------------------------------------------------
+			/*
 			TreeItem<Path> treeItem = treeCell.getTreeItem();
 			if ( treeItem != null )
 			{
@@ -167,7 +165,7 @@ public class PathTreeView extends TreeView<Path>
 				System.out.println( "TreeCell:null" );
 			}
 			System.out.println( "TreeCell.getText:" + treeCell.getText() );
-			
+			*/
 			
 			return treeCell;
 		});
