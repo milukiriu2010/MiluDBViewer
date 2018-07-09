@@ -5,11 +5,12 @@ import java.util.List;
 import milu.ctrl.sql.parse.SQLBag;
 import milu.db.MyDBAbstract;
 import milu.main.AppConf;
+import milu.task.ProgressInterface;
 
 public class ExecSQLFactory extends ExecSQLFactoryAbstract {
 
 	@Override
-	public ExecSQLAbstract createFactory( SQLBag sqlBag, MyDBAbstract myDBAbs, AppConf appConf ) 
+	public ExecSQLAbstract createFactory( SQLBag sqlBag, MyDBAbstract myDBAbs, AppConf appConf, ProgressInterface progressInf, double assignedSize ) 
 	{
 		ExecSQLAbstract execSQLAbs = null;
 		if ( SQLBag.TYPE.SELECT.equals(sqlBag.getType()) )
@@ -79,6 +80,8 @@ public class ExecSQLFactory extends ExecSQLFactoryAbstract {
 		execSQLAbs.setSQLBag(sqlBag);
 		execSQLAbs.setMyDBAbstract(myDBAbs);
 		execSQLAbs.setAppConf(appConf);
+		execSQLAbs.setProgressInterface(progressInf);
+		execSQLAbs.setAssignedSize(assignedSize);
 		return execSQLAbs;
 	}
 

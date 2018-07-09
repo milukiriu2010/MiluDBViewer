@@ -7,8 +7,11 @@ import java.util.List;
 import milu.ctrl.sql.parse.SQLBag;
 import milu.db.MyDBAbstract;
 import milu.main.AppConf;
+import milu.task.ProgressInterface;
+import milu.task.ProgressReportInterface;
 
-abstract public class ExecSQLAbstract 
+abstract public class ExecSQLAbstract
+	implements ProgressReportInterface
 {
 	// DB Access Object
 	protected MyDBAbstract  myDBAbs = null;
@@ -30,6 +33,9 @@ abstract public class ExecSQLAbstract
 	protected List<List<Object>> dataLst    = new ArrayList<>();
 	// Prepared List
 	protected List<Object>   preLst = null;
+	
+	protected ProgressInterface  progressInf  = null;
+	protected double             assignedSize = 0.0;	
 	
 	public void setMyDBAbstract( MyDBAbstract myDBAbs )
 	{
@@ -65,6 +71,20 @@ abstract public class ExecSQLAbstract
 	{
 		this.preLst = preLst;
 	}
+	
+	// ProgressReportInterface
+	@Override
+	public void setProgressInterface( ProgressInterface progressInf )
+	{
+		this.progressInf = progressInf;
+	}
+	
+	// ProgressReportInterface
+	@Override
+	public void setAssignedSize( double assignedSize )
+	{
+		this.assignedSize = assignedSize;
+	}	
 	
 	protected void clear()
 	{

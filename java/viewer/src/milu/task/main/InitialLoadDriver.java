@@ -19,6 +19,8 @@ import milu.db.driver.DriverShim;
 import milu.db.driver.LoadDriver;
 import milu.file.json.MyJsonHandleAbstract;
 import milu.file.json.MyJsonHandleFactory;
+import milu.file.json.MyJsonEachAbstract;
+import milu.file.json.MyJsonEachFactory;
 import milu.gui.dlg.MyAlertDialog;
 import milu.main.AppConst;
 import milu.tool.MyFileTool;
@@ -54,10 +56,11 @@ public class InitialLoadDriver extends InitialLoadAbstract
 		(
 			(json)->
 			{
-				MyJsonHandleAbstract myJsonAbs =
-					new MyJsonHandleFactory().createInstance(DriverShim.class);
 				try
 				{
+					/*
+					MyJsonHandleAbstract myJsonAbs =
+							new MyJsonHandleFactory().createInstance(DriverShim.class);
 					myJsonAbs.open(json.getAbsolutePath());
 					Object obj = myJsonAbs.load();
 					if ( obj instanceof DriverShim )
@@ -75,12 +78,26 @@ public class InitialLoadDriver extends InitialLoadAbstract
 							System.out.println( driverShim.getDriverClassName() + " Driver(User) Load skip." );
 						}
 					}
+					*/
+					MyJsonEachAbstract<DriverShim> myJsonAbs =
+							MyJsonEachFactory.<DriverShim>getInstance(MyJsonEachFactory.factoryType.DRIVER_SHIM);
+					DriverShim driverShim = myJsonAbs.load(new File(json.getAbsolutePath()));
+					if ( LoadDriver.isAlreadyLoadCheck( driverShim.getDriverClassName() ) == false )
+					{
+						DriverShim loadedDriver = LoadDriver.loadDriver( driverShim.getDriverClassName(), driverShim.getDriverPathLst() );
+						loadedDriver.setTemplateUrl( driverShim.getTemplateUrl() );
+						loadedDriver.setReferenceUrl( driverShim.getReferenceUrl() );
+						System.out.println( driverShim.getDriverClassName() + " Driver(User) Load done." );
+					}
+					else
+					{
+						System.out.println( driverShim.getDriverClassName() + " Driver(User) Load skip." );
+					}
 				}
 				catch ( Exception ex )
 				{
 					// "driver/'driver class name'.json" exists
 					// but, cannot read.
-					//this.showException(ex, "Cannot load(" + json.getAbsolutePath() + ")");
 					
 					// https://stackoverflow.com/questions/36309385/how-to-change-the-text-of-yes-no-buttons-in-javafx-8-alert-dialogs?utm_medium=organic&utm_source=google_rich_qa&utm_campaign=google_rich_qa
 					// https://stackoverflow.com/questions/29535395/javafx-default-focused-button-in-alert-dialog?utm_medium=organic&utm_source=google_rich_qa&utm_campaign=google_rich_qa

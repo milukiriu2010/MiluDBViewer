@@ -20,8 +20,11 @@ import milu.gui.ctrl.query.DBResultSelectTab;
 import milu.gui.ctrl.query.DBResultTab;
 import milu.gui.view.DBView;
 import milu.main.AppConf;
+import milu.task.ProgressInterface;
+import milu.task.ProgressReportInterface;
 
 public class ExecScriptEach 
+	implements ProgressReportInterface
 {
 	private int           no      = -1;
 	private DBView        dbView  = null;
@@ -35,6 +38,9 @@ public class ExecScriptEach
 	private Exception     myEx     = null;
 	private ProcInterface procInf     = null;
 	private Orientation   orientation = null;
+	
+	private ProgressInterface  progressInf  = null;
+	private double             assignedSize = 0.0;
 	
 	enum TYPE
 	{
@@ -97,9 +103,23 @@ public class ExecScriptEach
 		return this.myEx;
 	}
 	
+	// ProgressReportInterface
+	@Override
+	public void setProgressInterface( ProgressInterface progressInf )
+	{
+		this.progressInf = progressInf;
+	}
+	
+	// ProgressReportInterface
+	@Override
+	public void setAssignedSize( double assignedSize )
+	{
+		this.assignedSize = assignedSize;
+	}
+	
 	public void exec()
 	{
-		ExecSQLAbstract execSQLAbs = new ExecSQLFactory().createFactory( this.sqlBag, this.myDBAbs, this.appConf );
+		ExecSQLAbstract execSQLAbs = new ExecSQLFactory().createFactory( this.sqlBag, this.myDBAbs, this.appConf, this.progressInf, this.assignedSize );
 		if ( execSQLAbs == null )
 		{
 			return;

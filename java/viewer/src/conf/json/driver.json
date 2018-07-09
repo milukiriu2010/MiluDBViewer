@@ -1,8 +1,18 @@
 [
 	{
-	  "driverClassName": "org.sqlite.JDBC",
-	  "tmplateUrl": "jdbc:sqlite:filename",
-	  "referenceUrl": "https://github.com/xerial/sqlite-jdbc"
+	  "driverClassName": "com.github.adejanovski.cassandra.jdbc.CassandraDriver",
+	  "tmplateUrl": "jdbc:cassandra://host1--host2--host3:9042/keyspace1?loadbalancing\u003dTokenAwarePolicy(DCAwareRoundRobinPolicy(\"DC1\"))",
+	  "referenceUrl": "https://github.com/adejanovski/cassandra-jdbc-wrapper"
+	},
+	{
+	  "driverClassName": "com.github.cassandra.jdbc.CassandraDriver",
+	  "tmplateUrl": "jdbc:c*:datastax//[host][:9042]/[keyspace][?consistencyLevel=ONE|ANY|...][&compression=LZ4|SNAPPY]",
+	  "referenceUrl": "https://github.com/zhicwu/cassandra-jdbc-driver"
+	},
+	{
+	  "driverClassName": "org.h2.Driver",
+	  "tmplateUrl": "jdbc:h2:~/test",
+	  "referenceUrl": "http://www.h2database.com/html/features.html"
 	},
 	{
 	  "driverClassName": "mongodb.jdbc.MongoDriver",
@@ -10,8 +20,28 @@
 	  "referenceUrl": "http://www.unityjdbc.com/mongojdbc/mongo_jdbc.php"
 	},
 	{
-	  "driverClassName": "org.h2.Driver",
-	  "tmplateUrl": "jdbc:h2:~/test",
-	  "referenceUrl": "http://www.h2database.com/html/features.html"
+	  "driverClassName": "com.mysql.jdbc.Driver",
+	  "tmplateUrl": "jdbc:mysql://[host1][:3306][,[host2][:port2]]...[/[database]][?autoReconnect=true][&autoClosePStmtStreams=true]",
+	  "referenceUrl": "https://dev.mysql.com/doc/connector-j/5.1/en/connector-j-reference-configuration-properties.html"
+	},
+	{
+	  "driverClassName": "oracle.jdbc.driver.OracleDriver",
+	  "tmplateUrl": "jdbc:oracle:thin:@//<host>[:1521]/<service_name>[?internal_logon=sysdba|sysoper]",
+	  "referenceUrl": "https://docs.oracle.com/cd/B28359_01/java.111/b31224/urls.htm"
+	},
+	{
+	  "driverClassName": "org.postgresql.Driver",
+	  "tmplateUrl": "jdbc:postgresql://host1:5432,host2:port2/database[?targetServerType=master]",
+	  "referenceUrl": "https://jdbc.postgresql.org/documentation/head/connect.html"
+	},
+	{
+	  "driverClassName": "org.sqlite.JDBC",
+	  "tmplateUrl": "jdbc:sqlite:filename",
+	  "referenceUrl": "https://github.com/xerial/sqlite-jdbc"
+	},
+	{
+	  "driverClassName": "com.microsoft.sqlserver.jdbc.SQLServerDriver",
+	  "tmplateUrl": "jdbc:sqlserver://[serverName[\\instanceName][:portNumber]][;property\u003dvalue[;property\u003dvalue]]",
+	  "referenceUrl": "https://docs.microsoft.com/en-us/sql/connect/jdbc/building-the-connection-url?view\u003dsql-server-2017"
 	}
 ]

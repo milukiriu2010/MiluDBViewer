@@ -12,6 +12,8 @@ import java.io.FileWriter;
 import java.io.BufferedWriter;
 import java.io.IOException;
 
+import milu.file.json.MyJsonEachAbstract;
+import milu.file.json.MyJsonEachFactory;
 import milu.file.json.MyJsonHandleAbstract;
 import milu.file.json.MyJsonHandleFactory;
 import milu.main.AppConf;
@@ -121,6 +123,7 @@ public class MyFileTool
     
     public static void save( MainController mainCtrl, AppConf appConf )
     {
+    	/*
 		try
 		{
 			MyJsonHandleAbstract myJsonAbs =
@@ -128,6 +131,19 @@ public class MyFileTool
 					
 			myJsonAbs.open(AppConst.APP_CONF.val());
 			myJsonAbs.save( appConf );
+		}
+		catch ( IOException ioEx )
+		{
+			MyGUITool.showException( mainCtrl, "conf.lang.gui.common.MyAlert", "TITLE_MISC_ERROR", ioEx );
+		}
+		*/
+    	
+		try
+		{
+			MyJsonEachAbstract<AppConf> myJsonAbs =
+					MyJsonEachFactory.<AppConf>getInstance(MyJsonEachFactory.factoryType.APP_CONF);
+					
+			myJsonAbs.save( new File(AppConst.APP_CONF.val()), appConf );
 		}
 		catch ( IOException ioEx )
 		{

@@ -81,7 +81,7 @@ public class ExecExplainEach
 	
 	public void exec()
 	{
-		ExecSQLAbstract execSQLAbs = new ExecSQLExplainFactory().createFactory( this.sqlBag, this.myDBAbs, this.appConf );
+		ExecSQLAbstract execSQLAbs = new ExecSQLExplainFactory().createFactory( this.sqlBag, this.myDBAbs, this.appConf, null, 0.0 );
 		if ( execSQLAbs == null )
 		{
 			return;

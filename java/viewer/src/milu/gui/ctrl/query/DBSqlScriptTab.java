@@ -15,6 +15,7 @@ import javafx.scene.control.SplitPane;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.Label;
+import javafx.scene.control.ProgressBar;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TabPane.TabClosingPolicy;
 import javafx.scene.control.Button;
@@ -88,6 +89,8 @@ public class DBSqlScriptTab extends Tab
 	// Label for SQL execution time
 	private Label labelExecTimeSQL = new Label("*");
 	
+	private ProgressBar barProgress = new ProgressBar();
+	
 	// SQL History List
 	private List<String>  histSQLLst = null;
 	
@@ -141,6 +144,8 @@ public class DBSqlScriptTab extends Tab
 		brdPane.setBottom( hBox );
 		
 		this.setContent( brdPane );
+		
+		this.barProgress.setPrefWidth(500);
 		
 		MainController mainCtrl = this.dbView.getMainController();
 		// set icon on Tab
@@ -262,6 +267,9 @@ public class DBSqlScriptTab extends Tab
 		// execute task
 		final Future<?> future = this.service.submit( task );
 		
+		this.barProgress.progressProperty().unbind();
+		this.barProgress.progressProperty().bind(task.progressProperty());
+		
 		task.progressProperty().addListener((obs,oldVal,newVal)->{
 			System.out.println( "ExecExplainAllTask:Progress[" + obs.getClass() + "]oldVal[" + oldVal + "]newVal[" + newVal + "]" );
 			ResourceBundle langRB = mainCtrl.getLangResource("conf.lang.gui.ctrl.query.DBSqlTab");
@@ -273,7 +281,7 @@ public class DBSqlScriptTab extends Tab
 				VBox vBox = new VBox(2);
 				Label  labelProcess = new Label( langRB.getString("LABEL_PROCESSING") );
 				Button btnCancel    = new Button( cmnLangRB.getString("BTN_CANCEL") );
-				vBox.getChildren().addAll( labelProcess, btnCancel );
+				vBox.getChildren().addAll( labelProcess, this.barProgress, btnCancel );
 				
 				// Oracle =>
 				//   java.sql.SQLRecoverableException
@@ -296,6 +304,12 @@ public class DBSqlScriptTab extends Tab
 				this.setExecTime( endTime - startTime );
 				System.out.println( "ExecExplainAllTask:clear" );
 			}
+			/*
+			else
+			{
+				this.barProgress.setProgress(newVal.doubleValue());
+			}
+			*/
 		});
 		
 		// Exception Returned by Task

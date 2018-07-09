@@ -262,7 +262,7 @@ public class DBResultTab extends Tab
 		Label lblMsg = new Label();
 		
 		toggleHVTask.progressProperty().addListener((obs,oldVal,newVal)->{
-			System.out.println( "ToggleHVTask:Progress[" + obs.getClass() + "]oldVal[" + oldVal + "]newVal[" + newVal + "]" );
+			//System.out.println( "ToggleHVTask:Progress[" + obs.getClass() + "]oldVal[" + oldVal + "]newVal[" + newVal + "]" );
 			// task start.
 			if ( newVal.doubleValue() == 0.0 )
 			{
@@ -270,7 +270,7 @@ public class DBResultTab extends Tab
 				lblMsg.setText( langRB.getString("LABEL_PROCESSING") );
 				this.lowerPane.getChildren().clear();
 				this.lowerPane.getChildren().addAll( lblMsg, this.barProgress );
-				System.out.println( "ToggleHVTask:clear" );
+				//System.out.println( "ToggleHVTask:clear" );
 			}
 			// task done.
 			else if ( newVal.doubleValue() == 1.0 )
@@ -280,7 +280,7 @@ public class DBResultTab extends Tab
 				this.procInf.endProc();
 				long endTime = System.nanoTime();
 				this.setExecTime( endTime - startTime );
-				System.out.println( "ToggleHVTask:set" );
+				//System.out.println( "ToggleHVTask:set" );
 			}
 			/*
 			else
@@ -291,7 +291,7 @@ public class DBResultTab extends Tab
 		});
 		
 		toggleHVTask.messageProperty().addListener((obs,oldVal,newVal)->{
-			System.out.println( "DBResultTab:" + newVal );
+			//System.out.println( "DBResultTab:" + newVal );
 			lblMsg.setText(newVal);
 		});
 	}

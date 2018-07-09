@@ -10,11 +10,12 @@ import milu.db.MyDBOracle;
 import milu.db.MyDBSQLServer;
 import milu.db.MyDBSQLite;
 import milu.main.AppConf;
+import milu.task.ProgressInterface;
 
 public class ExecSQLExplainFactory extends ExecSQLFactoryAbstract 
 {
 	@Override
-	public ExecSQLAbstract createFactory(SQLBag sqlBag, MyDBAbstract myDBAbs, AppConf appConf ) 
+	public ExecSQLAbstract createFactory(SQLBag sqlBag, MyDBAbstract myDBAbs, AppConf appConf, ProgressInterface progressInf, double assignedSize ) 
 	{
 		ExecSQLAbstract execSQLAbs = null;
 		

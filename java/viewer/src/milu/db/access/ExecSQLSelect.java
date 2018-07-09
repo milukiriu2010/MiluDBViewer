@@ -63,6 +63,7 @@ public class ExecSQLSelect extends ExecSQLAbstract
 		ResultSet rs     = null;
 		Exception lastEx = null;
 		
+		double progress = this.assignedSize/(double)checkCnt;
 		try
 		{
 			this.clear();
@@ -93,21 +94,6 @@ public class ExecSQLSelect extends ExecSQLAbstract
 				mapObj.put( (String)this.colMetaInfoHeadLst.get(6), Integer.valueOf(rsmd.isNullable(i)) );
 				
 				this.colMetaInfoDataLst.add( mapObj );
-				
-				// ----------------------------------------------------------
-				// [Oracle XMLType Column] 
-				//   ColumTypeName   => SYS.XMLTYPE
-				//   ColumnClassName => oracle.jdbc.OracleOpaque
-				//                      java.sql.SQLXML( by xmlparser2.jar )
-				// ----------------------------------------------------------
-				/*
-				System.out.println
-				( 
-					rsmd.getColumnName( i )     + ":" + 
-					rsmd.getColumnTypeName( i ) + ":" +
-					rsmd.getColumnClassName( i )
-				);
-				*/
 			}
 			System.out.println( "----------------------------" );
 			
@@ -155,6 +141,10 @@ public class ExecSQLSelect extends ExecSQLAbstract
 				}
 				dataLst.add( dataRow );
 				fetchCnt++;
+				if ( this.progressInf != null )
+				{
+					this.progressInf.addProgress(progress);
+				}
 			}
 		}
 		catch ( SQLException sqlEx )

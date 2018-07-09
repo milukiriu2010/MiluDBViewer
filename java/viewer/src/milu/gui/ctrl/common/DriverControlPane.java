@@ -5,8 +5,8 @@ import java.io.IOException;
 import java.net.URL;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.util.Collection;
 import java.util.List;
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
@@ -27,8 +27,6 @@ import javafx.geometry.Insets;
 import javafx.stage.FileChooser;
 import javafx.util.StringConverter;
 
-import com.google.gson.reflect.TypeToken;
-
 import milu.db.driver.DriverClassConst;
 import milu.db.driver.DriverNameConst;
 import milu.db.driver.DriverInfo;
@@ -36,11 +34,15 @@ import milu.db.driver.DriverShim;
 import milu.db.driver.LoadDriver;
 import milu.file.json.MyJsonHandleAbstract;
 import milu.file.json.MyJsonHandleFactory;
-import milu.file.json.MyJsonList;
+import milu.file.json.MyJsonEachAbstract;
+import milu.file.json.MyJsonEachFactory;
+import milu.file.json.MyJsonListAbstract;
+import milu.file.json.MyJsonListFactory;
 import milu.gui.ctrl.common.inf.PaneSwitchDriverInterface;
 import milu.main.AppConst;
 import milu.main.AppConf;
 import milu.main.MainController;
+import milu.tool.MyFileTool;
 import milu.tool.MyGUITool;
 
 public class DriverControlPane extends Pane 
@@ -253,18 +255,7 @@ public class DriverControlPane extends Pane
 			});
 			
 			// save AppConf to "the default configuration file".
-			try
-			{
-				MyJsonHandleAbstract myJsonAbs =
-						new MyJsonHandleFactory().createInstance(AppConf.class);
-						
-				myJsonAbs.open(AppConst.APP_CONF.val());
-				myJsonAbs.save( appConf );
-			}
-			catch ( IOException ioEx )
-			{
-				MyGUITool.showException( this.mainCtrl, "conf.lang.gui.common.MyAlert", "TITLE_MISC_ERROR", ioEx );
-			}
+			MyFileTool.save(mainCtrl, appConf);
 		});
 		
 		this.btnDelJar.setOnAction((event)->{
@@ -273,13 +264,12 @@ public class DriverControlPane extends Pane
 		});
 		
 		URL url = getClass().getResource( "/conf/json/driver.json" );
-		MyJsonList<DriverInfo> myJsonLst = new MyJsonList<>();
+		MyJsonListAbstract<DriverInfo> myJsonLst = MyJsonListFactory.<DriverInfo>getInstance(MyJsonListFactory.factoryType.DRIVER_INFO);
+		List<DriverInfo> driverInfoLst = null;
 		try
 		{
-			Type type = new TypeToken<List<DriverInfo>>() {}.getType();
-			//List<DriverInfo> driverInfoLst = myJsonLst.load(url,DriverInfo.class);
-			//Collection<DriverInfo> driverInfoLst = myJsonLst.load(url,DriverInfo.class);
-			List<DriverInfo> driverInfoLst = myJsonLst.load(url,type);
+			driverInfoLst = myJsonLst.load(url);
+			/*
 			System.out.println( "=== MyJsonLst =========================================" );
 			driverInfoLst.forEach((driverInfo)->{
 				System.out.println( "ClassName   :" + driverInfo.getDriverClassName() );
@@ -288,16 +278,13 @@ public class DriverControlPane extends Pane
 				System.out.println( "***********************************************" );
 			});
 			System.out.println( "=======================================================" );
+			*/
 		}
 		catch ( Exception ex )
 		{
 			ex.printStackTrace();
+			driverInfoLst = new ArrayList<>();
 		}
-		
-		
-		
-		
-		
 		
 		// switch key<=>val
 		Map<DriverNameConst, DriverClassConst> inverseDriverMap =
@@ -306,8 +293,25 @@ public class DriverControlPane extends Pane
 		// -------------------------------------------
 		// set DriverClassName by DriverName
 		// -------------------------------------------
+		List<DriverInfo> driverInfoLstFinal = driverInfoLst; 
 		this.driverClassNameCombo.getSelectionModel().selectedItemProperty().addListener((obs,oldVal,newVal)->{
-			this.driverClassNameTxt.setText(inverseDriverMap.get(newVal).val());
+			String driverClassName = inverseDriverMap.get(newVal).val();
+			this.driverClassNameTxt.setText(driverClassName);
+			
+			DriverInfo driverInfo = driverInfoLstFinal.stream()
+					.filter( di->di.getDriverClassName().equals(driverClassName) )
+					.findFirst()
+					.orElse(null);
+			if ( driverInfo == null )
+			{
+				this.driverTemplateUrlTxt.setText("");
+				this.driverReferenceUrlTxt.setText("");
+			}
+			else
+			{
+				this.driverTemplateUrlTxt.setText(driverInfo.getTemplateUrl());
+				this.driverReferenceUrlTxt.setText(driverInfo.getReferenceUrl());
+			}
 		});
 		
 		this.btnLoad.setOnAction
@@ -362,10 +366,15 @@ public class DriverControlPane extends Pane
 					driver = LoadDriver.loadDriver( this.driverClassNameTxt.getText(), this.driverPathListView.getItems() );
 					driver.setTemplateUrl(this.driverTemplateUrlTxt.getText());
 					driver.setReferenceUrl(this.driverReferenceUrlTxt.getText());
+					/*
 					MyJsonHandleAbstract myJsonAbs =
 						new MyJsonHandleFactory().createInstance(DriverShim.class);
 					myJsonAbs.open(AppConst.DRIVER_DIR.val()+driver.getDriverClassName()+".json");
 					myJsonAbs.save(driver);
+					*/
+					MyJsonEachAbstract<DriverShim> myJsonAbs =
+							MyJsonEachFactory.<DriverShim>getInstance(MyJsonEachFactory.factoryType.DRIVER_SHIM);
+						myJsonAbs.save(new File(AppConst.DRIVER_DIR.val()+driver.getDriverClassName()+".json"),driver);
 				}
 				catch ( Exception ex )
 				{

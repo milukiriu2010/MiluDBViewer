@@ -2,8 +2,6 @@ package milu.gui.ctrl.common.table;
 
 import java.util.List;
 import java.util.ArrayList;
-import java.util.Set;
-import java.util.HashSet;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 
@@ -17,7 +15,6 @@ import javafx.scene.control.TableRow;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TextInputControl;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.ContextMenu;
@@ -62,8 +59,6 @@ public class ObjTableView extends TableView<List<Object>>
 	// This listener enables to select the whole column, when cliking a cell.
 	@SuppressWarnings("rawtypes")
 	ChangeListener<TablePosition> tableViewChangeListner = null;
-    
-    Set<TableColumn<List<Object>,Object>>  tableColSet = new HashSet<>();
     
     // Callback for CellEdit
     private Callback<TableColumn<List<Object>,Object>, TableCell<List<Object>,Object>> cellFactory = null;
@@ -112,39 +107,8 @@ public class ObjTableView extends TableView<List<Object>>
         // ----------------------------------------------------------
 		this.tableViewChangeListner = (obs,oldVal,newVal)->
 			{
-				/*
-				if ( oldVal.getTableColumn() != null )
-				{
-					this.tableColSet.add(oldVal.getTableColumn());
-				}
-				*/
         		if ( newVal.getTableColumn() != null )
         		{
-        			/*
-        			if ( this.tableColSet.size() == 0 )
-        			{
-	        			for ( int i = 0; i < getItems().size(); i++ )
-	        			{
-	        				getSelectionModel().clearSelection(i,oldVal.getTableColumn());
-	        			}
-        			}
-        			*/
-        			/*
-        			this.tableColSet.forEach
-        			(
-        				(tableCol)->
-        				{
-                			getSelectionModel().selectRange
-            				( 
-            					0, 
-            					tableCol, 
-            					getItems().size(), 
-            					tableCol 
-            				);
-        				}
-        			);
-        			*/
-        			
         			// set the range of selection on this TableView
         			// select all rows on the same column
         			getSelectionModel().selectRange
@@ -158,7 +122,6 @@ public class ObjTableView extends TableView<List<Object>>
         			System.out.println( "V Selected new TableColumn : " + newVal.getTableColumn().getText() );
         			System.out.println( "V Selected new column index: " + newVal.getColumn() );
         			System.out.println( "V Selected old column index: " + oldVal.getColumn() );
-        			System.out.println( "tableColSet size           : " + this.tableColSet.size() );
         		}
 			};
         
@@ -170,7 +133,7 @@ public class ObjTableView extends TableView<List<Object>>
 			{
 				public TableCell<List<Object>,Object> call(TableColumn<List<Object>,Object> p)
 				{
-					return new EditingCell(objTableView);
+					return new EditingCell();
 				}
 			};
         
@@ -234,7 +197,8 @@ public class ObjTableView extends TableView<List<Object>>
 		});
 		this.refresh();
 	}
-	
+
+	/*
 	void selectArea()
 	{
 		getSelectionModel().clearSelection();
@@ -249,6 +213,7 @@ public class ObjTableView extends TableView<List<Object>>
 			);
 		});
 	}
+	*/
 	
 	Callback<TableColumn<List<Object>,Object>, TableCell<List<Object>,Object>> getCellFactory()
 	{
@@ -313,7 +278,6 @@ public class ObjTableView extends TableView<List<Object>>
 	@Override
 	public synchronized void switchDirection( Event event )
 	{
-		this.tableColSet.clear();
 		TableProcessAbstract tpAbs = TableProcessFactory.getInstance( this.tableViewDirection, this );
 		tpAbs.switchDirection();
 	}
@@ -417,20 +381,12 @@ public class ObjTableView extends TableView<List<Object>>
 	// Get ColumnName from TableView 
 	public List<Object> getHeadList()
 	{
-		/*
-		TableProcessAbstract tpAbs = TableProcessFactory.getInstance( this.tableViewDirection, this );
-		return tpAbs.getHeadList();
-		*/
 		return this.headObjLst;
 	}
 	
 	// Get Data from TableView 
 	public List<List<Object>> getDataList()
 	{
-		/*
-		TableProcessAbstract tpAbs = TableProcessFactory.getInstance( this.tableViewDirection, this );
-		return tpAbs.getDataList();
-		*/
 		return this.dataObjLst;
 	}
 	
@@ -453,26 +409,8 @@ public class ObjTableView extends TableView<List<Object>>
 	{
 		private TextInputControl textInputCtrl = null;
 		
-		public EditingCell( ObjTableView objTableView )
+		public EditingCell()
 		{
-			this.addEventFilter
-			(
-				MouseEvent.MOUSE_CLICKED, 
-				(event)->
-				{
-					System.out.println( "Mouse Clicked." );
-					if ( event.isControlDown() || event.isShiftDown() )
-					{
-						objTableView.tableColSet.add(this.getTableColumn());
-						//objTableView.selectArea();
-					}
-					else
-					{
-						//objTableView.selectArea();
-						objTableView.tableColSet.clear();
-					}
-				}
-			);
 		}
 		
 		/*

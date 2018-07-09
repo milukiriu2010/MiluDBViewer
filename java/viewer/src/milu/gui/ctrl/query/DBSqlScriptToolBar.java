@@ -68,7 +68,7 @@ class DBSqlScriptToolBar extends ToolBar
 		
 		this.getItems().addAll(	this.btnExecSQL	);
 		
-		ExecSQLAbstract execSQLAbs = new ExecSQLExplainFactory().createFactory( null, this.dbView.getMyDBAbstract(), mainCtrl.getAppConf() );
+		ExecSQLAbstract execSQLAbs = new ExecSQLExplainFactory().createFactory( null, this.dbView.getMyDBAbstract(), mainCtrl.getAppConf(), null, 0.0 );
 		if ( execSQLAbs != null )
 		{
 			this.getItems().add( this.btnExplainSQL );

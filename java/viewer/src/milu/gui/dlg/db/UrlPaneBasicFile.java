@@ -201,20 +201,6 @@ public class UrlPaneBasicFile extends UrlPaneAbstract
 			appConf.setInitDirFileDB(file.getParentFile().getAbsolutePath());
 			
 			MyFileTool.save( this.mainCtrl, appConf );
-			/*
-			try
-			{
-				MyJsonHandleAbstract myJsonAbs =
-						new MyJsonHandleFactory().createInstance(AppConf.class);
-						
-				myJsonAbs.open(AppConst.APP_CONF.val());
-				myJsonAbs.save( appConf );
-			}
-			catch ( IOException ioEx )
-			{
-				MyTool.showException( this.mainCtrl, "conf.lang.gui.common.MyAlert", "TITLE_MISC_ERROR", ioEx );
-			}
-			*/
 		});
 		
 		this.tmplBtn.setOnAction((event)->{

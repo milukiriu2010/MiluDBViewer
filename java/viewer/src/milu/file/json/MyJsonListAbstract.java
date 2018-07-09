@@ -19,9 +19,9 @@ import java.io.InputStream;
 import java.lang.reflect.Type;
 import java.net.URL;
 
-public class MyJsonList<T> 
+abstract public class MyJsonListAbstract<T> 
 {
-	public List<T> load(URL url,Type type) throws FileNotFoundException, IOException
+	public List<T> load(URL url) throws FileNotFoundException, IOException
 	{
 		StringBuffer sb = new StringBuffer();
 		try
@@ -41,15 +41,11 @@ public class MyJsonList<T>
 			}
 		}
 		
-		//GsonBuilder gsonBuilder = new GsonBuilder();
-		//gsonBuilder.registerTypeAdapter( clazz, new JsonElementAdapter() );
-		//Gson gson = gsonBuilder.excludeFieldsWithoutExposeAnnotation().create();
-		Gson gson = new Gson();
+		GsonBuilder gsonBuilder = new GsonBuilder();
+		Gson gson = gsonBuilder.excludeFieldsWithoutExposeAnnotation().create();
 		
-		//Type type = new TypeToken<List<DriverInfo>>() {}.getType();
-		//Type type = new TypeToken<List<T>>() {}.getType();
-		
-		return gson.fromJson( sb.toString(), type );
+		return gson.fromJson( sb.toString(), this.getType() );
 	}
 	
+	abstract protected Type getType();
 }

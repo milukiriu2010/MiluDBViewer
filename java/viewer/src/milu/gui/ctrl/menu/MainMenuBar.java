@@ -24,8 +24,6 @@ import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
 import javafx.stage.Stage;
 import javafx.stage.Window;
-import milu.file.json.MyJsonHandleAbstract;
-import milu.file.json.MyJsonHandleFactory;
 import milu.gui.ctrl.common.inf.ChangeLangInterface;
 import milu.gui.ctrl.info.SystemTab;
 import milu.gui.ctrl.info.VersionTab;
@@ -35,6 +33,7 @@ import milu.gui.view.DBView;
 import milu.main.AppConf;
 import milu.main.AppConst;
 import milu.main.MainController;
+import milu.tool.MyFileTool;
 import milu.tool.MyGUITool;
 
 public class MainMenuBar extends MenuBar
@@ -253,19 +252,8 @@ public class MainMenuBar extends MenuBar
 				}
 				String langCode = this.langMap.get( menuItemLang.getText() );
 				appConf.setLangCode(langCode);
+				MyFileTool.save(mainCtrl, appConf);
 				
-				try
-				{
-					MyJsonHandleAbstract myJsonAbs =
-						new MyJsonHandleFactory().createInstance(AppConf.class);
-							
-					myJsonAbs.open(AppConst.APP_CONF.val());
-					myJsonAbs.save( appConf );
-				}
-				catch ( Exception ex )
-				{
-		    		MyGUITool.showException( mainCtrl, "conf.lang.gui.common.MyAlert", "TITLE_MISC_ERROR", ex );
-				}
 				mainCtrl.changeLang();
 			});
 		}
