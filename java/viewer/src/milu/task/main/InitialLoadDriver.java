@@ -17,8 +17,6 @@ import javafx.scene.control.Alert.AlertType;
 import milu.db.driver.DriverClassConst;
 import milu.db.driver.DriverShim;
 import milu.db.driver.LoadDriver;
-import milu.file.json.MyJsonHandleAbstract;
-import milu.file.json.MyJsonHandleFactory;
 import milu.file.json.MyJsonEachAbstract;
 import milu.file.json.MyJsonEachFactory;
 import milu.gui.dlg.MyAlertDialog;

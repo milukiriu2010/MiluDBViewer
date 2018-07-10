@@ -1,18 +1,11 @@
 package milu.file.json;
 
 import java.util.List;
-import java.util.Collection;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.reflect.TypeToken;
-
-import milu.db.MyDBAbstract;
-import milu.db.driver.DriverInfo;
 
 import java.io.DataInputStream;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;

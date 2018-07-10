@@ -13,6 +13,10 @@ public class MyFileExportFactory
 		{
 			return new MyFileExportExcel();
 		}
+		else if ( "csv".equals( ext ) )
+		{
+			return new MyFileExportCSV();
+		}
 		else
 		{
 			return null;

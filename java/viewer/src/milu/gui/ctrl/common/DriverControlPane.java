@@ -1,7 +1,6 @@
 package milu.gui.ctrl.common;
 
 import java.io.File;
-import java.io.IOException;
 import java.net.URL;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -10,7 +9,6 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
-import java.lang.reflect.Type;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -32,8 +30,6 @@ import milu.db.driver.DriverNameConst;
 import milu.db.driver.DriverInfo;
 import milu.db.driver.DriverShim;
 import milu.db.driver.LoadDriver;
-import milu.file.json.MyJsonHandleAbstract;
-import milu.file.json.MyJsonHandleFactory;
 import milu.file.json.MyJsonEachAbstract;
 import milu.file.json.MyJsonEachFactory;
 import milu.file.json.MyJsonListAbstract;

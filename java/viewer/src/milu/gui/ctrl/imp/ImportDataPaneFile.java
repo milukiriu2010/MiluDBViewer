@@ -12,6 +12,7 @@ import javafx.scene.control.Tooltip;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 import javafx.stage.FileChooser;
+import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.BorderPane;
 import milu.gui.ctrl.common.inf.ChangeLangInterface;
@@ -103,9 +104,13 @@ public class ImportDataPaneFile extends Pane
 				fc.setInitialDirectory( new File(this.txtSrcFile.getText()).getParentFile() );
 			}
 			// Extension Filter
-			FileChooser.ExtensionFilter  extFilter = 
-				new FileChooser.ExtensionFilter( "Excel(*.xlsx)", "*.xlsx" );
-			fc.getExtensionFilters().add(extFilter);
+			//FileChooser.ExtensionFilter  extFilter = 
+			//	new FileChooser.ExtensionFilter( "Excel(*.xlsx)", "*.xlsx" );
+			fc.getExtensionFilters().addAll
+			(
+				new ExtensionFilter( "Excel Files", "*.csv" ),
+				new ExtensionFilter( "Excel Files", "*.xlsx" )
+			);
 			File file = fc.showOpenDialog(this.getScene().getWindow());
 			if ( file == null )
 			{

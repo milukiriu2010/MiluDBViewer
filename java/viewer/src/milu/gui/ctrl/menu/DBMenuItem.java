@@ -5,8 +5,6 @@ import java.io.File;
 import java.nio.file.Path;
 
 import milu.db.MyDBAbstract;
-import milu.file.json.MyJsonHandleAbstract;
-import milu.file.json.MyJsonHandleFactory;
 import milu.file.json.MyJsonEachAbstract;
 import milu.file.json.MyJsonEachFactory;
 import milu.main.MainController;

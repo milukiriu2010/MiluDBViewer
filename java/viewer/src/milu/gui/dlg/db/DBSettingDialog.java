@@ -46,8 +46,6 @@ import javafx.util.StringConverter;
 import javafx.beans.value.ChangeListener;
 
 import milu.db.driver.DriverShim;
-import milu.file.json.MyJsonHandleAbstract;
-import milu.file.json.MyJsonHandleFactory;
 import milu.file.json.MyJsonEachAbstract;
 import milu.file.json.MyJsonEachFactory;
 import milu.db.MyDBAbstract;

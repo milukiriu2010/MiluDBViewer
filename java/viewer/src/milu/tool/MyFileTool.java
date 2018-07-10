@@ -1,9 +1,6 @@
 package milu.tool;
 
 import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.CopyOption;
 import java.nio.file.StandardCopyOption;
 import java.io.File;
 import java.io.FileReader;
@@ -14,8 +11,6 @@ import java.io.IOException;
 
 import milu.file.json.MyJsonEachAbstract;
 import milu.file.json.MyJsonEachFactory;
-import milu.file.json.MyJsonHandleAbstract;
-import milu.file.json.MyJsonHandleFactory;
 import milu.main.AppConf;
 import milu.main.AppConst;
 import milu.main.MainController;
@@ -123,21 +118,6 @@ public class MyFileTool
     
     public static void save( MainController mainCtrl, AppConf appConf )
     {
-    	/*
-		try
-		{
-			MyJsonHandleAbstract myJsonAbs =
-					new MyJsonHandleFactory().createInstance(AppConf.class);
-					
-			myJsonAbs.open(AppConst.APP_CONF.val());
-			myJsonAbs.save( appConf );
-		}
-		catch ( IOException ioEx )
-		{
-			MyGUITool.showException( mainCtrl, "conf.lang.gui.common.MyAlert", "TITLE_MISC_ERROR", ioEx );
-		}
-		*/
-    	
 		try
 		{
 			MyJsonEachAbstract<AppConf> myJsonAbs =

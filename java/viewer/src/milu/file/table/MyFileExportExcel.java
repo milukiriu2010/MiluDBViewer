@@ -95,6 +95,62 @@ public class MyFileExportExcel extends MyFileExportAbstract
 	}
 	
 	@Override
+	public void export( List<String> headLst, List<List<Object>> dataLst )
+			 throws IOException
+	{
+		int rowSize = dataLst.size();
+		int colSize = headLst.size();
+		
+		// Header for Sheet
+		Row  rowHead = this.sheet.createRow( 0 );
+		for ( int i = 0; i < colSize; i++ )
+		{
+			Cell cellHead = rowHead.createCell(i);
+			cellHead.setCellStyle(this.styleHeader);
+			cellHead.setCellType(CellType.STRING);
+			cellHead.setCellValue(headLst.get(i));
+		}
+		
+		// Body for Sheet
+		for ( int i = 0; i < rowSize; i++ )
+		{
+			Row rowBody = this.sheet.createRow(i+1);
+			List<Object> dataRow = dataLst.get(i);
+			for ( int j = 0; j < colSize; j++ )
+			{
+				Cell cellBody = rowBody.createCell(j);
+				if ( j == 0 )
+				{
+					cellBody.setCellStyle(this.styleHeader);
+				}
+				else
+				{
+					cellBody.setCellStyle(this.styleBody);
+				}
+				Object obj = dataRow.get(j);
+				if ( obj == null )
+				{
+					cellBody.setCellType(CellType.BLANK);
+				}
+				else
+				{
+					cellBody.setCellType(CellType.STRING);
+					cellBody.setCellValue(obj.toString());
+				}
+			}
+		}
+		
+		// Resize column size
+		for ( int i = 0; i < colSize; i++ )
+		{
+			this.sheet.autoSizeColumn( i, true );
+		}
+		
+		// Output to file.
+		this.book.write( this.foutStream );
+	}
+	/*
+	@Override
 	public void save( List<String> headLst, List<List<String>> dataLst )
 		throws IOException
 	{
@@ -134,5 +190,5 @@ public class MyFileExportExcel extends MyFileExportAbstract
 		// Output to file.
 		this.book.write( this.foutStream );
 	}
-
+	*/
 }

@@ -39,6 +39,10 @@ final public class AppConf
 	@Expose(serialize = true, deserialize = true)
 	private String  initDirImportFile = "";
 	
+	// Initial Directory to Export File(Excel)
+	@Expose(serialize = true, deserialize = true)
+	private String  initDirExportFile = "";
+	
 	// Initial Directory to SQL File
 	@Expose(serialize = true, deserialize = true)
 	private String  initDirSQLFile = "";
@@ -161,6 +165,17 @@ final public class AppConf
 	public void setInitDirImportFile( String initDirImportFile )
 	{
 		this.initDirImportFile = initDirImportFile;
+	}
+	
+	// Initial Directory to Export File(Excel)
+	public String getInitDirExportFile()
+	{
+		return this.initDirExportFile;
+	}
+	
+	public void setInitDirExportFile( String initDirExportFile )
+	{
+		this.initDirExportFile = initDirExportFile;
 	}
 	
 	// Initial Directory to SQL File

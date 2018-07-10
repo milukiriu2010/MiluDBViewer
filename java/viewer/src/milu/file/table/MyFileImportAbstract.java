@@ -3,7 +3,10 @@ package milu.file.table;
 import java.util.List;
 import java.util.ArrayList;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+
+import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 
 public abstract class MyFileImportAbstract 
 {
@@ -20,7 +23,7 @@ public abstract class MyFileImportAbstract
 		return this.dataLst;
 	}
 	
-	abstract public void open( File file ) throws Exception; 
+	abstract public void open( File file )  throws FileNotFoundException, IOException, InvalidFormatException; 
 	abstract public void close() throws IOException;
-	abstract public void load(int columnCnt);
+	abstract public void load(int columnCnt) throws IOException;
 }

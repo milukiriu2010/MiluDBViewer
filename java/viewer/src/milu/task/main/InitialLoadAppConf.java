@@ -4,8 +4,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Locale;
 
-import milu.file.json.MyJsonHandleAbstract;
-import milu.file.json.MyJsonHandleFactory;
 import milu.file.json.MyJsonEachAbstract;
 import milu.file.json.MyJsonEachFactory;
 import milu.main.AppConf;

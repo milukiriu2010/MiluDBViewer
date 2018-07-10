@@ -29,7 +29,7 @@ import javafx.util.Callback;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.Event;
-
+import milu.tool.MyFileTool;
 import milu.tool.MyGUITool;
 import milu.tool.MyStringTool;
 import milu.file.table.MyFileExportAbstract;
@@ -39,6 +39,8 @@ import milu.gui.ctrl.common.inf.SetTableViewDataInterface;
 import milu.task.ProgressInterface;
 import milu.task.ProgressReportInterface;
 import milu.gui.view.DBView;
+import milu.main.AppConf;
+import milu.main.MainController;
 
 public class ObjTableView extends TableView<List<Object>>
 	implements 
@@ -76,7 +78,7 @@ public class ObjTableView extends TableView<List<Object>>
 		WITH_HEAD,
 		NO_HEAD
 	}
-
+	
 	// @SuppressWarnings({"rawtypes","unchecked"})
 	@SuppressWarnings({"unchecked"})
 	public ObjTableView( DBView dbView )
@@ -127,7 +129,6 @@ public class ObjTableView extends TableView<List<Object>>
         
 		this.setEditable(true);
 		// Callback for CellEdit
-		final ObjTableView objTableView = this;
 		this.cellFactory =
 			new Callback<TableColumn<List<Object>,Object>, TableCell<List<Object>,Object>>()
 			{
@@ -230,10 +231,19 @@ public class ObjTableView extends TableView<List<Object>>
 		
 		MenuItem menuItemCopyTblWithHead = new MenuItem( langRB.getString("MENU_COPY_TABLE_WITH_HEAD") );
 		menuItemCopyTblWithHead.setOnAction( this::copyTableWithHead );
-
+		/*
 		MenuItem menuItemSave2Excel = new MenuItem( langRB.getString("MENU_SAVE_2_EXCEL") );
 		menuItemSave2Excel.setOnAction( event->this.save2Excel() );
-
+		*/
+		/*
+		Menu     menuExport = new Menu( langRB.getString("MENU_EXPORT") );
+		
+		MenuItem menuItemExport2Excel = new MenuItem( langRB.getString("MENU_EXPORT_2_EXCEL") );
+		menuItemExport2Excel.setOnAction( event->this.exportTable(ObjTableView.EXPORT_TYPE.EXCEL) );
+		*/
+		MenuItem menuItemExport = new MenuItem( langRB.getString("MENU_EXPORT") );
+		menuItemExport.setOnAction( this::exportTable );
+		
 		//MenuItem menuItemToggleHV = new MenuItem( langRB.getString("MENU_TOGGLE_HV") );
 		//menuItemToggleHV.setOnAction( event->this.switchDirection() );
 		
@@ -242,7 +252,8 @@ public class ObjTableView extends TableView<List<Object>>
 			menuItemCopyTblNoHead, 
 			menuItemCopyTblWithHead,
 			new SeparatorMenuItem(),
-			menuItemSave2Excel //,
+			menuItemExport //,
+			//menuItemSave2Excel,
 			//new SeparatorMenuItem(),
 			//menuItemToggleHV
 		);
@@ -253,10 +264,6 @@ public class ObjTableView extends TableView<List<Object>>
 	
 	public synchronized int getRowSize()
 	{
-		/*
-		TableProcessAbstract tpAbs = TableProcessFactory.getInstance( this.tableViewDirection, this );
-		return tpAbs.getRowSize();
-		*/
 		return this.dataObjLst.size();
 	}
 	
@@ -342,7 +349,7 @@ public class ObjTableView extends TableView<List<Object>>
 		TableProcessAbstract tpAbs = TableProcessFactory.getInstance( this.tableViewDirection, this );
 		tpAbs.copyTable(copyType);
 	}
-	
+	/*
 	private void save2Excel()
 	{
 		FileChooser  fileChooser = new FileChooser();
@@ -375,6 +382,50 @@ public class ObjTableView extends TableView<List<Object>>
 				myFileAbs.close();
 				myFileAbs = null;
 			}
+		}
+	}
+	*/
+	
+	private void exportTable( Event event )
+	{
+		MainController mainCtrl = this.dbView.getMainController();
+		AppConf appConf = mainCtrl.getAppConf();
+		FileChooser  fileChooser = new FileChooser();
+		// Initial Directory
+		if ( appConf.getInitDirExportFile().isEmpty() != true )
+		{
+			fileChooser.setInitialDirectory( new File(appConf.getInitDirExportFile()) );
+		}		
+		fileChooser.getExtensionFilters().addAll
+		(
+			new ExtensionFilter( "Excel Files", "*.csv" ),
+			new ExtensionFilter( "Excel Files", "*.xlsx" )
+		);
+		File file = fileChooser.showSaveDialog( this.getScene().getWindow() );
+		if ( file == null )
+		{
+			return;
+		}
+		appConf.setInitDirExportFile(file.getParentFile().getAbsolutePath());
+		MyFileTool.save( mainCtrl, appConf );
+		
+		List<String> columnLst = this.getColumns().stream()
+				.map(tableColumn->tableColumn.getText())
+				.collect(Collectors.toList());
+		MyFileExportAbstract myFileAbs = MyFileExportFactory.getInstance( file );
+		try
+		{
+			myFileAbs.open( file );
+			myFileAbs.export( columnLst, this.getItems() );
+		}
+		catch( IOException ioEx )
+		{
+			MyGUITool.showException( this.dbView.getMainController(), "conf.lang.gui.ctrl.query.ObjTableView", "TITLE_SAVE_ERROR", ioEx );
+    	}
+		finally
+		{
+			myFileAbs.close();
+			myFileAbs = null;
 		}
 	}
 	

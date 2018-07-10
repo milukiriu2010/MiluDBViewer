@@ -11,6 +11,10 @@ import net.sf.jsqlparser.statement.select.Join;
 import net.sf.jsqlparser.statement.select.FromItem;
 import net.sf.jsqlparser.statement.select.FromItemVisitor;
 
+import net.sf.jsqlparser.parser.Node;
+import net.sf.jsqlparser.parser.SimpleNode;
+import net.sf.jsqlparser.parser.Token;
+
 public class ExampleSelectVisitor implements SelectVisitor 
 {
 	private FromItemVisitor fromItemVisitor = null;
@@ -24,6 +28,17 @@ public class ExampleSelectVisitor implements SelectVisitor
 	public void visit(PlainSelect plainSelect) 
 	{
 		System.out.println( "SelectVisitor:PlainSelect[" + plainSelect + "]" );
+		SimpleNode simpleNode = plainSelect.getASTNode();
+		System.out.println( "SelectVisitor:PlainSelect:SimpleNode[" + simpleNode.toString() + "]" );
+		Token tokenFirst = simpleNode.jjtGetFirstToken();
+		System.out.println( "SelectVisitor:PlainSelect:SimpleNode:tokenFirst[" + tokenFirst.toString() + "]" );
+		Token tokenLast  = simpleNode.jjtGetLastToken();
+		System.out.println( "SelectVisitor:PlainSelect:SimpleNode:tokenLast[" + tokenLast.toString() + "]" );
+		for ( int i = 0; i < simpleNode.jjtGetNumChildren(); i++ )
+		{
+			Node node = simpleNode.jjtGetChild(i);
+			System.out.println( "SelectVisitor:PlainSelect:SimpleNode:Node[" + node.toString() + "]" );
+		}
 		
 		List<Join>   joinLst = plainSelect.getJoins();
 		if ( joinLst != null )

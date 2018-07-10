@@ -1,13 +1,11 @@
 package milu.file.json;
 
 import java.io.BufferedWriter;
-import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.InputStream;
 import java.lang.reflect.Type;
 
 import com.google.gson.Gson;

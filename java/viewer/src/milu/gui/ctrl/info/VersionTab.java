@@ -1,25 +1,18 @@
 package milu.gui.ctrl.info;
 
-import java.io.DataInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
-import java.text.MessageFormat;
 import java.util.ResourceBundle;
 
-import javafx.geometry.Orientation;
+import javafx.geometry.Side;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
-import javafx.scene.control.SplitPane;
 import javafx.scene.control.Tab;
+import javafx.scene.control.TabPane;
+import javafx.scene.control.TabPane.TabClosingPolicy;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
-import javafx.scene.web.WebEngine;
-import javafx.scene.web.WebView;
 import milu.gui.ctrl.common.inf.CloseInterface;
 import milu.gui.ctrl.common.inf.ChangeLangInterface;
 import milu.gui.view.DBView;
-import milu.main.AppConst;
 import milu.main.MainController;
 import milu.tool.MyGUITool;
 
@@ -43,9 +36,7 @@ public class VersionTab extends Tab
     // -----------------------------------------------------
 	// [Pane(1) on Tab]-[Center]
     // -----------------------------------------------------
-	// Left  => About this application
-	// Right => Library Info
-	private SplitPane  showPane = new SplitPane();
+	private TabPane    tabPane  = new TabPane();
 	
 	public VersionTab( DBView dbView )
 	{
@@ -76,55 +67,14 @@ public class VersionTab extends Tab
 	
 	private void setPaneBottom()
 	{
-		// ------------------------------------------------
-		// [Pane(1) on Tab]-[Left]
-		// ------------------------------------------------
-		URL urlVerInfo = getClass().getResource( "/conf/html/dlg/verinfo.html" );
-		WebView   webView1   = new WebView();
-		WebEngine webEngine1 = webView1.getEngine();
-		//webEngine.load( urlVerInfo.toExternalForm() );
-		StringBuffer sb = new StringBuffer();
-		String strFmt = null;
-		try
+		this.tabPane.setSide(Side.LEFT);
+		this.tabPane.getTabs().addAll
 		(
-			InputStream is = urlVerInfo.openStream();
-			DataInputStream     dis = new DataInputStream(is);
-		)
-		{
-			int readSize = 0;
-			int pos = 0;
-			while ( ( readSize = dis.available() ) > 0 )
-			{
-				byte[] b = new byte [readSize];
-				dis.read( b, pos, readSize );
-				pos += readSize;
-				sb.append( new String( b ) );
-			}
-			strFmt = sb.toString();
-		}
-		catch ( IOException ioEx )
-		{
-			ioEx.printStackTrace();
-			return;
-		}
-		webEngine1.loadContent( MessageFormat.format( strFmt, AppConst.VER.val(), AppConst.UPDATE_DATE.val() ) );
-		
-		// ------------------------------------------------
-		// [Pane(1) on Tab]-[Right]
-		// ------------------------------------------------	
-		URL urlLibInfo = getClass().getResource( "/conf/html/dlg/libinfo.html" );
-		WebView   webView2   = new WebView();
-		WebEngine webEngine2 = webView2.getEngine(); 
-		webEngine2.load( urlLibInfo.toExternalForm() );
-		
-		// ------------------------------------------------
-		// Show Pane
-		// ------------------------------------------------
-		this.showPane.setOrientation(Orientation.HORIZONTAL);
-		this.showPane.getItems().addAll( webView1, webView2 );
-		this.showPane.setDividerPositions( 0.5f, 0.5f );
-		
-		this.basePane.setBottom( this.showPane );
+			new VersionAboutTab( this.dbView ),
+			new VersionLibraryTab( this.dbView )
+		);
+		this.tabPane.setTabClosingPolicy(TabClosingPolicy.UNAVAILABLE);
+		this.basePane.setBottom( this.tabPane );
 	}
 	
 	private void setAction()
@@ -151,6 +101,11 @@ public class VersionTab extends Tab
 		}
 		
 		((ChangeLangInterface)this.updatePane).changeLang();
+		
+		this.tabPane.getTabs().stream()
+			.filter( ChangeLangInterface.class::isInstance )
+			.map( ChangeLangInterface.class::cast )
+			.forEach( x->x.changeLang() );
 	}
 
 }
