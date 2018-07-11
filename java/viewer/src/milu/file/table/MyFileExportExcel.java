@@ -95,7 +95,7 @@ public class MyFileExportExcel extends MyFileExportAbstract
 	}
 	
 	@Override
-	public void export( List<String> headLst, List<List<Object>> dataLst )
+	public void export( List<Object> headLst, List<List<Object>> dataLst )
 			 throws IOException
 	{
 		int rowSize = dataLst.size();
@@ -108,7 +108,7 @@ public class MyFileExportExcel extends MyFileExportAbstract
 			Cell cellHead = rowHead.createCell(i);
 			cellHead.setCellStyle(this.styleHeader);
 			cellHead.setCellType(CellType.STRING);
-			cellHead.setCellValue(headLst.get(i));
+			cellHead.setCellValue(headLst.get(i).toString());
 		}
 		
 		// Body for Sheet
@@ -119,14 +119,7 @@ public class MyFileExportExcel extends MyFileExportAbstract
 			for ( int j = 0; j < colSize; j++ )
 			{
 				Cell cellBody = rowBody.createCell(j);
-				if ( j == 0 )
-				{
-					cellBody.setCellStyle(this.styleHeader);
-				}
-				else
-				{
-					cellBody.setCellStyle(this.styleBody);
-				}
+				cellBody.setCellStyle(this.styleBody);
 				Object obj = dataRow.get(j);
 				if ( obj == null )
 				{

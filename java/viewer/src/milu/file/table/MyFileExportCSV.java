@@ -36,7 +36,7 @@ public class MyFileExportCSV extends MyFileExportAbstract
 	}
 
 	@Override
-	public void export(List<String> headLst, List<List<Object>> dataLst) 
+	public void export(List<Object> headLst, List<List<Object>> dataLst) 
 			throws IOException 
 	{
 		int rowSize = dataLst.size();
@@ -44,7 +44,7 @@ public class MyFileExportCSV extends MyFileExportAbstract
 		String lineSP = System.getProperty("line.separator");
 		
 		// Output Header
-		this.fw.write( headLst.stream().collect(Collectors.joining(",","",lineSP)) );
+		this.fw.write( headLst.stream().map(x->x.toString()).collect(Collectors.joining(",","",lineSP)) );
 		
 		// Output Data
 		for ( int i = 0; i < rowSize; i++ )

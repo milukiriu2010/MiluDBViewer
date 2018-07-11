@@ -144,6 +144,7 @@ public class ExecSQLSelect extends ExecSQLAbstract
 				if ( this.progressInf != null )
 				{
 					this.progressInf.addProgress(progress);
+					this.progressInf.setMsg("...");
 				}
 			}
 		}

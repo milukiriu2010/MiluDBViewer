@@ -9,6 +9,5 @@ public abstract class MyFileExportAbstract
 {
 	abstract public void open( File file ) throws FileNotFoundException, IOException;
 	abstract public void close();
-	abstract public void export( List<String> headLst, List<List<Object>> dataLst ) throws IOException;
-	//abstract public void save( List<String> headLst, List<List<String>> dataLst ) throws IOException;
+	abstract public void export( List<Object> headLst, List<List<Object>> dataLst ) throws IOException;
 }

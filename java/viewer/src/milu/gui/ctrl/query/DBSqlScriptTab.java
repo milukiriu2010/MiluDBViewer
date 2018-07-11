@@ -270,16 +270,21 @@ public class DBSqlScriptTab extends Tab
 		this.barProgress.progressProperty().unbind();
 		this.barProgress.progressProperty().bind(task.progressProperty());
 		
+		ResourceBundle langRB = mainCtrl.getLangResource("conf.lang.gui.ctrl.query.DBSqlTab");
+		ResourceBundle cmnLangRB = mainCtrl.getLangResource("conf.lang.gui.common.NodeName");
+		Label  labelProcess = new Label();
+		labelProcess.textProperty().unbind();
+		labelProcess.setText( langRB.getString("LABEL_PROCESSING") );
+		labelProcess.textProperty().bind(task.messageProperty());
+		
 		task.progressProperty().addListener((obs,oldVal,newVal)->{
-			System.out.println( "ExecExplainAllTask:Progress[" + obs.getClass() + "]oldVal[" + oldVal + "]newVal[" + newVal + "]" );
-			ResourceBundle langRB = mainCtrl.getLangResource("conf.lang.gui.ctrl.query.DBSqlTab");
-			ResourceBundle cmnLangRB = mainCtrl.getLangResource("conf.lang.gui.common.NodeName");
+			//System.out.println( "ExecExplainAllTask:Progress[" + obs.getClass() + "]oldVal[" + oldVal + "]newVal[" + newVal + "]" );
 			// task start.
 			if ( newVal.doubleValue() == 0.0 )
 			{
+				System.out.println( "ExecTask:start" );
 				this.beginProc();
 				VBox vBox = new VBox(2);
-				Label  labelProcess = new Label( langRB.getString("LABEL_PROCESSING") );
 				Button btnCancel    = new Button( cmnLangRB.getString("BTN_CANCEL") );
 				vBox.getChildren().addAll( labelProcess, this.barProgress, btnCancel );
 				
@@ -292,7 +297,6 @@ public class DBSqlScriptTab extends Tab
 				Tab tab = new Tab("...");
 				tab.setContent( vBox );
 				this.tabPane.getTabs().add(tab);
-				System.out.println( "ExecExplainAllTask:clear" );
 			}
 			// task done.
 			else if ( newVal.doubleValue() == 1.0 )
@@ -302,14 +306,8 @@ public class DBSqlScriptTab extends Tab
 				this.endProc();
 				long endTime = System.nanoTime();
 				this.setExecTime( endTime - startTime );
-				System.out.println( "ExecExplainAllTask:clear" );
+				System.out.println( "ExecTask:done" );
 			}
-			/*
-			else
-			{
-				this.barProgress.setProgress(newVal.doubleValue());
-			}
-			*/
 		});
 		
 		// Exception Returned by Task

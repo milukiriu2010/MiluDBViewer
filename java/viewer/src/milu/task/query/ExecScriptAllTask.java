@@ -102,6 +102,7 @@ public class ExecScriptAllTask extends Task<Exception>
 			for ( int i = 0; i < size; i++ )
 			{
 				this.setProgress( (double)i*assignedSize );
+				this.setMsg(".");
 				SQLBag sqlBag = this.sqlBagLst.get(i);
 				
 				ExecScriptEach execScriptEach = new ExecScriptEach();
