@@ -14,6 +14,9 @@ import net.sf.jsqlparser.statement.select.TableFunction;
 import net.sf.jsqlparser.statement.select.ValuesList;
 
 import net.sf.jsqlparser.expression.Alias;
+import net.sf.jsqlparser.parser.Node;
+import net.sf.jsqlparser.parser.SimpleNode;
+import net.sf.jsqlparser.parser.Token;
 
 public class ExampleFromItemVisitor implements FromItemVisitor 
 {
@@ -34,7 +37,22 @@ public class ExampleFromItemVisitor implements FromItemVisitor
 	@Override
 	public void visit(Table table) 
 	{
-		System.out.println( "FromItemVisitor:table[" + table + "]" );
+		System.out.println( "FromItemVisitor:Table:" + table );
+		SimpleNode simpleNode = table.getASTNode();
+		if ( simpleNode != null )
+		{
+			System.out.println( "FromItemVisitor:Table:SimpleNode[" + simpleNode.toString() + "]" );		
+			Token tokenFirst = simpleNode.jjtGetFirstToken();
+			System.out.println( "FromItemVisitor:Table:SimpleNode:tokenFirst[" + tokenFirst.toString() + "]" );
+			Token tokenLast  = simpleNode.jjtGetLastToken();
+			System.out.println( "FromItemVisitor:Table:SimpleNode:tokenLast[" + tokenLast.toString() + "]" );
+			for ( int i = 0; i < simpleNode.jjtGetNumChildren(); i++ )
+			{
+				Node node = simpleNode.jjtGetChild(i);
+				System.out.println( "FromItemVisitor:Table:SimpleNode:Node[" + node.toString() + "]" );
+			}
+		}
+		
 		Alias alias = table.getAlias();
 		if ( alias == null )
 		{
@@ -63,32 +81,32 @@ public class ExampleFromItemVisitor implements FromItemVisitor
 	}
 
 	@Override
-	public void visit(SubSelect arg0) {
-		// TODO Auto-generated method stub
+	public void visit(SubSelect subSelect ) {
+		System.out.println( "FromItemVisitor:SubSelect:" + subSelect );
 
 	}
 
 	@Override
-	public void visit(SubJoin arg0) {
-		// TODO Auto-generated method stub
+	public void visit(SubJoin subJoin) {
+		System.out.println( "FromItemVisitor:SubJoin:" + subJoin );
 
 	}
 
 	@Override
-	public void visit(LateralSubSelect arg0) {
-		// TODO Auto-generated method stub
+	public void visit(LateralSubSelect lateralSubSelect) {
+		System.out.println( "FromItemVisitor:LateralSubSelect:" + lateralSubSelect );
 
 	}
 
 	@Override
-	public void visit(ValuesList arg0) {
-		// TODO Auto-generated method stub
+	public void visit(ValuesList valuesList) {
+		System.out.println( "FromItemVisitor:ValuesList:" + valuesList );
 
 	}
 
 	@Override
-	public void visit(TableFunction arg0) {
-		// TODO Auto-generated method stub
+	public void visit(TableFunction tableFunction) {
+		System.out.println( "FromItemVisitor:TableFunction:" + tableFunction );
 
 	}
 

@@ -214,9 +214,12 @@ public class JSQLParseVisitorExample extends Application
 		{
 			String sqlStr = this.taSQL.getText();
 			Statements stmts = CCJSqlParserUtil.parseStatements(sqlStr);
-			ExampleFromItemVisitor  fromItemVisitor   = new ExampleFromItemVisitor();
-			ExampleSelectVisitor    selectVisitor     = new ExampleSelectVisitor( fromItemVisitor );
-			ExampleStatementVisitor statementsVisitor = new ExampleStatementVisitor( selectVisitor );
+			ExampleSelectItemVisitor  selectItemVisitor = new ExampleSelectItemVisitor();
+			ExampleFromItemVisitor    fromItemVisitor   = new ExampleFromItemVisitor();
+			ExampleExpressionVisitor  expVisitor        = new ExampleExpressionVisitor();
+			ExampleOrderByVisitor     orderByVisitor    = new ExampleOrderByVisitor();
+			ExampleSelectVisitor      selectVisitor     = new ExampleSelectVisitor( selectItemVisitor, fromItemVisitor, expVisitor, orderByVisitor );
+			ExampleStatementVisitor   statementsVisitor = new ExampleStatementVisitor( selectVisitor );
 			stmts.accept( statementsVisitor );
 			
 			List<String> sqlLst = statementsVisitor.getSqlLst();
@@ -242,9 +245,12 @@ public class JSQLParseVisitorExample extends Application
 	private void analyze( Statement stmt, StringBuffer sb )
 	{
 		sb.append( "========================\n\n" );
-		ExampleFromItemVisitor  fromItemVisitor   = new ExampleFromItemVisitor();
-		ExampleSelectVisitor    selectVisitor     = new ExampleSelectVisitor( fromItemVisitor );
-		ExampleStatementVisitor statementsVisitor = new ExampleStatementVisitor( selectVisitor );
+		ExampleSelectItemVisitor  selectItemVisitor = new ExampleSelectItemVisitor();
+		ExampleFromItemVisitor    fromItemVisitor   = new ExampleFromItemVisitor();
+		ExampleExpressionVisitor  expVisitor        = new ExampleExpressionVisitor();
+		ExampleOrderByVisitor     orderByVisitor    = new ExampleOrderByVisitor();
+		ExampleSelectVisitor      selectVisitor     = new ExampleSelectVisitor( selectItemVisitor, fromItemVisitor, expVisitor, orderByVisitor );
+		ExampleStatementVisitor   statementsVisitor = new ExampleStatementVisitor( selectVisitor );
 		stmt.accept(statementsVisitor);
 		
 		String sqlType = statementsVisitor.getSqlType();

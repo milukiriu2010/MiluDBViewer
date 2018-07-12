@@ -24,6 +24,7 @@ import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
 import javafx.stage.Stage;
 import javafx.stage.Window;
+import milu.db.MyDBAbstract;
 import milu.gui.ctrl.common.inf.ChangeLangInterface;
 import milu.gui.ctrl.info.SystemTab;
 import milu.gui.ctrl.info.VersionTab;
@@ -37,7 +38,9 @@ import milu.tool.MyFileTool;
 import milu.tool.MyGUITool;
 
 public class MainMenuBar extends MenuBar
-	implements ChangeLangInterface
+	implements
+		AfterDBConnectedInterface,
+		ChangeLangInterface
 {
 	// Control View
 	private DBView  dbView = null;
@@ -271,7 +274,8 @@ public class MainMenuBar extends MenuBar
 	    	this.menuBookMark.getItems().removeAll(this.menuBookMark.getItems());
 	    	try
 	    	{
-	    		this.createMenuBookMark( Paths.get(AppConst.DB_DIR.val()), this.menuBookMark );
+	    		//this.createMenuBookMark( Paths.get(AppConst.DB_DIR.val()), this.menuBookMark );
+	    		MyFileTool.createMenuBookMark( Paths.get(AppConst.DB_DIR.val()), this.menuBookMark, this.dbView, this );
 	    	}
 	    	catch ( IOException ioEx )
 	    	{
@@ -327,6 +331,7 @@ public class MainMenuBar extends MenuBar
 		this.menuItemVersion.setOnAction( (event)->this.dbView.openView( VersionTab.class ) );
 	}
 	
+	/*
 	private void createMenuBookMark( Path pathParent, Menu menuParent ) throws IOException
 	{
 		if ( Files.isDirectory(pathParent) == false )
@@ -346,7 +351,7 @@ public class MainMenuBar extends MenuBar
 				{
 					if ( path.toString().endsWith("json") )
 					{
-						MenuItem menuItem = new DBMenuItem(path,this.dbView.getMainController());
+						MenuItem menuItem = new DBMenuItem(path,this.dbView.getMainController(), this);
 						menuParent.getItems().add(menuItem);
 					}
 				}
@@ -360,11 +365,16 @@ public class MainMenuBar extends MenuBar
 			}
 		}
 	}
+	*/
 	
-	/**************************************************
-	 * Override from ChangeLangInterface
-	 ************************************************** 
-	 */
+	// AfterDBConnectedInterface
+	@Override
+	public void afterConnection( MyDBAbstract myDBAbs )
+	{
+		this.dbView.getMainController().createNewWindow(myDBAbs);		
+	}
+	
+	// ChangeLangInterface
 	@Override
 	public void changeLang()
 	{
@@ -421,7 +431,6 @@ public class MainMenuBar extends MenuBar
 		// ----------------------------------------------
 	    this.menuHelp.setText( langRB.getString( "MENU_HELP" ) );
 	    this.menuItemSysInfo.setText( langRB.getString( "MENU_HELP_SYSINFO" ) );
-	    //this.menuItemAbout.setText( langRB.getString( "MENU_HELP_ABOUT" ) );
 	    this.menuItemVersion.setText( langRB.getString( "MENU_HELP_VERSION" ) );
 	}
 	

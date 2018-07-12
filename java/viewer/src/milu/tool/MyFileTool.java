@@ -1,7 +1,13 @@
 package milu.tool;
 
+import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
+
+import javafx.scene.control.Menu;
+import javafx.scene.control.MenuItem;
+
 import java.io.File;
 import java.io.FileReader;
 import java.io.BufferedReader;
@@ -11,6 +17,9 @@ import java.io.IOException;
 
 import milu.file.json.MyJsonEachAbstract;
 import milu.file.json.MyJsonEachFactory;
+import milu.gui.ctrl.menu.AfterDBConnectedInterface;
+import milu.gui.ctrl.menu.DBMenuItem;
+import milu.gui.view.DBView;
 import milu.main.AppConf;
 import milu.main.AppConst;
 import milu.main.MainController;
@@ -131,6 +140,40 @@ public class MyFileTool
 		}
     }
 	
+	public static void createMenuBookMark( Path pathParent, Menu menuParent, DBView dbView, AfterDBConnectedInterface adbcInf ) throws IOException
+	{
+		if ( Files.isDirectory(pathParent) == false )
+		{
+			return;
+		}
+		
+		try
+		(
+	    	DirectoryStream<Path> directoryStream = 
+    			Files.newDirectoryStream(pathParent);
+		)
+		{
+			for ( Path path : directoryStream )
+			{
+				if ( Files.isRegularFile(path) )
+				{
+					if ( path.toString().endsWith("json") )
+					{
+						MenuItem menuItem = new DBMenuItem(path,dbView.getMainController(), adbcInf);
+						menuParent.getItems().add(menuItem);
+					}
+				}
+				else if ( Files.isDirectory(path) )
+				{
+					Menu menuSub = new Menu(path.toFile().getName());
+					menuParent.getItems().add(menuSub);
+					
+					createMenuBookMark( path, menuSub, dbView, adbcInf );
+				}
+			}
+		}
+	}
+		
     // It doesn't work well.
 	// https://stackoverflow.com/questions/6214703/copy-entire-directory-contents-to-another-directory?utm_medium=organic&utm_source=google_rich_qa&utm_campaign=google_rich_qa
     /*

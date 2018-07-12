@@ -112,7 +112,6 @@ class ImportDataPane extends Pane
 	{
 		this.rbSrcFile.setToggleGroup(tglSrc);
 		this.rbSrcDB.setToggleGroup(tglSrc);
-		this.rbSrcDB.setDisable(true);
 		this.rbSrcFile.setSelected(true);
 		
 		HBox hBoxSrc = new HBox(2);

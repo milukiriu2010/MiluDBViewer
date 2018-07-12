@@ -44,7 +44,6 @@ public class MyGUITool
 	public static Node createImageView( int width, int height, MainController mainCtrl, SchemaEntity schemaEntity )
 	{
 		String imageResourceName = schemaEntity.getImageResourceName();
-		//System.out.println( "image:" + imageResourceName );
 		ImageView iv = new ImageView( mainCtrl.getImage(imageResourceName) );
 		iv.setFitHeight( 16 );
 		iv.setFitWidth( 16 );
@@ -229,8 +228,6 @@ public class MyGUITool
 			Parent parent = (Parent)node;
 			for ( Node n : parent.getChildrenUnmodifiable() )
 			{
-				//System.out.println( "SearchNode[" + searchNodeClass.getName() + "]ChildNode[" + n.getClass().getName() + "]" );
-				//if ( searchNodeClass.getName().equals(n.getClass().getName()) )
 				if ( searchNodeClass.isInstance(n) )
 				{
 					return n;
@@ -306,7 +303,7 @@ public class MyGUITool
 		window.setX(x);
 		window.setY(y);
 	}
-	
+
 	public static void showException( MainController mainCtrl, String resourceName, String headID, Exception ex )
 	{
 		MyAlertDialog alertDlg = new MyAlertDialog( AlertType.WARNING, mainCtrl );
