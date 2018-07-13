@@ -64,6 +64,51 @@ public class CollectTaskFactory
 		return task;
 	}
 	
+	public static Task<Exception> getInstanceForTableLst( MainController mainCtrl, MyDBAbstract myDBAbs )
+	{
+		Task<Exception> task = null;
+		if ( myDBAbs instanceof MyDBPostgres )
+		{
+			task = new CollectTaskTableBasic();
+		}
+		else if ( myDBAbs instanceof MyDBMySQL )
+		{
+			task = new CollectTaskTableBasic();
+		}
+		else if ( myDBAbs instanceof MyDBOracle )
+		{
+			task = new CollectTaskTableBasic();
+		}
+		else if ( myDBAbs instanceof MyDBCassandra )
+		{
+			task = new CollectTaskTableBasic();
+		}
+		else if ( myDBAbs instanceof MyDBSQLServer )
+		{
+			task = new CollectTaskTableBasic();
+		}
+		else if ( myDBAbs instanceof MyDBSQLite )
+		{
+			task = new CollectTaskTableNoSchema();
+		}
+		else if ( myDBAbs instanceof MyDBMongo )
+		{
+			task = new CollectTaskTableBasic();
+		}
+		else
+		{
+			task = new CollectTaskTableBasic();
+		}
+		
+		if ( task instanceof CollectTaskInterface )
+		{
+			((CollectTaskInterface)task).setMainController(mainCtrl);
+			((CollectTaskInterface)task).setMyDBAbstract(myDBAbs);
+		}
+		
+		return task;
+	}
+	
 	public static Task<Exception> getInstance( AbsDBFactory.FACTORY_TYPE factoryType, CollectDataType dataType, MainController mainCtrl, MyDBAbstract myDBAbs, SchemaEntity selectedSchemaEntity )
 	{
 		Task<Exception> task = null;

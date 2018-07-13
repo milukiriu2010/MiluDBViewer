@@ -16,6 +16,7 @@ import milu.entity.schema.SchemaEntity;
 import milu.entity.schema.search.SearchSchemaEntityInterface;
 import milu.entity.schema.search.SearchSchemaEntityVisitorFactory;
 import milu.gui.ctrl.common.inf.CloseInterface;
+import milu.gui.ctrl.common.inf.WatchInterface;
 import milu.gui.ctrl.common.inf.ChangeLangInterface;
 import milu.gui.view.DBView;
 import milu.main.MainController;
@@ -39,7 +40,14 @@ class ImportDataPane extends Pane
 	// -------------------------------------------------
 	// [2:ImportDataPaneFile]
 	//   <Put>
+	//     SRC_TYPE          => String
 	//     SRC_FILE          => String
+	// -------------------------------------------------
+	// [2:ImportDataPaneDB]
+	//   <Put>
+	//     SRC_TYPE          => SRC_TYPE
+	//     SRC_DB            => MyDBAbstract
+	//     SRC_TABLE         => String
 	// -------------------------------------------------
 	// [3:ImportDataPaneFileTableView]
 	//   <Get>
@@ -72,6 +80,16 @@ class ImportDataPane extends Pane
 	// [Center]
     // -----------------------------------------------------
 	private Pane  selectedPane = null;
+	
+    // -----------------------------------------------------
+	// [Bottom]
+    // -----------------------------------------------------
+	private Label lblMsg = new Label();
+	
+	enum SRC_TYPE{
+		FILE,
+		DB
+	}
 	
 	ImportDataPane( DBView dbView, SchemaEntity dstSchemaEntity, CloseInterface closeInf )
 	{
@@ -131,13 +149,19 @@ class ImportDataPane extends Pane
 			if ( newVal == this.rbSrcFile )
 			{
 				this.selectedPane = new ImportDataPaneFile( this.dbView, this, this.mapObj );
+				this.mapObj.put( ImportData.SRC_TYPE.val(), ImportDataPane.SRC_TYPE.FILE );
 			}
 			else if ( newVal == this.rbSrcDB )
 			{
 				this.selectedPane = new ImportDataPaneDB( this.dbView, this, this.mapObj );
+				this.mapObj.put( ImportData.SRC_TYPE.val(), ImportDataPane.SRC_TYPE.DB );
 			}
 			this.basePane.setCenter(this.selectedPane);
 			this.paneStack.clear();
+			if ( this.selectedPane instanceof WatchInterface )
+			{
+				this.closeInf.addWatchLst((WatchInterface)this.selectedPane);
+			}
 		});
 	}
 	
@@ -152,11 +176,24 @@ class ImportDataPane extends Pane
 		{
 			this.selectedPane = new ImportDataPaneFileTableView( this.dbView, this, mapObj );
 		}
+		else if ( pane instanceof ImportDataPaneDB )
+		{
+			this.selectedPane = new ImportDataPaneFileTableView( this.dbView, this, mapObj );
+		}
 		else if ( pane instanceof ImportDataPaneFileTableView )
 		{
 			this.selectedPane = new ImportDataPaneResult( this.dbView, this, mapObj );
 		}
 		this.basePane.setCenter(this.selectedPane);
+		if ( this.selectedPane instanceof WatchInterface )
+		{
+			System.out.println( "selectedPane is WatchInterface." + this.selectedPane );
+			this.closeInf.addWatchLst((WatchInterface)this.selectedPane);
+		}
+		else
+		{
+			System.out.println( "selectedPane is not WatchInterface." + this.selectedPane );
+		}
 	}
 	
 	// WizardInterface
@@ -172,6 +209,21 @@ class ImportDataPane extends Pane
 	public void close()
 	{
 		this.closeInf.closeRequest(null);
+	}
+	
+	// WizardInterface
+	@Override
+	public void setMsg( String msg )
+	{
+		if ( "".equals(msg) )
+		{
+			this.basePane.setBottom(null);
+		}
+		else
+		{
+			this.lblMsg.setText(msg);
+			this.basePane.setBottom(this.lblMsg);
+		}
 	}
 	
 	// ChangeLangInterface

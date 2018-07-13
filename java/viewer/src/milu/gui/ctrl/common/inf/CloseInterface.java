@@ -5,4 +5,5 @@ import javafx.event.Event;
 public interface CloseInterface 
 {
 	public void closeRequest( Event event );
+	public void addWatchLst( WatchInterface watchInf );
 }

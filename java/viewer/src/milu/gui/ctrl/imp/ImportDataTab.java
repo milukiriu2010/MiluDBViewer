@@ -1,6 +1,8 @@
 package milu.gui.ctrl.imp;
 
 import java.text.MessageFormat;
+import java.util.Set;
+import java.util.HashSet;
 import java.util.ResourceBundle;
 
 import javafx.event.Event;
@@ -10,6 +12,7 @@ import javafx.scene.control.Tab;
 import javafx.scene.layout.Pane;
 import milu.entity.schema.SchemaEntity;
 import milu.gui.ctrl.common.inf.CloseInterface;
+import milu.gui.ctrl.common.inf.WatchInterface;
 import milu.gui.ctrl.common.inf.ChangeLangInterface;
 import milu.gui.view.DBView;
 import milu.main.MainController;
@@ -26,6 +29,8 @@ public class ImportDataTab extends Tab
 	private int counter = 0;
 	
 	private DBView          dbView = null;
+	
+	private Set<WatchInterface>  watchInfLst = new HashSet<>();
 	
     // -----------------------------------------------------
 	// [Pane(1) on Tab]
@@ -53,7 +58,14 @@ public class ImportDataTab extends Tab
 		// set icon on Tab
 		this.setGraphic( MyGUITool.createImageView( 16, 16, mainCtrl.getImage("file:resources/images/import.png") ) );
 		
+		this.setAction();
+		
 		this.changeLang();
+	}
+	
+	private void setAction()
+	{
+		this.setOnCloseRequest(this::closeRequest);
 	}
 	
 	// CloseInterface
@@ -61,6 +73,15 @@ public class ImportDataTab extends Tab
 	public void closeRequest( Event event )
 	{
 		this.getTabPane().getTabs().remove(this);
+		this.watchInfLst.forEach( (watchInf)->watchInf.notify(event) );
+	}
+	
+	// CloseInterface
+	@Override
+	public void addWatchLst( WatchInterface watchInf )
+	{
+		System.out.println( "ImportDataTab:addWatchLst" );
+		this.watchInfLst.add(watchInf);
 	}
 	
 	// ChangeLangInterface

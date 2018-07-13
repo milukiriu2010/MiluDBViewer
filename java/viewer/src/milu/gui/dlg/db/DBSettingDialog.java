@@ -607,7 +607,6 @@ public class DBSettingDialog extends Dialog<MyDBAbstract>
 		}
 		catch ( Exception ex )
 		{
-			//this.showException(ex);
 			MyGUITool.showException( this.mainCtrl, "conf.lang.gui.common.MyAlert", "TITLE_MISC_ERROR", ex );
 		}
 		

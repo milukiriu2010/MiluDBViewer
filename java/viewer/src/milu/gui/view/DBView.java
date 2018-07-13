@@ -41,6 +41,7 @@ import milu.db.MyDBAbstract;
 import milu.entity.schema.SchemaEntity;
 import milu.task.collect.CollectTaskFactory;
 import milu.tool.MyGUITool;
+import milu.tool.MyServiceTool;
 
 public class DBView extends Stage
 	implements
@@ -291,31 +292,30 @@ public class DBView extends Stage
 		
 		// shutdown the thread pool on closing this window. 
 		// http://winterbe.com/posts/2015/04/07/java8-concurrency-tutorial-thread-executor-examples/
-		this.setOnCloseRequest
-		(	
-			(event)->
+		this.setOnCloseRequest((event)->{
+			MyServiceTool.shutdownService(this.service);
+			/*
+			try
 			{
-				try
-				{
-					System.out.println( "shutdown executor start." );
-					service.shutdown();
-					service.awaitTermination( 3, TimeUnit.SECONDS );
-				}
-				catch ( InterruptedException intEx )
-				{
-					System.out.println( "tasks interrupted" );
-				}
-				finally
-				{
-					if ( !service.isTerminated() )
-					{
-						System.out.println( "executor still working..." );
-					}
-					service.shutdownNow();
-					System.out.println( "executor finished." );
-				}
+				System.out.println( "shutdown executor start." );
+				service.shutdown();
+				service.awaitTermination( 3, TimeUnit.SECONDS );
 			}
-		);
+			catch ( InterruptedException intEx )
+			{
+				System.out.println( "tasks interrupted" );
+			}
+			finally
+			{
+				if ( !service.isTerminated() )
+				{
+					System.out.println( "executor still working..." );
+				}
+				service.shutdownNow();
+				System.out.println( "executor finished." );
+			}
+			*/
+		});
 		
 		/*
 		Child Node:class javafx.scene.control.skin.TabPaneSkin$TabHeaderArea

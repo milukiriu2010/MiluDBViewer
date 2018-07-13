@@ -18,10 +18,12 @@ import javafx.scene.layout.Pane;
 import javafx.event.Event;
 import javafx.concurrent.Task;
 import milu.gui.ctrl.common.inf.CloseInterface;
+import milu.gui.ctrl.common.inf.WatchInterface;
 import milu.gui.ctrl.common.inf.ChangeLangInterface;
 import milu.main.MainController;
 import milu.task.version.ModuleTaskFactory;
 import milu.tool.MyGUITool;
+import milu.tool.MyServiceTool;
 
 public class VersionPane extends Pane 
 	implements
@@ -228,6 +230,8 @@ public class VersionPane extends Pane
 	@Override
 	public void closeRequest( Event event )
 	{
+		MyServiceTool.shutdownService(this.service);
+		/*
 		try
 		{
 			System.out.println( "shutdown executor start." );
@@ -247,6 +251,13 @@ public class VersionPane extends Pane
 			service.shutdownNow();
 			System.out.println( "executor finished." );
 		}
+		*/
+	}
+	
+	// CloseInterface
+	@Override
+	public void addWatchLst( WatchInterface watchInf )
+	{
 	}
 	
 	// MapInterface

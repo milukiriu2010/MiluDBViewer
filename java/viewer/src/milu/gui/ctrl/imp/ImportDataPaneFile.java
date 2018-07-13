@@ -54,7 +54,8 @@ public class ImportDataPaneFile extends Pane
 	    // -----------------------------------------------------
 		// [Center]
 	    // -----------------------------------------------------
-		this.txtSrcFile.setPrefWidth(500);
+		//this.txtSrcFile.setPrefWidth(500);
+		this.txtSrcFile.prefWidthProperty().bind(this.dbView.widthProperty().multiply(0.75));;
 		HBox hBoxSrc = new HBox(2);
 		hBoxSrc.setPadding( new Insets( 10, 10, 10, 10 ) );
 		hBoxSrc.setSpacing(10);
@@ -124,7 +125,7 @@ public class ImportDataPaneFile extends Pane
 		
 		this.btnNext.setOnAction((event)->{
 			this.mapObj.put( ImportData.SRC_FILE.val(), this.txtSrcFile.getText() );
-			this.wizardInf.next( this, this.mapObj);
+			this.wizardInf.next( this, this.mapObj );
 		});
 		
 		this.txtSrcFile.textProperty().addListener((obs,oldVal,newVal)->{

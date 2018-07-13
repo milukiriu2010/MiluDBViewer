@@ -3,7 +3,6 @@ package milu.gui.ctrl.common.table;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
-import java.util.stream.Collectors;
 
 import java.io.File;
 import java.io.IOException;

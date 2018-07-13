@@ -2,10 +2,13 @@ package milu.gui.ctrl.imp;
 
 import java.util.Map;
 import java.util.ResourceBundle;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 import java.util.List;
 import java.io.File;
 import java.io.IOException;
+import java.sql.SQLException;
 
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -17,12 +20,19 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
+import milu.ctrl.sql.generate.GenerateSQLAbstract;
+import milu.ctrl.sql.generate.GenerateSQLFactory;
+import milu.ctrl.sql.parse.SQLBag;
+import milu.db.MyDBAbstract;
+import milu.db.access.ExecSQLAbstract;
+import milu.db.access.ExecSQLFactory;
 import milu.entity.schema.SchemaEntity;
 import milu.file.table.MyFileImportFactory;
 import milu.file.table.MyFileImportAbstract;
 import milu.gui.ctrl.common.inf.ChangeLangInterface;
 import milu.gui.ctrl.common.table.ObjTableView;
 import milu.gui.view.DBView;
+import milu.main.AppConf;
 import milu.main.MainController;
 import milu.tool.MyGUITool;
 
@@ -56,6 +66,8 @@ public class ImportDataPaneFileTableView extends Pane
 	private Button btnImport = new Button();
 	private Button btnBack   = new Button();
 
+	// Thread Pool
+	private ExecutorService service = Executors.newSingleThreadExecutor();	
 
 	ImportDataPaneFileTableView( DBView dbView, WizardInterface wizardInf, Map<String,Object> mapObj )
 	{
@@ -145,6 +157,20 @@ public class ImportDataPaneFileTableView extends Pane
 	
 	private void loadData()
 	{
+		//mapObj.forEach( (k,v)->System.out.println( "mapObj:k[" + k + "]v[" + v + "]" ));
+		ImportDataPane.SRC_TYPE srcType = (ImportDataPane.SRC_TYPE)this.mapObj.get(ImportData.SRC_TYPE.val());
+		if ( ImportDataPane.SRC_TYPE.FILE.equals(srcType) )
+		{
+			this.loadDataFile();
+		}
+		else if ( ImportDataPane.SRC_TYPE.DB.equals(srcType) )
+		{
+			this.loadDataDB();
+		}
+	}
+	
+	private void loadDataFile()
+	{
 		SchemaEntity dstSchemaEntity = (SchemaEntity)this.mapObj.get(ImportData.DST_SCHEMA_ENTITY.val());
 		int columnCnt = dstSchemaEntity.getDefinitionLst().size();
 		List<Object> columnLst = dstSchemaEntity.getDefinitionLst().stream()
@@ -159,27 +185,11 @@ public class ImportDataPaneFileTableView extends Pane
 		{
 			myFileAbs.open(file);
 			myFileAbs.load(columnCnt);
-			//List<Object>       headLst = myFileAbs.getHeadLst();  
 			List<List<Object>> dataLst = myFileAbs.getDataLst();
-			//System.out.println( "headLst.size:" + headLst.size() );
 			System.out.println( "columnLst.size:" + columnLst.size() );
 			System.out.println( "dataLst.size  :" + dataLst.size() );
 			
 			this.objTableView.setTableViewData(columnLst, dataLst);
-			//this.objTableView.setTableViewData(headLst, dataLst);
-			/*
-			int no = 0;
-			for ( List<Object> dataRow : dataLst )
-			{
-				System.out.print( no + ":" );
-				for ( Object obj : dataRow )
-				{
-					System.out.print( obj.toString() + "\t" );
-				}
-				System.out.println();
-				no++;
-			}
-			*/
 		}
 		catch ( Exception ex )
 		{
@@ -193,9 +203,53 @@ public class ImportDataPaneFileTableView extends Pane
 			}
 			catch ( IOException ioEx )
 			{
-				
 			}
 		}
+	}
+	
+	private void loadDataDB()
+	{
+		SchemaEntity dstSchemaEntity = (SchemaEntity)this.mapObj.get(ImportData.DST_SCHEMA_ENTITY.val());
+		//int columnCnt = dstSchemaEntity.getDefinitionLst().size();
+		List<Object> columnLst = dstSchemaEntity.getDefinitionLst().stream()
+			.map( data->data.get("column_name") )
+			.collect(Collectors.toList());
+		
+		MainController mainCtrl = this.dbView.getMainController();
+		AppConf appConf = mainCtrl.getAppConf();
+		MyDBAbstract myDBAbsSrc = (MyDBAbstract)this.mapObj.get(ImportData.SRC_DB.val());
+		SchemaEntity srcSchemaEntity = (SchemaEntity)this.mapObj.get(ImportData.SRC_SCHEMA_ENTITY.val());
+		//String strTable = (String)this.mapObj.get(ImportData.SRC_TABLE.val());
+		//String strSQL = "select * from " + strTable;
+		
+		// --------------------------------------------------
+		// Create SQL
+		// --------------------------------------------------
+		GenerateSQLAbstract gsAbs = GenerateSQLFactory.getInstance(GenerateSQLFactory.TYPE.SELECT);
+		String strSQL = gsAbs.generate(srcSchemaEntity, myDBAbsSrc );
+		
+		SQLBag sqlBag = new SQLBag();
+		sqlBag.setSQL(strSQL);
+		sqlBag.setCommand(SQLBag.COMMAND.QUERY);
+		sqlBag.setType(SQLBag.TYPE.SELECT);
+		
+		ExecSQLAbstract  execSQLAbs = 
+				new ExecSQLFactory().createFactory( sqlBag, myDBAbsSrc, appConf, null, 0.0 );
+		try
+		{
+			execSQLAbs.exec(appConf.getFetchMax());
+			List<List<Object>> dataLst = execSQLAbs.getDataLst();
+			this.objTableView.setTableViewData(columnLst, dataLst);
+		}
+		catch ( SQLException sqlEx )
+		{
+			MyGUITool.showException( mainCtrl, "conf.lang.gui.common.MyAlert", "TITLE_MISC_ERROR", sqlEx );
+		}
+		catch ( Exception ex )
+		{
+			MyGUITool.showException( mainCtrl, "conf.lang.gui.common.MyAlert", "TITLE_MISC_ERROR", ex );			
+		}
+
 	}
 	
 	// ChangeLangInterface
