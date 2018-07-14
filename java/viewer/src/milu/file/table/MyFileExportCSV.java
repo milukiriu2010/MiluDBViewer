@@ -46,6 +46,11 @@ public class MyFileExportCSV extends MyFileExportAbstract
 		// Output Header
 		this.fw.write( headLst.stream().map(x->x.toString()).collect(Collectors.joining(",","",lineSP)) );
 		
+		double assignedSizeDiv = 0.0;
+		if ( rowSize != 0 )
+		{
+			assignedSizeDiv = this.assignedSize/(double)rowSize;
+		}
 		// Output Data
 		for ( int i = 0; i < rowSize; i++ )
 		{
@@ -62,6 +67,11 @@ public class MyFileExportCSV extends MyFileExportAbstract
 						}
 					})
 					.collect(Collectors.joining(",","",lineSP)) );
+			if ( this.progressInf != null )
+			{
+				this.progressInf.addProgress(assignedSizeDiv);
+				this.progressInf.setMsg("...");
+			}
 		}
 	}
 

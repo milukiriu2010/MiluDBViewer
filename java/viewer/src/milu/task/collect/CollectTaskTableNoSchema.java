@@ -2,14 +2,11 @@ package milu.task.collect;
 
 import java.sql.SQLException;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 
 import javafx.concurrent.Task;
 import milu.db.MyDBAbstract;
 import milu.db.obj.abs.AbsDBFactory;
-import milu.db.obj.abs.ObjDBFactory;
-import milu.db.obj.abs.ObjDBInterface;
 import milu.db.obj.abs.AbsDBFactory.FACTORY_TYPE;
 import milu.entity.schema.SchemaEntity;
 import milu.main.MainController;

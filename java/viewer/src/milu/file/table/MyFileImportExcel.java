@@ -54,6 +54,10 @@ public class MyFileImportExcel extends MyFileImportAbstract
 		
 		DataFormatter dataFormatter = new DataFormatter();
 
+		if ( this.progressInf != null )
+		{
+			this.progressInf.setMsg("...");
+		}
 		int i = 0;
 		for ( Row row : this.sheet )
 		{

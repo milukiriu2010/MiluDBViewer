@@ -144,8 +144,9 @@ public class ImportDataPaneDB extends Pane
 	    });
 	    
 		this.btnNext.setOnAction((event)->{
-			SchemaEntity schemaEntity = this.cmbSchema.getSelectionModel().getSelectedItem();
+			//SchemaEntity schemaEntity = this.cmbSchema.getSelectionModel().getSelectedItem();
 			SchemaEntity tableEntity  = this.cmbTable.getSelectionModel().getSelectedItem();
+			/*
 			String tableName = "";
 			if ( schemaEntity != null )
 			{
@@ -155,10 +156,11 @@ public class ImportDataPaneDB extends Pane
 			{
 				tableName = tableName + tableEntity.getName();
 			}
+			*/
 			
 			this.mapObj.put( ImportData.SRC_SCHEMA_ENTITY.val(), tableEntity );
 			this.mapObj.put( ImportData.SRC_DB.val()   , this.myDBAbs );
-			this.mapObj.put( ImportData.SRC_TABLE.val(), tableName );
+			//this.mapObj.put( ImportData.SRC_TABLE.val(), tableName );
 			this.wizardInf.next( this, this.mapObj );
 		});
 		
@@ -280,7 +282,7 @@ public class ImportDataPaneDB extends Pane
 		MainController mainCtrl = this.dbView.getMainController();
 		ResourceBundle langRB = mainCtrl.getLangResource("conf.lang.gui.ctrl.imp.ImportDataTab");
 		ResourceBundle extLangRB = mainCtrl.getLangResource("conf.lang.gui.common.NodeName");
-				
+		
 		// "next" button
 		this.btnNext.setGraphic( MyGUITool.createImageView( 16, 16, mainCtrl.getImage("file:resources/images/next.png") ));
 		Tooltip tipNext = new Tooltip(extLangRB.getString( "TOOLTIP_NEXT" ));

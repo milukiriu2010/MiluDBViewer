@@ -2,9 +2,13 @@ package milu.gui.ctrl.imp;
 
 import java.util.Map;
 import java.util.List;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
+import javafx.event.Event;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -24,15 +28,20 @@ import milu.ctrl.sql.generate.GenerateSQLAbstract;
 import milu.ctrl.sql.generate.GenerateSQLFactory;
 import milu.ctrl.sql.parse.SQLBag;
 import milu.gui.ctrl.common.inf.ChangeLangInterface;
+import milu.gui.ctrl.common.inf.WatchInterface;
 import milu.gui.ctrl.common.table.ObjTableView;
 import milu.gui.view.DBView;
 import milu.gui.view.FadeView;
 import milu.main.AppConf;
 import milu.main.MainController;
+import milu.task.imp.ImportTaskResult;
 import milu.tool.MyGUITool;
+import milu.tool.MyServiceTool;
 
 public class ImportDataPaneResult extends Pane
 	implements
+		ImportResultInterface,
+		WatchInterface,
 		ChangeLangInterface
 {
 	private DBView          dbView = null;
@@ -66,6 +75,9 @@ public class ImportDataPaneResult extends Pane
 	private Button btnRollback = new Button();
 	private Button btnBack     = new Button();
 	private Button btnClose    = new Button();
+
+	// Thread Pool
+	private ExecutorService service = Executors.newSingleThreadExecutor();
 	
 	ImportDataPaneResult( DBView dbView, WizardInterface wizardInf, Map<String,Object> mapObj )
 	{
@@ -98,8 +110,10 @@ public class ImportDataPaneResult extends Pane
 		// [Center]
 	    // -----------------------------------------------------
 		this.objTableView = new ObjTableView( this.dbView );
-		this.objTableView.setPrefWidth(500);
-		this.objTableView.setPrefHeight(200);
+		//this.objTableView.setPrefWidth(500);
+		//this.objTableView.setPrefHeight(200);
+		this.objTableView.prefWidthProperty().bind(this.dbView.widthProperty().multiply(0.9));
+		this.objTableView.prefHeightProperty().bind(this.dbView.heightProperty().multiply(0.4));
 		this.basePane.setCenter(this.objTableView);
 		
 	    // -----------------------------------------------------
@@ -151,8 +165,34 @@ public class ImportDataPaneResult extends Pane
 		});
 	}
 	
-	@SuppressWarnings("unchecked")
 	private void importData()
+	{
+		MainController mainCtrl = this.dbView.getMainController();
+		
+		final ImportTaskResult task = new ImportTaskResult();
+		task.setImportResultInterface(this);
+		task.setDBView(this.dbView);
+		task.setMapObj(this.mapObj);
+		// execute task
+		this.service.submit(task);
+		
+		task.progressProperty().addListener((obs,oldVal,newVal)->{
+			if ( newVal.doubleValue() == 1.0 )
+			{
+			}
+		});
+		
+		task.messageProperty().addListener((obs,oldVal,msg)->{
+			this.wizardInf.setMsg(msg);
+		});	
+
+		task.valueProperty().addListener((obs,oldVal,ex)->{
+			MyGUITool.showException( mainCtrl, "conf.lang.gui.common.MyAlert", "TITLE_MISC_ERROR", ex );
+		});
+	}
+	
+	@SuppressWarnings("unchecked")
+	private void importData2()
 	{
 		// --------------------------------------------------
 		// Create SQL
@@ -175,21 +215,7 @@ public class ImportDataPaneResult extends Pane
 		// --------------------------------------------------
 		MainController mainCtrl = this.dbView.getMainController();
 		AppConf appConf = mainCtrl.getAppConf();
-		/*
-		SQLParse sqlParse = new SQLParse();
-		try
-		{
-			sqlParse.setStrSQL(strSQL);
-			sqlParse.parse();
-		}
-		catch ( JSQLParserException jsqlEx )
-		{
-			jsqlEx.printStackTrace();
-		}
-		List<SQLBag> sqlBagLst = sqlParse.getSQLBagLst();
-		System.out.println( "sqlBagLst.size:" + sqlBagLst.size() );
-		SQLBag sqlBag = sqlBagLst.get(0);
-		*/
+		
 		SQLBag sqlBag = new SQLBag();
 		sqlBag.setSQL(strSQL);
 		sqlBag.setCommand(SQLBag.COMMAND.TRANSACTION);
@@ -227,6 +253,61 @@ public class ImportDataPaneResult extends Pane
 		this.txtNG.setText(String.valueOf(cntNG));
 		this.txtSQL.setText(strSQL.replaceAll("\n|\t", " "));
 		this.objTableView.setTableViewData(ngHeadLst,ngDataLst);
+	}
+	
+	// ImportResultInterface
+	@Override
+	public void setTotal( int cntTotal )
+	{
+		this.txtTotal.setText(String.valueOf(cntTotal));
+	}
+	
+	// ImportResultInterface
+	@Override
+	public void setOK( int cntOK )
+	{
+		this.txtOK.setText(String.valueOf(cntOK));
+	}
+	
+	// ImportResultInterface
+	@Override
+	public void setNG( int cntNG )
+	{
+		this.txtNG.setText(String.valueOf(cntNG));
+	}
+	
+	// ImportResultInterface
+	@Override
+	public void setSQL( String strSQL )
+	{
+		this.txtSQL.setText(strSQL.replaceAll("\n|\t", " "));
+	}
+	
+	// ImportResultInterface
+	@Override
+	public void setTableViewData( List<Object> columnLst, List<List<Object>> dataLst )
+	{
+		this.objTableView.setTableViewData(columnLst,dataLst);
+	}
+	
+	// WatchInterface
+	@Override
+	public void notify( Event event )
+	{
+		System.out.println( "ImportDataPaneFileTableView:notify" );
+		MyServiceTool.shutdownService(this.service);
+		MyDBAbstract myDBAbsSrc = (MyDBAbstract)this.mapObj.get(ImportData.SRC_DB.val());
+		if ( myDBAbsSrc != null )
+		{
+			try
+			{
+				myDBAbsSrc.close();
+			}
+			catch ( SQLException sqlEx )
+			{
+			}
+		}
+		
 	}
 	
 	// ChangeLangInterface

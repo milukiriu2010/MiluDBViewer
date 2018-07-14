@@ -33,6 +33,10 @@ public class MyFileImportCSV extends MyFileImportAbstract
 		this.headLst.clear();
 		this.dataLst.clear();
 
+		if ( this.progressInf != null )
+		{
+			this.progressInf.setMsg("...");
+		}
 		String line = null;
 		while ( (line = this.br.readLine()) != null )
 		{

@@ -111,6 +111,11 @@ public class MyFileExportExcel extends MyFileExportAbstract
 			cellHead.setCellValue(headLst.get(i).toString());
 		}
 		
+		double assignedSizeDiv = 0.0;
+		if ( rowSize != 0 )
+		{
+			assignedSizeDiv = this.assignedSize/(double)rowSize;
+		}
 		// Body for Sheet
 		for ( int i = 0; i < rowSize; i++ )
 		{
@@ -130,6 +135,11 @@ public class MyFileExportExcel extends MyFileExportAbstract
 					cellBody.setCellType(CellType.STRING);
 					cellBody.setCellValue(obj.toString());
 				}
+			}
+			if ( this.progressInf != null )
+			{
+				this.progressInf.addProgress(assignedSizeDiv);
+				this.progressInf.setMsg("...");
 			}
 		}
 		

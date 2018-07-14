@@ -4,40 +4,37 @@ import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.stream.Collectors;
 import java.util.List;
-import java.io.File;
-import java.io.IOException;
-import java.sql.SQLException;
 
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
-import javafx.beans.property.StringProperty;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
-import milu.ctrl.sql.generate.GenerateSQLAbstract;
-import milu.ctrl.sql.generate.GenerateSQLFactory;
-import milu.ctrl.sql.parse.SQLBag;
-import milu.db.MyDBAbstract;
-import milu.db.access.ExecSQLAbstract;
-import milu.db.access.ExecSQLFactory;
-import milu.entity.schema.SchemaEntity;
-import milu.file.table.MyFileImportFactory;
-import milu.file.table.MyFileImportAbstract;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
+import javafx.application.Platform;
+import javafx.beans.property.StringProperty;
+import javafx.concurrent.Task;
+import javafx.event.Event;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+
 import milu.gui.ctrl.common.inf.ChangeLangInterface;
+import milu.gui.ctrl.common.inf.WatchInterface;
 import milu.gui.ctrl.common.table.ObjTableView;
 import milu.gui.view.DBView;
-import milu.main.AppConf;
 import milu.main.MainController;
+import milu.task.imp.ImportTaskPreviewFactory;
 import milu.tool.MyGUITool;
+import milu.tool.MyServiceTool;
 
-public class ImportDataPaneFileTableView extends Pane
-	implements ChangeLangInterface 
+public class ImportDataPanePreview extends Pane
+	implements
+		ImportPreviewInterface,
+		WatchInterface,
+		ChangeLangInterface 
 {
 	private DBView          dbView = null;
 	
@@ -58,6 +55,7 @@ public class ImportDataPaneFileTableView extends Pane
     // -----------------------------------------------------
 	// [Center]
     // -----------------------------------------------------
+	private TextField    txtWarn      = new TextField();
 	private ObjTableView objTableView = null;
 
     // -----------------------------------------------------
@@ -67,9 +65,15 @@ public class ImportDataPaneFileTableView extends Pane
 	private Button btnBack   = new Button();
 
 	// Thread Pool
-	private ExecutorService service = Executors.newSingleThreadExecutor();	
+	private ExecutorService service = Executors.newSingleThreadExecutor();
+	
+	public enum ERROR_TYPE
+	{
+		ERROR_NO,
+		ERROR_COLUMN_CNT
+	}
 
-	ImportDataPaneFileTableView( DBView dbView, WizardInterface wizardInf, Map<String,Object> mapObj )
+	ImportDataPanePreview( DBView dbView, WizardInterface wizardInf, Map<String,Object> mapObj )
 	{
 		this.dbView    = dbView;
 		this.wizardInf = wizardInf;
@@ -91,14 +95,24 @@ public class ImportDataPaneFileTableView extends Pane
 	    // -----------------------------------------------------
 		// [Center]
 	    // -----------------------------------------------------
+		this.txtWarn.setEditable(false);
+		this.txtWarn.prefWidthProperty().bind(this.dbView.widthProperty().multiply(0.8));
 		this.objTableView = new ObjTableView( this.dbView );
-		this.objTableView.setPrefWidth(500);
-		this.objTableView.setPrefHeight(200);
-		this.basePane.setCenter(this.objTableView);
+		//this.objTableView.setPrefWidth(500);
+		//this.objTableView.setPrefHeight(200);
+		this.objTableView.prefWidthProperty().bind(this.dbView.widthProperty().multiply(0.9));
+		this.objTableView.prefHeightProperty().bind(this.dbView.heightProperty().multiply(0.5));
+		
+		VBox vBoxCenter = new VBox(2);
+		vBoxCenter.setPadding( new Insets( 10, 10, 10, 10 ) );
+		vBoxCenter.setSpacing(10);
+		vBoxCenter.getChildren().addAll(this.txtWarn,this.objTableView);
+		this.basePane.setCenter(vBoxCenter);
 		
 	    // -----------------------------------------------------
 		// [Bottom]
 	    // -----------------------------------------------------
+		this.btnImport.setDisable(true);
 		this.btnBack.setGraphic( MyGUITool.createImageView( 20, 20, mainCtrl.getImage("file:resources/images/back.png") ) );
 		
 		HBox hBoxNext = new HBox(2);
@@ -153,9 +167,44 @@ public class ImportDataPaneFileTableView extends Pane
 		this.btnBack.setOnAction((event)->{
 			this.wizardInf.prev();
 		});
+		
+		Platform.runLater(()->{
+			this.getScene().getWindow().setOnCloseRequest((event)->{
+				MyServiceTool.shutdownService(this.service);
+			});
+		});
 	}
 	
 	private void loadData()
+	{
+		MainController mainCtrl = this.dbView.getMainController();
+		ImportDataPane.SRC_TYPE srcType = (ImportDataPane.SRC_TYPE)this.mapObj.get(ImportData.SRC_TYPE.val());
+		final Task<Exception> task = 
+				ImportTaskPreviewFactory.createFactory( srcType, this, this.dbView, this.mapObj );
+		if ( task == null )
+		{
+			return;
+		}
+		// execute task
+		this.service.submit(task);
+		
+		task.progressProperty().addListener((obs,oldVal,newVal)->{
+			if ( newVal.doubleValue() == 1.0 )
+			{
+			}
+		});
+		
+		task.messageProperty().addListener((obs,oldVal,msg)->{
+			this.wizardInf.setMsg(msg);
+		});	
+
+		task.valueProperty().addListener((obs,oldVal,ex)->{
+			MyGUITool.showException( mainCtrl, "conf.lang.gui.common.MyAlert", "TITLE_MISC_ERROR", ex );
+		});
+	}
+	
+	/*
+	private void loadData2()
 	{
 		//mapObj.forEach( (k,v)->System.out.println( "mapObj:k[" + k + "]v[" + v + "]" ));
 		ImportDataPane.SRC_TYPE srcType = (ImportDataPane.SRC_TYPE)this.mapObj.get(ImportData.SRC_TYPE.val());
@@ -167,10 +216,17 @@ public class ImportDataPaneFileTableView extends Pane
 		{
 			this.loadDataDB();
 		}
+		else
+		{
+			System.out.println( "SRC_TYPE not recognized." );
+		}
 	}
-	
+	*/
+	/*
 	private void loadDataFile()
 	{
+		System.out.println( "Load data from file." );
+		
 		SchemaEntity dstSchemaEntity = (SchemaEntity)this.mapObj.get(ImportData.DST_SCHEMA_ENTITY.val());
 		int columnCnt = dstSchemaEntity.getDefinitionLst().size();
 		List<Object> columnLst = dstSchemaEntity.getDefinitionLst().stream()
@@ -206,9 +262,12 @@ public class ImportDataPaneFileTableView extends Pane
 			}
 		}
 	}
-	
+	*/
+	/*
 	private void loadDataDB()
 	{
+		System.out.println( "Load data from DB." );
+		
 		SchemaEntity dstSchemaEntity = (SchemaEntity)this.mapObj.get(ImportData.DST_SCHEMA_ENTITY.val());
 		//int columnCnt = dstSchemaEntity.getDefinitionLst().size();
 		List<Object> columnLst = dstSchemaEntity.getDefinitionLst().stream()
@@ -219,8 +278,6 @@ public class ImportDataPaneFileTableView extends Pane
 		AppConf appConf = mainCtrl.getAppConf();
 		MyDBAbstract myDBAbsSrc = (MyDBAbstract)this.mapObj.get(ImportData.SRC_DB.val());
 		SchemaEntity srcSchemaEntity = (SchemaEntity)this.mapObj.get(ImportData.SRC_SCHEMA_ENTITY.val());
-		//String strTable = (String)this.mapObj.get(ImportData.SRC_TABLE.val());
-		//String strSQL = "select * from " + strTable;
 		
 		// --------------------------------------------------
 		// Create SQL
@@ -238,8 +295,9 @@ public class ImportDataPaneFileTableView extends Pane
 		try
 		{
 			execSQLAbs.exec(appConf.getFetchMax());
-			List<List<Object>> dataLst = execSQLAbs.getDataLst();
-			this.objTableView.setTableViewData(columnLst, dataLst);
+		}
+		catch ( MyDBOverFetchSizeException myEx )
+		{
 		}
 		catch ( SQLException sqlEx )
 		{
@@ -249,7 +307,55 @@ public class ImportDataPaneFileTableView extends Pane
 		{
 			MyGUITool.showException( mainCtrl, "conf.lang.gui.common.MyAlert", "TITLE_MISC_ERROR", ex );			
 		}
+		finally
+		{
+			List<Object>       headLst = execSQLAbs.getColNameLst();
+			List<List<Object>> dataLst = execSQLAbs.getDataLst();
+			//this.objTableView.setTableViewData(columnLst, dataLst);
+			this.objTableView.setTableViewData(headLst, dataLst);
+			
+			if ( columnLst.size() != headLst.size() ) 
+			{
+				this.btnImport.setDisable(true);
+				this.txtWarn.setText("Column count doesn't match.");
+			}
+			else
+			{
+				this.btnImport.setDisable(false);
+			}
+		}
 
+	}
+	*/
+	// ImportPreviewInterface
+	@Override
+	public void setTableViewData( List<Object> columnLst, List<List<Object>> dataLst )
+	{
+		this.objTableView.setTableViewData(columnLst, dataLst);
+	}
+	
+	// ImportPreviewInterface
+	@Override
+	public void setErrorType( ImportDataPanePreview.ERROR_TYPE errorType )
+	{
+		if ( ERROR_TYPE.ERROR_NO.equals(errorType) )
+		{
+			this.btnImport.setDisable(false);
+			this.txtWarn.setText("");
+		}
+		else if ( ERROR_TYPE.ERROR_COLUMN_CNT.equals(errorType) ) 
+		{
+			this.btnImport.setDisable(true);
+			this.txtWarn.setText("Column count doesn't match.");
+		}
+	}
+	
+	// WatchInterface
+	@Override
+	public void notify( Event event )
+	{
+		System.out.println( "ImportDataPaneFileTableView:notify" );
+		MyServiceTool.shutdownService(this.service);
 	}
 	
 	// ChangeLangInterface

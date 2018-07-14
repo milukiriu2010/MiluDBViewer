@@ -7,6 +7,7 @@ import java.util.Stack;
 
 import javafx.geometry.Insets;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.BorderPane;
@@ -21,7 +22,7 @@ import milu.gui.ctrl.common.inf.ChangeLangInterface;
 import milu.gui.view.DBView;
 import milu.main.MainController;
 
-class ImportDataPane extends Pane
+public class ImportDataPane extends Pane
 	implements 
 		WizardInterface,
 		ChangeLangInterface 
@@ -47,7 +48,7 @@ class ImportDataPane extends Pane
 	//   <Put>
 	//     SRC_TYPE          => SRC_TYPE
 	//     SRC_DB            => MyDBAbstract
-	//     SRC_TABLE         => String
+	//     SRC_SCHEMA_ENTITY => SchemaEntity
 	// -------------------------------------------------
 	// [3:ImportDataPaneFileTableView]
 	//   <Get>
@@ -74,7 +75,7 @@ class ImportDataPane extends Pane
 	private RadioButton rbSrcFile  = new RadioButton();
 	private RadioButton rbSrcDB    = new RadioButton();
 	private Label       lblArrow   = new Label();
-	private Label       lblDstDB   = new Label();
+	private TextField   txtDstDB   = new TextField();
 	
     // -----------------------------------------------------
 	// [Center]
@@ -86,7 +87,7 @@ class ImportDataPane extends Pane
     // -----------------------------------------------------
 	private Label lblMsg = new Label();
 	
-	enum SRC_TYPE{
+	public enum SRC_TYPE{
 		FILE,
 		DB
 	}
@@ -96,6 +97,7 @@ class ImportDataPane extends Pane
 		this.dbView   = dbView;
 		this.closeInf = closeInf;
 		this.mapObj.put( ImportData.DST_SCHEMA_ENTITY.val(), dstSchemaEntity );
+		this.mapObj.put( ImportData.SRC_TYPE.val(), ImportDataPane.SRC_TYPE.FILE );
 		
 		// ---------------------------------------------------
 		// Get Table Name
@@ -112,7 +114,8 @@ class ImportDataPane extends Pane
 		}
 		String tableNamePath = schemaName + tableName;
 		this.mapObj.put( ImportData.TABLE_NAME_PATH.val(), tableNamePath );
-		this.lblDstDB.setText( tableNamePath );
+		this.txtDstDB.setText( tableNamePath );
+		this.txtDstDB.setEditable(false);
 		
 		this.setPane();
 		
@@ -135,7 +138,7 @@ class ImportDataPane extends Pane
 		HBox hBoxSrc = new HBox(2);
 		hBoxSrc.setPadding( new Insets( 10, 10, 10, 10 ) );
 		hBoxSrc.setSpacing(10);
-		hBoxSrc.getChildren().addAll(this.rbSrcFile,this.rbSrcDB,this.lblArrow,this.lblDstDB);
+		hBoxSrc.getChildren().addAll(this.rbSrcFile,this.rbSrcDB,this.lblArrow,this.txtDstDB);
 		
 		this.basePane.setTop(hBoxSrc);
 		
@@ -174,13 +177,13 @@ class ImportDataPane extends Pane
 		this.basePane.setCenter(null);
 		if ( pane instanceof ImportDataPaneFile )
 		{
-			this.selectedPane = new ImportDataPaneFileTableView( this.dbView, this, mapObj );
+			this.selectedPane = new ImportDataPanePreview( this.dbView, this, mapObj );
 		}
 		else if ( pane instanceof ImportDataPaneDB )
 		{
-			this.selectedPane = new ImportDataPaneFileTableView( this.dbView, this, mapObj );
+			this.selectedPane = new ImportDataPanePreview( this.dbView, this, mapObj );
 		}
-		else if ( pane instanceof ImportDataPaneFileTableView )
+		else if ( pane instanceof ImportDataPanePreview )
 		{
 			this.selectedPane = new ImportDataPaneResult( this.dbView, this, mapObj );
 		}
