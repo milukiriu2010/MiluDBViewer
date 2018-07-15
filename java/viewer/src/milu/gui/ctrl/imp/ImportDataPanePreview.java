@@ -338,6 +338,9 @@ public class ImportDataPanePreview extends Pane
 	@Override
 	public void setErrorType( ImportDataPanePreview.ERROR_TYPE errorType )
 	{
+		MainController mainCtrl = this.dbView.getMainController();
+		ResourceBundle langRB = mainCtrl.getLangResource("conf.lang.gui.ctrl.imp.ImportDataTab");
+		
 		if ( ERROR_TYPE.ERROR_NO.equals(errorType) )
 		{
 			this.btnImport.setDisable(false);
@@ -346,7 +349,7 @@ public class ImportDataPanePreview extends Pane
 		else if ( ERROR_TYPE.ERROR_COLUMN_CNT.equals(errorType) ) 
 		{
 			this.btnImport.setDisable(true);
-			this.txtWarn.setText("Column count doesn't match.");
+			this.txtWarn.setText( langRB.getString("MSG_ERROR_COLUMN_CNT") );
 		}
 	}
 	

@@ -70,7 +70,7 @@ public class MyFileExportCSV extends MyFileExportAbstract
 			if ( this.progressInf != null )
 			{
 				this.progressInf.addProgress(assignedSizeDiv);
-				this.progressInf.setMsg("...");
+				this.progressInf.setMsg( String.valueOf(i) );
 			}
 		}
 	}

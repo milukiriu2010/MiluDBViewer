@@ -73,7 +73,18 @@ public class MyFileImportExcel extends MyFileImportAbstract
 				else
 				{
 					String cellVal = dataFormatter.formatCellValue(cell);
-					dataRow.add(cellVal);
+					if ( MyStringTool.isNumberNoDecimal(cellVal) )
+					{
+						dataRow.add(Long.parseLong(cellVal));
+					}
+					else if ( MyStringTool.isNumberWithDecimal(cellVal) )
+					{
+						dataRow.add(Double.parseDouble(cellVal));
+					}
+					else
+					{
+						dataRow.add(cellVal);
+					}
 				}
 				if ( i == 0 )
 				{

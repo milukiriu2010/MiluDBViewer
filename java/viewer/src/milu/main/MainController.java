@@ -61,11 +61,6 @@ public class MainController
 	void init( Application application )
 	{
 		this.setApplication(application);
-		//this.loadLangResources();
-		//this.loadImages();
-		//this.loadAppConf();
-		//this.loadDriver();
-		//this.loadKey();
 		this.createNewDBConnectionAndOpenNewWindow();
 	}
 	

@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 import java.io.File;
-import java.io.IOException;
 
 import javafx.scene.control.TablePosition;
 import javafx.scene.control.TableView;
@@ -29,14 +28,13 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.Event;
 import milu.tool.MyFileTool;
-import milu.tool.MyGUITool;
 import milu.tool.MyStringTool;
-import milu.file.table.MyFileExportAbstract;
-import milu.file.table.MyFileExportFactory;
 import milu.gui.ctrl.common.inf.ChangeLangInterface;
 import milu.gui.ctrl.common.inf.SetTableViewDataInterface;
+import milu.gui.dlg.TaskDialog;
 import milu.task.ProgressInterface;
 import milu.task.ProgressReportInterface;
+import milu.task.exp.ExportTask;
 import milu.gui.view.DBView;
 import milu.main.AppConf;
 import milu.main.MainController;
@@ -443,6 +441,16 @@ public class ObjTableView extends TableView<List<Object>>
 		appConf.setInitDirExportFile(file.getParentFile().getAbsolutePath());
 		MyFileTool.save( mainCtrl, appConf );
 		
+		final ExportTask task = new ExportTask();
+		task.setFile(file);
+		task.setHeadLst(this.headObjLst);
+		task.setDataLst(this.dataObjLst);
+		
+		TaskDialog taskDlg = new TaskDialog(task,mainCtrl);
+		taskDlg.showAndWait();
+		//taskDlg.show();
+		
+		/*
 		MyFileExportAbstract myFileAbs = MyFileExportFactory.getInstance( file );
 		try
 		{
@@ -458,6 +466,7 @@ public class ObjTableView extends TableView<List<Object>>
 			myFileAbs.close();
 			myFileAbs = null;
 		}
+		*/
 	}
 	
 	// Get ColumnName from TableView 

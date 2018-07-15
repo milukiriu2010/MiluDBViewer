@@ -3,7 +3,6 @@ package milu.gui.ctrl.imp;
 import java.util.Map;
 import java.util.List;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.ResourceBundle;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -21,18 +20,11 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
 import milu.db.MyDBAbstract;
-import milu.db.access.ExecSQLAbstract;
-import milu.db.access.ExecSQLFactory;
-import milu.entity.schema.SchemaEntity;
-import milu.ctrl.sql.generate.GenerateSQLAbstract;
-import milu.ctrl.sql.generate.GenerateSQLFactory;
-import milu.ctrl.sql.parse.SQLBag;
 import milu.gui.ctrl.common.inf.ChangeLangInterface;
 import milu.gui.ctrl.common.inf.WatchInterface;
 import milu.gui.ctrl.common.table.ObjTableView;
 import milu.gui.view.DBView;
 import milu.gui.view.FadeView;
-import milu.main.AppConf;
 import milu.main.MainController;
 import milu.task.imp.ImportTaskResult;
 import milu.tool.MyGUITool;
@@ -191,6 +183,7 @@ public class ImportDataPaneResult extends Pane
 		});
 	}
 	
+	/*
 	@SuppressWarnings("unchecked")
 	private void importData2()
 	{
@@ -254,6 +247,7 @@ public class ImportDataPaneResult extends Pane
 		this.txtSQL.setText(strSQL.replaceAll("\n|\t", " "));
 		this.objTableView.setTableViewData(ngHeadLst,ngDataLst);
 	}
+	*/
 	
 	// ImportResultInterface
 	@Override

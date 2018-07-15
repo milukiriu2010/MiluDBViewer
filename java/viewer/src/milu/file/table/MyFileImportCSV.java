@@ -1,6 +1,9 @@
 package milu.file.table;
 
 import java.util.List;
+
+import milu.tool.MyStringTool;
+
 import java.util.ArrayList;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -50,7 +53,19 @@ public class MyFileImportCSV extends MyFileImportAbstract
 				}
 				else
 				{
-					dataRow.add(tokens[i]);
+					String cellVal = tokens[i];
+					if ( MyStringTool.isNumberNoDecimal(cellVal) )
+					{
+						dataRow.add(Long.parseLong(cellVal));
+					}
+					else if ( MyStringTool.isNumberWithDecimal(cellVal) )
+					{
+						dataRow.add(Double.parseDouble(cellVal));
+					}
+					else
+					{
+						dataRow.add(cellVal);
+					}
 				}
 			}
 			this.dataLst.add(dataRow);

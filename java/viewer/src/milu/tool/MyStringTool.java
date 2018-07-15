@@ -10,11 +10,26 @@ import milu.gui.view.DBView;
 
 public class MyStringTool 
 {
+	public static boolean isNumber( String strOrg )
+	{
+		return strOrg.matches("^(\\-)?[1-9]?\\d+(\\.\\d+)?$");
+	}
+	
+	public static boolean isNumberNoDecimal( String strOrg )
+	{
+		return strOrg.matches("^(\\-)?[1-9]?\\d+$");
+	}
+	
+	public static boolean isNumberWithDecimal( String strOrg )
+	{
+		return strOrg.matches("^(\\-)?[1-9]?\\d+\\.\\d+$");
+	}	
+	
 	public static String replaceMultiLine( String strOrg, String strSrc, String strDst )
 	{
 		String lineSP = System.getProperty("line.separator");
 		StringBuffer sb = new StringBuffer();
-		Pattern p = Pattern.compile( strSrc, Pattern.MULTILINE);
+		Pattern p = Pattern.compile( strSrc, Pattern.MULTILINE );
 		Matcher m = p.matcher(strOrg);
 		int i = 0;
 		while ( m.find() )

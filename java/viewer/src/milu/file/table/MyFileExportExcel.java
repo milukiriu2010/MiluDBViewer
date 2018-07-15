@@ -19,6 +19,8 @@ import org.apache.poi.ss.usermodel.VerticalAlignment;
 import org.apache.poi.xssf.streaming.SXSSFSheet;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 
+import milu.tool.MyStringTool;
+
 public class MyFileExportExcel extends MyFileExportAbstract
 {
 	private FileOutputStream   foutStream = null;
@@ -132,14 +134,23 @@ public class MyFileExportExcel extends MyFileExportAbstract
 				}
 				else
 				{
-					cellBody.setCellType(CellType.STRING);
-					cellBody.setCellValue(obj.toString());
+					if ( obj instanceof Number )
+					{
+						Number num = (Number)obj;
+						cellBody.setCellType(CellType.NUMERIC);
+						cellBody.setCellValue(num.doubleValue());
+					}
+					else
+					{
+						cellBody.setCellType(CellType.STRING);
+						cellBody.setCellValue(obj.toString());
+					}
 				}
 			}
 			if ( this.progressInf != null )
 			{
 				this.progressInf.addProgress(assignedSizeDiv);
-				this.progressInf.setMsg("...");
+				this.progressInf.setMsg( String.valueOf(i) );
 			}
 		}
 		

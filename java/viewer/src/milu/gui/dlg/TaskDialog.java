@@ -35,6 +35,8 @@ public class TaskDialog extends Dialog<Boolean>
 		this.task = task;
 		this.mainCtrl = mainCtrl;
 		
+		this.progressBar.prefWidthProperty().bind(this.getDialogPane().widthProperty().multiply(0.9));
+		
 		VBox vBox = new VBox(2);
 		vBox.setPadding( new Insets( 10, 10, 10, 10 ) );
 		vBox.setSpacing(10);
@@ -49,6 +51,8 @@ public class TaskDialog extends Dialog<Boolean>
 
 		this.getDialogPane().setContent(vBox);
 		
+		this.getDialogPane().setPrefSize(500, 80);
+		
 		this.setAction();
 		
 		this.start();
@@ -58,9 +62,19 @@ public class TaskDialog extends Dialog<Boolean>
 	{
 		this.setResultConverter((dialogButton)->Boolean.TRUE);
 		
+		/*
 		this.setOnCloseRequest((event)->{
 			MyServiceTool.shutdownService(this.service);
 		});
+		*/
+		
+		/*
+		Window window = this.getDialogPane().getScene().getWindow();
+		window.setOnCloseRequest((event)->{
+			System.out.println( "TaskDialog hide" );
+			window.hide();
+		});
+		*/
 	}
 	
 	private void start()
@@ -77,7 +91,11 @@ public class TaskDialog extends Dialog<Boolean>
 		this.task.progressProperty().addListener((obs,oldVal,newVal)->{
 			if ( newVal.doubleValue() == 1.0 )
 			{
+				System.out.println( "TaskDialog close" );
+				//Platform.runLater(()->this.close());
+				this.getDialogPane().getScene().getWindow().hide();
 				this.close();
+				MyServiceTool.shutdownService(this.service);
 			}
 		});
 		

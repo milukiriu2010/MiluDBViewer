@@ -280,8 +280,15 @@ public class ImportDataPaneDB extends Pane
 	public void changeLang() 
 	{
 		MainController mainCtrl = this.dbView.getMainController();
-		ResourceBundle langRB = mainCtrl.getLangResource("conf.lang.gui.ctrl.imp.ImportDataTab");
+		//ResourceBundle langRB = mainCtrl.getLangResource("conf.lang.gui.ctrl.imp.ImportDataTab");
 		ResourceBundle extLangRB = mainCtrl.getLangResource("conf.lang.gui.common.NodeName");
+		
+		// "Select DB"
+		this.menuBookMark.setText(extLangRB.getString("LABEL_DB"));
+		
+		// "Select Table"
+		this.lblTable.setText(extLangRB.getString("LABEL_TABLE"));
+		
 		
 		// "next" button
 		this.btnNext.setGraphic( MyGUITool.createImageView( 16, 16, mainCtrl.getImage("file:resources/images/next.png") ));
