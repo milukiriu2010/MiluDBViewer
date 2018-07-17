@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -46,6 +48,7 @@ public class MyFileExportCSV extends MyFileExportAbstract
 		// Output Header
 		this.fw.write( headLst.stream().map(x->x.toString()).collect(Collectors.joining(",","",lineSP)) );
 		
+		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		double assignedSizeDiv = 0.0;
 		if ( rowSize != 0 )
 		{
@@ -56,14 +59,22 @@ public class MyFileExportCSV extends MyFileExportAbstract
 		{
 			List<Object> dataRow = dataLst.get(i);
 			this.fw.write( dataRow.stream()
-					.map((x)->{
-						if ( x == null )
+					.map((obj)->{
+						if ( obj == null )
 						{
 							return "";
 						}
 						else
 						{
-							return x.toString();
+							if ( obj instanceof java.sql.Timestamp )
+							{
+								java.sql.Timestamp dateTime = (java.sql.Timestamp)obj;
+								return dateFormat.format(dateTime);
+							}
+							else
+							{
+								return obj.toString();
+							}
 						}
 					})
 					.collect(Collectors.joining(",","",lineSP)) );

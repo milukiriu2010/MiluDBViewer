@@ -101,7 +101,7 @@ public class ImportDataPanePreview extends Pane
 		//this.objTableView.setPrefWidth(500);
 		//this.objTableView.setPrefHeight(200);
 		this.objTableView.prefWidthProperty().bind(this.dbView.widthProperty().multiply(0.9));
-		this.objTableView.prefHeightProperty().bind(this.dbView.heightProperty().multiply(0.5));
+		this.objTableView.prefHeightProperty().bind(this.dbView.heightProperty().multiply(0.4));
 		
 		VBox vBoxCenter = new VBox(2);
 		vBoxCenter.setPadding( new Insets( 10, 10, 10, 10 ) );

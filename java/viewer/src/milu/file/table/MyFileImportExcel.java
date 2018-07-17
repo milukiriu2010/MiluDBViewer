@@ -2,6 +2,9 @@ package milu.file.table;
 
 import java.io.File;
 import java.io.InputStream;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.text.ParseException;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -48,6 +51,7 @@ public class MyFileImportExcel extends MyFileImportAbstract
 	// https://www.callicoder.com/java-read-excel-file-apache-poi/
 	@Override
 	public void load(int columnCnt) 
+		throws ParseException
 	{
 		this.headLst.clear();
 		this.dataLst.clear();
@@ -80,6 +84,10 @@ public class MyFileImportExcel extends MyFileImportAbstract
 					else if ( MyStringTool.isNumberWithDecimal(cellVal) )
 					{
 						dataRow.add(Double.parseDouble(cellVal));
+					}
+					else if ( MyStringTool.isDateTime(cellVal) )
+					{
+						this.addRowDateTime(cellVal, dataRow);
 					}
 					else
 					{

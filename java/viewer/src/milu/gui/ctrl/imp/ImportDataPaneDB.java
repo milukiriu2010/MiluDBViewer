@@ -62,9 +62,10 @@ public class ImportDataPaneDB extends Pane
     // -----------------------------------------------------
 	
 	private MenuBar          menuBar = new MenuBar();
-	private Menu             menuBookMark = new Menu("Select DB");
-	private TextField        txtUrl = new TextField();
-	private Label            lblTable  = new Label("Table");
+	private Menu             menuBookMark = new Menu();
+	private TextField        txtUser = new TextField();
+	private TextField        txtUrl  = new TextField();
+	private Label            lblTable  = new Label();
 	private ComboBox<SchemaEntity> cmbSchema = new ComboBox<>();
 	private ComboBox<SchemaEntity> cmbTable  = new ComboBox<>();
 	
@@ -89,9 +90,14 @@ public class ImportDataPaneDB extends Pane
 	    // ----------------------------------------------------- 
 		this.menuBar.getMenus().add(this.menuBookMark);
 		this.menuBookMark.getItems().addAll( new MenuItem("dummy") );
+		this.txtUser.setEditable(false);
 		this.txtUrl.setEditable(false);
 		//this.txtUrl.setPrefWidth(500);
-		this.txtUrl.prefWidthProperty().bind(this.dbView.widthProperty().multiply(0.75));
+		this.txtUrl.prefWidthProperty().bind(this.dbView.widthProperty().multiply(0.5));
+
+		HBox hBoxSchema = new HBox(2);
+		hBoxSchema.getChildren().addAll( this.txtUser, this.txtUrl );
+		//hBoxSchema.prefWidthProperty().bind(this.dbView.widthProperty().multiply(0.75));
 		
 		HBox hBoxTbl = new HBox(2);
 		hBoxTbl.getChildren().addAll( this.cmbSchema, this.cmbTable );
@@ -101,7 +107,8 @@ public class ImportDataPaneDB extends Pane
 		gridSrc.setVgap(2);
 		gridSrc.setPadding( new Insets( 10, 10, 10, 10 ) );
 		gridSrc.add( this.menuBar , 0, 1 );
-		gridSrc.add( this.txtUrl  , 1, 1 );
+		//gridSrc.add( this.txtUrl  , 1, 1 );
+		gridSrc.add( hBoxSchema   , 1, 1 );
 		gridSrc.add( this.lblTable, 0, 2 );
 		gridSrc.add( hBoxTbl      , 1, 2 );
 		
@@ -189,7 +196,11 @@ public class ImportDataPaneDB extends Pane
 				this.myDBAbs = null;
 			}
 		}
+		this.cmbSchema.getItems().removeAll(this.cmbSchema.getItems());
+		this.cmbTable.getItems().removeAll(this.cmbTable.getItems());
+		
 		this.myDBAbs = myDBAbs;
+		this.txtUser.setText(this.myDBAbs.getUsername());
 		this.txtUrl.setText(this.myDBAbs.getUrl());
 		
 		MainController mainCtrl = this.dbView.getMainController();
@@ -245,6 +256,10 @@ public class ImportDataPaneDB extends Pane
 		});	
 		
 		this.cmbSchema.valueProperty().addListener((obs,oldVal,schemaEntity)->{
+			if ( schemaEntity == null )
+			{
+				return;
+			}
 			SearchSchemaEntityInterface sseVisitorT = new SearchSchemaEntityVisitorFactory().createInstance( SchemaEntity.SCHEMA_TYPE.ROOT_TABLE );
 			schemaEntity.accept(sseVisitorT);
 			SchemaEntity tableRootEntity = sseVisitorT.getHitSchemaEntity();

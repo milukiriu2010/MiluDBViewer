@@ -68,13 +68,16 @@ public class CollectTaskTableNoSchema extends Task<Exception>
 	{
 		Exception    taskEx = null;
 		System.out.println( "Task start." );
+
+		Thread.sleep(100);
+		this.setProgress(0.0);
+		this.setMsg(".");
+		
 		long startTime = System.nanoTime();
 		Map<AbsDBFactory.FACTORY_TYPE,SchemaEntity.SCHEMA_TYPE>  factorySchemaMap = new LinkedHashMap<>();
 		factorySchemaMap.put( AbsDBFactory.FACTORY_TYPE.TABLE            , SchemaEntity.SCHEMA_TYPE.ROOT_TABLE );
 		try
 		{
-			this.setProgress(0.0);
-			
 			SchemaEntity rootEntity = this.myDBAbs.getSchemaRoot();
 			// Start to retrieve, if no child objects, 
 			if ( rootEntity.getEntityLst().size() != 0 )

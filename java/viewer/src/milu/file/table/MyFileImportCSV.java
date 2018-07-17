@@ -10,6 +10,7 @@ import java.io.FileNotFoundException;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.text.ParseException;
 
 public class MyFileImportCSV extends MyFileImportAbstract 
 {
@@ -31,11 +32,11 @@ public class MyFileImportCSV extends MyFileImportAbstract
 
 	@Override
 	public void load(int columnCnt) 
-			 throws IOException
+			 throws IOException, ParseException
 	{
 		this.headLst.clear();
 		this.dataLst.clear();
-
+		
 		if ( this.progressInf != null )
 		{
 			this.progressInf.setMsg("...");
@@ -61,6 +62,10 @@ public class MyFileImportCSV extends MyFileImportAbstract
 					else if ( MyStringTool.isNumberWithDecimal(cellVal) )
 					{
 						dataRow.add(Double.parseDouble(cellVal));
+					}
+					else if ( MyStringTool.isDateTime(cellVal) )
+					{
+						this.addRowDateTime(cellVal, dataRow);
 					}
 					else
 					{

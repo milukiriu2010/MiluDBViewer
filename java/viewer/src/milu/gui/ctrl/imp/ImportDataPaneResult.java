@@ -105,7 +105,7 @@ public class ImportDataPaneResult extends Pane
 		//this.objTableView.setPrefWidth(500);
 		//this.objTableView.setPrefHeight(200);
 		this.objTableView.prefWidthProperty().bind(this.dbView.widthProperty().multiply(0.9));
-		this.objTableView.prefHeightProperty().bind(this.dbView.heightProperty().multiply(0.4));
+		this.objTableView.prefHeightProperty().bind(this.dbView.heightProperty().multiply(0.3));
 		this.basePane.setCenter(this.objTableView);
 		
 	    // -----------------------------------------------------

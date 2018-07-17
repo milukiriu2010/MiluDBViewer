@@ -25,10 +25,6 @@ abstract class TableProcessAbstract
 	
 	abstract void copyTable( COPY_TYPE copyType );
 	
-	//abstract List<Object> getHeadList();
-	
-	//abstract List<List<Object>> getDataList();
-	
 	void setTableColumnCellValueFactory( final int index, TableColumn<List<Object>,Object> tableCol )
 	{
 		tableCol.setCellValueFactory
@@ -47,7 +43,7 @@ abstract class TableProcessAbstract
 					else if ( obj instanceof Timestamp )
 					{
 						Timestamp ts = (Timestamp)obj;
-						String strTS = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(ts);
+						String strTS = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(ts);
 						return new SimpleObjectProperty<Object>( strTS ); 
 					}
 					/* java.sql.SQLEXception: Attempt to read a SQLXML that is not readable

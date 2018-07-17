@@ -4,6 +4,8 @@ import java.util.List;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.io.FileNotFoundException;
 
 import org.apache.poi.hssf.util.HSSFColor;
@@ -18,8 +20,6 @@ import org.apache.poi.ss.usermodel.FillPatternType;
 import org.apache.poi.ss.usermodel.VerticalAlignment;
 import org.apache.poi.xssf.streaming.SXSSFSheet;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
-
-import milu.tool.MyStringTool;
 
 public class MyFileExportExcel extends MyFileExportAbstract
 {
@@ -112,7 +112,9 @@ public class MyFileExportExcel extends MyFileExportAbstract
 			cellHead.setCellType(CellType.STRING);
 			cellHead.setCellValue(headLst.get(i).toString());
 		}
+
 		
+		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		double assignedSizeDiv = 0.0;
 		if ( rowSize != 0 )
 		{
@@ -139,6 +141,12 @@ public class MyFileExportExcel extends MyFileExportAbstract
 						Number num = (Number)obj;
 						cellBody.setCellType(CellType.NUMERIC);
 						cellBody.setCellValue(num.doubleValue());
+					}
+					else if ( obj instanceof java.sql.Timestamp )
+					{
+						java.sql.Timestamp dateTime = (java.sql.Timestamp)obj;
+						cellBody.setCellType(CellType.STRING);
+						cellBody.setCellValue(dateFormat.format(dateTime));
 					}
 					else
 					{

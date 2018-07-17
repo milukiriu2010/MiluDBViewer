@@ -13,6 +13,7 @@ import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import milu.entity.schema.SchemaEntity;
 import milu.entity.schema.search.SearchSchemaEntityInterface;
 import milu.entity.schema.search.SearchSchemaEntityVisitorFactory;
@@ -77,15 +78,13 @@ public class ImportDataPane extends Pane
 	private Label       lblArrow   = new Label();
 	private TextField   txtDstDB   = new TextField();
 	
+	private VBox  vBoxSrc = new VBox(2);
+	private Label lblMsg  = new Label();
+	
     // -----------------------------------------------------
 	// [Center]
     // -----------------------------------------------------
 	private Pane  selectedPane = null;
-	
-    // -----------------------------------------------------
-	// [Bottom]
-    // -----------------------------------------------------
-	private Label lblMsg = new Label();
 	
 	public enum SRC_TYPE{
 		FILE,
@@ -140,7 +139,11 @@ public class ImportDataPane extends Pane
 		hBoxSrc.setSpacing(10);
 		hBoxSrc.getChildren().addAll(this.rbSrcFile,this.rbSrcDB,this.lblArrow,this.txtDstDB);
 		
-		this.basePane.setTop(hBoxSrc);
+		this.vBoxSrc.setPadding( new Insets( 10, 10, 10, 10 ) );
+		this.vBoxSrc.setSpacing(10);
+		this.vBoxSrc.getChildren().add(hBoxSrc);
+		
+		this.basePane.setTop(this.vBoxSrc);
 		
 		this.selectedPane = new ImportDataPaneFile( this.dbView, this, this.mapObj );
 		this.basePane.setCenter(this.selectedPane);
@@ -218,6 +221,7 @@ public class ImportDataPane extends Pane
 	@Override
 	public void setMsg( String msg )
 	{
+		/*
 		if ( "".equals(msg) )
 		{
 			this.basePane.setBottom(null);
@@ -226,6 +230,19 @@ public class ImportDataPane extends Pane
 		{
 			this.lblMsg.setText(msg);
 			this.basePane.setBottom(this.lblMsg);
+		}
+		*/
+		if ( "".equals(msg) )
+		{
+			this.vBoxSrc.getChildren().remove(this.lblMsg);
+		}
+		else
+		{
+			this.lblMsg.setText(msg);
+			if ( this.vBoxSrc.getChildren().contains(this.lblMsg) == false)
+			{
+				this.vBoxSrc.getChildren().add(this.lblMsg);
+			}
 		}
 	}
 	
