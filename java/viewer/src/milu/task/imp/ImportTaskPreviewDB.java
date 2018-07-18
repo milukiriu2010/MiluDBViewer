@@ -91,7 +91,7 @@ public class ImportTaskPreviewDB extends Task<Exception>
 				new ExecSQLFactory().createFactory( sqlBag, myDBAbsSrc, appConf, this, MAX );
 		try
 		{
-			execSQLAbs.exec(appConf.getFetchMax());
+			execSQLAbs.exec( appConf.getFetchMax(), appConf.getFetchPos() );
 			
 			return taskEx;
 		}

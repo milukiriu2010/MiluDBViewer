@@ -90,7 +90,7 @@ public class ExecExplainEach
 		try
 		{
 			System.out.println( "ExecExplainEach:start." );
-			execSQLAbs.exec( this.appConf.getFetchMax() );
+			execSQLAbs.exec( this.appConf.getFetchMax(), this.appConf.getFetchPos() );
 			System.out.println( "ExecExplainEach:end." );
 		}
 		catch ( MyDBOverFetchSizeException myDBEx )

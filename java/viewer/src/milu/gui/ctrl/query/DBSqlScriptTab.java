@@ -74,7 +74,7 @@ public class DBSqlScriptTab extends Tab
 	private AnchorPane   upperPane = new AnchorPane();
 	
 	// TextArea for input SQL 
-	private SqlTextArea  textAreaSQL = null;
+	private SQLTextArea  textAreaSQL = null;
 
 	// Upper => [AnchorPane(upperPane)]-[SqlTextArea(textAreaSQL)]
 	// Lower => [TabPane(tabPane)]
@@ -113,7 +113,7 @@ public class DBSqlScriptTab extends Tab
 		this.toolBar = new DBSqlScriptToolBar(this.dbView);
 		
         // http://tutorials.jenkov.com/javafx/textarea.html
-		this.textAreaSQL  = new SqlTextArea( dbView );
+		this.textAreaSQL  = new SQLTextArea( dbView );
         // AnchorPane
         this.upperPane.getChildren().add( this.textAreaSQL );
         this.textAreaSQL.init();
@@ -225,6 +225,20 @@ public class DBSqlScriptTab extends Tab
 		MainController mainCtrl = this.dbView.getMainController();
 		AppConf appConf = mainCtrl.getAppConf();
 		
+		// Get fetchPos, fetchMax from ToolBar
+		// &
+		// Set those values to AppConf
+		AppConf appConfClone = null;
+		try
+		{
+			appConfClone = (AppConf)appConf.clone();
+		}
+		catch ( CloneNotSupportedException cnsEx )
+		{
+		}
+		appConfClone.setFetchPos(((SQLFetchInterface)this.toolBar).getFetchPos());
+		appConfClone.setFetchMax(((SQLFetchInterface)this.toolBar).getFetchMax());
+		
 		// Get "orientation" of the active tab
 		Tab activeTab = 
 				this.tabPane.getTabs().stream()
@@ -257,7 +271,7 @@ public class DBSqlScriptTab extends Tab
 				factoryType, 
 				this.dbView, 
 				myDBAbs, 
-				appConf, 
+				appConfClone, 
 				this.tabPane, 
 				sqlBagLst, 
 				this,
@@ -504,7 +518,7 @@ public class DBSqlScriptTab extends Tab
 		{
 			fc.setInitialDirectory( new File(appConf.getInitDirSQLFile()) );
 		}
-		File file = fc.showOpenDialog(this.getTabPane().getScene().getWindow());
+		File file = fc.showSaveDialog(this.getTabPane().getScene().getWindow());
 		if ( file == null )
 		{
 			return;

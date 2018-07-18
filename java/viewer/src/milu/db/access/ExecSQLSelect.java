@@ -52,7 +52,7 @@ public class ExecSQLSelect extends ExecSQLAbstract
 	}
 	
 	@Override
-	public void exec(int checkCnt)		
+	public void exec( final int checkCnt, final int fetchPos )		
 		throws 
 			SQLException,
 			MyDBOverFetchSizeException,
@@ -69,8 +69,52 @@ public class ExecSQLSelect extends ExecSQLAbstract
 			this.clear();
 			this.execStartTime = System.nanoTime();
 			
-			stmt = this.myDBAbs.createStatement();
-			rs   = stmt.executeQuery( this.sqlBag.getSQL() );
+			boolean isAbsoluteOK = false;
+			if ( fetchPos == 1 )
+			{
+				stmt = this.myDBAbs.createStatement();
+				rs   = stmt.executeQuery( this.sqlBag.getSQL() );
+				isAbsoluteOK = true;
+			}
+			else
+			{
+				try
+				{
+					stmt = this.myDBAbs.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_READ_ONLY);
+					rs   = stmt.executeQuery( this.sqlBag.getSQL() );
+					rs.absolute(fetchPos);
+					isAbsoluteOK = true;
+				}
+				catch ( SQLException sqlEx2 )
+				{
+					System.out.println( "ResultSet absolute is not support." );
+					if ( stmt != null )
+					{
+						try
+						{
+							stmt.close();
+						}
+						catch ( SQLException sqlEx3 )
+						{
+						}
+					}
+					
+					if ( rs != null )
+					{
+						try
+						{
+							rs.close();
+						}
+						catch ( SQLException sqlEx3 )
+						{
+						}
+					}
+					
+					stmt = this.myDBAbs.createStatement();
+					rs   = stmt.executeQuery( this.sqlBag.getSQL() );
+					isAbsoluteOK = false;
+				}
+			}
 			
 			// Get Column Attribute
 			// https://examples.javacodegeeks.com/core-java/sql/resultsetmetadata/java-sql-resultsetmetadata-example/
@@ -97,10 +141,20 @@ public class ExecSQLSelect extends ExecSQLAbstract
 			}
 			System.out.println( "----------------------------" );
 			
+			// 
+			int startPos = 1;
 			// Fetch Count
 			int fetchCnt = 0;
 			while ( rs.next() )
 			{
+				if ( isAbsoluteOK == false )
+				{
+					if ( startPos < fetchPos )
+					{
+						startPos++;
+						continue;
+					}
+				}
 				if ( fetchCnt >= checkCnt )
 				{
 					throw new MyDBOverFetchSizeException();

@@ -12,7 +12,7 @@ public class ExecSQLExplainSQLServer extends ExecSQLAbstract
 {
 	// https://qiita.com/ota-meshi/items/6a0dc20f2aca6746047a
 	@Override
-	public void exec(int checkCnt) 
+	public void exec( final int checkCnt , final int fetchPos ) 
 		throws 
 			SQLException, 
 			Exception 

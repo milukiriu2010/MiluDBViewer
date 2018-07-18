@@ -23,6 +23,7 @@ import milu.db.MyDBAbstract;
 import milu.gui.ctrl.common.inf.ChangeLangInterface;
 import milu.gui.ctrl.common.inf.WatchInterface;
 import milu.gui.ctrl.common.table.ObjTableView;
+import milu.gui.dlg.TaskDialog;
 import milu.gui.view.DBView;
 import milu.gui.view.FadeView;
 import milu.main.MainController;
@@ -92,11 +93,14 @@ public class ImportDataPaneResult extends Pane
 		hBoxRS.setSpacing(10);
 		hBoxRS.setAlignment(Pos.CENTER);
 		hBoxRS.getChildren().addAll(this.lblTotal,this.txtTotal,this.lblOK,this.txtOK,this.lblNG,this.txtNG);
+		this.basePane.setTop(hBoxRS);
+		/*
 		VBox vBoxRS = new VBox(2);
 		vBoxRS.setPadding( new Insets( 10, 10, 10, 10 ) );
 		vBoxRS.setSpacing(10);
 		vBoxRS.getChildren().addAll(hBoxRS,this.txtSQL);
 		this.basePane.setTop(vBoxRS);
+		*/
 		
 	    // -----------------------------------------------------
 		// [Center]
@@ -106,7 +110,14 @@ public class ImportDataPaneResult extends Pane
 		//this.objTableView.setPrefHeight(200);
 		this.objTableView.prefWidthProperty().bind(this.dbView.widthProperty().multiply(0.9));
 		this.objTableView.prefHeightProperty().bind(this.dbView.heightProperty().multiply(0.3));
-		this.basePane.setCenter(this.objTableView);
+		//this.basePane.setCenter(this.objTableView);
+		
+		VBox vBoxCenter = new VBox(2);
+		vBoxCenter.setPadding( new Insets( 10, 10, 10, 10 ) );
+		vBoxCenter.setSpacing(10);
+		vBoxCenter.getChildren().addAll(this.txtSQL,this.objTableView);
+		this.basePane.setTop(vBoxCenter);
+
 		
 	    // -----------------------------------------------------
 		// [Bottom]
@@ -165,6 +176,11 @@ public class ImportDataPaneResult extends Pane
 		task.setImportResultInterface(this);
 		task.setDBView(this.dbView);
 		task.setMapObj(this.mapObj);
+		
+		TaskDialog taskDlg = new TaskDialog(task,mainCtrl);
+		taskDlg.showAndWait();
+		
+		/*
 		// execute task
 		this.service.submit(task);
 		
@@ -181,6 +197,7 @@ public class ImportDataPaneResult extends Pane
 		task.valueProperty().addListener((obs,oldVal,ex)->{
 			MyGUITool.showException( mainCtrl, "conf.lang.gui.common.MyAlert", "TITLE_MISC_ERROR", ex );
 		});
+		*/
 	}
 	
 	/*

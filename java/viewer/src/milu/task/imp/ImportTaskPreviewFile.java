@@ -105,6 +105,7 @@ public class ImportTaskPreviewFile extends Task<Exception>
 			Platform.runLater(()->{
 				this.impPreViewInf.setTableViewData(columnLst, dataLst);
 				this.impPreViewInf.setErrorType(ImportDataPanePreview.ERROR_TYPE.ERROR_NO);
+				this.setProgress(MAX);
 				this.setMsg("");
 			});
 		}

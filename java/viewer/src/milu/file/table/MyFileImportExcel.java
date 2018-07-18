@@ -2,8 +2,6 @@ package milu.file.table;
 
 import java.io.File;
 import java.io.InputStream;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.text.ParseException;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;

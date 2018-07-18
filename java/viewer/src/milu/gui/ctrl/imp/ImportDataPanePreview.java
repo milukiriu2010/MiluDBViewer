@@ -24,6 +24,7 @@ import javafx.geometry.Pos;
 import milu.gui.ctrl.common.inf.ChangeLangInterface;
 import milu.gui.ctrl.common.inf.WatchInterface;
 import milu.gui.ctrl.common.table.ObjTableView;
+import milu.gui.dlg.TaskDialog;
 import milu.gui.view.DBView;
 import milu.main.MainController;
 import milu.task.imp.ImportTaskPreviewFactory;
@@ -167,12 +168,13 @@ public class ImportDataPanePreview extends Pane
 		this.btnBack.setOnAction((event)->{
 			this.wizardInf.prev();
 		});
-		
+		/*
 		Platform.runLater(()->{
 			this.getScene().getWindow().setOnCloseRequest((event)->{
 				MyServiceTool.shutdownService(this.service);
 			});
 		});
+		*/
 	}
 	
 	private void loadData()
@@ -185,6 +187,9 @@ public class ImportDataPanePreview extends Pane
 		{
 			return;
 		}
+		TaskDialog taskDlg = new TaskDialog(task,mainCtrl);
+		taskDlg.showAndWait();
+		/*
 		// execute task
 		this.service.submit(task);
 		
@@ -201,6 +206,7 @@ public class ImportDataPanePreview extends Pane
 		task.valueProperty().addListener((obs,oldVal,ex)->{
 			MyGUITool.showException( mainCtrl, "conf.lang.gui.common.MyAlert", "TITLE_MISC_ERROR", ex );
 		});
+		*/
 	}
 	
 	/*

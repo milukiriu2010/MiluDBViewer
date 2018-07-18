@@ -22,6 +22,8 @@ import milu.security.MySecurityKey;
  **********************************
  */
 final public class AppConf
+	implements
+		Cloneable
 {
 	// Install Directory(for Development)
 	@Expose(serialize = false, deserialize = false)
@@ -51,7 +53,11 @@ final public class AppConf
 	@Expose(serialize = true, deserialize = true)
 	private String  langCode = "";
 	
-	// Max fetch rows when selecting.
+	// Absolute Position when selecting
+	@Expose(serialize = false, deserialize = false)
+	private Integer fetchPos = 1;
+	
+	// Max fetch rows when selecting
 	@Expose(serialize = true, deserialize = true)
 	private Integer fetchMax = 100;
 	
@@ -198,6 +204,17 @@ final public class AppConf
 	public void setLangCode( String langCode )
 	{
 		this.langCode = langCode;
+	}
+	
+	// Absolute Position when selecting
+	public Integer getFetchPos()
+	{
+		return this.fetchPos;
+	}
+	
+	public void setFetchPos( Integer fetchPos )
+	{
+		this.fetchPos = fetchPos;
 	}
 	
 	/**
@@ -450,5 +467,12 @@ final public class AppConf
 	public byte[] getProxyIV()
 	{
 		return this.proxyIV;
-	}	
+	}
+	
+	// Cloneable
+	@Override
+	public Object clone() throws CloneNotSupportedException
+	{
+		return (AppConf)super.clone();
+	}
 }

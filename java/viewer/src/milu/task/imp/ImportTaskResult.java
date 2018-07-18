@@ -94,7 +94,7 @@ public class ImportTaskResult extends Task<Exception>
 				new ExecSQLFactory().createPreparedFactory( sqlBag, myDBAbs, appConf, preLst );
 			try
 			{
-				execSQLAbs.exec(1);
+				execSQLAbs.exec(1,-1);
 				cntOK++;
 				System.out.println( "OK:" + preLst );
 			}

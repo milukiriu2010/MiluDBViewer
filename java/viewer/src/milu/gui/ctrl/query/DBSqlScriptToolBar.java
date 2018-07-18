@@ -5,7 +5,10 @@ import javafx.scene.control.Tooltip;
 
 import java.util.ResourceBundle;
 
+import javafx.beans.property.StringProperty;
+import javafx.beans.value.ObservableValue;
 import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
 import javafx.scene.control.Separator;
 import milu.db.access.ExecSQLAbstract;
 import milu.db.access.ExecSQLExplainFactory;
@@ -15,13 +18,16 @@ import milu.gui.ctrl.common.inf.ProcInterface;
 import milu.gui.ctrl.common.table.CopyTableInterface;
 import milu.gui.ctrl.common.table.DirectionSwitchInterface;
 import milu.gui.view.DBView;
+import milu.main.AppConf;
 import milu.main.MainController;
 import milu.tool.MyGUITool;
+import milu.tool.TextUtils;
 
 class DBSqlScriptToolBar extends ToolBar
 	implements 
 		ActionInterface,
 		ProcInterface,
+		SQLFetchInterface,
 		ChangeLangInterface
 {
 	private DBView          dbView = null;
@@ -48,6 +54,10 @@ class DBSqlScriptToolBar extends ToolBar
 	private Button    btnOpenSQL = new Button();
 	// Save SQL
 	private Button    btnSaveSQL = new Button();
+	// Absolute Position when selecting
+	private TextField txtFetchPos = new TextField();
+	// Max fetch rows when selecting
+	private TextField txtFetchMax = new TextField();
 	
 	DBSqlScriptToolBar( DBView dbView )
 	{
@@ -65,6 +75,12 @@ class DBSqlScriptToolBar extends ToolBar
 		this.btnNextSQL.setGraphic( MyGUITool.createImageView( 20, 20, mainCtrl.getImage("file:resources/images/next.png") ) );
 		this.btnOpenSQL.setGraphic( MyGUITool.createImageView( 20, 20, mainCtrl.getImage("file:resources/images/folder.png") ) );
 		this.btnSaveSQL.setGraphic( MyGUITool.createImageView( 20, 20, mainCtrl.getImage("file:resources/images/save.png") ) );
+		
+		AppConf appConf = mainCtrl.getAppConf();
+		this.txtFetchPos.setText(String.valueOf(appConf.getFetchPos()));
+		
+		this.txtFetchMax.setText(String.valueOf(appConf.getFetchMax()));
+		
 		
 		this.getItems().addAll(	this.btnExecSQL	);
 		
@@ -88,12 +104,52 @@ class DBSqlScriptToolBar extends ToolBar
 			this.btnOneLineSQL,
 			new Separator(),
 			this.btnOpenSQL,
-			this.btnSaveSQL
+			this.btnSaveSQL,
+			new Separator(),
+			this.txtFetchPos,
+			this.txtFetchMax
 		);
+		
+		this.setAction();
 		
 		this.changeLang();
 	}
 	
+	private void setAction()
+	{
+		this.setTextWidth(this.txtFetchPos);
+		this.txtFetchPos.textProperty().addListener((obs,oldVal,newVal)->{
+			this.checkText( obs, oldVal, newVal );
+			this.setTextWidth( this.txtFetchPos );
+		});
+		
+		this.setTextWidth(this.txtFetchMax);
+		this.txtFetchMax.textProperty().addListener((obs,oldVal,newVal)->{
+			this.checkText( obs, oldVal, newVal );
+			this.setTextWidth( this.txtFetchMax );
+		});
+	}
+	
+	private void checkText( ObservableValue<? extends String> obs, String oldVal, String newVal )
+	{
+		// "Numeric" or "No Input" are allowed.
+		if ( newVal.length() == 0 )
+		{
+			
+		}
+		// if alphabets or marks are input, back to previous input.
+		else if ( newVal.matches( "^[0-9]+$" ) == false )
+		{
+			((StringProperty)obs).setValue( oldVal );
+		}
+	}
+	
+	private void setTextWidth( TextField txtField )
+	{
+		txtField.setPrefWidth( TextUtils.computeTextWidth( txtField.getFont(), txtField.getText(), 0.0D) + 20 );
+	}
+	
+	// ActionInterface
 	@Override
 	public void setAction( Object obj )
 	{
@@ -152,6 +208,39 @@ class DBSqlScriptToolBar extends ToolBar
 			// mouse click, "space/return" key enter 
 			this.btnSaveSQL.setOnAction( ((SQLFileInterface)obj)::saveSQL );
 		}
+	}
+	
+	// SQLFetchInterface
+	@Override
+	public Integer getFetchPos()
+	{
+		try
+		{
+			return Integer.valueOf(this.txtFetchPos.getText());
+		}
+		catch ( NumberFormatException nfEx )
+		{
+			MainController mainCtrl = this.dbView.getMainController();
+			AppConf appConf = mainCtrl.getAppConf();
+			return appConf.getFetchPos();
+		}
+	}
+	
+	// SQLFetchInterface
+	@Override
+	public Integer getFetchMax()
+	{
+		try
+		{
+			return Integer.valueOf(this.txtFetchMax.getText());
+		}
+		catch ( NumberFormatException nfEx )
+		{
+			MainController mainCtrl = this.dbView.getMainController();
+			AppConf appConf = mainCtrl.getAppConf();
+			return appConf.getFetchMax();
+		}
+		
 	}
 	
 	// ProcBeginInterface

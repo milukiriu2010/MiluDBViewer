@@ -14,7 +14,7 @@ public class ExecSQLExplainOracle extends ExecSQLAbstract
 {
 
 	@Override
-	public void exec(int checkCnt) 
+	public void exec( final int checkCnt, final int fetchPos ) 
 		throws 
 			SQLException, 
 			Exception 

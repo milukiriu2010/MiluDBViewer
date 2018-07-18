@@ -44,7 +44,7 @@ import milu.db.MyDBAbstract;
 import milu.gui.ctrl.common.inf.ChangeLangInterface;
 import milu.gui.view.DBView;
 
-public class SqlTextArea extends TextArea
+public class SQLTextArea extends TextArea
 	implements 
 		ChangeLangInterface,
 		SQLFormatInterface
@@ -77,7 +77,7 @@ public class SqlTextArea extends TextArea
 	// "select * from information_schema.schemata" => "information_schema.schemata"
 	private String  strLastWord = "";
 	
-	public SqlTextArea( DBView dbView )
+	public SQLTextArea( DBView dbView )
 	{
 		super();
 		

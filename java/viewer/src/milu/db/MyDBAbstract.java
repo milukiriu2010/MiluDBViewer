@@ -521,6 +521,12 @@ abstract public class MyDBAbstract
 		return this.conn.createStatement();
 	}
 	
+	public synchronized Statement createStatement( int resultSetType, int resultSetConcurrency )
+			throws SQLException
+	{
+		return this.conn.createStatement( resultSetType, resultSetConcurrency );
+	}
+	
 	public synchronized PreparedStatement createPreparedStatement( String sql )
 		throws SQLException
 	{

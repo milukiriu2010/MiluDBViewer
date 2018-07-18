@@ -10,7 +10,7 @@ public class ExecSQLTransactionPrepared extends ExecSQLAbstract
 {
 
 	@Override
-	public void exec(int checkCnt) throws SQLException, Exception 
+	public void exec( final int checkCnt, final int fetchPos ) throws SQLException, Exception 
 	{
 		//System.out.println( "transaction:" + this.sqlBag.getSQL() );
 		try

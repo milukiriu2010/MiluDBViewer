@@ -10,7 +10,7 @@ import java.util.List;
 public class ExecSQLExplainMySQL extends ExecSQLAbstract {
 
 	@Override
-	public void exec(int checkCnt) throws SQLException, Exception 
+	public void exec( final int checkCnt, final int fetchPos ) throws SQLException, Exception 
 	{
 		Statement stmt   = null;
 		ResultSet rs     = null;

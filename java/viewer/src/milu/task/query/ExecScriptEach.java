@@ -128,7 +128,7 @@ public class ExecScriptEach
 		try
 		{
 			System.out.println( "ExecScriptEach:start." );
-			execSQLAbs.exec( this.appConf.getFetchMax() );
+			execSQLAbs.exec( this.appConf.getFetchMax(), this.appConf.getFetchPos() );
 			System.out.println( "ExecScriptEach:end." );
 		}
 		catch ( MyDBOverFetchSizeException myDBEx )

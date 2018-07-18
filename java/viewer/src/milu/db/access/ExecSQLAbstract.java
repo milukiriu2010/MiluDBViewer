@@ -94,7 +94,7 @@ abstract public class ExecSQLAbstract
 		this.dataLst.clear();
 	}
 	
-	abstract public void exec( final int checkCnt )
+	abstract public void exec( final int checkCnt, final int fetchPos )
 			throws 
 			SQLException,
 			MyDBOverFetchSizeException,
