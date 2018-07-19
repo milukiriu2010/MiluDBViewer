@@ -26,7 +26,6 @@ import java.sql.SQLException;
 
 import milu.gui.ctrl.common.inf.ChangeLangInterface;
 import milu.gui.ctrl.common.inf.CounterInterface;
-import milu.gui.ctrl.common.inf.ProcInterface;
 import milu.gui.ctrl.common.table.CopyTableInterface;
 import milu.gui.ctrl.common.table.DirectionSwitchInterface;
 import milu.gui.ctrl.common.table.ObjTableView;
@@ -36,6 +35,7 @@ import milu.tool.MyGUITool;
 import milu.tool.MyStringTool;
 import milu.db.MyDBAbstract;
 import milu.db.access.MyDBOverFetchSizeException;
+import milu.task.ProcInterface;
 import milu.task.ToggleHVTask;
 
 //-----------------------------------------

@@ -14,12 +14,12 @@ import milu.db.access.ExecSQLAbstract;
 import milu.db.access.ExecSQLExplainFactory;
 import milu.gui.ctrl.common.inf.ActionInterface;
 import milu.gui.ctrl.common.inf.ChangeLangInterface;
-import milu.gui.ctrl.common.inf.ProcInterface;
 import milu.gui.ctrl.common.table.CopyTableInterface;
 import milu.gui.ctrl.common.table.DirectionSwitchInterface;
 import milu.gui.view.DBView;
 import milu.main.AppConf;
 import milu.main.MainController;
+import milu.task.ProcInterface;
 import milu.tool.MyGUITool;
 import milu.tool.TextUtils;
 
@@ -270,6 +270,7 @@ class DBSqlScriptToolBar extends ToolBar
 	{
 		MainController mainCtrl = this.dbView.getMainController();
 		ResourceBundle langRB = mainCtrl.getLangResource("conf.lang.gui.ctrl.query.DBSqlTab");
+		ResourceBundle extLangRB = mainCtrl.getLangResource("conf.lang.gui.common.NodeName");
 		
 		// ----------------------------------------------
 		// ToolTip
@@ -358,5 +359,21 @@ class DBSqlScriptToolBar extends ToolBar
 		Tooltip tipSaveSQL = new Tooltip( langRB.getString( "TOOLTIP_SAVE_SQL" ));
 		tipSaveSQL.getStyleClass().add("Common_MyToolTip");
 		this.btnSaveSQL.setTooltip(tipSaveSQL);
+		
+		// ----------------------------------------------
+		// ToolTip
+		//   TextField[Fetch Pos] 
+		// ----------------------------------------------
+		Tooltip tipFetchPos = new Tooltip( extLangRB.getString( "TOOLTIP_FETCH_POS" ));
+		tipFetchPos.getStyleClass().add("Common_MyToolTip");
+		this.txtFetchPos.setTooltip(tipFetchPos);
+		
+		// ----------------------------------------------
+		// ToolTip
+		//   TextField[Fetch Max] 
+		// ----------------------------------------------
+		Tooltip tipFetchMax = new Tooltip( extLangRB.getString( "TOOLTIP_FETCH_MAX" ));
+		tipFetchMax.getStyleClass().add("Common_MyToolTip");
+		this.txtFetchMax.setTooltip(tipFetchMax);
 	}	
 }

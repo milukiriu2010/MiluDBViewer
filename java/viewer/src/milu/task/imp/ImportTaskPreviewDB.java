@@ -75,6 +75,8 @@ public class ImportTaskPreviewDB extends Task<Exception>
 		AppConf appConf = mainCtrl.getAppConf();
 		MyDBAbstract myDBAbsSrc = (MyDBAbstract)this.mapObj.get(ImportData.SRC_DB.val());
 		SchemaEntity srcSchemaEntity = (SchemaEntity)this.mapObj.get(ImportData.SRC_SCHEMA_ENTITY.val());
+		Integer  fetchPos = (Integer)this.mapObj.get(ImportData.SRC_FETCH_POS.val());
+		Integer  fetchMax = (Integer)this.mapObj.get(ImportData.SRC_FETCH_MAX.val());
 		
 		// --------------------------------------------------
 		// Create SQL
@@ -91,7 +93,7 @@ public class ImportTaskPreviewDB extends Task<Exception>
 				new ExecSQLFactory().createFactory( sqlBag, myDBAbsSrc, appConf, this, MAX );
 		try
 		{
-			execSQLAbs.exec( appConf.getFetchMax(), appConf.getFetchPos() );
+			execSQLAbs.exec( fetchMax, fetchPos );
 			
 			return taskEx;
 		}

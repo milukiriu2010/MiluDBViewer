@@ -446,7 +446,7 @@ public class ObjTableView extends TableView<List<Object>>
 		task.setHeadLst(this.headObjLst);
 		task.setDataLst(this.dataObjLst);
 		
-		TaskDialog taskDlg = new TaskDialog(task,mainCtrl);
+		TaskDialog taskDlg = new TaskDialog(task,mainCtrl,null);
 		taskDlg.showAndWait();
 		//taskDlg.show();
 		

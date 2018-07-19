@@ -51,6 +51,7 @@ public class MyFileImportCSV extends MyFileImportAbstract
 				if ( i >= tokens.length )
 				{
 					dataRow.add("");
+					//dataRow.add(new Object());
 				}
 				else
 				{
@@ -67,6 +68,12 @@ public class MyFileImportCSV extends MyFileImportAbstract
 					{
 						this.addRowDateTime(cellVal, dataRow);
 					}
+					/*
+					else if ( cellVal.length() == 0 )
+					{
+						dataRow.add(new Object());
+					}
+					*/
 					else
 					{
 						dataRow.add(cellVal);

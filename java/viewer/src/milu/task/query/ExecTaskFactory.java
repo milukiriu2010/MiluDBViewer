@@ -9,7 +9,7 @@ import milu.ctrl.sql.parse.SQLBag;
 import milu.db.MyDBAbstract;
 import milu.gui.view.DBView;
 import milu.main.AppConf;
-import milu.gui.ctrl.common.inf.ProcInterface;
+import milu.task.ProcInterface;
 
 public class ExecTaskFactory 
 {

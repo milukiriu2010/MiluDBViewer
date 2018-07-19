@@ -4,12 +4,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import java.sql.SQLException;
+
 import javafx.application.Platform;
 import javafx.concurrent.Task;
 import milu.ctrl.sql.generate.GenerateSQLAbstract;
 import milu.ctrl.sql.generate.GenerateSQLFactory;
 import milu.ctrl.sql.parse.SQLBag;
 import milu.db.MyDBAbstract;
+import milu.db.access.ExecSQLSelect;
 import milu.db.access.ExecSQLAbstract;
 import milu.db.access.ExecSQLFactory;
 import milu.entity.schema.SchemaEntity;
@@ -51,17 +54,47 @@ public class ImportTaskResult extends Task<Exception>
 	@SuppressWarnings("unchecked")
 	protected Exception call() throws Exception 
 	{
-		Thread.sleep(100);
 		this.setProgress(0.0);
 		
-		// --------------------------------------------------
-		// Create SQL
-		// --------------------------------------------------
-		MyDBAbstract myDBAbs = this.dbView.getMyDBAbstract();
-		GenerateSQLAbstract gsAbs = GenerateSQLFactory.getInstance(GenerateSQLFactory.TYPE.INSERT_BY_SIMPLE_WITHOUT_COMMENT);
+		Thread.sleep(100);
+		
+		MainController mainCtrl = this.dbView.getMainController();
+		AppConf appConf = mainCtrl.getAppConf();
 		SchemaEntity schemaEntity = (SchemaEntity)this.mapObj.get(ImportData.DST_SCHEMA_ENTITY.val());
-		String strSQL = gsAbs.generate( schemaEntity, myDBAbs );
-		System.out.println( "strSQL:" + strSQL );
+		MyDBAbstract myDBAbs = this.dbView.getMyDBAbstract();
+
+		// --------------------------------------------------
+		// Create SQL(Select)
+		// --------------------------------------------------
+		GenerateSQLAbstract gsAbsSel = GenerateSQLFactory.getInstance(GenerateSQLFactory.TYPE.SELECT);
+		String strSQLSel = gsAbsSel.generate( schemaEntity, myDBAbs );
+		System.out.println( "strSQLSel:" + strSQLSel );
+		
+		SQLBag sqlBagSel = new SQLBag();
+		sqlBagSel.setSQL(strSQLSel);
+		sqlBagSel.setCommand(SQLBag.COMMAND.QUERY);
+		sqlBagSel.setType(SQLBag.TYPE.SELECT);
+		
+		ExecSQLAbstract execSQLAbsSel = new ExecSQLFactory().createFactory( sqlBagSel, myDBAbs, appConf, null, -1 );
+		try
+		{
+			execSQLAbsSel.exec(1,1);
+		}
+		catch ( SQLException ex )
+		{
+			ex.printStackTrace();
+		}
+		
+		List<Map<String,Object>>  colMetaInfoDataLst = ((ExecSQLSelect)execSQLAbsSel).getColMetaInfoDataLst();
+		
+		
+		
+		// --------------------------------------------------
+		// Create SQL(Insert)
+		// --------------------------------------------------
+		GenerateSQLAbstract gsAbsIns = GenerateSQLFactory.getInstance(GenerateSQLFactory.TYPE.INSERT_BY_SIMPLE_WITHOUT_COMMENT);
+		String strSQLIns = gsAbsIns.generate( schemaEntity, myDBAbs );
+		System.out.println( "strSQLIns:" + strSQLIns );
 		
 		// --------------------------------------------------
 		// Create Import Data
@@ -73,13 +106,10 @@ public class ImportTaskResult extends Task<Exception>
 		// --------------------------------------------------
 		// Create ExecSQL Factory
 		// --------------------------------------------------
-		MainController mainCtrl = this.dbView.getMainController();
-		AppConf appConf = mainCtrl.getAppConf();
-		
-		SQLBag sqlBag = new SQLBag();
-		sqlBag.setSQL(strSQL);
-		sqlBag.setCommand(SQLBag.COMMAND.TRANSACTION);
-		sqlBag.setType(SQLBag.TYPE.INSERT);
+		SQLBag sqlBagIns = new SQLBag();
+		sqlBagIns.setSQL(strSQLIns);
+		sqlBagIns.setCommand(SQLBag.COMMAND.TRANSACTION);
+		sqlBagIns.setType(SQLBag.TYPE.INSERT);
 		int cntOK = 0;
 		int cntNG = 0;
 		List<Object> ngHeadLst = new ArrayList<>();
@@ -90,11 +120,11 @@ public class ImportTaskResult extends Task<Exception>
 		List<List<Object>> ngDataLst = new ArrayList<>();
 		for ( List<Object> preLst : dataFilterLst )
 		{
-			ExecSQLAbstract  execSQLAbs = 
-				new ExecSQLFactory().createPreparedFactory( sqlBag, myDBAbs, appConf, preLst );
+			ExecSQLAbstract  execSQLAbsIns = 
+				new ExecSQLFactory().createPreparedFactory( sqlBagIns, myDBAbs, appConf, preLst );
 			try
 			{
-				execSQLAbs.exec(1,-1);
+				execSQLAbsIns.exec(1,-1);
 				cntOK++;
 				System.out.println( "OK:" + preLst );
 			}
@@ -119,7 +149,7 @@ public class ImportTaskResult extends Task<Exception>
 			this.impResultInf.setTotal(dataFilterLst.size());
 			this.impResultInf.setOK(cntOKF);
 			this.impResultInf.setNG(cntNGF);
-			this.impResultInf.setSQL(strSQL);
+			this.impResultInf.setSQL(strSQLIns);
 			this.impResultInf.setTableViewData(ngHeadLst, ngDataLst);
 			this.setProgress(MAX);
 			this.setMsg("");

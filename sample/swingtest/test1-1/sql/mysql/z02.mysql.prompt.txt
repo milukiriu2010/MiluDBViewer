@@ -1,0 +1,2 @@
+mysqlsh -u root -p localhost
+

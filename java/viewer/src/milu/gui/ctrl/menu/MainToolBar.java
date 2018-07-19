@@ -10,11 +10,11 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
 import milu.gui.ctrl.common.inf.ChangeLangInterface;
-import milu.gui.ctrl.common.inf.ProcInterface;
 import milu.gui.ctrl.schema.DBSchemaTab;
 import milu.gui.view.DBView;
 import milu.gui.view.FadeView;
 import milu.main.MainController;
+import milu.task.ProcInterface;
 import milu.tool.MyGUITool;
 
 public class MainToolBar extends ToolBar

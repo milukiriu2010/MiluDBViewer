@@ -50,10 +50,17 @@ public class ImportDataPane extends Pane
 	//     SRC_TYPE          => SRC_TYPE
 	//     SRC_DB            => MyDBAbstract
 	//     SRC_SCHEMA_ENTITY => SchemaEntity
+	//     SRC_FETCH_POS     => Integer
+	//     SRC_FETCH_MAX     => Integer
 	// -------------------------------------------------
-	// [3:ImportDataPaneFileTableView]
+	// [3:ImportDataPanePreview]
 	//   <Get>
+	//     SRC_TYPE          => SRC_TYPE
 	//     SRC_FILE          => String
+	//     SRC_DB            => MyDBAbstract
+	//     SRC_SCHEMA_ENTITY => SchemaEntity
+	//     SRC_FETCH_POS     => Integer
+	//     SRC_FETCH_MAX     => Integer
 	//   <Put>
 	//     IMPORT_HEAD_LST   => List<Object>
 	//     IMPORT_DATA_LST   => List<List<Object>>
@@ -78,8 +85,10 @@ public class ImportDataPane extends Pane
 	private Label       lblArrow   = new Label();
 	private TextField   txtDstDB   = new TextField();
 	
+	/*
 	private VBox  vBoxSrc = new VBox(2);
 	private Label lblMsg  = new Label();
+	*/
 	
     // -----------------------------------------------------
 	// [Center]
@@ -138,12 +147,14 @@ public class ImportDataPane extends Pane
 		hBoxSrc.setPadding( new Insets( 10, 10, 10, 10 ) );
 		hBoxSrc.setSpacing(10);
 		hBoxSrc.getChildren().addAll(this.rbSrcFile,this.rbSrcDB,this.lblArrow,this.txtDstDB);
-		
+		this.basePane.setTop(hBoxSrc);
+		/*
 		this.vBoxSrc.setPadding( new Insets( 10, 10, 10, 10 ) );
 		this.vBoxSrc.setSpacing(10);
 		this.vBoxSrc.getChildren().add(hBoxSrc);
 		
 		this.basePane.setTop(this.vBoxSrc);
+		*/
 		
 		this.selectedPane = new ImportDataPaneFile( this.dbView, this, this.mapObj );
 		this.basePane.setCenter(this.selectedPane);
@@ -232,6 +243,7 @@ public class ImportDataPane extends Pane
 			this.basePane.setBottom(this.lblMsg);
 		}
 		*/
+		/*
 		if ( "".equals(msg) )
 		{
 			this.vBoxSrc.getChildren().remove(this.lblMsg);
@@ -244,6 +256,7 @@ public class ImportDataPane extends Pane
 				this.vBoxSrc.getChildren().add(this.lblMsg);
 			}
 		}
+		*/
 	}
 	
 	// ChangeLangInterface

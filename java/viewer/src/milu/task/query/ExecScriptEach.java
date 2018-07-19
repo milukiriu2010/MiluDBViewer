@@ -15,11 +15,11 @@ import milu.db.access.MyDBOverFetchSizeException;
 import milu.db.access.ExecSQLFactory;
 import milu.db.access.ExecSQLAbstract;
 import milu.db.access.ExecSQLSelect;
-import milu.gui.ctrl.common.inf.ProcInterface;
 import milu.gui.ctrl.query.DBResultSelectTab;
 import milu.gui.ctrl.query.DBResultTab;
 import milu.gui.view.DBView;
 import milu.main.AppConf;
+import milu.task.ProcInterface;
 import milu.task.ProgressInterface;
 import milu.task.ProgressReportInterface;
 

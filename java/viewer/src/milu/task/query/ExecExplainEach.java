@@ -10,10 +10,10 @@ import milu.db.MyDBAbstract;
 import milu.db.access.MyDBOverFetchSizeException;
 import milu.db.access.ExecSQLAbstract;
 import milu.db.access.ExecSQLExplainFactory;
-import milu.gui.ctrl.common.inf.ProcInterface;
 import milu.gui.ctrl.query.DBResultTab;
 import milu.gui.view.DBView;
 import milu.main.AppConf;
+import milu.task.ProcInterface;
 
 public class ExecExplainEach 
 {

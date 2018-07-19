@@ -12,15 +12,16 @@ import java.util.concurrent.Executors;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.geometry.Insets;
+import milu.task.ProcInterface;
 import milu.main.MainController;
 import milu.tool.MyGUITool;
 import milu.tool.MyServiceTool;
 
 public class TaskDialog extends Dialog<Boolean> 
 {
-	private Task<Exception> task = null;
-	
-	private MainController mainCtrl = null;
+	private Task<Exception> task     = null;
+	private MainController  mainCtrl = null;
+	private ProcInterface   procInf  = null;  
 	
 	private ProgressBar progressBar = new ProgressBar();
 	private Label       lblMsg = new Label();
@@ -28,12 +29,13 @@ public class TaskDialog extends Dialog<Boolean>
 	// Thread Pool
 	private ExecutorService service = Executors.newSingleThreadExecutor();	
 	
-	public TaskDialog( Task<Exception> task, MainController mainCtrl )
+	public TaskDialog( Task<Exception> task, MainController mainCtrl, ProcInterface procInf )
 	{
 		super();
 		
-		this.task = task;
+		this.task     = task;
 		this.mainCtrl = mainCtrl;
+		this.procInf  = procInf;
 		
 		this.progressBar.prefWidthProperty().bind(this.getDialogPane().widthProperty().multiply(0.9));
 		
@@ -93,6 +95,10 @@ public class TaskDialog extends Dialog<Boolean>
 			{
 				System.out.println( "TaskDialog close" );
 				//Platform.runLater(()->this.close());
+				if ( this.procInf != null )
+				{
+					this.procInf.endProc();
+				}
 				this.getDialogPane().getScene().getWindow().hide();
 				this.close();
 				MyServiceTool.shutdownService(this.service);

@@ -12,6 +12,8 @@ import java.util.stream.Collectors;
 
 import javafx.scene.control.MenuBar;
 import javafx.application.Platform;
+import javafx.beans.property.StringProperty;
+import javafx.beans.value.ObservableValue;
 import javafx.concurrent.Task;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
@@ -35,8 +37,11 @@ import milu.entity.schema.search.SearchSchemaEntityVisitorFactory;
 import milu.gui.ctrl.common.inf.WatchInterface;
 import milu.gui.ctrl.common.inf.ChangeLangInterface;
 import milu.gui.ctrl.menu.AfterDBConnectedInterface;
+import milu.gui.dlg.TaskDialog;
+import milu.main.AppConf;
 import milu.main.AppConst;
 import milu.main.MainController;
+import milu.task.ProcInterface;
 import milu.task.collect.CollectTaskFactory;
 import milu.tool.MyFileTool;
 import milu.tool.MyGUITool;
@@ -47,6 +52,7 @@ public class ImportDataPaneDB extends Pane
 	implements
 		AfterDBConnectedInterface,
 		WatchInterface,
+		ProcInterface,
 		ChangeLangInterface
 {
 	private DBView          dbView = null;
@@ -60,14 +66,16 @@ public class ImportDataPaneDB extends Pane
     // -----------------------------------------------------
 	// [Center]
     // -----------------------------------------------------
-	
-	private MenuBar          menuBar = new MenuBar();
+	private MenuBar          menuBar      = new MenuBar();
 	private Menu             menuBookMark = new Menu();
-	private TextField        txtUser = new TextField();
-	private TextField        txtUrl  = new TextField();
-	private Label            lblTable  = new Label();
+	private TextField        txtUser      = new TextField();
+	private TextField        txtUrl       = new TextField();
+	private Label            lblTable     = new Label();
 	private ComboBox<SchemaEntity> cmbSchema = new ComboBox<>();
 	private ComboBox<SchemaEntity> cmbTable  = new ComboBox<>();
+	private Label            lblFetch     = new Label();
+	private TextField        txtFetchPos  = new TextField();
+	private TextField        txtFetchMax  = new TextField();
 	
     // -----------------------------------------------------
 	// [Bottom]
@@ -76,14 +84,19 @@ public class ImportDataPaneDB extends Pane
 	
 	private MyDBAbstract  myDBAbs = null;
 	
+	/*
 	// Thread Pool
-	private ExecutorService service = Executors.newSingleThreadExecutor();	
+	private ExecutorService service = Executors.newSingleThreadExecutor();
+	*/	
 	
 	ImportDataPaneDB( DBView dbView, WizardInterface wizardInf, Map<String,Object> mapObj )
 	{
 		this.dbView = dbView;
 		this.wizardInf = wizardInf;
 		this.mapObj = mapObj;
+		
+		MainController mainCtrl = this.dbView.getMainController();
+		AppConf appConf = mainCtrl.getAppConf();
 				
 	    // -----------------------------------------------------
 		// [Center]
@@ -92,25 +105,29 @@ public class ImportDataPaneDB extends Pane
 		this.menuBookMark.getItems().addAll( new MenuItem("dummy") );
 		this.txtUser.setEditable(false);
 		this.txtUrl.setEditable(false);
-		//this.txtUrl.setPrefWidth(500);
 		this.txtUrl.prefWidthProperty().bind(this.dbView.widthProperty().multiply(0.5));
+		this.txtFetchPos.setText(appConf.getFetchPos().toString());
+		this.txtFetchMax.setText(appConf.getFetchMax().toString());
 
 		HBox hBoxSchema = new HBox(2);
 		hBoxSchema.getChildren().addAll( this.txtUser, this.txtUrl );
-		//hBoxSchema.prefWidthProperty().bind(this.dbView.widthProperty().multiply(0.75));
 		
-		HBox hBoxTbl = new HBox(2);
+		HBox hBoxTbl   = new HBox(2);
 		hBoxTbl.getChildren().addAll( this.cmbSchema, this.cmbTable );
+		
+		HBox hBoxFetch = new HBox(2);
+		hBoxFetch.getChildren().addAll( this.txtFetchPos, this.txtFetchMax );
 		
 		GridPane gridSrc = new GridPane();
 		gridSrc.setHgap(5);
 		gridSrc.setVgap(2);
 		gridSrc.setPadding( new Insets( 10, 10, 10, 10 ) );
 		gridSrc.add( this.menuBar , 0, 1 );
-		//gridSrc.add( this.txtUrl  , 1, 1 );
 		gridSrc.add( hBoxSchema   , 1, 1 );
 		gridSrc.add( this.lblTable, 0, 2 );
 		gridSrc.add( hBoxTbl      , 1, 2 );
+		gridSrc.add( this.lblFetch, 0, 3 );
+		gridSrc.add( hBoxFetch    , 1, 3 );
 		
 		this.basePane.setCenter(gridSrc);
 		
@@ -151,33 +168,74 @@ public class ImportDataPaneDB extends Pane
 	    });
 	    
 		this.btnNext.setOnAction((event)->{
-			//SchemaEntity schemaEntity = this.cmbSchema.getSelectionModel().getSelectedItem();
 			SchemaEntity tableEntity  = this.cmbTable.getSelectionModel().getSelectedItem();
-			/*
-			String tableName = "";
-			if ( schemaEntity != null )
-			{
-				tableName = schemaEntity.getName() + ".";
-			}
-			if ( tableEntity != null )
-			{
-				tableName = tableName + tableEntity.getName();
-			}
-			*/
 			
 			this.mapObj.put( ImportData.SRC_SCHEMA_ENTITY.val(), tableEntity );
-			this.mapObj.put( ImportData.SRC_DB.val()   , this.myDBAbs );
-			//this.mapObj.put( ImportData.SRC_TABLE.val(), tableName );
+			this.mapObj.put( ImportData.SRC_DB.val()           , this.myDBAbs );
+			this.mapObj.put( ImportData.SRC_FETCH_POS.val()    , this.getFetchPos() );
+			this.mapObj.put( ImportData.SRC_FETCH_MAX.val()    , this.getFetchMax() );
 			this.wizardInf.next( this, this.mapObj );
 		});
 		
+		this.txtFetchPos.textProperty().addListener((obs,oldVal,newVal)->{
+			this.checkText( obs, oldVal, newVal );
+		});
+		
+		this.txtFetchMax.textProperty().addListener((obs,oldVal,newVal)->{
+			this.checkText( obs, oldVal, newVal );
+		});		
+		/*
 		Platform.runLater(()->{
 			this.getScene().getWindow().setOnCloseRequest((event)->{
 				MyServiceTool.shutdownService(this.service);
 			});
 		});
+		*/
 	}
 	
+	private void checkText( ObservableValue<? extends String> obs, String oldVal, String newVal )
+	{
+		// "Numeric" or "No Input" are allowed.
+		if ( newVal.length() == 0 )
+		{
+			
+		}
+		// if alphabets or marks are input, back to previous input.
+		else if ( newVal.matches( "^[0-9]+$" ) == false )
+		{
+			((StringProperty)obs).setValue( oldVal );
+		}
+	}
+	
+	private Integer getFetchPos()
+	{
+		try
+		{
+			return Integer.valueOf(this.txtFetchPos.getText());
+		}
+		catch ( NumberFormatException nfEx )
+		{
+			MainController mainCtrl = this.dbView.getMainController();
+			AppConf appConf = mainCtrl.getAppConf();
+			return appConf.getFetchPos();
+		}
+	}
+	
+	private Integer getFetchMax()
+	{
+		try
+		{
+			return Integer.valueOf(this.txtFetchMax.getText());
+		}
+		catch ( NumberFormatException nfEx )
+		{
+			MainController mainCtrl = this.dbView.getMainController();
+			AppConf appConf = mainCtrl.getAppConf();
+			return appConf.getFetchMax();
+		}
+		
+	}
+		
 	// AfterDBConnectedInterface
 	@Override
 	public void afterConnection( MyDBAbstract myDBAbs )
@@ -204,19 +262,23 @@ public class ImportDataPaneDB extends Pane
 		this.txtUrl.setText(this.myDBAbs.getUrl());
 		
 		MainController mainCtrl = this.dbView.getMainController();
-		final Task<Exception> collectTask = CollectTaskFactory.getInstanceForTableLst( mainCtrl, this.myDBAbs );
-		if ( collectTask == null )
+		final Task<Exception> task = CollectTaskFactory.getInstanceForTableLst( mainCtrl, this.myDBAbs );
+		if ( task == null )
 		{
 			return;
 		}
+		TaskDialog taskDlg = new TaskDialog(task,mainCtrl,this);
+		taskDlg.showAndWait();		
+		
+		/*
 		// execute task
 		this.service.submit( collectTask );
 		
 		collectTask.progressProperty().addListener((obs,oldVal,newVal)->{
 			if ( newVal.doubleValue() == 1.0 )
 			{
-				this.cmbSchema.getItems().removeAll(this.cmbSchema.getItems());
-				this.cmbTable.getItems().removeAll(this.cmbTable.getItems());
+				//this.cmbSchema.getItems().removeAll(this.cmbSchema.getItems());
+				//this.cmbTable.getItems().removeAll(this.cmbTable.getItems());
 				
 				// ------------------------------------------------------
 				// set "Schema List" on ComboBox
@@ -280,6 +342,7 @@ public class ImportDataPaneDB extends Pane
 				this.btnNext.setDisable(false);
 			}
 		});
+		*/
 	}
 	
 	// WatchInterface
@@ -287,7 +350,75 @@ public class ImportDataPaneDB extends Pane
 	public void notify( Event event )
 	{
 		System.out.println( "ImportDataPaneDB:notify" );
-		MyServiceTool.shutdownService(this.service);
+		//MyServiceTool.shutdownService(this.service);
+	}
+	
+	// ProcInterface
+	@Override
+	public void beginProc()
+	{
+		
+	}
+	
+	// ProcInterface
+	@Override
+	public void endProc()
+	{
+		// ------------------------------------------------------
+		// set "Schema List" on ComboBox
+		// ------------------------------------------------------
+		SchemaEntity rootEntity = this.myDBAbs.getSchemaRoot();
+		List<SchemaEntity> entityLst = rootEntity.getEntityLst();
+		List<SchemaEntity> schemaEntityLst = entityLst.stream()
+			.filter((entity)->{ 
+				if ( SchemaEntity.SCHEMA_TYPE.SCHEMA.equals(entity.getType()) )
+				{
+					return true;
+				}
+				else
+				{
+					return false;
+				}
+			})
+			.collect(Collectors.toList());
+		this.cmbSchema.getItems().addAll(schemaEntityLst);
+		if ( schemaEntityLst.size() == 0 )
+		{
+			SearchSchemaEntityInterface sseVisitorT = new SearchSchemaEntityVisitorFactory().createInstance( SchemaEntity.SCHEMA_TYPE.ROOT_TABLE );
+			this.myDBAbs.getSchemaRoot().accept(sseVisitorT);
+			SchemaEntity tableRootEntity = sseVisitorT.getHitSchemaEntity();
+			if ( tableRootEntity != null )
+			{
+				this.cmbTable.getItems().removeAll(this.cmbTable.getItems());
+				this.cmbTable.getItems().addAll(tableRootEntity.getEntityLst());
+			}
+		}
+		
+		this.cmbSchema.valueProperty().addListener((obs,oldVal,schemaEntity)->{
+			if ( schemaEntity == null )
+			{
+				return;
+			}
+			SearchSchemaEntityInterface sseVisitorT = new SearchSchemaEntityVisitorFactory().createInstance( SchemaEntity.SCHEMA_TYPE.ROOT_TABLE );
+			schemaEntity.accept(sseVisitorT);
+			SchemaEntity tableRootEntity = sseVisitorT.getHitSchemaEntity();
+			if ( tableRootEntity != null )
+			{
+				this.cmbTable.getItems().removeAll(this.cmbTable.getItems());
+				this.cmbTable.getItems().addAll(tableRootEntity.getEntityLst());
+			}
+		});
+		
+		this.cmbTable.valueProperty().addListener((obs,oldVal,schemaEntity)->{
+			if ( schemaEntity == null )
+			{
+				this.btnNext.setDisable(true);
+			}
+			else
+			{
+				this.btnNext.setDisable(false);
+			}
+		});
 	}
 	
 	// ChangeLangInterface
@@ -304,6 +435,8 @@ public class ImportDataPaneDB extends Pane
 		// "Select Table"
 		this.lblTable.setText(extLangRB.getString("LABEL_TABLE"));
 		
+		// Fetch Start Position/Size
+		this.lblFetch.setText(extLangRB.getString("LABEL_FETCH"));
 		
 		// "next" button
 		this.btnNext.setGraphic( MyGUITool.createImageView( 16, 16, mainCtrl.getImage("file:resources/images/next.png") ));

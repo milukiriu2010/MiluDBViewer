@@ -9,6 +9,8 @@ public enum ImportData
 	SRC_SCHEMA_ENTITY("SrcSchemaEntity"),
 	SRC_DB("SrcDB"),
 	SRC_TABLE("SrcTable"),
+	SRC_FETCH_POS("SrcFetchPos"),
+	SRC_FETCH_MAX("SrcFetchMax"),
 	IMPORT_HEAD_LST("importHeadLst"),
 	IMPORT_DATA_LST("importDataLst"),
 	SKIP_ROW_COUNT("skipRowCount")

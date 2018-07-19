@@ -68,9 +68,11 @@ public class ImportDataPaneResult extends Pane
 	private Button btnRollback = new Button();
 	private Button btnBack     = new Button();
 	private Button btnClose    = new Button();
-
+	
+	/*
 	// Thread Pool
 	private ExecutorService service = Executors.newSingleThreadExecutor();
+	*/
 	
 	ImportDataPaneResult( DBView dbView, WizardInterface wizardInf, Map<String,Object> mapObj )
 	{
@@ -106,18 +108,14 @@ public class ImportDataPaneResult extends Pane
 		// [Center]
 	    // -----------------------------------------------------
 		this.objTableView = new ObjTableView( this.dbView );
-		//this.objTableView.setPrefWidth(500);
-		//this.objTableView.setPrefHeight(200);
 		this.objTableView.prefWidthProperty().bind(this.dbView.widthProperty().multiply(0.9));
-		this.objTableView.prefHeightProperty().bind(this.dbView.heightProperty().multiply(0.3));
-		//this.basePane.setCenter(this.objTableView);
+		this.objTableView.prefHeightProperty().bind(this.dbView.heightProperty().multiply(0.4));
 		
 		VBox vBoxCenter = new VBox(2);
 		vBoxCenter.setPadding( new Insets( 10, 10, 10, 10 ) );
 		vBoxCenter.setSpacing(10);
 		vBoxCenter.getChildren().addAll(this.txtSQL,this.objTableView);
-		this.basePane.setTop(vBoxCenter);
-
+		this.basePane.setCenter(vBoxCenter);
 		
 	    // -----------------------------------------------------
 		// [Bottom]
@@ -177,7 +175,7 @@ public class ImportDataPaneResult extends Pane
 		task.setDBView(this.dbView);
 		task.setMapObj(this.mapObj);
 		
-		TaskDialog taskDlg = new TaskDialog(task,mainCtrl);
+		TaskDialog taskDlg = new TaskDialog(task,mainCtrl,null);
 		taskDlg.showAndWait();
 		
 		/*
@@ -306,7 +304,7 @@ public class ImportDataPaneResult extends Pane
 	public void notify( Event event )
 	{
 		System.out.println( "ImportDataPaneFileTableView:notify" );
-		MyServiceTool.shutdownService(this.service);
+		//MyServiceTool.shutdownService(this.service);
 		MyDBAbstract myDBAbsSrc = (MyDBAbstract)this.mapObj.get(ImportData.SRC_DB.val());
 		if ( myDBAbsSrc != null )
 		{

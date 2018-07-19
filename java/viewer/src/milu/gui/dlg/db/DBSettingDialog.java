@@ -740,6 +740,10 @@ public class DBSettingDialog extends Dialog<MyDBAbstract>
 			MyJsonEachAbstract<MyDBAbstract> myJsonAbs =
 				MyJsonEachFactory.<MyDBAbstract>getInstance(MyJsonEachFactory.factoryType.MY_DB_ABS);
 			MyDBAbstract myDBAbsTmp = myJsonAbs.load(new File(path.toString()));
+			if ( myDBAbsTmp == null )
+			{
+				return;
+			}
 			myDBAbsTmp.setPassword(this.mainCtrl.getSecretKey());
 			System.out.println( "Class[" + myDBAbsTmp.getClass().toString() + "]" );
 			System.out.println( "User [" + myDBAbsTmp.getUsername() + "]" );

@@ -1,4 +1,4 @@
-package milu.gui.ctrl.common.inf;
+package milu.task;
 
 public interface ProcInterface 
 {

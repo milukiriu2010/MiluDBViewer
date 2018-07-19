@@ -64,9 +64,11 @@ public class ImportDataPanePreview extends Pane
     // -----------------------------------------------------
 	private Button btnImport = new Button();
 	private Button btnBack   = new Button();
-
+	
+	/*
 	// Thread Pool
 	private ExecutorService service = Executors.newSingleThreadExecutor();
+	*/
 	
 	public enum ERROR_TYPE
 	{
@@ -102,7 +104,7 @@ public class ImportDataPanePreview extends Pane
 		//this.objTableView.setPrefWidth(500);
 		//this.objTableView.setPrefHeight(200);
 		this.objTableView.prefWidthProperty().bind(this.dbView.widthProperty().multiply(0.9));
-		this.objTableView.prefHeightProperty().bind(this.dbView.heightProperty().multiply(0.4));
+		this.objTableView.prefHeightProperty().bind(this.dbView.heightProperty().multiply(0.5));
 		
 		VBox vBoxCenter = new VBox(2);
 		vBoxCenter.setPadding( new Insets( 10, 10, 10, 10 ) );
@@ -187,7 +189,7 @@ public class ImportDataPanePreview extends Pane
 		{
 			return;
 		}
-		TaskDialog taskDlg = new TaskDialog(task,mainCtrl);
+		TaskDialog taskDlg = new TaskDialog(task,mainCtrl,null);
 		taskDlg.showAndWait();
 		/*
 		// execute task
@@ -364,7 +366,7 @@ public class ImportDataPanePreview extends Pane
 	public void notify( Event event )
 	{
 		System.out.println( "ImportDataPaneFileTableView:notify" );
-		MyServiceTool.shutdownService(this.service);
+		//MyServiceTool.shutdownService(this.service);
 	}
 	
 	// ChangeLangInterface

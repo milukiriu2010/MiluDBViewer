@@ -10,10 +10,10 @@ import java.util.ArrayList;
 
 import milu.ctrl.sql.parse.SQLBag;
 import milu.db.MyDBAbstract;
-import milu.gui.ctrl.common.inf.ProcInterface;
 import milu.gui.ctrl.query.DBResultTab;
 import milu.gui.view.DBView;
 import milu.main.AppConf;
+import milu.task.ProcInterface;
 import milu.task.ProgressInterface;
 
 public class ExecExplainAllTask extends Task<Exception>
