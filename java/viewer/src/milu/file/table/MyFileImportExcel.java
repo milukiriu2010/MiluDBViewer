@@ -70,7 +70,8 @@ public class MyFileImportExcel extends MyFileImportAbstract
 				Cell cell = row.getCell(j);
 				if ( cell == null )
 				{
-					dataRow.add("");
+					//dataRow.add("");
+					dataRow.add(null);
 				}
 				else
 				{
@@ -86,6 +87,10 @@ public class MyFileImportExcel extends MyFileImportAbstract
 					else if ( MyStringTool.isDateTime(cellVal) )
 					{
 						this.addRowDateTime(cellVal, dataRow);
+					}
+					else if ( cellVal.length() == 0 )
+					{
+						dataRow.add(null);
 					}
 					else
 					{

@@ -3,7 +3,7 @@ package milu.task.imp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-
+import java.util.stream.Collectors;
 import java.sql.SQLException;
 
 import javafx.application.Platform;
@@ -13,8 +13,10 @@ import milu.ctrl.sql.generate.GenerateSQLFactory;
 import milu.ctrl.sql.parse.SQLBag;
 import milu.db.MyDBAbstract;
 import milu.db.access.ExecSQLSelect;
+import milu.db.access.ExecSQLTransactionPrepared;
 import milu.db.access.ExecSQLAbstract;
 import milu.db.access.ExecSQLFactory;
+import milu.db.access.MyDBOverFetchSizeException;
 import milu.entity.schema.SchemaEntity;
 import milu.gui.ctrl.imp.ImportData;
 import milu.gui.ctrl.imp.ImportResultInterface;
@@ -78,7 +80,10 @@ public class ImportTaskResult extends Task<Exception>
 		ExecSQLAbstract execSQLAbsSel = new ExecSQLFactory().createFactory( sqlBagSel, myDBAbs, appConf, null, -1 );
 		try
 		{
-			execSQLAbsSel.exec(1,1);
+			execSQLAbsSel.exec(0,1);
+		}
+		catch ( MyDBOverFetchSizeException mdfsEx )
+		{
 		}
 		catch ( SQLException ex )
 		{
@@ -86,8 +91,19 @@ public class ImportTaskResult extends Task<Exception>
 		}
 		
 		List<Map<String,Object>>  colMetaInfoDataLst = ((ExecSQLSelect)execSQLAbsSel).getColMetaInfoDataLst();
-		
-		
+		/*
+		List<String> colClassNameLst = 
+				colMetaInfoDataLst.stream()
+					.map( mapObj->mapObj.get("Class") )
+					//.map( mapObj->mapObj.get("Type") )
+					.map( String.class::cast )
+					.collect(Collectors.toList());
+					*/
+		List<String> colTypeLst = 
+				colMetaInfoDataLst.stream()
+					.map( mapObj->mapObj.get("Type") )
+					.map( String.class::cast )
+					.collect(Collectors.toList());
 		
 		// --------------------------------------------------
 		// Create SQL(Insert)
@@ -122,6 +138,7 @@ public class ImportTaskResult extends Task<Exception>
 		{
 			ExecSQLAbstract  execSQLAbsIns = 
 				new ExecSQLFactory().createPreparedFactory( sqlBagIns, myDBAbs, appConf, preLst );
+			((ExecSQLTransactionPrepared)execSQLAbsIns).setColTypeLst(colTypeLst);
 			try
 			{
 				execSQLAbsIns.exec(1,-1);
