@@ -2,8 +2,6 @@ package milu.gui.ctrl.imp;
 
 import java.util.Map;
 import java.util.ResourceBundle;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.List;
 
 import javafx.scene.control.Button;
@@ -14,7 +12,6 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
-import javafx.application.Platform;
 import javafx.beans.property.StringProperty;
 import javafx.concurrent.Task;
 import javafx.event.Event;
@@ -29,7 +26,6 @@ import milu.gui.view.DBView;
 import milu.main.MainController;
 import milu.task.imp.ImportTaskPreviewFactory;
 import milu.tool.MyGUITool;
-import milu.tool.MyServiceTool;
 
 public class ImportDataPanePreview extends Pane
 	implements

@@ -19,6 +19,8 @@ public class ExportTask extends Task<Exception>
 	private List<List<Object>> dataLst = null;
 	private int  dataSize = 0;
 	
+	private MyFileExportAbstract myFileAbs = null;
+	
 	private final double MAX = 100.0;
 	private double progress = 0.0;
 	
@@ -47,13 +49,13 @@ public class ExportTask extends Task<Exception>
 		Thread.sleep(100);
 		this.setProgress(0.0);
 		
-		MyFileExportAbstract myFileAbs = MyFileExportFactory.getInstance( file );
+		this.myFileAbs = MyFileExportFactory.getInstance( file );
 		try
 		{
-			myFileAbs.setProgressInterface(this);
-			myFileAbs.setAssignedSize(MAX);
-			myFileAbs.open( this.file );
-			myFileAbs.export( this.headLst, this.dataLst );
+			this.myFileAbs.setProgressInterface(this);
+			this.myFileAbs.setAssignedSize(MAX);
+			this.myFileAbs.open( this.file );
+			this.myFileAbs.export( this.headLst, this.dataLst );
 			
 			return taskEx;
 		}
@@ -64,8 +66,8 @@ public class ExportTask extends Task<Exception>
 		}
 		finally
 		{
-			myFileAbs.close();
-			myFileAbs = null;
+			this.myFileAbs.close();
+			this.myFileAbs = null;
 			
 			this.setProgress(MAX);
 			this.setMsg("");
@@ -103,4 +105,13 @@ public class ExportTask extends Task<Exception>
 		}
 	}
 
+	// ProgressInterface
+	@Override
+	public void cancelProc()
+	{
+		if ( this.myFileAbs != null )
+		{
+			this.myFileAbs.cancel();
+		}
+	}
 }

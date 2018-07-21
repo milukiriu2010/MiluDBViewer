@@ -2,6 +2,8 @@ package milu.gui.ctrl.imp;
 
 import java.io.File;
 import java.util.Map;
+import java.util.List;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 import javafx.geometry.Insets;
@@ -92,6 +94,7 @@ public class ImportDataPaneFile extends Pane
 	{
 		MainController mainCtrl = this.dbView.getMainController();
 		AppConf appConf = mainCtrl.getAppConf();
+		/*
 		this.btnOpen.setOnAction((event)->{
 			FileChooser fc = new FileChooser();
 			// Initial Directory
@@ -113,6 +116,28 @@ public class ImportDataPaneFile extends Pane
 				new ExtensionFilter( "Excel Files", "*.xlsx" )
 			);
 			File file = fc.showOpenDialog(this.getScene().getWindow());
+			if ( file == null )
+			{
+				return;
+			}
+			this.txtSrcFile.setText(file.getAbsolutePath());
+			appConf.setInitDirImportFile(file.getParentFile().getAbsolutePath());
+			
+			MyFileTool.save( mainCtrl, appConf );
+		});
+		*/
+		this.btnOpen.setOnAction((event)->{
+			List<FileChooser.ExtensionFilter> filterLst = new ArrayList<>();
+			filterLst.add(new ExtensionFilter( "Excel Files", "*.csv" ));
+			filterLst.add(new ExtensionFilter( "Excel Files", "*.xlsx" ));
+			
+			File file = 
+				MyGUITool.fileOpenDialog( 
+					appConf.getInitDirImportFile(), 
+					this.txtSrcFile, 
+					filterLst, 
+					this 
+				);
 			if ( file == null )
 			{
 				return;

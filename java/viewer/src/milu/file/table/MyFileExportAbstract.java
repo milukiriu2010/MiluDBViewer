@@ -14,7 +14,8 @@ public abstract class MyFileExportAbstract
 		ProgressReportInterface
 {
 	protected ProgressInterface  progressInf = null;
-	protected double  assignedSize = 0.0;
+	protected double   assignedSize = 0.0;
+	protected boolean  isCancel = false;
 	
 	// ProgressReportInterface
 	@Override
@@ -28,7 +29,14 @@ public abstract class MyFileExportAbstract
 	public void setAssignedSize( double assignedSize )
 	{
 		this.assignedSize = assignedSize;
-	}	
+	}
+	
+	// ProgressReportInterface
+	@Override
+	public void cancel()
+	{
+		this.isCancel = true;
+	}
 	
 	abstract public void open( File file ) throws FileNotFoundException, IOException;
 	abstract public void close();

@@ -63,6 +63,10 @@ public class MyFileImportExcel extends MyFileImportAbstract
 		int i = 0;
 		for ( Row row : this.sheet )
 		{
+			if ( this.isCancel == true )
+			{
+				break;
+			}
 			List<Object> dataRow = new ArrayList<>();
 			
 			for ( int j = 0; j < columnCnt; j++ )
@@ -86,7 +90,11 @@ public class MyFileImportExcel extends MyFileImportAbstract
 					}
 					else if ( MyStringTool.isDateTime(cellVal) )
 					{
-						this.addRowDateTime(cellVal, dataRow);
+						this.addRowDateTime(cellVal,dataRow);
+					}
+					else if ( MyStringTool.isDate(cellVal) )
+					{
+						this.addRowDateTime(cellVal,dataRow);
 					}
 					else if ( cellVal.length() == 0 )
 					{

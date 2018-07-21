@@ -152,7 +152,15 @@ public class CollectTaskObj3Level extends Task<Exception>
 			System.out.println( "Task finish:" + String.format( "%,d nsec",(endTime-startTime) ) );
 		}
 	}
+
+	// Task
+	@Override
+	protected void succeeded()
+	{
+		System.out.println( "Task Success." );
+	}
 	
+	// ProgressInterface
 	@Override
 	synchronized public void addProgress( double addpos )
 	{
@@ -160,6 +168,7 @@ public class CollectTaskObj3Level extends Task<Exception>
 		this.updateProgress( this.progress, MAX );
 	}
 	
+	// ProgressInterface
 	@Override
 	synchronized public void setProgress( double pos )
 	{
@@ -167,6 +176,7 @@ public class CollectTaskObj3Level extends Task<Exception>
 		this.updateProgress( this.progress, MAX );
 	}
 	
+	// ProgressInterface
 	@Override
 	synchronized public void setMsg( String msg )
 	{
@@ -184,9 +194,9 @@ public class CollectTaskObj3Level extends Task<Exception>
 		}
 	}
 	
+	// ProgressInterface
 	@Override
-	protected void succeeded()
+	public void cancelProc()
 	{
-		System.out.println( "Task Success." );
 	}
 }

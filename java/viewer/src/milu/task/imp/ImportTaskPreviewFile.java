@@ -143,4 +143,9 @@ public class ImportTaskPreviewFile extends Task<Exception>
 		}
 	}
 	
+	// ProgressInterface
+	@Override
+	public void cancelProc()
+	{
+	}	
 }

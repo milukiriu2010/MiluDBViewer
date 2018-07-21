@@ -156,4 +156,10 @@ public class CollectTaskTableNoSchema extends Task<Exception>
 			this.updateMessage("");
 		}
 	}
+	
+	// ProgressInterface
+	@Override
+	public void cancelProc()
+	{
+	}
 }

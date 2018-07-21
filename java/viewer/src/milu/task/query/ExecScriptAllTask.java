@@ -218,5 +218,10 @@ public class ExecScriptAllTask extends Task<Exception>
 			this.updateMessage("");
 		}
 	}
-
+	
+	// ProgressInterface
+	@Override
+	public void cancelProc()
+	{
+	}
 }

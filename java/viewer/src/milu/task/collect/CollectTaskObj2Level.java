@@ -64,6 +64,7 @@ public class CollectTaskObj2Level extends Task<Exception>
 		this.selectedSchemaEntity = selectedSchemaEntity;
 	}
 	
+	// Task
 	@Override
 	protected Exception call() 
 	{
@@ -144,12 +145,20 @@ public class CollectTaskObj2Level extends Task<Exception>
 	}
 	
 	@Override
+	protected void succeeded()
+	{
+		System.out.println( "Task Success." );
+	}
+	
+	// ProgressInterface
+	@Override
 	synchronized public void addProgress( double addpos )
 	{
 		this.progress += addpos;
 		this.updateProgress( this.progress, MAX );
 	}
 	
+	// ProgressInterface
 	@Override
 	synchronized public void setProgress( double pos )
 	{
@@ -157,6 +166,7 @@ public class CollectTaskObj2Level extends Task<Exception>
 		this.updateProgress( this.progress, MAX );
 	}
 	
+	// ProgressInterface
 	@Override
 	synchronized public void setMsg( String msg )
 	{
@@ -174,9 +184,9 @@ public class CollectTaskObj2Level extends Task<Exception>
 		}
 	}
 	
+	// ProgressInterface
 	@Override
-	protected void succeeded()
+	public void cancelProc()
 	{
-		System.out.println( "Task Success." );
 	}
 }

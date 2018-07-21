@@ -4,8 +4,6 @@ import java.util.Map;
 import java.util.List;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 import javafx.event.Event;
 import javafx.geometry.Insets;
@@ -29,7 +27,6 @@ import milu.gui.view.FadeView;
 import milu.main.MainController;
 import milu.task.imp.ImportTaskResult;
 import milu.tool.MyGUITool;
-import milu.tool.MyServiceTool;
 
 public class ImportDataPaneResult extends Pane
 	implements

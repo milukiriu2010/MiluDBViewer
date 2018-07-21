@@ -7,3 +7,5 @@
 *.tar.gz
 *.tgz
 *.bak
+mongo_*.xml
+

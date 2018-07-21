@@ -35,7 +35,8 @@ abstract public class ExecSQLAbstract
 	protected List<Object>   preLst = null;
 	
 	protected ProgressInterface  progressInf  = null;
-	protected double             assignedSize = 0.0;	
+	protected double             assignedSize = 0.0;
+	protected boolean            isCancel = false;
 	
 	public void setMyDBAbstract( MyDBAbstract myDBAbs )
 	{
@@ -84,7 +85,14 @@ abstract public class ExecSQLAbstract
 	public void setAssignedSize( double assignedSize )
 	{
 		this.assignedSize = assignedSize;
-	}	
+	}
+	
+	// ProgressReportInterface
+	@Override
+	public void cancel()
+	{
+		this.isCancel= true;
+	}
 	
 	protected void clear()
 	{

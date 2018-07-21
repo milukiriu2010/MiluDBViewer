@@ -21,13 +21,18 @@ public abstract class MyFileImportAbstract
 		ProgressReportInterface
 {
 	static private DateFormat dateFmtYYYYMMDDhhmmss = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-	static private DateFormat dateFmtYYYYMMDDhmmss = new SimpleDateFormat("yyyy-MM-dd H:mm:ss");	
+	static private DateFormat dateFmtYYYYMMDD0hmmss = new SimpleDateFormat("yyyy-MM-dd H:mm:ss");	
+	static private DateFormat dateFmtYYYYMMDD       = new SimpleDateFormat("yyyy-MM-dd");	
+	static private DateFormat dateFmtYYYY0MDD       = new SimpleDateFormat("yyyy-M-dd");	
+	static private DateFormat dateFmtYYYYMM0D       = new SimpleDateFormat("yyyy-MM-d");	
+	static private DateFormat dateFmtYYYY0M0D       = new SimpleDateFormat("yyyy-M-d");	
 	
 	protected List<Object>       headLst = new ArrayList<>();
 	protected List<List<Object>> dataLst = new ArrayList<>();
 	
 	protected ProgressInterface  progressInf = null;
 	protected double  assignedSize = 0.0;
+	protected boolean isCancel = false;
 	
 	public List<Object> getHeadLst()
 	{
@@ -53,6 +58,13 @@ public abstract class MyFileImportAbstract
 		this.assignedSize = assignedSize;
 	}
 	
+	// ProgressReportInterface
+	@Override
+	public void cancel()
+	{
+		this.isCancel = true;
+	}
+	
 	protected void addRowDateTime( String cellVal, List<Object> dataRow ) 
 		throws ParseException
 	{
@@ -62,12 +74,36 @@ public abstract class MyFileImportAbstract
 			Date date = dateFmtYYYYMMDDhhmmss.parse(cellVal);
 			dataRow.add(new Timestamp(date.getTime()));
 		}
-		// 2018-07-17  9:10:10
+		// 2018-07-17 9:10:10
 		else if ( cellVal.matches("^\\d{4}\\-\\d{2}-\\d{2} \\d{1}:\\d{2}:\\d{2}$") )
 		{
-			Date date = dateFmtYYYYMMDDhmmss.parse(cellVal);
+			Date date = dateFmtYYYYMMDD0hmmss.parse(cellVal);
 			dataRow.add(new Timestamp(date.getTime()));
 		}						
+		// 2018-07-17
+		else if ( cellVal.matches("^\\d{4}\\-\\d{2}-\\d{2}$") )
+		{
+			Date date = dateFmtYYYYMMDD.parse(cellVal);
+			dataRow.add(new Timestamp(date.getTime()));
+		}						
+		// 2018-7-17
+		else if ( cellVal.matches("^\\d{4}\\-\\d{1}-\\d{2}$") )
+		{
+			Date date = dateFmtYYYY0MDD.parse(cellVal);
+			dataRow.add(new Timestamp(date.getTime()));
+		}
+		// 2018-12-7
+		else if ( cellVal.matches("^\\d{4}\\-\\d{2}-\\d{1}$") )
+		{
+			Date date = dateFmtYYYYMM0D.parse(cellVal);
+			dataRow.add(new Timestamp(date.getTime()));
+		}
+		// 2018-7-7
+		else if ( cellVal.matches("^\\d{4}\\-\\d{1}-\\d{1}$") )
+		{
+			Date date = dateFmtYYYY0M0D.parse(cellVal);
+			dataRow.add(new Timestamp(date.getTime()));
+		}
 		else
 		{
 			dataRow.add(cellVal);

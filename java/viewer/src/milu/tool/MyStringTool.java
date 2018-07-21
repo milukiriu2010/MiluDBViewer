@@ -20,24 +20,34 @@ public class MyStringTool
 	// -------------------------------------------------
 	public static boolean isNumber( String strOrg )
 	{
-		return strOrg.matches("^(\\-)?([1-9]?\\d+|\\d)(\\.\\d+)?$");
+		//return strOrg.matches("^(\\-)?([1-9]?\\d+|\\d)(\\.\\d+)?$");
+		return strOrg.matches("^(\\-)?([1-9]\\d+|\\d)(\\.\\d+)?$");
 	}
 	
 	public static boolean isNumberNoDecimal( String strOrg )
 	{
-		return strOrg.matches("^(\\-)?[1-9]?\\d+$");
+		//return strOrg.matches("^(\\-)?[1-9]?\\d+$");
+		return strOrg.matches("^(\\-)?([1-9]\\d+|\\d)$");
 	}
 	
 	public static boolean isNumberWithDecimal( String strOrg )
 	{
-		return strOrg.matches("^(\\-)?[1-9]?\\d+\\.\\d+$");
+		//return strOrg.matches("^(\\-)?[1-9]?\\d+\\.\\d+$");
+		return strOrg.matches("^(\\-)?([1-9]\\d+|\\d)\\.\\d+$");
 	}
 	
 	// 2018-07-17 10:10:10
-	// 2018- 7- 7  9: 9: 9
+	// 2018-7-7 9:9:9
 	public static boolean isDateTime( String strOrg )
 	{
 		return strOrg.matches("^\\d{4}\\-\\d{1,2}-\\d{1,2} \\d{1,2}:\\d{1,2}:\\d{1,2}(\\.\\d+)?$");
+	}
+	
+	// 2018-07-17
+	// 2018-7-7
+	public static boolean isDate( String strOrg )
+	{
+		return strOrg.matches("^\\d{4}\\-\\d{1,2}-\\d{1,2}$");
 	}
 	
 	public static String replaceMultiLine( String strOrg, String strSrc, String strDst )

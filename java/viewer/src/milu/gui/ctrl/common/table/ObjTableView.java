@@ -315,6 +315,13 @@ public class ObjTableView extends TableView<List<Object>>
 		this.assignedSize = assignedSize;
 	}
 	
+	// ProgressReportInterface
+	@Override
+	public void cancel()
+	{
+		
+	}
+	
 	// CopyTableInterface
 	@Override
 	public synchronized void copyTableNoHead( Event event )

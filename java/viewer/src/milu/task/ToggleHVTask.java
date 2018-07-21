@@ -97,5 +97,10 @@ public class ToggleHVTask extends Task<Double>
 			this.updateMessage("");
 		}
 	}
-
+	
+	// ProgressInterface
+	@Override
+	public void cancelProc()
+	{
+	}
 }

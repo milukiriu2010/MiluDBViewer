@@ -535,3 +535,11 @@ Caused by: java.lang.IllegalStateException: The file is locked: nio:C:/myjava/Mi
 	at org.h2.mvstore.FileStore.open(FileStore.java:173)
 	at org.h2.mvstore.MVStore.<init>(MVStore.java:347)
 	... 96 more
+2018-07-21 04:09:25 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLException: テーブル "T_NPB_PITCH_STAT" が見つかりません
+Table "T_NPB_PITCH_STAT" not found; SQL statement:
+DELETE FROM t_npb_pitch_stat [42102-196]
+2018-07-21 04:09:26 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLException: テーブル "T_NPB_HIT_STAT" が見つかりません
+Table "T_NPB_HIT_STAT" not found; SQL statement:
+DELETE FROM t_npb_hit_stat [42102-196]

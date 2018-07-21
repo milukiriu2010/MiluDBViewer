@@ -163,4 +163,9 @@ public class ImportTaskPreviewDB extends Task<Exception>
 		}
 	}
 	
+	// ProgressInterface
+	@Override
+	public void cancelProc()
+	{
+	}
 }

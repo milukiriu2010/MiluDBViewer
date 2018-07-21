@@ -2,9 +2,13 @@ package milu.db.access;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.text.SimpleDateFormat;
 
+import java.sql.Timestamp;
 import java.sql.SQLException;
 import java.sql.PreparedStatement;
+
+import milu.db.MyDBSQLite;
 
 public class ExecSQLTransactionPrepared extends ExecSQLAbstract 
 {
@@ -48,7 +52,7 @@ public class ExecSQLTransactionPrepared extends ExecSQLAbstract
 					{
 						stmt.setObject( i, obj );
 					}
-					else if ( this.colTypeLst.size() < preLstSize )
+					else if ( i >= this.colTypeLst.size() )
 					{
 						stmt.setObject( i, obj );
 					}
@@ -115,6 +119,11 @@ public class ExecSQLTransactionPrepared extends ExecSQLAbstract
 						{
 							stmt.setNull( i, java.sql.Types.VARCHAR );
 						}
+						// SQLite
+						else if ( "TEXT".equals(colType) )
+						{
+							stmt.setNull( i, java.sql.Types.VARCHAR );
+						}
 						// Oracle
 						// Cassandra(zhicwu)
 						else if ( "DATE".equals(colType) )
@@ -156,9 +165,27 @@ public class ExecSQLTransactionPrepared extends ExecSQLAbstract
 						}
 					}
 				}
+				// obj is not null.
 				else
 				{
-					stmt.setObject( i, obj );
+					if ( obj instanceof Timestamp )
+					{
+						// SQLite does not support "java.sql.Timestamp"
+						if ( this.myDBAbs instanceof MyDBSQLite )
+						{
+							Timestamp objTS = (Timestamp)obj;
+							String strTS = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(objTS);
+							stmt.setString( i, strTS );
+						}
+						else
+						{
+							stmt.setObject( i, obj );
+						}
+					}
+					else
+					{
+						stmt.setObject( i, obj );
+					}
 				}
 			}
 			

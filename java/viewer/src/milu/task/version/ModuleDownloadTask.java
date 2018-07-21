@@ -105,4 +105,10 @@ public class ModuleDownloadTask extends Task<Exception>
 			this.updateMessage("");
 		}
 	}
+	
+	// ProgressInterface
+	@Override
+	public void cancelProc()
+	{
+	}
 }

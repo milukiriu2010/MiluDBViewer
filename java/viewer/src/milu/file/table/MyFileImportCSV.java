@@ -44,6 +44,10 @@ public class MyFileImportCSV extends MyFileImportAbstract
 		String line = null;
 		while ( (line = this.br.readLine()) != null )
 		{
+			if ( this.isCancel == true )
+			{
+				break;
+			}
 			String[] tokens = line.split(",");
 			List<Object> dataRow = new ArrayList<>();
 			for ( int i = 0; i < columnCnt; i++ )
@@ -65,6 +69,10 @@ public class MyFileImportCSV extends MyFileImportAbstract
 						dataRow.add(Double.parseDouble(cellVal));
 					}
 					else if ( MyStringTool.isDateTime(cellVal) )
+					{
+						this.addRowDateTime(cellVal, dataRow);
+					}
+					else if ( MyStringTool.isDate(cellVal) )
 					{
 						this.addRowDateTime(cellVal, dataRow);
 					}

@@ -186,4 +186,10 @@ public class CollectTaskTableBasic extends Task<Exception>
 			this.updateMessage("");
 		}
 	}
+	
+	// ProgressInterface
+	@Override
+	public void cancelProc()
+	{
+	}
 }

@@ -123,6 +123,10 @@ public class MyFileExportExcel extends MyFileExportAbstract
 		// Body for Sheet
 		for ( int i = 0; i < rowSize; i++ )
 		{
+			if ( this.isCancel == true )
+			{
+				break;
+			}
 			Row rowBody = this.sheet.createRow(i+1);
 			List<Object> dataRow = dataLst.get(i);
 			for ( int j = 0; j < colSize; j++ )

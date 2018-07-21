@@ -57,6 +57,10 @@ public class MyFileExportCSV extends MyFileExportAbstract
 		// Output Data
 		for ( int i = 0; i < rowSize; i++ )
 		{
+			if ( this.isCancel == true )
+			{
+				break;
+			}
 			List<Object> dataRow = dataLst.get(i);
 			this.fw.write( dataRow.stream()
 					.map((obj)->{

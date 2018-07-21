@@ -6,12 +6,9 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 
 import javafx.scene.control.MenuBar;
-import javafx.application.Platform;
 import javafx.beans.property.StringProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.concurrent.Task;
@@ -45,7 +42,6 @@ import milu.task.ProcInterface;
 import milu.task.collect.CollectTaskFactory;
 import milu.tool.MyFileTool;
 import milu.tool.MyGUITool;
-import milu.tool.MyServiceTool;
 import milu.gui.view.DBView;
 
 public class ImportDataPaneDB extends Pane 

@@ -3,6 +3,7 @@ package milu.tool;
 import java.util.Collections;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.io.File;
 import java.sql.SQLException;
 
 import javafx.geometry.Bounds;
@@ -21,8 +22,11 @@ import javafx.stage.Screen;
 import javafx.stage.Window;
 import javafx.scene.control.ScrollBar;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.Pane;
 import javafx.scene.effect.Blend;
 import javafx.scene.effect.BlendMode;
+import javafx.stage.FileChooser;
 import java.awt.MouseInfo;
 import java.awt.Point;
 
@@ -302,6 +306,29 @@ public class MyGUITool
 		}
 		window.setX(x);
 		window.setY(y);
+	}
+	
+	public static File fileOpenDialog( String appConfDir, TextField txtField, List<FileChooser.ExtensionFilter> filterLst, Pane pane )
+	{
+		FileChooser fc = new FileChooser();
+		File initDirFile = null;
+		// Initial Directory
+		if ( appConfDir != null && appConfDir.isEmpty() != true )
+		{
+			initDirFile = new File(appConfDir);
+		}
+		if ( txtField.getText() != null && txtField.getText().isEmpty() != true )
+		{
+			initDirFile = new File(txtField.getText());
+		}
+		if ( initDirFile != null && initDirFile.exists() )
+		{
+			fc.setInitialDirectory(initDirFile);
+		}
+		// Extension Filter
+		fc.getExtensionFilters().addAll(filterLst);
+		File file = fc.showOpenDialog(pane.getScene().getWindow());
+		return file;
 	}
 
 	public static void showException( MainController mainCtrl, String resourceName, String headID, Exception ex )

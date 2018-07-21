@@ -117,6 +117,13 @@ public class ExecScriptEach
 		this.assignedSize = assignedSize;
 	}
 	
+	// ProgressReportInterface
+	@Override
+	public void cancel()
+	{
+		
+	}
+	
 	public void exec()
 	{
 		ExecSQLAbstract execSQLAbs = new ExecSQLFactory().createFactory( this.sqlBag, this.myDBAbs, this.appConf, this.progressInf, this.assignedSize );
