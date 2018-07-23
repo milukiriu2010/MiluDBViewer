@@ -37,7 +37,8 @@ public class SystemTab extends Tab implements ChangeLangInterface
 				new SystemPropertyTab(this.dbView),
 				new SystemEnvTab(this.dbView),
 				new SystemDisplayTab(this.dbView),
-				new SystemMemTab(this.dbView)
+				new SystemMemTab(this.dbView),
+				new SystemSQLTypesTab(this.dbView)
 			);
 		
 		//this.setContent(this.tabPane);

@@ -57,6 +57,7 @@ public class ImportTaskPreviewFile extends Task<Exception>
 		Exception taskEx = null;
 		
 		this.setProgress(0.0);
+		this.setProgress(-1*MAX);
 		
 		SchemaEntity dstSchemaEntity = (SchemaEntity)this.mapObj.get(ImportData.DST_SCHEMA_ENTITY.val());
 		int columnCnt = dstSchemaEntity.getDefinitionLst().size();

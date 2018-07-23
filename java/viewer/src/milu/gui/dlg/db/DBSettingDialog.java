@@ -16,6 +16,7 @@ import java.sql.Driver;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.control.ButtonType;
@@ -54,6 +55,7 @@ import milu.gui.ctrl.common.ButtonOrderNoneDialogPane;
 import milu.gui.ctrl.common.DriverControlPane;
 import milu.gui.ctrl.common.PathTreeView;
 import milu.gui.ctrl.common.inf.PaneSwitchDriverInterface;
+import milu.gui.dlg.MyAlertDialog;
 import milu.gui.ctrl.common.inf.ChangePathInterface;
 import milu.main.AppConst;
 import milu.main.MainController;
@@ -337,6 +339,8 @@ public class DBSettingDialog extends Dialog<MyDBAbstract>
 	
 	private void setAction()
 	{
+		ResourceBundle cmnLangRB = this.mainCtrl.getLangResource("conf.lang.gui.common.NodeName");
+		
 		// ----------------------------------------
 		// [Pane on Dialog(1)]-[Left]
 		// ----------------------------------------
@@ -382,21 +386,31 @@ public class DBSettingDialog extends Dialog<MyDBAbstract>
 			(event)->{ this.pathTreeView.editItem(); }
 		);
 
-		this.btnDelFolder.setOnAction
-		( 
-			(event)->
-			{
-				try
+		this.btnDelFolder.setOnAction((event)->{
+			MyAlertDialog myAlertDlg = 
+				new MyAlertDialog
+				( 
+					Alert.AlertType.CONFIRMATION, 
+					this.mainCtrl,
+					new ButtonType( cmnLangRB.getString("BTN_YES"), ButtonData.YES ),
+					new ButtonType( cmnLangRB.getString("BTN_NO") , ButtonData.NO )
+				);
+			myAlertDlg.setTitle(cmnLangRB.getString("TITLE_DELETE"));
+			myAlertDlg.setTxtMsg(cmnLangRB.getString("MSG_DELETE"));
+			myAlertDlg.showAndWait().ifPresent((type)->{
+				if ( ButtonType.YES.getButtonData().equals(type.getButtonData()) )
 				{
-					this.pathTreeView.delFolder();
+					try
+					{
+						this.pathTreeView.delFolder();
+					}
+					catch ( IOException ioEx )
+					{
+						MyGUITool.showException( this.mainCtrl, "conf.lang.gui.common.MyAlert", "TITLE_MISC_ERROR", ioEx );
+					}
 				}
-				catch ( IOException ioEx )
-				{
-					//this.showException(ioEx);
-					MyGUITool.showException( this.mainCtrl, "conf.lang.gui.common.MyAlert", "TITLE_MISC_ERROR", ioEx );
-				}
-			}
-		);
+			});
+		});
 		
 		// ----------------------------------------
 		// [Pane on Dialog(1)]-[Center]
@@ -681,10 +695,17 @@ public class DBSettingDialog extends Dialog<MyDBAbstract>
 	public void changePath( Path path )
 	{
 		System.out.println( "changePath[" + path.toString() + "]" );
+		// "Folder" is selected.
 		if ( Files.isRegularFile(path) == false )
 		{
+			this.btnNewFolder.setDisable(false);
+			this.btnNewConnection.setDisable(false);
 			return;
 		}
+		// "File" is selected.
+		this.btnNewFolder.setDisable(true);
+		this.btnNewConnection.setDisable(true);
+		
 		try
 		{
 			/*

@@ -1,10 +1,10 @@
 create table t_soccer_player_list
 (
-	id              varchar(10)   primary key,
-	english_name    varchar(40)   not null,
-	japanese_name   varchar(40),
-	org_lang_name   varchar(40),
-	nick_name       varchar(20),
+	id              varchar(10)    primary key,
+	english_name    nvarchar(40)   not null,
+	japanese_name   nvarchar(40),
+	org_lang_name   nvarchar(40),
+	nick_name       nvarchar(20),
 	country_id      numeric(4),
 	position        varchar(2),
 	birthday        datetime

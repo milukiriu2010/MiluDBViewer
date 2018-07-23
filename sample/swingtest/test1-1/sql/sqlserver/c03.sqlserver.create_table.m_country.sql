@@ -2,8 +2,8 @@ create table m_country
 (
     ID          numeric(4),
     English     varchar(40),
-    Japanese    varchar(40),
-    Chinese     varchar(40),
+    Japanese    nvarchar(40),
+    Chinese     nvarchar(40),
     French      varchar(40),
     Spanish     varchar(40),
     constraint pk_m_country primary key( ID )

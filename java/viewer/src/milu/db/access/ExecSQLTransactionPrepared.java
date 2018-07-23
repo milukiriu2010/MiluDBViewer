@@ -13,7 +13,7 @@ import milu.db.MyDBSQLite;
 public class ExecSQLTransactionPrepared extends ExecSQLAbstract 
 {
 	//private List<String> colClassNameLst = null;
-	private List<String> colTypeLst = null;
+	private List<String> colTypeNameLst = null;
 	
 	/*
 	public void setColClassNameLst( List<String> colClassNameLst )
@@ -22,9 +22,9 @@ public class ExecSQLTransactionPrepared extends ExecSQLAbstract
 	}
 	*/
 	
-	public void setColTypeLst( List<String> colTypeLst )
+	public void setColTypeNameLst( List<String> colTypeNameLst )
 	{
-		this.colTypeLst = colTypeLst;
+		this.colTypeNameLst = colTypeNameLst;
 	}
 
 	@Override
@@ -48,111 +48,111 @@ public class ExecSQLTransactionPrepared extends ExecSQLAbstract
 				Object obj = this.preLst.get(i-1);
 				if ( obj == null )
 				{
-					if ( this.colTypeLst == null )
+					if ( this.colTypeNameLst == null )
 					{
 						stmt.setObject( i, obj );
 					}
-					else if ( i >= this.colTypeLst.size() )
+					else if ( i >= this.colTypeNameLst.size() )
 					{
 						stmt.setObject( i, obj );
 					}
 					else
 					{
-						String colType = this.colTypeLst.get(i-1).toUpperCase();
-						if ( "NUMERIC".equals(colType) )
+						String colTypeName = this.colTypeNameLst.get(i-1).toUpperCase();
+						if ( "NUMERIC".equals(colTypeName) )
 						{
 							stmt.setNull( i, java.sql.Types.NUMERIC );
 						}
-						else if ( "NUMBER".equals(colType) )
+						else if ( "NUMBER".equals(colTypeName) )
 						{
 							stmt.setNull( i, java.sql.Types.NUMERIC );
 						}
 						// MySQL
 						// Cassandra(zhicwu)
-						else if ( "INT".equals(colType) )
+						else if ( "INT".equals(colTypeName) )
 						{
 							stmt.setNull( i, java.sql.Types.INTEGER );
 						}
 						// MySQL
-						else if ( "MEDIUMINT UNSIGNED".equals(colType) )
+						else if ( "MEDIUMINT UNSIGNED".equals(colTypeName) )
 						{
 							stmt.setNull( i, java.sql.Types.INTEGER );
 						}
 						// MySQL
-						else if ( "SMALLINT".equals(colType) )
+						else if ( "SMALLINT".equals(colTypeName) )
 						{
 							stmt.setNull( i, java.sql.Types.SMALLINT );
 						}
 						// MySQL
-						else if ( "SMALLINT UNSIGNED".equals(colType) )
+						else if ( "SMALLINT UNSIGNED".equals(colTypeName) )
 						{
 							stmt.setNull( i, java.sql.Types.SMALLINT );
 						}
 						// MySQL
-						else if ( "TINYINT".equals(colType) )
+						else if ( "TINYINT".equals(colTypeName) )
 						{
 							stmt.setNull( i, java.sql.Types.TINYINT );
 						}
 						// MySQL
-						else if ( "TINYINT UNSIGNED".equals(colType) )
+						else if ( "TINYINT UNSIGNED".equals(colTypeName) )
 						{
 							stmt.setNull( i, java.sql.Types.TINYINT );
 						}
 						// MySQL
 						// Cassandra(zhicwu)
-						else if ( "DECIMAL".equals(colType) )
+						else if ( "DECIMAL".equals(colTypeName) )
 						{
 							stmt.setNull( i, java.sql.Types.DECIMAL );
 						}
-						else if ( "CHAR".equals(colType) )
+						else if ( "CHAR".equals(colTypeName) )
 						{
 							stmt.setNull( i, java.sql.Types.CHAR );
 						}
 						// MySQL
 						// Cassandra(zhicwu)
-						else if ( "VARCHAR".equals(colType) )
+						else if ( "VARCHAR".equals(colTypeName) )
 						{
 							stmt.setNull( i, java.sql.Types.VARCHAR );
 						}
 						// Oracle
-						else if ( "VARCHAR2".equals(colType) )
+						else if ( "VARCHAR2".equals(colTypeName) )
 						{
 							stmt.setNull( i, java.sql.Types.VARCHAR );
 						}
 						// SQLite
-						else if ( "TEXT".equals(colType) )
+						else if ( "TEXT".equals(colTypeName) )
 						{
 							stmt.setNull( i, java.sql.Types.VARCHAR );
 						}
 						// Oracle
 						// Cassandra(zhicwu)
-						else if ( "DATE".equals(colType) )
+						else if ( "DATE".equals(colTypeName) )
 						{
 							stmt.setNull( i, java.sql.Types.DATE );
 						}
 						// MySQL
-						else if ( "YEAR".equals(colType) )
+						else if ( "YEAR".equals(colTypeName) )
 						{
 							stmt.setNull( i, java.sql.Types.DATE );
 						}
 						// MySQL
-						else if ( "DATETIME".equals(colType) )
+						else if ( "DATETIME".equals(colTypeName) )
 						{
 							stmt.setNull( i, java.sql.Types.TIMESTAMP );
 						}
 						// MySQL
 						// Cassandra(zhicwu)
-						else if ( "TIMESTAMP".equals(colType) )
+						else if ( "TIMESTAMP".equals(colTypeName) )
 						{
 							stmt.setNull( i, java.sql.Types.TIMESTAMP );
 						}
 						// Oracle
-						else if ( "CLOB".equals(colType) )
+						else if ( "CLOB".equals(colTypeName) )
 						{
 							stmt.setNull( i, java.sql.Types.CLOB );
 						}
 						// Oracle
-						else if ( "SYS.XMLTYPE".equals(colType) )
+						else if ( "SYS.XMLTYPE".equals(colTypeName) )
 						{
 							stmt.setNull( i, java.sql.Types.SQLXML );
 						}

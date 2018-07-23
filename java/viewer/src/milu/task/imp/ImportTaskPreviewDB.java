@@ -126,6 +126,7 @@ public class ImportTaskPreviewDB extends Task<Exception>
 				{
 					this.impPreViewInf.setErrorType(ImportDataPanePreview.ERROR_TYPE.ERROR_NO);
 				}
+				this.setProgress(MAX);
 				this.setMsg("");
 			});
 		}

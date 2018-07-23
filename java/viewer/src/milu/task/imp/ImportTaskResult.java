@@ -99,9 +99,9 @@ public class ImportTaskResult extends Task<Exception>
 					.map( String.class::cast )
 					.collect(Collectors.toList());
 					*/
-		List<String> colTypeLst = 
+		List<String> colTypeNameLst = 
 				colMetaInfoDataLst.stream()
-					.map( mapObj->mapObj.get("Type") )
+					.map( mapObj->mapObj.get("TypeName") )
 					.map( String.class::cast )
 					.collect(Collectors.toList());
 		
@@ -138,7 +138,7 @@ public class ImportTaskResult extends Task<Exception>
 		{
 			ExecSQLAbstract  execSQLAbsIns = 
 				new ExecSQLFactory().createPreparedFactory( sqlBagIns, myDBAbs, appConf, preLst );
-			((ExecSQLTransactionPrepared)execSQLAbsIns).setColTypeLst(colTypeLst);
+			((ExecSQLTransactionPrepared)execSQLAbsIns).setColTypeNameLst(colTypeNameLst);
 			try
 			{
 				execSQLAbsIns.exec(1,-1);

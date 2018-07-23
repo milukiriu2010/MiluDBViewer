@@ -19,17 +19,19 @@ public class ExecSQLSelect extends ExecSQLAbstract
 	
 	// Column Meta Info Head List
 	private List<Object> colMetaInfoHeadLst = 
-			Arrays.asList("Name","Class","Type","Size","Precision","Scale","Nullable");
+			Arrays.asList("Name","Class","Type","TypeName","Size","Precision","Scale","Nullable","AutoIncrement");
 
 	// Column Meta Info Data List
 	// -------------------------------------------
 	// 0:ColumnName
 	// 1:ColumnClassName
-	// 2:ColumnTypeName
-	// 3:ColumnDisplaySize
-	// 4:Precision
-	// 5:Scale
-	// 6:isNullable
+	// 2:ColumnType
+	// 3:ColumnTypeName
+	// 4:ColumnDisplaySize
+	// 5:Precision
+	// 6:Scale
+	// 7:isNullable
+	// 8:isAutoIncrement
 	private List<Map<String,Object>> colMetaInfoDataLst = new ArrayList<>();
 	
 	public List<Object> getColMetaInfoHeadLst()
@@ -131,11 +133,13 @@ public class ExecSQLSelect extends ExecSQLAbstract
 				Map<String,Object> mapObj = new LinkedHashMap<>();
 				mapObj.put( (String)this.colMetaInfoHeadLst.get(0), rsmd.getColumnName( i ) );
 				mapObj.put( (String)this.colMetaInfoHeadLst.get(1), rsmd.getColumnClassName( i ) );
-				mapObj.put( (String)this.colMetaInfoHeadLst.get(2), rsmd.getColumnTypeName( i ) );
-				mapObj.put( (String)this.colMetaInfoHeadLst.get(3), Integer.valueOf(rsmd.getColumnDisplaySize(i)) );
-				mapObj.put( (String)this.colMetaInfoHeadLst.get(4), Integer.valueOf(rsmd.getPrecision(i)) );
-				mapObj.put( (String)this.colMetaInfoHeadLst.get(5), Integer.valueOf(rsmd.getScale(i)) );
-				mapObj.put( (String)this.colMetaInfoHeadLst.get(6), Integer.valueOf(rsmd.isNullable(i)) );
+				mapObj.put( (String)this.colMetaInfoHeadLst.get(2), rsmd.getColumnType( i ) );
+				mapObj.put( (String)this.colMetaInfoHeadLst.get(3), rsmd.getColumnTypeName( i ) );
+				mapObj.put( (String)this.colMetaInfoHeadLst.get(4), Integer.valueOf(rsmd.getColumnDisplaySize(i)) );
+				mapObj.put( (String)this.colMetaInfoHeadLst.get(5), Integer.valueOf(rsmd.getPrecision(i)) );
+				mapObj.put( (String)this.colMetaInfoHeadLst.get(6), Integer.valueOf(rsmd.getScale(i)) );
+				mapObj.put( (String)this.colMetaInfoHeadLst.get(7), Integer.valueOf(rsmd.isNullable(i)) );
+				mapObj.put( (String)this.colMetaInfoHeadLst.get(8), rsmd.isAutoIncrement(i) );
 				
 				this.colMetaInfoDataLst.add( mapObj );
 			}

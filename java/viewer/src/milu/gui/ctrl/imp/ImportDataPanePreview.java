@@ -97,8 +97,6 @@ public class ImportDataPanePreview extends Pane
 		this.txtWarn.setEditable(false);
 		this.txtWarn.prefWidthProperty().bind(this.dbView.widthProperty().multiply(0.8));
 		this.objTableView = new ObjTableView( this.dbView );
-		//this.objTableView.setPrefWidth(500);
-		//this.objTableView.setPrefHeight(200);
 		this.objTableView.prefWidthProperty().bind(this.dbView.widthProperty().multiply(0.9));
 		this.objTableView.prefHeightProperty().bind(this.dbView.heightProperty().multiply(0.5));
 		
