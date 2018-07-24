@@ -80,6 +80,10 @@ public class InitialLoadDriver extends InitialLoadAbstract
 					MyJsonEachAbstract<DriverShim> myJsonAbs =
 							MyJsonEachFactory.<DriverShim>getInstance(MyJsonEachFactory.factoryType.DRIVER_SHIM);
 					DriverShim driverShim = myJsonAbs.load(new File(json.getAbsolutePath()));
+					if ( driverShim == null )
+					{
+						return;
+					}
 					if ( LoadDriver.isAlreadyLoadCheck( driverShim.getDriverClassName() ) == false )
 					{
 						DriverShim loadedDriver = LoadDriver.loadDriver( driverShim.getDriverClassName(), driverShim.getDriverPathLst() );
@@ -149,7 +153,8 @@ public class InitialLoadDriver extends InitialLoadAbstract
 		
 		// PostgreSQL
 		List<String>  driverPathLstPostgres = new ArrayList<>();
-		driverPathLstPostgres.add( "file:lib/postgresql/postgresql-42.1.4.jar" );
+		//driverPathLstPostgres.add( "file:lib/postgresql/postgresql-42.1.4.jar" );
+		driverPathLstPostgres.add( "file:lib/postgresql/postgresql-42.2.4.jar" );
 		
 		driverMap.put( DriverClassConst.CLASS_NAME_POSTGRESQL, driverPathLstPostgres );
 		driverTemplateUrlMap.put( DriverClassConst.CLASS_NAME_POSTGRESQL, "jdbc:postgresql://host1:5432,host2:port2/database[?targetServerType=master]" );
@@ -158,6 +163,7 @@ public class InitialLoadDriver extends InitialLoadAbstract
 		// MySQL
 		List<String>  driverPathLstMySQL = new ArrayList<>();
 		driverPathLstMySQL.add( "file:lib/mysql/mysql-connector-java-5.1.45-bin.jar" );
+		//driverPathLstMySQL.add( "file:lib/mysql/mysql-connector-java-8.0.11.jar" );
 		
 		driverMap.put( DriverClassConst.CLASS_NAME_MYSQL, driverPathLstMySQL );
 		driverTemplateUrlMap.put( DriverClassConst.CLASS_NAME_MYSQL, "jdbc:mysql://[host1][:3306][,[host2][:port2]]...[/[database]][?autoReconnect=true][&autoClosePStmtStreams=true]" );

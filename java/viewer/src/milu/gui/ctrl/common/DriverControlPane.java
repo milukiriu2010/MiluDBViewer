@@ -234,12 +234,15 @@ public class DriverControlPane extends Pane
 		this.driverPathListView.setCellFactory(	(callback)->new EditListCell() );
 		
 		this.btnAddJar.setOnAction((event)->{
+			/*
 			FileChooser fc = new FileChooser();
 			if ( "".equals(appConf.getInitDirJDBC()) == false )
 			{
 				fc.setInitialDirectory(new File(appConf.getInitDirJDBC()));
 			}
 			List<File> fileLst = fc.showOpenMultipleDialog(this.getScene().getWindow());
+			*/
+			List<File> fileLst = MyGUITool.fileOpenMultiDialog( appConf.getInitDirJDBC(), null, this );
 			if ( fileLst == null )
 			{
 				return;

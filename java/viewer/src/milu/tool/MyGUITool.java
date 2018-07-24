@@ -23,7 +23,6 @@ import javafx.stage.Window;
 import javafx.scene.control.ScrollBar;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.Pane;
 import javafx.scene.effect.Blend;
 import javafx.scene.effect.BlendMode;
 import javafx.stage.FileChooser;
@@ -308,7 +307,7 @@ public class MyGUITool
 		window.setY(y);
 	}
 	
-	public static File fileOpenDialog( String appConfDir, TextField txtField, List<FileChooser.ExtensionFilter> filterLst, Pane pane )
+	public static File fileOpenDialog( String appConfDir, TextField txtField, List<FileChooser.ExtensionFilter> filterLst, Node node )
 	{
 		FileChooser fc = new FileChooser();
 		File initDirFile = null;
@@ -317,17 +316,74 @@ public class MyGUITool
 		{
 			initDirFile = new File(appConfDir);
 		}
-		if ( txtField.getText() != null && txtField.getText().isEmpty() != true )
+		if ( (txtField != null) && 
+			 (txtField.getText() != null) && 
+			 (txtField.getText().isEmpty() != true) 
+		)
 		{
 			initDirFile = new File(txtField.getText());
+		}
+		if ( initDirFile != null && initDirFile.exists() )
+		{
+			if ( initDirFile.isDirectory() )
+			{
+				fc.setInitialDirectory(initDirFile);
+			}
+			else
+			{
+				fc.setInitialDirectory(initDirFile.getParentFile());
+			}
+		}
+		// Extension Filter
+		if ( filterLst != null && filterLst.size() > 0 )
+		{
+			fc.getExtensionFilters().addAll(filterLst);
+		}
+		File file = fc.showOpenDialog(node.getScene().getWindow());
+		return file;
+	}
+	
+	public static List<File> fileOpenMultiDialog( String appConfDir, List<FileChooser.ExtensionFilter> filterLst, Node node )
+	{
+		FileChooser fc = new FileChooser();
+		File initDirFile = null;
+		// Initial Directory
+		if ( appConfDir != null && appConfDir.isEmpty() != true )
+		{
+			initDirFile = new File(appConfDir);
 		}
 		if ( initDirFile != null && initDirFile.exists() )
 		{
 			fc.setInitialDirectory(initDirFile);
 		}
 		// Extension Filter
-		fc.getExtensionFilters().addAll(filterLst);
-		File file = fc.showOpenDialog(pane.getScene().getWindow());
+		if ( filterLst != null && filterLst.size() > 0 )
+		{
+			fc.getExtensionFilters().addAll(filterLst);
+		}
+		List<File> fileLst = fc.showOpenMultipleDialog(node.getScene().getWindow());
+		return fileLst;
+	}
+	
+	public static File fileSaveDialog( String appConfDir, List<FileChooser.ExtensionFilter> filterLst, Node node )
+	{
+		FileChooser fc = new FileChooser();
+		File initDirFile = null;
+		// Initial Directory
+		if ( appConfDir != null && appConfDir.isEmpty() != true )
+		{
+			initDirFile = new File(appConfDir);
+		}
+		if ( initDirFile != null && initDirFile.exists() )
+		{
+			fc.setInitialDirectory(initDirFile);
+		}
+		// Extension Filter
+		if ( filterLst != null && filterLst.size() > 0 )
+		{
+			fc.getExtensionFilters().addAll(filterLst);
+		}
+		File file = fc.showSaveDialog(node.getScene().getWindow());
 		return file;
 	}
 

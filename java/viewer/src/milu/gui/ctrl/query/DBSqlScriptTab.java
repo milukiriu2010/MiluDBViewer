@@ -488,6 +488,7 @@ public class DBSqlScriptTab extends Tab
 	{
 		MainController mainCtrl = this.dbView.getMainController();
 		AppConf appConf = mainCtrl.getAppConf();
+		/*
 		FileChooser fc = new FileChooser();
 		// Initial Directory
 		if ( appConf.getInitDirSQLFile().isEmpty() != true )
@@ -495,6 +496,8 @@ public class DBSqlScriptTab extends Tab
 			fc.setInitialDirectory( new File(appConf.getInitDirSQLFile()) );
 		}
 		File file = fc.showOpenDialog(this.getTabPane().getScene().getWindow());
+		*/
+		File file = MyGUITool.fileOpenDialog( appConf.getInitDirSQLFile(), null, null, this.getTabPane() );
 		if ( file == null )
 		{
 			return;
@@ -512,6 +515,7 @@ public class DBSqlScriptTab extends Tab
 	{
 		MainController mainCtrl = this.dbView.getMainController();
 		AppConf appConf = mainCtrl.getAppConf();
+		/*
 		FileChooser fc = new FileChooser();
 		// Initial Directory
 		if ( appConf.getInitDirSQLFile().isEmpty() != true )
@@ -519,6 +523,8 @@ public class DBSqlScriptTab extends Tab
 			fc.setInitialDirectory( new File(appConf.getInitDirSQLFile()) );
 		}
 		File file = fc.showSaveDialog(this.getTabPane().getScene().getWindow());
+		*/
+		File file = MyGUITool.fileSaveDialog( appConf.getInitDirSQLFile(), null, this.getTabPane() );
 		if ( file == null )
 		{
 			return;

@@ -74,7 +74,6 @@ public class MyFileImportExcel extends MyFileImportAbstract
 				Cell cell = row.getCell(j);
 				if ( cell == null )
 				{
-					//dataRow.add("");
 					dataRow.add(null);
 				}
 				else

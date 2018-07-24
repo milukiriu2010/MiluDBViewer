@@ -94,38 +94,6 @@ public class ImportDataPaneFile extends Pane
 	{
 		MainController mainCtrl = this.dbView.getMainController();
 		AppConf appConf = mainCtrl.getAppConf();
-		/*
-		this.btnOpen.setOnAction((event)->{
-			FileChooser fc = new FileChooser();
-			// Initial Directory
-			if ( appConf.getInitDirImportFile().isEmpty() != true )
-			{
-				fc.setInitialDirectory( new File(appConf.getInitDirImportFile()) );
-			}
-			if ( (this.txtSrcFile.getText() != null) && 
-				 (this.txtSrcFile.getText().isEmpty() != true ) )
-			{
-				fc.setInitialDirectory( new File(this.txtSrcFile.getText()).getParentFile() );
-			}
-			// Extension Filter
-			//FileChooser.ExtensionFilter  extFilter = 
-			//	new FileChooser.ExtensionFilter( "Excel(*.xlsx)", "*.xlsx" );
-			fc.getExtensionFilters().addAll
-			(
-				new ExtensionFilter( "Excel Files", "*.csv" ),
-				new ExtensionFilter( "Excel Files", "*.xlsx" )
-			);
-			File file = fc.showOpenDialog(this.getScene().getWindow());
-			if ( file == null )
-			{
-				return;
-			}
-			this.txtSrcFile.setText(file.getAbsolutePath());
-			appConf.setInitDirImportFile(file.getParentFile().getAbsolutePath());
-			
-			MyFileTool.save( mainCtrl, appConf );
-		});
-		*/
 		this.btnOpen.setOnAction((event)->{
 			List<FileChooser.ExtensionFilter> filterLst = new ArrayList<>();
 			filterLst.add(new ExtensionFilter( "Excel Files", "*.csv" ));

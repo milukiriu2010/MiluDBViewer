@@ -182,6 +182,7 @@ public class UrlPaneBasicFile extends UrlPaneAbstract
 		
 		AppConf appConf = this.mainCtrl.getAppConf();
 		this.btnOpen.setOnAction((event)->{
+			/*
 			FileChooser fc = new FileChooser();
 			if ( appConf.getInitDirFileDB().isEmpty() != true )
 			{
@@ -193,6 +194,8 @@ public class UrlPaneBasicFile extends UrlPaneAbstract
 				fc.setInitialDirectory( new File(this.dbnameTextField.getText()).getParentFile() );
 			}
 			File file = fc.showOpenDialog(this.getScene().getWindow());
+			*/
+			File file = MyGUITool.fileOpenDialog( appConf.getInitDirFileDB(), this.dbnameTextField, null, this );
 			if ( file == null )
 			{
 				return;

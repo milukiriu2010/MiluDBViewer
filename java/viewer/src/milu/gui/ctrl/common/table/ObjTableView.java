@@ -28,6 +28,7 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.Event;
 import milu.tool.MyFileTool;
+import milu.tool.MyGUITool;
 import milu.tool.MyStringTool;
 import milu.gui.ctrl.common.inf.ChangeLangInterface;
 import milu.gui.ctrl.common.inf.SetTableViewDataInterface;
@@ -429,6 +430,7 @@ public class ObjTableView extends TableView<List<Object>>
 	{
 		MainController mainCtrl = this.dbView.getMainController();
 		AppConf appConf = mainCtrl.getAppConf();
+		/*
 		FileChooser  fileChooser = new FileChooser();
 		// Initial Directory
 		if ( appConf.getInitDirExportFile().isEmpty() != true )
@@ -441,6 +443,11 @@ public class ObjTableView extends TableView<List<Object>>
 			new ExtensionFilter( "Excel Files", "*.xlsx" )
 		);
 		File file = fileChooser.showSaveDialog( this.getScene().getWindow() );
+		*/
+		List<FileChooser.ExtensionFilter> filterLst = new ArrayList<>();
+		filterLst.add(new ExtensionFilter( "Excel Files", "*.csv" ));
+		filterLst.add(new ExtensionFilter( "Excel Files", "*.xlsx" ));
+		File file = MyGUITool.fileSaveDialog( appConf.getInitDirExportFile(), filterLst, this );
 		if ( file == null )
 		{
 			return;
@@ -455,25 +462,6 @@ public class ObjTableView extends TableView<List<Object>>
 		
 		TaskDialog taskDlg = new TaskDialog(task,mainCtrl,null);
 		taskDlg.showAndWait();
-		//taskDlg.show();
-		
-		/*
-		MyFileExportAbstract myFileAbs = MyFileExportFactory.getInstance( file );
-		try
-		{
-			myFileAbs.open( file );
-			myFileAbs.export( this.headObjLst, this.dataObjLst );
-		}
-		catch( IOException ioEx )
-		{
-			MyGUITool.showException( this.dbView.getMainController(), "conf.lang.gui.ctrl.query.ObjTableView", "TITLE_SAVE_ERROR", ioEx );
-    	}
-		finally
-		{
-			myFileAbs.close();
-			myFileAbs = null;
-		}
-		*/
 	}
 	
 	// Get ColumnName from TableView 

@@ -41,6 +41,7 @@ public class MyFileImportCSV extends MyFileImportAbstract
 		{
 			this.progressInf.setMsg("...");
 		}
+		int i = 0;
 		String line = null;
 		while ( (line = this.br.readLine()) != null )
 		{
@@ -50,16 +51,15 @@ public class MyFileImportCSV extends MyFileImportAbstract
 			}
 			String[] tokens = line.split(",");
 			List<Object> dataRow = new ArrayList<>();
-			for ( int i = 0; i < columnCnt; i++ )
+			for ( int j = 0; j < columnCnt; j++ )
 			{
-				if ( i >= tokens.length )
+				if ( j >= tokens.length )
 				{
-					//dataRow.add("");
 					dataRow.add(null);
 				}
 				else
 				{
-					String cellVal = tokens[i];
+					String cellVal = tokens[j];
 					if ( MyStringTool.isNumberNoDecimal(cellVal) )
 					{
 						dataRow.add(Long.parseLong(cellVal));
@@ -85,8 +85,13 @@ public class MyFileImportCSV extends MyFileImportAbstract
 						dataRow.add(cellVal);
 					}
 				}
+				if ( i == 0 )
+				{
+					this.headLst.add(MyStringTool.getAplha(j, ""));
+				}
 			}
 			this.dataLst.add(dataRow);
+			i++;
 		}
 		
 	}

@@ -99,12 +99,14 @@ public class ImportTaskPreviewFile extends Task<Exception>
 			{
 			}
 			
+			List<Object>       headLst = myFileAbs.getHeadLst();
 			List<List<Object>> dataLst = myFileAbs.getDataLst();
 			System.out.println( "columnLst.size:" + columnLst.size() );
 			System.out.println( "dataLst.size  :" + dataLst.size() );
 
 			Platform.runLater(()->{
-				this.impPreViewInf.setTableViewData(columnLst, dataLst);
+				this.impPreViewInf.setTableViewData(headLst, dataLst);
+				//this.impPreViewInf.setTableViewData(columnLst, dataLst);
 				this.impPreViewInf.setErrorType(ImportDataPanePreview.ERROR_TYPE.ERROR_NO);
 				this.setProgress(MAX);
 				this.setMsg("");
