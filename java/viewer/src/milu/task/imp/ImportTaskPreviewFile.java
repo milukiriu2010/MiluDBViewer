@@ -29,6 +29,8 @@ public class ImportTaskPreviewFile extends Task<Exception>
 	private final double MAX = 100.0;
 	private double progress = 0.0;
 	
+	private MyFileImportAbstract myFileAbs = null;
+	
 	// ImportTaskPreviewInterface
 	@Override
 	public void setImportPreviewInterface(ImportPreviewInterface impPreViewInf) 
@@ -57,7 +59,6 @@ public class ImportTaskPreviewFile extends Task<Exception>
 		Exception taskEx = null;
 		
 		this.setProgress(0.0);
-		this.setProgress(-1*MAX);
 		
 		SchemaEntity dstSchemaEntity = (SchemaEntity)this.mapObj.get(ImportData.DST_SCHEMA_ENTITY.val());
 		int columnCnt = dstSchemaEntity.getDefinitionLst().size();
@@ -68,14 +69,14 @@ public class ImportTaskPreviewFile extends Task<Exception>
 		//MainController mainCtrl = this.dbView.getMainController();
 		String strFile = (String)this.mapObj.get(ImportData.SRC_FILE.val());
 		File file = new File(strFile);
-		MyFileImportAbstract myFileAbs = MyFileImportFactory.getInstance(file);
+		this.myFileAbs = MyFileImportFactory.getInstance(file);
 		try
 		{
 			Thread.sleep(100);
-			myFileAbs.setProgressInterface(this);
-			myFileAbs.setAssignedSize(MAX);
-			myFileAbs.open(file);
-			myFileAbs.load(columnCnt);
+			this.myFileAbs.setProgressInterface(this);
+			this.myFileAbs.setAssignedSize(MAX);
+			this.myFileAbs.open(file);
+			this.myFileAbs.load(columnCnt);
 			
 			return taskEx;
 		}
@@ -93,14 +94,14 @@ public class ImportTaskPreviewFile extends Task<Exception>
 		{
 			try
 			{
-				myFileAbs.close();
+				this.myFileAbs.close();
 			}
 			catch ( IOException ioEx )
 			{
 			}
 			
-			List<Object>       headLst = myFileAbs.getHeadLst();
-			List<List<Object>> dataLst = myFileAbs.getDataLst();
+			List<Object>       headLst = this.myFileAbs.getHeadLst();
+			List<List<Object>> dataLst = this.myFileAbs.getDataLst();
 			System.out.println( "columnLst.size:" + columnLst.size() );
 			System.out.println( "dataLst.size  :" + dataLst.size() );
 
@@ -150,5 +151,9 @@ public class ImportTaskPreviewFile extends Task<Exception>
 	@Override
 	public void cancelProc()
 	{
+		if ( this.myFileAbs != null )
+		{
+			this.myFileAbs.cancel();
+		}
 	}	
 }

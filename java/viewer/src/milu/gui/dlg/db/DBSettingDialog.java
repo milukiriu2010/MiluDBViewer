@@ -695,16 +695,33 @@ public class DBSettingDialog extends Dialog<MyDBAbstract>
 	public void changePath( Path path )
 	{
 		System.out.println( "changePath[" + path.toString() + "]" );
-		// "Folder" is selected.
-		if ( Files.isRegularFile(path) == false )
+		System.out.println( "AppCons.DB_DIR[" + AppConst.DB_DIR.val() + "]" );
+		// "Bookmark Folder" is selected
+		if ( AppConst.DB_DIR.val().equals(path.toString()+File.separator) )
 		{
 			this.btnNewFolder.setDisable(false);
 			this.btnNewConnection.setDisable(false);
+			this.btnEditFolder.setDisable(true);
+			this.btnDelFolder.setDisable(true);
+			return;
+		}
+		// "Folder" is selected.
+		else if ( Files.isRegularFile(path) == false )
+		{
+			this.btnNewFolder.setDisable(false);
+			this.btnNewConnection.setDisable(false);
+			this.btnEditFolder.setDisable(false);
+			this.btnDelFolder.setDisable(false);
 			return;
 		}
 		// "File" is selected.
-		this.btnNewFolder.setDisable(true);
-		this.btnNewConnection.setDisable(true);
+		else
+		{
+			this.btnNewFolder.setDisable(true);
+			this.btnNewConnection.setDisable(true);
+			this.btnEditFolder.setDisable(false);
+			this.btnDelFolder.setDisable(false);
+		}
 		
 		try
 		{

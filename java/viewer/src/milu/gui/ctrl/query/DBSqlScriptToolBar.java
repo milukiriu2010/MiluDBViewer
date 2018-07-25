@@ -36,6 +36,10 @@ class DBSqlScriptToolBar extends ToolBar
 	private Button    btnExecSQL = new Button();
 	// Explain SQL
 	private Button    btnExplainSQL = new Button();
+	// Exec Query SQL
+	private Button    btnExecSQLQuery = new Button();
+	// Exec Transaction SQL
+	private Button    btnExecSQLTrans = new Button();
 	// Toggle Horizontal/Vertical mode
 	private Button    btnToggleHV = new Button();
 	// Button to copy table data(no column)
@@ -66,6 +70,8 @@ class DBSqlScriptToolBar extends ToolBar
 		MainController mainCtrl = this.dbView.getMainController();
 		this.btnExecSQL.setGraphic( MyGUITool.createImageView( 20, 20, mainCtrl.getImage("file:resources/images/execsql.png") ) );
 		this.btnExplainSQL.setGraphic( MyGUITool.createImageView( 20, 20, mainCtrl.getImage("file:resources/images/explain.png") ) );
+		this.btnExecSQLQuery.setGraphic( MyGUITool.createImageView( 20, 20, mainCtrl.getImage("file:resources/images/execQUERY.png") ) );
+		this.btnExecSQLTrans.setGraphic( MyGUITool.createImageView( 20, 20, mainCtrl.getImage("file:resources/images/execTRANS.png") ) );
 		this.btnToggleHV.setGraphic( MyGUITool.createImageView( 20, 20, mainCtrl.getImage("file:resources/images/direction.png") ) );
 		this.btnCopyTblNoHead.setGraphic( MyGUITool.createImageView( 20, 20, mainCtrl.getImage("file:resources/images/copy.png") ) );
 		this.btnCopyTblWithHead.setGraphic( MyGUITool.createImageView( 20, 20, mainCtrl.getImage("file:resources/images/copy2.png") ) );
@@ -92,6 +98,8 @@ class DBSqlScriptToolBar extends ToolBar
 		
 		this.getItems().addAll
 		(
+			this.btnExecSQLQuery,
+			this.btnExecSQLTrans,
 			new Separator(),
 			this.btnToggleHV,
 			this.btnCopyTblNoHead,
@@ -163,6 +171,15 @@ class DBSqlScriptToolBar extends ToolBar
 		{
 			// mouse click, "space/return" key enter 
 			this.btnExplainSQL.setOnAction( ((SQLExplainInterface)obj)::explainSQL );
+		}
+		
+		if ( obj instanceof SQLExecWithoutParseInterface )
+		{
+			// mouse click, "space/return" key enter 
+			this.btnExecSQLQuery.setOnAction( ((SQLExecWithoutParseInterface)obj)::execSQLQuery );
+			
+			// mouse click, "space/return" key enter 
+			this.btnExecSQLTrans.setOnAction( ((SQLExecWithoutParseInterface)obj)::execSQLTrans );
 		}
 		
 		if ( obj instanceof DirectionSwitchInterface )
@@ -287,6 +304,22 @@ class DBSqlScriptToolBar extends ToolBar
 		Tooltip tipExplainSQL = new Tooltip( langRB.getString( "TOOLTIP_EXEC_EXPLAIN" ) );
 		tipExplainSQL.getStyleClass().add("Common_MyToolTip");
 		this.btnExplainSQL.setTooltip( tipExplainSQL );
+		
+		// ----------------------------------------------
+		// ToolTip
+		//   Button[Exec Query-SQL without parse] 
+		// ----------------------------------------------
+		Tooltip tipExecSQLQuery = new Tooltip( langRB.getString( "TOOLTIP_EXEC_SQL_QUERY" ));
+		tipExecSQLQuery.getStyleClass().add("Common_MyToolTip");
+		this.btnExecSQLQuery.setTooltip(tipExecSQLQuery);
+		
+		// ----------------------------------------------
+		// ToolTip
+		//   Button[Exec Transaction-SQL without parse] 
+		// ----------------------------------------------
+		Tooltip tipExecSQLTrans = new Tooltip( langRB.getString( "TOOLTIP_EXEC_SQL_TRANS" ));
+		tipExecSQLTrans.getStyleClass().add("Common_MyToolTip");
+		this.btnExecSQLTrans.setTooltip(tipExecSQLTrans);
 		
 		// ----------------------------------------------
 		// ToolTip

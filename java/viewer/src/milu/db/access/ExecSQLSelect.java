@@ -151,6 +151,10 @@ public class ExecSQLSelect extends ExecSQLAbstract
 			int fetchCnt = 0;
 			while ( rs.next() )
 			{
+				if ( this.isCancel == true )
+				{
+					break;
+				}
 				if ( isAbsoluteOK == false )
 				{
 					if ( startPos < fetchPos )

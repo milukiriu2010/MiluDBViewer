@@ -60,6 +60,9 @@ public class SchemaTreeContextMenu extends ContextMenu
 	// [Generate DELETE]
 	private MenuItem  menuItemGenerateDelete = new MenuItem();
 	
+	// [Generate "CREATE TABLE"]
+	private MenuItem  menuItemGenerateCreateTable = new MenuItem();
+	
 	// [Import Data]
 	private MenuItem  menuItemImportData = new MenuItem();
 
@@ -122,12 +125,13 @@ public class SchemaTreeContextMenu extends ContextMenu
 			clipboard.setContent( content );				
 		});
 		
-		this.menuItemGenerateSelect.setOnAction( (event)->{	this.GenerateSQL( GenerateSQLFactory.TYPE.SELECT );	} );
-		this.menuItemInsertPlaceHolderName.setOnAction( (event)->{ this.GenerateSQL( GenerateSQLFactory.TYPE.INSERT_BY_NAME );	} );
-		this.menuItemInsertPlaceHolderSimple.setOnAction( (event)->{ this.GenerateSQL( GenerateSQLFactory.TYPE.INSERT_BY_SIMPLE );	} );
-		this.menuItemUpdatePlaceHolderName.setOnAction( (event)->{ this.GenerateSQL( GenerateSQLFactory.TYPE.UPDATE_BY_NAME );	} );
-		this.menuItemUpdatePlaceHolderSimple.setOnAction( (event)->{ this.GenerateSQL( GenerateSQLFactory.TYPE.UPDATE_BY_SIMPLE );	} );
-		this.menuItemGenerateDelete.setOnAction( (event)->{	this.GenerateSQL( GenerateSQLFactory.TYPE.DELETE );	} );
+		this.menuItemGenerateSelect.setOnAction( (event)->{	this.generateSQL( GenerateSQLFactory.TYPE.SELECT );	} );
+		this.menuItemInsertPlaceHolderName.setOnAction( (event)->{ this.generateSQL( GenerateSQLFactory.TYPE.INSERT_BY_NAME );	} );
+		this.menuItemInsertPlaceHolderSimple.setOnAction( (event)->{ this.generateSQL( GenerateSQLFactory.TYPE.INSERT_BY_SIMPLE );	} );
+		this.menuItemUpdatePlaceHolderName.setOnAction( (event)->{ this.generateSQL( GenerateSQLFactory.TYPE.UPDATE_BY_NAME );	} );
+		this.menuItemUpdatePlaceHolderSimple.setOnAction( (event)->{ this.generateSQL( GenerateSQLFactory.TYPE.UPDATE_BY_SIMPLE );	} );
+		this.menuItemGenerateDelete.setOnAction( (event)->{	this.generateSQL( GenerateSQLFactory.TYPE.DELETE );	} );
+		this.menuItemGenerateCreateTable.setOnAction( (event)->{ this.generateSQL( GenerateSQLFactory.TYPE.CREATE_TABLE ); } );
 		this.menuItemImportData.setOnAction( (event)->{
 			SchemaEntity schemaEntity = this.schemaTreeView.getSelectionModel().getSelectedItem().getValue();
 			this.dbView.openView(ImportDataTab.class,schemaEntity);
@@ -143,6 +147,7 @@ public class SchemaTreeContextMenu extends ContextMenu
 			this.subMenuGenerateInsert,
 			this.subMenuGenerateUpdate,
 			this.menuItemGenerateDelete,
+			this.menuItemGenerateCreateTable,
 			new SeparatorMenuItem(),
 			this.menuItemImportData
 		);
@@ -160,7 +165,7 @@ public class SchemaTreeContextMenu extends ContextMenu
 		);
 	}
 	
-	private void GenerateSQL( GenerateSQLFactory.TYPE type )
+	private void generateSQL( GenerateSQLFactory.TYPE type )
 	{
 		MyDBAbstract myDBAbs = this.dbView.getMyDBAbstract();
 		GenerateSQLAbstract gsAbs = GenerateSQLFactory.getInstance(type);
@@ -277,6 +282,8 @@ public class SchemaTreeContextMenu extends ContextMenu
 		this.menuItemUpdatePlaceHolderSimple.setText( langRB.getString("MENU_UPDATE_PLACEHOLDER_SIMPLE") );
 		
 		this.menuItemGenerateDelete.setText( langRB.getString("MENU_GENERATE_DELETE") );
+		
+		this.menuItemGenerateCreateTable.setText( langRB.getString("MENU_GENERATE_CREATE_TABLE") );
 		
 		this.menuItemImportData.setText( langRB.getString("MENU_IMPORT_DATA") );
 	}

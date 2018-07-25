@@ -63,6 +63,7 @@ public class PathTreeView extends TreeView<Path>
 		itemRoot.setExpanded(true);
 		itemRoot.setGraphic( MyGUITool.createImageView( 16, 16, this.mainCtrl.getImage("file:resources/images/folder.png") ) );
 		this.setRoot(itemRoot);
+		this.chgPathInf.changePath(itemRoot.getValue());
 		this.getSelectionModel().select(itemRoot);
 		//this.setShowRoot(false);
 		

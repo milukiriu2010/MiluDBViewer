@@ -19,7 +19,6 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.application.Application;
-import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 import milu.db.MyDBAbstract;

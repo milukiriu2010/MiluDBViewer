@@ -14,10 +14,12 @@ import java.text.ParseException;
 
 public class MyFileImportCSV extends MyFileImportAbstract 
 {
+	private File file = null;
 	private BufferedReader br = null;
 	@Override
 	public void open(File file) throws FileNotFoundException, IOException
 	{
+		this.file = file;
 		this.br = new BufferedReader(new FileReader(file));
 	}
 
@@ -41,6 +43,7 @@ public class MyFileImportCSV extends MyFileImportAbstract
 		{
 			this.progressInf.setMsg("...");
 		}
+		long fileSize = this.file.length();
 		int i = 0;
 		String line = null;
 		while ( (line = this.br.readLine()) != null )
@@ -92,6 +95,11 @@ public class MyFileImportCSV extends MyFileImportAbstract
 			}
 			this.dataLst.add(dataRow);
 			i++;
+			if ( this.progressInf != null )
+			{
+				this.progressInf.addProgress( this.assignedSize/fileSize*line.length() );
+				this.progressInf.setMsg( String.valueOf(i) );
+			}
 		}
 		
 	}

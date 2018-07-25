@@ -674,6 +674,26 @@ public class SQLTextArea extends TextArea
 		return sqlBagLst;
 	}
 	
+	public List<SQLBag> getSQLBagLst( SQLBag.COMMAND cmdType )
+	{
+		List<SQLBag> sqlBagLst = new ArrayList<>();
+		String strSQL = this.getSQL();
+		SQLBag sqlBag = new SQLBag();
+		sqlBag.setSQL(strSQL);
+		if ( cmdType == SQLBag.COMMAND.QUERY )
+		{
+			sqlBag.setCommand(SQLBag.COMMAND.QUERY);
+			sqlBag.setType(SQLBag.TYPE.SELECT);
+		}
+		else if ( cmdType == SQLBag.COMMAND.TRANSACTION )
+		{
+			sqlBag.setCommand(SQLBag.COMMAND.TRANSACTION);
+			sqlBag.setType(SQLBag.TYPE.UNKNOWN_TRANSACTION);
+		}
+		sqlBagLst.add(sqlBag);
+		return sqlBagLst;
+	}
+	
 	/**************************************************
 	 * Override from ChangeLangInterface
 	 ************************************************** 

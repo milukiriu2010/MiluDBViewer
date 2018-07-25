@@ -10,7 +10,8 @@ public class GenerateSQLFactory
 		INSERT_BY_SIMPLE_WITHOUT_COMMENT,
 		UPDATE_BY_NAME,
 		UPDATE_BY_SIMPLE,
-		DELETE
+		DELETE,
+		CREATE_TABLE
 	}
 
 	public static GenerateSQLAbstract getInstance( TYPE type )
@@ -43,6 +44,10 @@ public class GenerateSQLFactory
 		else if ( TYPE.DELETE.equals(type) )
 		{
 			gsAbs = new GenerateSQLDelete();
+		}
+		else if ( TYPE.CREATE_TABLE.equals(type) )
+		{
+			gsAbs = new GenerateSQLCreateTable();
 		}
 		
 		return gsAbs;

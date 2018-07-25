@@ -35,6 +35,8 @@ public class ImportTaskPreviewDB extends Task<Exception>
 	private final double MAX = 100.0;
 	private double progress = 0.0;
 	
+	private ExecSQLAbstract  execSQLAbs = null;
+	
 	// ImportTaskPreviewInterface
 	@Override
 	public void setImportPreviewInterface(ImportPreviewInterface impPreViewInf) 
@@ -89,11 +91,11 @@ public class ImportTaskPreviewDB extends Task<Exception>
 		sqlBag.setCommand(SQLBag.COMMAND.QUERY);
 		sqlBag.setType(SQLBag.TYPE.SELECT);
 		
-		ExecSQLAbstract  execSQLAbs = 
+		this.execSQLAbs = 
 				new ExecSQLFactory().createFactory( sqlBag, myDBAbsSrc, appConf, this, MAX );
 		try
 		{
-			execSQLAbs.exec( fetchMax, fetchPos );
+			this.execSQLAbs.exec( fetchMax, fetchPos );
 			
 			return taskEx;
 		}
@@ -168,5 +170,9 @@ public class ImportTaskPreviewDB extends Task<Exception>
 	@Override
 	public void cancelProc()
 	{
+		if ( this.execSQLAbs != null )
+		{
+			this.execSQLAbs.cancel();
+		}
 	}
 }

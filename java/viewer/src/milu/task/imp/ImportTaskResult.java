@@ -34,7 +34,8 @@ public class ImportTaskResult extends Task<Exception>
 	private Map<String,Object> mapObj = null;
 	
 	private final double MAX = 100.0;
-	private double progress = 0.0;
+	private double progress  = 0.0;
+	private boolean isCancel = false;
 	
 	public void setImportResultInterface( ImportResultInterface impResultInf )
 	{
@@ -136,6 +137,10 @@ public class ImportTaskResult extends Task<Exception>
 		List<List<Object>> ngDataLst = new ArrayList<>();
 		for ( List<Object> preLst : dataFilterLst )
 		{
+			if ( this.isCancel == true )
+			{
+				break;
+			}
 			ExecSQLAbstract  execSQLAbsIns = 
 				new ExecSQLFactory().createPreparedFactory( sqlBagIns, myDBAbs, appConf, preLst );
 			((ExecSQLTransactionPrepared)execSQLAbsIns).setColTypeNameLst(colTypeNameLst);
@@ -209,5 +214,6 @@ public class ImportTaskResult extends Task<Exception>
 	@Override
 	public void cancelProc()
 	{
+		this.isCancel = true;
 	}
 }

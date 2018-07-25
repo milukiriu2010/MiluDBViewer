@@ -23,7 +23,6 @@ import javafx.scene.control.ToolBar;
 
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.stage.FileChooser;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.AnchorPane;
 import javafx.concurrent.Task;
@@ -55,6 +54,7 @@ public class DBSqlScriptTab extends Tab
 		ActionInterface,
 		SQLExecInterface,
 		SQLExplainInterface,
+		SQLExecWithoutParseInterface,
 		CopyTableInterface,
 		DirectionSwitchInterface,
 		ProcInterface,
@@ -99,6 +99,19 @@ public class DBSqlScriptTab extends Tab
 	
 	// Thread Pool
 	private ExecutorService service = Executors.newSingleThreadExecutor();
+	
+	enum SQLPARSE
+	{
+		WITH_PARSE,
+		WITHOUT_PARSE
+	}
+	
+	enum SQLTYPE
+	{
+		QUERY,
+		TRANS,
+		ANY
+	}
 	
 	public DBSqlScriptTab( DBView dbView )
 	{
@@ -218,7 +231,7 @@ public class DBSqlScriptTab extends Tab
 		this.labelExecTimeSQL.setText( String.format( "%,d", nanoSec ) + "nsec" );
 	}
 	
-	private void execTask( ExecTaskFactory.FACTORY_TYPE factoryType )
+	private void execTask( ExecTaskFactory.FACTORY_TYPE factoryType, DBSqlScriptTab.SQLPARSE sqlParse, DBSqlScriptTab.SQLTYPE sqlType )
 	{
 		long startTime = System.nanoTime();
 		MyDBAbstract myDBAbs = this.dbView.getMyDBAbstract();
@@ -262,7 +275,27 @@ public class DBSqlScriptTab extends Tab
 		// remove Tab "SQL Result"
 		this.tabPane.getTabs().removeAll(this.tabPane.getTabs());
 		
+		// SQL List for Exec
+		/*
 		List<SQLBag> sqlBagLst = this.textAreaSQL.getSQLBagLst();
+		this.setCount( sqlBagLst.size() );
+		*/
+		List<SQLBag> sqlBagLst = null;
+		if ( sqlParse == DBSqlScriptTab.SQLPARSE.WITH_PARSE )
+		{
+			sqlBagLst = this.textAreaSQL.getSQLBagLst();
+		}
+		else if ( sqlParse == DBSqlScriptTab.SQLPARSE.WITHOUT_PARSE )
+		{
+			if ( sqlType == DBSqlScriptTab.SQLTYPE.QUERY )
+			{
+				sqlBagLst = this.textAreaSQL.getSQLBagLst( SQLBag.COMMAND.QUERY );
+			}
+			else if ( sqlType == DBSqlScriptTab.SQLTYPE.TRANS )
+			{
+				sqlBagLst = this.textAreaSQL.getSQLBagLst( SQLBag.COMMAND.TRANSACTION );
+			}
+		}
 		this.setCount( sqlBagLst.size() );
 		
 		Task<Exception> task =
@@ -363,14 +396,28 @@ public class DBSqlScriptTab extends Tab
 	@Override
 	public void execSQL( Event event )
 	{
-		this.execTask(ExecTaskFactory.FACTORY_TYPE.SCRIPT);
+		this.execTask( ExecTaskFactory.FACTORY_TYPE.SCRIPT, DBSqlScriptTab.SQLPARSE.WITH_PARSE, DBSqlScriptTab.SQLTYPE.ANY );
 	}
 	
 	// SQLExplainInterface
 	@Override
 	public void explainSQL( Event event )
 	{
-		this.execTask(ExecTaskFactory.FACTORY_TYPE.EXPLAIN);
+		this.execTask( ExecTaskFactory.FACTORY_TYPE.EXPLAIN, DBSqlScriptTab.SQLPARSE.WITH_PARSE, DBSqlScriptTab.SQLTYPE.ANY );
+	}
+	
+	// SQLExecWithoutParseInterface
+	@Override
+	public void execSQLQuery( Event event )
+	{
+		this.execTask( ExecTaskFactory.FACTORY_TYPE.SCRIPT, DBSqlScriptTab.SQLPARSE.WITHOUT_PARSE, DBSqlScriptTab.SQLTYPE.QUERY );
+	}
+	
+	// SQLExecWithoutParseInterface
+	@Override
+	public void execSQLTrans( Event event )
+	{
+		this.execTask( ExecTaskFactory.FACTORY_TYPE.SCRIPT, DBSqlScriptTab.SQLPARSE.WITHOUT_PARSE, DBSqlScriptTab.SQLTYPE.TRANS );
 	}
 	
 	// CopyTableInterface
@@ -556,6 +603,7 @@ public class DBSqlScriptTab extends Tab
 	@Override	
 	public void changeLang()
 	{
+		((ChangeLangInterface)this.toolBar).changeLang();
 		this.textAreaSQL.changeLang();
 	}
 	

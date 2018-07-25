@@ -73,6 +73,10 @@ public class ExecSQLFactory extends ExecSQLFactoryAbstract {
 		{
 			execSQLAbs = new ExecSQLTransaction();
 		}
+		else if ( SQLBag.TYPE.UNKNOWN_TRANSACTION.equals(sqlBag.getType()) )
+		{
+			execSQLAbs = new ExecSQLTransaction();
+		}
 		else
 		{
 			return null;

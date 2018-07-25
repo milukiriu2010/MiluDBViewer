@@ -60,6 +60,12 @@ public class MyFileImportExcel extends MyFileImportAbstract
 		{
 			this.progressInf.setMsg("...");
 		}
+		int lastRowNum = this.sheet.getLastRowNum()+1;
+		double assignedSizeDiv = 0.0;
+		if ( lastRowNum != 0 )
+		{
+			assignedSizeDiv = this.assignedSize/lastRowNum;
+		}
 		int i = 0;
 		for ( Row row : this.sheet )
 		{
@@ -111,6 +117,11 @@ public class MyFileImportExcel extends MyFileImportAbstract
 			}
 			this.dataLst.add(dataRow);
 			i++;
+			if ( this.progressInf != null )
+			{
+				this.progressInf.addProgress(assignedSizeDiv);
+				this.progressInf.setMsg( i + "/" + lastRowNum );
+			}
 		}
 	}
 
