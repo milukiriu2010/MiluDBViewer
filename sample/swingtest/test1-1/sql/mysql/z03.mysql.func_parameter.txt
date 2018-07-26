@@ -1,0 +1,5 @@
+SELECT ORDINAL_POSITION, PARAMETER_MODE, PARAMETER_NAME, DTD_IDENTIFIER
+FROM information_schema.parameters
+WHERE specific_name = 'CalcIncome';
+
+

@@ -505,10 +505,15 @@ public class SQLTextArea extends TextArea
 			return strSQL;
 		}
 		
-		// cut the last ";"
-		while ( strSQL.charAt(strSQL.length()-1) == ';' )
+		int semiColonCnt = MyStringTool.getCharCount( strSQL, ";" );
+		
+		if ( semiColonCnt <= 1 )
 		{
-			strSQL = strSQL.substring( 0, strSQL.length()-1 );
+			// cut the last ";"
+			while ( strSQL.charAt(strSQL.length()-1) == ';' )
+			{
+				strSQL = strSQL.substring( 0, strSQL.length()-1 );
+			}
 		}
 		return strSQL;
 	}

@@ -1,1 +1,5 @@
 psql -U milu -d miludb2
+
+psql -U milu -d miludb2 -f dellstore2-normal-1.0.sql
+
+psql -U milu -d miludb2 -f world.sql

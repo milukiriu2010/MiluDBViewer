@@ -177,6 +177,14 @@ public class InitialLoadDriver extends InitialLoadAbstract
 		driverTemplateUrlMap.put( DriverClassConst.CLASS_NAME_CASSANDRA1, "jdbc:c*:datastax//[host][:9042]/[keyspace][?consistencyLevel=ONE|ANY|...][&compression=LZ4|SNAPPY]" );
 		driverReferenceUrlMap.put( DriverClassConst.CLASS_NAME_CASSANDRA1, "https://github.com/zhicwu/cassandra-jdbc-driver" );
 		
+		// SQLite
+		List<String>  driverPathLstSQLite = new ArrayList<>();
+		driverPathLstSQLite.add( "file:lib/sqlite/sqlite-jdbc-3.23.1.jar" );
+		
+		driverMap.put( DriverClassConst.CLASS_NAME_SQLITE, driverPathLstSQLite );
+		driverTemplateUrlMap.put( DriverClassConst.CLASS_NAME_SQLITE, "jdbc:sqlite:filename" );
+		driverReferenceUrlMap.put( DriverClassConst.CLASS_NAME_SQLITE, "https://github.com/xerial/sqlite-jdbc" );
+		
 		// --------------------------------------------------
 		// Load Driver
 		// --------------------------------------------------

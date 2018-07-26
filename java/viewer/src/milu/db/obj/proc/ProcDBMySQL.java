@@ -30,11 +30,6 @@ public class ProcDBMySQL extends ProcDBAbstract
 		{
 			while ( rs.next() )
 			{
-				/*
-				Map<String, String> mapView = new HashMap<String,String>();
-				mapView.put( "procName", rs.getString("name") );
-				this.procLst.add( mapView );
-				*/
 				SchemaEntity procEntity = SchemaEntityFactory.createInstance( rs.getString("name"), SchemaEntity.SCHEMA_TYPE.PROC );
 				procEntityLst.add( procEntity );				
 			}
@@ -46,6 +41,15 @@ public class ProcDBMySQL extends ProcDBAbstract
 	@Override
 	protected String listSQL(String schemaName) 
 	{
+		// -----------------------------------------
+		// https://ocelot.ca/blog/blog/2017/08/22/no-more-mysql-proc-in-mysql-8-0/
+		// -----------------------------------------
+		// MySQL 8.0
+		//   maybe, these views should be used. 
+		//     information_schema.routines
+		//     information_schema.parameters
+		// -----------------------------------------
+		
 		String sql = 
 			" select distinct \n" +
 			"   name \n"       +

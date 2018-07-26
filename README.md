@@ -26,6 +26,15 @@
 (2) $ cd <<your path>>
 (3) $ ./MiluDBViewer***.sh
 
+# Checked DB
+(1) Cassandra 3.9.0
+(2) MySQL 5.7.20
+(3) Oracle 12c Release2/11g Release2
+(4) PostgreSQL 10.4/10.1
+(5) SQLite 3.23.1
+(6) Microsoft SQLServer 2017
+(7) MongoDB 3.6.5
+
 # Features
 
 ## Copy data vertically
