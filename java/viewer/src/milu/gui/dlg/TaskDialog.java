@@ -107,7 +107,7 @@ public class TaskDialog extends Dialog<Boolean>
 			{
 				((ProgressInterface)this.task).cancelProc();
 			}
-			future.cancel(true);
+			//future.cancel(true);
 			this.getDialogPane().getScene().getWindow().hide();
 			this.close();
 		});

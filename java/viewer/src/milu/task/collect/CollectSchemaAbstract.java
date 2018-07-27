@@ -9,6 +9,7 @@ import milu.db.obj.abs.ObjDBInterface;
 import milu.entity.schema.SchemaEntity;
 import milu.entity.schema.SchemaEntityFactory;
 import milu.main.MainController;
+import milu.task.CancelWrapper;
 import milu.task.ProgressInterface;
 
 abstract class CollectSchemaAbstract 
@@ -39,6 +40,8 @@ abstract class CollectSchemaAbstract
 	protected ProgressInterface  progressInf = null;
 	
 	protected double          assignedSize = 0.0;
+	
+	protected CancelWrapper   cancelWrap   = null;
 	
 	void setSchemaType( SchemaEntity.SCHEMA_TYPE schemaType )
 	{
@@ -108,6 +111,11 @@ abstract class CollectSchemaAbstract
 		}
 		this.meEntity = SchemaEntityFactory.createInstance( this.schemaType, this.mainCtrl );
 		this.schemaEntity.addEntity(this.meEntity);
+	}
+	
+	void setCancelWrapper( CancelWrapper cancelWrap )
+	{
+		this.cancelWrap = cancelWrap;
 	}
 	
 	// ---------------------------------------

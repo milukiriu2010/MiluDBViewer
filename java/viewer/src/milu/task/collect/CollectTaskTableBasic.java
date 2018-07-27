@@ -13,6 +13,7 @@ import milu.db.obj.abs.ObjDBInterface;
 import milu.db.obj.abs.AbsDBFactory.FACTORY_TYPE;
 import milu.entity.schema.SchemaEntity;
 import milu.main.MainController;
+import milu.task.CancelWrapper;
 import milu.task.ProgressInterface;
 
 public class CollectTaskTableBasic extends Task<Exception> 
@@ -27,6 +28,7 @@ public class CollectTaskTableBasic extends Task<Exception>
 	private MyDBAbstract   myDBAbs  = null;
 	
 	private double         progress = 0.0;
+	private CancelWrapper  cancelWrap = new CancelWrapper();
 	
 	// CollectTaskInterface
 	@Override
@@ -106,6 +108,10 @@ public class CollectTaskTableBasic extends Task<Exception>
 			int schemaEntityLstSize = schemaEntityLst.size();
 			for ( int i = 0; i < schemaEntityLstSize; i++ )
 			{
+				if ( this.cancelWrap.getIsCancel() == true )
+				{
+					break;
+				}
 				SchemaEntity schemaEntity = schemaEntityLst.get(i);
 				
 				double assignedSize = MAX/schemaEntityLstSize/factorySchemaMap.size();
@@ -113,12 +119,17 @@ public class CollectTaskTableBasic extends Task<Exception>
 				( 
 					(factoryType,schemaType)->
 					{
+						if ( this.cancelWrap.getIsCancel() == true )
+						{
+							return;
+						}
 						CollectSchemaFactoryAbstract csfAbs = CollectSchemaFactoryCreator.createFactory( CollectSchemaFactoryCreator.FACTORY_TYPE.CREATE_ME );
 						CollectSchemaAbstract csAbs = 
 							csfAbs.createInstance( factoryType, schemaType, this.mainCtrl, this.myDBAbs, schemaEntity, null, this, assignedSize );
 						
 						try
 						{
+							csAbs.setCancelWrapper(this.cancelWrap);
 							csAbs.retrieveChildren();
 						}
 						catch ( SQLException sqlEx )
@@ -191,5 +202,6 @@ public class CollectTaskTableBasic extends Task<Exception>
 	@Override
 	public void cancelProc()
 	{
+		this.cancelWrap.setIsCancel(true);
 	}
 }

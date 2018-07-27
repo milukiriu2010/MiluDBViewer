@@ -27,6 +27,10 @@ public class CollectSchemaTable extends CollectSchemaAbstract
 		double progressDiv = this.assignedSize/entityLstSize;
 		for ( int i = 0; i < entityLstSize; i++ )
 		{
+			if ( this.cancelWrap != null && this.cancelWrap.getIsCancel() == true )
+			{
+				break;
+			}
 			SchemaEntity childEntity = entityLst.get(i);
 			String objName = childEntity.getName();
 			List<Map<String,String>>  definitionLst = this.objDBAbs.selectDefinition( schemaName, objName ); 

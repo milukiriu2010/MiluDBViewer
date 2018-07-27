@@ -10,6 +10,7 @@ import milu.db.obj.abs.AbsDBFactory;
 import milu.db.obj.abs.AbsDBFactory.FACTORY_TYPE;
 import milu.entity.schema.SchemaEntity;
 import milu.main.MainController;
+import milu.task.CancelWrapper;
 import milu.task.ProgressInterface;
 
 public class CollectTaskTableNoSchema extends Task<Exception> 
@@ -24,6 +25,7 @@ public class CollectTaskTableNoSchema extends Task<Exception>
 	private MyDBAbstract   myDBAbs  = null;
 	
 	private double         progress = 0.0;
+	private CancelWrapper  cancelWrap = new CancelWrapper();
 	
 	// CollectTaskInterface
 	@Override
@@ -91,12 +93,17 @@ public class CollectTaskTableNoSchema extends Task<Exception>
 			( 
 				(factoryType,schemaType)->
 				{
+					if ( this.cancelWrap.getIsCancel() == true )
+					{
+						return;
+					}
 					CollectSchemaFactoryAbstract csfAbs = CollectSchemaFactoryCreator.createFactory( CollectSchemaFactoryCreator.FACTORY_TYPE.CREATE_ME );
 					CollectSchemaAbstract csAbs = 
 						csfAbs.createInstance( factoryType, schemaType, this.mainCtrl, this.myDBAbs, rootEntity, null, this, assignedSize );
 					
 					try
 					{
+						csAbs.setCancelWrapper(this.cancelWrap);
 						csAbs.retrieveChildren();
 					}
 					catch ( SQLException sqlEx )
@@ -161,5 +168,6 @@ public class CollectTaskTableNoSchema extends Task<Exception>
 	@Override
 	public void cancelProc()
 	{
+		this.cancelWrap.setIsCancel(true);
 	}
 }
