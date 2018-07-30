@@ -7,6 +7,7 @@ import java.util.HashMap;
 
 import net.sf.jsqlparser.schema.Table;
 import net.sf.jsqlparser.statement.select.LateralSubSelect;
+import net.sf.jsqlparser.statement.select.ParenthesisFromItem;
 import net.sf.jsqlparser.statement.select.SubJoin;
 import net.sf.jsqlparser.statement.select.SubSelect;
 import net.sf.jsqlparser.statement.select.TableFunction;
@@ -109,5 +110,10 @@ public class TableFromItemVisitor implements AnalyzeFromItemVisitor
 		// TODO Auto-generated method stub
 
 	}
+	
+	@Override
+	public void visit(ParenthesisFromItem arg0) {
+		// TODO Auto-generated method stub
 
+	}
 }

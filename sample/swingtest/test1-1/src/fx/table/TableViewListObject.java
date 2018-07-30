@@ -5,6 +5,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.text.ParseException;
 
 import javafx.scene.Group;
 import javafx.scene.Scene;
@@ -15,7 +18,6 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextInputControl;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableCell;
@@ -39,7 +41,7 @@ public class TableViewListObject extends Application
 	private List<List<Object>> dataLst = new ArrayList<>();
 	private ObservableList<List<Object>> obsDataLst = null;
 	
-	private List<Integer>  selectedRowLst = new ArrayList<>();
+	//private List<Integer>  selectedRowLst = new ArrayList<>();
 	
 	final HBox hb = new HBox();
 	
@@ -65,6 +67,7 @@ public class TableViewListObject extends Application
         this.tableView.setPrefHeight(300);
         this.tableView.getSelectionModel().setSelectionMode( SelectionMode.MULTIPLE );
         this.tableView.getSelectionModel().setCellSelectionEnabled( true );
+        this.tableView.setEditable(true);
         //this.tableView.setRowFactory(null);
         
         this.setTableColumnWithData();
@@ -86,12 +89,15 @@ public class TableViewListObject extends Application
         	(event)->
         	{
         		List<Object> dataRow = new ArrayList<>();
-        		dataRow.add( Integer.valueOf(this.dataLst.size()+1) );
+        		dataRow.add( Integer.valueOf(this.obsDataLst.size()+1) );
         		dataRow.add( addFirstName.getText() );
         		dataRow.add( addLastName.getText() );
         		dataRow.add( addAge.getText() );
         		dataRow.add( new Date() );
-        		//this.dataLst.add(dataRow);
+        		/*
+        		this.dataLst.add(dataRow);
+        		this.obsDataLst = FXCollections.observableArrayList(this.dataLst);
+        		*/
         		this.obsDataLst.add(dataRow);
         		
                 addFirstName.clear();
@@ -212,6 +218,56 @@ public class TableViewListObject extends Application
 				}
 			);
 			tableCol.setGraphic(label);
+			final int ifinal = i;
+			tableCol.setOnEditCommit
+			((t)->{
+				System.out.println( "setOnEditCommit:" + t.getNewValue() );
+				//ObservableList<List<Object>> dataInLst = t.getTableView().getItems();
+				int rowID = t.getTablePosition().getRow();
+				List<Object> dataRow = this.obsDataLst.get(rowID);
+				Object data = dataRow.get(ifinal);
+				System.out.println( data.getClass().toString() );
+				if ( data instanceof Integer )
+				{
+					dataRow.set( ifinal, Integer.valueOf(t.getNewValue().toString()) );
+				}
+				else if ( data instanceof String )
+				{
+					dataRow.set( ifinal, t.getNewValue() );
+				}
+				else if ( data instanceof java.util.Date )
+				{
+					DateFormat dateFmt = new SimpleDateFormat( "yyyy-MM-dd HH:mm:ss" );
+					try
+					{
+						dataRow.set( ifinal, dateFmt.parse(t.getNewValue().toString()) );
+					}
+					catch ( ParseException parseEx )
+					{
+						
+					}
+				}
+				else
+				{
+					dataRow.set( ifinal, t.getNewValue() );
+				}
+				/*
+				TableColumn<List<Object>,Object> tableColEdited = t.getTableColumn();
+				tableColEdited.setCellValueFactory((p)->{
+					List<Object> x = p.getValue();
+					if ( x != null )
+					{
+						Object obj = x.get( ifinal );
+						tableColEdited.setStyle( "-fx-background-color: #ffffcc;" );
+						return new SimpleObjectProperty<Object>( obj );
+					}
+					else
+					{
+						return new SimpleObjectProperty<Object>( "<NULL>" );
+					}
+				});
+				*/
+			});
 			
 			//tableCol.setSortable(false);
 			this.setContextMenu(tableCol);
@@ -238,10 +294,7 @@ public class TableViewListObject extends Application
 					}					
 				}
 			);
-			if ( i == 0 )
-			{
-				tableCol.setCellFactory( p->new EditingCell(this) );
-			}
+			tableCol.setCellFactory( p->new EditingCell() );
 			this.tableView.getColumns().add(tableCol);
 		}
 		
@@ -276,7 +329,7 @@ public class TableViewListObject extends Application
 		
 		tblColumn.setContextMenu(tblColumnContextMenu);
 	}
-	
+	/*
 	public void selectRecord( int id, MouseEvent event )
 	{
 		if ( event.isShiftDown() )
@@ -293,11 +346,21 @@ public class TableViewListObject extends Application
 		tableView.getSelectionModel().clearSelection();
 		this.selectedRowLst.forEach( (rowId)->{System.out.println("rowId:"+rowId);tableView.getSelectionModel().select(rowId);} );
 	}
+	*/
 	
+	// It seems "EditingCell" is created by every column.
 	class EditingCell extends TableCell<List<Object>, Object>
 	{
+		private int changedCnt = 0;
+		private Object objBak  = null;
+		
 		private TextInputControl textInputCtrl = null;
 		
+		public EditingCell()
+		{
+			//TableColumn<List<Object>,Object> tableCol = this.getTableColumn();
+		}
+		/*
 		public EditingCell( TableViewListObject app )
 		{
 			this.addEventFilter
@@ -312,7 +375,7 @@ public class TableViewListObject extends Application
 				}
 			);
 		}
-		
+		*/
 		/*
 		 * (non-Javadoc)
 		 * @see javafx.scene.control.TableCell#startEdit()
@@ -340,7 +403,7 @@ public class TableViewListObject extends Application
 		{
 			super.cancelEdit();
 			
-			setText((String)getItem());
+			setText(getItem().toString());
 			setGraphic(null);
 		}
 		
@@ -352,19 +415,51 @@ public class TableViewListObject extends Application
 		{
 			super.updateItem(item, empty);
 			
-            if (empty) {
+			if ( this.changedCnt == 0 && this.objBak == null )
+			{
+				this.objBak = item;
+			}
+			
+			if ( item != null )
+			{
+				System.out.println( "updateItem:" + this.hashCode() + ":" + getString() + ":" + item.toString() );
+			}
+			else
+			{
+				System.out.println( "updateItem:" + this.hashCode() + ":" + getString() + ":NULL" );
+			}
+			
+            if (empty) 
+            {
                 setText(null);
                 setGraphic(null);
-            } else {
-                if (isEditing()) {
-                    if (textInputCtrl != null) {
+            } 
+            else 
+            {
+                if (isEditing()) 
+                {
+                    if (textInputCtrl != null) 
+                    {
                     	textInputCtrl.setText(getString());
                     }
                     setText(null);
                     setGraphic(textInputCtrl);
-                } else {
-                    setText(getString());
+                   	setStyle(null);
+                } 
+                else 
+                {
+                	String str = getString();
+                    setText(str);
                     setGraphic(null);
+                    if ( changedCnt > 0 )
+                    {
+                    	setStyle("-fx-background-color: #66ff66;");
+                    }
+                    if ( objBak != null && objBak.equals(item) == false )
+                    {
+                    	System.out.println( "Changed..." );
+                    	this.changedCnt++;
+                    }
                 }
             }
 		}
@@ -398,7 +493,7 @@ public class TableViewListObject extends Application
 	                    if (!arg2)
 	                    {
 	        				// To copy data, open an edit cell.
-	        				// Do not change the cell data, no matter what an user inputs
+	        				// Do not change the cell data, no matter what a user inputs
 	                        commitEdit(textInputCtrl.getText());
 	                    }
 	                }
