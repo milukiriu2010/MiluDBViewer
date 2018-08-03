@@ -29,6 +29,10 @@ public class MyDBFactory
 			{
 				myDBAbs = new MyDBMySQL();
 			}
+			else if ( DriverClassConst.CLASS_NAME_MARIADB.val().equals(driverShim.getDriverClassName()) )
+			{
+				myDBAbs = new MyDBMySQL();
+			}
 			else if 
 			( 
 				DriverClassConst.CLASS_NAME_CASSANDRA1.val().equals(driverShim.getDriverClassName()) ||

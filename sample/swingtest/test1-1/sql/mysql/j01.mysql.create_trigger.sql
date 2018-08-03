@@ -51,6 +51,7 @@ BEGIN
       , COUNT(*)
     FROM sales
   GROUP BY product_name;
+END;
 
 -------------------------------------------------------------------
 

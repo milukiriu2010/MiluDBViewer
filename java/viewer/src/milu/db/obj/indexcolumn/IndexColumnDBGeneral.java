@@ -20,6 +20,23 @@ public class IndexColumnDBGeneral extends IndexColumnDBAbstract {
 		DatabaseMetaData dm = this.myDBAbs.getMetaData();
 		try
 		(
+			ResultSet        rs = dm.getPrimaryKeys( null, schemaName, tableName );
+		)
+		{
+			while ( rs.next() )
+			{
+				if ( indexName.equals(rs.getString("PK_NAME")) == false )
+				{
+					continue;
+				}				
+				Map<String, String> mapColumn = new HashMap<String,String>();
+				mapColumn.put( "columnName", rs.getString("COLUMN_NAME") );
+				this.indexColumnLst.add( mapColumn );
+			}
+		}
+		
+		try
+		(
 			ResultSet        rs = dm.getIndexInfo( null, schemaName, tableName, false, false );
 		)
 		{
@@ -35,8 +52,8 @@ public class IndexColumnDBGeneral extends IndexColumnDBAbstract {
 				mapColumn.put( "clusteringOrder", asc_or_desc.equals("A") ? "asc":"desc" );
 				this.indexColumnLst.add( mapColumn );
 			}
-			return this.getEntityLst();
 		}
+		return this.getEntityLst();
 	}
 
 	@Override

@@ -38,6 +38,7 @@ public class FKDBFactory implements ObjDBFactory
 		else
 		{
 			return null;
+			//fkDBAbs = new FKDBGeneral();
 		}
 		
 		fkDBAbs.setMyDBAbstract(myDBAbs);

@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import net.sf.jsqlparser.schema.Table;
 import net.sf.jsqlparser.statement.select.FromItemVisitor;
 import net.sf.jsqlparser.statement.select.LateralSubSelect;
+import net.sf.jsqlparser.statement.select.ParenthesisFromItem;
 import net.sf.jsqlparser.statement.select.SubJoin;
 import net.sf.jsqlparser.statement.select.SubSelect;
 import net.sf.jsqlparser.statement.select.TableFunction;
@@ -110,4 +111,10 @@ public class ExampleFromItemVisitor implements FromItemVisitor
 
 	}
 
+	// 1.3
+	@Override
+	public void visit(ParenthesisFromItem parenthesisFromItem) {
+		System.out.println( "FromItemVisitor:ParenthesisFromItem:" + parenthesisFromItem );
+
+	}
 }

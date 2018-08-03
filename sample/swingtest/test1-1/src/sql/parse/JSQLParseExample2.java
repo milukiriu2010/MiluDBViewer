@@ -449,7 +449,10 @@ public class JSQLParseExample2 extends Application
         if (fromItem instanceof SubJoin)
         {
         	processAlias( ((SubJoin)fromItem).getAlias(), level+1, sb );
-        	processJoin( ((SubJoin)fromItem).getJoin(), level+1, sb );
+        	// 1.2
+        	//processJoin( ((SubJoin)fromItem).getJoin(), level+1, sb );
+        	// 1.3
+        	((SubJoin)fromItem).getJoinList().forEach((subJoin)->processJoin( subJoin, level+1, sb ));
         	processFromItem( ((SubJoin)fromItem).getLeft(), level+1, sb );
         } 
         else if (fromItem instanceof SubSelect)

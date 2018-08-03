@@ -20,6 +20,29 @@ public class IndexDBGeneral extends IndexDBAbstract
 		DatabaseMetaData dm = this.myDBAbs.getMetaData();
 		try
 		(
+			ResultSet        rs = dm.getPrimaryKeys( null, schemaName, tableName );
+		)
+		{
+			String oldIndexName = "";
+			while ( rs.next() )
+			{
+				Map<String, String> dataRow = new HashMap<String,String>();
+				String indexName = rs.getString("PK_NAME");
+				if ( indexName.equals(oldIndexName) )
+				{
+					continue;
+				}
+				oldIndexName = indexName;
+				dataRow.put( "indexName"    , indexName );
+				System.out.println( rs.getString("PK_NAME") );
+				dataRow.put( "is_unique"    , "t" );
+				dataRow.put( "is_primary"   , "t" );
+				this.indexLst.add( dataRow );
+			}
+		}
+		
+		try
+		(
 			ResultSet        rs = dm.getIndexInfo( null, schemaName, tableName, false, false );
 		)
 		{

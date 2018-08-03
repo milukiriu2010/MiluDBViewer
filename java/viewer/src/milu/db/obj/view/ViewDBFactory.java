@@ -37,7 +37,7 @@ public class ViewDBFactory implements ObjDBFactory
 		}
 		else
 		{
-			return null;
+			viewDBAbs = new ViewDBGeneral();
 		}
 		
 		viewDBAbs.setMyDBAbstract(myDBAbs);

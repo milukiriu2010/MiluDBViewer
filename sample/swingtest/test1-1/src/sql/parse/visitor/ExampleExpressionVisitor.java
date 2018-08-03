@@ -32,6 +32,7 @@ import net.sf.jsqlparser.expression.TimeKeyExpression;
 import net.sf.jsqlparser.expression.TimeValue;
 import net.sf.jsqlparser.expression.TimestampValue;
 import net.sf.jsqlparser.expression.UserVariable;
+import net.sf.jsqlparser.expression.ValueListExpression;
 import net.sf.jsqlparser.expression.WhenClause;
 import net.sf.jsqlparser.expression.operators.arithmetic.Addition;
 import net.sf.jsqlparser.expression.operators.arithmetic.BitwiseAnd;
@@ -435,6 +436,13 @@ public class ExampleExpressionVisitor implements ExpressionVisitor {
 	@Override
 	public void visit(NotExpression arg0) {
 		System.out.println( "NotExpression:" + arg0 );
+
+	}
+
+	// 1.3
+	@Override
+	public void visit(ValueListExpression arg0) {
+		System.out.println( "ValueListExpression:" + arg0 );
 
 	}
 

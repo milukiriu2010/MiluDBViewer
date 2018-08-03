@@ -10,7 +10,8 @@ public enum DriverClassConst
 	CLASS_NAME_SQLSERVER("com.microsoft.sqlserver.jdbc.SQLServerDriver"),
 	CLASS_NAME_SQLITE("org.sqlite.JDBC"),
 	CLASS_NAME_MONGODB1("mongodb.jdbc.MongoDriver"),
-	CLASS_NAME_H2("org.h2.Driver")
+	CLASS_NAME_H2("org.h2.Driver"),
+	CLASS_NAME_MARIADB("org.mariadb.jdbc.Driver")
 	;
 	
 	private String val = null;

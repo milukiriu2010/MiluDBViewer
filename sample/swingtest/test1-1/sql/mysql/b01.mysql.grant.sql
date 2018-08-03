@@ -21,7 +21,8 @@ grant alter on *.* to 'milu'@'localhost';
 grant references on *.* to 'milu'@'localhost';
 grant index on miludb.* to 'milu'@'localhost';
 
-grant execute on *.* to 'milu'@'%';
+grant execute on *.* to 'milu'@'localhost';
+-- # grant execute on *.* to 'milu'@'%';
 
 flush privileges;
 

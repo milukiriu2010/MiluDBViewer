@@ -27,7 +27,7 @@ public abstract class ViewDBAbstract implements ObjDBInterface
 	
 	// select View Definition
 	@Override
-	abstract public List<Map<String,String>> selectDefinition( String schameName, String viewName ) throws SQLException;
+	abstract public List<Map<String,String>> selectDefinition( String schemaName, String viewName ) throws SQLException;
 	
 	// SQL for View Definition
 	abstract protected String definitionSQL( String schemaName, String viewName );
