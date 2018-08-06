@@ -18,10 +18,12 @@ abstract class CollectSchemaAbstract
 	
 	protected MainController  mainCtrl = null;
 	
-	// ---------------------------------------
+	// ----------------------------------------
+	// SchemaEntityEachSchema
+	// ----------------------------------------
 	// -[ROOT]
 	//   -[SCHEMA] <=
-	// ---------------------------------------
+	// ----------------------------------------
 	protected SchemaEntity    schemaEntity = null;
 	
 	
@@ -95,6 +97,9 @@ abstract class CollectSchemaAbstract
 	//   -[SCHEMA]
 	//     -[ROOT_TABLE] => me
 	// ---------------------------------------
+	// factoryType
+	//   AbsDBFactory.FACTORY_TYPE.TABLE
+	//   AbsDBFactory.FACTORY_TYPE.VIEW
 	void createMeEntity( AbsDBFactory.FACTORY_TYPE factoryType )
 	{
 		ObjDBFactory objDBFactory = AbsDBFactory.getFactory(factoryType);
@@ -109,7 +114,16 @@ abstract class CollectSchemaAbstract
 			//System.out.println( "createMeEntity:obj:null" );
 			return;
 		}
+		// schemaType
+		//   SchemaEntity.SCHEMA_TYPE.ROOT_TABLE
+		//   SchemaEntity.SCHEMA_TYPE.ROOT_VIEW		
 		this.meEntity = SchemaEntityFactory.createInstance( this.schemaType, this.mainCtrl );
+		// ----------------------------------------
+		// SchemaEntityEachSchema
+		// ----------------------------------------
+		// -[ROOT]
+		//   -[SCHEMA] 
+		// ----------------------------------------
 		this.schemaEntity.addEntity(this.meEntity);
 	}
 	

@@ -16,12 +16,27 @@ public class CollectSchemaTable extends CollectSchemaAbstract
 		{
 			return;
 		}
+		// ----------------------------------------
+		// this.schemaEntity =
+		//   SchemaEntityEachSchema
+		// ----------------------------------------
+		// -[ROOT]
+		//   -[SCHEMA] <=
+		// ----------------------------------------
 		String schemaName = null;
 		if ( this.schemaEntity != null )
 		{
 			schemaName = this.schemaEntity.getName();
 		}
 		List<SchemaEntity> entityLst = this.objDBAbs.selectEntityLst( schemaName );
+		// ----------------------------------------
+		// this.meEntity =
+		//   SchemaEntityRootTable
+		// ----------------------------------------
+		// -[ROOT]
+		//   -[SCHEMA]
+		//     -[ROOT_TABLE]  <=
+		// ----------------------------------------		
 		this.meEntity.addEntityAll(entityLst);
 		int entityLstSize = entityLst.size();
 		double progressDiv = this.assignedSize/entityLstSize;
@@ -31,6 +46,15 @@ public class CollectSchemaTable extends CollectSchemaAbstract
 			{
 				break;
 			}
+			// ----------------------------------------
+			// childEntity =
+			//   SchemaEntityEachTable
+			// ----------------------------------------
+			// -[ROOT]
+			//   -[SCHEMA]
+			//     -[ROOT_TABLE]
+			//       -[TABLE]    <=
+			// ----------------------------------------		
 			SchemaEntity childEntity = entityLst.get(i);
 			String objName = childEntity.getName();
 			List<Map<String,String>>  definitionLst = this.objDBAbs.selectDefinition( schemaName, objName ); 

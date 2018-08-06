@@ -32,9 +32,12 @@ public class TableDBOracle extends TableDBAbstract
 		
 		String sql = this.definitionSQL( schameName, tableName );
 		
+		/*
 		System.out.println( " -- selectDefinition(Table) ------------" );
 		System.out.println( sql );
 		System.out.println( " ---------------------------------------" );
+		*/
+		
 		try
 		(
 			Statement stmt = this.myDBAbs.createStatement();

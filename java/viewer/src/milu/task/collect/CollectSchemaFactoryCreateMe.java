@@ -26,6 +26,7 @@ public class CollectSchemaFactoryCreateMe extends CollectSchemaFactoryAbstract {
 		if ( AbsDBFactory.FACTORY_TYPE.TABLE.equals(factoryType) )
 		{
 			csAbs = new CollectSchemaTable();
+			//csAbs = new CollectSchemaTableWithExecutorService();
 		}
 		else if (
 			//( AbsDBFactory.FACTORY_TYPE.VIEW.equals(factoryType) ) ||
@@ -40,12 +41,19 @@ public class CollectSchemaFactoryCreateMe extends CollectSchemaFactoryAbstract {
 			csAbs = new CollectSchemaSkip();
 		}
 		
+		// schemaType
+		//   SchemaEntity.SCHEMA_TYPE.ROOT_TABLE
+		//   SchemaEntity.SCHEMA_TYPE.ROOT_VIEW
 		csAbs.setSchemaType(schemaType);
 		csAbs.setMainController(mainCtrl);
 		csAbs.setMyDBAbstract(myDBAbs);
+		// SchemaEntityRoot
 		csAbs.setSchemaEntity(schemaEntity);
 		csAbs.setProgressInterface(progressInf);
 		csAbs.setAssignedSize(assignedSize);
+		// factoryType
+		//   AbsDBFactory.FACTORY_TYPE.TABLE
+		//   AbsDBFactory.FACTORY_TYPE.VIEW
 		csAbs.createMeEntity(factoryType);
 		return csAbs;
 	}
