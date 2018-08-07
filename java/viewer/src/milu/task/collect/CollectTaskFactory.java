@@ -115,29 +115,35 @@ public class CollectTaskFactory
 		
 		if ( AbsDBFactory.FACTORY_TYPE.TABLE.equals(factoryType) )
 		{
+			// get list & definition "TABLE"
 			if ( CollectDataType.LIST_AND_DEFINITION.equals(dataType) )
 			{
 				task = new CollectTaskRootObject();
 			}
+			// get list "TABLE"
 			else
 			{
 				task = new CollectTaskObj1Level();
 			}
 		}
+		// get list "INDEX"
 		else if ( AbsDBFactory.FACTORY_TYPE.INDEX.equals(factoryType) )
 		{
 			task = new CollectTaskObj2Level();
 		}
+		// get list "COLUMN" for "INDEX"
 		else if ( AbsDBFactory.FACTORY_TYPE.INDEX_COLUMN.equals(factoryType) )
 		{
 			task = new CollectTaskObj3Level();
 		}
 		else if ( AbsDBFactory.FACTORY_TYPE.VIEW.equals(factoryType) )
 		{
+			// get list & definition "VIEW"
 			if ( CollectDataType.LIST_AND_DEFINITION.equals(dataType) )
 			{
 				task = new CollectTaskRootObject();
 			}
+			// get list "VIEW"
 			else
 			{
 				task = new CollectTaskObj1Level();

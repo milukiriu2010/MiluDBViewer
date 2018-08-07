@@ -10,15 +10,20 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
 import java.util.concurrent.ExecutionException;
 
+import milu.db.obj.abs.AbsDBFactory;
+import milu.db.obj.abs.ObjDBFactory;
+import milu.db.obj.abs.ObjDBInterface;
+import milu.db.obj.index.IndexDBAbstract;
 import milu.entity.schema.SchemaEntity;
 import milu.entity.schema.SchemaEntityFactory;
 
+// same speed as no thread pool. umm.
 public class CollectSchemaTableWithExecutorService extends CollectSchemaAbstract 
 {
 	@Override
 	void retrieveChildren() throws SQLException
 	{
-		ExecutorService executorService = Executors.newFixedThreadPool(2);
+		ExecutorService executorService = Executors.newFixedThreadPool(10);
 		try
 		{
 			this.execRetrieveChildren(executorService);
@@ -68,10 +73,6 @@ public class CollectSchemaTableWithExecutorService extends CollectSchemaAbstract
 		List<Callable<String>> callableLst = new ArrayList<>();
 		for ( int i = 0; i < entityLstSize; i++ )
 		{
-			if ( this.cancelWrap != null && this.cancelWrap.getIsCancel() == true )
-			{
-				break;
-			}
 			// ----------------------------------------
 			// childEntity =
 			//   SchemaEntityEachTable
@@ -83,11 +84,18 @@ public class CollectSchemaTableWithExecutorService extends CollectSchemaAbstract
 			// ----------------------------------------		
 			SchemaEntity childEntity = entityLst.get(i);
 			String objName = childEntity.getName();
+			
+			if ( this.cancelWrap != null && this.cancelWrap.getIsCancel() == true )
+			{
+				break;
+			}
 
 			Callable<String> callable = ()->{
+				this.progressInf.addProgress(progressDiv);
+				this.progressInf.setMsg( schemaNameFinal + "." + objName );
 				if ( this.cancelWrap != null && this.cancelWrap.getIsCancel() == true )
 				{
-					return "<NULL>";
+					return objName;
 				}
 				List<Map<String,String>>  definitionLst = this.objDBAbs.selectDefinition( schemaNameFinal, objName ); 
 				childEntity.setDefinitionlst(definitionLst);
@@ -96,8 +104,7 @@ public class CollectSchemaTableWithExecutorService extends CollectSchemaAbstract
 					"schema[" + schemaNameFinal + 
 					"]schemaType[" + schemaType + 
 					"]obj[" + objName + 
-					"]assignedSize[" + this.assignedSize + 
-					"]progressDiv[" + progressDiv + 
+					"]Thread[" + Thread.currentThread().getName() + 
 					"]" 
 				);
 				
@@ -111,6 +118,30 @@ public class CollectSchemaTableWithExecutorService extends CollectSchemaAbstract
 				SchemaEntity rootIndexEntity = SchemaEntityFactory.createInstance( SchemaEntity.SCHEMA_TYPE.ROOT_INDEX, this.mainCtrl );
 				childEntity.addEntity(rootIndexEntity);
 				
+				/*
+				// ---------------------------------------
+				// -[ROOT]
+				//   -[SCHEMA]
+				//     -[ROOT_TABLE]
+				//       -[TABLE]
+				//         -[INDEX_ROOT]
+				//           -[INDEX]    => add
+				// ---------------------------------------
+				ObjDBFactory objDBFactory = AbsDBFactory.getFactory( AbsDBFactory.FACTORY_TYPE.INDEX );
+				if ( objDBFactory == null )
+				{
+					return null;
+				}
+				ObjDBInterface objDBInf = objDBFactory.getInstance(this.myDBAbs);
+				if ( objDBInf == null )
+				{
+					return null;
+				}
+				
+				List<SchemaEntity> indexEntityLst = ((IndexDBAbstract)objDBInf).selectEntityLst( schemaNameFinal, objName );
+				childEntity.addEntityAll(indexEntityLst);
+				*/
+				
 				return objName;
 			};
 			callableLst.add(callable);
@@ -122,22 +153,25 @@ public class CollectSchemaTableWithExecutorService extends CollectSchemaAbstract
 			futureLst.forEach((future)->{
 				try
 				{
-					this.progressInf.addProgress(progressDiv);
-					this.progressInf.setMsg( schemaNameFinal + "." + future.get() );
+					String objName = future.get();
+					System.out.println( "Future: " + objName );
 				}
 				catch ( InterruptedException intEx )
 				{
 					//throw new RuntimeException( intEx );
+					intEx.printStackTrace();
 				}
 				catch ( ExecutionException execEx )
 				{
 					//throw new RuntimeException( execEx );
+					execEx.printStackTrace();
 				}
 			});
 		}
 		catch ( InterruptedException intEx )
 		{
 			//throw intEx;
+			intEx.printStackTrace();
 		}
 	}
 

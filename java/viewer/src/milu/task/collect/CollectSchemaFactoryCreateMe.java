@@ -26,6 +26,16 @@ public class CollectSchemaFactoryCreateMe extends CollectSchemaFactoryAbstract {
 		if ( AbsDBFactory.FACTORY_TYPE.TABLE.equals(factoryType) )
 		{
 			csAbs = new CollectSchemaTable();
+			
+			// --------------------------------------------------------------
+			// same speed as single thread
+			// --------------------------------------------------------------
+			// -[ROOT]
+			//   -[SCHEMA]
+			//     -[ROOT_TABLE]
+			//       -[TABLE]
+			//         -[INDEX_ROOT] => it doesn't work well at some tables
+			// --------------------------------------------------------------
 			//csAbs = new CollectSchemaTableWithExecutorService();
 		}
 		else if (

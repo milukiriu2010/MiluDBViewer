@@ -81,13 +81,6 @@ public class CollectTaskObj1Level extends Task<Exception>
 			{
 				return null;
 			}
-			/*
-			// Start to retrieve, if no child objects, 
-			if ( this.selectedSchemaEntity.getEntityLst().size() != 0 )
-			{
-				return null;
-			}
-			*/
 			
 			System.out.println( "Schema retriving..." );
 			ObjDBFactory objDBFactory = AbsDBFactory.getFactory( this.factoryType );

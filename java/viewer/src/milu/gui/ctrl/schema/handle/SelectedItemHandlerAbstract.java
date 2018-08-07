@@ -505,40 +505,20 @@ abstract public class SelectedItemHandlerAbstract
 	
 	protected void setValueProperty( Task<Exception> collectTask )
 	{
-		collectTask.valueProperty().addListener
-		(
-			(obs,oldVal,ex)->
+		collectTask.valueProperty().addListener((obs,oldVal,ex)->{
+			if ( ex == null )
 			{
-				if ( ex == null )
-				{
-					return;
-				}
-				else if ( ex instanceof SQLException )
-				{
-					SQLException sqlEx = (SQLException)ex;
-					MyGUITool.showException( this.dbView.getMainController(), "conf.lang.gui.common.MyAlert", "TITLE_EXEC_QUERY_ERROR", sqlEx, myDBAbs );
-					/*
-					ResourceBundle langRB = this.dbView.getMainController().getLangResource("conf.lang.gui.common.MyAlert");
-					MyAlertDialog alertDlg = new MyAlertDialog( AlertType.WARNING, this.dbView.getMainController() );
-					alertDlg.setHeaderText( langRB.getString("TITLE_EXEC_QUERY_ERROR") );
-		    		alertDlg.setTxtExp( sqlEx, myDBAbs );
-		    		alertDlg.showAndWait();
-		    		alertDlg = null;
-		    		*/
-				}
-				else
-				{
-					MyGUITool.showException( this.dbView.getMainController(), "conf.lang.gui.common.MyAlert", "TITLE_MISC_ERROR", ex );
-					/*
-					ResourceBundle langRB = this.dbView.getMainController().getLangResource("conf.lang.gui.common.MyAlert");
-					MyAlertDialog alertDlg = new MyAlertDialog( AlertType.WARNING, this.dbView.getMainController() );
-					alertDlg.setHeaderText( langRB.getString("TITLE_MISC_ERROR") );
-		    		alertDlg.setTxtExp( ex );
-		    		alertDlg.showAndWait();
-		    		alertDlg = null;
-		    		*/
-				}
+				return;
 			}
-		);
+			else if ( ex instanceof SQLException )
+			{
+				SQLException sqlEx = (SQLException)ex;
+				MyGUITool.showException( this.dbView.getMainController(), "conf.lang.gui.common.MyAlert", "TITLE_EXEC_QUERY_ERROR", sqlEx, myDBAbs );
+			}
+			else
+			{
+				MyGUITool.showException( this.dbView.getMainController(), "conf.lang.gui.common.MyAlert", "TITLE_MISC_ERROR", ex );
+			}
+		});
 	}
 }

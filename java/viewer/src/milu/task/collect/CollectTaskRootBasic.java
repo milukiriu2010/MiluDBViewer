@@ -157,7 +157,7 @@ public class CollectTaskRootBasic extends Task<Exception>
 			this.updateValue(taskEx);
 			this.setMsg("");
 			long endTime = System.nanoTime();
-			System.out.println( "Task finish:" + String.format( "%,d nsec",(endTime-startTime) ) );
+			System.out.println( "Task finish:" + Thread.currentThread().getName() + ":" + String.format( "%,d nsec",(endTime-startTime) ) );
 		}
 	}
 	

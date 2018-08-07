@@ -69,7 +69,8 @@ public class DBView extends Stage
 	private BorderPane brdPane = new BorderPane();
 	
 	// Thread Pool
-	private ExecutorService service = Executors.newSingleThreadExecutor();	
+	private ExecutorService service = Executors.newSingleThreadExecutor();
+	//private ExecutorService service = Executors.newFixedThreadPool(3);
 	
 	// Message from Task
 	private Label  lblMsg = new Label();
