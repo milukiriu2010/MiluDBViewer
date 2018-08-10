@@ -648,6 +648,20 @@ public class SQLTextArea extends TextArea
 		
 	}
 	
+	public List<SQLBag> getSQLBagLst() throws JSQLParserException
+	{
+		SQLParse sqlParse = new SQLParse();
+		String sqlStr = this.getSelectedText();
+		if ( sqlStr.length() == 0 )
+		{
+			sqlStr = this.getText();
+		}
+		sqlParse.setStrSQL(sqlStr);
+		sqlParse.parseStatements();
+		return sqlParse.getSQLBagLst();
+	}
+	
+	/*
 	public List<SQLBag> getSQLBagLst()
 	{
 		SQLParse sqlParse = new SQLParse();
@@ -678,6 +692,7 @@ public class SQLTextArea extends TextArea
 		
 		return sqlBagLst;
 	}
+	*/
 	
 	public List<SQLBag> getSQLBagLst( SQLBag.COMMAND cmdType )
 	{

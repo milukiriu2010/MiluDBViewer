@@ -28,6 +28,8 @@ import javafx.scene.layout.AnchorPane;
 import javafx.concurrent.Task;
 import javafx.event.Event;
 
+import net.sf.jsqlparser.JSQLParserException;
+
 import milu.ctrl.sql.parse.SQLBag;
 import milu.db.MyDBAbstract;
 import milu.gui.ctrl.common.inf.ActionInterface;
@@ -276,14 +278,19 @@ public class DBSqlScriptTab extends Tab
 		this.tabPane.getTabs().removeAll(this.tabPane.getTabs());
 		
 		// SQL List for Exec
-		/*
-		List<SQLBag> sqlBagLst = this.textAreaSQL.getSQLBagLst();
-		this.setCount( sqlBagLst.size() );
-		*/
 		List<SQLBag> sqlBagLst = null;
 		if ( sqlParse == DBSqlScriptTab.SQLPARSE.WITH_PARSE )
 		{
-			sqlBagLst = this.textAreaSQL.getSQLBagLst();
+			try
+			{
+				sqlBagLst = this.textAreaSQL.getSQLBagLst();
+			}
+			catch ( JSQLParserException parseEx )
+			{
+				this.tabPane.getTabs().add(new Tab("..."));
+				this.showException( parseEx, startTime );
+				return;
+			}
 		}
 		else if ( sqlParse == DBSqlScriptTab.SQLPARSE.WITHOUT_PARSE )
 		{
@@ -371,7 +378,15 @@ public class DBSqlScriptTab extends Tab
 		
 		ResourceBundle langRB = this.dbView.getMainController().getLangResource("conf.lang.gui.ctrl.query.DBSqlTab");
 		
-		Label     labelTitle = new Label( langRB.getString("TITLE_EXEC_QUERY_ERROR") );
+		Label     labelTitle = new Label();
+		if ( ex instanceof JSQLParserException )
+		{
+			labelTitle.setText(langRB.getString("TITLE_EXEC_PARSE_ERROR"));
+		}
+		else
+		{
+			labelTitle.setText(langRB.getString("TITLE_EXEC_QUERY_ERROR"));
+		}
 		
 		String    strMsg     = ex.getMessage();
 		TextArea  txtMsg     = new TextArea( strMsg );
@@ -535,15 +550,6 @@ public class DBSqlScriptTab extends Tab
 	{
 		MainController mainCtrl = this.dbView.getMainController();
 		AppConf appConf = mainCtrl.getAppConf();
-		/*
-		FileChooser fc = new FileChooser();
-		// Initial Directory
-		if ( appConf.getInitDirSQLFile().isEmpty() != true )
-		{
-			fc.setInitialDirectory( new File(appConf.getInitDirSQLFile()) );
-		}
-		File file = fc.showOpenDialog(this.getTabPane().getScene().getWindow());
-		*/
 		File file = MyGUITool.fileOpenDialog( appConf.getInitDirSQLFile(), null, null, this.getTabPane() );
 		if ( file == null )
 		{
@@ -562,15 +568,6 @@ public class DBSqlScriptTab extends Tab
 	{
 		MainController mainCtrl = this.dbView.getMainController();
 		AppConf appConf = mainCtrl.getAppConf();
-		/*
-		FileChooser fc = new FileChooser();
-		// Initial Directory
-		if ( appConf.getInitDirSQLFile().isEmpty() != true )
-		{
-			fc.setInitialDirectory( new File(appConf.getInitDirSQLFile()) );
-		}
-		File file = fc.showSaveDialog(this.getTabPane().getScene().getWindow());
-		*/
 		File file = MyGUITool.fileSaveDialog( appConf.getInitDirSQLFile(), null, this.getTabPane() );
 		if ( file == null )
 		{

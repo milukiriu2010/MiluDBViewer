@@ -16,6 +16,14 @@ import java.sql.Driver;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
+import java.security.InvalidAlgorithmParameterException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+
+
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBar.ButtonData;
@@ -725,56 +733,6 @@ public class DBSettingDialog extends Dialog<MyDBAbstract>
 		
 		try
 		{
-			/*
-			MyJsonHandleAbstract myJsonAbs =
-				new MyJsonHandleFactory().createInstance(MyDBAbstract.class);
-			myJsonAbs.open(path.toString());
-			Object obj = myJsonAbs.load();
-			if ( obj instanceof MyDBAbstract )
-			{
-				MyDBAbstract myDBAbsTmp = (MyDBAbstract)obj;
-				myDBAbsTmp.setPassword(this.mainCtrl.getSecretKey());
-				System.out.println( "Class[" + myDBAbsTmp.getClass().toString() + "]" );
-				System.out.println( "User [" + myDBAbsTmp.getUsername() + "]" );
-				System.out.println( "URL  [" + myDBAbsTmp.getUrl() + "]" );
-				System.out.println( "JDBC [" + myDBAbsTmp.getDriveShim().getDriverClassName() + "]" );
-				myDBAbsTmp.getDBOpts().forEach( (k,v)->System.out.println("DBOpts:k["+k+"]v["+v+"]") );
-				myDBAbsTmp.getDBOptsSpecial().forEach( (k,v)->System.out.println("DBOptsSpeicial:k["+k+"]v["+v+"]") );
-				myDBAbsTmp.getDBOptsAux().forEach( (k,v)->System.out.println("DBOptsAux:k["+k+"]v["+v+"]") );
-				
-				// select "MyDBAbstract" of the same "DriverShim" in the "DBType 'ComboBox'"
-				MyDBAbstract myDBAbsCandidate =
-					this.comboBoxDBType.getItems().stream()
-						.filter( item -> item.getDriveShim().getDriverClassName().equals(myDBAbsTmp.getDriveShim().getDriverClassName()) )
-						.findAny()
-						.orElse(null);
-				
-				if ( myDBAbsCandidate != null )
-				{
-					this.comboBoxDBType.valueProperty().removeListener( this.changeListener );
-					// select DBType
-					this.comboBoxDBType.getSelectionModel().select(myDBAbsCandidate);
-					// set "User Name"
-					this.usernameTextField.setText(myDBAbsTmp.getUsername());
-					// set "Password"
-					this.passwordTextField.setText(myDBAbsTmp.getPassword());
-					// set "URL"
-					myDBAbsCandidate.setUrl(myDBAbsTmp.getUrl(),false);
-					// set "dbOpts"
-					myDBAbsCandidate.setDBOpts(myDBAbsTmp.getDBOpts());
-					// set "dbOptsSpecial"
-					myDBAbsCandidate.setDBOptsSpecial(myDBAbsTmp.getDBOptsSpecial());
-					// set "dbOptsAux"
-					myDBAbsCandidate.setDBOptsAux(myDBAbsTmp.getDBOptsAux());
-					System.out.println( "myDBAbsCandidate:" + myDBAbsCandidate );
-					System.out.println( "myDBAbsCandidate:url:" + myDBAbsCandidate.getUrl() + "|" );
-					myDBAbsCandidate.getDBOpts().forEach( (k,v)->System.out.println("myDBAbsCandidate:DBOpts:k["+k+"]v["+v+"]") );
-					
-					this.setUrlPane(myDBAbsCandidate);
-					this.comboBoxDBType.valueProperty().addListener( this.changeListener );
-				}
-			}
-			*/
 			MyJsonEachAbstract<MyDBAbstract> myJsonAbs =
 				MyJsonEachFactory.<MyDBAbstract>getInstance(MyJsonEachFactory.factoryType.MY_DB_ABS);
 			MyDBAbstract myDBAbsTmp = myJsonAbs.load(new File(path.toString()));
@@ -782,7 +740,21 @@ public class DBSettingDialog extends Dialog<MyDBAbstract>
 			{
 				return;
 			}
-			myDBAbsTmp.setPassword(this.mainCtrl.getSecretKey());
+			
+			try
+			{
+				myDBAbsTmp.setPassword(this.mainCtrl.getSecretKey());
+			}
+			catch ( NoSuchAlgorithmException 			| 
+					NoSuchPaddingException   			|
+					InvalidKeyException      			|
+					InvalidAlgorithmParameterException  |
+					BadPaddingException                 |
+					IllegalBlockSizeException  decryptEx )
+			{
+				MyGUITool.showException( this.mainCtrl, "conf.lang.gui.common.MyAlert", "TITLE_PASSWORD_DECRYPT_ERROR", decryptEx );
+			}
+			
 			System.out.println( "Class[" + myDBAbsTmp.getClass().toString() + "]" );
 			System.out.println( "User [" + myDBAbsTmp.getUsername() + "]" );
 			System.out.println( "URL  [" + myDBAbsTmp.getUrl() + "]" );
@@ -806,7 +778,14 @@ public class DBSettingDialog extends Dialog<MyDBAbstract>
 				// set "User Name"
 				this.usernameTextField.setText(myDBAbsTmp.getUsername());
 				// set "Password"
-				this.passwordTextField.setText(myDBAbsTmp.getPassword());
+				if ( myDBAbsTmp.getPassword() != null )
+				{
+					this.passwordTextField.setText(myDBAbsTmp.getPassword());
+				}
+				else
+				{
+					this.passwordTextField.setText("");
+				}
 				// set "URL"
 				myDBAbsCandidate.setUrl(myDBAbsTmp.getUrl(),false);
 				// set "dbOpts"

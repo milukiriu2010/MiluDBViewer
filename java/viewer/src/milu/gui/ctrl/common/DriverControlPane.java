@@ -233,14 +233,6 @@ public class DriverControlPane extends Pane
 		this.driverPathListView.setCellFactory(	(callback)->new EditListCell() );
 		
 		this.btnAddJar.setOnAction((event)->{
-			/*
-			FileChooser fc = new FileChooser();
-			if ( "".equals(appConf.getInitDirJDBC()) == false )
-			{
-				fc.setInitialDirectory(new File(appConf.getInitDirJDBC()));
-			}
-			List<File> fileLst = fc.showOpenMultipleDialog(this.getScene().getWindow());
-			*/
 			List<File> fileLst = MyGUITool.fileOpenMultiDialog( appConf.getInitDirJDBC(), null, this );
 			if ( fileLst == null )
 			{
@@ -312,85 +304,86 @@ public class DriverControlPane extends Pane
 			}
 		});
 		
-		this.btnLoad.setOnAction
-		(
-			(event)->
+		this.btnLoad.setOnAction((event)->{
+			// -------------------------------------------------
+			// At first, check already registered to add driver
+			// -------------------------------------------------
+			if ( this.driverEdit == null )
 			{
-				// -------------------------------------------------
-				// At first, check already registered to add driver
-				// -------------------------------------------------
-				if ( this.driverEdit == null )
-				{
-					/*
-					Driver driver = 
-						DriverManager.drivers()
-							.filter( DriverShim.class::isInstance )
-							.map( DriverShim.class::cast )
-							.filter( d -> d.getDriverClazzName().contains(this.driverClassNameTxt.getText()) )
-							.findAny()
-							.orElse(null);
-					*/
-					
-					// show alert, if already driver is loaded.
-					//if ( driver != null )
-					if (LoadDriver.isAlreadyLoadCheck(this.driverClassNameTxt.getText()))
-					{
-						MyGUITool.showMsg( this.mainCtrl, "conf.lang.gui.common.MyAlert", "TITLE_NOT_ALLOWED_DUPLICATE" );
-						return;
-					}
-				}
+				/*
+				Driver driver = 
+					DriverManager.drivers()
+						.filter( DriverShim.class::isInstance )
+						.map( DriverShim.class::cast )
+						.filter( d -> d.getDriverClazzName().contains(this.driverClassNameTxt.getText()) )
+						.findAny()
+						.orElse(null);
+				*/
 				
-				// -------------------------------------------------
-				// At fist, delete driver to edit driver
-				// -------------------------------------------------
-				if ( this.driverEdit != null )
+				// show alert, if already driver is loaded.
+				//if ( driver != null )
+				if (LoadDriver.isAlreadyLoadCheck(this.driverClassNameTxt.getText()))
 				{
-					try
-					{
-						DriverManager.deregisterDriver(this.driverEdit);
-					}
-					catch ( SQLException sqlEx )
-					{
-						MyGUITool.showException( this.mainCtrl, "conf.lang.gui.common.MyAlert", "TITLE_MISC_ERROR", sqlEx );
-					}
-				}
-				
-				// -----------------------------------------------
-				// add driver
-				// -----------------------------------------------
-				DriverShim driver = null;
-				try
-				{
-					driver = LoadDriver.loadDriver( this.driverClassNameTxt.getText(), this.driverPathListView.getItems() );
-					driver.setTemplateUrl(this.driverTemplateUrlTxt.getText());
-					driver.setReferenceUrl(this.driverReferenceUrlTxt.getText());
-					/*
-					MyJsonHandleAbstract myJsonAbs =
-						new MyJsonHandleFactory().createInstance(DriverShim.class);
-					myJsonAbs.open(AppConst.DRIVER_DIR.val()+driver.getDriverClassName()+".json");
-					myJsonAbs.save(driver);
-					*/
-					MyJsonEachAbstract<DriverShim> myJsonAbs =
-							MyJsonEachFactory.<DriverShim>getInstance(MyJsonEachFactory.factoryType.DRIVER_SHIM);
-						myJsonAbs.save(new File(AppConst.DRIVER_DIR.val()+driver.getDriverClassName()+".json"),driver);
-				}
-				catch ( Exception ex )
-				{
-					MyGUITool.showException( this.mainCtrl, "conf.lang.gui.common.MyAlert", "TITLE_MISC_ERROR", ex );
-				}
-				finally
-				{
-					if ( this.driverEdit != null )
-					{
-						this.psdInf.driverEdit(driver);
-					}
-					else
-					{
-						this.psdInf.driverAdd(driver);
-					}
+					MyGUITool.showMsg( this.mainCtrl, "conf.lang.gui.common.MyAlert", "TITLE_NOT_ALLOWED_DUPLICATE" );
+					return;
 				}
 			}
-		);
+			
+			// -------------------------------------------------
+			// At fist, delete driver to edit driver
+			// -------------------------------------------------
+			if ( this.driverEdit != null )
+			{
+				try
+				{
+					DriverManager.deregisterDriver(this.driverEdit);
+				}
+				catch ( SQLException sqlEx )
+				{
+					MyGUITool.showException( this.mainCtrl, "conf.lang.gui.common.MyAlert", "TITLE_MISC_ERROR", sqlEx );
+				}
+			}
+			
+			// -----------------------------------------------
+			// add driver
+			// -----------------------------------------------
+			DriverShim driver = null;
+			try
+			{
+				driver = LoadDriver.loadDriver( this.driverClassNameTxt.getText(), this.driverPathListView.getItems() );
+				driver.setTemplateUrl(this.driverTemplateUrlTxt.getText());
+				driver.setReferenceUrl(this.driverReferenceUrlTxt.getText());
+				MyJsonEachAbstract<DriverShim> myJsonAbs =
+						MyJsonEachFactory.<DriverShim>getInstance(MyJsonEachFactory.factoryType.DRIVER_SHIM);
+				myJsonAbs.save(new File(AppConst.DRIVER_DIR.val()+driver.getDriverClassName()+".json"),driver);
+
+				if ( this.driverEdit != null )
+				{
+					this.psdInf.driverEdit(driver);
+				}
+				else
+				{
+					this.psdInf.driverAdd(driver);
+				}
+			}
+			catch ( Exception ex )
+			{
+				MyGUITool.showException( this.mainCtrl, "conf.lang.gui.common.MyAlert", "TITLE_MISC_ERROR", ex );
+			}
+			/*
+			finally
+			{
+				if ( this.driverEdit != null )
+				{
+					this.psdInf.driverEdit(driver);
+				}
+				else
+				{
+					this.psdInf.driverAdd(driver);
+				}
+			}
+			*/
+		});
 		
 		this.btnCancel.setOnAction( (event)->this.psdInf.driverCancel() );
 	}

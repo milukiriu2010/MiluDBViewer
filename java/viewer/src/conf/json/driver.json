@@ -25,6 +25,11 @@
 	  "referenceUrl": "https://dev.mysql.com/doc/connector-j/5.1/en/connector-j-reference-configuration-properties.html"
 	},
 	{
+	  "driverClassName": "org.mariadb.jdbc.Driver",
+	  "tmplateUrl": "jdbc:mariadb://host:3306/dbname",
+	  "referenceUrl": "https://mariadb.com/kb/en/library/about-mariadb-connector-j/"
+	},
+	{
 	  "driverClassName": "oracle.jdbc.driver.OracleDriver",
 	  "tmplateUrl": "jdbc:oracle:thin:@//<host>[:1521]/<service_name>[?internal_logon=sysdba|sysoper]",
 	  "referenceUrl": "https://docs.oracle.com/cd/B28359_01/java.111/b31224/urls.htm"
@@ -43,5 +48,10 @@
 	  "driverClassName": "com.microsoft.sqlserver.jdbc.SQLServerDriver",
 	  "tmplateUrl": "jdbc:sqlserver://[serverName[\\instanceName][:portNumber]][;property\u003dvalue[;property\u003dvalue]]",
 	  "referenceUrl": "https://docs.microsoft.com/en-us/sql/connect/jdbc/building-the-connection-url?view\u003dsql-server-2017"
-	}
+	},
+	{
+	  "driverClassName": "com.ibm.db2.jcc.DB2Driver",
+	  "tmplateUrl": "jdbc:db2://host:5021/database",
+	  "referenceUrl": "https://www.ibm.com/support/knowledgecenter/en/SSEPGG_11.1.0/com.ibm.db2.luw.apdv.java.doc/src/tpc/imjcc_r0052342.html"
+	}	
 ]

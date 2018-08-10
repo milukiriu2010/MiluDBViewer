@@ -4,6 +4,7 @@ public enum DriverNameConst
 {
 	DB_CASSANDRA1("Cassandra(zhicwu)"),
 	DB_CASSANDRA2("Cassandra(adejanovski)"),
+	DB_DB2("DB2"),
 	DB_H2("H2"),
 	DB_MARIADB("MariaDB"),
 	DB_MONGODB1("MongoDB(Unity)"),

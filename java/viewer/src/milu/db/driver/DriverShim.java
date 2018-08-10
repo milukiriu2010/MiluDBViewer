@@ -49,6 +49,7 @@ public class DriverShim implements Driver
 		driverDBMap.put( DriverClassConst.CLASS_NAME_MONGODB1  , DriverNameConst.DB_MONGODB1 );
 		driverDBMap.put( DriverClassConst.CLASS_NAME_H2        , DriverNameConst.DB_H2 );
 		driverDBMap.put( DriverClassConst.CLASS_NAME_MARIADB   , DriverNameConst.DB_MARIADB );
+		driverDBMap.put( DriverClassConst.CLASS_NAME_DB2       , DriverNameConst.DB_DB2 );
 	}
 	
 	public void setDriver(Driver driver)
