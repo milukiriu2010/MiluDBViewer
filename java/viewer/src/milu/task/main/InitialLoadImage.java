@@ -68,6 +68,7 @@ public class InitialLoadImage extends InitialLoadAbstract
 				"file:resources/images/explain.png",
 				"file:resources/images/execQUERY.png",
 				"file:resources/images/execTRANS.png",
+				"file:resources/images/execTRANS_SEMI.png",
 				"file:resources/images/direction.png",
 				"file:resources/images/copy.png",
 				"file:resources/images/copy2.png",

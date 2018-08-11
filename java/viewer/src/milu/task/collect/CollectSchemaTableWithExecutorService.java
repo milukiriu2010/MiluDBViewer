@@ -10,10 +10,6 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
 import java.util.concurrent.ExecutionException;
 
-import milu.db.obj.abs.AbsDBFactory;
-import milu.db.obj.abs.ObjDBFactory;
-import milu.db.obj.abs.ObjDBInterface;
-import milu.db.obj.index.IndexDBAbstract;
 import milu.entity.schema.SchemaEntity;
 import milu.entity.schema.SchemaEntityFactory;
 

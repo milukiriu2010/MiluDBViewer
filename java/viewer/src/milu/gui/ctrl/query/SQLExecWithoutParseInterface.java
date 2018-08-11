@@ -6,4 +6,5 @@ public interface SQLExecWithoutParseInterface
 {
 	public void execSQLQuery( Event event );
 	public void execSQLTrans( Event event );
+	public void execSQLTransSemi( Event event );
 }

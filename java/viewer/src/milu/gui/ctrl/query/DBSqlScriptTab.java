@@ -105,7 +105,8 @@ public class DBSqlScriptTab extends Tab
 	enum SQLPARSE
 	{
 		WITH_PARSE,
-		WITHOUT_PARSE
+		WITHOUT_PARSE,
+		WITHOUT_PARSE_SPLIT_SEMI
 	}
 	
 	enum SQLTYPE
@@ -303,6 +304,17 @@ public class DBSqlScriptTab extends Tab
 				sqlBagLst = this.textAreaSQL.getSQLBagLst( SQLBag.COMMAND.TRANSACTION );
 			}
 		}
+		else if ( sqlParse == DBSqlScriptTab.SQLPARSE.WITHOUT_PARSE_SPLIT_SEMI )
+		{
+			if ( sqlType == DBSqlScriptTab.SQLTYPE.QUERY )
+			{
+				sqlBagLst = this.textAreaSQL.getSQLBagLst( SQLBag.COMMAND.QUERY, ";" );
+			}
+			else if ( sqlType == DBSqlScriptTab.SQLTYPE.TRANS )
+			{
+				sqlBagLst = this.textAreaSQL.getSQLBagLst( SQLBag.COMMAND.TRANSACTION, ":" );
+			}
+		}
 		this.setCount( sqlBagLst.size() );
 		
 		Task<Exception> task =
@@ -433,6 +445,13 @@ public class DBSqlScriptTab extends Tab
 	public void execSQLTrans( Event event )
 	{
 		this.execTask( ExecTaskFactory.FACTORY_TYPE.SCRIPT, DBSqlScriptTab.SQLPARSE.WITHOUT_PARSE, DBSqlScriptTab.SQLTYPE.TRANS );
+	}
+	
+	// SQLExecWithoutParseInterface
+	@Override
+	public void execSQLTransSemi( Event event )
+	{
+		this.execTask( ExecTaskFactory.FACTORY_TYPE.SCRIPT, DBSqlScriptTab.SQLPARSE.WITHOUT_PARSE_SPLIT_SEMI, DBSqlScriptTab.SQLTYPE.TRANS );
 	}
 	
 	// CopyTableInterface
