@@ -11,6 +11,27 @@ import milu.gui.view.DBView;
 public class MyStringTool 
 {
 	// -------------------------------------------------
+	// null      => true
+	// length=0  => true
+	// else      => false
+	// -------------------------------------------------
+	public static boolean isEmpty( String str )
+	{
+		if ( str == null )
+		{
+			return true;
+		}
+		else if ( str.length() == 0 )
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+	
+	// -------------------------------------------------
 	//  10
 	//  10.0
 	//   1.0

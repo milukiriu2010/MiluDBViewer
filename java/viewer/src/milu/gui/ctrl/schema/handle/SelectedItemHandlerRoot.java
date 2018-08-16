@@ -40,36 +40,28 @@ public class SelectedItemHandlerRoot extends SelectedItemHandlerAbstract
 			// execute task
 			this.service.submit( collectTask );
 			
-			collectTask.progressProperty().addListener
-			(
-				(obs,oldVal,newVal)->
+			collectTask.progressProperty().addListener((obs,oldVal,newVal)->{
+				//System.out.println( "CollectTask:Progress[" + obs.getClass() + "]oldVal[" + oldVal + "]newVal[" + newVal + "]" );
+				if ( newVal.doubleValue() == 0.0 )
 				{
-					System.out.println( "CollectTask:Progress[" + obs.getClass() + "]oldVal[" + oldVal + "]newVal[" + newVal + "]" );
-					if ( newVal.doubleValue() == 0.0 )
-					{
-						this.schemaTreeView.setIsLoading(true);
-					}
-					// Task Done.
-					else if ( newVal.doubleValue() == 1.0 )
-					{
-						System.out.println( "CollectTask:Done[" + newVal + "]" );
-						this.addChildren(rootEntity);
-						this.tabPane.getTabs().removeAll(this.tabPane.getTabs());
-						this.schemaTreeView.setIsLoading(false);
-						this.dbView.setBottomMsg(null);
-						this.serviceShutdown();
-					}
+					this.schemaTreeView.setIsLoading(true);
 				}
-			);
+				// Task Done.
+				else if ( newVal.doubleValue() == 1.0 )
+				{
+					System.out.println( "CollectTask:Done[" + newVal + "]" );
+					this.addChildren(rootEntity);
+					this.tabPane.getTabs().removeAll(this.tabPane.getTabs());
+					this.schemaTreeView.setIsLoading(false);
+					this.dbView.setBottomMsg(null);
+					this.serviceShutdown();
+				}
+			});
 			
-			collectTask.messageProperty().addListener
-			(
-				(obs,oldVal,newVal)->
-				{
-					System.out.println( "CollectTask:Message[" + newVal + "]" );
-					this.dbView.setBottomMsg(newVal);
-				}
-			);
+			collectTask.messageProperty().addListener((obs,oldVal,newVal)->{
+				//System.out.println( "CollectTask:Message[" + newVal + "]" );
+				this.dbView.setBottomMsg(newVal);
+			});
 			
 			this.setValueProperty(collectTask);
 		}

@@ -24,10 +24,9 @@ import java.sql.DatabaseMetaData;
 import java.sql.SQLException;
 
 import milu.db.driver.DriverShim;
-
 import milu.entity.schema.SchemaEntity;
-
 import milu.security.MySecurityKey;
+import milu.main.AppConf;
 
 abstract public class MyDBAbstract
 	implements
@@ -86,6 +85,10 @@ abstract public class MyDBAbstract
 	@Expose(serialize = false, deserialize = true)
 	protected SchemaEntity schemaRoot = null;
 	
+	// AppConf
+	@Expose(serialize = false, deserialize = false)
+	protected AppConf appConf = null;
+	
 	public enum UPDATE
 	{
 		WITH,
@@ -121,6 +124,8 @@ abstract public class MyDBAbstract
 	
 	abstract public void processAfterException() throws SQLException;
 	
+	abstract protected void processAfterConnection();
+	
 	/**
 	 * Get Driver URL
 	 ***********************************************
@@ -136,6 +141,8 @@ abstract public class MyDBAbstract
 	abstract public int getDefaultPort();
 	
 	abstract protected void setSchemaRoot();
+	
+	abstract protected void addProp( Properties prop );
 	
 	/***********************************************
 	 * Get DB User name
@@ -361,6 +368,11 @@ abstract public class MyDBAbstract
 		return this.schemaRoot;
 	}
 	
+	public void setAppConf( AppConf appConf )
+	{
+		this.appConf = appConf;
+	}
+	
 	private Properties createProp()
 	{
 		Properties prop = new Properties();
@@ -375,6 +387,8 @@ abstract public class MyDBAbstract
 		}
 		
 		this.dbOpts.forEach( (k,v)->prop.setProperty(k,v) );
+		
+		this.addProp(prop);
 		
 		return prop;
 	}
@@ -424,6 +438,8 @@ abstract public class MyDBAbstract
 		this.conn.setAutoCommit( false );
 		
 		this.setSchemaRoot();
+		
+		this.processAfterConnection();
 	}
 	
 	/**

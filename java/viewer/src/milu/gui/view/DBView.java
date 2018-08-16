@@ -34,6 +34,7 @@ import milu.gui.ctrl.menu.MainToolBar;
 import milu.gui.ctrl.query.SQLExecInterface;
 import milu.gui.ctrl.query.DBSqlScriptTab;
 import milu.gui.dlg.MyAlertDialog;
+import milu.main.AppConf;
 import milu.main.MainController;
 import milu.db.MyDBAbstract;
 import milu.entity.schema.SchemaEntity;
@@ -235,86 +236,59 @@ public class DBView extends Stage
 	
 	private void setAction()
 	{
-		// thread start after opening this window.
-		this.setOnShown
-		(
-			(event)->
+		AppConf appConf = this.mainCtrl.getAppConf();
+		
+		// --------------------------------------------------------------------
+		// start thread to collect database objects after opening this window.
+		// --------------------------------------------------------------------
+		this.setOnShown((event)->{
+			System.out.println( "dbView Shown:" + appConf.isCollectDBObj() );
+			// not collect database objects
+			if ( appConf.isCollectDBObj() == false )
 			{
-				System.out.println( "dbView Shown." );
+				this.endProc();
+				return;
+			}
+			
+			final Task<Exception> collectTask = CollectTaskFactory.getInstance( mainCtrl, myDBAbs );
+			if ( collectTask == null )
+			{
+				return;
+			}
+			// execute task
+			this.service.submit( collectTask );
 				
-				final Task<Exception> collectTask = CollectTaskFactory.getInstance( mainCtrl, myDBAbs );
-				if ( collectTask == null )
+			collectTask.progressProperty().addListener((obs,oldVal,newVal)->{
+				//System.out.println( "CollectTask:Progress[" + obs.getClass() + "]oldVal[" + oldVal + "]newVal[" + newVal + "]" );
+				// Task Done.
+				if ( newVal.doubleValue() == 1.0 )
+				{
+					System.out.println( "CollectTask:Done[" + newVal + "]" );
+					this.endProc();
+					this.setBottomMsg(null);
+				}
+			});
+				
+			// "progressProperty <=> messageProperty" is not synchronized.
+			// It shouldn't call this after "progress = 1.0".
+			collectTask.messageProperty().addListener((obs,oldVal,newVal)->{
+				//System.out.println( "CollectTask:Message[" + newVal + "]" );
+				this.setBottomMsg(newVal);
+			});
+				
+			collectTask.valueProperty().addListener((obs,oldVal,ex)->{
+				if ( ex == null )
 				{
 					return;
 				}
-				// execute task
-				this.service.submit( collectTask );
-				
-				collectTask.progressProperty().addListener
-				(
-					(obs,oldVal,newVal)->
-					{
-						System.out.println( "CollectTask:Progress[" + obs.getClass() + "]oldVal[" + oldVal + "]newVal[" + newVal + "]" );
-						// Task Done.
-						if ( newVal.doubleValue() == 1.0 )
-						{
-							System.out.println( "CollectTask:Done[" + newVal + "]" );
-							this.endProc();
-							this.setBottomMsg(null);
-						}
-					}
-				);
-				
-				// "progressProperty <=> messageProperty" is not synchronized.
-				// It shouldn't call this after "progress = 1.0".
-				collectTask.messageProperty().addListener
-				(
-					(obs,oldVal,newVal)->
-					{
-						System.out.println( "CollectTask:Message[" + newVal + "]" );
-						this.setBottomMsg(newVal);
-					}
-				);
-				
-				collectTask.valueProperty().addListener
-				(
-					(obs,oldVal,ex)->
-					{
-						if ( ex == null )
-						{
-							return;
-						}
-			    		MyGUITool.showException( this.mainCtrl, "conf.lang.gui.common.MyAlert", "TITLE_MISC_ERROR", ex );
-			    	}
-				);
-			}
-		);
+	    		MyGUITool.showException( this.mainCtrl, "conf.lang.gui.common.MyAlert", "TITLE_MISC_ERROR", ex );
+		    });
+		});
 		
 		// shutdown the thread pool on closing this window. 
 		// http://winterbe.com/posts/2015/04/07/java8-concurrency-tutorial-thread-executor-examples/
 		this.setOnCloseRequest((event)->{
 			MyServiceTool.shutdownService(this.service);
-			/*
-			try
-			{
-				System.out.println( "shutdown executor start." );
-				service.shutdown();
-				service.awaitTermination( 3, TimeUnit.SECONDS );
-			}
-			catch ( InterruptedException intEx )
-			{
-				System.out.println( "tasks interrupted" );
-			}
-			finally
-			{
-				if ( !service.isTerminated() )
-				{
-					System.out.println( "executor still working..." );
-				}
-				service.shutdownNow();
-				System.out.println( "executor finished." );
-			}
-			*/
 		});
 		
 		/*

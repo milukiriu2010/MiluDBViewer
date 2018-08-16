@@ -7,6 +7,7 @@ import java.nio.file.Paths;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Map;
+import java.util.Properties;
 import java.util.regex.Pattern;
 
 import milu.db.driver.DriverClassConst;
@@ -60,6 +61,11 @@ public class MyDBMongo extends MyDBAbstract {
 	protected void setSchemaRoot()
 	{
 		this.schemaRoot = SchemaEntityFactory.createInstance( this.url, SchemaEntity.SCHEMA_TYPE.ROOT );
+	}
+
+	@Override
+	protected void processAfterConnection()
+	{
 		System.out.println( "=== after connection ===");
 		if ( DriverClassConst.CLASS_NAME_MONGODB1.val().equals(this.driverShim.getDriverClazzName()))
 		{
@@ -89,5 +95,9 @@ public class MyDBMongo extends MyDBAbstract {
 			}
 		}
 	}
-
+	
+	@Override
+	protected void addProp( Properties prop )
+	{
+	}
 }

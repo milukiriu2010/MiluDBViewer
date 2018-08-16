@@ -61,6 +61,12 @@ final public class AppConf
 	@Expose(serialize = true, deserialize = true)
 	private Integer fetchMax = 100;
 	
+	// collect database objects after connection?
+	//   yes => collect
+	//   no  => skip
+	@Expose(serialize = true, deserialize = true)
+	private Boolean collectDBObj = true;
+	
 	// MySQL - Explain Extended
 	@Expose(serialize = true, deserialize = true)
 	private Boolean mysqlExplainExtended   = false;
@@ -76,6 +82,18 @@ final public class AppConf
 	// Oracle - TNS Admin
 	@Expose(serialize = true, deserialize = true)
 	private String  oracleTnsAdmin = "";
+	
+	// Oracle - v$session.osuser
+	@Expose(serialize = true, deserialize = true)
+	private String  oracleSessionOsuser = "";
+	
+	// Oracle - v$session.machine
+	@Expose(serialize = true, deserialize = true)
+	private String  oracleSessionMachine = "";
+	
+	// Oracle - v$session.program
+	@Expose(serialize = true, deserialize = true)
+	private String  oracleSessionProgram = "";
 	
 	// PostgreSQL - Explain Analyze
 	@Expose(serialize = true, deserialize = true)
@@ -233,6 +251,17 @@ final public class AppConf
 		this.fetchMax = fetchMax;
 	}
 	
+	// collect database objects after connection?
+	public Boolean isCollectDBObj()
+	{
+		return this.collectDBObj;
+	}
+	
+	public void setCollectDBObj( Boolean collectDBObj )
+	{
+		this.collectDBObj = collectDBObj;	
+	}
+	
 	// MySQL - Explain Extended
 	public Boolean getMySQLExplainExtended()
 	{
@@ -279,6 +308,39 @@ final public class AppConf
 		{
 			System.clearProperty("oracle.net.tns_admin");
 		}
+	}
+	
+	// Oracle - v$session.osuser
+	public String getOracleSessionOsuser()
+	{
+		return this.oracleSessionOsuser;
+	}
+	
+	public void setOracleSessionOsuser( String oracleSessionOsuser )
+	{
+		this.oracleSessionOsuser = oracleSessionOsuser;
+	}
+	
+	// Oracle - v$session.machine
+	public String getOracleSessionMachine()
+	{
+		return this.oracleSessionMachine;
+	}
+	
+	public void setOracleSessionMachine( String oracleSessionMachine )
+	{
+		this.oracleSessionMachine = oracleSessionMachine;
+	}
+	
+	// Oracle - v$session.program
+	public String getOracleSessionProgram()
+	{
+		return this.oracleSessionProgram;
+	}
+	
+	public void setOracleSessionProgram( String oracleSessionProgram )
+	{
+		this.oracleSessionProgram = oracleSessionProgram;
 	}
 	
 	// PostgreSQL - Explain Analyze

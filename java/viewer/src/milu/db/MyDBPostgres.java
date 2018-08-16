@@ -2,6 +2,7 @@ package milu.db;
 
 import java.sql.SQLException;
 import java.util.Map;
+import java.util.Properties;
 
 import milu.entity.schema.SchemaEntity;
 import milu.entity.schema.SchemaEntityFactory;
@@ -76,5 +77,15 @@ public class MyDBPostgres extends MyDBAbstract
 	public void setSchemaRoot()
 	{
 		this.schemaRoot = SchemaEntityFactory.createInstance( this.url, SchemaEntity.SCHEMA_TYPE.ROOT );
+	}
+	
+	@Override
+	protected void processAfterConnection()
+	{
+	}
+	
+	@Override
+	protected void addProp( Properties prop )
+	{
 	}
 }

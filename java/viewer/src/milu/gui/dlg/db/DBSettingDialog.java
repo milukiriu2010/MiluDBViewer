@@ -378,11 +378,9 @@ public class DBSettingDialog extends Dialog<MyDBAbstract>
 				try
 				{
 					this.pathTreeView.addNewFile();
-					//event.consume();
 				}
 				catch ( IOException ioEx )
 				{
-					//this.showException(ioEx);
 					MyGUITool.showException( this.mainCtrl, "conf.lang.gui.common.MyAlert", "TITLE_MISC_ERROR", ioEx );
 				}
 			}
@@ -491,11 +489,6 @@ public class DBSettingDialog extends Dialog<MyDBAbstract>
 						Path path = treeItem.getValue();
 						if ( Files.isRegularFile(path) )
 						{
-							/*
-							MyJsonHandleAbstract myJsonAbs =
-									new MyJsonHandleFactory().createInstance(MyDBAbstract.class);
-							myJsonAbs.open(path.toString());
-							*/
 							MyJsonEachAbstract<MyDBAbstract> myJsonAbs =
 									MyJsonEachFactory.<MyDBAbstract>getInstance(MyJsonEachFactory.factoryType.MY_DB_ABS);
 							try
@@ -570,7 +563,6 @@ public class DBSettingDialog extends Dialog<MyDBAbstract>
 			Node node = nodeLstIterator.next();
 			if ( node instanceof UrlPaneAbstract )
 			{
-				//UrlPaneAbstract urlPaneAbs1 = (UrlPaneAbstract)node;
 				this.vBoxConnection.getChildren().remove( node );
 				
 				UrlPaneAbstract urlPaneAbs2 = null;
@@ -619,6 +611,7 @@ public class DBSettingDialog extends Dialog<MyDBAbstract>
 			myDBAbs = this.comboBoxDBType.getValue();
 			myDBAbs.setUsername( this.usernameTextField.getText() );
 			myDBAbs.setPassword( this.passwordTextField.getText() );
+			myDBAbs.setAppConf(this.mainCtrl.getAppConf());
 			
 			// Connect to DB
 			myDBAbs.connect();
@@ -733,6 +726,7 @@ public class DBSettingDialog extends Dialog<MyDBAbstract>
 		
 		try
 		{
+			// create "MyDBAbstract" from Json
 			MyJsonEachAbstract<MyDBAbstract> myJsonAbs =
 				MyJsonEachFactory.<MyDBAbstract>getInstance(MyJsonEachFactory.factoryType.MY_DB_ABS);
 			MyDBAbstract myDBAbsTmp = myJsonAbs.load(new File(path.toString()));
@@ -762,7 +756,7 @@ public class DBSettingDialog extends Dialog<MyDBAbstract>
 			myDBAbsTmp.getDBOpts().forEach( (k,v)->System.out.println("DBOpts:k["+k+"]v["+v+"]") );
 			myDBAbsTmp.getDBOptsSpecial().forEach( (k,v)->System.out.println("DBOptsSpeicial:k["+k+"]v["+v+"]") );
 			myDBAbsTmp.getDBOptsAux().forEach( (k,v)->System.out.println("DBOptsAux:k["+k+"]v["+v+"]") );
-					
+			
 			// select "MyDBAbstract" of the same "DriverShim" in the "DBType 'ComboBox'"
 			MyDBAbstract myDBAbsCandidate =
 				this.comboBoxDBType.getItems().stream()

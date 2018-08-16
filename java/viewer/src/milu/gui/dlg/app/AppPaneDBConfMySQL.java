@@ -134,20 +134,6 @@ public class AppPaneDBConfMySQL extends AppPaneAbstract
 		}
 		
 		// set objects
-		/*
-		VBox vBox = new VBox(2);
-		vBox.getChildren().addAll
-		( 
-			this.lblTitle, 
-			lblExplain,
-			lblExtended,
-			hBoxExtended,
-			lblPartitions,
-			hBoxPartitions,
-			lblFormat, 
-			hBoxFormat 
-		);
-		*/
 		VBox vBoxExplain = new VBox(2);
 		vBoxExplain.getChildren().addAll
 		(

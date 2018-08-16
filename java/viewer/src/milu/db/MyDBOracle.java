@@ -2,9 +2,11 @@ package milu.db;
 
 import java.sql.SQLException;
 import java.util.Map;
+import java.util.Properties;
 
 import milu.entity.schema.SchemaEntity;
 import milu.entity.schema.SchemaEntityFactory;
+import milu.tool.MyStringTool;
 
 /**
  * 
@@ -122,5 +124,45 @@ public class MyDBOracle extends MyDBAbstract
 	public void setSchemaRoot()
 	{
 		this.schemaRoot = SchemaEntityFactory.createInstance( this.url, SchemaEntity.SCHEMA_TYPE.ROOT );
+	}
+	
+	@Override
+	protected void processAfterConnection()
+	{
+	}
+	
+	@Override
+	protected void addProp( Properties prop )
+	{
+		/*
+		prop.put( "v$session.osuser" , "test" );
+		prop.put( "v$session.machine", "abcd" );
+		prop.put( "v$session.program", "test" );
+		*/
+		if ( appConf == null )
+		{
+			return;
+		}
+		
+		// ----------------------------------------------
+		// change value for v$session
+		// ----------------------------------------------
+		//   osuser
+		//   machine
+		//   program
+		// ----------------------------------------------
+		// https://stackoverflow.com/questions/1612657/change-oracle-jdbc-thin-client-identifier
+		if ( MyStringTool.isEmpty(appConf.getOracleSessionOsuser()) == false )
+		{
+			prop.put( "v$session.osuser" , appConf.getOracleSessionOsuser() );
+		}
+		if ( MyStringTool.isEmpty(appConf.getOracleSessionMachine()) == false )
+		{
+			prop.put( "v$session.machine", appConf.getOracleSessionMachine() );
+		}
+		if ( MyStringTool.isEmpty(appConf.getOracleSessionProgram()) == false )
+		{
+			prop.put( "v$session.program", appConf.getOracleSessionProgram() );
+		}
 	}
 }
