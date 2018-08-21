@@ -56,7 +56,13 @@ public class MyFileTool
 	// delete all folders & files under "dir"
 	public static void purgeDirectory( File dir )
 	{
-		for ( File file: dir.listFiles() )
+		File[] files = dir.listFiles();
+		if ( files == null )
+		{
+			return;
+		}
+		
+		for ( File file: files )
 		{
 			file.delete();
 		}
