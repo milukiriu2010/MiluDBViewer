@@ -25,6 +25,18 @@ mac OS High Sierra version 10.13.1
 3. Requirements
 ============================================================
 JRE/JDK 10.0.1 or later
++ JavaFX
+
+**************************************************
+* JavaFX                                         *
+**************************************************
+JavaFX is not included since jdk11.
+https://openjfx.io/openjfx-docs/#install-java
+https://openjfx.io/openjfx-docs/#install-javafx
+
+necessary to set javafx library path
+like
+PATH_TO_FX=C:\Program Files\Java\javafx-sdk-11\lib
 
 ============================================================
 4. Install & Run

@@ -18,6 +18,14 @@
 @rem set NLS_LANG=French_France.AL32UTF8
 @rem set NLS_LANG=Japanese_Japan.AL32UTF8
 
+@rem ==========================================================
+@rem === check JavaFX library path                          ===
+@rem === https://openjfx.io/openjfx-docs/#install-javafx    ===
+@rem === PATH_TO_FX=C:\Program Files\Java\javafx-sdk-11\lib ===
+@rem ==========================================================
+@if "%PATH_TO_FX%" == "" goto no_javafx
+
+
 @rem ============================================
 @rem === start app by java ======================
 @rem ============================================
@@ -38,6 +46,15 @@
 @rem === start app ==============================
 @rem ============================================
 @goto exec
+
+
+@rem ==============================================
+@rem ===  Not Found javafx      ===================
+@rem ==============================================
+:no_javafx
+  @msg "%username%" "necessary to set PATH_TO_FX(javafx library path like C:\Program Files\Java\javafx-sdk-11\lib). see https://openjfx.io/openjfx-docs/#install-javafx"
+  @goto end_batch
+
 
 @rem ==============================================
 @rem ===  Not Found java/javaw  ===================
@@ -70,11 +87,11 @@
   @goto exec
 
 
-@rem ==============================================
-@rem === Start App ================================
-@rem ==============================================
+@rem ==========================================================
+@rem === Start App ============================================
+@rem ==========================================================
 :exec
-  "%MYJAVA%" -classpath %MYCLASSPATH% -jar MiluDBViewer.jar milu.main.MiluDBViewer
+  "%MYJAVA%" --module-path "%PATH_TO_FX%" --add-modules=javafx.controls -classpath %MYCLASSPATH% -jar MiluDBViewer.jar milu.main.MiluDBViewer
   @goto end_batch
 
 :end_batch

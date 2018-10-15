@@ -45,12 +45,29 @@ checkJavaVersion()
 	fi
 }
 
-# ====================================================
-# === start application ==============================
-# ====================================================
+# ==========================================================
+# === start application ====================================
+# === https://openjfx.io/openjfx-docs/#install-javafx    ===
+# === PATH_TO_FX=C:\Program Files\Java\javafx-sdk-11\lib ===
+# ==========================================================
 kickJava()
 {
-	$MYJAVA -classpath $MYCLASSPATH -jar MiluDBViewer.jar milu.main.MiluDBViewer
+	$MYJAVA --module-path $PATH_TO_FX --add-modules=javafx.controls -classpath $MYCLASSPATH -jar MiluDBViewer.jar milu.main.MiluDBViewer
+	exit
+}
+
+@rem ==============================================
+@rem ===  Not Found javafx      ===================
+@rem ==============================================
+noJavaFx()
+{
+	msg="necessary to set PATH_TO_FX(javafx library path like C:\Program Files\Java\javafx-sdk-11\lib). see https://openjfx.io/openjfx-docs/#install-javafx"
+	zenity=`which zenity`
+	if [ -n $zenity ]; then
+		zenity --warning --text="$msg"
+	else
+    	echo $msg
+	fi
 	exit
 }
 
@@ -84,6 +101,15 @@ export MYCLASSPATH=$MYCLASSPATH:$prgdir/lib/jarchivelib/jarchivelib-0.7.1-jar-wi
 # ====================================================
 # export NLS_LANG=French_France.AL32UTF8
 # export NLS_LANG=Japanese_Japan.AL32UTF8
+
+# ==========================================================
+# === check JavaFX library path                          ===
+# === https://openjfx.io/openjfx-docs/#install-javafx    ===
+# === PATH_TO_FX=C:\Program Files\Java\javafx-sdk-11\lib ===
+# ==========================================================
+if [ -z $PATH_TO_FX ]; then
+  noJavaFx
+fi
 
 # ====================================================
 # === start app by java ==============================
