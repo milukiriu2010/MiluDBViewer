@@ -20,8 +20,11 @@ notFoundJava()
 # ====================================================
 checkJavaVersion()
 {
-	java_version=`$MYJAVA -version 2>&1 | head -1 |  sed -n 's/.*"\(.*\)"/\1/pg'`
-    echo "Java Version: "$java_version
+	# java version "10.0.1" 2018-04-17
+	#java_version=`$MYJAVA -version 2>&1 | head -1 |  sed -n 's/.*"\(.*\)"/\1/pg'`
+	# openjdk version "11" 2018-09-25
+	java_version=`$MYJAVA -version 2>&1 | head -1 |  sed -n 's/.*"\(.*\)".*/\1/pg'`
+    echo "Java Version: ["$java_version"]"
 	
 	#if [[ $java_version =~ \"([[:digit:]])\.([[:digit:]])\.(.*)\" ]]
     #then
@@ -56,9 +59,9 @@ kickJava()
 	exit
 }
 
-@rem ==============================================
-@rem ===  Not Found javafx      ===================
-@rem ==============================================
+# ==============================================
+# ===  Not Found javafx      ===================
+# ==============================================
 noJavaFx()
 {
 	msg="necessary to set PATH_TO_FX(javafx library path like C:\Program Files\Java\javafx-sdk-11\lib). see https://openjfx.io/openjfx-docs/#install-javafx"

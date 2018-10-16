@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- https://github.com/oracle/oracle-db-examples/blob/master/java/jdbc/ConnectionManagementSamples/build.xml -->
+<!-- https://ant.apache.org/manual/tutorial-HelloWorldWithAnt.html -->
+<project name="MiluDBViewer" default="compile">
+    <property name="build.dir"     value="../build" />
+	<property name="src.dir"       location="../src" />
+	<property name="lib.dir"       location="../lib" />
+	<property name="doc.dir"       location="../doc" />
+	<property name="resources.dir" location="../resources" />
+	<property name="shell.dir"     location="../shell" />
+
+	<property environment="myenv"/>
+	
+	<!-- classpath -->
+	<path id="java.classpath">
+		<pathelement path="../lib/jsqlparser/jsqlparser-1.3-SNAPSHOT.jar" />
+		<pathelement path="../lib/excel/commons-collections4-4.1.jar" />
+		<pathelement path="../lib/excel/poi-3.17.jar" />
+		<pathelement path="../lib/excel/poi-ooxml-3.17.jar" />
+		<pathelement path="../lib/excel/poi-ooxml-schemas-3.17.jar" />
+		<pathelement path="../lib/excel/xmlbeans-2.6.0.jar" />
+		<pathelement path="../lib/gson/gson-2.8.3-SNAPSHOT.jar" />
+		<pathelement path="../lib/hibernate/hibernate-core-5.3.1.Final.jar" />
+		<pathelement path="../lib/jarchivelib/jarchivelib-0.7.1-jar-with-dependencies.jar" />
+		<pathelement path="${myenv.PATH_TO_FX}/javafx-swt.jar" />
+		<pathelement path="${myenv.PATH_TO_FX}/javafx.base.jar" />
+		<pathelement path="${myenv.PATH_TO_FX}/javafx.controls.jar" />
+		<pathelement path="${myenv.PATH_TO_FX}/javafx.fxml.jar" />
+		<pathelement path="${myenv.PATH_TO_FX}/javafx.graphics.jar" />
+		<pathelement path="${myenv.PATH_TO_FX}/javafx.media.jar" />
+		<pathelement path="${myenv.PATH_TO_FX}/javafx.swing.jar" />
+		<pathelement path="${myenv.PATH_TO_FX}/javafx.web.jar" />
+	</path>
+
+	<target name="check">
+		<echo message="PATH_TO_FX=${myenv.PATH_TO_FX}"/>
+	</target>
+	
+	<target name="compile">
+        <mkdir dir="${build.dir}"/>
+		<javac includeantruntime="false"
+			srcdir="${src.dir}"
+			destdir="${build.dir}"
+			encoding="UTF-8"
+		>
+			<classpath refid="java.classpath" />
+		</javac>
+	</target>
+	
+	<target name="clean">
+		<delete dir="${build.dir}" />
+	</target>
+	
+	<target name="jar" depends="clean,compile">
+		<!--
+		<copy todir="${build.dir}/milu/conf">
+			<fileset dir="${src.dir}/conf" />
+		</copy>
+		-->
+		<copy todir="${build.dir}/conf">
+			<fileset dir="${src.dir}/conf" />
+		</copy>
+		<!-- by this jar, css works, but language doesn't work.-->
+		<jar destfile="${build.dir}/${ant.project.name}.jar" basedir="${build.dir}">
+            <manifest>
+                <attribute name="Main-Class" value="milu.main.MiluDBViewer"/>
+                <attribute name="Class-Path" 
+						value=". 
+							lib/jsqlparser/jsqlparser-1.3-SNAPSHOT.jar
+							lib/excel/commons-collections4-4.1.jar
+							lib/excel/poi-3.17.jar
+							lib/excel/poi-ooxml-3.17.jar
+							lib/excel/poi-ooxml-schemas-3.17.jar
+							lib/excel/xmlbeans-2.6.0.jar
+							lib/gson/gson-2.8.3-SNAPSHOT.jar
+							lib/hibernate/hibernate-core-5.3.1.Final.jar
+							lib/jarchivelib/jarchivelib-0.7.1-jar-with-dependencies.jar
+				"/>
+            </manifest>
+		</jar>
+		<!-- -->
+		<copy todir="${build.dir}/lib">
+			<fileset dir="${lib.dir}" />
+		</copy>
+		<copy todir="${build.dir}/resources">
+			<fileset dir="${resources.dir}" />
+		</copy>
+		<copy todir="${build.dir}">
+			<fileset dir="${shell.dir}" />
+		</copy>
+		<mkdir dir="${build.dir}/doc"/>
+		<copy todir="${build.dir}/doc">
+			<fileset dir="${doc.dir}" />
+		</copy>
+		<chmod file="${build.dir}/*.sh" perm="755" />
+		<!-- chmod file="${build.dir}/*.bat" perm="755" / -->
+		
+		<delete dir="${build.dir}/milu" />
+	</target>
+</project>
