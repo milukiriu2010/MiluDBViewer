@@ -313,19 +313,19 @@ public class MainMenuBar extends MenuBar
 		// [Help]
 		//   - [System Information] menu clicked
 		// ----------------------------------------------
-		this.menuItemSysInfo.setOnAction((event)->this.dbView.openView(SystemTab.class));
+		this.menuItemSysInfo.setOnAction((event)->this.dbView.openView(SystemTab.class,true));
 		
 		// ----------------------------------------------
 		// [Help]
 		//   - [JDBC Info] menu clicked
 		// ----------------------------------------------
-		this.menuItemJDBC.setOnAction( (event)->this.dbView.openView( DBJdbcTab.class ) );
+		this.menuItemJDBC.setOnAction( (event)->this.dbView.openView( DBJdbcTab.class,true ) );
 		
 		// ----------------------------------------------
 		// [Help]
 		//   - [Version] menu clicked
 		// ----------------------------------------------
-		this.menuItemVersion.setOnAction( (event)->this.dbView.openView( VersionTab.class ) );
+		this.menuItemVersion.setOnAction( (event)->this.dbView.openView( VersionTab.class,true ) );
 	}
 	
 	/*

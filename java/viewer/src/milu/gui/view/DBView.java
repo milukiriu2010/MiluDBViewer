@@ -415,7 +415,7 @@ public class DBView extends Stage
 	
 	// NewWinInterface
 	@Override
-	public void openView( Class<?> castClazz )
+	public void openView( Class<?> castClazz, boolean isReUse )
 	{
 		// https://www.mkyong.com/java8/java-8-streams-filter-examples/
 		// https://stackoverflow.com/questions/35740543/java-8-stream-check-if-instanceof?utm_medium=organic&utm_source=google_rich_qa&utm_campaign=google_rich_qa
@@ -425,7 +425,7 @@ public class DBView extends Stage
 				.orElse(null);								// If not found, return null
 		
 		// found "castClazz" Tab
-		if ( tab != null )
+		if ( tab != null && isReUse == true )
 		{
 			// Activate "Tab", if already exists.
 			this.tabPane.getSelectionModel().select( tab );

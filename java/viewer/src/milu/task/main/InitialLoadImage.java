@@ -58,6 +58,7 @@ public class InitialLoadImage extends InitialLoadAbstract
 				"file:resources/images/newtab.png",
 				"file:resources/images/newwin.png",
 				"file:resources/images/connect.png",
+				"file:resources/images/prepare.png",
 				// Dialog
 				"file:resources/images/winicon.gif",
 				// DBSqlTab

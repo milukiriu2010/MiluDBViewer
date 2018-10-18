@@ -10,6 +10,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
 import milu.gui.ctrl.common.inf.ChangeLangInterface;
+import milu.gui.ctrl.prepare.PrepareSQLTab;
 import milu.gui.ctrl.schema.DBSchemaTab;
 import milu.gui.view.DBView;
 import milu.gui.view.FadeView;
@@ -35,6 +36,8 @@ public class MainToolBar extends ToolBar
 	private Button btnNewWin   = new Button();
 	// Button to add new DB connection
 	private Button btnNewCon   = new Button();
+	// Button for "PreparedStatement"
+	private Button btnPrepare  = new Button();
 	// Button  to Open Schema View
 	private Button btnSchema   = new Button();
 	
@@ -72,6 +75,9 @@ public class MainToolBar extends ToolBar
 		// Button for new DB connection
 		this.btnNewCon.setGraphic( MyGUITool.createImageView( 20, 20, mainCtrl.getImage("file:resources/images/connect.png") ) );
 		
+		// Button for "PreparedStatement"
+		this.btnPrepare.setGraphic( MyGUITool.createImageView( 20, 20, mainCtrl.getImage("file:resources/images/prepare.png") ) );
+		
 		// Button to Open Schema View
 		this.btnSchema.setGraphic( MyGUITool.createImageView( 20, 20, mainCtrl.getImage("file:resources/images/schema.png") ) );
 		
@@ -83,6 +89,7 @@ public class MainToolBar extends ToolBar
 			this.btnNewTab,
 			this.btnNewWin,
 			this.btnNewCon,
+			this.btnPrepare,
 			new Separator(),
 			this.btnSchema,
 			new Separator()
@@ -112,8 +119,11 @@ public class MainToolBar extends ToolBar
 		// "New DB Connection" button clicked
 		this.btnNewCon.setOnAction( this.dbView::createNewDBConnection );
 		
+		// Button for "PreparedStatement"
+		this.btnPrepare.setOnAction( (event)->{ this.dbView.openView(PrepareSQLTab.class,false); } );
+		
 		// "Open Schema View" button clicked
-		this.btnSchema.setOnAction( (event)->{ this.dbView.openView(DBSchemaTab.class); } );
+		this.btnSchema.setOnAction( (event)->{ this.dbView.openView(DBSchemaTab.class,true); } );
 		// disable until finishing to get schema list.
 		this.btnSchema.setDisable(true);
 	}
@@ -211,6 +221,14 @@ public class MainToolBar extends ToolBar
 		Tooltip tipNewCon = new Tooltip( langRB.getString( "TOOLTIP_NEW_CON" ));
 		tipNewCon.getStyleClass().add("Common_MyToolTip");
 		this.btnNewCon.setTooltip( tipNewCon );
+		
+		// ----------------------------------------------
+		// ToolTip
+		// Button for "PreparedStatement"
+		// ----------------------------------------------
+		Tooltip tipPrepare = new Tooltip( langRB.getString( "TOOLTIP_PREPARE" ));
+		tipPrepare.getStyleClass().add("Common_MyToolTip");
+		this.btnPrepare.setTooltip( tipPrepare );
 
 		// ----------------------------------------------
 		// ToolTip
