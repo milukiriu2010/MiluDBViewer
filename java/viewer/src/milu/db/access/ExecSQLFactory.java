@@ -93,7 +93,11 @@ public class ExecSQLFactory extends ExecSQLFactoryAbstract {
 	public ExecSQLAbstract createPreparedFactory( SQLBag sqlBag, MyDBAbstract myDBAbs, AppConf appConf, List<Object> preLst ) 
 	{
 		ExecSQLAbstract execSQLAbs = null;
-		if ( SQLBag.TYPE.INSERT.equals(sqlBag.getType()) )
+		if ( SQLBag.TYPE.SELECT.equals(sqlBag.getType()) )
+		{
+			execSQLAbs = new ExecSQLSelectPrepared();
+		}
+		else if ( SQLBag.TYPE.INSERT.equals(sqlBag.getType()) )
 		{
 			execSQLAbs = new ExecSQLTransactionPrepared();
 		}

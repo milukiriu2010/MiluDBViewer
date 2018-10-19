@@ -32,6 +32,7 @@ import net.sf.jsqlparser.JSQLParserException;
 
 import milu.ctrl.sql.parse.SQLBag;
 import milu.db.MyDBAbstract;
+import milu.gui.ctrl.common.ParseAction;
 import milu.gui.ctrl.common.inf.ActionInterface;
 import milu.gui.ctrl.common.inf.ChangeLangInterface;
 import milu.gui.ctrl.common.inf.CounterInterface;
@@ -101,20 +102,6 @@ public class DBSqlScriptTab extends Tab
 	
 	// Thread Pool
 	private ExecutorService service = Executors.newSingleThreadExecutor();
-	
-	enum SQLPARSE
-	{
-		WITH_PARSE,
-		WITHOUT_PARSE,
-		WITHOUT_PARSE_SPLIT_SEMI
-	}
-	
-	enum SQLTYPE
-	{
-		QUERY,
-		TRANS,
-		ANY
-	}
 	
 	public DBSqlScriptTab( DBView dbView )
 	{
@@ -234,7 +221,7 @@ public class DBSqlScriptTab extends Tab
 		this.labelExecTimeSQL.setText( String.format( "%,d", nanoSec ) + "nsec" );
 	}
 	
-	private void execTask( ExecTaskFactory.FACTORY_TYPE factoryType, DBSqlScriptTab.SQLPARSE sqlParse, DBSqlScriptTab.SQLTYPE sqlType )
+	private void execTask( ExecTaskFactory.FACTORY_TYPE factoryType, ParseAction.SQLPARSE sqlParse, ParseAction.SQLTYPE sqlType )
 	{
 		long startTime = System.nanoTime();
 		MyDBAbstract myDBAbs = this.dbView.getMyDBAbstract();
@@ -280,7 +267,7 @@ public class DBSqlScriptTab extends Tab
 		
 		// SQL List for Exec
 		List<SQLBag> sqlBagLst = null;
-		if ( sqlParse == DBSqlScriptTab.SQLPARSE.WITH_PARSE )
+		if ( sqlParse == ParseAction.SQLPARSE.WITH_PARSE )
 		{
 			try
 			{
@@ -293,24 +280,24 @@ public class DBSqlScriptTab extends Tab
 				return;
 			}
 		}
-		else if ( sqlParse == DBSqlScriptTab.SQLPARSE.WITHOUT_PARSE )
+		else if ( sqlParse == ParseAction.SQLPARSE.WITHOUT_PARSE )
 		{
-			if ( sqlType == DBSqlScriptTab.SQLTYPE.QUERY )
+			if ( sqlType == ParseAction.SQLTYPE.QUERY )
 			{
 				sqlBagLst = this.textAreaSQL.getSQLBagLst( SQLBag.COMMAND.QUERY );
 			}
-			else if ( sqlType == DBSqlScriptTab.SQLTYPE.TRANS )
+			else if ( sqlType == ParseAction.SQLTYPE.TRANS )
 			{
 				sqlBagLst = this.textAreaSQL.getSQLBagLst( SQLBag.COMMAND.TRANSACTION );
 			}
 		}
-		else if ( sqlParse == DBSqlScriptTab.SQLPARSE.WITHOUT_PARSE_SPLIT_SEMI )
+		else if ( sqlParse == ParseAction.SQLPARSE.WITHOUT_PARSE_SPLIT_SEMI )
 		{
-			if ( sqlType == DBSqlScriptTab.SQLTYPE.QUERY )
+			if ( sqlType == ParseAction.SQLTYPE.QUERY )
 			{
 				sqlBagLst = this.textAreaSQL.getSQLBagLst( SQLBag.COMMAND.QUERY, ";" );
 			}
-			else if ( sqlType == DBSqlScriptTab.SQLTYPE.TRANS )
+			else if ( sqlType == ParseAction.SQLTYPE.TRANS )
 			{
 				sqlBagLst = this.textAreaSQL.getSQLBagLst( SQLBag.COMMAND.TRANSACTION, ":" );
 			}
@@ -423,35 +410,35 @@ public class DBSqlScriptTab extends Tab
 	@Override
 	public void execSQL( Event event )
 	{
-		this.execTask( ExecTaskFactory.FACTORY_TYPE.SCRIPT, DBSqlScriptTab.SQLPARSE.WITH_PARSE, DBSqlScriptTab.SQLTYPE.ANY );
+		this.execTask( ExecTaskFactory.FACTORY_TYPE.SCRIPT, ParseAction.SQLPARSE.WITH_PARSE, ParseAction.SQLTYPE.ANY );
 	}
 	
 	// SQLExplainInterface
 	@Override
 	public void explainSQL( Event event )
 	{
-		this.execTask( ExecTaskFactory.FACTORY_TYPE.EXPLAIN, DBSqlScriptTab.SQLPARSE.WITH_PARSE, DBSqlScriptTab.SQLTYPE.ANY );
+		this.execTask( ExecTaskFactory.FACTORY_TYPE.EXPLAIN, ParseAction.SQLPARSE.WITH_PARSE, ParseAction.SQLTYPE.ANY );
 	}
 	
 	// SQLExecWithoutParseInterface
 	@Override
 	public void execSQLQuery( Event event )
 	{
-		this.execTask( ExecTaskFactory.FACTORY_TYPE.SCRIPT, DBSqlScriptTab.SQLPARSE.WITHOUT_PARSE, DBSqlScriptTab.SQLTYPE.QUERY );
+		this.execTask( ExecTaskFactory.FACTORY_TYPE.SCRIPT, ParseAction.SQLPARSE.WITHOUT_PARSE, ParseAction.SQLTYPE.QUERY );
 	}
 	
 	// SQLExecWithoutParseInterface
 	@Override
 	public void execSQLTrans( Event event )
 	{
-		this.execTask( ExecTaskFactory.FACTORY_TYPE.SCRIPT, DBSqlScriptTab.SQLPARSE.WITHOUT_PARSE, DBSqlScriptTab.SQLTYPE.TRANS );
+		this.execTask( ExecTaskFactory.FACTORY_TYPE.SCRIPT, ParseAction.SQLPARSE.WITHOUT_PARSE, ParseAction.SQLTYPE.TRANS );
 	}
 	
 	// SQLExecWithoutParseInterface
 	@Override
 	public void execSQLTransSemi( Event event )
 	{
-		this.execTask( ExecTaskFactory.FACTORY_TYPE.SCRIPT, DBSqlScriptTab.SQLPARSE.WITHOUT_PARSE_SPLIT_SEMI, DBSqlScriptTab.SQLTYPE.TRANS );
+		this.execTask( ExecTaskFactory.FACTORY_TYPE.SCRIPT, ParseAction.SQLPARSE.WITHOUT_PARSE_SPLIT_SEMI, ParseAction.SQLTYPE.TRANS );
 	}
 	
 	// CopyTableInterface

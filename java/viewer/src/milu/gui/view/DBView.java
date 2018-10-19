@@ -468,6 +468,7 @@ public class DBView extends Stage
 		{
 			((FocusInterface)tab).setFocus();
 		}
+		this.setActionOnTab();
 	}
 	
 	// NewWinInterface

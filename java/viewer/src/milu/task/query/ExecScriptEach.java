@@ -23,7 +23,7 @@ import milu.task.ProcInterface;
 import milu.task.ProgressInterface;
 import milu.task.ProgressReportInterface;
 
-public class ExecScriptEach 
+class ExecScriptEach 
 	implements ProgressReportInterface
 {
 	private int           no      = -1;

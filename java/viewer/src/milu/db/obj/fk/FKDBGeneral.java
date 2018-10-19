@@ -9,7 +9,6 @@ import java.util.Map;
 
 import milu.entity.schema.SchemaEntity;
 import milu.entity.schema.SchemaEntityEachFK;
-import milu.entity.schema.SchemaEntityFactory;
 
 public class FKDBGeneral extends FKDBAbstract {
 
