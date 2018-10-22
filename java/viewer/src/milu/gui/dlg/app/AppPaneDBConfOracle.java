@@ -62,8 +62,6 @@ class AppPaneDBConfOracle extends AppPaneAbstract
 		this.lblTitle.setText( this.extLangRB.getString( "TITLE_DB_CONF_PANE_ORACLE" ) );
 		this.lblTitle.getStyleClass().add("AppPane_Label_Title");
 		
-		Label lblTnsAdmin = new Label("TNS Admin:");
-		
 		// ----------------------------------------------------
 		// Items for "TNS"
 		// ----------------------------------------------------
@@ -122,19 +120,6 @@ class AppPaneDBConfOracle extends AppPaneAbstract
 		Tooltip tipFolder = new Tooltip(this.extLangRB.getString( "TOOLTIP_NEW_FOLDER" ));
 		tipFolder.getStyleClass().add("Common_MyToolTip");		
 		this.folderBtn.setTooltip( tipFolder );
-		
-		/*
-		HBox hBoxTnsAdmin = new HBox(2);
-		hBoxTnsAdmin.getChildren().addAll( lblTnsAdmin, this.tnsAdminTextField, this.folderBtn );
-		
-		// set objects
-		VBox vBox = new VBox(2);
-		vBox.getChildren().addAll
-		( 
-			this.lblTitle, 
-			hBoxTnsAdmin
-		);
-		*/
 		
 		// ----------------------------------------------------
 		// v$session.osuser

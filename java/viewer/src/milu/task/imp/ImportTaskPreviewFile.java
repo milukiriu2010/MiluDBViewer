@@ -4,7 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
+//import java.util.stream.Collectors;
 
 import javafx.application.Platform;
 import javafx.concurrent.Task;
@@ -61,12 +61,17 @@ public class ImportTaskPreviewFile extends Task<Exception>
 		this.setProgress(0.0);
 		
 		SchemaEntity dstSchemaEntity = (SchemaEntity)this.mapObj.get(ImportData.DST_SCHEMA_ENTITY.val());
-		int columnCnt = dstSchemaEntity.getDefinitionLst().size();
-		List<Object> columnLst = dstSchemaEntity.getDefinitionLst().stream()
-			.map( data->data.get("column_name") )
-			.collect(Collectors.toList());
+		int columnCnt = -1;
+		if ( dstSchemaEntity != null )
+		{
+			dstSchemaEntity.getDefinitionLst().size();
+			/*
+			List<Object> columnLst = dstSchemaEntity.getDefinitionLst().stream()
+				.map( data->data.get("column_name") )
+				.collect(Collectors.toList());
+				*/
+		}
 		
-		//MainController mainCtrl = this.dbView.getMainController();
 		String strFile = (String)this.mapObj.get(ImportData.SRC_FILE.val());
 		File file = new File(strFile);
 		this.myFileAbs = MyFileImportFactory.getInstance(file);
@@ -102,7 +107,7 @@ public class ImportTaskPreviewFile extends Task<Exception>
 			
 			List<Object>       headLst = this.myFileAbs.getHeadLst();
 			List<List<Object>> dataLst = this.myFileAbs.getDataLst();
-			System.out.println( "columnLst.size:" + columnLst.size() );
+			//System.out.println( "columnLst.size:" + columnLst.size() );
 			System.out.println( "dataLst.size  :" + dataLst.size() );
 
 			Platform.runLater(()->{

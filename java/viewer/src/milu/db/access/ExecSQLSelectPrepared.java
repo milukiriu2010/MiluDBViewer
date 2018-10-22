@@ -2,10 +2,10 @@ package milu.db.access;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
@@ -62,7 +62,7 @@ public class ExecSQLSelectPrepared extends ExecSQLAbstract
 			Exception 
 	{
 		System.out.println( "select:" + this.sqlBag.getSQL() );
-		Statement stmt   = null;
+		PreparedStatement stmt   = null;
 		ResultSet rs     = null;
 		Exception lastEx = null;
 		
@@ -75,16 +75,24 @@ public class ExecSQLSelectPrepared extends ExecSQLAbstract
 			boolean isAbsoluteOK = false;
 			if ( fetchPos == 1 )
 			{
-				stmt = this.myDBAbs.createStatement();
-				rs   = stmt.executeQuery( this.sqlBag.getSQL() );
+				stmt = this.myDBAbs.createPreparedStatement( this.sqlBag.getSQL() );
+				for ( int i = 0; i < this.preLst.size(); i++ )
+				{
+					stmt.setObject( i+1, this.preLst.get(i) );
+				}
+				rs   = stmt.executeQuery();
 				isAbsoluteOK = true;
 			}
 			else
 			{
 				try
 				{
-					stmt = this.myDBAbs.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_READ_ONLY);
-					rs   = stmt.executeQuery( this.sqlBag.getSQL() );
+					stmt = this.myDBAbs.createPreparedStatement(this.sqlBag.getSQL(),ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_READ_ONLY);
+					for ( int i = 0; i < this.preLst.size(); i++ )
+					{
+						stmt.setObject( i+1, this.preLst.get(i) );
+					}
+					rs   = stmt.executeQuery();
 					rs.absolute(fetchPos);
 					isAbsoluteOK = true;
 				}
@@ -113,8 +121,12 @@ public class ExecSQLSelectPrepared extends ExecSQLAbstract
 						}
 					}
 					
-					stmt = this.myDBAbs.createStatement();
-					rs   = stmt.executeQuery( this.sqlBag.getSQL() );
+					stmt = this.myDBAbs.createPreparedStatement(this.sqlBag.getSQL(),ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_READ_ONLY);
+					for ( int i = 0; i < this.preLst.size(); i++ )
+					{
+						stmt.setObject( i+1, this.preLst.get(i) );
+					}
+					rs   = stmt.executeQuery();
 					isAbsoluteOK = false;
 				}
 			}

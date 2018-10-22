@@ -9,15 +9,15 @@ import javafx.scene.control.Separator;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToolBar;
 import javafx.scene.control.Tooltip;
-import milu.db.access.ExecSQLAbstract;
-import milu.db.access.ExecSQLExplainFactory;
+//import milu.db.access.ExecSQLAbstract;
+//import milu.db.access.ExecSQLExplainFactory;
 import milu.gui.ctrl.common.inf.ActionInterface;
 import milu.gui.ctrl.common.inf.ChangeLangInterface;
 import milu.gui.ctrl.common.table.CopyTableInterface;
 import milu.gui.ctrl.common.table.DirectionSwitchInterface;
 import milu.gui.ctrl.query.SQLExecInterface;
-import milu.gui.ctrl.query.SQLExecWithoutParseInterface;
-import milu.gui.ctrl.query.SQLExplainInterface;
+//import milu.gui.ctrl.query.SQLExecWithoutParseInterface;
+//import milu.gui.ctrl.query.SQLExplainInterface;
 import milu.gui.ctrl.query.SQLFetchInterface;
 import milu.gui.ctrl.query.SQLFileInterface;
 import milu.gui.ctrl.query.SQLFormatInterface;
@@ -38,16 +38,18 @@ public class PrepareSQLToolBar extends ToolBar
 {
 	private DBView          dbView = null;
 	
+	// Open Parameter File
+	private Button    btnOpenParam = new Button();
 	// Exec SQL
 	private Button    btnExecSQL = new Button();
 	// Explain SQL
-	private Button    btnExplainSQL = new Button();
+	//private Button    btnExplainSQL = new Button();
 	// Exec Query SQL
-	private Button    btnExecSQLQuery = new Button();
+	//private Button    btnExecSQLQuery = new Button();
 	// Exec Transaction SQL
-	private Button    btnExecSQLTrans = new Button();
+	//private Button    btnExecSQLTrans = new Button();
 	// Exec Transaction SQL(every ";")
-	private Button    btnExecSQLTransSemi = new Button();
+	//private Button    btnExecSQLTransSemi = new Button();
 	// Toggle Horizontal/Vertical mode
 	private Button    btnToggleHV = new Button();
 	// Button to copy table data(no column)
@@ -76,11 +78,12 @@ public class PrepareSQLToolBar extends ToolBar
 		this.dbView = dbView;
 		
 		MainController mainCtrl = this.dbView.getMainController();
+		this.btnOpenParam.setGraphic( MyGUITool.createImageView( 20, 20, mainCtrl.getImage("file:resources/images/file.png") ) );
 		this.btnExecSQL.setGraphic( MyGUITool.createImageView( 20, 20, mainCtrl.getImage("file:resources/images/execsql.png") ) );
-		this.btnExplainSQL.setGraphic( MyGUITool.createImageView( 20, 20, mainCtrl.getImage("file:resources/images/explain.png") ) );
-		this.btnExecSQLQuery.setGraphic( MyGUITool.createImageView( 20, 20, mainCtrl.getImage("file:resources/images/execQUERY.png") ) );
-		this.btnExecSQLTrans.setGraphic( MyGUITool.createImageView( 20, 20, mainCtrl.getImage("file:resources/images/execTRANS.png") ) );
-		this.btnExecSQLTransSemi.setGraphic( MyGUITool.createImageView( 20, 20, mainCtrl.getImage("file:resources/images/execTRANS_SEMI.png") ) );
+		//this.btnExplainSQL.setGraphic( MyGUITool.createImageView( 20, 20, mainCtrl.getImage("file:resources/images/explain.png") ) );
+		//this.btnExecSQLQuery.setGraphic( MyGUITool.createImageView( 20, 20, mainCtrl.getImage("file:resources/images/execQUERY.png") ) );
+		//this.btnExecSQLTrans.setGraphic( MyGUITool.createImageView( 20, 20, mainCtrl.getImage("file:resources/images/execTRANS.png") ) );
+		//this.btnExecSQLTransSemi.setGraphic( MyGUITool.createImageView( 20, 20, mainCtrl.getImage("file:resources/images/execTRANS_SEMI.png") ) );
 		this.btnToggleHV.setGraphic( MyGUITool.createImageView( 20, 20, mainCtrl.getImage("file:resources/images/direction.png") ) );
 		this.btnCopyTblNoHead.setGraphic( MyGUITool.createImageView( 20, 20, mainCtrl.getImage("file:resources/images/copy.png") ) );
 		this.btnCopyTblWithHead.setGraphic( MyGUITool.createImageView( 20, 20, mainCtrl.getImage("file:resources/images/copy2.png") ) );
@@ -97,19 +100,22 @@ public class PrepareSQLToolBar extends ToolBar
 		this.txtFetchMax.setText(String.valueOf(appConf.getFetchMax()));
 		
 		
+		this.getItems().addAll(	this.btnOpenParam	);
 		this.getItems().addAll(	this.btnExecSQL	);
 		
+		/*
 		ExecSQLAbstract execSQLAbs = new ExecSQLExplainFactory().createFactory( null, this.dbView.getMyDBAbstract(), mainCtrl.getAppConf(), null, 0.0 );
 		if ( execSQLAbs != null )
 		{
 			this.getItems().add( this.btnExplainSQL );
 		}
+		*/
 		
 		this.getItems().addAll
 		(
-			this.btnExecSQLQuery,
-			this.btnExecSQLTrans,
-			this.btnExecSQLTransSemi,
+				//this.btnExecSQLQuery,
+				//this.btnExecSQLTrans,
+				//this.btnExecSQLTransSemi,
 			new Separator(),
 			this.btnToggleHV,
 			this.btnCopyTblNoHead,
@@ -172,12 +178,18 @@ public class PrepareSQLToolBar extends ToolBar
 	@Override
 	public void setAction( Object obj )
 	{
+		if ( obj instanceof ParamFileInterface )
+		{
+			this.btnOpenParam.setOnAction( ((ParamFileInterface)obj)::openParam );
+		}
+		
 		if ( obj instanceof SQLExecInterface )
 		{
 			// mouse click, "space/return" key enter 
 			this.btnExecSQL.setOnAction( ((SQLExecInterface)obj)::execSQL );
 		}
 		
+		/*
 		if ( obj instanceof SQLExplainInterface )
 		{
 			// mouse click, "space/return" key enter 
@@ -195,6 +207,7 @@ public class PrepareSQLToolBar extends ToolBar
 			// mouse click, "space/return" key enter 
 			this.btnExecSQLTransSemi.setOnAction( ((SQLExecWithoutParseInterface)obj)::execSQLTransSemi );
 		}
+		*/
 		
 		if ( obj instanceof DirectionSwitchInterface )
 		{
@@ -279,7 +292,7 @@ public class PrepareSQLToolBar extends ToolBar
 	public void beginProc()
 	{
 		this.btnExecSQL.setDisable(true);
-		this.btnExplainSQL.setDisable(true);
+		//this.btnExplainSQL.setDisable(true);
 		this.btnToggleHV.setDisable(true);
 	}
 	
@@ -288,7 +301,7 @@ public class PrepareSQLToolBar extends ToolBar
 	public void endProc()
 	{
 		this.btnExecSQL.setDisable(false);
-		this.btnExplainSQL.setDisable(false);
+		//this.btnExplainSQL.setDisable(false);
 		this.btnToggleHV.setDisable(false);
 	}
 	
@@ -305,12 +318,21 @@ public class PrepareSQLToolBar extends ToolBar
 		
 		// ----------------------------------------------
 		// ToolTip
+		//   Button[Open Parameter File] 
+		// ----------------------------------------------
+		Tooltip tipOpenParam = new Tooltip( langRB.getString( "TOOLTIP_OPEN_PARAM" ));
+		tipOpenParam.getStyleClass().add("Common_MyToolTip");
+		this.btnOpenParam.setTooltip(tipOpenParam);
+		
+		// ----------------------------------------------
+		// ToolTip
 		//   Button[Exec Query] 
 		// ----------------------------------------------
 		Tooltip tipExecSQL = new Tooltip( langRB.getString( "TOOLTIP_EXEC_SQL" ));
 		tipExecSQL.getStyleClass().add("Common_MyToolTip");
 		this.btnExecSQL.setTooltip(tipExecSQL);
 		
+		/*
 		// ----------------------------------------------
 		// ToolTip
 		//   Button[Exec Explain] 
@@ -342,6 +364,7 @@ public class PrepareSQLToolBar extends ToolBar
 		Tooltip tipExecSQLTransSemi = new Tooltip( langRB.getString( "TOOLTIP_EXEC_SQL_TRANS_SEMI" ));
 		tipExecSQLTransSemi.getStyleClass().add("Common_MyToolTip");
 		this.btnExecSQLTransSemi.setTooltip(tipExecSQLTransSemi);
+		*/
 		
 		// ----------------------------------------------
 		// ToolTip

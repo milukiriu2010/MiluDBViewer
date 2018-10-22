@@ -10,7 +10,6 @@ import javafx.stage.Stage;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
 
 import javafx.application.Platform;
 import javafx.concurrent.Task;
@@ -94,7 +93,8 @@ public class TaskDialog extends Dialog<Boolean>
 	private void start()
 	{
 		// execute task
-		final Future<?> future = this.service.submit( this.task );
+		//final Future<?> future = this.service.submit( this.task );
+		this.service.submit( this.task );
 		
 		this.progressBar.progressProperty().unbind();
 		this.progressBar.progressProperty().bind(this.task.progressProperty());

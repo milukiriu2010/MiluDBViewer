@@ -74,8 +74,15 @@ public class MyFileImportExcel extends MyFileImportAbstract
 				break;
 			}
 			List<Object> dataRow = new ArrayList<>();
+
+			// ロードする列数を決定する
+			int loadColumnCnt = columnCnt;
+			if ( columnCnt == -1 )
+			{
+				loadColumnCnt = row.getLastCellNum();
+			}
 			
-			for ( int j = 0; j < columnCnt; j++ )
+			for ( int j = 0; j < loadColumnCnt; j++ )
 			{
 				Cell cell = row.getCell(j);
 				if ( cell == null )

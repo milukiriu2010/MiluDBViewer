@@ -32,6 +32,7 @@ public class TableViewEditDemo extends Application {
 
 	 
 	    @Override
+	    @SuppressWarnings("unchecked")
 	    public void start(Stage stage) {
 	 
 	        TableView<Person> table = new TableView<Person>();
@@ -137,6 +138,8 @@ public class TableViewEditDemo extends Application {
 	        ObservableList<Person> list = getPersonList();
 	        table.setItems(list);
 	 
+	        // Type safety: A generic array of
+	        //   SuppressWarnings("unchecked")
 	        table.getColumns().addAll(fullNameCol, genderCol, singleCol);
 	 
 	        StackPane root = new StackPane();

@@ -54,7 +54,15 @@ public class MyFileImportCSV extends MyFileImportAbstract
 			}
 			String[] tokens = line.split(",");
 			List<Object> dataRow = new ArrayList<>();
-			for ( int j = 0; j < columnCnt; j++ )
+			
+			// ロードする列数を決定する
+			int loadColumnCnt = columnCnt;
+			if ( columnCnt == -1 )
+			{
+				loadColumnCnt = tokens.length;
+			}
+			
+			for ( int j = 0; j < loadColumnCnt; j++ )
 			{
 				if ( j >= tokens.length )
 				{

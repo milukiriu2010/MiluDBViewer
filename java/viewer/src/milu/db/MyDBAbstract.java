@@ -548,7 +548,13 @@ abstract public class MyDBAbstract
 	{
 		return this.conn.prepareStatement(sql);
 	}
-	
+
+	public synchronized PreparedStatement createPreparedStatement( String sql, int resultSetType, int resultSetConcurrency )
+		throws SQLException
+	{
+		return this.conn.prepareStatement(sql,resultSetType,resultSetConcurrency);
+	}
+
 	public synchronized DatabaseMetaData getMetaData()
 		throws SQLException
 	{

@@ -3,11 +3,13 @@ package milu.task.prepare;
 import java.util.ArrayList;
 import java.util.List;
 
+import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.geometry.Orientation;
 import javafx.scene.control.TabPane;
 import milu.ctrl.sql.parse.SQLBag;
 import milu.db.MyDBAbstract;
+import milu.gui.ctrl.query.DBResultTab;
 import milu.gui.view.DBView;
 import milu.main.AppConf;
 import milu.task.ProcInterface;
@@ -107,6 +109,43 @@ public class PrepareScriptAllTask extends Task<Exception>
 				this.setProgress( (double)i*assignedSize );
 				this.setMsg(".");
 				SQLBag sqlBag = this.sqlBagLst.get(i);
+				
+				PrepareScriptEach scriptEach = new PrepareScriptEach();
+				scriptEach.setNo( (i+1) );
+				scriptEach.setDBView(this.dbView);
+				scriptEach.setMyDBAbstract(this.myDBAbs);
+				scriptEach.setAppConf(this.appConf);
+				scriptEach.setTabPane(this.tabPane);
+				scriptEach.setSQLBag(sqlBag);
+				scriptEach.setProcInf(this.procInf);
+				scriptEach.setOrientation(this.orientation);
+				scriptEach.setProgressInterface(this);
+				scriptEach.setAssignedSize(assignedSize);
+				scriptEach.setPlaceHolderLst(placeHolderLst);
+				scriptEach.exec();
+				
+				List<Object> resData = new ArrayList<>();
+				// Script
+				resData.add( "Script" + (i+1) );
+				// Result
+				Exception eachEx = scriptEach.getMyEx();
+				String result = "OK";
+				if ( eachEx != null )
+				{
+					String className = eachEx.getClass().getName();
+					result = "NG(" + className.substring(className.lastIndexOf(".")+1) + ")";
+				}
+				resData.add( result );
+				// Type
+				resData.add( sqlBag.getType().toString() ); 
+				// Cnt
+				resData.add( String.valueOf(scriptEach.getProcCnt()) );
+				// Exec Time
+				resData.add( String.format( "%,d", scriptEach.getExecTime() ) + "nsec" );
+				// SQL
+				resData.add( sqlBag.getSQL() );
+				resDataLst.add(resData);
+
 			}
 			this.setProgress(MAX);
 			return null;
@@ -119,6 +158,36 @@ public class PrepareScriptAllTask extends Task<Exception>
 		finally
 		{
 			final long startTimeTotalF = startTimeTotal;
+			if ( size > 1 )
+			{
+				Platform.runLater
+				(
+					()->
+					{
+						List<Object>       resHeadLst = new ArrayList<>();
+						resHeadLst.add("Script");
+						resHeadLst.add("Result");
+						resHeadLst.add("Type");
+						resHeadLst.add("Row");
+						resHeadLst.add("Exec Time");
+						resHeadLst.add("SQL");
+						
+						DBResultTab dbResultTab = new DBResultTab( this.dbView );
+						dbResultTab.setText( "Result" );
+						dbResultTab.setSQL(null);
+						dbResultTab.setProcInf(this.procInf);
+						dbResultTab.setDataOnTableViewSQL(resHeadLst, resDataLst);
+						long endTimeTotal = System.nanoTime();
+						dbResultTab.setExecTime( endTimeTotal - startTimeTotalF );
+						// 0 => "..." => already remove
+						// 1 => "Result"
+						// 2 => "Script 1"
+						// 3 => "Script 2"
+						this.tabPane.getTabs().add( 0, dbResultTab );
+						this.tabPane.getSelectionModel().select( dbResultTab );
+					}
+				);
+			}
 			if ( this.taskEx != null )
 			{
 				this.updateValue( this.taskEx );

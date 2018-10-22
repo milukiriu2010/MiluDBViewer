@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<launch4jConfig>
+  <dontWrapJar>false</dontWrapJar>
+  <headerType>gui</headerType>
+  <jar>C:\myjava\MiluDBViewer11.git\java\viewer\build\MiluDBViewer.jar</jar>
+  <outfile>C:\myjava\MiluDBViewer11.git\java\viewer\build\MiluDBViewer.exe</outfile>
+  <errTitle></errTitle>
+  <cmdLine>--module-path &quot;%PATH_TO_FX%&quot; --add-modules=javafx.controls</cmdLine>
+  <chdir>.</chdir>
+  <priority>normal</priority>
+  <downloadUrl>http://java.com/download</downloadUrl>
+  <supportUrl></supportUrl>
+  <stayAlive>false</stayAlive>
+  <restartOnCrash>false</restartOnCrash>
+  <manifest></manifest>
+  <icon>C:\myjava\MiluDBViewer11.git\java\viewer\resources\images\winicon.ico</icon>
+  <jre>
+    <path></path>
+    <bundledJre64Bit>false</bundledJre64Bit>
+    <bundledJreAsFallback>false</bundledJreAsFallback>
+    <minVersion>1.8.0</minVersion>
+    <maxVersion></maxVersion>
+    <jdkPreference>preferJdk</jdkPreference>
+    <runtimeBits>64/32</runtimeBits>
+  </jre>
+</launch4jConfig>

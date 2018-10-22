@@ -1,7 +1,10 @@
 package milu.gui.ctrl.prepare;
 
+import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -26,6 +29,8 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.stage.FileChooser;
+import javafx.stage.FileChooser.ExtensionFilter;
 import milu.ctrl.sql.parse.SQLBag;
 import milu.db.MyDBAbstract;
 import milu.gui.ctrl.common.ParseAction;
@@ -33,17 +38,28 @@ import milu.gui.ctrl.common.inf.ActionInterface;
 import milu.gui.ctrl.common.inf.ChangeLangInterface;
 import milu.gui.ctrl.common.inf.CounterInterface;
 import milu.gui.ctrl.common.inf.FocusInterface;
+import milu.gui.ctrl.common.table.CopyTableInterface;
 import milu.gui.ctrl.common.table.DirectionSwitchInterface;
 import milu.gui.ctrl.common.table.ObjTableView;
+import milu.gui.ctrl.imp.ImportData;
+import milu.gui.ctrl.imp.ImportDataPane;
+import milu.gui.ctrl.imp.ImportDataPanePreview;
+import milu.gui.ctrl.imp.ImportPreviewInterface;
 import milu.gui.ctrl.query.SQLTextArea;
+import milu.gui.dlg.TaskDialog;
 import milu.gui.ctrl.query.SQLExecInterface;
 import milu.gui.ctrl.query.SQLFetchInterface;
+import milu.gui.ctrl.query.SQLFileInterface;
+import milu.gui.ctrl.query.SQLFormatInterface;
+import milu.gui.ctrl.query.SQLHistoryInterface;
 import milu.gui.view.DBView;
 import milu.main.AppConf;
 import milu.main.MainController;
 import milu.task.ProcInterface;
+import milu.task.imp.ImportTaskPreviewFactory;
 import milu.task.prepare.PrepareTaskFactory;
 import milu.tool.LimitedQueue;
+import milu.tool.MyFileTool;
 import milu.tool.MyGUITool;
 import milu.tool.MyStringTool;
 import net.sf.jsqlparser.JSQLParserException;
@@ -55,7 +71,14 @@ public class PrepareSQLTab extends Tab
 		ChangeLangInterface,
 		ActionInterface,
 		SQLExecInterface,
-		ProcInterface
+		CopyTableInterface,
+		DirectionSwitchInterface,
+		ProcInterface,
+		SQLFormatInterface,
+		SQLHistoryInterface,
+		SQLFileInterface,
+		ParamFileInterface,
+		ImportPreviewInterface
 {
 	private DBView          dbView = null;
 	
@@ -466,6 +489,205 @@ public class PrepareSQLTab extends Tab
 		this.execTask( PrepareTaskFactory.FACTORY_TYPE.SCRIPT, ParseAction.SQLPARSE.WITH_PARSE, ParseAction.SQLTYPE.ANY );
 	}
 	
+	// CopyTableInterface
+	@Override
+	public void copyTableNoHead( Event event )
+	{
+		Tab selectedTab = this.tabPane.getSelectionModel().getSelectedItem();
+		if ( selectedTab instanceof CopyTableInterface )
+		{
+			((CopyTableInterface)selectedTab).copyTableNoHead( event );
+		}
+	}
+	
+	// CopyTableInterface
+	@Override
+	public void copyTableWithHead( Event event )
+	{
+		Tab selectedTab = this.tabPane.getSelectionModel().getSelectedItem();
+		if ( selectedTab instanceof CopyTableInterface )
+		{
+			((CopyTableInterface)selectedTab).copyTableWithHead( event );
+		}
+	}
+	
+	// DirectionSwitchInterface
+	@Override
+	public Orientation getOrientation()
+	{
+		throw new UnsupportedOperationException();
+	}
+	
+	// DirectionSwitchInterface
+	@Override
+	public void setOrientation( Orientation orientation )
+	{
+		throw new UnsupportedOperationException();
+	}
+	
+	// DirectionSwitchInterface
+	@Override
+	public void switchDirection( Event event )
+	{
+		Tab selectedTab = this.tabPane.getSelectionModel().getSelectedItem();
+		if ( selectedTab instanceof DirectionSwitchInterface )
+		{
+			((DirectionSwitchInterface)selectedTab).switchDirection( event );
+		}
+	}
+
+	// SQLFormatInterface
+	@Override
+	public void formatSQL( Event event )
+	{
+		this.textAreaSQL.formatSQL( event );
+	}
+
+	// SQLFormatInterface
+	@Override
+	public void oneLineSQL( Event event )
+	{
+		this.textAreaSQL.oneLineSQL( event );
+	}
+
+	// SQLHistoryInterface
+	@Override
+	public void prevSQL( Event event )
+	{
+		this.histSQLPos++;
+		int size = this.histSQLLst.size();
+		if ( size == 0 )
+		{
+			this.histSQLPos = 0;
+		}
+		else if ( this.histSQLPos > (size-1) )
+		{
+			this.histSQLPos = size-1;
+		}
+		this.setSQLTextFromHistory();
+	}
+
+	// SQLHistoryInterface
+	@Override
+	public void nextSQL( Event event )
+	{
+		this.histSQLPos--;
+		if ( this.histSQLPos < -1 )
+		{
+			this.histSQLPos = -1;
+		}
+		this.setSQLTextFromHistory();
+	}
+	
+	private void setSQLTextFromHistory()
+	{
+		if ( this.histSQLPos >= this.histSQLLst.size() )
+		{
+			return;
+		}
+		else if ( this.histSQLPos == -1 )
+		{
+			this.textAreaSQL.setText(null);
+			return;
+		}
+		
+		String strSQL = this.histSQLLst.get(this.histSQLPos);
+		if ( strSQL != null )
+		{
+			this.textAreaSQL.setText(strSQL);
+		}
+	}
+	
+	// ParamFileInterface
+	@Override
+	public void openParam( Event event )
+	{
+		MainController mainCtrl = this.dbView.getMainController();
+		AppConf appConf = mainCtrl.getAppConf();
+
+		List<FileChooser.ExtensionFilter> filterLst = new ArrayList<>();
+		filterLst.add(new ExtensionFilter( "Excel Files", "*.csv" ));
+		filterLst.add(new ExtensionFilter( "Excel Files", "*.xlsx" ));
+		
+		File file = 
+			MyGUITool.fileOpenDialog(
+					appConf.getInitDirImportFile(),
+					null, 
+					filterLst, 
+					this.getContent()
+					);
+		if ( file == null )
+		{
+			return;
+		}
+		
+		// アプリ設定として設定ファイルに保存する
+		appConf.setInitDirImportFile(file.getParentFile().getAbsolutePath());
+		MyFileTool.save( mainCtrl, appConf );
+		
+		// ロードするファイルを設定する
+		Map<String, Object> mapObj = new HashMap<>();
+		mapObj.put( ImportData.SRC_FILE.val(), file.getAbsolutePath() );
+		
+		// ロード進行中ダイアログ起動
+		final Task<Exception> task = 
+				ImportTaskPreviewFactory.createFactory( ImportDataPane.SRC_TYPE.FILE, this, this.dbView, mapObj );
+		if ( task == null )
+		{
+			return;
+		}
+		TaskDialog taskDlg = new TaskDialog(task,mainCtrl,null);
+		taskDlg.showAndWait();
+	}
+	
+	// ImportPreviewInterface
+	@Override
+	public void setTableViewData( List<Object> columnLst, List<List<Object>> dataLst )
+	{
+		this.objTableView.setTableViewData(columnLst, dataLst);
+	}
+	
+	// ImportPreviewInterface
+	@Override
+	public void setErrorType( ImportDataPanePreview.ERROR_TYPE errorType )
+	{
+	}
+
+	// SQLFileInterface
+	@Override
+	public void openSQL( Event event )
+	{
+		MainController mainCtrl = this.dbView.getMainController();
+		AppConf appConf = mainCtrl.getAppConf();
+		File file = MyGUITool.fileOpenDialog( appConf.getInitDirSQLFile(), null, null, this.getTabPane() );
+		if ( file == null )
+		{
+			return;
+		}
+		appConf.setInitDirSQLFile(file.getParent());
+		MyFileTool.save(mainCtrl, appConf);
+		
+		String strSQL = MyFileTool.loadFile(file, mainCtrl, appConf);
+		this.textAreaSQL.setText(strSQL);
+	}
+
+	// SQLFileInterface
+	@Override
+	public void saveSQL( Event event )
+	{
+		MainController mainCtrl = this.dbView.getMainController();
+		AppConf appConf = mainCtrl.getAppConf();
+		File file = MyGUITool.fileSaveDialog( appConf.getInitDirSQLFile(), null, this.getTabPane() );
+		if ( file == null )
+		{
+			return;
+		}
+		appConf.setInitDirSQLFile(file.getParent());
+		MyFileTool.save(mainCtrl, appConf);
+		
+		MyFileTool.saveFile(file, this.textAreaSQL.getText(), mainCtrl, appConf);
+	}
+
 	// ProcInterface
 	@Override
 	public void beginProc()
