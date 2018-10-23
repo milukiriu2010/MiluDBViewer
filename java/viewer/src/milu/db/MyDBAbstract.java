@@ -15,6 +15,7 @@ import java.io.UnsupportedEncodingException;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
+import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.Statement;
@@ -553,6 +554,12 @@ abstract public class MyDBAbstract
 		throws SQLException
 	{
 		return this.conn.prepareStatement(sql,resultSetType,resultSetConcurrency);
+	}
+	
+	public synchronized CallableStatement createCallableStatement( String sql )
+		throws SQLException
+	{
+		return this.conn.prepareCall(sql);
 	}
 
 	public synchronized DatabaseMetaData getMetaData()

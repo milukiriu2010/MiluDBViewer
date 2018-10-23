@@ -99,6 +99,28 @@ export MYCLASSPATH=$MYCLASSPATH:$prgdir/lib/jarchivelib/jarchivelib-0.7.1-jar-wi
 #echo "CLASSPATH=>"
 #echo $MYCLASSPATH
 
+# ============================================
+# === set classpath ==========================
+# ============================================
+export ADDEXPORTS=$ADDEXPORTS --add-exports javafx.base/com.sun.javafx.logging=ALL-UNNAMED
+export ADDEXPORTS=$ADDEXPORTS --add-exports javafx.graphics/com.sun.glass.ui=ALL-UNNAMED
+export ADDEXPORTS=$ADDEXPORTS --add-exports javafx.graphics/com.sun.glass.utils=ALL-UNNAMED
+export ADDEXPORTS=$ADDEXPORTS --add-exports javafx.graphics/com.sun.javafx.application=ALL-UNNAMED
+export ADDEXPORTS=$ADDEXPORTS --add-exports javafx.graphics/com.sun.javafx.font=ALL-UNNAMED
+export ADDEXPORTS=$ADDEXPORTS --add-exports javafx.graphics/com.sun.javafx.geom=ALL-UNNAMED
+export ADDEXPORTS=$ADDEXPORTS --add-exports javafx.graphics/com.sun.javafx.geom.transform=ALL-UNNAMED
+export ADDEXPORTS=$ADDEXPORTS --add-exports javafx.graphics/com.sun.javafx.scene=ALL-UNNAMED
+export ADDEXPORTS=$ADDEXPORTS --add-exports javafx.controls/com.sun.javafx.scene.control=ALL-UNNAMED 
+export ADDEXPORTS=$ADDEXPORTS --add-exports javafx.graphics/com.sun.javafx.scene.input=ALL-UNNAMED
+export ADDEXPORTS=$ADDEXPORTS --add-exports javafx.graphics/com.sun.javafx.sg.prism=ALL-UNNAMED
+export ADDEXPORTS=$ADDEXPORTS --add-exports javafx.graphics/com.sun.javafx.text=ALL-UNNAMED
+export ADDEXPORTS=$ADDEXPORTS --add-exports javafx.graphics/com.sun.javafx.tk=ALL-UNNAMED
+export ADDEXPORTS=$ADDEXPORTS --add-exports javafx.graphics/com.sun.javafx.util=ALL-UNNAMED
+export ADDEXPORTS=$ADDEXPORTS --add-exports javafx.graphics/com.sun.prism=ALL-UNNAMED
+export ADDEXPORTS=$ADDEXPORTS --add-exports javafx.graphics/com.sun.prism.paint=ALL-UNNAMED
+export ADDEXPORTS=$ADDEXPORTS --add-exports javafx.graphics/com.sun.scenario.effect=ALL-UNNAMED
+
+
 # ====================================================
 # === set NLS_LANG ===================================
 # ====================================================

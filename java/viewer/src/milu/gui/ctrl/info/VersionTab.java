@@ -42,6 +42,8 @@ public class VersionTab extends Tab
 	{
 		super();
 		
+		System.out.println( "VersionTab construct start" );
+		
 		this.dbView = dbView;
 		MainController mainCtrl = this.dbView.getMainController();
 
@@ -63,6 +65,8 @@ public class VersionTab extends Tab
 		this.setAction();
 		
 		this.changeLang();
+		
+		System.out.println( "VersionTab construct end" );
 	}
 	
 	private void setPaneBottom()

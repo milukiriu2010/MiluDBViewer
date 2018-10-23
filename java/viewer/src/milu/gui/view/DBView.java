@@ -31,9 +31,9 @@ import milu.gui.ctrl.common.inf.FocusInterface;
 import milu.gui.ctrl.common.table.DirectionSwitchInterface;
 import milu.gui.ctrl.menu.MainMenuBar;
 import milu.gui.ctrl.menu.MainToolBar;
-import milu.gui.ctrl.query.SQLExecInterface;
-import milu.gui.ctrl.query.DBSqlScriptTab;
 import milu.gui.dlg.MyAlertDialog;
+import milu.gui.stmt.query.DBSqlScriptTab;
+import milu.gui.stmt.query.SQLExecInterface;
 import milu.main.AppConf;
 import milu.main.MainController;
 import milu.db.MyDBAbstract;
@@ -436,8 +436,10 @@ public class DBView extends Stage
 			//final Tab newTab = TabFactory.getInstance( this, castClazz );
 			Object obj = null;
 			Constructor<?>[] constructors = castClazz.getDeclaredConstructors();
+			System.out.println( "openView:constructors:" + constructors.length );
 			for ( int i = 0; i < constructors.length; i++ )
 			{
+				System.out.println( "openView:constructors:i:" + i );
 				try
 				{
 					// exit loop 
@@ -447,8 +449,10 @@ public class DBView extends Stage
 				}
 				catch ( Exception ex )
 				{
+					ex.printStackTrace();
 				}
 			}
+			System.out.println( "openView:obj:" + obj );
 			if ( obj == null )
 			{
 				return;
@@ -463,6 +467,7 @@ public class DBView extends Stage
 			this.tabPane.getSelectionModel().select( newTab );
 			tab = newTab;
 		}
+		System.out.println( "openView:tab:" + tab );
 		
 		if ( tab instanceof FocusInterface )
 		{

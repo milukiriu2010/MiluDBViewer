@@ -13,6 +13,27 @@
 @set MYCLASSPATH=%MYCLASSPATH%;lib/jarchivelib/jarchivelib-0.7.1-jar-with-dependencies.jar
 
 @rem ============================================
+@rem === set classpath ==========================
+@rem ============================================
+@set ADDEXPORTS=%ADDEXPORTS% --add-exports javafx.base/com.sun.javafx.logging=ALL-UNNAMED
+@set ADDEXPORTS=%ADDEXPORTS% --add-exports javafx.graphics/com.sun.glass.ui=ALL-UNNAMED
+@set ADDEXPORTS=%ADDEXPORTS% --add-exports javafx.graphics/com.sun.glass.utils=ALL-UNNAMED
+@set ADDEXPORTS=%ADDEXPORTS% --add-exports javafx.graphics/com.sun.javafx.application=ALL-UNNAMED
+@set ADDEXPORTS=%ADDEXPORTS% --add-exports javafx.graphics/com.sun.javafx.font=ALL-UNNAMED
+@set ADDEXPORTS=%ADDEXPORTS% --add-exports javafx.graphics/com.sun.javafx.geom=ALL-UNNAMED
+@set ADDEXPORTS=%ADDEXPORTS% --add-exports javafx.graphics/com.sun.javafx.geom.transform=ALL-UNNAMED
+@set ADDEXPORTS=%ADDEXPORTS% --add-exports javafx.graphics/com.sun.javafx.scene=ALL-UNNAMED
+@set ADDEXPORTS=%ADDEXPORTS% --add-exports javafx.controls/com.sun.javafx.scene.control=ALL-UNNAMED 
+@set ADDEXPORTS=%ADDEXPORTS% --add-exports javafx.graphics/com.sun.javafx.scene.input=ALL-UNNAMED
+@set ADDEXPORTS=%ADDEXPORTS% --add-exports javafx.graphics/com.sun.javafx.sg.prism=ALL-UNNAMED
+@set ADDEXPORTS=%ADDEXPORTS% --add-exports javafx.graphics/com.sun.javafx.text=ALL-UNNAMED
+@set ADDEXPORTS=%ADDEXPORTS% --add-exports javafx.graphics/com.sun.javafx.tk=ALL-UNNAMED
+@set ADDEXPORTS=%ADDEXPORTS% --add-exports javafx.graphics/com.sun.javafx.util=ALL-UNNAMED
+@set ADDEXPORTS=%ADDEXPORTS% --add-exports javafx.graphics/com.sun.prism=ALL-UNNAMED
+@set ADDEXPORTS=%ADDEXPORTS% --add-exports javafx.graphics/com.sun.prism.paint=ALL-UNNAMED
+@set ADDEXPORTS=%ADDEXPORTS% --add-exports javafx.graphics/com.sun.scenario.effect=ALL-UNNAMED
+
+@rem ============================================
 @rem === set NLS_LANG ===========================
 @rem ============================================
 @rem set NLS_LANG=French_France.AL32UTF8
@@ -91,7 +112,7 @@
 @rem === Start App ============================================
 @rem ==========================================================
 :exec
-  "%MYJAVA%" --module-path "%PATH_TO_FX%" --add-modules=javafx.controls -classpath %MYCLASSPATH% -jar MiluDBViewer.jar milu.main.MiluDBViewer
+  "%MYJAVA%" --module-path "%PATH_TO_FX%" --add-modules=javafx.controls %ADDEXPORTS% -classpath %MYCLASSPATH% -jar MiluDBViewer.jar milu.main.MiluDBViewer
   @goto end_batch
 
 :end_batch
