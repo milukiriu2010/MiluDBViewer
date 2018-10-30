@@ -8,7 +8,9 @@ import java.sql.Timestamp;
 import java.sql.SQLException;
 import java.sql.CallableStatement;
 
+import milu.ctrl.sql.parse.MySQLType;
 import milu.db.MyDBSQLite;
+import milu.gui.stmt.call.CallObj;
 
 public class ExecSQLTransactionCall extends ExecSQLAbstract 
 {
@@ -33,159 +35,40 @@ public class ExecSQLTransactionCall extends ExecSQLAbstract
 			this.execStartTime = System.nanoTime();
 			
 			this.colNameLst.add( "Type" );
-			this.colNameLst.add( "Row" );
+			//this.colNameLst.add( "Row" );
 			
-			int preLstSize = this.preLst.size();
-			for ( int i=1; i <= preLstSize; i++ )
+			
+			for ( int i = 0; i < this.callLst.size(); i++ )
 			{
-				Object obj = this.preLst.get(i-1);
-				if ( obj == null )
+				CallObj callObj = this.callLst.get(i);
+				CallObj.ParamType paramType = callObj.getParamType();
+				MySQLType sqlType = callObj.getSqlType();
+				String inColName = callObj.getInColName();
+				// INパラメータを設定
+				if ( ( paramType == CallObj.ParamType.IN ) || ( paramType == CallObj.ParamType.IN_OUT ) )
 				{
-					if ( this.colTypeNameLst == null )
-					{
-						stmt.setObject( i, obj );
-					}
-					else if ( i >= this.colTypeNameLst.size() )
-					{
-						stmt.setObject( i, obj );
-					}
-					else
-					{
-						String colTypeName = this.colTypeNameLst.get(i-1).toUpperCase();
-						if ( "NUMERIC".equals(colTypeName) )
-						{
-							stmt.setNull( i, java.sql.Types.NUMERIC );
-						}
-						else if ( "NUMBER".equals(colTypeName) )
-						{
-							stmt.setNull( i, java.sql.Types.NUMERIC );
-						}
-						// MySQL
-						// Cassandra(zhicwu)
-						else if ( "INT".equals(colTypeName) )
-						{
-							stmt.setNull( i, java.sql.Types.INTEGER );
-						}
-						// MySQL
-						else if ( "MEDIUMINT UNSIGNED".equals(colTypeName) )
-						{
-							stmt.setNull( i, java.sql.Types.INTEGER );
-						}
-						// MySQL
-						else if ( "SMALLINT".equals(colTypeName) )
-						{
-							stmt.setNull( i, java.sql.Types.SMALLINT );
-						}
-						// MySQL
-						else if ( "SMALLINT UNSIGNED".equals(colTypeName) )
-						{
-							stmt.setNull( i, java.sql.Types.SMALLINT );
-						}
-						// MySQL
-						else if ( "TINYINT".equals(colTypeName) )
-						{
-							stmt.setNull( i, java.sql.Types.TINYINT );
-						}
-						// MySQL
-						else if ( "TINYINT UNSIGNED".equals(colTypeName) )
-						{
-							stmt.setNull( i, java.sql.Types.TINYINT );
-						}
-						// MySQL
-						// Cassandra(zhicwu)
-						else if ( "DECIMAL".equals(colTypeName) )
-						{
-							stmt.setNull( i, java.sql.Types.DECIMAL );
-						}
-						else if ( "CHAR".equals(colTypeName) )
-						{
-							stmt.setNull( i, java.sql.Types.CHAR );
-						}
-						// MySQL
-						// Cassandra(zhicwu)
-						else if ( "VARCHAR".equals(colTypeName) )
-						{
-							stmt.setNull( i, java.sql.Types.VARCHAR );
-						}
-						// Oracle
-						else if ( "VARCHAR2".equals(colTypeName) )
-						{
-							stmt.setNull( i, java.sql.Types.VARCHAR );
-						}
-						// SQLite
-						else if ( "TEXT".equals(colTypeName) )
-						{
-							stmt.setNull( i, java.sql.Types.VARCHAR );
-						}
-						// Oracle
-						// Cassandra(zhicwu)
-						else if ( "DATE".equals(colTypeName) )
-						{
-							stmt.setNull( i, java.sql.Types.DATE );
-						}
-						// MySQL
-						else if ( "YEAR".equals(colTypeName) )
-						{
-							stmt.setNull( i, java.sql.Types.DATE );
-						}
-						// MySQL
-						else if ( "DATETIME".equals(colTypeName) )
-						{
-							stmt.setNull( i, java.sql.Types.TIMESTAMP );
-						}
-						// MySQL
-						// Cassandra(zhicwu)
-						else if ( "TIMESTAMP".equals(colTypeName) )
-						{
-							stmt.setNull( i, java.sql.Types.TIMESTAMP );
-						}
-						// Oracle
-						else if ( "CLOB".equals(colTypeName) )
-						{
-							stmt.setNull( i, java.sql.Types.CLOB );
-						}
-						// Oracle
-						else if ( "SYS.XMLTYPE".equals(colTypeName) )
-						{
-							stmt.setNull( i, java.sql.Types.SQLXML );
-						}
-						// MySQL
-						//   GEOMETRY(sakila.address)
-						//   BLOB(sakila.staff)
-						else
-						{
-							stmt.setObject( i, obj );
-						}
-					}
+					
+					
+					
+					
+					
+					
+					// 後でpreLstを取るロジックを修正
+					stmt.setObject(i+1, this.preLst.get(0));
 				}
-				// obj is not null.
-				else
+				// OUTパラメータを設定
+				if ( ( paramType == CallObj.ParamType.OUT ) || ( paramType == CallObj.ParamType.IN_OUT ) )
 				{
-					if ( obj instanceof Timestamp )
-					{
-						// SQLite does not support "java.sql.Timestamp"
-						if ( this.myDBAbs instanceof MyDBSQLite )
-						{
-							Timestamp objTS = (Timestamp)obj;
-							String strTS = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(objTS);
-							stmt.setString( i, strTS );
-						}
-						else
-						{
-							stmt.setObject( i, obj );
-						}
-					}
-					else
-					{
-						stmt.setObject( i, obj );
-					}
+					stmt.registerOutParameter(i+1, sqlType.getVal());
 				}
 			}
 			
-			int cnt = stmt.executeUpdate();
+			stmt.execute();
 			List<Object> data = new ArrayList<>();
 			data.add( this.sqlBag.getType().getVal() );
-			data.add( Integer.valueOf(cnt) );
+			
+			// OUTパラメータをここで出力する
+			//data.add( Integer.valueOf(cnt) );
 			this.dataLst.add(data);
 		}
 		catch ( SQLException sqlEx )

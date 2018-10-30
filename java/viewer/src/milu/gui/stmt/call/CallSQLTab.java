@@ -12,6 +12,8 @@ import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 
 import javafx.application.Platform;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.event.Event;
 import javafx.geometry.Insets;
@@ -31,6 +33,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
+import milu.ctrl.sql.parse.MySQLType;
 import milu.ctrl.sql.parse.SQLBag;
 import milu.db.MyDBAbstract;
 import milu.gui.ctrl.common.ParseAction;
@@ -48,6 +51,7 @@ import milu.gui.ctrl.imp.ImportPreviewInterface;
 import milu.gui.dlg.TaskDialog;
 import milu.gui.stmt.prepare.ParamFileInterface;
 import milu.gui.stmt.query.SQLExecInterface;
+import milu.gui.stmt.query.SQLExecWithoutParseInterface;
 import milu.gui.stmt.query.SQLFetchInterface;
 import milu.gui.stmt.query.SQLFileInterface;
 import milu.gui.stmt.query.SQLFormatInterface;
@@ -58,7 +62,7 @@ import milu.main.AppConf;
 import milu.main.MainController;
 import milu.task.ProcInterface;
 import milu.task.imp.ImportTaskPreviewFactory;
-import milu.task.stmt.prepare.PrepareTaskFactory;
+import milu.task.stmt.call.CallTaskFactory;
 import milu.tool.LimitedQueue;
 import milu.tool.MyFileTool;
 import milu.tool.MyGUITool;
@@ -71,7 +75,7 @@ public class CallSQLTab extends Tab
 		FocusInterface,
 		ChangeLangInterface,
 		ActionInterface,
-		SQLExecInterface,
+		SQLExecWithoutParseInterface,
 		CopyTableInterface,
 		DirectionSwitchInterface,
 		ProcInterface,
@@ -90,25 +94,34 @@ public class CallSQLTab extends Tab
 	private ToolBar  toolBar = null;
 	
 	// TextArea on this pane
-	private AnchorPane   upperPane = new AnchorPane();
+	private AnchorPane   lowerPane = new AnchorPane();
 	
 	// TextArea for input SQL 
 	private SQLTextArea  textAreaSQL = null;
 
 	// ---------------------------------------------------------------------
-	// Upper => see. splitPane2
-	// Lower => [TabPane(tabPane)]
+	// Upper => splitPane21
+	// Lower => splitPane22
 	// ---------------------------------------------------------------------
 	private SplitPane splitPane1 = new SplitPane();
 	
 	// ---------------------------------------------------------------------
-	// Upper-Left  => [AnchorPane(upperPane)]-[SqlTextArea(textAreaSQL)]
-	// Upper-Right => [ObjTableView]
+	// Upper-Left  => [ObjTableView]
+	// Upper-Right => [CallTableView]
 	// ---------------------------------------------------------------------
-	private SplitPane splitPane2 = new SplitPane();
+	private SplitPane splitPane21 = new SplitPane();
 	
-	// Parameter for PreparedStatement
+	// ---------------------------------------------------------------------
+	// Lower-Left  => [AnchorPane(lowerPane)]-[SqlTextArea(textAreaSQL)]
+	// Lower-Right => [TabPane(tabPane)]
+	// ---------------------------------------------------------------------
+	private SplitPane splitPane22 = new SplitPane();
+	
+	// In Parameter for CallableStatement
 	private ObjTableView objTableView = null;
+	
+	// Parameter for CallableStatment
+	private CallTableView callTableView = null;
 	
 	// TabPane for SQL result
 	private TabPane         tabPane = new TabPane();
@@ -144,19 +157,11 @@ public class CallSQLTab extends Tab
 		
         // http://tutorials.jenkov.com/javafx/textarea.html
 		this.textAreaSQL  = new SQLTextArea( dbView );
-		this.textAreaSQL.setText
-		(
-		"select * from all_objects \n" + 
-		"where \n" + 
-		" status = ? \n" + 
-		" and\r\n" + 
-		" namespace = ? \n" + 
-		""
-		);
+		this.textAreaSQL.setText("kunimei_en2jp(?,?,?)");
 		
 		
         // AnchorPane
-        this.upperPane.getChildren().add( this.textAreaSQL );
+        this.lowerPane.getChildren().add( this.textAreaSQL );
         this.textAreaSQL.init();
         AnchorPane.setTopAnchor( this.textAreaSQL, 0.0 );
         AnchorPane.setBottomAnchor( this.textAreaSQL, 0.0 );
@@ -174,41 +179,68 @@ public class CallSQLTab extends Tab
         hBox.getChildren().addAll( this.labelCntSQL, this.labelExecTimeSQL );
 
     	// ---------------------------------------------------------------------
-    	// Upper => see. splitPane2
-    	// Lower => [TabPane(tabPane)]
+    	// Upper => splitPane21
+    	// Lower => splitPane22
     	// ---------------------------------------------------------------------
-        // SplitPane1
-        // http://fxexperience.com/2011/06/splitpane-in-javafx-2-0/
 		this.splitPane1.setOrientation(Orientation.VERTICAL);
-		this.splitPane1.getItems().addAll( this.splitPane2, this.tabPane );
-		this.splitPane1.setDividerPositions( 0.3f, 0.7f );
+		this.splitPane1.getItems().addAll( this.splitPane21, this.splitPane22 );
+		//this.splitPane1.getItems().addAll( this.splitPane2, this.tabPane );
+		this.splitPane1.setDividerPositions( 0.5f, 0.5f );
 
 		// -----------------------------------------------
-		// Initialize data for TableView
+		// Initialize data for ObjTableView
 		// -----------------------------------------------
 		this.objTableView = new ObjTableView(this.dbView);
 		List<Object> headLst = new ArrayList<>();
 		headLst.add("A");
-		headLst.add("B");
 		List<Object> dataRow1 = new ArrayList<>();
-		dataRow1.add("INVALID");
-		dataRow1.add(1);
+		dataRow1.add("Japan");
 		List<Object> dataRow2 = new ArrayList<>();
-		dataRow2.add("INVALID");
-		dataRow2.add(2);
+		dataRow2.add("Spain");
 		List<List<Object>> dataRowLst = new ArrayList<>();
 		dataRowLst.add(dataRow1);
 		dataRowLst.add(dataRow2);
 		this.objTableView.setTableViewData(headLst, dataRowLst);
+
+		// -----------------------------------------------
+		// Initialize data for CallTableView
+		// -----------------------------------------------
+		this.callTableView = new CallTableView(this.dbView);
+		// パラメータ１
+		CallObj callObj1 = new CallObj();
+		callObj1.setParamNo(1);
+		callObj1.setParamType(CallObj.ParamType.IN_OUT);
+		callObj1.setSqlType(MySQLType.VARCHAR);
+		callObj1.setInColName("A");
+		// パラメータ２
+		CallObj callObj2 = new CallObj();
+		callObj2.setParamNo(2);
+		callObj2.setParamType(CallObj.ParamType.OUT);
+		callObj2.setSqlType(MySQLType.VARCHAR);
+		// パラメータ３
+		CallObj callObj3 = new CallObj();
+		callObj3.setParamNo(3);
+		callObj3.setParamType(CallObj.ParamType.OUT);
+		callObj3.setSqlType(MySQLType.NUMERIC);
+		
+		ObservableList<CallObj> callObjLst = FXCollections.observableArrayList(callObj1,callObj2,callObj3);
+		this.callTableView.setItems(callObjLst);
 		
 		// ---------------------------------------------------------------------
-		// Upper-Left  => [AnchorPane(upperPane)]-[SqlTextArea(textAreaSQL)]
-		// Upper-Right => [TableView]
+		// Upper-Left  => [ObjTableView]
+		// Upper-Right => [CallTableView]
 		// ---------------------------------------------------------------------
-		// Parameter for PreparedStatement
-		this.splitPane2.setOrientation(Orientation.HORIZONTAL);
-		this.splitPane2.getItems().addAll( this.upperPane, this.objTableView );
-		this.splitPane2.setDividerPositions( 0.5f, 0.5f );
+		this.splitPane21.setOrientation(Orientation.HORIZONTAL);
+		this.splitPane21.getItems().addAll( this.objTableView, this.callTableView );
+		this.splitPane21.setDividerPositions( 0.5f, 0.5f );
+
+		// ---------------------------------------------------------------------
+		// Lower-Left  => [AnchorPane(lowerPane)]-[SqlTextArea(textAreaSQL)]
+		// Lower-Right => [TabPane(tabPane)]
+		// ---------------------------------------------------------------------
+		this.splitPane22.setOrientation(Orientation.HORIZONTAL);
+		this.splitPane22.getItems().addAll( this.lowerPane, this.tabPane );
+		this.splitPane22.setDividerPositions( 0.5f, 0.5f );
 		
 		BorderPane brdPane = new BorderPane();
 		brdPane.setTop(this.toolBar);
@@ -221,10 +253,10 @@ public class CallSQLTab extends Tab
 		
 		MainController mainCtrl = this.dbView.getMainController();
 		// set icon on Tab
-		this.setGraphic( MyGUITool.createImageView( 16, 16, mainCtrl.getImage("file:resources/images/prepare.png") ) );
+		this.setGraphic( MyGUITool.createImageView( 16, 16, mainCtrl.getImage("file:resources/images/call.png") ) );
 		
 		// Tab Title
-		this.setText( "Prepared" + Integer.valueOf( counterOpend ) );
+		this.setText( "Callable" + Integer.valueOf( counterOpend ) );
 		
 		// SQL History List
 		this.histSQLLst = new LimitedQueue<String>(10);
@@ -291,8 +323,7 @@ public class CallSQLTab extends Tab
 		this.labelExecTimeSQL.setText( String.format( "%,d", nanoSec ) + "nsec" );
 	}
 	
-	
-	private void execTask( PrepareTaskFactory.FACTORY_TYPE factoryType, ParseAction.SQLPARSE sqlParse, ParseAction.SQLTYPE sqlType )
+	private void execTask( CallTaskFactory.FACTORY_TYPE factoryType, ParseAction.SQLPARSE sqlParse, ParseAction.SQLTYPE sqlType )
 	{
 		System.out.println( "execTask:sqlParse[" + sqlParse + "]" );
 		
@@ -377,11 +408,13 @@ public class CallSQLTab extends Tab
 		}
 		this.setCount( sqlBagLst.size() );
 
-		// PreparedStatementのプレースホルダに渡すパラメータ
-		List<List<Object>> placeHolderLst = this.objTableView.getDataList();
+		// CallableStatement(INパラメータ)のプレースホルダに渡すパラメータ
+		List<List<Object>> placeHolderInLst = this.objTableView.getDataList();
+		
+		ObservableList<CallObj> placeHolderParamLst = this.callTableView.getItems();
 		
 		Task<Exception> task =
-			PrepareTaskFactory.createFactory
+			CallTaskFactory.createFactory
 			( 
 				factoryType, 
 				this.dbView, 
@@ -391,7 +424,8 @@ public class CallSQLTab extends Tab
 				sqlBagLst, 
 				this,
 				orientation,
-				placeHolderLst
+				placeHolderParamLst,
+				placeHolderInLst
 			); 
 		
 		// execute task
@@ -483,11 +517,24 @@ public class CallSQLTab extends Tab
 		this.setExecTime( endTime - startTime );
 	}
 	
-	// SQLExecInterface
+	// SQLExecWithoutParseInterface
 	@Override
-	public void execSQL( Event event )
+	public void execSQLQuery( Event event )
 	{
-		this.execTask( PrepareTaskFactory.FACTORY_TYPE.SCRIPT, ParseAction.SQLPARSE.WITH_PARSE, ParseAction.SQLTYPE.ANY );
+	}
+	
+	// SQLExecWithoutParseInterface
+	@Override
+	public void execSQLTrans( Event event )
+	{
+		this.execTask( CallTaskFactory.FACTORY_TYPE.SCRIPT, ParseAction.SQLPARSE.WITHOUT_PARSE, ParseAction.SQLTYPE.TRANS );		
+	}
+	
+	
+	// SQLExecWithoutParseInterface
+	@Override
+	public void execSQLTransSemi( Event event )
+	{
 	}
 	
 	// CopyTableInterface

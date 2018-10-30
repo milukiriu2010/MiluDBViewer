@@ -133,7 +133,6 @@ public class PrepareScriptEach
 		// Result Data
 		List<List<Object>> dataLst = new ArrayList<>();
 		
-		//ExecSQLAbstract execSQLAbs = new ExecSQLFactory().createPreparedFactory( this.sqlBag, this.myDBAbs, this.appConf, this.progressInf, this.assignedSize );
 		ExecSQLAbstract execSQLAbs = new ExecSQLFactory().createPreparedFactory( this.sqlBag, this.myDBAbs, this.appConf, null );
 		if ( execSQLAbs == null )
 		{

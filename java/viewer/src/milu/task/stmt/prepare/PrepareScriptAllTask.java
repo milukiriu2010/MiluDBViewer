@@ -91,7 +91,8 @@ public class PrepareScriptAllTask extends Task<Exception>
 
 	// Task
 	@Override
-	protected Exception call() throws Exception {
+	protected Exception call() throws Exception 
+	{
 		System.out.println( "PrepareScriptAllTask:start." );
 		this.setProgress(0.0);
 		int size = -1;

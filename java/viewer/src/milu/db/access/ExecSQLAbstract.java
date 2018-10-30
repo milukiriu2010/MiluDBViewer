@@ -3,9 +3,12 @@ package milu.db.access;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Observable;
 
+import javafx.collections.ObservableList;
 import milu.ctrl.sql.parse.SQLBag;
 import milu.db.MyDBAbstract;
+import milu.gui.stmt.call.CallObj;
 import milu.main.AppConf;
 import milu.task.ProgressInterface;
 import milu.task.ProgressReportInterface;
@@ -33,6 +36,8 @@ abstract public class ExecSQLAbstract
 	protected List<List<Object>> dataLst    = new ArrayList<>();
 	// Prepared List
 	protected List<Object>   preLst = null;
+	// Callable List
+	protected ObservableList<CallObj> callLst = null;
 	
 	protected ProgressInterface  progressInf  = null;
 	protected double             assignedSize = 0.0;
@@ -71,6 +76,12 @@ abstract public class ExecSQLAbstract
 	public void setPreLst( List<Object> preLst )
 	{
 		this.preLst = preLst;
+	}
+	
+	// Callable List
+	public void setCallLst( ObservableList<CallObj> callLst )
+	{
+		this.callLst = callLst;
 	}
 	
 	// ProgressReportInterface

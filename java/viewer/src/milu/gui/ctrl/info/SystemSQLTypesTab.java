@@ -83,6 +83,8 @@ public class SystemSQLTypesTab extends Tab
 		dataLst.add(Arrays.asList(java.sql.Types.STRUCT       ,"java.sql.Types.STRUCT"));
 		dataLst.add(Arrays.asList(java.sql.Types.TIME         ,"java.sql.Types.TIME"));
 		dataLst.add(Arrays.asList(java.sql.Types.TIME_WITH_TIMEZONE,"java.sql.Types.TIME_WITH_TIMEZONE"));
+		dataLst.add(Arrays.asList(java.sql.Types.TIMESTAMP    ,"java.sql.Types.TIMESTAMP"));
+		dataLst.add(Arrays.asList(java.sql.Types.TIMESTAMP_WITH_TIMEZONE,"java.sql.Types.TIMESTAMP_WITH_TIMEZONE"));
 		dataLst.add(Arrays.asList(java.sql.Types.TINYINT      ,"java.sql.Types.TINYINT"));
 		dataLst.add(Arrays.asList(java.sql.Types.VARBINARY    ,"java.sql.Types.VARBINARY"));
 		dataLst.add(Arrays.asList(java.sql.Types.VARCHAR      ,"java.sql.Types.VARCHAR"));

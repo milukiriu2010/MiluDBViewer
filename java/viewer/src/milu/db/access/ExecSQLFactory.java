@@ -2,8 +2,10 @@ package milu.db.access;
 
 import java.util.List;
 
+import javafx.collections.ObservableList;
 import milu.ctrl.sql.parse.SQLBag;
 import milu.db.MyDBAbstract;
+import milu.gui.stmt.call.CallObj;
 import milu.main.AppConf;
 import milu.task.ProgressInterface;
 
@@ -116,6 +118,26 @@ public class ExecSQLFactory extends ExecSQLFactoryAbstract {
 		execSQLAbs.setSQLBag(sqlBag);
 		execSQLAbs.setMyDBAbstract(myDBAbs);
 		execSQLAbs.setAppConf(appConf);
+		execSQLAbs.setPreLst(preLst);
+		return execSQLAbs;
+	}
+	
+	@Override
+	public ExecSQLAbstract createCallableFactory( SQLBag sqlBag, MyDBAbstract myDBAbs, AppConf appConf, ObservableList<CallObj> paramLst, List<Object> preLst ) 
+	{
+		ExecSQLAbstract execSQLAbs = null;
+		if ( SQLBag.TYPE.UNKNOWN_TRANSACTION.equals(sqlBag.getType()) )
+		{
+			execSQLAbs = new ExecSQLTransactionCall();
+		}
+		else
+		{
+			return null;
+		}
+		execSQLAbs.setSQLBag(sqlBag);
+		execSQLAbs.setMyDBAbstract(myDBAbs);
+		execSQLAbs.setAppConf(appConf);
+		execSQLAbs.setCallLst(paramLst);
 		execSQLAbs.setPreLst(preLst);
 		return execSQLAbs;
 	}
