@@ -33,6 +33,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
+import milu.ctrl.sql.parse.CallObj;
 import milu.ctrl.sql.parse.MySQLType;
 import milu.ctrl.sql.parse.SQLBag;
 import milu.db.MyDBAbstract;
@@ -50,7 +51,6 @@ import milu.gui.ctrl.imp.ImportDataPanePreview;
 import milu.gui.ctrl.imp.ImportPreviewInterface;
 import milu.gui.dlg.TaskDialog;
 import milu.gui.stmt.prepare.ParamFileInterface;
-import milu.gui.stmt.query.SQLExecInterface;
 import milu.gui.stmt.query.SQLExecWithoutParseInterface;
 import milu.gui.stmt.query.SQLFetchInterface;
 import milu.gui.stmt.query.SQLFileInterface;
@@ -157,7 +157,8 @@ public class CallSQLTab extends Tab
 		
         // http://tutorials.jenkov.com/javafx/textarea.html
 		this.textAreaSQL  = new SQLTextArea( dbView );
-		this.textAreaSQL.setText("kunimei_en2jp(?,?,?)");
+		// Example SQL
+		//this.textAreaSQL.setText("kunimei_en2jp(?,?,?)");
 		
 		
         // AnchorPane
@@ -189,8 +190,10 @@ public class CallSQLTab extends Tab
 
 		// -----------------------------------------------
 		// Initialize data for ObjTableView
+		// Example Data
 		// -----------------------------------------------
 		this.objTableView = new ObjTableView(this.dbView);
+		/*
 		List<Object> headLst = new ArrayList<>();
 		headLst.add("A");
 		List<Object> dataRow1 = new ArrayList<>();
@@ -201,23 +204,26 @@ public class CallSQLTab extends Tab
 		dataRowLst.add(dataRow1);
 		dataRowLst.add(dataRow2);
 		this.objTableView.setTableViewData(headLst, dataRowLst);
+		*/
 
 		// -----------------------------------------------
 		// Initialize data for CallTableView
+		// Example Data
 		// -----------------------------------------------
 		this.callTableView = new CallTableView(this.dbView);
-		// パラメータ１
+		/*
+		// Parameter 1
 		CallObj callObj1 = new CallObj();
 		callObj1.setParamNo(1);
 		callObj1.setParamType(CallObj.ParamType.IN_OUT);
 		callObj1.setSqlType(MySQLType.VARCHAR);
 		callObj1.setInColName("A");
-		// パラメータ２
+		// Parameter 2
 		CallObj callObj2 = new CallObj();
 		callObj2.setParamNo(2);
 		callObj2.setParamType(CallObj.ParamType.OUT);
 		callObj2.setSqlType(MySQLType.VARCHAR);
-		// パラメータ３
+		// Parameter 3
 		CallObj callObj3 = new CallObj();
 		callObj3.setParamNo(3);
 		callObj3.setParamType(CallObj.ParamType.OUT);
@@ -225,6 +231,7 @@ public class CallSQLTab extends Tab
 		
 		ObservableList<CallObj> callObjLst = FXCollections.observableArrayList(callObj1,callObj2,callObj3);
 		this.callTableView.setItems(callObjLst);
+		*/
 		
 		// ---------------------------------------------------------------------
 		// Upper-Left  => [ObjTableView]
@@ -260,7 +267,169 @@ public class CallSQLTab extends Tab
 		
 		// SQL History List
 		this.histSQLLst = new LimitedQueue<String>(10);
+		
+		this.setExampleData();
 	}
+	
+	private void setExampleData()
+	{
+		// Example SQL
+		this.textAreaSQL.setText
+		(
+		"extract_soccer_player(?,?,?,?) \n" +
+		"\n" +
+		"--#================================================= \n" +
+		"--# This is an example SQL.     \n" +
+		"--# Cut this comment to execute the above SQL. \n" +
+		"--#================================================= \n" +
+		"-- 1. in     number   => A\n" +
+		"-- 2. in     varchar2 => B\n" +
+		"-- 3. out    varchar2     \n" +
+		"-- 4. out    date         \n" +
+		"--#================================================= \n" +
+		"-- create or replace procedure extract_soccer_player \n" + 
+		"-- (\n" + 
+		"--    i_country_id  in   number,\n" + 
+		"--    i_position    in   varchar2,\n" + 
+		"--    o_name        out  varchar2,\n" + 
+		"--    o_birthday    out  date\n" + 
+		"-- )\n" + 
+		"-- is\n" + 
+		"-- begin\n" + 
+		"-- 	select english_name, birthday into o_name, o_birthday\n" + 
+		"-- 	from t_soccer_player_list where country_id = i_country_id and position = i_position;\n" + 
+		"-- end;\n" + 
+		"-- /" +
+		"--#================================================= \n"
+		);
+
+		// -----------------------------------------------
+		// Initialize data for ObjTableView
+		// Example Data
+		// -----------------------------------------------
+		List<Object> headLst = new ArrayList<>();
+		headLst.add("A");
+		headLst.add("B");
+		List<Object> dataRow1 = new ArrayList<>();
+		dataRow1.add(81);
+		dataRow1.add("FW");
+		List<Object> dataRow2 = new ArrayList<>();
+		dataRow2.add(385);
+		dataRow2.add("MF");
+		List<Object> dataRow3 = new ArrayList<>();
+		dataRow3.add(34);
+		dataRow3.add("FW");
+		List<Object> dataRow4 = new ArrayList<>();
+		dataRow4.add(351);
+		dataRow4.add("FW");
+		List<Object> dataRow5 = new ArrayList<>();
+		dataRow5.add(221);
+		dataRow5.add("FW");
+		List<List<Object>> dataRowLst = new ArrayList<>();
+		dataRowLst.add(dataRow1);
+		dataRowLst.add(dataRow2);
+		dataRowLst.add(dataRow3);
+		dataRowLst.add(dataRow4);
+		dataRowLst.add(dataRow5);
+		this.objTableView.setTableViewData(headLst, dataRowLst);
+
+		// -----------------------------------------------
+		// Initialize data for CallTableView
+		// Example Data
+		// -----------------------------------------------
+		// Parameter 1
+		CallObj callObj1 = new CallObj();
+		callObj1.setParamNo(1);
+		callObj1.setParamType(CallObj.ParamType.IN);
+		callObj1.setSqlType(MySQLType.NUMERIC);
+		callObj1.setInColName("A");
+		// Parameter 2
+		CallObj callObj2 = new CallObj();
+		callObj2.setParamNo(2);
+		callObj2.setParamType(CallObj.ParamType.IN);
+		callObj2.setSqlType(MySQLType.VARCHAR);
+		callObj2.setInColName("B");
+		// Parameter 3
+		CallObj callObj3 = new CallObj();
+		callObj3.setParamNo(3);
+		callObj3.setParamType(CallObj.ParamType.OUT);
+		callObj3.setSqlType(MySQLType.VARCHAR);
+		// Parameter 4
+		CallObj callObj4 = new CallObj();
+		callObj4.setParamNo(4);
+		callObj4.setParamType(CallObj.ParamType.OUT);
+		callObj4.setSqlType(MySQLType.TIMESTAMP);
+		
+		
+		
+		ObservableList<CallObj> callObjLst = FXCollections.observableArrayList(callObj1,callObj2,callObj3,callObj4);
+		// dummy data
+		for ( int i = 5; i <= 10; i++ )
+		{
+			CallObj callObj = new CallObj();
+			callObj.setParamNo(i);
+			callObjLst.add(callObj);
+		}
+		this.callTableView.setItems(callObjLst);
+	}
+	
+	/*
+	private void setExampleDataX()
+	{
+		// Example SQL
+		this.textAreaSQL.setText
+		(
+		"kunimei_en2jp(?,?,?)   \n" +
+		"\n" +
+		"--#=========================== \n" +
+		"--#This is an example SQL      \n" +
+		"--#cut this comment to execute \n" +
+		"--#=========================== \n" +
+		"-- 1. in_out varchar => A\n" +
+		"-- 2. out    varchar     \n" +
+		"-- 3. out    numeric"
+		);
+
+		// -----------------------------------------------
+		// Initialize data for ObjTableView
+		// Example Data
+		// -----------------------------------------------
+		List<Object> headLst = new ArrayList<>();
+		headLst.add("A");
+		List<Object> dataRow1 = new ArrayList<>();
+		dataRow1.add("Japan");
+		List<Object> dataRow2 = new ArrayList<>();
+		dataRow2.add("Spain");
+		List<List<Object>> dataRowLst = new ArrayList<>();
+		dataRowLst.add(dataRow1);
+		dataRowLst.add(dataRow2);
+		this.objTableView.setTableViewData(headLst, dataRowLst);
+
+		// -----------------------------------------------
+		// Initialize data for CallTableView
+		// Example Data
+		// -----------------------------------------------
+		// Parameter 1
+		CallObj callObj1 = new CallObj();
+		callObj1.setParamNo(1);
+		callObj1.setParamType(CallObj.ParamType.IN_OUT);
+		callObj1.setSqlType(MySQLType.VARCHAR);
+		callObj1.setInColName("A");
+		// Parameter 2
+		CallObj callObj2 = new CallObj();
+		callObj2.setParamNo(2);
+		callObj2.setParamType(CallObj.ParamType.OUT);
+		callObj2.setSqlType(MySQLType.VARCHAR);
+		// Parameter 3
+		CallObj callObj3 = new CallObj();
+		callObj3.setParamNo(3);
+		callObj3.setParamType(CallObj.ParamType.OUT);
+		callObj3.setSqlType(MySQLType.NUMERIC);
+		
+		ObservableList<CallObj> callObjLst = FXCollections.observableArrayList(callObj1,callObj2,callObj3);
+		this.callTableView.setItems(callObjLst);
+	}
+	*/
 	
 	
 	// ActionInterface

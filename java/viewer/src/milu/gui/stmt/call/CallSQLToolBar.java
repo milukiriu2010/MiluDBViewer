@@ -16,7 +16,6 @@ import milu.gui.ctrl.common.inf.ChangeLangInterface;
 import milu.gui.ctrl.common.table.CopyTableInterface;
 import milu.gui.ctrl.common.table.DirectionSwitchInterface;
 import milu.gui.stmt.prepare.ParamFileInterface;
-import milu.gui.stmt.query.SQLExecInterface;
 import milu.gui.stmt.query.SQLExecWithoutParseInterface;
 import milu.gui.stmt.query.SQLFetchInterface;
 import milu.gui.stmt.query.SQLFileInterface;

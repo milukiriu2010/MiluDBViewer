@@ -3,12 +3,11 @@ package milu.db.access;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Observable;
 
 import javafx.collections.ObservableList;
+import milu.ctrl.sql.parse.CallObj;
 import milu.ctrl.sql.parse.SQLBag;
 import milu.db.MyDBAbstract;
-import milu.gui.stmt.call.CallObj;
 import milu.main.AppConf;
 import milu.task.ProgressInterface;
 import milu.task.ProgressReportInterface;

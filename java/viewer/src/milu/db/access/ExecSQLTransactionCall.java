@@ -2,25 +2,17 @@ package milu.db.access;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.text.SimpleDateFormat;
 
-import java.sql.Timestamp;
+
 import java.sql.SQLException;
 import java.sql.CallableStatement;
 
+import milu.ctrl.sql.parse.CallObj;
 import milu.ctrl.sql.parse.MySQLType;
-import milu.db.MyDBSQLite;
-import milu.gui.stmt.call.CallObj;
+import milu.tool.MyStringTool;
 
 public class ExecSQLTransactionCall extends ExecSQLAbstract 
 {
-	private List<String> colTypeNameLst = null;
-	
-	public void setColTypeNameLst( List<String> colTypeNameLst )
-	{
-		this.colTypeNameLst = colTypeNameLst;
-	}
-
 	@Override
 	public void exec( final int checkCnt, final int fetchPos ) throws SQLException, Exception 
 	{
@@ -33,10 +25,11 @@ public class ExecSQLTransactionCall extends ExecSQLAbstract
 		{
 			this.clear();
 			this.execStartTime = System.nanoTime();
-			
-			this.colNameLst.add( "Type" );
-			//this.colNameLst.add( "Row" );
-			
+
+			// data on ObjTableView
+			List<Object> data = new ArrayList<>();
+			// OUTパラメータを使っている位置のリスト
+			List<Integer> outLst = new ArrayList<>();
 			
 			for ( int i = 0; i < this.callLst.size(); i++ )
 			{
@@ -47,28 +40,36 @@ public class ExecSQLTransactionCall extends ExecSQLAbstract
 				// INパラメータを設定
 				if ( ( paramType == CallObj.ParamType.IN ) || ( paramType == CallObj.ParamType.IN_OUT ) )
 				{
+					// INパラーメータのカラム名
+					this.colNameLst.add( "IN"+Integer.valueOf(i+1) );
 					
-					
-					
-					
-					
-					
-					// 後でpreLstを取るロジックを修正
-					stmt.setObject(i+1, this.preLst.get(0));
+					int placeHolderInPos = MyStringTool.getNumFromAlpha(inColName, 0 );
+					stmt.setObject(i+1, this.preLst.get(placeHolderInPos));
+					// INパラメータをここでObjTableViewへ出力する
+					data.add(this.preLst.get(placeHolderInPos));
 				}
 				// OUTパラメータを設定
 				if ( ( paramType == CallObj.ParamType.OUT ) || ( paramType == CallObj.ParamType.IN_OUT ) )
 				{
 					stmt.registerOutParameter(i+1, sqlType.getVal());
+					
+					// OUTパラーメータのカラム名
+					this.colNameLst.add( "OUT"+Integer.valueOf(i+1) );
+					outLst.add(i+1);
 				}
 			}
 			
 			stmt.execute();
-			List<Object> data = new ArrayList<>();
-			data.add( this.sqlBag.getType().getVal() );
-			
-			// OUTパラメータをここで出力する
-			//data.add( Integer.valueOf(cnt) );
+			// OUTパラメータをここでObjTableViewへ出力する
+			outLst.forEach((pos) -> {
+				try {
+					data.add(stmt.getObject(pos));
+				}
+				catch ( SQLException sqlEx0 )
+				{
+					sqlEx0.printStackTrace();
+				}
+			});
 			this.dataLst.add(data);
 		}
 		catch ( SQLException sqlEx )

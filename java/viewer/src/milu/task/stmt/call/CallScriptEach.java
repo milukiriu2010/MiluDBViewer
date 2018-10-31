@@ -8,19 +8,18 @@ import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.geometry.Orientation;
 import javafx.scene.control.TabPane;
+import milu.ctrl.sql.parse.CallObj;
 import milu.ctrl.sql.parse.SQLBag;
 import milu.db.MyDBAbstract;
 import milu.db.access.ExecSQLAbstract;
 import milu.db.access.ExecSQLFactory;
 import milu.db.access.MyDBOverFetchSizeException;
-import milu.gui.stmt.call.CallObj;
 import milu.gui.stmt.query.DBResultTab;
 import milu.gui.view.DBView;
 import milu.main.AppConf;
 import milu.task.ProcInterface;
 import milu.task.ProgressInterface;
 import milu.task.ProgressReportInterface;
-import milu.task.stmt.prepare.PrepareScriptEach;
 
 public class CallScriptEach 
 	implements 

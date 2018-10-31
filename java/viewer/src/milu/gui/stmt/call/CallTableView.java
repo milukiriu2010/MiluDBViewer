@@ -11,6 +11,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.ComboBoxTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.util.Callback;
+import milu.ctrl.sql.parse.CallObj;
 import milu.ctrl.sql.parse.MySQLType;
 import milu.gui.view.DBView;
 
@@ -18,6 +19,7 @@ public class CallTableView extends TableView<CallObj>
 {
 	private DBView  dbView = null;
 	
+	@SuppressWarnings("unchecked")
 	public CallTableView( DBView dbView )
 	{
 		super();
@@ -30,7 +32,7 @@ public class CallTableView extends TableView<CallObj>
 		// IN/OUTパラメータの番号
 		// ---------------------------------------------
 		TableColumn<CallObj,CallObj.ParamType>  paramNoCol =
-				new TableColumn<>("No");
+				new TableColumn<>("Param");
 		paramNoCol.setCellValueFactory(new PropertyValueFactory<>("paramNo"));
 		
 		// ---------------------------------------------
@@ -39,8 +41,11 @@ public class CallTableView extends TableView<CallObj>
 		TableColumn<CallObj,CallObj.ParamType>  paramTypeCol =
 				new TableColumn<>("IN/OUT");
 		
-		ObservableList<CallObj.ParamType> paramTypeLst = 
-				FXCollections.observableArrayList(CallObj.ParamType.values());
+		ObservableList<CallObj.ParamType> paramTypeLst = FXCollections.observableArrayList();
+		// NULLの選択項目をリストに追加
+		paramTypeLst.add(null);
+		// ParamTypeのEnumをリストに追加
+		paramTypeLst.addAll(FXCollections.observableArrayList(CallObj.ParamType.values()));
 		
 		paramTypeCol.setCellValueFactory(new Callback<CellDataFeatures<CallObj, CallObj.ParamType>, ObservableValue<CallObj.ParamType>>(){
 			@Override
@@ -70,10 +75,11 @@ public class CallTableView extends TableView<CallObj>
 		TableColumn<CallObj,MySQLType> sqlTypeCol =
 				new TableColumn<>("Type for OUT Parameter");
 		
-		ObservableList<MySQLType> sqlTypeLst =
-				FXCollections.observableArrayList(MySQLType.values());
+		ObservableList<MySQLType> sqlTypeLst = FXCollections.observableArrayList();
 		// NULLの選択項目をリストに追加
 		sqlTypeLst.add(null);
+		// MySQLTypeのEnum項目をリストに追加
+		sqlTypeLst.addAll(FXCollections.observableArrayList(MySQLType.values()));
 		
 		sqlTypeCol.setCellValueFactory(new Callback<CellDataFeatures<CallObj, MySQLType>, ObservableValue<MySQLType>>(){
 			@Override
@@ -101,7 +107,7 @@ public class CallTableView extends TableView<CallObj>
 				new TableColumn<>("Column for IN parameter");
 
 		ObservableList<String> inColNameLst =
-				FXCollections.observableArrayList(null,"A","B","C");
+				FXCollections.observableArrayList(null,"A","B","C","D","E","F","G","H","I","J");
 
 		inColNameCol.setCellValueFactory(new Callback<CellDataFeatures<CallObj, String>, ObservableValue<String>>(){
 			@Override
@@ -121,6 +127,7 @@ public class CallTableView extends TableView<CallObj>
 			CallObj callObj = event.getTableView().getItems().get(row);
 			callObj.setInColName(newInColName);
 		});
+		
 		
 		this.getColumns().addAll(paramNoCol,paramTypeCol,sqlTypeCol,inColNameCol);
 	}

@@ -3,9 +3,9 @@ package milu.db.access;
 import java.util.List;
 
 import javafx.collections.ObservableList;
+import milu.ctrl.sql.parse.CallObj;
 import milu.ctrl.sql.parse.SQLBag;
 import milu.db.MyDBAbstract;
-import milu.gui.stmt.call.CallObj;
 import milu.main.AppConf;
 import milu.task.ProgressInterface;
 

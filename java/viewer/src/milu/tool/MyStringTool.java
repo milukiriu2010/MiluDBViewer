@@ -120,6 +120,41 @@ public class MyStringTool
 	    return lastIndexOf( ch, str.substring(0,str.length()-1) );
 	}
 	
+	// ----------------------------------------
+	//  A  =>  0
+	//  B  =>  1
+	// ...
+	//  Z  => 25 
+	// AA  => 26
+	// ...
+	// ----------------------------------------
+	public static int getNumFromAlpha( String str, int base )
+	{
+		if ( str == null || str.length() == 0 )
+		{
+			return -1;
+		}
+		else if ( str.length() == 1 )
+		{
+			char c = str.charAt(0);
+			return (base+c-'A');
+		}
+		else
+		{
+			char c = str.charAt(str.length()-1);
+			int num = c-'A';
+			return getNumFromAlpha(str.substring(0,str.length()-1),26+num);
+		}
+	}
+
+	// ----------------------------------------
+	//  0 =>  A
+	//  1 =>  B
+	// ...
+	// 25 =>  Z
+	// 26 => AA
+	// ...
+	// ----------------------------------------
 	public static String getAplha( int pos, String tail )
 	{
 		if ( pos < 26 )
