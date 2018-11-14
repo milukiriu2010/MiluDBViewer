@@ -2,6 +2,8 @@ mysqlsh -u root -p localhost
 
 mysql -u root -p
 
+mysql -u milu -p miludb
+
 ====================================================================
 
 create function
