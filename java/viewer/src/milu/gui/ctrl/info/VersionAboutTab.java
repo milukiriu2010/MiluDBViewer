@@ -35,6 +35,8 @@ public class VersionAboutTab extends Tab
 	private void setContent()
 	{
 		URL urlVerInfo = getClass().getResource( "/conf/html/dlg/verinfo.html" );
+		//java.lang.reflect.InvocationTargetException
+		//URL urlVerInfo = getClass().getResource( "conf/html/dlg/verinfo.html" );
 		WebView   webView1   = new WebView();
 		WebEngine webEngine1 = webView1.getEngine();
 		//webEngine.load( urlVerInfo.toExternalForm() );

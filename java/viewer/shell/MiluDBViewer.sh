@@ -55,7 +55,7 @@ checkJavaVersion()
 # ==========================================================
 kickJava()
 {
-	$MYJAVA --module-path $PATH_TO_FX --add-modules=javafx.controls -classpath $MYCLASSPATH -jar MiluDBViewer.jar milu.main.MiluDBViewer
+	$MYJAVA --module-path $PATH_TO_FX --add-modules javafx.controls -classpath $MYCLASSPATH -jar MiluDBViewer.jar milu.main.MiluDBViewer
 	exit
 }
 

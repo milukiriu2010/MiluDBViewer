@@ -134,6 +134,8 @@ public class PrepareSQLTab extends Tab
 		super();
 		
 		this.dbView = dbView;
+		// Example Object
+		PrepareExampleAbs peAbs = PrepareExampleFactory.createInstance(dbView.getMyDBAbstract());
 		
 		// Increment Counter
 		// Counter for how many times this class is opened.
@@ -143,6 +145,8 @@ public class PrepareSQLTab extends Tab
 		
         // http://tutorials.jenkov.com/javafx/textarea.html
 		this.textAreaSQL  = new SQLTextArea( dbView );
+		this.textAreaSQL.setText(peAbs.getSQL());
+		/*
 		this.textAreaSQL.setText
 		(
 		"select * from all_objects \n" + 
@@ -152,6 +156,7 @@ public class PrepareSQLTab extends Tab
 		" namespace = ? \n" + 
 		""
 		);
+		*/
 		
 		
         // AnchorPane
@@ -186,6 +191,8 @@ public class PrepareSQLTab extends Tab
 		// Initialize data for TableView
 		// -----------------------------------------------
 		this.objTableView = new ObjTableView(this.dbView);
+		this.objTableView.setTableViewData(peAbs.getHeadLst(), peAbs.getDataRowLst());
+		/*
 		List<Object> headLst = new ArrayList<>();
 		headLst.add("A");
 		headLst.add("B");
@@ -199,6 +206,7 @@ public class PrepareSQLTab extends Tab
 		dataRowLst.add(dataRow1);
 		dataRowLst.add(dataRow2);
 		this.objTableView.setTableViewData(headLst, dataRowLst);
+		*/
 		
 		// ---------------------------------------------------------------------
 		// Upper-Left  => [AnchorPane(upperPane)]-[SqlTextArea(textAreaSQL)]

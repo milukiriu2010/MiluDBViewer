@@ -112,7 +112,7 @@
 @rem === Start App ============================================
 @rem ==========================================================
 :exec
-  "%MYJAVA%" --module-path "%PATH_TO_FX%" --add-modules=javafx.controls %ADDEXPORTS% -classpath %MYCLASSPATH% -jar MiluDBViewer.jar milu.main.MiluDBViewer
+  "%MYJAVA%" --module-path "%PATH_TO_FX%" --add-modules javafx.controls %ADDEXPORTS% -classpath %MYCLASSPATH% -jar MiluDBViewer.jar milu.main.MiluDBViewer
   @goto end_batch
 
 :end_batch

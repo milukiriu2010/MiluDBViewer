@@ -2,11 +2,14 @@ package milu.gui.ctrl.common;
 
 import javafx.scene.control.TreeView;
 import javafx.application.Platform;
+import javafx.event.EventHandler;
 import javafx.scene.control.cell.TextFieldTreeCell;
 import javafx.util.StringConverter;
 import javafx.scene.control.TreeItem;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.Dragboard;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.TransferMode;
 import javafx.scene.input.DragEvent;
 
@@ -18,6 +21,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.InvalidPathException;
 
+import milu.gui.ctrl.common.inf.ActionInterface;
 import milu.gui.ctrl.common.inf.ChangePathInterface;
 import milu.main.MainController;
 import milu.tool.MyGUITool;
@@ -35,6 +39,9 @@ public class PathTreeView extends TreeView<Path>
 	private String  fileExt = "";
 	
 	private TreeItem<Path>  itemDrag = null;
+	
+	// Action Listener
+	private ActionInterface actionInf = null;
 	
 	public void setMainController( MainController mainCtrl )
 	{
@@ -257,10 +264,38 @@ public class PathTreeView extends TreeView<Path>
 				
 		});
 		
+		this.addEventHandler(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
+			@Override
+			public void handle(KeyEvent event) {
+				System.out.println("PathTreeView:addEventHandler:"+event.getCode());
+				if ( event.getCode() == KeyCode.ENTER )
+				{
+					System.out.println("PathTreeView:Enter:Consume");
+					// prevent "edit mode" when pressed "enter key"
+					event.consume();
+				}
+			}
+		});
+		
+		this.setOnKeyPressed((event)->{
+			System.out.println("PathTreeView:setOnKeyPressed:"+event.getCode());
+			if ( event.getCode() == KeyCode.ENTER && this.actionInf != null )
+			{
+				this.actionInf.setAction(event);
+				return;
+			}
+		});
+		
 		this.getSelectionModel().selectedItemProperty().addListener((obs,oldVal,newVal)->{
 			this.chgPathInf.changePath( newVal.getValue() );
 		});
 		
+	}
+	
+	// Regist Action
+	public void registActionInf( ActionInterface actionInf )
+	{
+		this.actionInf = actionInf;
 	}
 	
 	public void setDragDropEvent( TextFieldTreeCell<Path> treeCell )

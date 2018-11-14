@@ -64,6 +64,7 @@ import milu.gui.ctrl.common.DriverControlPane;
 import milu.gui.ctrl.common.PathTreeView;
 import milu.gui.ctrl.common.inf.PaneSwitchDriverInterface;
 import milu.gui.dlg.MyAlertDialog;
+import milu.gui.ctrl.common.inf.ActionInterface;
 import milu.gui.ctrl.common.inf.ChangePathInterface;
 import milu.main.AppConst;
 import milu.main.MainController;
@@ -74,6 +75,7 @@ import milu.tool.MyGUITool;
 public class DBSettingDialog extends Dialog<MyDBAbstract>
 	implements
 		PaneSwitchDriverInterface,
+		ActionInterface,
 		ChangePathInterface
 {
 	private MainController mainCtrl = null;
@@ -171,6 +173,8 @@ public class DBSettingDialog extends Dialog<MyDBAbstract>
 		try
 		{
 			this.pathTreeView.init();
+			// Add Listener
+			this.pathTreeView.registActionInf(this);
 		}
 		catch( IOException ioEx )
 		{
@@ -690,6 +694,17 @@ public class DBSettingDialog extends Dialog<MyDBAbstract>
 		Stage stage = (Stage)this.getDialogPane().getScene().getWindow();
 		stage.sizeToScene();
 	}
+	
+	// Call when pressed "Enter Key" on PathTreeView
+	// ActionInterface
+	@Override
+	public void setAction(Object obj) {
+		// Connect to DB
+		//this.setActionBtnOK( null );
+		final Button okButton = (Button)this.getDialogPane().lookupButton( this.okButtonType );
+		okButton.fire();
+	}
+
 	
 	// ChangePathInterface
 	@Override
