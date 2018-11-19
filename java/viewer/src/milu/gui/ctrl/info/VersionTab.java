@@ -42,7 +42,7 @@ public class VersionTab extends Tab
 	{
 		super();
 		
-		System.out.println( "VersionTab construct start" );
+		System.out.println( "VersionTab:construct start" );
 		
 		this.dbView = dbView;
 		MainController mainCtrl = this.dbView.getMainController();
@@ -71,6 +71,7 @@ public class VersionTab extends Tab
 	
 	private void setPaneBottom()
 	{
+		System.out.println( "VersionTab:setPaneBottom start" );
 		this.tabPane.setSide(Side.LEFT);
 		this.tabPane.getTabs().addAll
 		(
@@ -79,6 +80,7 @@ public class VersionTab extends Tab
 		);
 		this.tabPane.setTabClosingPolicy(TabClosingPolicy.UNAVAILABLE);
 		this.basePane.setBottom( this.tabPane );
+		System.out.println( "VersionTab:setPaneBottom end" );
 	}
 	
 	private void setAction()

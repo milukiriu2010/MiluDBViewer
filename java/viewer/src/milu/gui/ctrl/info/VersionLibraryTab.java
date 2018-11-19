@@ -1,5 +1,7 @@
 package milu.gui.ctrl.info;
 
+import java.io.File;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -30,12 +32,33 @@ public class VersionLibraryTab extends Tab
 	
 	private void setContent()
 	{
-		URL urlLibInfo = getClass().getResource( "/conf/html/dlg/libinfo.html" );
-		WebView   webView1   = new WebView();
-		WebEngine webEngine1 = webView1.getEngine(); 
-		webEngine1.load( urlLibInfo.toExternalForm() );
-		
-		this.setContent(webView1);
+		//URL urlLibInfo = getClass().getResource( "/conf/html/dlg/libinfo.html" );
+		try 
+		{
+			String[] fileNames = new String[] {
+					System.getProperty("user.dir")+"/conf/html/dlg/libinfo.html",
+					System.getProperty("user.dir")+"/bin/conf/html/dlg/libinfo.html"
+			};
+			String fileName = null;
+			File file = null;
+			for (int i=0;i<fileNames.length;i++)
+			{
+				fileName = fileNames[i];
+				file = new File(fileName);
+				if (file.exists()) break;
+			}
+			System.out.println("fileName:"+fileName);
+			URL urlLibInfo =  file.toURI().toURL();
+			WebView   webView1   = new WebView();
+			WebEngine webEngine1 = webView1.getEngine(); 
+			webEngine1.load( urlLibInfo.toExternalForm() );
+			
+			this.setContent(webView1);
+		}
+		catch ( MalformedURLException ex )
+		{
+			ex.printStackTrace();
+		}
 	}
 	
 	@Override

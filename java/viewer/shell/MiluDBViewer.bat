@@ -1,3 +1,10 @@
+@rem ==========================================================
+@rem === check JavaFX library path                          ===
+@rem === https://openjfx.io/openjfx-docs/#install-javafx    ===
+@rem === PATH_TO_FX=C:\Program Files\Java\javafx-sdk-11\lib ===
+@rem ==========================================================
+@if "%PATH_TO_FX%" == "" goto no_javafx
+
 @rem ============================================
 @rem === set classpath ==========================
 @rem ============================================
@@ -11,6 +18,14 @@
 @set MYCLASSPATH=%MYCLASSPATH%;lib/gson/gson-2.8.3-SNAPSHOT.jar
 @set MYCLASSPATH=%MYCLASSPATH%;lib/hibernate/hibernate-core-5.3.1.Final.jar
 @set MYCLASSPATH=%MYCLASSPATH%;lib/jarchivelib/jarchivelib-0.7.1-jar-with-dependencies.jar
+@rem @set MYCLASSPATH=%MYCLASSPATH%;"%PATH_TO_FX%\javafx.base.jar"
+@rem @set MYCLASSPATH=%MYCLASSPATH%;"%PATH_TO_FX%\javafx.controls.jar"
+@rem @set MYCLASSPATH=%MYCLASSPATH%;"%PATH_TO_FX%\javafx.fxml.jar"
+@rem @set MYCLASSPATH=%MYCLASSPATH%;"%PATH_TO_FX%\javafx.graphics.jar"
+@rem @set MYCLASSPATH=%MYCLASSPATH%;"%PATH_TO_FX%\javafx.media.jar"
+@rem @set MYCLASSPATH=%MYCLASSPATH%;"%PATH_TO_FX%\javafx.swing.jar"
+@rem @set MYCLASSPATH=%MYCLASSPATH%;"%PATH_TO_FX%\javafx.web.jar"
+@rem @set MYCLASSPATH=%MYCLASSPATH%;"%PATH_TO_FX%\javafx-swt.jar"
 
 @rem ============================================
 @rem === set classpath ==========================
@@ -38,13 +53,6 @@
 @rem ============================================
 @rem set NLS_LANG=French_France.AL32UTF8
 @rem set NLS_LANG=Japanese_Japan.AL32UTF8
-
-@rem ==========================================================
-@rem === check JavaFX library path                          ===
-@rem === https://openjfx.io/openjfx-docs/#install-javafx    ===
-@rem === PATH_TO_FX=C:\Program Files\Java\javafx-sdk-11\lib ===
-@rem ==========================================================
-@if "%PATH_TO_FX%" == "" goto no_javafx
 
 
 @rem ============================================

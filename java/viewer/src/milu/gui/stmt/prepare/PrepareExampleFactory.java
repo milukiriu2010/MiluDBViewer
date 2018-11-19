@@ -4,6 +4,7 @@ import milu.db.MyDBAbstract;
 import milu.db.MyDBMySQL;
 import milu.db.MyDBOracle;
 import milu.db.MyDBPostgres;
+import milu.db.MyDBSQLServer;
 import milu.db.MyDBSQLite;
 
 public class PrepareExampleFactory 
@@ -26,6 +27,10 @@ public class PrepareExampleFactory
 		else if ( myDBAbs instanceof MyDBSQLite )
 		{
 			peAbs = new PrepareExampleSQLite();
+		}
+		else if ( myDBAbs instanceof MyDBSQLServer )
+		{
+			peAbs = new PrepareExampleSQLServer();
 		}
 		else
 		{
