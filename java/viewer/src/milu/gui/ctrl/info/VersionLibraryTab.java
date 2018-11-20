@@ -32,7 +32,13 @@ public class VersionLibraryTab extends Tab
 	
 	private void setContent()
 	{
-		//URL urlLibInfo = getClass().getResource( "/conf/html/dlg/libinfo.html" );
+		URL urlLibInfo = getClass().getResource( "/conf/html/dlg/libinfo.html" );
+		WebView   webView1   = new WebView();
+		WebEngine webEngine1 = webView1.getEngine(); 
+		webEngine1.load( urlLibInfo.toExternalForm() );
+		
+		this.setContent(webView1);
+		/*
 		try 
 		{
 			String[] fileNames = new String[] {
@@ -59,6 +65,7 @@ public class VersionLibraryTab extends Tab
 		{
 			ex.printStackTrace();
 		}
+		*/
 	}
 	
 	@Override

@@ -279,11 +279,25 @@ public class PathTreeView extends TreeView<Path>
 		
 		this.setOnKeyPressed((event)->{
 			System.out.println("PathTreeView:setOnKeyPressed:"+event.getCode());
+			/*
 			if ( event.getCode() == KeyCode.ENTER && this.actionInf != null )
 			{
+				
 				this.actionInf.setAction(event);
 				return;
 			}
+			*/
+			if ( event.getCode() != KeyCode.ENTER ) return;
+			if ( this.actionInf == null ) return;
+			
+			TreeItem<Path> pathTreeItem = this.getSelectionModel().getSelectedItem();
+			if ( pathTreeItem == null ) return;
+			
+			Path path = pathTreeItem.getValue();
+			if ( Files.isRegularFile(path) == false ) return;
+			
+			// 通常のファイルに対しリターンキーを押したときのみアクション(DB接続)を実施
+			this.actionInf.setAction(event);
 		});
 		
 		this.getSelectionModel().selectedItemProperty().addListener((obs,oldVal,newVal)->{
