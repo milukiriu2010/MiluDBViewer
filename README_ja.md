@@ -14,17 +14,36 @@
 
 # インストールと起動
 
-1. このアプリは JDK 10以上を必要としています.
-   [JDK 10 ダウンロード - Oracle](http://www.oracle.com/technetwork/java/javase/downloads/jdk10-downloads-4416644.html)
+1. Open JDK 11+Open JavaFX11 以上をダウンロードしてください。
+   [Open JDK 11 ダウンロード - jdk.java.net](https://jdk.java.net/)  
+   [Open JavaFX 11 ダウンロード - gluonhq.com/](https://gluonhq.com/products/javafx/)  
 
 2-1. Windows
-(1) "MiluDBViewer_Setup*.*.*.exe"を実行してインストールしてください。
-(2) "<<your path>>\MiluDBViewer.exe" を実行してください。
+(1-1) Open JDK 11をインストール
+私の場合, C:\Program Files\Java\jdk-11  
+(1-2) Open JavaFX 11をインストール
+私の場合, C:\Program Files\Java\javafx-sdk-11  
+(1-3) jdk/binを環境変数PATHに追加
+私の場合, C:\Program Files\Java\jdk-11\bin  
+(1-4) javafx/lib環境変数PATH_TO_FXに追加  
+私の場合, C:\Program Files\Java\javafx-sdk-11\lib  
+[Run HelloWorld using JavaFX](https://openjfx.io/openjfx-docs/#install-javafx)  
+(2-1) "MiluDBViewer_Setup*.*.*.exe"を実行してインストールしてください。  
+(2-2) "<<your path>>\MiluDBViewer.bat" を実行してください。  
 
 2-2. Linux
-(1) MiluDBViewer*.*.*.tgzを解凍してください。
-(2) $ cd <<your path>>
-(3) $ ./MiluDBViewer***.sh を実行してください。
+(1-1) Open JDK 11をインストール  
+私の場合, /opt/java/jdk-11  
+(1-2) Open JavaFX 11をインストール 
+私の場合, /opt/java/javafx-sdk-11  
+(1-3) jdk/binを環境変数PATHに追加  
+私の場合, /opt/java/jdk-11/bin  
+(1-4) javafx/lib環境変数PATH_TO_FXに追加  
+私の場合, /opt/java/javafx-sdk-11/lib  
+[Run HelloWorld using JavaFX](https://openjfx.io/openjfx-docs/#install-javafx)  
+(3-1) MiluDBViewer*.*.*.tgzを解凍してください。  
+(3-2) $ cd <<your path>>  
+(3-3) $ ./MiluDBViewer***.sh を実行してください。  
 
 # 動作確認したデータベース
 (1) Cassandra 3.9.0

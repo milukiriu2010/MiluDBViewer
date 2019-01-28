@@ -14,17 +14,36 @@
 
 # Install & Run
 
-1. This app requires JDK 10 or later.
-   [JDK 10 Download from Oracle](http://www.oracle.com/technetwork/java/javase/downloads/jdk10-downloads-4416644.html)
-
+1. Download "Open JDK11 + Open JavaFX11" or later.  
+   [Open JDK 11 Download from jdk.java.net](https://jdk.java.net/)  
+   [Open JavaFX 11 Donwload from gluonhq.com/](https://gluonhq.com/products/javafx/)  
+   
 2-1. Windows
-(1) run "MiluDBViewer_Setup*.*.*.exe"
-(2) run "<<your path>>\MiluDBViewer.exe"
+(1-1) Open JDK 11 Install.  
+for me, C:\Program Files\Java\jdk-11  
+(1-2) Open JavaFX 11 Install  
+for me, C:\Program Files\Java\javafx-sdk-11  
+(1-3) Add jdk/bin to PATH
+for me, C:\Program Files\Java\jdk-11\bin  
+(1-4) Add javafx/lib to PATH_TO_FX  
+for me, C:\Program Files\Java\javafx-sdk-11\lib  
+[Run HelloWorld using JavaFX](https://openjfx.io/openjfx-docs/#install-javafx)  
+(2-1) run "MiluDBViewer_Setup*.*.*.exe"  
+(2-2) run "<<your path>>\MiluDBViewer.exe"  
 
 2-2. Linux
-(1) extract MiluDBViewer*.*.*.tgz by a file archiver to <<your path>>
-(2) $ cd <<your path>>
-(3) $ ./MiluDBViewer***.sh
+(1-1) Open JDK 11 Install.  
+for me, /opt/java/jdk-11  
+(1-2) Open JavaFX 11 Install  
+for me, /opt/java/javafx-sdk-11  
+(1-3) Add jdk/bin to PATH
+for me, /opt/java/jdk-11/bin  
+(1-4) Add javafx/lib to PATH_TO_FX  
+for me, /opt/java/javafx-sdk-11/lib  
+[Run HelloWorld using JavaFX](https://openjfx.io/openjfx-docs/#install-javafx)  
+(3-1) extract MiluDBViewer*.*.*.tgz by a file archiver to <<your path>>  
+(3-2) $ cd <<your path>>  
+(3-3) $ ./MiluDBViewer***.sh  
 
 # Checked DB
 (1) Cassandra 3.9.0
