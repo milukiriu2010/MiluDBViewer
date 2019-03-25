@@ -81,17 +81,17 @@
 @rem ===  Not Found javafx      ===================
 @rem ==============================================
 :no_javafx
-  @msg "%username%" "necessary to set PATH_TO_FX(javafx library path like C:\Program Files\Java\javafx-sdk-11\lib). see https://openjfx.io/openjfx-docs/#install-javafx"
+  @msg "%username%" "necessary to set PATH_TO_FX(javafx library path like C:\Program Files\Java\javafx-sdk-12\lib). see https://openjfx.io/openjfx-docs/#install-javafx"
   @goto end_batch
 
 
-@rem ==============================================
-@rem ===  Not Found java/javaw  ===================
-@rem ===  or                    ===================
-@rem ===  Found under JDK/JRE 9 ===================
-@rem ==============================================
+@rem ===============================================
+@rem ===  Not Found java/javaw   ===================
+@rem ===  or                     ===================
+@rem ===  Found under JDK/JRE 12 ===================
+@rem ===============================================
 :nojava
-  @msg "%username%" "JDK/JRE9 or later is required!!"
+  @msg "%username%" "JDK/JRE12 or later is required!!"
   @goto end_batch
 
 @rem ==============================================
@@ -111,7 +111,7 @@
     @echo Build: %%x
     @set JAVA_MAJOR_VER=%%v
   )
-  @if %JAVA_MAJOR_VER% lss 9 goto nojava
+  @if %JAVA_MAJOR_VER% lss 12 goto nojava
   
   @goto exec
 
@@ -120,7 +120,7 @@
 @rem === Start App ============================================
 @rem ==========================================================
 :exec
-  "%MYJAVA%" --module-path "%PATH_TO_FX%" --add-modules javafx.controls %ADDEXPORTS% -classpath %MYCLASSPATH% -jar MiluDBViewer.jar milu.main.MiluDBViewer
+  "%MYJAVA%" --module-path "%PATH_TO_FX%" --add-modules javafx.controls,javafx.web %ADDEXPORTS% -classpath %MYCLASSPATH% -jar MiluDBViewer.jar milu.main.MiluDBViewer
   @goto end_batch
 
 :end_batch

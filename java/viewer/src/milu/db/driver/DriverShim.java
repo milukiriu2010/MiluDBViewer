@@ -23,19 +23,19 @@ public class DriverShim implements Driver
 	private Driver       driver = null;
 	
 	@Expose(serialize = true, deserialize = true)
-	private String       driverClassName = null;
+	public String       driverClassName = null;
 	
 	@Expose(serialize = true, deserialize = true)
-	private List<String> driverPathLst   = new ArrayList<>();
+	public List<String> driverPathLst   = new ArrayList<>();
 	
 	@Expose(serialize = false, deserialize = false)
 	private String       dbName = null;
 	
 	@Expose(serialize = true, deserialize = true)
-	private String       tmplateUrl = null;
+	public String       tmplateUrl = null;
 	
 	@Expose(serialize = true, deserialize = true)
-	private String       referenceUrl = null;
+	public String       referenceUrl = null;
 	
 	static
 	{

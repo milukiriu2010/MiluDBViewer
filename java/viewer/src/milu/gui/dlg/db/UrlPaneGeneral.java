@@ -70,31 +70,36 @@ public class UrlPaneGeneral extends UrlPaneAbstract
 		
 		this.tglBtnFreeHand.setSelected(true);
 		this.setPaneFreeHand();
-
-		// ----------------------------------------------------
-		// get URL by Driver Info
-		// ----------------------------------------------------
-		DriverShim driverShim = myDBAbs.getDriveShim();
 		
-		// ----------------------------------------------------
-		// Items for "Free hand"
-		// ----------------------------------------------------
-		//this.tmplTextField.setText("jdbc:mysql://[host1][:3306][,[host2][:port2]]...[/[database]][?autoReconnect=true][&autoClosePStmtStreams=true]");
-		this.tmplTextField.setText( driverShim.getTemplateUrl() );
-		this.tmplTextField.setEditable(false);
+		if ( myDBAbs != null )
+		{
+			
+			// ----------------------------------------------------
+			// get URL by Driver Info
+			// ----------------------------------------------------
+			DriverShim driverShim = myDBAbs.getDriveShim();
+			
+			// ----------------------------------------------------
+			// Items for "Free hand"
+			// ----------------------------------------------------
+			//this.tmplTextField.setText("jdbc:mysql://[host1][:3306][,[host2][:port2]]...[/[database]][?autoReconnect=true][&autoClosePStmtStreams=true]");
+			this.tmplTextField.setText( driverShim.getTemplateUrl() );
+			this.tmplTextField.setEditable(false);
 
-		this.tmplBtn.setGraphic( MyGUITool.createImageView( 16, 16, this.mainCtrl.getImage("file:resources/images/copy.png") ));
-		Tooltip tipCopy = new Tooltip(langRB.getString( "TOOLTIP_COPY" ));
-		tipCopy.getStyleClass().add("Common_MyToolTip");
-		this.tmplBtn.setTooltip( tipCopy );
-		
-		// ----------------------------------------------------
-		// Items for "All"
-		// ----------------------------------------------------
-		//this.lblUrl.setText( "https://dev.mysql.com/doc/connector-j/5.1/en/connector-j-reference-configuration-properties.html" );
-		this.lblUrl.setText( driverShim.getReferenceUrl() );
-		this.lblUrl.setCursor( Cursor.HAND );
-		this.lblUrl.getStyleClass().add("DBSettingDialog_URL");
+			this.tmplBtn.setGraphic( MyGUITool.createImageView( 16, 16, this.mainCtrl.getImage("file:resources/images/copy.png") ));
+			Tooltip tipCopy = new Tooltip(langRB.getString( "TOOLTIP_COPY" ));
+			tipCopy.getStyleClass().add("Common_MyToolTip");
+			this.tmplBtn.setTooltip( tipCopy );
+			
+			// ----------------------------------------------------
+			// Items for "All"
+			// ----------------------------------------------------
+			//this.lblUrl.setText( "https://dev.mysql.com/doc/connector-j/5.1/en/connector-j-reference-configuration-properties.html" );
+			this.lblUrl.setText( driverShim.getReferenceUrl() );
+			this.lblUrl.setCursor( Cursor.HAND );
+			this.lblUrl.getStyleClass().add("DBSettingDialog_URL");
+		}
+
 		
 		this.setAction();
 		

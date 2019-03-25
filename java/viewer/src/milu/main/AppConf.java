@@ -27,125 +27,125 @@ final public class AppConf
 {
 	// Install Directory(for Development)
 	@Expose(serialize = false, deserialize = false)
-	private String  instDir = "";
+	public String  instDir = "";
 	
 	// Initial Directory for JDBC Driver
 	@Expose(serialize = true, deserialize = true)
-	private String  initDirJDBC = "";
+	public String  initDirJDBC = "";
 	
 	// Initial Directory for File DB(SQLite)
 	@Expose(serialize = true, deserialize = true)
-	private String  initDirFileDB = "";
+	public String  initDirFileDB = "";
 	
 	// Initial Directory to Import File(Excel)
 	@Expose(serialize = true, deserialize = true)
-	private String  initDirImportFile = "";
+	public String  initDirImportFile = "";
 	
 	// Initial Directory to Export File(Excel)
 	@Expose(serialize = true, deserialize = true)
-	private String  initDirExportFile = "";
+	public String  initDirExportFile = "";
 	
 	// Initial Directory to SQL File
 	@Expose(serialize = true, deserialize = true)
-	private String  initDirSQLFile = "";
+	public String  initDirSQLFile = "";
 
 	// Language Code
 	@Expose(serialize = true, deserialize = true)
-	private String  langCode = "";
+	public String  langCode = "";
 	
 	// Absolute Position when selecting
 	@Expose(serialize = false, deserialize = false)
-	private Integer fetchPos = 1;
+	public Integer fetchPos = 1;
 	
 	// Max fetch rows when selecting
 	@Expose(serialize = true, deserialize = true)
-	private Integer fetchMax = 100;
+	public Integer fetchMax = 100;
 	
 	// collect database objects after connection?
 	//   yes => collect
 	//   no  => skip
 	@Expose(serialize = true, deserialize = true)
-	private Boolean collectDBObj = true;
+	public Boolean collectDBObj = true;
 	
 	// MySQL - Explain Extended
 	@Expose(serialize = true, deserialize = true)
-	private Boolean mysqlExplainExtended   = false;
+	public Boolean mysqlExplainExtended   = false;
 	
 	// MySQL - Explain Partitions
 	@Expose(serialize = true, deserialize = true)
-	private Boolean mysqlExplainPartitions = false;
+	public Boolean mysqlExplainPartitions = false;
 	
 	// MySQL - Explain Format
 	@Expose(serialize = true, deserialize = true)
-	private String  mysqlExplainFormat     = "TRADITIONAL";
+	public String  mysqlExplainFormat     = "TRADITIONAL";
 	
 	// Oracle - TNS Admin
 	@Expose(serialize = true, deserialize = true)
-	private String  oracleTnsAdmin = "";
+	public String  oracleTnsAdmin = "";
 	
 	// Oracle - v$session.osuser
 	@Expose(serialize = true, deserialize = true)
-	private String  oracleSessionOsuser = "";
+	public String  oracleSessionOsuser = "";
 	
 	// Oracle - v$session.machine
 	@Expose(serialize = true, deserialize = true)
-	private String  oracleSessionMachine = "";
+	public String  oracleSessionMachine = "";
 	
 	// Oracle - v$session.program
 	@Expose(serialize = true, deserialize = true)
-	private String  oracleSessionProgram = "";
+	public String  oracleSessionProgram = "";
 	
 	// PostgreSQL - Explain Analyze
 	@Expose(serialize = true, deserialize = true)
-	private Boolean postgresExplainAnalyze = false;
+	public Boolean postgresExplainAnalyze = false;
 	
 	// PostgreSQL - Explain Verbose
 	@Expose(serialize = true, deserialize = true)
-	private Boolean postgresExplainVerbose = false;
+	public Boolean postgresExplainVerbose = false;
 	
 	// PostgreSQL - Explain Costs
 	@Expose(serialize = true, deserialize = true)
-	private Boolean postgresExplainCosts   = true;
+	public Boolean postgresExplainCosts   = true;
 	
 	// PostgreSQL - Explain Buffers
 	@Expose(serialize = true, deserialize = true)
-	private Boolean postgresExplainBuffers = false;
+	public Boolean postgresExplainBuffers = false;
 	
 	// PostgreSQL - Explain Timing
 	@Expose(serialize = true, deserialize = true)
-	private Boolean postgresExplainTiming  = false;
+	public Boolean postgresExplainTiming  = false;
 	
 	// PostgreSQL - Explain Format
 	@Expose(serialize = true, deserialize = true)
-	private String  postgresExplainFormat = "TEXT";
+	public String  postgresExplainFormat = "TEXT";
 	
 	// Proxy Type
 	@Expose(serialize = true, deserialize = true)
-	private ProxyType proxyType = ProxyType.NO_PROXY;
+	public ProxyType proxyType = ProxyType.NO_PROXY;
 	
 	// Proxy Host/IP
 	@Expose(serialize = true, deserialize = true)
-	private String  proxyHost = "";
+	public String  proxyHost = "";
 	
 	// Proxy Port
 	@Expose(serialize = true, deserialize = true)
-	private Integer proxyPort = 8080;
+	public Integer proxyPort = 8080;
 	
 	// Proxy User
 	@Expose(serialize = true, deserialize = true)
-	private String  proxyUser = "";
+	public String  proxyUser = "";
 	
 	// Proxy Password
 	@Expose(serialize = false, deserialize = true)
-	private String  proxyPassword = "";
+	public String  proxyPassword = "";
 	
 	// Proxy Password(Encrypted)
 	@Expose(serialize = true, deserialize = true)
-	private String  proxyPasswordEnc = "";
+	public String  proxyPasswordEnc = "";
 	
 	// Initial Vector
 	@Expose(serialize = true, deserialize = true)
-	private byte[]  proxyIV = null;
+	public byte[]  proxyIV = null;
 	
 	// Install Directory(for Development)
 	public void setInstDir( String instDir )

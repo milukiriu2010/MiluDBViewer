@@ -39,27 +39,27 @@ abstract public class MyDBAbstract
 	
 	// DB User Name
 	@Expose(serialize = true, deserialize = true)
-	protected String  username = null;
+	public String  username = null;
 	
 	// DB Password
 	@Expose(serialize = false, deserialize = true)
-	protected String  password = null;
+	public String  password = null;
 
 	// DB Password(Encrypted)
 	@Expose(serialize = true, deserialize = true)
-	protected String  passwordEnc = null;
+	public String  passwordEnc = null;
 	
 	// Initial Vector
 	@Expose(serialize = true, deserialize = true)
-	protected byte[]  iv = null;
+	public byte[]  iv = null;
 	
 	// JDBC Driver
 	@Expose(serialize = true, deserialize = true)
-	protected DriverShim   driverShim = null;
+	public DriverShim   driverShim = null;
 	
 	// DB URL
 	@Expose(serialize = true, deserialize = true)
-	protected String  url = null;
+	public String  url = null;
 	
 	// DB properties
 	// -----------------------------------------------------------------------
@@ -67,7 +67,7 @@ abstract public class MyDBAbstract
 	//   consistencyLevel <=> ONE
 	// -----------------------------------------------------------------------
 	@Expose(serialize = true, deserialize = true)
-	protected Map<String,String>  dbOpts = new HashMap<>();
+	public Map<String,String>  dbOpts = new HashMap<>();
 	
 	// DB properties(special)
 	// -----------------------------------------------------------------------
@@ -76,15 +76,15 @@ abstract public class MyDBAbstract
 	//   TNSName  <=> ORCL
 	// -----------------------------------------------------------------------
 	@Expose(serialize = true, deserialize = true)
-	protected Map<String,String>  dbOptsSpecial = new HashMap<>();
+	public Map<String,String>  dbOptsSpecial = new HashMap<>();
 	
 	// DB properties(auxiliary)
 	@Expose(serialize = true, deserialize = true)
-	protected Map<String,String>  dbOptsAux = new HashMap<>();
+	public Map<String,String>  dbOptsAux = new HashMap<>();
 	
 	// SchemaEntity Root
 	@Expose(serialize = false, deserialize = true)
-	protected SchemaEntity schemaRoot = null;
+	public SchemaEntity schemaRoot = null;
 	
 	// AppConf
 	@Expose(serialize = false, deserialize = false)
