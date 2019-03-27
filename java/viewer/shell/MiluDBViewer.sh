@@ -5,7 +5,7 @@
 # ====================================================
 notFoundJava()
 {
-	msg="JDK/JRE9 or later is required!!"
+	msg="JDK12 or later is required!!"
 	zenity=`which zenity`
 	if [ -n $zenity ]; then
 		zenity --warning --text="$msg"
@@ -36,14 +36,17 @@ checkJavaVersion()
 	#	echo "Minor: "$JAVA_VER_MINOR
 	#	echo "Build: "$JAVA_VER_BUILD
     #fi
-	JAVA_VER_MAJOR=`echo $java_version | sed -n 's/^\(.*\)\.\(.*\)\.\(.*\)$/\1/p'`
-	JAVA_VER_MINOR=`echo $java_version | sed -n 's/^\(.*\)\.\(.*\)\.\(.*\)$/\2/p'`
-	JAVA_VER_BUILD=`echo $java_version | sed -n 's/^\(.*\)\.\(.*\)\.\(.*\)$/\3/p'`
+	#JAVA_VER_MAJOR=`echo $java_version | sed -n 's/^\(.*\)\.\(.*\)\.\(.*\)$/\1/p'`
+	#JAVA_VER_MINOR=`echo $java_version | sed -n 's/^\(.*\)\.\(.*\)\.\(.*\)$/\2/p'`
+	#JAVA_VER_BUILD=`echo $java_version | sed -n 's/^\(.*\)\.\(.*\)\.\(.*\)$/\3/p'`
+	JAVA_VER_MAJOR=`echo $java_version | sed -n 's/^\(.*\)\.*\(.*\)\.*\(.*\)$/\1/p'`
+	JAVA_VER_MINOR=`echo $java_version | sed -n 's/^\(.*\)\.*\(.*\)\.*\(.*\)$/\2/p'`
+	JAVA_VER_BUILD=`echo $java_version | sed -n 's/^\(.*\)\.*\(.*\)\.*\(.*\)$/\3/p'`
 	echo "Major: "$JAVA_VER_MAJOR
 	echo "Minor: "$JAVA_VER_MINOR
 	echo "Build: "$JAVA_VER_BUILD
 
-	if [ "$JAVA_VER_MAJOR" -lt "9" ]; then
+	if [ $JAVA_VER_MAJOR -lt 12 ]; then
       notFoundJava
 	fi
 }
@@ -55,7 +58,7 @@ checkJavaVersion()
 # ==========================================================
 kickJava()
 {
-	$MYJAVA --module-path $PATH_TO_FX --add-modules javafx.controls -classpath $MYCLASSPATH -jar MiluDBViewer.jar milu.main.MiluDBViewer
+	$MYJAVA --module-path $PATH_TO_FX --add-modules javafx.controls,javafx.web -classpath $MYCLASSPATH $ADDEXPORTS -jar MiluDBViewer.jar milu.main.MiluDBViewer
 	exit
 }
 
@@ -64,7 +67,7 @@ kickJava()
 # ==============================================
 noJavaFx()
 {
-	msg="necessary to set PATH_TO_FX(javafx library path like C:\Program Files\Java\javafx-sdk-11\lib). see https://openjfx.io/openjfx-docs/#install-javafx"
+	msg="necessary to set PATH_TO_FX(javafx library path like C:\Program Files\Java\javafx-sdk-12\lib). see https://openjfx.io/openjfx-docs/#install-javafx"
 	zenity=`which zenity`
 	if [ -n $zenity ]; then
 		zenity --warning --text="$msg"
@@ -102,23 +105,23 @@ export MYCLASSPATH=$MYCLASSPATH:$prgdir/lib/jarchivelib/jarchivelib-0.7.1-jar-wi
 # ============================================
 # === set classpath ==========================
 # ============================================
-export ADDEXPORTS=$ADDEXPORTS --add-exports javafx.base/com.sun.javafx.logging=ALL-UNNAMED
-export ADDEXPORTS=$ADDEXPORTS --add-exports javafx.graphics/com.sun.glass.ui=ALL-UNNAMED
-export ADDEXPORTS=$ADDEXPORTS --add-exports javafx.graphics/com.sun.glass.utils=ALL-UNNAMED
-export ADDEXPORTS=$ADDEXPORTS --add-exports javafx.graphics/com.sun.javafx.application=ALL-UNNAMED
-export ADDEXPORTS=$ADDEXPORTS --add-exports javafx.graphics/com.sun.javafx.font=ALL-UNNAMED
-export ADDEXPORTS=$ADDEXPORTS --add-exports javafx.graphics/com.sun.javafx.geom=ALL-UNNAMED
-export ADDEXPORTS=$ADDEXPORTS --add-exports javafx.graphics/com.sun.javafx.geom.transform=ALL-UNNAMED
-export ADDEXPORTS=$ADDEXPORTS --add-exports javafx.graphics/com.sun.javafx.scene=ALL-UNNAMED
-export ADDEXPORTS=$ADDEXPORTS --add-exports javafx.controls/com.sun.javafx.scene.control=ALL-UNNAMED 
-export ADDEXPORTS=$ADDEXPORTS --add-exports javafx.graphics/com.sun.javafx.scene.input=ALL-UNNAMED
-export ADDEXPORTS=$ADDEXPORTS --add-exports javafx.graphics/com.sun.javafx.sg.prism=ALL-UNNAMED
-export ADDEXPORTS=$ADDEXPORTS --add-exports javafx.graphics/com.sun.javafx.text=ALL-UNNAMED
-export ADDEXPORTS=$ADDEXPORTS --add-exports javafx.graphics/com.sun.javafx.tk=ALL-UNNAMED
-export ADDEXPORTS=$ADDEXPORTS --add-exports javafx.graphics/com.sun.javafx.util=ALL-UNNAMED
-export ADDEXPORTS=$ADDEXPORTS --add-exports javafx.graphics/com.sun.prism=ALL-UNNAMED
-export ADDEXPORTS=$ADDEXPORTS --add-exports javafx.graphics/com.sun.prism.paint=ALL-UNNAMED
-export ADDEXPORTS=$ADDEXPORTS --add-exports javafx.graphics/com.sun.scenario.effect=ALL-UNNAMED
+export ADDEXPORTS="$ADDEXPORTS --add-exports javafx.base/com.sun.javafx.logging=ALL-UNNAMED"
+export ADDEXPORTS="$ADDEXPORTS --add-exports javafx.graphics/com.sun.glass.ui=ALL-UNNAMED"
+export ADDEXPORTS="$ADDEXPORTS --add-exports javafx.graphics/com.sun.glass.utils=ALL-UNNAMED"
+export ADDEXPORTS="$ADDEXPORTS --add-exports javafx.graphics/com.sun.javafx.application=ALL-UNNAMED"
+export ADDEXPORTS="$ADDEXPORTS --add-exports javafx.graphics/com.sun.javafx.font=ALL-UNNAMED"
+export ADDEXPORTS="$ADDEXPORTS --add-exports javafx.graphics/com.sun.javafx.geom=ALL-UNNAMED"
+export ADDEXPORTS="$ADDEXPORTS --add-exports javafx.graphics/com.sun.javafx.geom.transform=ALL-UNNAMED"
+export ADDEXPORTS="$ADDEXPORTS --add-exports javafx.graphics/com.sun.javafx.scene=ALL-UNNAMED"
+export ADDEXPORTS="$ADDEXPORTS --add-exports javafx.controls/com.sun.javafx.scene.control=ALL-UNNAMED"
+export ADDEXPORTS="$ADDEXPORTS --add-exports javafx.graphics/com.sun.javafx.scene.input=ALL-UNNAMED"
+export ADDEXPORTS="$ADDEXPORTS --add-exports javafx.graphics/com.sun.javafx.sg.prism=ALL-UNNAMED"
+export ADDEXPORTS="$ADDEXPORTS --add-exports javafx.graphics/com.sun.javafx.text=ALL-UNNAMED"
+export ADDEXPORTS="$ADDEXPORTS --add-exports javafx.graphics/com.sun.javafx.tk=ALL-UNNAMED"
+export ADDEXPORTS="$ADDEXPORTS --add-exports javafx.graphics/com.sun.javafx.util=ALL-UNNAMED"
+export ADDEXPORTS="$ADDEXPORTS --add-exports javafx.graphics/com.sun.prism=ALL-UNNAMED"
+export ADDEXPORTS="$ADDEXPORTS --add-exports javafx.graphics/com.sun.prism.paint=ALL-UNNAMED"
+export ADDEXPORTS="$ADDEXPORTS --add-exports javafx.graphics/com.sun.scenario.effect=ALL-UNNAMED"
 
 
 # ====================================================
