@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "MiluDBViewer"
-#define MyAppVersion "0.3.5"
+#define MyAppVersion "0.3.6"
 #define MyAppPublisher "Milu"
 #define MyAppURL "https://github.com/milukiriu2010/MiluDBViewer"
 #define MyAppExeName "MiluDBViewer.bat"
@@ -21,10 +21,10 @@ AppSupportURL={#MyAppURL}
 AppUpdatesURL={#MyAppURL}
 DefaultDirName={pf}\{#MyAppName}
 DisableProgramGroupPage=yes
-LicenseFile=C:\myjava\MiluDBViewer12.git\java\viewer\build\doc\license\MiluDBViewer\license.txt
-OutputDir=C:\myjava\MiluDBViewer12.git\java\viewer\exe
+LicenseFile=C:\myjava\MiluDBViewer13.git\java\viewer\build\doc\license\MiluDBViewer\license.txt
+OutputDir=C:\myjava\MiluDBViewer13.git\java\viewer\exe
 OutputBaseFilename=MiluDBViewer_Setup
-SetupIconFile=C:\myjava\MiluDBViewer12.git\java\viewer\resources\images\winicon.ico
+SetupIconFile=C:\myjava\MiluDBViewer13.git\java\viewer\resources\images\winicon.ico
 Compression=lzma
 SolidCompression=yes
 ; UninstallDisplayIcon={app}\MiluDBViewer.exe
@@ -40,13 +40,13 @@ Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{
 Name: "quicklaunchicon"; Description: "{cm:CreateQuickLaunchIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked; OnlyBelowVersion: 0,6.1
 
 [Files]
-; Source: "C:\myjava\MiluDBViewer12.git\java\viewer\build\MiluDBViewer.exe"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\myjava\MiluDBViewer12.git\java\viewer\build\MiluDBViewer.bat"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\myjava\MiluDBViewer12.git\java\viewer\build\MiluDBViewer.jar"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\myjava\MiluDBViewer12.git\java\viewer\build\conf\*"; DestDir: "{app}\conf"; Flags: ignoreversion recursesubdirs createallsubdirs
-Source: "C:\myjava\MiluDBViewer12.git\java\viewer\build\doc\*"; DestDir: "{app}\doc"; Flags: ignoreversion recursesubdirs createallsubdirs
-Source: "C:\myjava\MiluDBViewer12.git\java\viewer\build\lib\*"; DestDir: "{app}\lib"; Flags: ignoreversion recursesubdirs createallsubdirs
-Source: "C:\myjava\MiluDBViewer12.git\java\viewer\build\resources\*"; DestDir: "{app}\resources"; Flags: ignoreversion recursesubdirs createallsubdirs
+; Source: "C:\myjava\MiluDBViewer13.git\java\viewer\build\MiluDBViewer.exe"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\myjava\MiluDBViewer13.git\java\viewer\build\MiluDBViewer.bat"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\myjava\MiluDBViewer13.git\java\viewer\build\MiluDBViewer.jar"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\myjava\MiluDBViewer13.git\java\viewer\build\conf\*"; DestDir: "{app}\conf"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "C:\myjava\MiluDBViewer13.git\java\viewer\build\doc\*"; DestDir: "{app}\doc"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "C:\myjava\MiluDBViewer13.git\java\viewer\build\lib\*"; DestDir: "{app}\lib"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "C:\myjava\MiluDBViewer13.git\java\viewer\build\resources\*"; DestDir: "{app}\resources"; Flags: ignoreversion recursesubdirs createallsubdirs
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Icons]
