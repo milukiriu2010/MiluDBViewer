@@ -15,6 +15,7 @@ abstract public class MyJsonEachAbstract<T>
 {
 	public T load(File file) throws FileNotFoundException, IOException
 	{
+		System.out.println("MyJsonEachAbstract:file:"+file.getAbsolutePath());
 		String json = null;
 		try
 		(
@@ -29,7 +30,9 @@ abstract public class MyJsonEachAbstract<T>
 		
 		GsonBuilder gsonBuilder = new GsonBuilder();
 		this.decorate(gsonBuilder);
-		Gson gson = gsonBuilder.excludeFieldsWithoutExposeAnnotation().create();
+		//Gson gson = gsonBuilder.excludeFieldsWithoutExposeAnnotation().create();
+		GsonBuilder gsonBuilder2 = gsonBuilder.excludeFieldsWithoutExposeAnnotation();
+		Gson gson = gsonBuilder2.create();
 		
 		return gson.fromJson( json, this.getType() );
 	}

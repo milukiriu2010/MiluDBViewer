@@ -28,6 +28,9 @@ public class InitialLoadFactory
 	{
 		InitialLoadAbstract ilAbs = null;
 		
+		System.out.println("===================================");
+		System.out.println("InitialLoadFactory:"+type.toString());
+		
 		if ( FACTORY_TYPE.IMAGE.equals(type) )
 		{
 			ilAbs = new InitialLoadImage();
