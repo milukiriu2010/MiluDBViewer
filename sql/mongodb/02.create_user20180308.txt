@@ -1,0 +1,39 @@
+use admin
+db.createUser(
+  {
+    user: "milu",
+    pwd: "milu",
+    roles: [ { role: "userAdminAnyDatabase", db: "admin" } ]
+  }
+);
+
+https://qiita.com/t2hk/items/45a04875dc6d8be9b004
+
+use test
+db.createUser(
+  {
+    user: "mongo",
+	pwd:  "mongo",
+	roles: [ { role:"readWrite", db:"test" } ]
+  }
+);
+
+use test
+db.createUser(
+  {
+    user: "milurw",
+	pwd:  "milurw",
+	roles: [ { role:"readWrite", db:"test" } ]
+  }
+);
+
+
+use admin
+db.createUser(
+  {
+    user: "miluadmin",
+	pwd:  "miluadmin",
+	roles: [ { role:"readWriteAnyDatabase", db:"test" } ]
+  }
+);
+

@@ -1,8 +1,0 @@
-org.h2.Driver
-
-jdbc:h2:[file:][<path>]<databaseName>
-
-http://www.h2database.com/html/features.html
-
-
-jdbc:h2:file:C:/myjava/MiluDBViewer.git/sample/swingtest/test1-1/sql/h2/example.db

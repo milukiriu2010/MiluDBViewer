@@ -1,0 +1,2 @@
+mongoimport --db geospatial -c restaurants    restaurants.json
+mongoimport --db geospatial -c neighborhoods  neighborhoods.json

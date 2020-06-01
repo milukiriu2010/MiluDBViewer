@@ -1,0 +1,90 @@
+SELECT  obj.name AS FK_NAME,
+    sch.name AS [schema_name],
+    tab1.name AS [table],
+    col1.name AS [column],
+    tab2.name AS [referenced_table],
+    col2.name AS [referenced_column]
+FROM sys.foreign_key_columns fkc
+INNER JOIN sys.objects obj
+    ON obj.object_id = fkc.constraint_object_id
+INNER JOIN sys.tables tab1
+    ON tab1.object_id = fkc.parent_object_id
+INNER JOIN sys.schemas sch
+    ON tab1.schema_id = sch.schema_id
+INNER JOIN sys.columns col1
+    ON col1.column_id = parent_column_id AND col1.object_id = tab1.object_id
+INNER JOIN sys.tables tab2
+    ON tab2.object_id = fkc.referenced_object_id
+INNER JOIN sys.columns col2
+    ON col2.column_id = referenced_column_id AND col2.object_id = tab2.object_id
+
+===================================================================
+
+select
+  ssf.name  constraint_schema,
+  sof.name  constraint_name,
+  sst1.name  table_schema,
+  st1.name  table_name,
+  sst2.name  referenced_table_schema,
+  st2.name   referenced_table_name
+from 
+  sys.foreign_key_columns sf
+  inner join sys.objects sof on sf.constraint_object_id = sof.object_id
+  inner join sys.schemas ssf on sof.schema_id = ssf.schema_id
+  inner join sys.tables st1 on st1.object_id = sf.parent_object_id
+  inner join sys.schemas sst1 on st1.schema_id = sst1.schema_id
+  inner join sys.tables st2 on st2.object_id = sf.referenced_object_id
+  inner join sys.schemas sst2 on st2.schema_id = sst2.schema_id
+where
+  ssf.name = 'miluschema'
+
+
+
+===================================================================
+
+select
+  ssf.name   constraint_schema,
+  sof.name   constraint_name,
+  sst1.name  table_schema,
+  st1.name   table_name,
+  col1.name  column_name
+from 
+  sys.foreign_key_columns sf
+  inner join sys.objects sof  on sf.constraint_object_id = sof.object_id
+  inner join sys.schemas ssf  on sof.schema_id = ssf.schema_id
+  inner join sys.tables  st1  on st1.object_id = sf.parent_object_id
+  inner join sys.schemas sst1 on st1.schema_id = sst1.schema_id
+  inner join sys.columns col1 on ( col1.object_id = sf.parent_object_id and col1.column_id = sf.parent_column_id )
+where
+  ssf.name = 'miluschema'
+  and
+  sof.name = 'FK__t_npb_pla__team___6477ECF3'
+  and
+  sst1.name = 'miluschema'
+  and
+  st1.name = 't_npb_player_list'
+
+===================================================================
+
+select
+  ssf.name   constraint_schema,
+  sof.name   constraint_name,
+  sst1.name  table_schema,
+  st1.name   table_name,
+  col1.name  column_name
+from 
+  sys.foreign_key_columns sf
+  inner join sys.objects sof  on sf.constraint_object_id = sof.object_id
+  inner join sys.schemas ssf  on sof.schema_id = ssf.schema_id
+  inner join sys.tables  st1  on st1.object_id = sf.referenced_object_id
+  inner join sys.schemas sst1 on st1.schema_id = sst1.schema_id
+  inner join sys.columns col1 on ( col1.object_id = sf.referenced_object_id and col1.column_id = sf.referenced_column_id )
+where
+  ssf.name = 'miluschema'
+  and
+  sof.name = 'FK__t_npb_pla__team___6477ECF3'
+  and
+  sst1.name = 'miluschema'
+  and
+  st1.name = 'm_npb_team_list'
+
