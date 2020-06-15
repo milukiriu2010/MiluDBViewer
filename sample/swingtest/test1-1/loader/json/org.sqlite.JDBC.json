@@ -1,8 +1,0 @@
-{
-  "driverClassName": "org.sqlite.JDBC",
-  "driverPathLst": [
-    "C:\\myjava\\MiluDBViewer.git\\sample\\swingtest\\test1-1\\loader\\sqlite\\sqlite-jdbc-3.21.0.jar"
-  ],
-  "tmplateUrl": "jdbc:sqlite:filename",
-  "referenceUrl": "https://github.com/xerial/sqlite-jdbc"
-}

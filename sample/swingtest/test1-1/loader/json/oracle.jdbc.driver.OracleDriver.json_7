@@ -1,6 +1,0 @@
-{
-  "driverClassName": "oracle.jdbc.driver.OracleDriver",
-  "driverPathLst": [
-    "C:\\myjava\\MiluDBViewer.git\\sample\\swingtest\\test1-1\\loader\\oracle\\ojdbc7.jar"
-  ]
-}

@@ -1,8 +1,0 @@
-{
-  "driverClassName": "com.microsoft.sqlserver.jdbc.SQLServerDriver",
-  "driverPathLst": [
-    "C:\\myjava\\MiluDBViewer.git\\sample\\swingtest\\test1-1\\loader\\sqlserver\\mssql-jdbc-6.4.0.jre9.jar"
-  ],
-  "tmplateUrl": "jdbc:sqlserver://[serverName[\\instanceName][:portNumber]][;property\u003dvalue[;property\u003dvalue]]",
-  "referenceUrl": "https://docs.microsoft.com/en-us/sql/connect/jdbc/building-the-connection-url?view\u003dsql-server-2017"
-}
