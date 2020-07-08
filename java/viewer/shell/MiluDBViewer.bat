@@ -54,6 +54,12 @@
 @rem set NLS_LANG=French_France.AL32UTF8
 @rem set NLS_LANG=Japanese_Japan.AL32UTF8
 
+@rem ============================================
+@rem === start app by special java ==============
+@rem ============================================
+@if not "%JAVA_MILU%" == "" @set MYJAVA=%JAVA_MILU%
+@if not "%MYJAVA%" == "" goto exec
+
 
 @rem ============================================
 @rem === start app by java ======================
@@ -99,6 +105,7 @@
 @rem https://stackoverflow.com/questions/5675459/how-to-get-java-version-from-batch-script
 @rem ==============================================
 :java_check
+  @echo %JAVA_MILU%
   @for /f "tokens=3" %%g in ('java -version 2^>^&1 ^| findstr /i "version"') do @(
     @set JAVAVER=%%g
   )
