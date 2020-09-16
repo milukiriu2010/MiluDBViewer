@@ -142,7 +142,7 @@ fi
 # ====================================================
 # === start app by special java ======================
 # ====================================================
-if [ -n $JAVA_MILU ]; then 
+if [ -n "$JAVA_MILU" ]; then 
   export MYJAVA=$JAVA_MILU
   kickJava
 fi
@@ -151,7 +151,7 @@ fi
 # === start app by java ==============================
 # ====================================================
 export MYJAVA=`which java`
-if [ -n $MYJAVA ]; then 
+if [ -n "$MYJAVA" ]; then 
   checkJavaVersion $MYJAVA
   kickJava
 fi
