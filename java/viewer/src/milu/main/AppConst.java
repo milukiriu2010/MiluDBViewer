@@ -6,8 +6,8 @@ import java.io.File;
 public enum AppConst 
 {
 	APP_NAME("MiluDBViewer"),
-	VER("0.3.7"),
-	UPDATE_DATE("2020/03/24"),
+	VER("0.3.8"),
+	UPDATE_DATE("2020/09/17"),
 	USER_DIR(System.getProperty("user.home")+File.separator+".MiluDBViewer"+File.separator),
 	APP_CONF(USER_DIR.val()+"app_conf"+File.separator+"app_conf.json"),
 	DRIVER_DIR(USER_DIR.val()+"driver"+File.separator),
