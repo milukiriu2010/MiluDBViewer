@@ -445,8 +445,8 @@ public class ObjTableView extends TableView<List<Object>>
 		File file = fileChooser.showSaveDialog( this.getScene().getWindow() );
 		*/
 		List<FileChooser.ExtensionFilter> filterLst = new ArrayList<>();
-		filterLst.add(new ExtensionFilter( "Excel Files", "*.csv" ));
 		filterLst.add(new ExtensionFilter( "Excel Files", "*.xlsx" ));
+		filterLst.add(new ExtensionFilter( "Excel Files", "*.csv" ));
 		File file = MyGUITool.fileSaveDialog( appConf.getInitDirExportFile(), filterLst, this );
 		if ( file == null )
 		{

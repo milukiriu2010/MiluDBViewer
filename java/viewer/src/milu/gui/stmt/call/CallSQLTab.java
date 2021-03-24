@@ -823,8 +823,8 @@ public class CallSQLTab extends Tab
 		AppConf appConf = mainCtrl.getAppConf();
 
 		List<FileChooser.ExtensionFilter> filterLst = new ArrayList<>();
-		filterLst.add(new ExtensionFilter( "Excel Files", "*.csv" ));
 		filterLst.add(new ExtensionFilter( "Excel Files", "*.xlsx" ));
+		filterLst.add(new ExtensionFilter( "Excel Files", "*.csv" ));
 		
 		File file = 
 			MyGUITool.fileOpenDialog(
