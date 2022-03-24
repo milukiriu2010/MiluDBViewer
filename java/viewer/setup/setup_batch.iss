@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "MiluDBViewer"
-#define MyAppVersion "0.3.9_jdk17"
+#define MyAppVersion "0.3.9_jdk18"
 #define MyAppPublisher "Milu"
 #define MyAppURL "https://github.com/milukiriu2010/MiluDBViewer"
 #define MyAppExeName "MiluDBViewer.bat"
