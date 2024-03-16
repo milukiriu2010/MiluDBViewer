@@ -7,6 +7,8 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Map;
 
 import milu.main.AppConf;
@@ -59,7 +61,10 @@ class ModuleDownload
 		File downloadDir = new File( AppConst.DOWNLOAD_DIR.val() );
 		downloadDir.mkdirs();
 		
-		this.url = new URL( strUrl );
+		// deprecated 20
+		//this.url = new URL( strUrl );
+		Path path = Paths.get(strUrl);
+		this.url = path.toUri().toURL();			
 		
 		ProxyAbstract proxyAbs = ProxyFactory.getInstance( this.appConf );
 		proxyAbs.selectProxy();

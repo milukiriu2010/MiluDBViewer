@@ -325,7 +325,9 @@ public class MainController
 		System.out.println( "changeLang start:" + langCode );
 		if ( langCode != null && langCode.isEmpty() == false )
 		{
-			Locale nextLocale = new Locale( langCode );
+			// deprecated version 19
+			//Locale nextLocale = new Locale( langCode );
+			Locale nextLocale = Locale.of( langCode );
 			Locale.setDefault( nextLocale );
 		}
 		

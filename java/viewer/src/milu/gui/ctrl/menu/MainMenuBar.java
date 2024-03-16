@@ -166,7 +166,9 @@ public class MainMenuBar extends MenuBar
 		{
 			String langName = langKeyIterator.next();
 			CheckMenuItem menuItemLang = new CheckMenuItem( langName );
-			if ( Locale.getDefault().getLanguage().equals( new Locale( this.langMap.get(langName) ).getLanguage() ) )
+			// deprecated version 19
+			//if ( Locale.getDefault().getLanguage().equals( new Locale( this.langMap.get(langName) ).getLanguage() ) )
+			if ( Locale.getDefault().getLanguage().equals( Locale.of( this.langMap.get(langName) ).getLanguage() ) )
 			{
 				menuItemLang.selectedProperty().set( true );
 			}

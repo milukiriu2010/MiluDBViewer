@@ -4,6 +4,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.sql.Driver;
 import java.sql.DriverManager;
@@ -50,7 +51,12 @@ public class LoadDriver
 					URL url = null;
 					if ( driverPath.startsWith("file:") )
 					{
-						url = new URL(driverPath);
+						// deprecated jdk 20
+						//url = new URL(driverPath);
+						
+						Path path = Paths.get(driverPath);
+						url = path.toUri().toURL();
+						System.out.println( "LoadDriver:driverPath:" + driverPath);
 					}
 					else
 					{

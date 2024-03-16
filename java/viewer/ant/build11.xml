@@ -22,6 +22,7 @@
 		<pathelement path="../lib/gson/gson-2.8.3-SNAPSHOT.jar" />
 		<pathelement path="../lib/hibernate/hibernate-core-5.3.1.Final.jar" />
 		<pathelement path="../lib/jarchivelib/jarchivelib-0.7.1-jar-with-dependencies.jar" />
+		<pathelement path="../lib/slf4j/slf4j-api-1.7.36.jar" />
 		<pathelement path="${myenv.PATH_TO_FX}/javafx-swt.jar" />
 		<pathelement path="${myenv.PATH_TO_FX}/javafx.base.jar" />
 		<pathelement path="${myenv.PATH_TO_FX}/javafx.controls.jar" />
@@ -75,6 +76,7 @@
 							lib/gson/gson-2.8.3-SNAPSHOT.jar
 							lib/hibernate/hibernate-core-5.3.1.Final.jar
 							lib/jarchivelib/jarchivelib-0.7.1-jar-with-dependencies.jar
+							lib/slf4j/slf4j-api-1.7.36.jar
 				"/>
             </manifest>
 		</jar>
