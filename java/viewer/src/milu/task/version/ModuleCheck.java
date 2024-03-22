@@ -7,7 +7,8 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Map;
 import java.util.HashMap;
 
@@ -119,7 +120,10 @@ class ModuleCheck
 		
 		System.out.println( "accessRemoteURL:" + strUrl );
 		
-		this.url = new URL( strUrl );
+		// deprecated jdk 20
+		//this.url = new URL( strUrl );
+		Path path = Paths.get(strUrl);
+		this.url = path.toUri().toURL();		
 		
 		System.out.println( "ProxyType:" + this.appConf.getProxyType() );
 		

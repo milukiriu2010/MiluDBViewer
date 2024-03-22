@@ -56,7 +56,11 @@ public class ModuleUpdate
 			
 			this.progressInf.setMsg( "start installer..." );
 			
-			Runtime.getRuntime().exec(downloadFilePath);
+			// deprecated jdk18
+			//Runtime.getRuntime().exec(downloadFilePath);
+			String[] paths = new String[3];
+			paths[0] = downloadFilePath;
+			Runtime.getRuntime().exec(paths);
 		}
 		else
 		{
@@ -96,7 +100,11 @@ public class ModuleUpdate
 			
 			this.progressInf.setProgress(90);
 			this.progressInf.setMsg( "start new version..." );
-			Runtime.getRuntime().exec( instDir + File.separator + "MiluDBViewer.sh" );
+			// deprecated jdk18
+			//Runtime.getRuntime().exec( instDir + File.separator + "MiluDBViewer.sh" );
+			String[] paths = new String[3];
+			paths[0] = instDir + File.separator + "MiluDBViewer.sh";
+			Runtime.getRuntime().exec(paths);
 		}
 
 	}

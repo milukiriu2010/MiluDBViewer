@@ -142,10 +142,15 @@ public class InitialLoadDriver extends InitialLoadAbstract
 		
 		// Oracle
 		List<String>  driverPathLstOracle = new ArrayList<>();
-		driverPathLstOracle.add( "file:lib/oracle/ojdbc8.jar" );
-		driverPathLstOracle.add( "file:lib/oracle/orai18n.jar" );
-		driverPathLstOracle.add( "file:lib/oracle/xdb6.jar" );
-		driverPathLstOracle.add( "file:lib/oracle/xmlparserv2.jar" );
+		// jdk 20 deprecated
+		//driverPathLstOracle.add( "file:lib/oracle/ojdbc8.jar" );
+		//driverPathLstOracle.add( "file:lib/oracle/orai18n.jar" );
+		//driverPathLstOracle.add( "file:lib/oracle/xdb6.jar" );
+		//driverPathLstOracle.add( "file:lib/oracle/xmlparserv2.jar" );
+		driverPathLstOracle.add( "lib/oracle/ojdbc8.jar" );
+		driverPathLstOracle.add( "lib/oracle/orai18n.jar" );
+		driverPathLstOracle.add( "lib/oracle/xdb6.jar" );
+		driverPathLstOracle.add( "lib/oracle/xmlparserv2.jar" );
 		
 		driverMap.put( DriverClassConst.CLASS_NAME_ORACLE, driverPathLstOracle );
 		driverTemplateUrlMap.put( DriverClassConst.CLASS_NAME_ORACLE, "jdbc:oracle:thin:@//<host>[:1521]/<service_name>[?internal_logon=sysdba|sysoper]" );
@@ -153,8 +158,12 @@ public class InitialLoadDriver extends InitialLoadAbstract
 		
 		// PostgreSQL
 		List<String>  driverPathLstPostgres = new ArrayList<>();
+		// jdk 20 deprecated
 		//driverPathLstPostgres.add( "file:lib/postgresql/postgresql-42.1.4.jar" );
-		driverPathLstPostgres.add( "file:lib/postgresql/postgresql-42.2.4.jar" );
+		//driverPathLstPostgres.add( "file:lib/postgresql/postgresql-42.2.4.jar" );
+		//driverPathLstPostgres.add( "lib/postgresql/postgresql-42.2.4.jar" );
+		driverPathLstPostgres.add( "lib/postgresql/postgresql-42.6.2.jar" );
+		//driverPathLstPostgres.add( "lib/postgresql/postgresql-42.7.3.jar" );
 		
 		driverMap.put( DriverClassConst.CLASS_NAME_POSTGRESQL, driverPathLstPostgres );
 		driverTemplateUrlMap.put( DriverClassConst.CLASS_NAME_POSTGRESQL, "jdbc:postgresql://host1:5432,host2:port2/database[?targetServerType=master]" );
@@ -162,8 +171,11 @@ public class InitialLoadDriver extends InitialLoadAbstract
 		
 		// MySQL
 		List<String>  driverPathLstMySQL = new ArrayList<>();
-		driverPathLstMySQL.add( "file:lib/mysql/mysql-connector-java-5.1.45-bin.jar" );
+		// jdk 20 deprecated
+		//driverPathLstMySQL.add( "file:lib/mysql/mysql-connector-java-5.1.45-bin.jar" );
 		//driverPathLstMySQL.add( "file:lib/mysql/mysql-connector-java-8.0.11.jar" );
+		driverPathLstMySQL.add( "lib/mysql/mysql-connector-java-5.1.45-bin.jar" );
+		//driverPathLstMySQL.add( "lib/mysql/mysql-connector-java-8.0.11.jar" );
 		
 		driverMap.put( DriverClassConst.CLASS_NAME_MYSQL, driverPathLstMySQL );
 		driverTemplateUrlMap.put( DriverClassConst.CLASS_NAME_MYSQL, "jdbc:mysql://[host1][:3306][,[host2][:port2]]...[/[database]][?autoReconnect=true][&autoClosePStmtStreams=true]" );
@@ -171,7 +183,9 @@ public class InitialLoadDriver extends InitialLoadAbstract
 		
 		// Cassandra
 		List<String>  driverPathLstCassandra = new ArrayList<>();
-		driverPathLstCassandra.add( "file:lib/cassandra/cassandra-jdbc-driver-0.6.4-shaded.jar" );
+		// jdk 20 deprecated
+		//driverPathLstCassandra.add( "file:lib/cassandra/cassandra-jdbc-driver-0.6.4-shaded.jar" );
+		driverPathLstCassandra.add( "lib/cassandra/cassandra-jdbc-driver-0.6.4-shaded.jar" );
 		
 		driverMap.put( DriverClassConst.CLASS_NAME_CASSANDRA1, driverPathLstCassandra );
 		driverTemplateUrlMap.put( DriverClassConst.CLASS_NAME_CASSANDRA1, "jdbc:c*:datastax//[host][:9042]/[keyspace][?consistencyLevel=ONE|ANY|...][&compression=LZ4|SNAPPY]" );
@@ -179,7 +193,12 @@ public class InitialLoadDriver extends InitialLoadAbstract
 		
 		// SQLite
 		List<String>  driverPathLstSQLite = new ArrayList<>();
-		driverPathLstSQLite.add( "file:lib/sqlite/sqlite-jdbc-3.23.1.jar" );
+		// jdk 20 deprecated
+		//driverPathLstSQLite.add( "file:lib/sqlite/sqlite-jdbc-3.23.1.jar" );
+		//driverPathLstSQLite.add( "lib/sqlite/sqlite-jdbc-3.23.1.jar" );
+		driverPathLstSQLite.add( "lib/sqlite/sqlite-jdbc-3.45.1.0.jar" );
+		//driverPathLstSQLite.add( "lib/sqlite/slf4j-api-1.7.36.jar" );
+		
 		
 		driverMap.put( DriverClassConst.CLASS_NAME_SQLITE, driverPathLstSQLite );
 		driverTemplateUrlMap.put( DriverClassConst.CLASS_NAME_SQLITE, "jdbc:sqlite:filename" );
