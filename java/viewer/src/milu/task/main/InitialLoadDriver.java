@@ -147,7 +147,8 @@ public class InitialLoadDriver extends InitialLoadAbstract
 		//driverPathLstOracle.add( "file:lib/oracle/orai18n.jar" );
 		//driverPathLstOracle.add( "file:lib/oracle/xdb6.jar" );
 		//driverPathLstOracle.add( "file:lib/oracle/xmlparserv2.jar" );
-		driverPathLstOracle.add( "lib/oracle/ojdbc8.jar" );
+		//driverPathLstOracle.add( "lib/oracle/ojdbc8.jar" );
+		driverPathLstOracle.add( "lib/oracle/ojdbc11.jar" );
 		driverPathLstOracle.add( "lib/oracle/orai18n.jar" );
 		driverPathLstOracle.add( "lib/oracle/xdb6.jar" );
 		driverPathLstOracle.add( "lib/oracle/xmlparserv2.jar" );
@@ -174,8 +175,8 @@ public class InitialLoadDriver extends InitialLoadAbstract
 		// jdk 20 deprecated
 		//driverPathLstMySQL.add( "file:lib/mysql/mysql-connector-java-5.1.45-bin.jar" );
 		//driverPathLstMySQL.add( "file:lib/mysql/mysql-connector-java-8.0.11.jar" );
-		driverPathLstMySQL.add( "lib/mysql/mysql-connector-java-5.1.45-bin.jar" );
-		//driverPathLstMySQL.add( "lib/mysql/mysql-connector-java-8.0.11.jar" );
+		//driverPathLstMySQL.add( "lib/mysql/mysql-connector-java-5.1.45-bin.jar" );
+		driverPathLstMySQL.add( "lib/mysql/mysql-connector-j-8.3.0.jar" );
 		
 		driverMap.put( DriverClassConst.CLASS_NAME_MYSQL, driverPathLstMySQL );
 		driverTemplateUrlMap.put( DriverClassConst.CLASS_NAME_MYSQL, "jdbc:mysql://[host1][:3306][,[host2][:port2]]...[/[database]][?autoReconnect=true][&autoClosePStmtStreams=true]" );

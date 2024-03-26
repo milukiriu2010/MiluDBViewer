@@ -19,7 +19,7 @@
 		<pathelement path="../lib/excel/poi-ooxml-3.17.jar" />
 		<pathelement path="../lib/excel/poi-ooxml-schemas-3.17.jar" />
 		<pathelement path="../lib/excel/xmlbeans-2.6.0.jar" />
-		<pathelement path="../lib/gson/gson-2.8.3-SNAPSHOT.jar" />
+		<pathelement path="../lib/gson/gson-2.10.1.jar" />
 		<pathelement path="../lib/hibernate/hibernate-core-5.3.1.Final.jar" />
 		<pathelement path="../lib/jarchivelib/jarchivelib-0.7.1-jar-with-dependencies.jar" />
 		<pathelement path="../lib/slf4j/slf4j-api-1.7.36.jar" />
@@ -73,7 +73,7 @@
 							lib/excel/poi-ooxml-3.17.jar
 							lib/excel/poi-ooxml-schemas-3.17.jar
 							lib/excel/xmlbeans-2.6.0.jar
-							lib/gson/gson-2.8.3-SNAPSHOT.jar
+							lib/gson/gson-2.10.1.jar
 							lib/hibernate/hibernate-core-5.3.1.Final.jar
 							lib/jarchivelib/jarchivelib-0.7.1-jar-with-dependencies.jar
 							lib/slf4j/slf4j-api-1.7.36.jar

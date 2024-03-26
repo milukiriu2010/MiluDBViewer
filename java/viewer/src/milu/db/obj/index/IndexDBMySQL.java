@@ -48,6 +48,7 @@ public class IndexDBMySQL extends IndexDBAbstract
 		String sql = 
 			" select distinct \n"             + 
 			"   index_name, \n"               +
+			"   seq_in_index, \n"             +
 			"   case index_name \n "          +
 			"     when 'PRIMARY' then 't' \n" +
 			"     else                'f' \n" +
