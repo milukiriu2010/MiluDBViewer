@@ -14,40 +14,49 @@
 
 # Install & Run
 
-1. Download "Open JDK11 + Open JavaFX11" or later.  
-   [Open JDK 11 Download from jdk.java.net](https://jdk.java.net/)  
-   [Open JavaFX 11 Donwload from gluonhq.com/](https://gluonhq.com/products/javafx/)  
+1. Download "Open JDK22 + Open JavaFX22" or later.  
+   [Open JDK 22 Download from jdk.java.net](https://jdk.java.net/)  
+   [Open JavaFX 22 Donwload from gluonhq.com/](https://gluonhq.com/products/javafx/)  
    
 2-1. Windows
-(1-1) Open JDK 11 Install.  
-for me, C:\Program Files\Java\jdk-11  
-(1-2) Open JavaFX 11 Install  
-for me, C:\Program Files\Java\javafx-sdk-11  
+(1-1) Open JDK 22 Install.  
+for me, C:\Program Files\Java\jdk-22  
+(1-2) Open JavaFX 22 Install  
+for me, C:\Program Files\Java\javafx-sdk-22  
 (1-3) Add jdk/bin to PATH
-for me, C:\Program Files\Java\jdk-11\bin  
+for me, C:\Program Files\Java\jdk-22\bin  
 (1-4) Add javafx/lib to PATH_TO_FX  
-for me, C:\Program Files\Java\javafx-sdk-11\lib  
+for me, C:\Program Files\Java\javafx-sdk-22\lib  
 [Run HelloWorld using JavaFX](https://openjfx.io/openjfx-docs/#install-javafx)  
-(2-1) run "MiluDBViewer_Setup*.*.*.exe"  
-(2-2) run "<<your path>>\MiluDBViewer.exe"  
+(2-1) run "MiluDBViewer_Setup\*.\*.\*.exe"  
+(2-2) run "*your path*\MiluDBViewer.exe"  
 
 2-2. Linux
-(1-1) Open JDK 11 Install.  
-for me, /opt/java/jdk-11  
-(1-2) Open JavaFX 11 Install  
-for me, /opt/java/javafx-sdk-11  
+(1-1) Open JDK 22 Install.  
+for me, /opt/java/jdk-22  
+(1-2) Open JavaFX 22 Install  
+for me, /opt/java/javafx-sdk-22  
 (1-3) Add jdk/bin to PATH
-for me, /opt/java/jdk-11/bin  
+for me, /opt/java/jdk-22/bin  
 (1-4) Add javafx/lib to PATH_TO_FX  
-for me, /opt/java/javafx-sdk-11/lib  
+for me, /opt/java/javafx-sdk-22/lib  
 [Run HelloWorld using JavaFX](https://openjfx.io/openjfx-docs/#install-javafx)  
-(3-1) extract MiluDBViewer*.*.*.tgz by a file archiver to <<your path>>  
-(3-2) $ cd <<your path>>  
-(3-3) $ ./MiluDBViewer***.sh  
+(3-1) extract MiluDBViewer\*.\*.\*.tar.gz by a file archiver to <<your path>>  
+(3-2) $ cd *your path*
+(3-3) $ ./MiluDBViewer\*\*\*.sh  
 
-# Checked DB
+# Checked DB(MiluDBViewer0.4.0_jdk22)
+(1) Cassandra 4.1.4
+(2) MySQL 8.0.36
+(3) Oracle Database 23c Free
+(4) PostgreSQL 14.11
+(5) SQLite 3.45.1
+(6) Microsoft SQLServer 2017
+(7) MongoDB 3.6.5
+
+# Checked DB(MiluDBViewer0.3.9_jdk21)
 (1) Cassandra 3.9.0
-(2) MySQL 5.7.20
+(2) MySQL 5.7.20/8.0.11
 (3) Oracle 12c Release2/11g Release2
 (4) PostgreSQL 10.4/10.1
 (5) SQLite 3.23.1

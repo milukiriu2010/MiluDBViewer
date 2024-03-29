@@ -14,40 +14,50 @@
 
 # インストールと起動
 
-1. Open JDK 11+Open JavaFX11 以上をダウンロードしてください。
-   [Open JDK 11 ダウンロード - jdk.java.net](https://jdk.java.net/)  
-   [Open JavaFX 11 ダウンロード - gluonhq.com/](https://gluonhq.com/products/javafx/)  
+1. Open JDK 22+Open JavaFX22 以上をダウンロードしてください。
+   [Open JDK 22 ダウンロード - jdk.java.net](https://jdk.java.net/)  
+   [Open JavaFX 22 ダウンロード - gluonhq.com/](https://gluonhq.com/products/javafx/)  
 
 2-1. Windows
-(1-1) Open JDK 11をインストール
-私の場合, C:\Program Files\Java\jdk-11  
-(1-2) Open JavaFX 11をインストール
-私の場合, C:\Program Files\Java\javafx-sdk-11  
+(1-1) Open JDK 22をインストール
+私の場合, C:\Program Files\Java\jdk-22  
+(1-2) Open JavaFX 22をインストール
+私の場合, C:\Program Files\Java\javafx-sdk-22  
 (1-3) jdk/binを環境変数PATHに追加
-私の場合, C:\Program Files\Java\jdk-11\bin  
+私の場合, C:\Program Files\Java\jdk-22\bin  
 (1-4) javafx/lib環境変数PATH_TO_FXに追加  
-私の場合, C:\Program Files\Java\javafx-sdk-11\lib  
+私の場合, C:\Program Files\Java\javafx-sdk-22\lib  
 [Run HelloWorld using JavaFX](https://openjfx.io/openjfx-docs/#install-javafx)  
-(2-1) "MiluDBViewer_Setup*.*.*.exe"を実行してインストールしてください。  
-(2-2) "<<your path>>\MiluDBViewer.bat" を実行してください。  
+(2-1) "MiluDBViewer_Setup\*.\*.\*.exe"を実行してインストールしてください。  
+(2-2) "*your path*\MiluDBViewer.bat" を実行してください。  
 
 2-2. Linux
-(1-1) Open JDK 11をインストール  
-私の場合, /opt/java/jdk-11  
-(1-2) Open JavaFX 11をインストール 
-私の場合, /opt/java/javafx-sdk-11  
+(1-1) Open JDK 22をインストール  
+私の場合, /opt/java/jdk-22  
+(1-2) Open JavaFX 22をインストール 
+私の場合, /opt/java/javafx-sdk-22  
 (1-3) jdk/binを環境変数PATHに追加  
-私の場合, /opt/java/jdk-11/bin  
+私の場合, /opt/java/jdk-22/bin  
 (1-4) javafx/lib環境変数PATH_TO_FXに追加  
-私の場合, /opt/java/javafx-sdk-11/lib  
+私の場合, /opt/java/javafx-sdk-22/lib  
 [Run HelloWorld using JavaFX](https://openjfx.io/openjfx-docs/#install-javafx)  
-(3-1) MiluDBViewer*.*.*.tgzを解凍してください。  
-(3-2) $ cd <<your path>>  
-(3-3) $ ./MiluDBViewer***.sh を実行してください。  
+(3-1) MiluDBViewer\*.\*.\*.tgzを解凍してください。  
+(3-2) $ cd *your path* 
+(3-3) $ ./MiluDBViewer\*\*\*.sh を実行してください。  
 
-# 動作確認したデータベース
+# 動作確認したデータベース(MiluDBViewer0.4.0_jdk22)
+(1) Cassandra 4.1.4
+(2) MySQL 8.0.36
+(3) Oracle Database 23c Free
+(4) PostgreSQL 14.11
+(5) SQLite 3.45.1
+(6) Microsoft SQLServer 2017
+(7) MongoDB 3.6.5
+
+
+# 動作確認したデータベース(MiluDBViewer0.3.9_jdk21)
 (1) Cassandra 3.9.0
-(2) MySQL 5.7.20
+(2) MySQL 5.7.20/8.0.11
 (3) Oracle 12c Release2/11g Release2
 (4) PostgreSQL 10.4/10.1
 (5) SQLite 3.23.1
