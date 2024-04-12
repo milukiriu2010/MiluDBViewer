@@ -205,6 +205,26 @@ public class InitialLoadDriver extends InitialLoadAbstract
 		driverTemplateUrlMap.put( DriverClassConst.CLASS_NAME_SQLITE, "jdbc:sqlite:filename" );
 		driverReferenceUrlMap.put( DriverClassConst.CLASS_NAME_SQLITE, "https://github.com/xerial/sqlite-jdbc" );
 		
+		// SQLServer
+		List<String> driverPathLstSQLServer = new ArrayList<>();
+		
+		driverPathLstSQLServer.add( "lib/sqlserver/mssql-jdbc-12.6.1.jre11.jar" );
+		
+		driverMap.put( DriverClassConst.CLASS_NAME_SQLSERVER, driverPathLstSQLServer );
+		driverTemplateUrlMap.put( DriverClassConst.CLASS_NAME_SQLSERVER, "jdbc:sqlserver://[serverName[\\instanceName][:portNumber]][;property=value[;property=value]]" );
+		driverReferenceUrlMap.put( DriverClassConst.CLASS_NAME_SQLSERVER, "https://docs.microsoft.com/en-us/sql/connect/jdbc/building-the-connection-url?view=sql-server-2017" );
+		
+		// MongoDB(Unity)
+		List<String> driverPathLstMongoDB = new ArrayList<>();
+		
+		//driverPathLstMongoDB.add( "lib/mongo/mongo-java-driver-3.0.3.jar" );
+		driverPathLstMongoDB.add( "lib/mongo/mongo-java-driver-3.12.14.jar" );
+		driverPathLstMongoDB.add( "lib/mongo/mongodb_unityjdbc_free.jar" );
+		
+		driverMap.put( DriverClassConst.CLASS_NAME_MONGODB1, driverPathLstMongoDB );
+		driverTemplateUrlMap.put( DriverClassConst.CLASS_NAME_MONGODB1, "jdbc:mongo://<serverName>:27017/<databaseName>" );
+		driverReferenceUrlMap.put( DriverClassConst.CLASS_NAME_MONGODB1, "http://www.unityjdbc.com/mongojdbc/mongo_jdbc.php" );
+		
 		// --------------------------------------------------
 		// Load Driver
 		// --------------------------------------------------
