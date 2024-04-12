@@ -37,3 +37,15 @@ db.createUser(
   }
 );
 
+use Northwind
+db.createUser(
+  {
+    user: "milu",
+	pwd:  "milu",
+	roles: [ { role:"readWrite", db:"Northwind" } ]
+  }
+);
+
+db.system.users.remove({user:"milu"});
+
+

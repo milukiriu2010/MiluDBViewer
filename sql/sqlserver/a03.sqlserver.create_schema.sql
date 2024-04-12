@@ -1,2 +1,2 @@
-create schema miluschema authorization milux;
+create schema miluschema authorization milu;
 go
