@@ -1,0 +1,35 @@
+.AppPane_Label_Title
+{
+    -fx-font-weight: bold;
+}
+
+/*
+.AppPane_titled-address .label 
+{
+  -fx-font: 28px Vivaldi;
+}
+*/
+.AppPane_bordered-titled-title 
+{
+  /* -fx-background-color: white; */
+  /* -fx-translate-y: -16; */
+  -fx-font-weight: bold;
+  -fx-text-fill: white;
+  -fx-background-color: black;
+  -fx-translate-y: -8;
+  -fx-border-width: 2;
+}
+
+.AppPane_bordered-titled-border 
+{
+  -fx-content-display: top;
+  -fx-border-insets: 20 15 15 15;
+  /* -fx-background-color: white; */
+  -fx-border-color: black;
+  -fx-border-width: 2;
+}
+
+.AppPane_bordered-titled-content 
+{
+  -fx-padding: 26 10 10 10;
+}

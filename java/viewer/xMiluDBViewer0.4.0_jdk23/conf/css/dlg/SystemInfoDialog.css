@@ -1,0 +1,7 @@
+.SystemInfoDialog_Label_Title
+{
+    -fx-font-weight: bold;
+    /* -fx-font-style: italic; */
+    /* -fx-text-fill: #ff0000; OK */
+    /* -fx-stroke: #00ff00; NG */
+}

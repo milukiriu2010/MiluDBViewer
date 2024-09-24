@@ -1,0 +1,16 @@
+.LabelTable_VBox {
+	-fx-border-color: #000000;
+	-fx-border-width: 2;
+	-fx-background-color: #ffffff;
+}
+
+.LabelTable_Label_Table {
+	-fx-border-color: #000000;
+	-fx-background-color: #ffffff;
+	-fx-padding: 0 2 0 2;
+}
+
+.LabelTable_Label_Column {
+	-fx-background-color: #ffffff;
+	-fx-padding: 0 2 0 2;
+}

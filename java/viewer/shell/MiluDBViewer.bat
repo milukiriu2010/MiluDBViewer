@@ -9,15 +9,16 @@
 @rem === set classpath ==========================
 @rem ============================================
 @set MYCLASSPATH=%CLASSPATH%;.;
-@set MYCLASSPATH=%MYCLASSPATH%;lib/jsqlparser/jsqlparser-1.2-SNAPSHOT.jar
+@set MYCLASSPATH=%MYCLASSPATH%;lib/jsqlparser/jsqlparser-1.3-SNAPSHOT.jar
 @set MYCLASSPATH=%MYCLASSPATH%;lib/excel/commons-collections4-4.1.jar
 @set MYCLASSPATH=%MYCLASSPATH%;lib/excel/poi-3.17.jar
 @set MYCLASSPATH=%MYCLASSPATH%;lib/excel/poi-ooxml-3.17.jar
 @set MYCLASSPATH=%MYCLASSPATH%;lib/excel/poi-ooxml-schemas-3.17.jar
 @set MYCLASSPATH=%MYCLASSPATH%;lib/excel/xmlbeans-2.6.0.jar
-@set MYCLASSPATH=%MYCLASSPATH%;lib/gson/gson-2.8.3-SNAPSHOT.jar
+@set MYCLASSPATH=%MYCLASSPATH%;lib/gson/gson-2.10.1.jar
 @set MYCLASSPATH=%MYCLASSPATH%;lib/hibernate/hibernate-core-5.3.1.Final.jar
 @set MYCLASSPATH=%MYCLASSPATH%;lib/jarchivelib/jarchivelib-0.7.1-jar-with-dependencies.jar
+@set MYCLASSPATH=%MYCLASSPATH%:lib/slf4j/slf4j-api-1.7.36.jar
 @rem @set MYCLASSPATH=%MYCLASSPATH%;"%PATH_TO_FX%\javafx.base.jar"
 @rem @set MYCLASSPATH=%MYCLASSPATH%;"%PATH_TO_FX%\javafx.controls.jar"
 @rem @set MYCLASSPATH=%MYCLASSPATH%;"%PATH_TO_FX%\javafx.fxml.jar"

@@ -1,0 +1,13 @@
+
+.SchemaERView_Column_Src {
+	-fx-background-color: #ffc0cb;
+}
+
+.SchemaERView_Column_Dst {
+	-fx-background-color: #00ffff;
+}
+
+.SchemaERView_Path {
+	-fx-stroke: #00ff00;
+	-fx-stroke-width: 3;
+}

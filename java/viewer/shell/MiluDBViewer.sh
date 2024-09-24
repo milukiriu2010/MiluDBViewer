@@ -89,7 +89,7 @@ cd $prgdir
 # ====================================================
 export MYCLASSPATH=$CLASSPATH:.
 export MYCLASSPATH=$MYCLASSPATH:$prgdir
-export MYCLASSPATH=$MYCLASSPATH:$prgdir/lib/jsqlparser/jsqlparser-1.2-SNAPSHOT.jar
+export MYCLASSPATH=$MYCLASSPATH:$prgdir/lib/jsqlparser/jsqlparser-1.3-SNAPSHOT.jar
 export MYCLASSPATH=$MYCLASSPATH:$prgdir/lib/excel/commons-collections4-4.1.jar
 export MYCLASSPATH=$MYCLASSPATH:$prgdir/lib/excel/poi-3.17.jar
 export MYCLASSPATH=$MYCLASSPATH:$prgdir/lib/excel/poi-ooxml-3.17.jar
