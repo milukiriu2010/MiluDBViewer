@@ -1,0 +1,4 @@
+service mysql status
+mysql --user=milu --password=milu
+mysql>use miludb;
+mysql>select * from m_country;

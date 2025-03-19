@@ -1,0 +1,7 @@
+sqlplus / as sysdba
+sqlplus> startup
+sqlplus> alter pluggable database freepdb1 open;
+
+lsnrctl start
+
+sqlplus milu/milu@freedb1
