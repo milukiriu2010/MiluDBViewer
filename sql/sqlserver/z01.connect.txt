@@ -1,7 +1,9 @@
 ==================================================================
 
+systemctl status mssql-server --no-pager
+
 sqlcmd -S localhost -U sa -P Q -N o
-sqlcmd -S localhost -U milu -P milu -N o
+sqlcmd -S localhost -U milu -P milu -d miludb -N o
 sqlcmd -U milu -P milu -d miludb -N o
 sqlcmd -E -S localhost -d miludb
 

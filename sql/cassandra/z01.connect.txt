@@ -1,0 +1,5 @@
+jdk11
+cassandra -f
+
+cqlsh 192.168.3.29 9042
+cqlsh> describe keyspaces;
